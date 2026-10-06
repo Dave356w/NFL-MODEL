@@ -84,3 +84,24 @@ hurts both measures, because the QB term already covers a change of starter. Onl
 **prior 300** improves log loss (+0.0008, ≈2.7 SE, which survives allowing for five
 variants) with ROI +0.4 within noise. That is a small gain, recorded as a candidate
 for the next revision and not worth a mid-season ledger restart.
+
+### Test 4: game-state (garbage-time) filtering of the box-score profiles
+
+`python research/game_state.py [CACHE_DIR]`. Box scores are rebuilt from play-by-play
+keeping only plays whose offense pre-snap win probability (nflverse `wp`) is inside a
+band. Availability and the QB term are unchanged.
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| production (all plays) | 811 | +2.17 | +0.3% ± 2.7 | 0.6364 | −0.0283 |
+| G1 wp in [0.05, 0.95] (drops 15.5% of snaps) | 811 | +13.68 | +1.7% ± 2.7 | 0.6371 | −0.0290 |
+| G2 wp in [0.10, 0.90] (drops 23.3% of snaps) | 811 | −6.99 | −0.9% ± 2.7 | 0.6371 | −0.0290 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| G1 vs production | +1.42 pts ± 1.72 | −0.0007 ± 0.0023 |
+| G2 vs production | −1.13 pts ± 1.85 | −0.0007 ± 0.0029 |
+
+**No.** The ROI differences are under one SE and flip sign between the two cutoffs.
+Both filters score slightly worse on log loss. Dropping 15–23% of snaps costs sample,
+and blowout plays still carry information about team quality. **Keep all plays.**
