@@ -1,25 +1,25 @@
 feature,label,coefficient per scaled unit,training scale,training missing fraction
 site,Home field,0.18034267695306566,1.0,0.0
-d__for__rates_core__plays_per_game,Offense: plays per game,0.024171626408563095,2.4374001142994888,0.0
-d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,0.181596286647462,0.7157099830883294,0.0
-d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,0.026002585253929972,0.4055891864725226,0.0
-d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.24078933193092691,2.3383791746365516,0.0
-d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,-0.007411133997524022,0.1673459130887043,0.0
-d__for__rates_core__interception_pct,Offense: interception %,0.040849995847366365,0.6998650608007839,0.0
-d__for__rates_core__sacks_taken_pct,Offense: sack %,-0.0951846457307194,1.7799124919165872,0.0
-d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.04061035301803987,6.886208127941813,0.0
-d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.052868057934904344,2.2686526121700297,0.0
-d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.13351809879299095,0.5311676209643116,0.0
-d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.08888901625513794,0.35819950101067083,0.0
-d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,-0.01676726905637766,1.8537622580838986,0.0
-d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.06969933597397936,0.17430656820077042,0.0
-d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.1333031654638394,0.7286437052945064,0.0
-d__allowed__rates_core__sacks_taken_pct,Defense: opponents’ sack %,0.009243357755035476,1.3151524725948422,0.0
-d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.09093578076640721,6.456414067973898,0.0
+d__for__rates_core__plays_per_game,Offense: plays per game,0.02417162640856305,2.4374001142994888,0.0
+d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,0.18159628664746225,0.7157099830883294,0.0
+d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,0.026002585253930087,0.4055891864725226,0.0
+d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.24078933193092666,2.3383791746365516,0.0
+d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,-0.007411133997524005,0.1673459130887043,0.0
+d__for__rates_core__interception_pct,Offense: interception %,0.04084999584736639,0.6998650608007839,0.0
+d__for__rates_core__sacks_taken_pct,Offense: sack %,-0.09518464573071941,1.7799124919165872,0.0
+d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.040610353018039884,6.886208127941813,0.0
+d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.05286805793490462,2.26865261217003,0.0
+d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.133518098792991,0.5311676209643116,0.0
+d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.08888901625513793,0.35819950101067083,0.0
+d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,-0.016767269056377307,1.8537622580838986,0.0
+d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.06969933597397933,0.17430656820077042,0.0
+d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.13330316546383944,0.7286437052945064,0.0
+d__allowed__rates_core__sacks_taken_pct,Defense: opponents’ sack %,0.009243357755035552,1.3151524725948422,0.0
+d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.0909357807664072,6.456414067973898,0.0
 d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.1495560443372817,0.3682621152490772,0.0
 d__avail__OL_out_cs,Availability: offensive line snaps unavailable (this-season window),-0.03586699516690807,0.14503853536915104,0.0
 d__avail__WRTE_out_cs,Availability: receiver and tight end snaps unavailable (this-season window),-0.0455084566644725,0.1453218755949105,0.0
-d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),-0.032768141373690794,0.236385517678872,0.0
-d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.06498493561318447,0.14601800266208365,0.0
+d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),-0.0327681413736908,0.236385517678872,0.0
+d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.06498493561318446,0.14601800266208365,0.0
 d__avail__LB_out_cs,Availability: linebacker snaps unavailable (this-season window),-0.03631107117647637,0.19589132263687645,0.0
-d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),-0.0740541579296562,0.15413550375434937,0.0
+d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),-0.07405415792965622,0.15413550375434937,0.0
