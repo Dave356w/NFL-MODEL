@@ -76,6 +76,10 @@ def make_data(root, with_ledger=True):
         "market_blend_verdict": "Composite weight -0.1: no reliable evidence.", "limitations": ["a limitation"],
         "availability_audit": [{"source": "availability_roster_membership", "team_weeks": 10, "off_roster_snap_share": .066}]}))
     (latest / "board.html").write_text("<html>board</html>")
+    pd.DataFrame([{"team": "TB", "gsis_id": "x", "player": "Baker Mayfield", "position": "QB", "unit": "QB",
+                   "snap_share": .74, "prev_week": 4, "prev_status": "Out", "prev_injury": "Thumb",
+                   "this_week": "not on a week-5 report yet", "counted": 0., "report_state": "none"}]
+                 ).to_csv(latest / "report_notes.csv", index=False)
     if with_ledger:
         recs = [{"experiment": "e", "revision": m.REVISION, "game_id": "2026_05_KC_BUF", "season": 2026, "week": 5,
                  "home": "BUF", "away": "KC", "generated_utc": "2026-10-03T12:00:00+00:00",
@@ -197,3 +201,10 @@ def test_candidate_table_shows_roi_but_selection_stays_log_loss(tmp_path):
     model = (out / "model.html").read_text()
     assert "lowest walk-forward log loss" in model and "does not choose the recipe" in model
     assert "−0.7% ± 2.2" in model.replace("-", "−") and "selected" in model and "best ROI" in model
+
+
+def test_injury_report_notes_on_the_card(tmp_path):
+    out, _ = render(tmp_path)
+    idx = (out / "index.html").read_text()
+    assert "Injury report notes" in idx and "Baker Mayfield" in idx and "Out (Thumb) · wk 4" in idx
+    assert "not on a week-5 report yet" in idx and "Week 5 report not published yet" in idx
