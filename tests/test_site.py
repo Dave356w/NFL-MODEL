@@ -22,12 +22,14 @@ def make_data(root, with_ledger=True):
         {"game_id": "2026_05_TB_DAL", "season": 2026, "week": 5, "away": "TB", "home": "DAL",
          "gameday": "2026-10-08", "gametime": "20:15", "site": 1., "result": np.nan, "ready": True,
          "spread_line": 9.5, "market_wp": .78, "model_wp": .60, "homefield_wp": .54,
+         "home_moneyline": -485, "away_moneyline": 370,
          "away_qb_expected": "J.Daniels", "away_qb_usual": "B.Mayfield", "home_qb_expected": "D.Prescott",
          "home_qb_usual": "D.Prescott", "away_injury_report": "none", "home_injury_report": "none",
          "home__avail__qb_delta": .1, "away__avail__qb_delta": -.5, "home__avail__OL_out_cs": .1, "away__avail__OL_out_cs": 0.},
         {"game_id": "2026_05_KC_BUF", "season": 2026, "week": 5, "away": "KC", "home": "BUF",
-         "gameday": "2026-10-04", "gametime": "16:25", "site": 1., "result": 7., "away_score": 20, "home_score": 27,
+         "gameday": "2026-10-04", "gametime": "16:25", "site": 1., "result": 7., "home won": 1., "away_score": 20, "home_score": 27,
          "ready": True, "spread_line": 2.5, "market_wp": .58, "model_wp": .55, "homefield_wp": .54,
+         "home_moneyline": -135, "away_moneyline": 115,
          "away_injury_report": "final", "home_injury_report": "final"}])
     board.to_csv(latest / "board.csv", index=False)
     pd.DataFrame([{"game_id": "2026_05_TB_DAL", "game": "TB@DAL", "feature": "site",
@@ -36,6 +38,12 @@ def make_data(root, with_ledger=True):
                          "model_wp": rng.uniform(.2, .8, 300), "market_wp": rng.uniform(.2, .8, 300),
                          "homefield_wp": .55})
     m.calibration_bands(hist).to_csv(latest / "calibration_bands.csv", index=False)
+    ml = pd.DataFrame({"home_moneyline": np.where(hist.market_wp > .5, -150, 130),
+                       "away_moneyline": np.where(hist.market_wp > .5, 130, -150)})
+    roi_hist = pd.concat([hist, ml], axis=1)
+    m.roi_table(roi_hist).to_csv(latest / "roi_bands.csv", index=False)
+    m.roi_table(roi_hist, by="season").to_csv(latest / "roi_by_season.csv", index=False)
+    m.roi_table(roi_hist.iloc[:0]).to_csv(latest / "season_roi.csv", index=False)
     m.band_records(hist).to_csv(latest / "band_records.csv", index=False)
     old = m.BOOTSTRAP_REPS
     m.BOOTSTRAP_REPS = 50
@@ -59,7 +67,8 @@ def make_data(root, with_ledger=True):
         recs = [{"experiment": "e", "revision": m.REVISION, "game_id": "2026_05_KC_BUF", "season": 2026, "week": 5,
                  "home": "BUF", "away": "KC", "generated_utc": "2026-10-03T12:00:00+00:00",
                  "kickoff_utc": "2026-10-04T20:25:00+00:00", "model_wp": .55, "market_wp": .58,
-                 "homefield_wp": .54, "spread_line": 2.5, "injury_report": {"home": "final", "away": "final"}}]
+                 "homefield_wp": .54, "spread_line": 2.5, "home_moneyline": -135, "away_moneyline": 115,
+                 "injury_report": {"home": "final", "away": "final"}}]
         res = pd.DataFrame({"game_id": ["2026_05_KC_BUF"], "away_score": [20], "home_score": [27], "result": [7]})
         g.write_outputs(g.grade(recs, res), root)
     return root
@@ -138,3 +147,20 @@ def test_snapshot_copies_page_inputs(tmp_path):
     assert "d__x" not in board.columns and "home__avail__qb_delta" in board.columns
     assert (proj / "2026_week05.csv").exists()
     assert json.loads((latest / "manifest.json").read_text())["availability_audit"] == []
+
+
+def test_roi_is_the_headline_everywhere(tmp_path):
+    out, _ = render(tmp_path)
+    data = tmp_path / "data"
+    idx = (out / "index.html").read_text()
+    # forward tile first: KC@BUF bet BUF -135 and won -> +0.74u, +74.1%
+    assert idx.index("Flat 1u ROI · forward") < idx.index("Flat 1u ROI · held-out") < idx.index("Log loss vs market")
+    assert "+74.1%" in idx and "Bet DAL −485" in idx and "BUF −135 +0.74u" in idx
+    t = pd.read_csv(data / "latest" / "roi_bands.csv")
+    r = t[(t.group == "All games") & (t.source == "model")].iloc[0]
+    assert f"{100 * r.roi:+.1f}%" in idx
+    grades = (out / "grades.html").read_text()
+    assert "Flat 1u ROI by price band" in grades and "Mkt null" in grades and "+0.74" in grades
+    assert "Flat 1u ROI by price band · reconstructed" in (out / "market-calibration.html").read_text()
+    model = (out / "model.html").read_text()
+    assert "Flat 1u ROI by season" in model and "Goal: flat 1u ROI" in model

@@ -48,6 +48,28 @@ loss over earlier seasons picks the recipe, which is frozen for the season in
 signature refuses to run against an existing frozen record; that is why
 feature changes ship as a new `REVISION`.
 
+## The goal: flat 1u ROI at the moneyline
+
+The model is judged by flat-stake betting results. Every game it decides
+(model probability ≠ 50%) gets 1u on the side it makes the favorite, graded at
+that side's posted American moneyline. A win pays the price, a loss costs 1u,
+and a tie is a push. Each ROI is reported with:
+
+* W-L-P, units, ROI ± one standard error;
+* the no-vig market probability q of the picked side, and the win rate's excess over q;
+* the **market-correct null** `q × payout − (1 − q)`: the ROI expected if the
+  market were exactly right. It is negative by the hold, so it is the bar to
+  beat, not zero;
+* the same-row baseline of betting the market favorite (pick'ems excluded from both);
+* the picked side's price band (≤ −250 … ≥ +250, the MLB site's bands). The
+  bands are descriptive, not a betting filter.
+
+Prices: historical seasons use the nflverse schedule moneyline. A ledger
+snapshot saves the moneyline it saw at lock time, which is not necessarily the
+close. Log loss still fits the coefficients and selects the recipe (owner's
+decision 2026-10-06: ROI is reported, not optimized). It is shown as a
+secondary score.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of

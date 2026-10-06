@@ -29,8 +29,15 @@ product and decides which experiments to run.
 3. **Current-season walk-forward and post-hoc slices**: diagnostics and
    hypotheses only.
 
+**The owner's goal metric is flat 1u ROI at the moneyline on the model's side**
+(see `MODEL.md`). Lead with it: units, ROI ± SE, n, the market-correct null
+(negative by the hold, not zero) and the same-row market-favorite baseline.
+Log loss/Brier are secondary. ROI is reported, not optimized: recipe selection
+and coefficient fitting stay on log loss unless the owner decides otherwise.
+That would be a new `REVISION`.
+
 Report each comparison with its basis, n, revision, the same-row market
-baseline, a proper score (log loss/Brier) and uncertainty. A confidence
+baseline, a proper score and uncertainty. A confidence
 interval that crosses zero means the effect is unresolved; it does not show the
 effect is zero. Pick accuracy is not calibration.
 

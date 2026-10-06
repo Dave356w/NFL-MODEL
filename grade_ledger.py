@@ -4,7 +4,9 @@ and data/ledger_report.txt.
 
 The JSONL is the record of truth and is never rewritten here: it holds each
 game's FIRST pregame snapshot per experiment, written by nfl_model.record_forward.
-This script only joins final scores onto it. Re-running is idempotent; a game
+This script only joins final scores onto it and grades the headline bet:
+1u flat on the model's side at the moneyline saved in the snapshot, next to
+the same-row market-favorite baseline. Re-running is idempotent; a game
 with no final score stays `pending`, a tie is `tie` and is excluded from W/L and
 probability scores (the model's fit and backtests exclude ties the same way).
 
@@ -28,10 +30,12 @@ REPORT = DATA / "ledger_report.txt"
 SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home",
            "kickoff_utc", "generated_utc", "lead_hours", "model_wp", "market_wp",
-           "homefield_wp", "spread_line", "away_injury_report", "home_injury_report",
+           "homefield_wp", "spread_line", "home_moneyline", "away_moneyline",
+           "away_injury_report", "home_injury_report",
            "away_score", "home_score", "result", "home won", "status",
            "model_pick", "model_hit", "market_hit", "model_log_loss", "market_log_loss",
-           "model_brier", "market_brier"]
+           "model_brier", "market_brier", "bet_side", "bet_team", "bet_price", "bet_band",
+           "bet_q", "bet_result", "units", "null_ev", "fav_units"]
 
 
 def load_records(path=LEDGER):
@@ -59,6 +63,7 @@ def grade(records, results):
                      "generated_utc": r["generated_utc"], "model_wp": r["model_wp"],
                      "market_wp": r.get("market_wp"), "homefield_wp": r.get("homefield_wp"),
                      "spread_line": r.get("spread_line"),
+                     "home_moneyline": r.get("home_moneyline"), "away_moneyline": r.get("away_moneyline"),
                      "away_injury_report": inj.get("away"), "home_injury_report": inj.get("home")})
     g = pd.DataFrame(rows)
     g["lead_hours"] = ((pd.to_datetime(g.kickoff_utc, utc=True) - pd.to_datetime(g.generated_utc, utc=True))
@@ -80,8 +85,27 @@ def grade(records, results):
                                     -(y * np.log(clip(q)) + (1 - y) * np.log(clip(1 - q))), np.nan)
     g["model_brier"] = np.where(y.notna(), (p - y) ** 2, np.nan)
     g["market_brier"] = np.where(y.notna() & q.notna(), (q - y) ** 2, np.nan)
+    hw = g["home won"].where(g.status != "pending")
+    bets = m.flat_bets(g.assign(**{"home won": hw}), "model_wp")
+    fav = m.flat_bets(g.assign(**{"home won": hw, "market_ml_wp": m.market_ml_wp(g)}), "market_ml_wp")
+    g["bet_side"], g["bet_price"], g["bet_band"], g["bet_q"] = bets.side, bets.price, bets.band, bets.q
+    g["bet_team"] = np.where(bets.side == "home", g.home, np.where(bets.side == "away", g.away, ""))
+    g["bet_result"], g["units"], g["null_ev"] = bets.result, bets.units, bets.null_ev
+    g["fav_units"] = fav.units.where(bets.units.notna())  # same rows as the model's bets
     g = g.sort_values(["kickoff_utc", "game_id"], ascending=[False, True]).reset_index(drop=True)
     return g[COLUMNS]
+
+
+def roi(g):
+    """Headline: 1u flat on the model's side at the saved moneyline. The market-favorite
+    baseline is scored on the same rows (games where both have a priced bet)."""
+    b = g[g.units.notna() & g.fav_units.notna()] if len(g) else g
+    bets = pd.DataFrame({"result": b.get("bet_result", []), "units": b.get("units", []),
+                         "q": b.get("bet_q", []), "null_ev": b.get("null_ev", [])})
+    out = m.roi_summary(bets)
+    out["fav_units"] = float(b.fav_units.sum()) if len(b) else 0.
+    out["fav_roi"] = float(b.fav_units.mean()) if len(b) else np.nan
+    return out
 
 
 def summary(g):
@@ -89,7 +113,7 @@ def summary(g):
     s = g[(g.status == "graded") & g.market_wp.notna()]
     out = {"snapshots": int(len(g)), "pending": int((g.status == "pending").sum()),
            "ties": int((g.status == "tie").sum()), "graded": int((g.status == "graded").sum()),
-           "scored": int(len(s))}
+           "scored": int(len(s)), "roi": roi(g)}
     if len(s):
         mh, kh = s.model_hit.dropna(), s.market_hit.dropna()
         d = (s.market_log_loss - s.model_log_loss).to_numpy(float)
@@ -99,6 +123,19 @@ def summary(g):
                    ll_gain=float(d.mean()), ll_gain_se=float(d.std(ddof=1) / np.sqrt(len(d))) if len(d) > 1 else np.nan,
                    model_brier=float(s.model_brier.mean()), market_brier=float(s.market_brier.mean()))
     return out
+
+
+def roi_bands(g):
+    """Model-side flat ROI per price band of the picked side, plus all games."""
+    b = g[g.units.notna() & g.fav_units.notna()]
+    rows = []
+    for lab in list(m.ML_BANDS) + ["All games"]:
+        part = b if lab == "All games" else b[b.bet_band == lab]
+        bets = pd.DataFrame({"result": part.bet_result, "units": part.units, "q": part.bet_q,
+                             "null_ev": part.null_ev})
+        rows.append({"group": lab, **m.roi_summary(bets),
+                     "fav_units": float(part.fav_units.sum()), "fav_roi": float(part.fav_units.mean()) if len(part) else np.nan})
+    return pd.DataFrame(rows)
 
 
 def scored_frame(g):
@@ -113,7 +150,8 @@ def report_text(g, now=None):
     lines = [f"NFL forward ledger report -- {now.strftime('%Y-%m-%d %H:%M UTC')}",
              "Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).",
              "Basis: native forward observations only; no reconstructed or backfilled rows.",
-             "Market: spread-derived home win probability saved in the same snapshot (no independent quote timestamp).",
+             "Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).",
+             "Log loss/Brier market: spread-derived home win probability from the same snapshot.",
              ""]
     if g.empty:
         return "\n".join(lines + ["No snapshots recorded yet."]) + "\n"
@@ -121,6 +159,21 @@ def report_text(g, now=None):
         sm = summary(part)
         lines.append(f"== {rev}: {sm['snapshots']} snapshots, {sm['graded']} graded, "
                      f"{sm['pending']} pending, {sm['ties']} ties")
+        r = sm["roi"]
+        if r["bets"]:
+            lines += [f"  HEADLINE flat 1u, model's side at the snapshot moneyline: {r['wins']}-{r['losses']}-{r['pushes']}, "
+                      f"{r['units']:+.2f}u, ROI {100 * r['roi']:+.1f}% +/- {100 * r['roi_se']:.1f} (1 SE)",
+                      f"    win {100 * r['win_pct']:.1f}% vs no-vig q {100 * r['mean_q']:.1f}% (excess {r['excess_pp']:+.1f}pp); "
+                      f"market-correct null ROI {100 * r['null_roi']:+.1f}%",
+                      f"    same rows, market favorite every game: {r['fav_units']:+.2f}u, ROI {100 * r['fav_roi']:+.1f}%",
+                      "  ROI by the picked side's price band (model):"]
+            bt = roi_bands(part)
+            for row in bt.itertuples(index=False):
+                if row.bets:
+                    lines.append(f"    {row.group:>14}  n={row.bets:<4} {row.wins}-{row.losses}-{row.pushes}  "
+                                 f"{row.units:+7.2f}u  ROI {100 * row.roi:+6.1f}%  q {100 * row.mean_q:.1f}%")
+        else:
+            lines.append("  No graded bets with a saved moneyline yet.")
         if sm["scored"]:
             lines += [f"  Scored rows (graded, market present): {sm['scored']}",
                       f"  Model picks  {m.record_text(sm['model_wins'], sm['model_losses'])}",
