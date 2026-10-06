@@ -5,6 +5,14 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.9.5 (reporting only; same REVISION, config signature, recipe and ledger):
+report notes also list roster removals. NFL injury reports never list players
+on IR/PUP/suspension or players who left the team, so a starter moved to IR
+(De'Von Achane, MIA, R01 on the week-4 roster) was counted 100% out by the
+model but absent from the card notes. Notes now add every window player
+(>= REPORT_NOTE_MIN_SHARE of unit snaps) who is out on, or missing from, the
+most recent roster before the game, with the same data-gap rule the model uses.
+
 v1.9.4 (reporting only; same REVISION, config signature, recipe and ledger):
 injury-report notes on each game card. report_notes() lists, per team, the
 players on the latest injury report with their share of their unit's snaps,
@@ -662,7 +670,7 @@ def load_availability(years,season):
     season reloads every run."""
     import nflreadpy as nfl
     cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True)
-    players=None; out={'inj':[],'rost':[],'snaps':[]}; detail=[]
+    players=None; out={'inj':[],'rost':[],'snaps':[]}; detail=[]; rdetail=[]
     names={'inj':'injstatus','rost':'rost','snaps':'snaps'}  # 'injstatus': raw report_status, not weights
     for y in years:
         paths={k:cache/f'avail_{names[k]}_{y}.csv' for k in out}
@@ -681,6 +689,8 @@ def load_availability(years,season):
         rost=fetch_upstream(lambda:nfl.load_rosters_weekly(y).to_pandas(),f'rosters {y}')
         if 'game_type' in rost: rost=rost[rost.game_type=='REG']
         if 'status_description_abbr' not in rost: rost['status_description_abbr']=None
+        if y==season and 'full_name' in rost:  # names for the card notes (display only)
+            rdetail.append(normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','full_name','position','status','status_description_abbr']].copy()))
         rost=normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','position','status','status_description_abbr']].copy())
         snaps=fetch_upstream(lambda:nfl.load_snap_counts(y).to_pandas(),f'snap counts {y}'); snaps=normalize_teams(snaps[snaps.game_type=='REG'].copy())
         if players is None: players=load_player_ids(nfl)
@@ -695,6 +705,7 @@ def load_availability(years,season):
             out[k].append(df)
     out={k:pd.concat(v,ignore_index=True) for k,v in out.items()}
     out['inj_detail']=pd.concat(detail,ignore_index=True) if detail else pd.DataFrame()
+    out['roster_detail']=pd.concat(rdetail,ignore_index=True) if rdetail else pd.DataFrame()
     st=out['rost'].status
     known=st.isin(ROSTER_OUT+ROSTER_MEMBER)
     AUDIT.append({'source':'roster_status_codes','counts':{str(k):int(v) for k,v in st.value_counts(dropna=False).items()},
@@ -725,7 +736,16 @@ def roster_out_mask(rost):
 REPORT_NOTE_MIN_SHARE=.05  # notes list a player if he holds this share of his unit's window snaps (QBs always)
 
 
-def report_notes(detail,snaps,teams,season,week):
+ROSTER_DESC_LABEL={'R01':'Reserve/Injured (IR)','R48':'IR, designated to return','R04':'Reserve/PUP','R05':'Reserve/NFI',
+                   'R27':'Reserve/Suspended','R40':'Reserve/Non-football illness','R02':'Retired','W03':'Waived'}
+
+
+def roster_note(row):
+    d=row.get('status_description_abbr')
+    return ROSTER_DESC_LABEL.get(d,f'{row.get("status")}' + (f' ({d})' if isinstance(d,str) and d else ''))
+
+
+def report_notes(detail,snaps,teams,season,week,rost=None):
     """Per team, what the injury reports say about players who matter to the
     window the model uses, and how that changes through the week:
       * report_state 'none'    : this week's report is not published yet. Players
@@ -736,7 +756,10 @@ def report_notes(detail,snaps,teams,season,week):
       * report_state 'final'   : game statuses published; 'counted' is the weight
         the model applies (Out/Doubtful 1, Questionable .25).
     Players who were listed last week and are absent from a final report this week
-    are shown as cleared. Snap share = player's share of his unit's snaps over the
+    are shown as cleared. Roster removals (IR, PUP, suspension, cut, traded, or no
+    longer on the most recent roster before the game) are never on an injury report;
+    they are added from `rost` and counted 100%, as the model does (membership is
+    skipped, as in the model, when most window snaps are off that roster). Snap share = player's share of his unit's snaps over the
     team's last AVAIL_WINDOW games before this week (current season once it has
     CS_MIN_GAMES games), the window the _cs unit columns use."""
     cols=['team','gsis_id','player','position','unit','snap_share','prev_week','prev_status','prev_injury',
@@ -762,16 +785,38 @@ def report_notes(detail,snaps,teams,season,week):
         unit_tot=g.groupby('unit').s.sum(); pl=g.groupby(['gsis_id','unit']).s.sum().reset_index()
         share={r.gsis_id:(r.unit,float(r.s/unit_tot[r.unit]) if unit_tot[r.unit]>0 else 0.) for r in pl.itertuples()}
         listed_now=cur[cur.report_status.notna()|cur.practice_status.fillna('').str.contains('Did Not|Limited',regex=True)]
-        for pid in dict.fromkeys(list(prev.gsis_id)+list(listed_now.gsis_id)):
+        removed={}  # gsis_id -> (label, roster week, name, position)
+        if rost is not None and len(rost):
+            rt=rost[(rost.season==season)&(rost.team==t)]
+            weeks=sorted(int(x) for x in rt.week.unique())
+            rw=(1 if 1 in weeks else None) if week==1 else max([x for x in weeks if x<week],default=None)
+            if rw is not None:
+                ref=rt[rt.week==rw]; outm=roster_out_mask(ref)
+                members=set(ref.gsis_id[~outm])
+                tot=sum(v for u,v in unit_tot.items()); off=sum(float(g.s[(g.gsis_id==pid)].sum()) for pid in set(g.gsis_id) if pid not in members)
+                gap=tot>0 and off/tot>MEMBERSHIP_MAX_SHARE
+                for r_ in ref[outm].to_dict('records'):
+                    removed[r_['gsis_id']]=(f'{roster_note(r_)} on wk {rw} roster',r_.get('full_name'),r_.get('position'))
+                if not gap:
+                    names=rost[rost.season==season].drop_duplicates('gsis_id',keep='last').set_index('gsis_id')
+                    for pid in share:
+                        if pid not in members and pid not in removed:
+                            nm=names.full_name.get(pid) if 'full_name' in names else None
+                            removed[pid]=(f'not on wk {rw} roster (left team)',nm,names.position.get(pid) if 'position' in names else None)
+        for pid in dict.fromkeys(list(prev.gsis_id)+list(listed_now.gsis_id)+[p for p in removed if share.get(p,(None,0.))[1]>=REPORT_NOTE_MIN_SHARE]):
             p=prev[prev.gsis_id==pid]; c=cur[cur.gsis_id==pid]
-            src=(c if len(c) else p).iloc[0]
-            unit,sh=share.get(pid,(POS_GROUP.get(src.position,'QB' if src.position=='QB' else None),0.))
+            if len(c) or len(p):
+                src=(c if len(c) else p).iloc[0]; name,pos=src.full_name,src.position
+            else:
+                name,pos=removed[pid][1],removed[pid][2]
+            unit,sh=share.get(pid,(POS_GROUP.get(pos,'QB' if pos=='QB' else None),0.))
             if sh<REPORT_NOTE_MIN_SHARE and unit!='QB': continue  # no window snaps: carries no weight either
-            if state=='none': now=f'not on a week-{week} report yet'; w=0.
+            if pid in removed: now=removed[pid][0]; w=1.  # the model counts roster removals fully
+            elif state=='none': now=f'not on a week-{week} report yet'; w=0.
             elif len(c) and pd.notna(c.report_status.iloc[0]): now=c.report_status.iloc[0]; w=STATUS_WEIGHT.get(now,0.)
             elif len(c): now=f'practice: {c.practice_status.iloc[0]}' if pd.notna(c.practice_status.iloc[0]) else 'listed, no status'; w=0.
             else: now='not listed (cleared)' if state=='final' else f'not on the week-{week} practice report'; w=0.
-            rows.append({'team':t,'gsis_id':pid,'player':src.full_name,'position':src.position,'unit':unit,'snap_share':sh,
+            rows.append({'team':t,'gsis_id':pid,'player':name,'position':pos,'unit':unit,'snap_share':sh,
                          'prev_week':pw if len(p) else None,'prev_status':p.report_status.iloc[0] if len(p) else None,
                          'prev_injury':p.report_primary_injury.iloc[0] if len(p) and 'report_primary_injury' in p else None,
                          'this_week':now,'counted':w,'report_state':state})
@@ -2242,7 +2287,8 @@ def main():
     notes=None
     if avail is not None:
         wk=schedules[(schedules.season==season)&(schedules.week==cur)]
-        notes=report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur)
+        notes=report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur,
+                           rost=a.get('roster_detail'))
         save(notes,'report_notes.csv')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}
@@ -2487,6 +2533,16 @@ def _self_test():
     n3=report_notes(det(last),snr,['T'],2020,5).set_index('gsis_id')  # bye in week 4: week 3 is still the latest report
     assert n3.loc['rb1','prev_week']==3 and n3.loc['rb1','this_week']=='not on a week-5 report yet'
     assert report_notes(pd.DataFrame(),snr,['T'],2020,4).empty
+    # v1.9.5 roster removals are never on an injury report: IR on the latest roster, or gone from it, counts 100%.
+    rr=lambda ids,ir=():pd.DataFrame([{'season':2020,'week':3,'team':'T','gsis_id':g,'full_name':g.upper(),'position':'RB' if g!='wr' else 'WR',
+                                       'status':'RES' if g in ir else 'ACT','status_description_abbr':'R01' if g in ir else 'A01'} for g in ids])
+    n4=report_notes(det(last),snr,['T'],2020,4,rost=rr(['rb1','rb2','wr'],ir=['rb2'])).set_index('gsis_id')
+    assert n4.loc['rb2','this_week']=='Reserve/Injured (IR) on wk 3 roster' and n4.loc['rb2','counted']==1. and n4.loc['rb2','player']=='RB2'
+    assert np.isclose(n4.loc['rb2','snap_share'],20/60) and n4.loc['rb1','counted']==0.  # rb1: report-based, not out yet
+    n5=report_notes(det(last),snr,['T'],2020,4,rost=rr(['rb1','wr'])).set_index('gsis_id')  # rb2 left the team
+    assert n5.loc['rb2','this_week']=='not on wk 3 roster (left team)' and n5.loc['rb2','counted']==1.
+    n6=report_notes(det(last),snr,['T'],2020,4,rost=rr(['zz'])).set_index('gsis_id')  # roster misses most snaps: data gap
+    assert 'left team' not in ' '.join(n6.this_week)
     # v1.9.3 upstream retries: transient failures retried with backoff; persistent ones re-raised.
     calls,waits=[],[]
     def flaky():
