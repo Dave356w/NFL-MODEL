@@ -1,6 +1,19 @@
 """NFL box-score composite W/L model — v1.8 (production).
-Paste the entire file into ONE Colab cell; or python nfl_boxscore_composite.py.
-Offline checks: python nfl_boxscore_composite.py --self-test
+Paste the entire file into ONE Colab cell; or python nfl_model.py.
+Offline checks: python nfl_model.py --self-test
+GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
+(committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
+by actions/cache) set; see README.md.
+
+v1.9 (NEW experiment: new REVISION and OUTPUT_ROOT; v1.8 folders, frozen
+recipe and forward ledger are left untouched): legacy roster status codes.
+The first full v1.8 run over 2019-2026 audited roster codes that the 2024-26
+check had not seen: SUS (suspended), PUP, RSN (reserve/non-football injury),
+NWT (not with team), UFA/RFA (free agents), RSR, E14 (exempt), TRT/TRC
+(transactions). Older seasons carry them with no status description, so v1.8
+counted those players as on the roster and available. They now count as out;
+active (ACT), practice squad (DEV) and game-day inactive (INA) stay members.
+This also starts the GitHub Actions ledger (data/forward_predictions.jsonl).
 
 v1.8 (NEW experiment: new REVISION and OUTPUT_ROOT; the v1.7 folder, frozen
 recipe and forward ledger are left untouched): availability review fixes.
@@ -190,6 +203,7 @@ for _pkg in ('numpy','pandas','scipy'):
 import datetime as dt
 import hashlib
 import json
+import os
 import shutil
 import warnings
 from pathlib import Path
@@ -209,11 +223,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.8'
+REVISION='boxscore-composite-v1.9'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_8'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_9'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -235,10 +249,13 @@ SELECTION_RULE='min_log_loss'  # 'one_se' restores v1 behavior
 SELECTION_ONE_SE=1.         # used only when SELECTION_RULE=='one_se'; always reported
 MARKET_SIGMA=12.37          # fixed spread-to-WP comparator only
 FLAG_GAP_PP=10.             # board flags |model - market| at or above this many points
-CACHE_MAX_AGE_HOURS=24.
+CACHE_MAX_AGE_HOURS=24.                # current season's play-by-play reconstruction
+COMPLETED_CACHE_MAX_AGE_HOURS=24.*7    # completed seasons: weekly refresh picks up upstream revisions
+STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/Drive layout)
+CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.8 availability review: injury-report coverage gate, starter-based QB projection, roster status codes; v1.7 families'
+DIAGNOSTICS='v1.9 legacy roster status codes out; v1.8 report gate and starter-based QB projection; v1.7 families'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -302,7 +319,10 @@ ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_core',
                 'rates_core_adj_avail_cs':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
-ROSTER_OUT=('RES','CUT','TRD','RET','EXE','E01')  # read from the PRIOR week's roster only
+# Read from the PRIOR week's roster only. Second row: codes used mainly in 2019-2023 rosters
+# (suspended, PUP, non-football injury, not with team, free agents, exempt, transactions).
+ROSTER_OUT=('RES','CUT','TRD','RET','EXE','E01',
+            'SUS','PUP','RSN','NWT','UFA','RFA','RSR','E14','TRT','TRC')
 ROSTER_OUT_DESC_PREFIX=('R','W')  # status_description_abbr reserve/waived codes count as out whatever the status
 ROSTER_MEMBER=('ACT','DEV','INA')  # active, practice squad, game-day inactive; anything else is audited
 FINAL_REPORT_HOURS=24.    # inside this many hours of kickoff a team with practice rows but no game status counts as reported
@@ -532,13 +552,14 @@ def aggregate_qb(p,schedule):
 
 
 def load_boxes(year,schedule):
-    path=OUTPUT_ROOT/'cache'/f'boxscores_{year}_{REVISION}.csv'; meta=path.with_suffix('.json')
-    qbpath=OUTPUT_ROOT/'cache'/f'qb_{year}_{REVISION}.csv'
+    path=cache_dir()/f'boxscores_{year}_{REVISION}.csv'; meta=path.with_suffix('.json')
+    qbpath=cache_dir()/f'qb_{year}_{REVISION}.csv'
     schedule_hash=data_hash(schedule[['game_id','week','result','home_team','away_team']])
     if REUSE_CACHE and path.exists() and meta.exists():
         m=json.loads(meta.read_text())
         age=(now_utc()-dt.datetime.fromisoformat(m['generated_utc'])).total_seconds()/3600
-        if (0<=age<CACHE_MAX_AGE_HOURS and m['schedule_hash']==schedule_hash and qbpath.exists()
+        max_age=CACHE_MAX_AGE_HOURS if schedule.result.isna().any() else COMPLETED_CACHE_MAX_AGE_HOURS
+        if (0<=age<max_age and m['schedule_hash']==schedule_hash and qbpath.exists()
                 and m['sha256']==hashlib.sha256(path.read_bytes()).hexdigest()):
             AUDIT.append({'cache':str(path),**m}); return pd.read_csv(path),pd.read_csv(qbpath)
     if schedule.result.notna().sum()==0: return pd.DataFrame(columns=['game_id','season','week','team','opponent',*COUNTS]),None
@@ -569,7 +590,7 @@ def load_availability(years,season):
     snap counts mapped to GSIS ids. Completed seasons are cached; the current
     season reloads every run."""
     import nflreadpy as nfl
-    cache=OUTPUT_ROOT/'cache'; cache.mkdir(parents=True,exist_ok=True)
+    cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True)
     players=None; out={'inj':[],'rost':[],'snaps':[]}
     names={'inj':'injstatus','rost':'rost','snaps':'snaps'}  # 'injstatus': raw report_status, not weights
     for y in years:
@@ -797,7 +818,7 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None):
     per-season cache keyed on the config signature and all inputs the season
     can touch. The current season is always rebuilt. Returns (table, info)."""
     sig,_=config_signature()
-    cache=OUTPUT_ROOT/'cache'; cache.mkdir(parents=True,exist_ok=True)
+    cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True)
     def window(df,y):
         if df is None or not len(df): return pd.DataFrame({'empty':[]})
         return df[(df.season>=y-MAX_HISTORY_SEASONS)&(df.season<=y)].sort_values(list(df.columns)[:4]).reset_index(drop=True)
@@ -1418,7 +1439,7 @@ def config_signature():
 
 def frozen_recipe(oof,season):
     sig,cfg=config_signature()
-    path=OUTPUT_ROOT/f'frozen_recipe_{season}.json'
+    path=state_dir()/f'frozen_recipe_{season}.json'
     if path.exists():
         rec=json.loads(path.read_text())
         if rec['config_signature']!=sig:
@@ -1461,10 +1482,10 @@ def record_forward(board,fit,recipe_record,asof=None):
     For availability recipes a game waits until both teams' injury reports
     carry game statuses (injury_reports_ready), so the frozen snapshot is not
     an early-week forecast that assumed everyone healthy.
-    The ledger is local to OUTPUT_ROOT; it is not a trusted external timestamp.
+    The ledger is local to state_dir(); it is not a trusted external timestamp.
     """
     asof=now_utc() if asof is None else asof
-    path=OUTPUT_ROOT/'forward_predictions.jsonl'
+    path=state_dir()/'forward_predictions.jsonl'
     old=[json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
     sig=recipe_record['config_signature']
     identity=f'{sig}:{recipe_key(recipe_record["recipe"])}:{recipe_record["season"]}'
@@ -1784,7 +1805,7 @@ def cached_grid(features,season):
     for half in TEAM_HALF_LIVES:
         hist=features[half]; hist=hist[hist.season<season]
         h.update(data_hash(hist).encode())
-    path=OUTPUT_ROOT/'cache'/f'walk_forward_{h.hexdigest()[:16]}.csv'
+    path=cache_dir()/f'walk_forward_{h.hexdigest()[:16]}.csv'
     meta=path.with_suffix('.json')
     if REUSE_CACHE and path.exists() and meta.exists():
         m=json.loads(meta.read_text())
@@ -1827,8 +1848,29 @@ def migrate_local_outputs(local,root):
     return report
 
 
+def state_dir():
+    """Frozen recipes and the forward ledger (committed data/ in Actions)."""
+    return Path(STATE_DIR) if STATE_DIR else OUTPUT_ROOT
+
+
+def cache_dir():
+    return Path(CACHE_DIR) if CACHE_DIR else OUTPUT_ROOT/'cache'
+
+
+def apply_env_config(env=None):
+    """Actions/CLI overrides. Unset variables leave the Colab defaults alone."""
+    global STATE_DIR,CACHE_DIR,SEASON,CURRENT_WEEK
+    env=os.environ if env is None else env
+    if env.get('NFL_STATE_DIR'): STATE_DIR=env['NFL_STATE_DIR']
+    if env.get('NFL_CACHE_DIR'): CACHE_DIR=env['NFL_CACHE_DIR']
+    if env.get('NFL_SEASON'): SEASON=int(env['NFL_SEASON'])
+    if env.get('NFL_WEEK'): CURRENT_WEEK=int(env['NFL_WEEK'])
+
+
 def resolve_output_root():
-    """Google Drive in Colab (mounting it if needed); the local folder otherwise."""
+    """NFL_OUTPUT_ROOT if set; Google Drive in Colab (mounting it if needed);
+    the local folder otherwise."""
+    if os.environ.get('NFL_OUTPUT_ROOT'): return Path(os.environ['NFL_OUTPUT_ROOT'])
     local=Path(OUTPUT_NAME)
     if not USE_GOOGLE_DRIVE: return local
     try:
@@ -1852,6 +1894,7 @@ def main():
         if importlib.util.find_spec(pkg) is None:
             subprocess.run([sys.executable,'-m','pip','install','-q',pkg],check=True)
     AUDIT.clear()
+    apply_env_config()
     OUTPUT_ROOT=resolve_output_root()
     on_drive=str(OUTPUT_ROOT).startswith(DRIVE_MOUNT)
     print(f'Output folder: {OUTPUT_ROOT.resolve()}{" (Google Drive)" if on_drive else ""}')
@@ -1988,7 +2031,7 @@ def main():
                   if uses_adj else 'no explicit opponent-strength adjustment'),
                  'game-state effects in full-game statistics',
                  'design chosen after historical results reviewed; development evaluation, not untouched test',
-                 'v1.1-v1.8 changes applied after v1 results were seen',
+                 'v1.1-v1.9 changes applied after v1 results were seen',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
                    'no game-day inactives or late-week news',
@@ -1998,7 +2041,7 @@ def main():
                    'unit availability measures fresh absences; returns and arrivals do not offset them',
                    'forward ledger waits for final injury reports (game statuses) for both teams']
                   if uses_avail else ['no live starters/injuries in the selected recipe'])
-    dump(outdir/'run_manifest.json',{'revision':REVISION,'diagnostics':DIAGNOSTICS,'output_root':str(OUTPUT_ROOT.resolve()),'market_blend_verdict':blend_verdict(blend),
+    dump(outdir/'run_manifest.json',{'revision':REVISION,'diagnostics':DIAGNOSTICS,'output_root':str(OUTPUT_ROOT.resolve()),'state_dir':str(state_dir().resolve()),'market_blend_verdict':blend_verdict(blend),
         'generated_utc':now.isoformat(),'season':season,'week':cur,
         'config_signature':sig,'config':cfg,'recipe':recipe,'source_audit':AUDIT,'package_versions':versions,
         'data_mode':'current-upstream historical reconstruction, separate first-pregame local ledger',
@@ -2010,7 +2053,9 @@ def main():
         'limitations':limitations,
         'csv_files':saved})
     print(f'Saved {len(saved)} CSVs, HTML, fitted weights and audit JSON to {outdir.resolve()}')
-    if on_drive:
+    if STATE_DIR:
+        print(f'Frozen recipe and forward ledger: {state_dir().resolve()}; caches: {cache_dir().resolve()}.')
+    elif on_drive:
         print('Frozen recipe, forward ledger and caches are on Google Drive. Let Drive finish syncing '
               '(a minute or so) before disconnecting the runtime.')
     else:
@@ -2019,7 +2064,15 @@ def main():
 
 
 def self_test():
-    """Synthetic regressions only. No claim about real NFL predictive accuracy."""
+    """Synthetic regressions only. No claim about real NFL predictive accuracy.
+    Runs with STATE_DIR/CACHE_DIR cleared so nothing can reach a configured data/ folder."""
+    saved={k:globals()[k] for k in ('STATE_DIR','CACHE_DIR','OUTPUT_ROOT')}
+    globals().update(STATE_DIR=None,CACHE_DIR=None)
+    try: return _self_test()
+    finally: globals().update(saved)
+
+
+def _self_test():
     import tempfile
     rng=np.random.default_rng(SEED)
     # PBP extraction: sacks counted once, net yards, no-play penalties, fumble attribution, TOP dedup.
@@ -2132,8 +2185,9 @@ def self_test():
     finally:
         STATUS_WEIGHT.clear(); STATUS_WEIGHT.update(old_sw)
     # v1.8 roster codes: a reserve/waived description counts as out even under status ACT; DEV stays a member.
-    rc=pd.DataFrame({'status':['ACT','ACT','DEV','INA','E01','RES'],'status_description_abbr':['A01','R48','P01','A01',None,'R01']})
-    assert roster_out_mask(rc).tolist()==[False,True,False,False,True,True]
+    rc=pd.DataFrame({'status':['ACT','ACT','DEV','INA','E01','RES','SUS','UFA','PUP'],
+                     'status_description_abbr':['A01','R48','P01','A01',None,'R01',None,None,None]})
+    assert roster_out_mask(rc).tolist()==[False,True,False,False,True,True,True,True,True]
     # v1.8 benching: the healthy veteran who lost the job is no longer projected; the week-4 starter is.
     bench=qbt.copy()
     bench.loc[(bench.week==4)&(bench.gsis_id=='qa'),['dropbacks','net_yards','leader','starter']]=[2,10.,False,False]
