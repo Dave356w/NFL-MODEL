@@ -1,0 +1,96 @@
+{
+  "revision": "boxscore-composite-v1.9",
+  "diagnostics": "v1.9 legacy roster status codes out; v1.8 report gate and starter-based QB projection; v1.7 families",
+  "generated_utc": "2026-10-06T14:32:53.292526+00:00",
+  "season": 2026,
+  "week": 5,
+  "config_signature": "61cdea39451eea8454e1d4f2a0410b46fb55fdd72793619138aaccefd435cc2e",
+  "recipe": {
+    "family": "rates_core_avail_cs",
+    "half_life": 8.0,
+    "ridge": 0.1
+  },
+  "market_blend_verdict": "Composite weight -0.121 (95% -0.560 to +0.264): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0004 log loss per game (95% -0.0028 to +0.0020; positive means the blend beat the market).",
+  "limitations": [
+    "box score definitions approximate some official totals",
+    "no explicit opponent-strength adjustment",
+    "game-state effects in full-game statistics",
+    "design chosen after historical results reviewed; development evaluation, not untouched test",
+    "v1.1-v1.9 changes applied after v1 results were seen",
+    "game-bootstrap intervals omit selection and serial-dependence uncertainty",
+    "availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; no game-day inactives or late-week news",
+    "roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)",
+    "QB projection: most recent starter among available rostered QBs (week 1: most starts last season); a newly signed starter is projected only when no rostered QB has team history",
+    "unit availability measures fresh absences; returns and arrivals do not offset them",
+    "forward ledger waits for final injury reports (game statuses) for both teams"
+  ],
+  "target": "binary home W/L; ties excluded from fit/evaluation but their prior stats retained",
+  "fit_timing": "whole prior weeks only; no within-week coefficient updates",
+  "validation": "prior-season-only recipe selection; weekly coefficients trained only on earlier game rows",
+  "profile_decay": "2^(-team-game age / selected half-life) times offseason retention per season boundary",
+  "fit_decay": "2^(-age in NFL-season units / FIT_HALF_LIFE_SEASONS)",
+  "package_versions": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "nflreadpy": "0.1.5",
+    "pyarrow": "25.0.1"
+  },
+  "availability_audit": [
+    {
+      "source": "roster_status_codes",
+      "counts": {
+        "ACT": 187462,
+        "DEV": 55905,
+        "RES": 37009,
+        "INA": 23475,
+        "CUT": 17669,
+        "RET": 2113,
+        "NWT": 604,
+        "PUP": 321,
+        "RSN": 319,
+        "SUS": 246,
+        "UFA": 180,
+        "EXE": 144,
+        "RSR": 119,
+        "TRC": 80,
+        "TRD": 60,
+        "E14": 28,
+        "TRT": 14,
+        "RFA": 6,
+        "E01": 4
+      },
+      "unrecognized_counted_as_member": {},
+      "out_by_description": 206
+    },
+    {
+      "source": "availability_roster_membership",
+      "rule": "most recent roster week before the game (week 1: week-1 roster); off-roster players count as out",
+      "qb_rule": "available QB on the reference roster QB list who most recently started for the team; else most team dropbacks; else most dropbacks anywhere; else league backup prior. Efficiency from all-team history.",
+      "team_weeks": 3900,
+      "no_reference_roster": 0,
+      "reference_older_than_prior_week": 220,
+      "membership_skipped_as_data_gap": 12,
+      "qb_projected_from_backup_prior": 3,
+      "qb_projected_from_other_team_history": 27,
+      "qb_projected_not_last_starter": 146,
+      "injury_report_final": 3771,
+      "injury_report_practice_only": 93,
+      "injury_report_none": 36,
+      "window_snaps": 20982214.0,
+      "off_roster_snaps": 1401370.0,
+      "off_roster_snap_share": 0.06678847141679138,
+      "cached_seasons": [],
+      "rebuilt_seasons": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ]
+    }
+  ]
+}
