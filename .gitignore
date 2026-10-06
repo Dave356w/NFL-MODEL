@@ -1,3 +1,11 @@
 __pycache__/
-selftest_board.html
+*.pyc
+.venv/
+# build output (regenerated each run / deployed to Pages)
+public/
+# model run folders and caches (restored from actions/cache in CI)
+runs/
+.nfl_cache/
 nfl_boxscore_output_*/
+selftest_board.html
+*.tmp
