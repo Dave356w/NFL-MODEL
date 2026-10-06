@@ -1,6 +1,37 @@
-"""NFL box-score composite W/L model — v1.7 (production).
-Paste the entire file into ONE Colab cell; or python nfl_boxscore_composite_v1_7.py.
-Offline checks: python nfl_boxscore_composite_v1_7.py --self-test
+"""NFL box-score composite W/L model — v1.8 (production).
+Paste the entire file into ONE Colab cell; or python nfl_boxscore_composite.py.
+Offline checks: python nfl_boxscore_composite.py --self-test
+
+v1.8 (NEW experiment: new REVISION and OUTPUT_ROOT; the v1.7 folder, frozen
+recipe and forward ledger are left untouched): availability review fixes.
+  * Injury-report coverage gate. Game statuses (Out/Doubtful/Questionable)
+    publish Friday (Wednesday for Thursday games), so an early-week run saw
+    every unit healthy apart from IR and departures, and the ledger froze that
+    first snapshot. Each team-week now records its report state: 'final' (any
+    game status listed), 'practice' (practice rows only) or 'none'. A game
+    enters the forward ledger only when both teams are 'final', or 'practice'
+    within FINAL_REPORT_HOURS of kickoff (a team with no designations at all,
+    12 of 544 team-weeks in 2025). The board flags games still waiting.
+  * QB projection follows the depth chart. Projected = the available rostered
+    QB who started (took the first dropback of) the team's most recent game
+    any of them started; a benched veteran no longer stays the projection for
+    weeks, and a starter hurt mid-game is not replaced by his relief.
+    "Usual" = starter of the team's most recent game. Each passer's efficiency
+    now uses his history with every team. With no rostered QB in the team's
+    history (e.g. a week-1 veteran signing), the rostered QB with the most
+    recent-weighted dropbacks anywhere is projected before the backup prior.
+  * The QB position filter uses the reference roster's QB list even when
+    membership is skipped as a data gap, so gadget passers stay excluded.
+  * Roster status: also out are status E01 (exempt) and any row whose status
+    description is a reserve (R..) or waived (W..) code, e.g. ACT/R48
+    (designated to return, not activated). Practice squad (DEV) and game-day
+    inactive (INA) remain members. Unrecognized status codes are audited.
+  * Injury cache stores the raw report_status; STATUS_WEIGHT is applied after
+    loading, so a weight change can no longer reuse stale cached weights.
+  * Reading note: unit columns measure FRESH absences. Returns and arrivals
+    never offset them, and a long-term absence leaves the 4-game snap window
+    while box-score profiles still carry his games, so the feature describes
+    recent lineup change, not the current lineup.
 
 v1.7 (NEW experiment: new REVISION and OUTPUT_ROOT; the v1.6 folder, frozen
 recipe and forward ledger are left untouched): opponent-adjusted availability.
@@ -178,11 +209,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.7'
+REVISION='boxscore-composite-v1.8'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_7'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_8'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -207,7 +238,7 @@ FLAG_GAP_PP=10.             # board flags |model - market| at or above this many
 CACHE_MAX_AGE_HOURS=24.
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.7 opponent-adjusted availability family; market blend, matched-band calibration, pick records, cached availability; Drive storage'
+DIAGNOSTICS='v1.8 availability review: injury-report coverage gate, starter-based QB projection, roster status codes; v1.7 families'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -271,12 +302,15 @@ ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_core',
                 'rates_core_adj_avail_cs':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
-ROSTER_OUT=('RES','CUT','TRD','RET','EXE')  # read from the PRIOR week's roster only
+ROSTER_OUT=('RES','CUT','TRD','RET','EXE','E01')  # read from the PRIOR week's roster only
+ROSTER_OUT_DESC_PREFIX=('R','W')  # status_description_abbr reserve/waived codes count as out whatever the status
+ROSTER_MEMBER=('ACT','DEV','INA')  # active, practice squad, game-day inactive; anything else is audited
+FINAL_REPORT_HOURS=24.    # inside this many hours of kickoff a team with practice rows but no game status counts as reported
 ROSTER_MEMBERSHIP='most recent roster week before the game (week 1: week-1 roster); off-roster players count as out'
 MEMBERSHIP_MAX_SHARE=.5   # above this off-roster snap share, treat the roster as a data gap
 AVAIL_WINDOW=4            # team's prior games that define each player's snap share
 CS_MIN_GAMES=2            # _cs family: current-season-only window once a team has this many games
-QB_RULE='projected QB must be listed at QB on the reference roster; else league backup prior'
+QB_RULE='available QB on the reference roster QB list who most recently started for the team; else most team dropbacks; else most dropbacks anywhere; else league backup prior. Efficiency from all-team history.'
 NO_QB_LABEL='backup without team dropbacks (league backup prior)'
 QB_HALF_LIFE=8.           # team games
 QB_PRIOR_DROPBACKS=150.   # shrinkage toward backup-level efficiency
@@ -482,7 +516,7 @@ def aggregate_qb(p,schedule):
     """Passer-level dropbacks and net yards per team-game (sacks included)."""
     p=p[(p.season_type=='REG')&(numeric(p,'two_point_attempt')!=1)]
     if 'play_deleted' in p: p=p[numeric(p,'play_deleted')!=1]
-    if 'passer_player_id' not in p: return pd.DataFrame(columns=['game_id','season','week','team','gsis_id','name','dropbacks','net_yards','leader'])
+    if 'passer_player_id' not in p: return pd.DataFrame(columns=['game_id','season','week','team','gsis_id','name','dropbacks','net_yards','leader','starter'])
     db=p[p.play_type.ne('no_play')&((numeric(p,'pass_attempt')==1)|(numeric(p,'sack')==1))&p.passer_player_id.notna()].copy()
     db['ny']=numeric(db,'yards_gained').fillna(0.)
     q=db.groupby(['game_id','posteam','passer_player_id'],as_index=False).agg(
@@ -490,6 +524,10 @@ def aggregate_qb(p,schedule):
     q=q.rename(columns={'posteam':'team','passer_player_id':'gsis_id'})
     q=q.merge(schedule.loc[schedule.result.notna(),['game_id','season','week']],on='game_id',how='inner')
     q['leader']=q.dropbacks.eq(q.groupby(['game_id','team']).dropbacks.transform('max'))
+    # Starter = passer on the team's first dropback of the game.
+    first=db.sort_values('play_id').drop_duplicates(['game_id','posteam'])
+    starters=set(zip(first.game_id,first.posteam,first.passer_player_id))
+    q['starter']=[k in starters for k in zip(q.game_id,q.team,q.gsis_id)]
     return q
 
 
@@ -533,19 +571,21 @@ def load_availability(years,season):
     import nflreadpy as nfl
     cache=OUTPUT_ROOT/'cache'; cache.mkdir(parents=True,exist_ok=True)
     players=None; out={'inj':[],'rost':[],'snaps':[]}
+    names={'inj':'injstatus','rost':'rost','snaps':'snaps'}  # 'injstatus': raw report_status, not weights
     for y in years:
-        paths={k:cache/f'avail_{k}_{y}.csv' for k in out}
+        paths={k:cache/f'avail_{names[k]}_{y}.csv' for k in out}
         if y<season and all(p.exists() for p in paths.values()):
             for k,p in paths.items(): out[k].append(pd.read_csv(p))
             continue
         try: inj=nfl.load_injuries(y).to_pandas()
         except Exception: inj=_nflverse_parquet('injuries',y)  # nflreadpy can fail on newer files
+        # Raw report_status is cached; STATUS_WEIGHT is applied after loading (injury_weights).
         inj=normalize_teams(inj[inj.game_type=='REG'].copy())
-        inj['weight']=inj.report_status.map(STATUS_WEIGHT).fillna(0.)
-        inj=inj.dropna(subset=['gsis_id']).groupby(['season','week','team','gsis_id'],as_index=False).weight.max()
+        inj=inj.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','report_status']].drop_duplicates()
         rost=nfl.load_rosters_weekly(y).to_pandas()
         if 'game_type' in rost: rost=rost[rost.game_type=='REG']
-        rost=normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','position','status']].copy())
+        if 'status_description_abbr' not in rost: rost['status_description_abbr']=None
+        rost=normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','position','status','status_description_abbr']].copy())
         snaps=nfl.load_snap_counts(y).to_pandas(); snaps=normalize_teams(snaps[snaps.game_type=='REG'].copy())
         if players is None:
             pl=nfl.load_players().to_pandas().dropna(subset=['pfr_id','gsis_id'])
@@ -559,7 +599,32 @@ def load_availability(years,season):
         for k,df in (('inj',inj),('rost',rost),('snaps',snaps)):
             if y<season: df.to_csv(paths[k],index=False)
             out[k].append(df)
-    return {k:pd.concat(v,ignore_index=True) for k,v in out.items()}
+    out={k:pd.concat(v,ignore_index=True) for k,v in out.items()}
+    st=out['rost'].status
+    known=st.isin(ROSTER_OUT+ROSTER_MEMBER)
+    AUDIT.append({'source':'roster_status_codes','counts':{str(k):int(v) for k,v in st.value_counts(dropna=False).items()},
+                  'unrecognized_counted_as_member':{str(k):int(v) for k,v in st[~known].value_counts(dropna=False).items()},
+                  'out_by_description':int((roster_out_mask(out['rost'])&~st.isin(ROSTER_OUT)).sum())})
+    if (~known).any():
+        print(f'  Note: unrecognized roster status codes counted as members: {AUDIT[-1]["unrecognized_counted_as_member"]}')
+    return out
+
+
+def injury_weights(inj):
+    """Raw injury rows plus 'weight' from the CURRENT STATUS_WEIGHT (rows that
+    already carry a weight keep it; used by synthetic tests)."""
+    inj=inj.copy()
+    if 'report_status' not in inj: inj['report_status']=None
+    if 'weight' not in inj: inj['weight']=inj.report_status.map(STATUS_WEIGHT).fillna(0.)
+    return inj
+
+
+def roster_out_mask(rost):
+    out=rost.status.isin(ROSTER_OUT)
+    if 'status_description_abbr' in rost:
+        d=rost.status_description_abbr.astype(str)
+        out|=rost.status_description_abbr.notna()&d.str[:1].isin(ROSTER_OUT_DESC_PREFIX)
+    return out
 
 
 def availability_table(targets,qb,snaps,inj,rost,audit=None):
@@ -568,11 +633,17 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
     membership; week 1 uses the week-1 roster), and snaps/QB play from earlier
     games. A player in the window who is not on the reference roster has left
     and counts as out. '_cs' unit columns use current-season games only once
-    the team has CS_MIN_GAMES of them."""
-    inj_map={k:dict(zip(g.gsis_id,g.weight)) for k,g in inj.groupby(['season','week','team'])}
-    rost_out={k:set(g.gsis_id[g.status.isin(ROSTER_OUT)]) for k,g in rost.groupby(['season','week','team'])}
-    members={k:set(g.gsis_id[~g.status.isin(ROSTER_OUT)]) for k,g in rost.groupby(['season','week','team'])}
-    qb_ids={k:set(g.gsis_id[(g.position=='QB')&~g.status.isin(ROSTER_OUT)]) for k,g in rost.groupby(['season','week','team'])}
+    the team has CS_MIN_GAMES of them. 'injury_report' is the week's report
+    state: 'final' (a game status is listed), 'practice' (rows, no status) or
+    'none' (nothing published yet)."""
+    inj=injury_weights(inj)
+    inj_map={k:g.groupby('gsis_id').weight.max().to_dict() for k,g in inj.groupby(['season','week','team'])}
+    report_state={k:'final' if (g.report_status.notna()|(g.weight>0)).any() else 'practice'
+                  for k,g in inj.groupby(['season','week','team'])}
+    rost=rost.assign(_out=roster_out_mask(rost))
+    rost_out={k:set(g.gsis_id[g._out]) for k,g in rost.groupby(['season','week','team'])}
+    members={k:set(g.gsis_id[~g._out]) for k,g in rost.groupby(['season','week','team'])}
+    qb_ids={k:set(g.gsis_id[(g.position=='QB')&~g._out]) for k,g in rost.groupby(['season','week','team'])}
     roster_weeks={}
     for (rs,rw,rt) in members: roster_weeks.setdefault((int(rs),rt),[]).append(int(rw))
     def ref_week_for(y,w,t):
@@ -585,6 +656,16 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
     snaps['snaps']=np.where(snaps.group.isin(OFFENSE_GROUPS),snaps.offense_snaps,snaps.defense_snaps)
     by_team={t:g for t,g in snaps.groupby('team')}
     qb_team={t:g for t,g in qb.groupby('team')} if qb is not None and len(qb) else {}
+    qb_player={pid:g for pid,g in qb.groupby('gsis_id')} if qb is not None and len(qb) else {}
+    def player_history(pid,y,w):
+        """(recent-weighted dropbacks, net yards) over a passer's games for ANY team.
+        Age counts his own appearances, with the offseason discount."""
+        g=qb_player.get(pid)
+        if g is None: return 0.,0.
+        g=g[before(g,y,w)&(g.season>=y-1)].sort_values(['season','week','game_id'])
+        if not len(g): return 0.,0.
+        wt=np.exp2(-np.arange(len(g)-1,-1,-1,dtype=float)/QB_HALF_LIFE)*np.power(OFFSEASON_RETENTION,y-g.season.to_numpy(float))
+        return float((wt*g.dropbacks.to_numpy(float)).sum()),float((wt*g.net_yards.to_numpy(float)).sum())
     prior_cache={}
     def backup_prior(y,w):
         if (y,w) not in prior_cache:
@@ -596,6 +677,8 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
         return prior_cache[(y,w)]
     stats={'team_weeks':0,'no_reference_roster':0,'reference_older_than_prior_week':0,
            'membership_skipped_as_data_gap':0,'qb_projected_from_backup_prior':0,
+           'qb_projected_from_other_team_history':0,'qb_projected_not_last_starter':0,
+           'injury_report_final':0,'injury_report_practice_only':0,'injury_report_none':0,
            'window_snaps':0.,'off_roster_snaps':0.}
     rows=[]
     for r in targets[['season','week','team']].drop_duplicates().itertuples(index=False):
@@ -607,7 +690,9 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
             for pid in rost_out.get((y,ref_week,t),()): out[pid]=1.
         ref=members.get((y,ref_week,t)) if ref_week is not None else None
         if ref is not None and w>1 and ref_week<w-1: stats['reference_older_than_prior_week']+=1
-        rec={'season':y,'week':w,'team':t,'qb_expected':None,'qb_usual':None,
+        rep_state=report_state.get((y,w,t),'none')
+        stats['injury_report_'+{'final':'final','practice':'practice_only','none':'none'}[rep_state]]+=1
+        rec={'season':y,'week':w,'team':t,'qb_expected':None,'qb_usual':None,'injury_report':rep_state,
              'roster_reference_week':ref_week if ref is not None else np.nan,'off_roster_snap_share':np.nan}
         g=by_team.get(t); h=None; hcs=None
         if g is not None:
@@ -643,19 +728,51 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
                 age=pd.Series(np.arange(len(order)-1,-1,-1,dtype=float),index=order.game_id)
                 wt=np.exp2(-hq.game_id.map(age).to_numpy()/QB_HALF_LIFE)*np.power(OFFSEASON_RETENTION,y-hq.season.to_numpy(float))
                 agg=pd.DataFrame({'gsis_id':hq.gsis_id.to_numpy(),'name':hq['name'].to_numpy(),
-                                  'n':wt*hq.dropbacks.to_numpy(),'yds':wt*hq.net_yards.to_numpy()}).groupby('gsis_id').agg(
-                    n=('n','sum'),yds=('yds','sum'),name=('name','last'))
-                agg['eff']=(agg.yds+QB_PRIOR_DROPBACKS*prior)/(agg.n+QB_PRIOR_DROPBACKS)
+                                  'n':wt*hq.dropbacks.to_numpy()}).groupby('gsis_id').agg(n=('n','sum'),name=('name','last'))
+                def eff(pid):  # shrunk net yards per dropback over the passer's games for any team
+                    n,yds=player_history(pid,y,w)
+                    return (yds+QB_PRIOR_DROPBACKS*prior)/(n+QB_PRIOR_DROPBACKS)
+                agg['eff']=[eff(pid) for pid in agg.index]
                 # The mix keeps departed passers: it describes what the team's profile stats reflect.
                 mix=float((agg.n*agg.eff).sum()/agg.n.sum())
+                # Starter ranking ('leader' if no starter flag). In season: most recent start first.
+                # Before the team's first game of the season: most starts last season, so a
+                # week-18 rest-day starter is not taken for the incumbent.
+                scol='starter' if 'starter' in hq else 'leader'
+                st=hq[hq[scol].astype(bool)].sort_values(['season','week','game_id'],ascending=False)
+                if len(st) and not (st.season==y).any():
+                    cnt=st.gsis_id.value_counts()
+                    starters=sorted(dict.fromkeys(st.gsis_id),key=lambda c:-cnt[c])  # stable: ties keep recency
+                else: starters=list(dict.fromkeys(st.gsis_id))
+                rec['qb_usual']=agg.loc[starters[0],'name'] if starters else agg.loc[agg.n.idxmax(),'name']
+                # Only quarterbacks on the reference roster's QB list can be projected (no gadget
+                # passers), also when membership is skipped as a data gap. If that list misses
+                # every team passer during a gap, passers who started a game stand in for it.
+                qbl=qb_ids.get((y,ref_week,t),set()) if ref_week is not None else None
                 ok=agg[[unavail(pid)<1. for pid in agg.index]]
-                # Only rostered quarterbacks can be projected (no gadget passers).
-                if ref is not None: ok=ok[ok.index.isin(qb_ids.get((y,ref_week,t),set()))]
-                proj=float(ok.loc[ok.n.idxmax(),'eff']) if len(ok) else prior
-                if not len(ok): stats['qb_projected_from_backup_prior']+=1
+                if qbl is not None:
+                    if ref is None and not ok.index.isin(qbl).any(): ok=ok[ok.index.isin(starters)]
+                    else: ok=ok[ok.index.isin(qbl)]
+                pid=None
+                for c in starters:  # highest-ranked starter among the candidates
+                    if c in ok.index: pid=c; break
+                if pid is None and len(ok): pid=ok.n.idxmax()
+                if pid is not None:
+                    proj,name=float(agg.loc[pid,'eff']),agg.loc[pid,'name']
+                    if not starters or pid!=starters[0]: stats['qb_projected_not_last_starter']+=1
+                else:
+                    # No candidate in the team's history (e.g. a newly signed starter): the available
+                    # rostered QB with the most recent-weighted dropbacks for any team.
+                    other=[(player_history(c,y,w)[0],c) for c in sorted(qbl or ()) if unavail(c)<1.]
+                    other=[(n,c) for n,c in other if n>0]
+                    if other:
+                        n,pid=max(other)
+                        proj=eff(pid); stats['qb_projected_from_other_team_history']+=1
+                        name=qb_player[pid].sort_values(['season','week'])['name'].iloc[-1]
+                    else:
+                        proj,name=prior,NO_QB_LABEL; stats['qb_projected_from_backup_prior']+=1
                 rec['qb_delta']=proj-mix
-                rec['qb_usual']=agg.loc[agg.n.idxmax(),'name']
-                rec['qb_expected']=ok.loc[ok.n.idxmax(),'name'] if len(ok) else NO_QB_LABEL
+                rec['qb_expected']=name
         rows.append(rec)
     if audit is not None:
         audit.append({'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**stats,
@@ -663,7 +780,8 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None):
     return pd.DataFrame(rows)
 
 AVAIL_STAT_KEYS=('team_weeks','no_reference_roster','reference_older_than_prior_week','membership_skipped_as_data_gap',
-                 'qb_projected_from_backup_prior','window_snaps','off_roster_snaps')
+                 'qb_projected_from_backup_prior','qb_projected_from_other_team_history','qb_projected_not_last_starter',
+                 'injury_report_final','injury_report_practice_only','injury_report_none','window_snaps','off_roster_snaps')
 
 
 def combine_avail_stats(stats):
@@ -707,7 +825,7 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None):
         parts.append(df); stats+=st
     if audit is not None: audit.append({**combine_avail_stats(stats),**info})
     out=pd.concat(parts,ignore_index=True)
-    for c in ('qb_expected','qb_usual'):  # same dtype and missing marker however seasons were combined
+    for c in ('qb_expected','qb_usual','injury_report'):  # same dtype and missing marker however seasons were combined
         out[c]=out[c].astype(object).where(out[c].notna(),None)
     return out,info
 
@@ -817,7 +935,7 @@ def lagged_features(box,schedules,half_life,avail=None):
                 key=(year,week,team)
                 row=av.loc[key] if av is not None and key in av.index else None
                 for c in ALL_AVAIL_COLS: r[f'{side}__avail__{c}']=float(row[c]) if row is not None else np.nan
-                for c in ('qb_expected','qb_usual'): r[f'{side}_{c}']=row[c] if row is not None else None
+                for c in ('qb_expected','qb_usual','injury_report'): r[f'{side}_{c}']=row[c] if row is not None else None
             for c in ALL_AVAIL_COLS: r['d__avail__'+c]=r['home__avail__'+c]-r['away__avail__'+c]
             records.append(r)
     return pd.DataFrame(records).sort_values(['season','week','game_id']).reset_index(drop=True)
@@ -1292,6 +1410,7 @@ def config_signature():
          'avail':{'families':AVAIL_FAMILIES,'status_weight':STATUS_WEIGHT,'roster_out':ROSTER_OUT,'window':AVAIL_WINDOW,
                   'qb_half_life':QB_HALF_LIFE,'qb_prior':QB_PRIOR_DROPBACKS,'pos_group':POS_GROUP,
                   'roster_membership':ROSTER_MEMBERSHIP,'membership_max_share':MEMBERSHIP_MAX_SHARE,
+                  'roster_out_desc_prefix':ROSTER_OUT_DESC_PREFIX,'injury_cache':'raw report_status',
                   'family_cols':AVAIL_FAMILY_COLS,'cs_min_games':CS_MIN_GAMES,'qb_rule':QB_RULE},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
@@ -1325,9 +1444,23 @@ def kickoff_utc(row):
     except (ValueError,TypeError): return None
 
 
+def injury_reports_ready(r,ko,asof):
+    """Both teams' game statuses are published: a 'final' report, or practice
+    rows only (no designations at all) within FINAL_REPORT_HOURS of kickoff."""
+    for side in ('home','away'):
+        st=r.get(f'{side}_injury_report')
+        if st=='final': continue
+        if st=='practice' and ko is not None and (ko-asof).total_seconds()<=3600*FINAL_REPORT_HOURS: continue
+        return False
+    return True
+
+
 def record_forward(board,fit,recipe_record,asof=None):
     """First pre-kickoff snapshot per game/recipe only. Final/in-progress rows
     cannot be backfilled as forecasts. Unknown kickoff times are skipped.
+    For availability recipes a game waits until both teams' injury reports
+    carry game statuses (injury_reports_ready), so the frozen snapshot is not
+    an early-week forecast that assumed everyone healthy.
     The ledger is local to OUTPUT_ROOT; it is not a trusted external timestamp.
     """
     asof=now_utc() if asof is None else asof
@@ -1336,17 +1469,20 @@ def record_forward(board,fit,recipe_record,asof=None):
     sig=recipe_record['config_signature']
     identity=f'{sig}:{recipe_key(recipe_record["recipe"])}:{recipe_record["season"]}'
     seen={(r['experiment'],r['game_id']) for r in old}
+    gate=recipe_record['recipe']['family'] in AVAIL_FAMILIES
     new=[]
     for r in board.to_dict('records'):
         ko=kickoff_utc(r)
         if pd.notna(r['result']) or ko is None or ko<=asof or not r['ready']: continue
         if (identity,r['game_id']) in seen: continue
+        if gate and not injury_reports_ready(r,ko,asof): continue
         record={'experiment':identity,'revision':REVISION,'game_id':r['game_id'],'season':int(r['season']),
             'week':int(r['week']),'home':r['home'],'away':r['away'],'generated_utc':asof.isoformat(),
             'kickoff_utc':ko.isoformat(),'model_wp':float(r['model_wp']),
             'market_wp':float(r['market_wp']) if pd.notna(r['market_wp']) else None,
             'homefield_wp':float(r['homefield_wp']),
             'spread_line':float(r['spread_line']) if pd.notna(r['spread_line']) else None,
+            'injury_report':{side:r.get(f'{side}_injury_report') for side in ('home','away')},
             'recipe':recipe_record['recipe'],'coefficient_fit':fit,
             'source_note':'First locally recorded pre-kickoff forecast; source market quote has no independent quote timestamp.'}
         new.append(record); seen.add((identity,r['game_id']))
@@ -1459,11 +1595,12 @@ def _fmt_avail(c,v):
     return f'{v:+.2f}' if c=='qb_delta' else f'{100*v:.0f}%'
 
 
-def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,week_card=None,calib=None,records=None):
+def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,week_card=None,calib=None,records=None,asof=None):
     esc=lambda x:escape(str(x),quote=True)
     recipe=recipe_record['recipe']; fam=recipe['family']
     pfam=profile_family(fam)  # family whose stat profiles are shown
     has_avail=fam in AVAIL_FAMILIES
+    asof=now_utc() if asof is None else asof
     parts=contribution_table(board,fit)
     cmax=max(float(parts['log-odds contribution'].abs().max()),1e-9) if len(parts) else 1.
     tz=ZoneInfo(TIMEZONE)
@@ -1518,13 +1655,21 @@ def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,wee
           tile(outer_card,'Held-out seasons (reconstructed)',ci=True),
           tile(season_card,'This season so far'),
           tile(week_card,'This week'),'</div>']
+    if has_avail:
+        pend=[r for r in rows if pd.isna(r['result']) and not injury_reports_ready(r,kickoff_utc(r),asof)]
+        if pend:
+            out.append(f'<p class="flag">Injury reports not final for {len(pend)} upcoming game{"s" if len(pend)!=1 else ""} '
+                       f'(marked \u201creport pending\u201d). Their availability inputs treat unlisted players as healthy; '
+                       f'rerun after game statuses publish (Friday; Wednesday for Thursday games). They wait out of the forward ledger.</p>')
 
     slate=['<div class="slate"><table class="games"><thead><tr><th>Game</th><th>Model home win %</th><th class="num">Market</th>'
            '<th class="num">Gap</th><th>Result</th></tr></thead><tbody>']
     for r in rows:
         p=float(r['model_wp']); m=_num(r['market_wp']); gap=100*(p-m) if np.isfinite(m) else np.nan
         flagged=np.isfinite(gap) and abs(gap)>=FLAG_GAP_PP
-        if pd.isna(r['result']): res='<span class="tag">Upcoming</span>'
+        if pd.isna(r['result']):
+            res='<span class="tag">Upcoming</span>'
+            if has_avail and not injury_reports_ready(r,kickoff_utc(r),asof): res+='<br><span class="mut">report pending</span>'
         else:
             y=won(r['result'])
             res=f'{esc(score(r))}<br><span class="mut">Model </span>{mark(p,y)}<span class="mut">, market </span>{mark(m,y)}'
@@ -1587,6 +1732,11 @@ def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,wee
                             f'<td class="num{" win" if side=="home" else ""}">{fh}</td></tr>')
         if has_avail:
             arow=[]
+            if pd.isna(r['result']) and not injury_reports_ready(r,kickoff_utc(r),asof):
+                waiting=[r[s] for s in ('away','home') if r.get(f'{s}_injury_report')!='final']
+                arow.append(f'<p class="flag">Injury report not final for {esc(" and ".join(waiting))}: game statuses '
+                            f'(Out/Doubtful/Questionable) are not published yet, so these availability numbers are provisional '
+                            f'and this game stays out of the forward ledger until they are.</p>')
             for side in ('away','home'):
                 exp,usual=r.get(f'{side}_qb_expected'),r.get(f'{side}_qb_usual')
                 if isinstance(exp,str) and isinstance(usual,str) and exp!=usual:
@@ -1597,7 +1747,8 @@ def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,wee
             out+=['<h3>Availability</h3>',*arow,
                   '<p class="mut">The QB row compares the projected starter with the team\u2019s recent dropback mix, so it is nonzero even without a change. '
                   'Unit rows count players listed Out/Doubtful (Questionable as a quarter), moved off the roster, or no longer on it'
-                  +(f'; once a team has {CS_MIN_GAMES} games this season, only this season\u2019s games count' if fam.endswith('_cs') else '')+'.</p>',
+                  +(f'; once a team has {CS_MIN_GAMES} games this season, only this season\u2019s games count' if fam.endswith('_cs') else '')+'. '
+                  'They measure fresh absences: returning players and new arrivals do not offset them, so read them as recent lineup change, not the current lineup.</p>',
                   f'<div class="slate"><table><thead><tr><th>Injury report and most recent roster</th><th class="num">{esc(r["away"])}</th>'
                   f'<th class="num">{esc(r["home"])}</th></tr></thead><tbody>{trs}</tbody></table></div>']
         out+=['<details><summary>Team stat profiles</summary>',
@@ -1761,7 +1912,15 @@ def main():
         print(f'  Roster membership: {"n/a" if share is None else f"{100*share:.1f}%"} of window snaps off the reference roster; '
               f'{mem["membership_skipped_as_data_gap"]} team-weeks skipped as data gaps, {mem["no_reference_roster"]} without a reference roster, '
               f'{mem["reference_older_than_prior_week"]} using an older (post-bye) roster, '
-              f'{mem["qb_projected_from_backup_prior"]} QB projections from the backup prior')
+              f'{mem["qb_projected_from_backup_prior"]} QB projections from the backup prior, '
+              f'{mem["qb_projected_from_other_team_history"]} from history with another team')
+        pend=cr[cr.injury_report!='final']
+        if len(pend):
+            print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
+                  f'{", ".join(f"{t} ({st})" for t,st in zip(pend.team,pend.injury_report))}. '
+                  f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
+                  f'ledger until game statuses publish (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff).')
+        else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}
     for half in TEAM_HALF_LIVES:
@@ -1808,7 +1967,7 @@ def main():
     weights=coefficient_table(fit); save(weights,'current_composite_weights.csv')
     save(contribution_table(board,fit),'current_game_score_contributions.csv')
     dump(outdir/'current_coefficient_fit.json',fit)
-    html=html_board(board,fit,card,recipe_rec,now.astimezone(ZoneInfo(TIMEZONE)).strftime('%Y-%m-%d %H:%M %Z'),season_card,week_card,calib=None,records=(recs,rec_label))
+    html=html_board(board,fit,card,recipe_rec,now.astimezone(ZoneInfo(TIMEZONE)).strftime('%Y-%m-%d %H:%M %Z'),season_card,week_card,calib=None,records=(recs,rec_label),asof=now)
     (outdir/f'week{cur}_board.html').write_text(html,encoding='utf-8')
     if HAS_IPY: display(HTML(html))
     if WRITE_FORWARD_LEDGER:
@@ -1829,12 +1988,15 @@ def main():
                   if uses_adj else 'no explicit opponent-strength adjustment'),
                  'game-state effects in full-game statistics',
                  'design chosen after historical results reviewed; development evaluation, not untouched test',
-                 'v1.1-v1.7 changes applied after v1 results were seen',
+                 'v1.1-v1.8 changes applied after v1 results were seen',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
                    'no game-day inactives or late-week news',
                    'roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)',
-                   'newly acquired QBs have no team history; with no rostered QB history the league backup prior is used']
+                   'QB projection: most recent starter among available rostered QBs (week 1: most starts last season); '
+                   'a newly signed starter is projected only when no rostered QB has team history',
+                   'unit availability measures fresh absences; returns and arrivals do not offset them',
+                   'forward ledger waits for final injury reports (game statuses) for both teams']
                   if uses_avail else ['no live starters/injuries in the selected recipe'])
     dump(outdir/'run_manifest.json',{'revision':REVISION,'diagnostics':DIAGNOSTICS,'output_root':str(OUTPUT_ROOT.resolve()),'market_blend_verdict':blend_verdict(blend),
         'generated_utc':now.isoformat(),'season':season,'week':cur,
@@ -1900,11 +2062,11 @@ def self_test():
     assert abs(fit_blend(expit(lm),expit(lc),yb2)[2])<.1
     # Availability: QB swap, unit shares, roster status and membership, bye weeks, no same-game snaps.
     qbt=pd.DataFrame([{'game_id':f'g{w}','season':2020,'week':w,'team':'T','gsis_id':gid,'name':nm,
-        'dropbacks':db,'net_yards':db*e,'leader':ld} for w in range(1,5)
+        'dropbacks':db,'net_yards':db*e,'leader':ld,'starter':ld} for w in range(1,5)
         for gid,nm,db,e,ld in (('qa','Starter',36,7.,True),('qb','Backup',3,4.,False))]
         # A receiver with one trick-play throw: never a QB projection.
-        +[{'game_id':'g2','season':2020,'week':2,'team':'T','gsis_id':'w1','name':'Gadget','dropbacks':1,'net_yards':30.,'leader':False}]
-        +[{'game_id':'o1','season':2019,'week':1,'team':'U','gsis_id':'x','name':'X','dropbacks':40,'net_yards':160.,'leader':False}])
+        +[{'game_id':'g2','season':2020,'week':2,'team':'T','gsis_id':'w1','name':'Gadget','dropbacks':1,'net_yards':30.,'leader':False,'starter':False}]
+        +[{'game_id':'o1','season':2019,'week':1,'team':'U','gsis_id':'x','name':'X','dropbacks':40,'net_yards':160.,'leader':False,'starter':False}])
     sn=pd.DataFrame([{'season':2020,'week':w,'game_id':f'g{w}','team':'T','gsis_id':f'p{i}','position':'T',
         'offense_snaps':60.,'defense_snaps':0.} for w in range(1,6) for i in range(5)]
         # p5 played weeks 1-4 and then left the team: no roster row, no status, no injury listing.
@@ -1919,15 +2081,15 @@ def self_test():
                             +[{'season':2020,'week':5,'team':'T','gsis_id':'p3','position':'T','status':'RES'}])
     full=('p0','p1','p3','p4','qa','qb','w1')
     rost=roster(full)
-    inj=pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'p0','weight':1.},
-                      {'season':2020,'week':5,'team':'T','gsis_id':'p4','weight':.25}])
+    inj=pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'p0','report_status':'Out'},
+                      {'season':2020,'week':5,'team':'T','gsis_id':'p4','report_status':'Questionable'}])
     aud=[]
     av=availability_table(tg,qbt,sn,inj,rost,audit=aud).iloc[0]
     # p0 out, p2 prior-week RES, p4 questionable, p5 departed; p3 same-week RES ignored.
     assert np.isclose(av.OL_out,(1+1+.25+1)/6) and av.roster_reference_week==4
     assert np.isclose(av.off_roster_snap_share,2/6) and aud[-1]['membership_skipped_as_data_gap']==0
     assert av.qb_expected=='Starter' and abs(av.qb_delta)<.2
-    inj2=pd.concat([inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qa','weight':1.}])])
+    inj2=pd.concat([inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qa','report_status':'Doubtful'}])])
     av2=availability_table(tg,qbt,sn,inj2,rost).iloc[0]
     assert av2.qb_expected=='Backup' and av2.qb_delta<-.5
     # A departed starter (not on the reference roster, no injury listing) is not projected.
@@ -1950,12 +2112,58 @@ def self_test():
     sn2=pd.DataFrame([{'season':2019,'week':17,'game_id':'h17','team':'S','gsis_id':'o1','position':'T','offense_snaps':60.,'defense_snaps':0.}]
         +[{'season':2020,'week':w,'game_id':f'h{w}','team':'S','gsis_id':'n1','position':'T','offense_snaps':60.,'defense_snaps':0.} for w in (1,2)])
     rs2=pd.DataFrame([{'season':2020,'week':2,'team':'S','gsis_id':g,'position':'T','status':'ACT'} for g in ('o1','n1')])
-    ij2=pd.DataFrame([{'season':2020,'week':3,'team':'S','gsis_id':'o1','weight':1.}])
+    ij2=pd.DataFrame([{'season':2020,'week':3,'team':'S','gsis_id':'o1','report_status':'Out'}])
     a7=availability_table(pd.DataFrame({'season':[2020],'week':[3],'team':['S']}),qbt,sn2,ij2,rs2).iloc[0]
     assert np.isclose(a7.OL_out,1/3) and np.isclose(a7.OL_out_cs,0.)
     a8=availability_table(pd.DataFrame({'season':[2020],'week':[2],'team':['S']}),qbt,sn2,ij2.assign(week=2),
                           rs2.assign(week=1)).iloc[0]
     assert np.isclose(a8.OL_out_cs,a8.OL_out)  # only 1 current game: falls back to the standard window
+    # v1.8 injury-report state: game statuses -> 'final'; practice rows only -> 'practice'; nothing -> 'none'.
+    assert av.injury_report=='final'
+    prac=pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'p0','report_status':None}])
+    assert availability_table(tg,qbt,sn,prac,rost).iloc[0].injury_report=='practice'
+    av_none=availability_table(tg,qbt,sn,inj.iloc[:0],rost).iloc[0]
+    assert av_none.injury_report=='none' and np.isclose(av_none.OL_out,(1+1)/6)  # only prior-week RES and departure
+    # v1.8 raw statuses are weighted at load time: a STATUS_WEIGHT change takes effect without a stale cache.
+    old_sw=dict(STATUS_WEIGHT)
+    try:
+        STATUS_WEIGHT['Questionable']=.5
+        assert np.isclose(availability_table(tg,qbt,sn,inj,rost).iloc[0].OL_out,(1+1+.5+1)/6)
+    finally:
+        STATUS_WEIGHT.clear(); STATUS_WEIGHT.update(old_sw)
+    # v1.8 roster codes: a reserve/waived description counts as out even under status ACT; DEV stays a member.
+    rc=pd.DataFrame({'status':['ACT','ACT','DEV','INA','E01','RES'],'status_description_abbr':['A01','R48','P01','A01',None,'R01']})
+    assert roster_out_mask(rc).tolist()==[False,True,False,False,True,True]
+    # v1.8 benching: the healthy veteran who lost the job is no longer projected; the week-4 starter is.
+    bench=qbt.copy()
+    bench.loc[(bench.week==4)&(bench.gsis_id=='qa'),['dropbacks','net_yards','leader','starter']]=[2,10.,False,False]
+    bench.loc[(bench.week==4)&(bench.gsis_id=='qb'),['dropbacks','net_yards','leader','starter']]=[35,140.,True,True]
+    ab=availability_table(tg,bench,sn,inj,rost).iloc[0]
+    assert ab.qb_expected=='Backup' and ab.qb_usual=='Backup'
+    # Starter hurt mid-game (backup led the dropbacks) and healthy now: the starter is still projected.
+    hurt=qbt.copy()
+    hurt.loc[(hurt.week==4)&(hurt.gsis_id=='qa'),['dropbacks','net_yards','leader']]=[5,35.,False]
+    hurt.loc[(hurt.week==4)&(hurt.gsis_id=='qb'),['dropbacks','net_yards','leader']]=[30,120.,True]
+    ah=availability_table(tg,hurt,sn,inj,rost).iloc[0]
+    assert ah.qb_expected=='Starter' and ah.qb_usual=='Starter'
+    # Week 1: a rest-day backup start in last season's finale does not make him the incumbent.
+    last=qbt[qbt.season==2020].assign(season=2019)
+    rest=pd.DataFrame([{'game_id':'g17','season':2019,'week':17,'team':'T','gsis_id':'qb','name':'Backup',
+                        'dropbacks':30,'net_yards':120.,'leader':True,'starter':True}])
+    w1=availability_table(pd.DataFrame({'season':[2020],'week':[1],'team':['T']}),pd.concat([last,rest],ignore_index=True),
+                          sn.assign(season=2019),inj.assign(week=1).iloc[:0],roster(full,week=1).assign(week=1)).iloc[0]
+    assert w1.qb_expected=='Starter' and w1.qb_usual=='Starter'
+    # Newly signed veteran: no rostered QB has team history, so his history with team U is used.
+    aud=[]
+    av9=availability_table(tg,qbt,sn,inj,roster(('p0','p1','p3','p4','x','w1')).assign(
+        position=lambda d:np.where(d.gsis_id=='x','QB',d.position)),audit=aud).iloc[0]
+    assert av9.qb_expected=='X' and aud[-1]['qb_projected_from_other_team_history']==1
+    assert av9.qb_delta<-1.  # X's 4.0 yards per dropback elsewhere vs a mix led by a 7.0 starter
+    # Data gap: membership is skipped, but the QB list still excludes a gadget passer with more dropbacks.
+    gad=qbt.copy(); gad.loc[gad.gsis_id=='w1','dropbacks']=20
+    aud=[]
+    av10=availability_table(tg,gad,sn,inj2,roster(('qb','w1'),reserve=()),audit=aud).iloc[0]
+    assert aud[-1]['membership_skipped_as_data_gap']==1 and av10.qb_expected=='Backup'
     assert 'd__avail__OL_out_cs' in feature_names('rates_core_avail_cs') and 'd__avail__OL_out' not in feature_names('rates_core_avail_cs')
     # v1.7 family: opponent-adjusted core stats plus the current-season availability columns, nothing else.
     fa=feature_names('rates_core_adj_avail_cs')
@@ -1968,7 +2176,7 @@ def self_test():
         globals()['OUTPUT_ROOT']=Path(tmp)
         try:
             direct_aud=[]; direct=availability_table(tg2,qbt,sn,inj,rost,audit=direct_aud)
-            for c in ('qb_expected','qb_usual'): direct[c]=direct[c].astype(object).where(direct[c].notna(),None)
+            for c in ('qb_expected','qb_usual','injury_report'): direct[c]=direct[c].astype(object).where(direct[c].notna(),None)
             a1,i1=availability_cached(tg2,qbt,sn,inj,rost,2020,audit=(aud1:=[]))
             a2,i2=availability_cached(tg2,qbt,sn,inj,rost,2020,audit=(aud2:=[]))
             key=['season','week','team']
@@ -1976,7 +2184,7 @@ def self_test():
             pd.testing.assert_frame_equal(srt(a1),srt(direct)); pd.testing.assert_frame_equal(srt(a2),srt(direct))
             assert i1['rebuilt_seasons']==[2019,2020] and i2['cached_seasons']==[2019] and i2['rebuilt_seasons']==[2020]
             for k in AVAIL_STAT_KEYS: assert np.isclose(aud2[-1][k],direct_aud[-1][k]),k
-            inj3=pd.concat([inj,pd.DataFrame([{'season':2019,'week':4,'team':'T','gsis_id':'p1','weight':1.}])])
+            inj3=pd.concat([inj,pd.DataFrame([{'season':2019,'week':4,'team':'T','gsis_id':'p1','report_status':'Out'}])])
             _,i3=availability_cached(tg2,qbt,sn,inj3,rost,2020)
             assert i3['rebuilt_seasons']==[2019,2020] and len(list(Path(tmp,'cache').glob('avail_features_2019_*.pkl')))==1
         finally:
@@ -2083,7 +2291,23 @@ def self_test():
             rec=frozen_recipe(oof,2024)
             assert frozen_recipe(oof.assign(**{'home won':1-oof['home won']}),2024)==rec
             future=board.copy(); future['result']=np.nan; future['gameday']='2030-10-01'; future['gametime']='20:15'
+            future['home_injury_report']=future['away_injury_report']='final'
             asof=dt.datetime(2030,10,1,18,tzinfo=dt.timezone.utc)
+            # v1.8 report gate (availability recipes): no report -> wait; practice-only -> wait until
+            # FINAL_REPORT_HOURS before kickoff (00:15 UTC Oct 2); a non-availability recipe is not gated.
+            ko=dt.datetime(2030,10,2,0,15,tzinfo=dt.timezone.utc)
+            avrec=dict(rec,recipe=dict(rec['recipe'],family='rates_core_avail_cs'))
+            noav=dict(rec,recipe=dict(rec['recipe'],family='rates_core'))
+            early=future.assign(game_id=future.game_id+'early',home_injury_report='none')
+            _,n=record_forward(early,fit,avrec,ko-dt.timedelta(days=5)); assert n==0
+            prac=future.assign(game_id=future.game_id+'prac',away_injury_report='practice')
+            _,n=record_forward(prac,fit,avrec,ko-dt.timedelta(hours=FINAL_REPORT_HOURS+1)); assert n==0
+            _,n=record_forward(prac,fit,avrec,ko-dt.timedelta(hours=FINAL_REPORT_HOURS-1)); assert n==len(prac)
+            _,n=record_forward(early.assign(game_id=early.game_id+'x'),fit,noav,ko-dt.timedelta(days=5)); assert n==len(early)
+            hp=html_board(early,fit,scorecard(outer),avrec,'t',asof=ko-dt.timedelta(days=5))
+            assert 'Injury reports not final for' in hp and 'report pending' in hp
+            assert 'Injury reports not final for' not in html_board(future,fit,scorecard(outer),avrec,'t',asof=asof)
+            (Path(tmp)/'forward_predictions.jsonl').unlink()
             records,n=record_forward(future,fit,rec,asof)
             assert n==len(future)
             first_bytes=(Path(tmp)/'forward_predictions.jsonl').read_bytes()
@@ -2127,7 +2351,8 @@ def self_test():
             (Path(tmp)/'board.html').write_text(html,encoding='utf-8')
             Path('selftest_board.html').write_text(html,encoding='utf-8')
         print('PASS: box-score definitions, same-game/future-stat exclusion, roster membership, departed players, bye weeks, '
-              'QB-position projection, current-season window, opponent-adjusted availability family, market blend, '
+              'QB-position projection, starter-based QB projection (benching, mid-game injury, week 1, new signing, data gap), '
+              'injury-report gate, raw-status weights, roster status codes, current-season window, opponent-adjusted availability family, market blend, '
               'matched-band calibration and pick records, Drive migration, availability cache, '
               'decay, chronological selection, weekly fit boundary, exact score decomposition, team symmetry, '
               'frozen recipe, first-pregame ledger and board rendering.')
