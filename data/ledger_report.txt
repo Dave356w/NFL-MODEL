@@ -1,6 +1,7 @@
-NFL forward ledger report -- 2026-10-06 14:38 UTC
+NFL forward ledger report -- 2026-10-06 15:32 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
-Market: spread-derived home win probability saved in the same snapshot (no independent quote timestamp).
+Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
+Log loss/Brier market: spread-derived home win probability from the same snapshot.
 
 No snapshots recorded yet.
