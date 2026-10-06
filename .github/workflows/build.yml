@@ -1,0 +1,138 @@
+name: Build & deploy NFL site
+
+on:
+  # Build + deploy when a change lands on main, so the site goes live
+  # without waiting for a cron.
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      season:
+        description: 'Season override (blank = current)'
+        required: false
+      week:
+        description: 'Week override (blank = first week with unplayed games)'
+        required: false
+  # GitHub cron cannot follow the NFL schedule, so a cheap hourly poll asks
+  # schedule_gate.py whether a full build is due: a game within 30h that has
+  # no ledger snapshot yet, or any game within 150 minutes (final refresh).
+  # The early-morning pass always runs: it grades finished games and
+  # refreshes the board. Timezone-aware entries avoid DST drift.
+  schedule:
+    - cron: '13 6 * * *'
+      timezone: America/New_York
+    - cron: '41 * * * *'
+      timezone: America/New_York
+
+# One build at a time, queued not cancelled, so overlapping runs cannot
+# interleave ledger commits.
+concurrency:
+  group: site-build
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # commit data/ (ledger, frozen recipe, snapshots)
+  pages: write
+  id-token: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+      reason: ${{ steps.gate.outputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Gate scheduled build against the NFL schedule and ledger
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: python schedule_gate.py
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      # Latest main when the job STARTS (not the queued trigger commit), so a
+      # run that waited in site-build builds on the ledger the previous run
+      # committed. commit_data.py also pins its commit to this checkout.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      # Play-by-play reconstructions, availability inputs and the walk-forward
+      # grid are cached by nfl_model.py itself (keys hash config + inputs);
+      # this only carries the folder between runs. Rolling key: every run
+      # saves a fresh copy and restores the newest one.
+      - name: Restore model caches
+        uses: actions/cache@v4
+        with:
+          path: .nfl_cache
+          key: nfl-cache-${{ github.run_id }}
+          restore-keys: nfl-cache-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Validate committed data
+        run: python validate_data_files.py
+
+      # Runs the model (writes data/forward_predictions.jsonl and the frozen
+      # recipe), snapshots data/latest + data/projections, grades the ledger
+      # and renders public/. A model failure exits non-zero before any page
+      # is written: no artifact, no deploy, last good site stays live.
+      - name: Run model and build site
+        env:
+          NFL_STATE_DIR: data
+          NFL_CACHE_DIR: .nfl_cache
+          NFL_OUTPUT_ROOT: runs
+          NFL_SEASON: ${{ github.event.inputs.season }}
+          NFL_WEEK: ${{ github.event.inputs.week }}
+          OUT_DIR: public
+        run: python build_site.py
+
+      # Commit even if a later step of the build failed: a pregame snapshot
+      # already appended to the ledger cannot be re-derived after kickoff.
+      # Validation still gates it. Signed through the GraphQL API, falling
+      # back to git push (see commit_data.py).
+      - name: Commit ledger and snapshots
+        if: ${{ !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python validate_data_files.py
+          python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
