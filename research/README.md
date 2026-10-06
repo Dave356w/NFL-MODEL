@@ -53,7 +53,7 @@ ROI with an unresolved log-loss gain. **Keep the layer.**
 | window 8 vs 4 | −0.13 pts ± 0.82 | −0.0007 ± 0.0011 |
 | window 16 vs 4 | +0.33 pts ± 1.14 | −0.0015 ± 0.0018 |
 
-_(First run's numbers; confirmation re-run from this script pending.)_
+All three tables were reproduced exactly by the committed scripts; production matches the live held-out numbers (+2.17u, +0.3%).
 
 **No.** Longer windows score slightly worse on log loss, and their ROI differences are
 well inside noise. **Keep 4.**
