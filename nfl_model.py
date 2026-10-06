@@ -5,6 +5,12 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.9.3 (operations only; same REVISION, config signature, recipe and ledger):
+nflverse downloads retry transient failures (UPSTREAM_RETRIES, exponential
+backoff), and the pfr->gsis player id map falls back to its last cached copy
+(audited) when the players file is unavailable. The first Actions build after
+v1.9.2 failed on a single HTTP 500 from players.parquet.
+
 v1.9.2 (reporting only; same REVISION, config signature, recipe and ledger):
 retrospective grading of the CHOSEN recipe, like the MLB site's rebuilt
 history. The frozen recipe's weekly walk-forward predictions for every
@@ -272,6 +278,8 @@ MARKET_SIGMA=12.37          # fixed spread-to-WP comparator only
 FLAG_GAP_PP=10.             # board flags |model - market| at or above this many points
 CACHE_MAX_AGE_HOURS=24.                # current season's play-by-play reconstruction
 COMPLETED_CACHE_MAX_AGE_HOURS=24.*7    # completed seasons: weekly refresh picks up upstream revisions
+UPSTREAM_RETRIES=4      # nflverse download attempts before giving up
+UPSTREAM_BACKOFF=5.     # seconds before the first retry; doubles each time
 STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/Drive layout)
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
@@ -417,7 +425,7 @@ def profile_family(family):
 
 def load_schedule(year):
     import nflreadpy as nfl
-    s=nfl.load_schedules(year).to_pandas()
+    s=fetch_upstream(lambda:nfl.load_schedules(year).to_pandas(),f'schedule {year}')
     s=normalize_teams(s[s.game_type=='REG'].copy())
     if s.game_id.duplicated().any(): raise ValueError('Duplicate schedule game IDs')
     s['season']=int(year)
@@ -585,7 +593,7 @@ def load_boxes(year,schedule):
             AUDIT.append({'cache':str(path),**m}); return pd.read_csv(path),pd.read_csv(qbpath)
     if schedule.result.notna().sum()==0: return pd.DataFrame(columns=['game_id','season','week','team','opponent',*COUNTS]),None
     import nflreadpy as nfl
-    raw=nfl.load_pbp(year)
+    raw=fetch_upstream(lambda:nfl.load_pbp(year),f'play-by-play {year}')
     cols=['game_id','play_id','season_type','posteam','play_type','yards_gained','pass_attempt','rush_attempt',
           'sack','interception','fumble_lost','third_down_converted','third_down_failed','first_down_rush',
           'first_down_pass','first_down_penalty','penalty','penalty_team','penalty_yards','two_point_attempt',
@@ -600,6 +608,39 @@ def load_boxes(year,schedule):
     m={'generated_utc':now_utc().isoformat(),'schedule_hash':schedule_hash,'pbp_sha256':source_hash,
        'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'aggregation_audit':AUDIT[-1]}
     dump(meta,m); return box,qb
+
+
+def fetch_upstream(fn,what,tries=None,sleep=None):
+    """Call an nflverse loader, retrying transient failures (HTTP 5xx, resets) with
+    exponential backoff. The last failure is re-raised unchanged."""
+    import time
+    tries=UPSTREAM_RETRIES if tries is None else tries
+    sleep=time.sleep if sleep is None else sleep
+    for i in range(tries):
+        try: return fn()
+        except Exception as exc:
+            if i==tries-1: raise
+            wait=UPSTREAM_BACKOFF*2**i
+            print(f'  {what}: {type(exc).__name__}: {str(exc)[:160]}; retry {i+1}/{tries-1} in {wait:.0f}s')
+            sleep(wait)
+
+
+def load_player_ids(nfl,sleep=None):
+    """pfr_id -> gsis_id from nflverse players. The map is cached on every success;
+    if upstream stays unavailable after retries, the cached copy is used (audited)
+    rather than failing the build. Without a cache the error is raised."""
+    path=cache_dir()/'players_pfr_gsis.csv'
+    try:
+        pl=fetch_upstream(lambda:nfl.load_players().to_pandas(),'players',sleep=sleep)
+        pl=pl.dropna(subset=['pfr_id','gsis_id'])[['pfr_id','gsis_id']]
+        path.parent.mkdir(parents=True,exist_ok=True); pl.to_csv(path,index=False)
+    except Exception as exc:
+        if not path.exists(): raise
+        pl=pd.read_csv(path)
+        age=(now_utc().timestamp()-path.stat().st_mtime)/3600
+        AUDIT.append({'source':'players','fallback':'cached id map','age_hours':round(age,1),'error':f'{type(exc).__name__}: {str(exc)[:200]}'})
+        print(f'  players: upstream unavailable ({type(exc).__name__}); using cached id map ({age:.0f}h old)')
+    return dict(zip(pl.pfr_id,pl.gsis_id))
 
 
 def _nflverse_parquet(tag,year):
@@ -620,18 +661,17 @@ def load_availability(years,season):
             for k,p in paths.items(): out[k].append(pd.read_csv(p))
             continue
         try: inj=nfl.load_injuries(y).to_pandas()
-        except Exception: inj=_nflverse_parquet('injuries',y)  # nflreadpy can fail on newer files
+        except Exception:  # nflreadpy can fail on newer files; the direct parquet is retried
+            inj=fetch_upstream(lambda:_nflverse_parquet('injuries',y),f'injuries {y}')
         # Raw report_status is cached; STATUS_WEIGHT is applied after loading (injury_weights).
         inj=normalize_teams(inj[inj.game_type=='REG'].copy())
         inj=inj.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','report_status']].drop_duplicates()
-        rost=nfl.load_rosters_weekly(y).to_pandas()
+        rost=fetch_upstream(lambda:nfl.load_rosters_weekly(y).to_pandas(),f'rosters {y}')
         if 'game_type' in rost: rost=rost[rost.game_type=='REG']
         if 'status_description_abbr' not in rost: rost['status_description_abbr']=None
         rost=normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','position','status','status_description_abbr']].copy())
-        snaps=nfl.load_snap_counts(y).to_pandas(); snaps=normalize_teams(snaps[snaps.game_type=='REG'].copy())
-        if players is None:
-            pl=nfl.load_players().to_pandas().dropna(subset=['pfr_id','gsis_id'])
-            players=dict(zip(pl.pfr_id,pl.gsis_id))
+        snaps=fetch_upstream(lambda:nfl.load_snap_counts(y).to_pandas(),f'snap counts {y}'); snaps=normalize_teams(snaps[snaps.game_type=='REG'].copy())
+        if players is None: players=load_player_ids(nfl)
         snaps['gsis_id']=snaps.pfr_player_id.map(players)
         tot=(snaps.offense_snaps+snaps.defense_snaps).sum()
         mapped=(snaps.offense_snaps+snaps.defense_snaps)[snaps.gsis_id.notna()].sum()
@@ -2353,6 +2393,35 @@ def _self_test():
     a8=availability_table(pd.DataFrame({'season':[2020],'week':[2],'team':['S']}),qbt,sn2,ij2.assign(week=2),
                           rs2.assign(week=1)).iloc[0]
     assert np.isclose(a8.OL_out_cs,a8.OL_out)  # only 1 current game: falls back to the standard window
+    # v1.9.3 upstream retries: transient failures retried with backoff; persistent ones re-raised.
+    calls,waits=[],[]
+    def flaky():
+        calls.append(1)
+        if len(calls)<3: raise ConnectionError('500 Server Error')
+        return 'ok'
+    assert fetch_upstream(flaky,'t',tries=4,sleep=waits.append)=='ok' and waits==[UPSTREAM_BACKOFF,2*UPSTREAM_BACKOFF]
+    try: fetch_upstream(lambda:(_ for _ in ()).throw(ConnectionError('down')),'t',tries=2,sleep=lambda s:None)
+    except ConnectionError: pass
+    else: raise AssertionError('persistent failure swallowed')
+    class FakeNfl:
+        ok=True
+        def load_players(self):
+            if not self.ok: raise ConnectionError('500')
+            class F:
+                def to_pandas(_): return pd.DataFrame({'pfr_id':['a',None],'gsis_id':['00-1','00-2']})
+            return F()
+    with tempfile.TemporaryDirectory() as tmp:
+        old_cd=globals()['CACHE_DIR']; globals()['CACHE_DIR']=tmp
+        try:
+            fk=FakeNfl(); fk.ok=False
+            try: load_player_ids(fk,sleep=lambda s:None)
+            except ConnectionError: pass
+            else: raise AssertionError('no cache must raise')
+            fk.ok=True; assert load_player_ids(fk,sleep=lambda s:None)=={'a':'00-1'}
+            fk.ok=False; n_audit=len(AUDIT)
+            assert load_player_ids(fk,sleep=lambda s:None)=={'a':'00-1'} and AUDIT[-1]['fallback']=='cached id map'
+            del AUDIT[n_audit:]
+        finally: globals()['CACHE_DIR']=old_cd
     # v1.9.1 flat 1u at the moneyline: payouts, bands, pushes, missing prices, same-row baseline.
     assert np.isclose(ml_payout(-150),100/150) and np.isclose(ml_payout(130),1.3) and np.isclose(ml_implied(-150),.6)
     assert [ml_band(x) for x in (-250,-249,-175,-174,-130,-129,-100,100,129,130,175,250)]==[
