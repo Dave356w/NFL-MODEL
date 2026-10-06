@@ -21,9 +21,9 @@ market spread is a benchmark only and never enters the model.
 | Page | For |
 |---|---|
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, largest drivers, availability, injury-report status |
-| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pregame snapshot graded as a 1u bet: units, ROI by price band, record, log loss |
+| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pregame snapshot graded as a 1u bet (units, ROI by price band), then the chosen recipe's rebuilt history since 2021, graded game by game |
 | [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Held-out flat ROI by price band; model and market in matched probability bands |
-| [Model](https://dave356w.github.io/NFL-MODEL/model.html) | Recipe, flat ROI and log loss by held-out season, coefficients, limitations |
+| [Model](https://dave356w.github.io/NFL-MODEL/model.html) | Recipe, all 24 candidates' log loss (which selects) and flat ROI (shown only), held-out ROI by season, coefficients |
 | [Full board](https://dave356w.github.io/NFL-MODEL/board.html) | The model's own detailed weekly board |
 
 | Where to look | For |

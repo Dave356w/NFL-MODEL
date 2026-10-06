@@ -44,6 +44,18 @@ def make_data(root, with_ledger=True):
     m.roi_table(roi_hist).to_csv(latest / "roi_bands.csv", index=False)
     m.roi_table(roi_hist, by="season").to_csv(latest / "roi_by_season.csv", index=False)
     m.roi_table(roi_hist.iloc[:0]).to_csv(latest / "season_roi.csv", index=False)
+    retro = roi_hist.assign(game_id=[f"g{i}" for i in range(len(roi_hist))], week=1, home="DAL", away="TB",
+                            result=np.where(roi_hist["home won"] == 1, 3., -3.), spread_line=1.,
+                            basis="backtest (recipe chosen on these seasons)")
+    bets = m.flat_bets(retro)
+    retro = retro.assign(bet_side=bets.side, bet_team=np.where(bets.side == "home", "DAL", "TB"), bet_price=bets.price,
+                         bet_band=bets.band, bet_q=bets.q, bet_result=bets.result, units=bets.units, null_ev=bets.null_ev,
+                         market_ml_wp=m.market_ml_wp(retro), home_score=20, away_score=17)
+    retro.to_csv(latest / "retro_ledger.csv", index=False)
+    m.roi_table(retro, by="season").to_csv(latest / "retro_roi_by_season.csv", index=False)
+    m.roi_table(retro).to_csv(latest / "retro_roi_bands.csv", index=False)
+    pd.DataFrame([{"key": "rates_core_avail_cs_h8_r0.1", "log loss": .638, "bets": 300, "units": -2., "roi": -.0067,
+                   "roi_se": .022}]).to_csv(latest / "candidate_roi.csv", index=False)
     m.band_records(hist).to_csv(latest / "band_records.csv", index=False)
     old = m.BOOTSTRAP_REPS
     m.BOOTSTRAP_REPS = 50
@@ -53,7 +65,8 @@ def make_data(root, with_ledger=True):
         m.scorecard(hist).to_csv(latest / "season_scorecard.csv", index=False)
     finally:
         m.BOOTSTRAP_REPS = old
-    pd.DataFrame([{"family": "rates_core_avail_cs", "half_life": 8., "ridge": .1, "log loss": .638, "games": 1355, "selected": True}]).to_csv(latest / "recipe_selection.csv", index=False)
+    pd.DataFrame([{"family": "rates_core_avail_cs", "half_life": 8., "ridge": .1, "key": "rates_core_avail_cs_h8_r0.1",
+                   "log loss": .638, "games": 1355, "selected": True}]).to_csv(latest / "recipe_selection.csv", index=False)
     pd.DataFrame([{"feature": "site", "label": "Home field", "coefficient per scaled unit": .2,
                    "training scale": 1., "training missing fraction": 0.}]).to_csv(latest / "weights.csv", index=False)
     pd.DataFrame().to_csv(latest / "market_blend.csv", index=False)
@@ -164,3 +177,23 @@ def test_roi_is_the_headline_everywhere(tmp_path):
     assert "Flat 1u ROI by price band · reconstructed" in (out / "market-calibration.html").read_text()
     model = (out / "model.html").read_text()
     assert "Flat 1u ROI by season" in model and "Goal: flat 1u ROI" in model
+
+
+def test_rebuilt_history_of_the_chosen_recipe_is_graded_and_labelled(tmp_path):
+    out, _ = render(tmp_path)
+    t = pd.read_csv(tmp_path / "data" / "latest" / "retro_roi_bands.csv")
+    r = t[(t.group == "All games") & (t.source == "model")].iloc[0]
+    grades = (out / "grades.html").read_text()
+    assert "Rebuilt history · chosen recipe · reconstructed" in grades and "Hindsight, not a track record." in grades
+    assert grades.index("Forward ledger") < grades.index("Rebuilt history")  # forward record leads
+    assert f"{100 * r.roi:+.1f}%" in grades and "Rebuilt history by season" in grades and "<details open" in grades
+    retro = pd.read_csv(tmp_path / "data" / "latest" / "retro_ledger.csv")
+    assert np.isclose(retro.units.sum(), m.roi_summary(m.flat_bets(retro))["units"])
+    assert "Flat 1u ROI · rebuilt history" in (out / "index.html").read_text()
+
+
+def test_candidate_table_shows_roi_but_selection_stays_log_loss(tmp_path):
+    out, _ = render(tmp_path)
+    model = (out / "model.html").read_text()
+    assert "lowest walk-forward log loss" in model and "does not choose the recipe" in model
+    assert "−0.7% ± 2.2" in model.replace("-", "−") and "selected" in model and "best ROI" in model

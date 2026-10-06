@@ -62,6 +62,10 @@ SNAPSHOT = {
     "roi_bands.csv": "roi_bands.csv",
     "roi_by_season.csv": "roi_by_season.csv",
     "season_roi.csv": "season_roi.csv",
+    "retro_ledger.csv": "retro_ledger.csv",
+    "retro_roi_by_season.csv": "retro_roi_by_season.csv",
+    "retro_roi_bands.csv": "retro_roi_bands.csv",
+    "candidate_roi.csv": "candidate_roi.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
@@ -521,6 +525,8 @@ def render_index(latest, ledger, built, now=None):
             f"Model run <span class='stamp'>{esc(generated[:16].replace('T', ' '))} UTC</span>.")
     tiles, _ = ledger_tiles(ledger, rev)
     tiles.insert(1, roi_tile("Flat 1u ROI · held-out", roi_from_table(latest["roi_bands"]), "reconstructed seasons"))
+    tiles.insert(2, roi_tile("Flat 1u ROI · rebuilt history", roi_from_table(latest["retro_roi_bands"]),
+                             "chosen recipe, hindsight"))
     parts = [head(f"Week {week} projections", lead), f"<div class='gr-summary'>{''.join(tiles)}</div>"]
 
     def pending(r):
@@ -692,7 +698,58 @@ def render_grades(ledger, latest, built):
         parts.append("<h2 class='sec'>All snapshots</h2>" + table(
             ["Week", "Game", "Lead", "Model home", "Market home", "Bet (1u)", "Final", "Model", "Units", "Market", "LL gain", "Rev"],
             rows, num_cols=(2, 3, 4, 8, 10)))
+    if latest is not None:
+        parts.append(render_retro(latest))
     return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built, bool(latest and latest.get("board_html")))
+
+
+def render_retro(latest):
+    """The chosen recipe graded on every backtest game: the MLB site's rebuilt history."""
+    retro = latest.get("retro_ledger")
+    if retro is None or retro.empty:
+        return ""
+    key = m.recipe_key(latest["manifest"].get("recipe") or {}) if latest["manifest"].get("recipe") else ""
+    seasons = sorted(int(x) for x in retro.season.unique())
+    out = [f"<h2 class='sec'>Rebuilt history · chosen recipe · reconstructed</h2>",
+           f"<div class='gr-note flag-note'><b>Hindsight, not a track record.</b> The current recipe "
+           f"<span class='mono'>{esc(key)}</span> graded as flat 1u moneyline bets on every game since {seasons[0]}. "
+           "Each prediction comes from coefficients refit before its week on earlier games only, but the recipe "
+           "was chosen using these same seasons, and features use today's upstream data. The forward ledger above "
+           "is the native record; the held-out seasons (Model page) choose each season's recipe from earlier seasons only. "
+           "Prices are the nflverse schedule moneylines.</div>"]
+    r = roi_from_table(latest["retro_roi_bands"])
+    tiles = [roi_tile("Flat 1u ROI · rebuilt", r, f"{seasons[0]}–{seasons[-1]}")]
+    if r and r.get("bets"):
+        tiles.append(stat("Win rate vs market", f"{100 * r['win_pct']:.1f}%",
+                          f"no-vig q {100 * r['mean_q']:.1f}% · excess {r['excess_pp']:+.1f}pp"))
+        tiles.append(stat("Market-correct null", roi_text(r["null_roi"]), "expected ROI if the market were right"))
+    out.append(f"<div class='gr-summary'>{''.join(tiles)}</div>")
+    if len(latest["retro_roi_by_season"]):
+        out.append("<h2 class='sec'>Rebuilt history by season</h2>" + roi_band_table(latest["retro_roi_by_season"], "Season"))
+    if len(latest["retro_roi_bands"]):
+        out.append("<h2 class='sec'>Rebuilt history by price band</h2>" + roi_band_table(latest["retro_roi_bands"]) + ROI_NOTE)
+    out.append("<h2 class='sec'>Rebuilt games</h2>")
+    for i, yr in enumerate(reversed(seasons)):
+        g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
+        units = g.units.dropna()
+        rows = []
+        for x in g.itertuples(index=False):
+            res = x.bet_result if isinstance(x.bet_result, str) and x.bet_result else ""
+            badge = (f"<span class='badge {'w' if res == 'W' else 'l' if res == 'L' else ''}'>{res}</span>" if res else "—")
+            sc = (f"{int(x.away_score)}–{int(x.home_score)}" if math.isfinite(num(getattr(x, "away_score", math.nan)))
+                  and math.isfinite(num(getattr(x, "home_score", math.nan))) else "")
+            rows.append([f"<span class='mono'>W{int(x.week)}</span>",
+                         f"<span class='team-code'>{esc(x.away)} @ {esc(x.home)}</span>", pct(x.model_wp, 1),
+                         pct(getattr(x, "market_ml_wp", math.nan), 1),
+                         f"{esc(x.bet_team)} {ml_text(x.bet_price)}" if isinstance(x.bet_team, str) and x.bet_team else "—",
+                         sc, badge, f"{num(x.units):+.2f}" if math.isfinite(num(x.units)) else "—"])
+        summ = (f"{yr} · {len(units)} bets · {units.sum():+.2f}u · ROI {roi_text(units.mean())}"
+                if len(units) else f"{yr} · no priced bets")
+        out.append(f"<details{' open' if i == 0 else ''} style='margin-bottom:10px'><summary style='cursor:pointer;"
+                   f"font:700 14px/1.4 var(--sans);padding:6px 2px'>{esc(summ)}</summary>"
+                   + table(["Week", "Game", "Model home", "Market home (no-vig)", "Bet (1u)", "Final", "Result", "Units"],
+                           rows, num_cols=(2, 3, 7)) + "</details>")
+    return "".join(out)
 
 
 def render_calibration(latest, ledger, built):
@@ -775,9 +832,23 @@ def render_model(latest, built):
         parts.append(f"<h2 class='sec'>{int(man['season'])} so far · weekly walk-forward</h2>" + table(heads, card_rows(sc), (1, 2, 3, 4, 5)))
     sel = latest["recipe_selection"]
     if len(sel):
-        rows = [[f"<span class='mono'>{esc(m.recipe_key(r))}</span>{' <span class=\"badge lean\">selected</span>' if r.get('selected') else ''}",
-                 f"{r['log loss']:.5f}", f"{num(r.get('games', math.nan)):.0f}"] for r in sel.head(8).to_dict("records")]
-        parts.append("<h2 class='sec'>Recipe selection · best eight</h2>" + table(["Recipe", "Walk-forward LL", "Games"], rows, (1, 2)))
+        cr = latest["candidate_roi"]
+        if len(cr) and "key" in sel:
+            sel = sel.merge(cr[["key", "bets", "units", "roi", "roi_se"]], on="key", how="left")
+        best_roi = sel.loc[sel.roi.idxmax(), "key"] if "roi" in sel and sel.roi.notna().any() else None
+        rows = []
+        for r in sel.to_dict("records"):
+            tags = (" <span class=\"badge lean\">selected</span>" if r.get("selected") else "") + \
+                   (" <span class=\"badge\">best ROI</span>" if r.get("key") == best_roi else "")
+            rows.append([f"<span class='mono'>{esc(m.recipe_key(r))}</span>{tags}", f"{r['log loss']:.5f}",
+                         roi_text(r.get("roi"), r.get("roi_se")) if "roi" in r else "—",
+                         f"{num(r.get('units')):+.2f}" if math.isfinite(num(r.get("units"))) else "—",
+                         f"{num(r.get('games', math.nan)):.0f}"])
+        parts.append("<h2 class='sec'>Recipe selection · all candidates</h2><div class='gr-note'>The recipe is chosen by "
+                     "<b>lowest walk-forward log loss</b> over the earlier seasons and frozen for the season. Flat 1u ROI on "
+                     "the same games is shown for comparison only: it does not choose the recipe. With ROI standard errors "
+                     "near ±2.5 points, most candidates cannot be told apart by ROI.</div>"
+                     + table(["Recipe", "Walk-forward LL", "Flat 1u ROI ± SE", "Units", "Games"], rows, (1, 2, 3, 4)))
     w = latest["weights"]
     if len(w):
         w = w.reindex(w["coefficient per scaled unit"].abs().sort_values(ascending=False).index)

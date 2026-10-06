@@ -70,6 +70,13 @@ close. Log loss still fits the coefficients and selects the recipe (owner's
 decision 2026-10-06: ROI is reported, not optimized). It is shown as a
 secondary score.
 
+**Is the recipe chosen by ROI? No.** Selection is the lowest walk-forward log
+loss over earlier seasons. The Model page lists all 24 candidates' flat ROI on
+the same games beside their log loss, for comparison only. Under real data
+(2021–25) the top log-loss group ranged −0.5% to +0.7% ROI, all with SE ≈
+±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
+new `REVISION`.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of
@@ -83,6 +90,12 @@ secondary score.
    development evidence, not forward confirmation.
 3. **This season so far**: weekly walk-forward reconstructions of games already
    played. They use current upstream data, not the data available at the time.
+4. **Rebuilt history of the chosen recipe** (Ledger page, below the forward
+   record): the frozen recipe's weekly walk-forward predictions for every game
+   since 2021 plus this season's earlier weeks, graded as flat 1u moneyline
+   bets game by game (`data/latest/retro_ledger.csv`). This is the MLB site's
+   "rebuilt" history. The recipe was chosen on those seasons, so it is
+   hindsight, not a track record.
 
 The market comparator is `Φ(spread / 12.37)` from the nflverse schedule line.
 That line has no independent quote timestamp.
