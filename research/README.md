@@ -105,3 +105,26 @@ band. Availability and the QB term are unchanged.
 **No.** The ROI differences are under one SE and flip sign between the two cutoffs.
 Both filters score slightly worse on log loss. Dropping 15–23% of snaps costs sample,
 and blowout plays still carry information about team quality. **Keep all plays.**
+
+### Test 5: same-week roster with game-day inactives (a T−60 model)
+
+`python research/same_week_roster.py [CACHE_DIR]`. Production uses only the most recent
+roster *before* the game week. This variant uses the game week's own roster and counts
+game-day inactives (INA) as out, as a forecast made about 60 minutes before kickoff would.
+The week roster is pregame: in 2024–25 none of 6,857 INA players took a snap that week,
+and 0.1% of players who played were flagged out that week.
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| production (prior-week roster) | 811 | +2.17 | +0.3% ± 2.7 | 0.6364 | −0.0283 |
+| same-week roster + inactives | 811 | −10.49 | −1.3% ± 2.7 | 0.6356 | −0.0275 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| same-week + inactives vs production | −1.56 pts ± 1.12 | +0.0008 ± 0.0023 |
+
+**No.** ROI is lower (≈1.4 SE, within noise) and the log-loss change is unresolved.
+Players who matter and miss a game are almost always already Out/Doubtful on the Friday
+final report, which the model counts. Inactives mostly add healthy scratches and backups
+with few snaps. **No same-week-roster revision.** The live check of whether nflverse
+publishes inactives before kickoff is moot and was not pursued.

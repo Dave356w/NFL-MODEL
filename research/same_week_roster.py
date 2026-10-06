@@ -4,11 +4,13 @@
 
 Production uses only the most recent roster BEFORE the game week (same-week
 status has unknown timing). This variant uses the game week's own roster as the
-reference and counts game-day inactives (INA) as out, i.e. it pretends the final
-pregame roster (inactives are announced ~90 min before kickoff) was known at
-forecast time. Historical same-week rows may include moves made after kickoff,
-so this is an UPPER BOUND on what a T-60 snapshot could gain, not a usable model.
-If the bound is small, live same-week rosters are not worth a new revision.
+reference and counts game-day inactives (INA) as out, i.e. a forecast made ~60 min before
+kickoff, after inactives are announced (~90 min). Verified pregame: in 2024-25
+none of the 6,857 same-week INA players took a snap that week, and only 38 of
+~38,000 players who played (0.1%) were flagged out in that week's roster (nearly
+all activated-from-IR descriptions), so the week's roster is captured before
+kickoff and carries no in-game injuries. This is therefore a realistic estimate
+of a T-60 same-week-roster model, given live data arrived in time.
 """
 from _common import (FULL, DHEAD, HEAD, availability, cache_dir_from_argv, diff_row, grid, load_inputs, log,
                      m, outer, row, score)
