@@ -640,8 +640,9 @@ def render_index(latest, ledger, built, now=None):
 
 STATE_TEXT = {
     "none": "Week {w} report not published yet. Players listed last week are counted as available until it is "
-            "(final statuses come Friday; Wednesday for Thursday games).",
-    "practice": "Week {w} practice report only: no game statuses yet, so everyone is still counted as available.",
+            "(final statuses come Friday; Wednesday for Thursday games). Roster moves (IR, PUP, cut, traded) count in full now.",
+    "practice": "Week {w} practice report only: no game statuses yet, so listed players are still counted as available. "
+                "Roster moves (IR, PUP, cut, traded) count in full.",
     "final": "Week {w} final report: the statuses below are what the model counts (Out/Doubtful 100%, Questionable 25%).",
 }
 
