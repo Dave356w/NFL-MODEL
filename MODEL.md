@@ -48,6 +48,35 @@ loss over earlier seasons picks the recipe, which is frozen for the season in
 signature refuses to run against an existing frozen record; that is why
 feature changes ship as a new `REVISION`.
 
+## The goal: flat 1u ROI at the moneyline
+
+The model is judged by flat-stake betting results. Every game it decides
+(model probability ≠ 50%) gets 1u on the side it makes the favorite, graded at
+that side's posted American moneyline. A win pays the price, a loss costs 1u,
+and a tie is a push. Each ROI is reported with:
+
+* W-L-P, units, ROI ± one standard error;
+* the no-vig market probability q of the picked side, and the win rate's excess over q;
+* the **market-correct null** `q × payout − (1 − q)`: the ROI expected if the
+  market were exactly right. It is negative by the hold, so it is the bar to
+  beat, not zero;
+* the same-row baseline of betting the market favorite (pick'ems excluded from both);
+* the picked side's price band (≤ −250 … ≥ +250, the MLB site's bands). The
+  bands are descriptive, not a betting filter.
+
+Prices: historical seasons use the nflverse schedule moneyline. A ledger
+snapshot saves the moneyline it saw at lock time, which is not necessarily the
+close. Log loss still fits the coefficients and selects the recipe (owner's
+decision 2026-10-06: ROI is reported, not optimized). It is shown as a
+secondary score.
+
+**Is the recipe chosen by ROI? No.** Selection is the lowest walk-forward log
+loss over earlier seasons. The Model page lists all 24 candidates' flat ROI on
+the same games beside their log loss, for comparison only. Under real data
+(2021–25) the top log-loss group ranged −0.5% to +0.7% ROI, all with SE ≈
+±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
+new `REVISION`.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of
@@ -61,6 +90,12 @@ feature changes ship as a new `REVISION`.
    development evidence, not forward confirmation.
 3. **This season so far**: weekly walk-forward reconstructions of games already
    played. They use current upstream data, not the data available at the time.
+4. **Rebuilt history of the chosen recipe** (Ledger page, below the forward
+   record): the frozen recipe's weekly walk-forward predictions for every game
+   since 2021 plus this season's earlier weeks, graded as flat 1u moneyline
+   bets game by game (`data/latest/retro_ledger.csv`). This is the MLB site's
+   "rebuilt" history. The recipe was chosen on those seasons, so it is
+   hindsight, not a track record.
 
 The market comparator is `Φ(spread / 12.37)` from the nflverse schedule line.
 That line has no independent quote timestamp.

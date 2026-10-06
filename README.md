@@ -1,9 +1,13 @@
 # NFL Box-Score Composite
 
-Weekly NFL home-win probabilities from prior-game box-score profiles and
-player availability, built and published as a static site by GitHub Actions.
-Every game's first pregame forecast is locked into a forward ledger and graded
-against the final score and the spread-implied market.
+Weekly NFL win probabilities from prior-game box-score profiles and player
+availability, built and published as a static site by GitHub Actions.
+
+**Goal: flat 1-unit ROI.** Every game the model decides gets 1u on the side it
+makes the favorite, graded at that side's moneyline. Every game's first pregame
+forecast is locked into a forward ledger with the moneyline it saw, then graded
+on units and ROI against the same-row market favorite and the market-correct
+null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
@@ -17,9 +21,9 @@ market spread is a benchmark only and never enters the model.
 | Page | For |
 |---|---|
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, largest drivers, availability, injury-report status |
-| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pregame snapshot, graded; record and log loss vs market |
-| [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Model and market in matched probability bands, forward and held-out kept separate |
-| [Model](https://dave356w.github.io/NFL-MODEL/model.html) | Recipe, held-out scorecards by season, coefficients, limitations |
+| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pregame snapshot graded as a 1u bet (units, ROI by price band), then the chosen recipe's rebuilt history since 2021, graded game by game |
+| [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Held-out flat ROI by price band; model and market in matched probability bands |
+| [Model](https://dave356w.github.io/NFL-MODEL/model.html) | Recipe, all 24 candidates' log loss (which selects) and flat ROI (shown only), held-out ROI by season, coefficients |
 | [Full board](https://dave356w.github.io/NFL-MODEL/board.html) | The model's own detailed weekly board |
 
 | Where to look | For |

@@ -5,6 +5,27 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.9.2 (reporting only; same REVISION, config signature, recipe and ledger):
+retrospective grading of the CHOSEN recipe, like the MLB site's rebuilt
+history. The frozen recipe's weekly walk-forward predictions for every
+backtest game (2021 on) plus this season's earlier weeks are graded as flat
+1u moneyline bets, one row per game (retro_ledger.csv), by season and by
+price band. Labelled reconstructed: the recipe was chosen using those same
+seasons, so this is hindsight, not forward evidence; the held-out seasons
+(recipe chosen from earlier seasons only) and the forward ledger stay
+separate. Also candidate_roi.csv: every candidate's walk-forward flat ROI
+next to the log loss that selects the recipe (selection is NOT by ROI).
+
+v1.9.1 (reporting only; same REVISION, config signature, recipe and ledger):
+flat 1-unit ROI at the moneyline is the headline metric. Every game the model
+decides gets 1u on the side it makes the favorite, graded at that side's
+posted moneyline (nflverse schedule; a ledger snapshot saves the line it saw).
+Reported with W-L, units, ROI +/- SE, the no-vig market probability of the
+picked side, the market-correct null (q x payout - (1 - q), negative by the
+hold) and the same-row always-the-market-favorite baseline, overall, by
+season and by the picked side's price band (MLB-site bands). Log loss still
+fits coefficients and selects the recipe; it is reported as a secondary score.
+
 v1.9 (NEW experiment: new REVISION and OUTPUT_ROOT; v1.8 folders, frozen
 recipe and forward ledger are left untouched): legacy roster status codes.
 The first full v1.8 run over 2019-2026 audited roster codes that the 2024-26
@@ -255,7 +276,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.9 legacy roster status codes out; v1.8 report gate and starter-based QB projection; v1.7 families'
+DIAGNOSTICS='v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1178,6 +1199,148 @@ def market_blend_diagnostic(oof,outer,folds):
     return pd.DataFrame(rows)
 
 
+# Flat-bet evaluation (v1.9.1, reporting only). 1u on the side a probability column
+# makes the favorite, every game it decides, at that side's posted moneyline.
+ML_BANDS=('≤ −250','−249 to −175','−174 to −130','−129 to −100','+100 to +129','+130 to +174','+175 to +249','≥ +250')
+
+
+def ml_payout(ml):
+    """Profit per 1u stake on a win at American odds ml."""
+    ml=float(ml)
+    return ml/100. if ml>0 else 100./-ml
+
+
+def ml_implied(ml):
+    ml=float(ml)
+    return -ml/(-ml+100.) if ml<0 else 100./(ml+100.)
+
+
+def ml_band(ml):
+    ml=float(ml)
+    for i,cut in enumerate((-250,-175,-130,0,130,175,250)):
+        if (ml<=cut if i<3 else ml<cut): return ML_BANDS[i]
+    return ML_BANDS[-1]
+
+
+def attach_moneylines(df,schedules):
+    """Add home_moneyline/away_moneyline by game_id (NaN where the schedule has none)."""
+    df=df.drop(columns=[c for c in ('home_moneyline','away_moneyline') if c in df])
+    cols=[c for c in ('home_moneyline','away_moneyline') if c in schedules]
+    if cols: df=df.merge(schedules[['game_id',*cols]].drop_duplicates('game_id'),on='game_id',how='left',validate='many_to_one')
+    for c in ('home_moneyline','away_moneyline'):
+        if c not in df: df[c]=np.nan
+    return df
+
+
+def flat_bets(df,col='model_wp'):
+    """One row per game: the side `col` favors, its moneyline, the no-vig market
+    probability of that side (q), and the 1u result. units is NaN while the game
+    is unplayed or a price is missing; a tie is a push (0u)."""
+    rows=[]
+    for r in df.to_dict('records'):
+        p=r.get(col); hm,am=r.get('home_moneyline'),r.get('away_moneyline'); y=r.get('home won')
+        out={'side':'','price':np.nan,'band':'','q':np.nan,'payout':np.nan,'result':'','units':np.nan,'null_ev':np.nan}
+        if p is None or not np.isfinite(float(p)) or np.isclose(float(p),.5): rows.append(out); continue
+        home=float(p)>.5; out['side']='home' if home else 'away'
+        price=hm if home else am
+        try: price=float(price); ok=np.isfinite(price) and abs(price)>=100
+        except (TypeError,ValueError): ok=False
+        if ok:
+            ih,ia=ml_implied(hm),ml_implied(am)
+            q=(ih if home else ia)/(ih+ia); pay=ml_payout(price)
+            out.update(price=price,band=ml_band(price),q=q,payout=pay,null_ev=q*pay-(1-q))
+            if y is not None and np.isfinite(float(y)):
+                y=float(y)
+                if y==.5: out.update(result='P',units=0.)
+                else:
+                    won=(y==1.)==home
+                    out.update(result='W' if won else 'L',units=pay if won else -1.)
+        rows.append(out)
+    cols=['side','price','band','q','payout','result','units','null_ev']
+    return pd.DataFrame(rows,index=df.index,columns=cols)  # columns even with no rows (week 1)
+
+
+def market_ml_wp(df):
+    """No-vig home win probability from the two moneylines (NaN where either is missing)."""
+    out=[]
+    for hm,am in zip(df.get('home_moneyline',pd.Series(np.nan,index=df.index)),df.get('away_moneyline',pd.Series(np.nan,index=df.index))):
+        try:
+            ih,ia=ml_implied(hm),ml_implied(am); out.append(ih/(ih+ia) if np.isfinite(ih+ia) else np.nan)
+        except (TypeError,ValueError): out.append(np.nan)
+    return np.asarray(out,float)
+
+
+def roi_summary(bets):
+    """W-L-P, units, ROI and its SE, mean q, excess win rate over q, market null."""
+    b=bets[bets.units.notna()]
+    n=len(b)
+    if not n: return {'bets':0,'wins':0,'losses':0,'pushes':0,'units':0.,'roi':np.nan,'roi_se':np.nan,
+                      'win_pct':np.nan,'mean_q':np.nan,'excess_pp':np.nan,'null_roi':np.nan}
+    w,l=int((b.result=='W').sum()),int((b.result=='L').sum())
+    dec=b[b.result!='P']
+    win=float((dec.result=='W').mean()) if len(dec) else np.nan
+    return {'bets':n,'wins':w,'losses':l,'pushes':n-w-l,'units':float(b.units.sum()),'roi':float(b.units.mean()),
+            'roi_se':float(b.units.std(ddof=1)/np.sqrt(n)) if n>1 else np.nan,'win_pct':win,
+            'mean_q':float(b.q.mean()),'excess_pp':100*(win-float(dec.q.mean())) if len(dec) else np.nan,
+            'null_roi':float(b.null_ev.mean())}
+
+
+def roi_table(df,by=None):
+    """Flat 1u ROI for the model's side and, on the same rows, the market favorite.
+    Rows: one per price band of the MODEL's picked side (market favorite rows use
+    the same games) plus 'All games'; or one per value of `by` (e.g. season)."""
+    d=df.copy(); d['market_ml_wp']=market_ml_wp(d)
+    mb=flat_bets(d,'model_wp'); kb=flat_bets(d,'market_ml_wp')
+    keep=mb.units.notna()&kb.units.notna()  # same graded, priced rows for both
+    groups=[('All games',keep)]
+    if by is None:
+        groups=[(lab,keep&(mb.band==lab)) for lab in ML_BANDS]+groups
+    else:
+        groups=[(str(v),keep&(d[by]==v)) for v in sorted(d[by].dropna().unique())]+groups
+    rows=[]
+    for i,(lab,mask) in enumerate(groups):
+        for src,b in (('model',mb),('market favorite',kb)):
+            rows.append({'group':lab,'group_index':i,'source':src,**roi_summary(b[mask])})
+    return pd.DataFrame(rows)
+
+
+RETRO_COLS=['game_id','season','week','home','away','home won','market_wp','result','spread_line']
+
+
+def retrospective_ledger(oof,gw,recipe,schedules,season,cur):
+    """The chosen recipe graded on every backtest game plus this season's earlier
+    weeks, as flat 1u moneyline bets. Predictions are weekly walk-forward (each game
+    from coefficients fit on earlier games only), but the recipe itself was chosen
+    with the backtest seasons: reconstructed hindsight, never forward evidence."""
+    key='p__'+recipe_key(recipe)
+    a=oof[RETRO_COLS+[key]].rename(columns={key:'model_wp'}).assign(basis='backtest (recipe chosen on these seasons)')
+    b=gw.loc[(gw.season==season)&(gw.week<cur)&gw.result.notna(),RETRO_COLS+['model_wp']].assign(basis='current season walk-forward')
+    r=pd.concat([a,b],ignore_index=True)
+    r=attach_moneylines(r,schedules)
+    extra=[c for c in ('home_score','away_score','gameday') if c in schedules]
+    if extra: r=r.merge(schedules[['game_id',*extra]].drop_duplicates('game_id'),on='game_id',how='left')
+    bets=flat_bets(r)
+    r['bet_side']=bets.side; r['bet_team']=np.where(bets.side=='home',r.home,np.where(bets.side=='away',r.away,''))
+    for c in ('price','band','q','result','units','null_ev'): r['bet_'+c if c in ('price','band','q','result') else c]=bets[c]
+    r['market_ml_wp']=market_ml_wp(r)
+    r['fav_units']=flat_bets(r,'market_ml_wp').units
+    return r.sort_values(['season','week','game_id']).reset_index(drop=True)
+
+
+def candidate_roi(oof):
+    """Every candidate's walk-forward flat 1u ROI beside its selection log loss, on
+    the same row set as roi_table (games where the market also has a favorite), so
+    the selected recipe's units equal its rebuilt-history total for these seasons."""
+    y=oof['home won'].to_numpy(float); rows=[]
+    fav=flat_bets(oof.assign(market_ml_wp=market_ml_wp(oof)),'market_ml_wp').units.notna()
+    for r in candidates():
+        key=recipe_key(r)
+        b=flat_bets(oof.assign(model_wp=oof['p__'+key]))  # oof carries moneylines
+        sm=roi_summary(b[fav])
+        rows.append({'key':key,'log loss':float(ll(y,oof['p__'+key]).mean()),**sm})
+    return pd.DataFrame(rows)
+
+
 def wilson(k,n,z=1.96):
     if n<=0: return np.nan,np.nan
     p=k/n; d=1+z*z/n; c=(p+z*z/(2*n))/d; h=z*np.sqrt(p*(1-p)/n+z*z/(4*n*n))/d
@@ -1503,6 +1666,8 @@ def record_forward(board,fit,recipe_record,asof=None):
             'market_wp':float(r['market_wp']) if pd.notna(r['market_wp']) else None,
             'homefield_wp':float(r['homefield_wp']),
             'spread_line':float(r['spread_line']) if pd.notna(r['spread_line']) else None,
+            'home_moneyline':float(r['home_moneyline']) if pd.notna(r.get('home_moneyline')) else None,
+            'away_moneyline':float(r['away_moneyline']) if pd.notna(r.get('away_moneyline')) else None,
             'injury_report':{side:r.get(f'{side}_injury_report') for side in ('home','away')},
             'recipe':recipe_record['recipe'],'coefficient_fit':fit,
             'source_note':'First locally recorded pre-kickoff forecast; source market quote has no independent quote timestamp.'}
@@ -1974,6 +2139,7 @@ def main():
     oof=cached_grid(features,season)
     save(oof,'candidate_walk_forward_predictions.csv')
     outer,folds=outer_predictions(oof)
+    outer=attach_moneylines(outer,schedules)
     card=scorecard(outer)
     print('Held-out (outer) seasons, pooled:'); display(card.round(4)); save(card,'outer_chronological_scorecard.csv')
     save(outer,'outer_chronological_predictions.csv')
@@ -1986,6 +2152,13 @@ def main():
     if len(blend): display(blend.round(4))
     print('  '+blend_verdict(blend)); save(blend,'market_blend_diagnostic.csv')
     cal=calibration_bands(outer); save(cal,'calibration_bands.csv')
+    roi=roi_table(outer); save(roi,'roi_bands.csv')
+    roi_years=roi_table(outer,by='season'); save(roi_years,'roi_by_season.csv')
+    t=roi[(roi.group=='All games')].set_index('source')
+    for src in ('model','market favorite'):
+        r=t.loc[src]
+        print(f'  Held-out flat 1u at the moneyline, {src}: {r.wins}-{r.losses}-{r.pushes}, '
+              f'{r.units:+.2f}u, ROI {100*r.roi:+.1f}% +/- {100*r.roi_se:.1f} (market null {100*r.null_roi:+.1f}%)')
     dump(outdir/'outer_recipe_choices.json',folds)
     recipe_rec=frozen_recipe(oof,season); recipe=recipe_rec['recipe']
     selection=pd.DataFrame(recipe_rec['selection_scores'])
@@ -1996,7 +2169,16 @@ def main():
     dump(outdir/'frozen_recipe.json',recipe_rec)
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
     gw,fit=current_predictions(features,recipe,season,cur)
+    gw=attach_moneylines(gw,schedules)
     save(gw,'current_season_predictions.csv')
+    save(roi_table(gw[gw.week<cur]),'season_roi.csv')
+    retro=retrospective_ledger(oof,gw,recipe,schedules,season,cur); save(retro,'retro_ledger.csv')
+    save(roi_table(retro,by='season'),'retro_roi_by_season.csv'); save(roi_table(retro),'retro_roi_bands.csv')
+    sel_window=attach_moneylines(oof[oof.season<season],schedules)
+    save(candidate_roi(sel_window),'candidate_roi.csv')
+    t=roi_table(retro).query("group=='All games' and source=='model'").iloc[0]
+    print(f'  Chosen recipe {recipe_key(recipe)} rebuilt history (reconstructed): {int(t.bets)} bets, '
+          f'{t.units:+.2f}u, ROI {100*t.roi:+.1f}% +/- {100*t.roi_se:.1f}')
     season_card=scorecard(gw); save(season_card,'season_scorecard.csv')
     rcols=['season','week','home won','model_wp','market_wp']
     rec_hist=pd.concat([outer[rcols],gw.loc[(gw.week<cur)&gw.result.notna(),rcols]],ignore_index=True)
@@ -2171,6 +2353,46 @@ def _self_test():
     a8=availability_table(pd.DataFrame({'season':[2020],'week':[2],'team':['S']}),qbt,sn2,ij2.assign(week=2),
                           rs2.assign(week=1)).iloc[0]
     assert np.isclose(a8.OL_out_cs,a8.OL_out)  # only 1 current game: falls back to the standard window
+    # v1.9.1 flat 1u at the moneyline: payouts, bands, pushes, missing prices, same-row baseline.
+    assert np.isclose(ml_payout(-150),100/150) and np.isclose(ml_payout(130),1.3) and np.isclose(ml_implied(-150),.6)
+    assert [ml_band(x) for x in (-250,-249,-175,-174,-130,-129,-100,100,129,130,175,250)]==[
+        ML_BANDS[0],ML_BANDS[1],ML_BANDS[1],ML_BANDS[2],ML_BANDS[2],ML_BANDS[3],ML_BANDS[3],ML_BANDS[4],ML_BANDS[4],ML_BANDS[5],ML_BANDS[6],ML_BANDS[7]]
+    fb=pd.DataFrame({'game_id':list('abcdef'),'model_wp':[.7,.4,.6,.5,.6,.6],'home won':[1.,1.,.5,1.,0.,np.nan],
+                     'home_moneyline':[-150,-120,-110,-110,np.nan,-200],'away_moneyline':[130,100,-110,-110,120,170]})
+    bets=flat_bets(fb)
+    assert bets.side.tolist()==['home','away','home','','home','home']
+    assert np.allclose(bets.units.iloc[:3],[100/150,-1.,0.]) and bets.result.tolist()[:3]==['W','L','P']
+    assert np.isnan(bets.units.iloc[3]) and np.isnan(bets.units.iloc[4]) and np.isnan(bets.units.iloc[5])  # no pick, no price, unplayed
+    q=ml_implied(-150)/(ml_implied(-150)+ml_implied(130))
+    assert np.isclose(bets.q.iloc[0],q) and np.isclose(bets.null_ev.iloc[0],q*100/150-(1-q)) and bets.null_ev.iloc[0]<0
+    sm=roi_summary(bets)
+    assert (sm['bets'],sm['wins'],sm['losses'],sm['pushes'])==(3,1,1,1) and np.isclose(sm['units'],100/150-1)
+    rt=roi_table(fb.assign(season=2020)).set_index(['group','source'])
+    # One row set for both sources: c is a market pick'em (no favorite), so it leaves both.
+    assert rt.loc[('All games','model'),'bets']==rt.loc[('All games','market favorite'),'bets']==2
+    assert rt.loc[(ML_BANDS[2],'model'),'bets']==1  # game a at -150
+    assert attach_moneylines(fb.drop(columns=['home_moneyline','away_moneyline']),pd.DataFrame({'game_id':['a']})).home_moneyline.isna().all()
+    # v1.9.2 retrospective ledger: chosen recipe's column, this season's earlier weeks only, graded rows.
+    ofb=fb.iloc[:3].assign(season=2020,week=1,home='H',away='A',market_wp=.6,result=[3.,-3.,0.],spread_line=1.,
+                           **{'home won':[1.,0.,.5]},
+                           p__x=[.7,.4,.6]).drop(columns=['model_wp','home_moneyline','away_moneyline'])
+    gwb=pd.DataFrame({'game_id':['g1','g2'],'season':2021,'week':[1,2],'home':'H','away':'A','home won':[1.,np.nan],
+                      'market_wp':.6,'result':[3.,np.nan],'spread_line':1.,'model_wp':[.6,.6]})
+    sch=pd.DataFrame({'game_id':['a','b','c','g1','g2'],'home_moneyline':[-150,-120,-110,-200,-200],
+                      'away_moneyline':[130,100,-110,170,170],'home_score':[10,7,3,9,np.nan],'away_score':[7,10,3,6,np.nan]})
+    rl=retrospective_ledger(ofb.rename(columns={'p__x':'p__'+recipe_key({'family':'f','half_life':1.,'ridge':1.})}),
+                            gwb,{'family':'f','half_life':1.,'ridge':1.},sch,2021,2)
+    assert rl.game_id.tolist()==['a','b','c','g1'] and rl.bet_team.tolist()==['H','A','H','H']
+    assert np.allclose(rl.units,[100/150,1.,0.,.5]) and rl.basis.iloc[-1]=='current season walk-forward'
+    # candidate ROI uses roi_table's row set: market pick'em c leaves both.
+    pk='p__'+recipe_key({'family':'f','half_life':1.,'ridge':1.})
+    cof=attach_moneylines(ofb.rename(columns={'p__x':pk}),sch)
+    old_c=globals()['candidates']; globals()['candidates']=lambda:[{'family':'f','half_life':1.,'ridge':1.}]
+    try: cr=candidate_roi(cof).iloc[0]
+    finally: globals()['candidates']=old_c
+    assert cr.bets==roi_table(cof.assign(model_wp=cof[pk])).query("group=='All games' and source=='model'").bets.iloc[0]==2
+    empty=roi_table(fb.iloc[:0])  # week 1: no earlier games this season
+    assert (empty.bets==0).all() and set(empty.source)=={'model','market favorite'}
     # v1.8 injury-report state: game statuses -> 'final'; practice rows only -> 'practice'; nothing -> 'none'.
     assert av.injury_report=='final'
     prac=pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'p0','report_status':None}])

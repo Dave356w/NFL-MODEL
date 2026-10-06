@@ -6,11 +6,12 @@ import pandas as pd
 import grade_ledger as g
 
 
-def rec(gid, wp, mkt, exp="e", rev="r1", week=5):
+def rec(gid, wp, mkt, exp="e", rev="r1", week=5, hm=-150, am=130):
     return {"experiment": exp, "revision": rev, "game_id": gid, "season": 2026, "week": week,
             "home": "H" + gid, "away": "A" + gid, "generated_utc": "2026-10-10T12:00:00+00:00",
             "kickoff_utc": "2026-10-11T17:00:00+00:00", "model_wp": wp, "market_wp": mkt,
-            "homefield_wp": .55, "spread_line": 3.0, "injury_report": {"home": "final", "away": "final"}}
+            "homefield_wp": .55, "spread_line": 3.0, "home_moneyline": hm, "away_moneyline": am,
+            "injury_report": {"home": "final", "away": "final"}}
 
 
 RESULTS = pd.DataFrame({"game_id": ["a", "b", "c", "d"], "away_score": [10, 24, 17, np.nan],
@@ -52,3 +53,22 @@ def test_empty_ledger(tmp_path):
     assert out.empty and g.summary(out)["snapshots"] == 0
     g.write_outputs(out, tmp_path)
     assert "No snapshots" in (tmp_path / "ledger_report.txt").read_text()
+
+
+def test_flat_roi_at_saved_moneyline_with_same_row_baseline():
+    # a: model home (-150) wins +0.667; b: model away (+130), away won -> +1.3; c: tie -> push 0;
+    # e: no saved price -> no bet; d: pending -> no units yet.
+    out = g.grade([rec("a", .7, .6), rec("b", .4, .6), rec("c", .6, .6), rec("d", .6, .6),
+                   rec("e", .6, .6, hm=None, am=None)], RESULTS)
+    s = out.set_index("game_id")
+    assert s.loc["a", "bet_team"] == "Ha" and s.loc["a", "bet_result"] == "W" and np.isclose(s.loc["a", "units"], 2 / 3)
+    assert s.loc["b", "bet_team"] == "Ab" and np.isclose(s.loc["b", "units"], 1.3) and s.loc["c", "bet_result"] == "P"
+    assert np.isnan(s.loc["d", "units"]) and np.isnan(s.loc["e", "units"]) and s.loc["e", "bet_team"] == "He"
+    r = g.summary(out)["roi"]
+    assert (r["bets"], r["wins"], r["losses"], r["pushes"]) == (3, 2, 0, 1)
+    assert np.isclose(r["units"], 2 / 3 + 1.3) and np.isclose(r["roi"], (2 / 3 + 1.3) / 3)
+    assert np.isclose(r["fav_units"], 2 / 3 - 1 + 0)  # market favorite = home -150 on all three
+    assert r["null_roi"] < 0  # market-correct null is negative by the hold
+    bands = g.roi_bands(out).set_index("group")
+    assert bands.loc["All games", "bets"] == 3 and bands.loc["−174 to −130", "bets"] == 2
+    assert "HEADLINE flat 1u" in g.report_text(out)
