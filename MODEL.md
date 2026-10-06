@@ -100,6 +100,21 @@ new `REVISION`.
 The market comparator is `Φ(spread / 12.37)` from the nflverse schedule line.
 That line has no independent quote timestamp.
 
+## How a week's forecast updates as injury reports arrive
+
+| When (Sunday game) | Injury data for the week | Model counts | Card shows | Ledger |
+|---|---|---|---|---|
+| Tue (daily 06:13 ET build) | none yet | everyone on the latest roster as available (IR/departures already out) | last week's Out/Doubtful/Questionable players: "not on a week-N report yet", 0% counted; "Report pending" | waits |
+| Wed–Thu | practice participation only | still available | each listed player's practice status (DNP/Limited) | waits |
+| Fri ~4pm ET | final report: game statuses | Out/Doubtful 100%, Questionable 25% of the player's unit-snap share | the statuses as counted; last week's players absent from the report: "cleared" | locks at the first build after nflverse publishes it: the daily pass, or hourly builds from 30h before kickoff |
+| ≤150 min before kickoff | final | final | final | already locked; board refreshes once more |
+
+Thursday games run the same schedule two days earlier (final report Wednesday). Monday
+games run one day later (Saturday). A team with no designations at all still locks within 24h of kickoff.
+The gate also needs nflverse to have published the report. Its injury file refreshes at
+least daily, and every build re-reads it. Same-week roster moves (for example a Friday IR
+move) are not used; the report's Out status covers them.
+
 ## Pipeline
 
 ```

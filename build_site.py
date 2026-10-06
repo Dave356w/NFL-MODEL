@@ -66,6 +66,7 @@ SNAPSHOT = {
     "retro_roi_by_season.csv": "retro_roi_by_season.csv",
     "retro_roi_bands.csv": "retro_roi_bands.csv",
     "candidate_roi.csv": "candidate_roi.csv",
+    "report_notes.csv": "report_notes.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
@@ -630,10 +631,46 @@ def render_index(latest, ledger, built, now=None):
             arows.insert(0, ["Projected QB (usual)", _qb(r, "away"), _qb(r, "home")])
             arows.insert(1, ["Injury report", esc(r.get("away_injury_report") or "none"), esc(r.get("home_injury_report") or "none")])
             det.append("<h3>Availability</h3>" + table(["", esc(away), esc(home)], arows, num_cols=(1, 2)))
+            det.append(report_notes_html(latest.get("report_notes"), (away, home), int(r["week"])))
         det.append("</div>")
         cards.append(f"<details class='card'>{summary}{''.join(det)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built, latest.get("board_html", False))
+
+
+STATE_TEXT = {
+    "none": "Week {w} report not published yet. Players listed last week are counted as available until it is "
+            "(final statuses come Friday; Wednesday for Thursday games).",
+    "practice": "Week {w} practice report only: no game statuses yet, so everyone is still counted as available.",
+    "final": "Week {w} final report: the statuses below are what the model counts (Out/Doubtful 100%, Questionable 25%).",
+}
+
+
+def report_notes_html(notes, teams, week):
+    """Per-team injury-report notes: what the reports say and what the model counts now."""
+    if notes is None or notes.empty:
+        return ""
+    out = ["<h3>Injury report notes</h3>"]
+    for t in teams:
+        n = notes[notes.team == t]
+        state = n.report_state.iloc[0] if len(n) else None
+        if n.empty:
+            continue
+        rows = []
+        for x in n.itertuples(index=False):
+            prev = ""
+            if isinstance(x.prev_status, str) and x.prev_status:
+                inj = f" ({esc(x.prev_injury)})" if isinstance(x.prev_injury, str) and x.prev_injury else ""
+                prev = f"{esc(x.prev_status)}{inj} · wk {int(num(x.prev_week))}"
+            counted = num(x.counted)
+            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>",
+                         f"{100 * num(x.snap_share):.0f}% <span class='mut'>{esc(x.unit)}</span>",
+                         prev or "—", esc(x.this_week),
+                         f"{100 * counted:.0f}%" if math.isfinite(counted) else "—"])
+        out.append(f"<p class='mut'><b>{esc(t)}</b> · {esc(STATE_TEXT.get(state, '').format(w=week))}</p>"
+                   + table(["Player", "Share of unit snaps", "Last report", f"Week {week}", "Counted out"], rows,
+                           num_cols=(1, 4)))
+    return "".join(out) if len(out) > 1 else ""
 
 
 def _fmt_avail(c, v):

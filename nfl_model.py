@@ -5,6 +5,15 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.9.4 (reporting only; same REVISION, config signature, recipe and ledger):
+injury-report notes on each game card. report_notes() lists, per team, the
+players on the latest injury report with their share of their unit's snaps,
+and follows the week as reports arrive: before the team's report for this
+week is out, last week's Out/Doubtful/Questionable players are shown as "not
+on a week-N report yet" (counted as available, as the model does); with a
+practice-only report, their practice participation; with the final report,
+the game status the model counts. Display only: features are unchanged.
+
 v1.9.3 (operations only; same REVISION, config signature, recipe and ledger):
 nflverse downloads retry transient failures (UPSTREAM_RETRIES, exponential
 backoff), and the pfr->gsis player id map falls back to its last cached copy
@@ -653,7 +662,7 @@ def load_availability(years,season):
     season reloads every run."""
     import nflreadpy as nfl
     cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True)
-    players=None; out={'inj':[],'rost':[],'snaps':[]}
+    players=None; out={'inj':[],'rost':[],'snaps':[]}; detail=[]
     names={'inj':'injstatus','rost':'rost','snaps':'snaps'}  # 'injstatus': raw report_status, not weights
     for y in years:
         paths={k:cache/f'avail_{names[k]}_{y}.csv' for k in out}
@@ -665,6 +674,9 @@ def load_availability(years,season):
             inj=fetch_upstream(lambda:_nflverse_parquet('injuries',y),f'injuries {y}')
         # Raw report_status is cached; STATUS_WEIGHT is applied after loading (injury_weights).
         inj=normalize_teams(inj[inj.game_type=='REG'].copy())
+        if y==season:  # names, injuries and practice status for the card notes (display only)
+            dcols=['season','week','team','gsis_id','full_name','position','report_status','report_primary_injury','practice_status']
+            detail.append(inj.dropna(subset=['gsis_id'])[[c for c in dcols if c in inj]].drop_duplicates(['season','week','team','gsis_id']))
         inj=inj.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','report_status']].drop_duplicates()
         rost=fetch_upstream(lambda:nfl.load_rosters_weekly(y).to_pandas(),f'rosters {y}')
         if 'game_type' in rost: rost=rost[rost.game_type=='REG']
@@ -682,6 +694,7 @@ def load_availability(years,season):
             if y<season: df.to_csv(paths[k],index=False)
             out[k].append(df)
     out={k:pd.concat(v,ignore_index=True) for k,v in out.items()}
+    out['inj_detail']=pd.concat(detail,ignore_index=True) if detail else pd.DataFrame()
     st=out['rost'].status
     known=st.isin(ROSTER_OUT+ROSTER_MEMBER)
     AUDIT.append({'source':'roster_status_codes','counts':{str(k):int(v) for k,v in st.value_counts(dropna=False).items()},
@@ -707,6 +720,63 @@ def roster_out_mask(rost):
         d=rost.status_description_abbr.astype(str)
         out|=rost.status_description_abbr.notna()&d.str[:1].isin(ROSTER_OUT_DESC_PREFIX)
     return out
+
+
+REPORT_NOTE_MIN_SHARE=.05  # notes list a player if he holds this share of his unit's window snaps (QBs always)
+
+
+def report_notes(detail,snaps,teams,season,week):
+    """Per team, what the injury reports say about players who matter to the
+    window the model uses, and how that changes through the week:
+      * report_state 'none'    : this week's report is not published yet. Players
+        listed Out/Doubtful/Questionable on the team's latest earlier report are
+        shown with 'not on a week-N report yet'; the model counts them as available.
+      * report_state 'practice': practice participation only (no game statuses yet);
+        still counted as available.
+      * report_state 'final'   : game statuses published; 'counted' is the weight
+        the model applies (Out/Doubtful 1, Questionable .25).
+    Players who were listed last week and are absent from a final report this week
+    are shown as cleared. Snap share = player's share of his unit's snaps over the
+    team's last AVAIL_WINDOW games before this week (current season once it has
+    CS_MIN_GAMES games), the window the _cs unit columns use."""
+    cols=['team','gsis_id','player','position','unit','snap_share','prev_week','prev_status','prev_injury',
+          'this_week','counted','report_state']
+    if detail is None or detail.empty: return pd.DataFrame(columns=cols)
+    d=detail[detail.season==season]
+    sn=snaps.copy()
+    sn['unit']=sn.position.map(lambda p:'QB' if p=='QB' else POS_GROUP.get(p))
+    sn=sn[sn.unit.notna()].copy()
+    sn['s']=np.where(sn.unit.isin(OFFENSE_GROUPS+('QB',)),sn.offense_snaps,sn.defense_snaps)
+    rows=[]
+    for t in teams:
+        cur=d[(d.week==week)&(d.team==t)]
+        state='final' if cur.report_status.notna().any() else 'practice' if len(cur) else 'none'
+        earlier=d[(d.week<week)&(d.team==t)]
+        pw=int(earlier.week.max()) if len(earlier) else None
+        prev=earlier[(earlier.week==pw)&earlier.report_status.isin(list(STATUS_WEIGHT))] if pw is not None else earlier.iloc[:0]
+        g=sn[(sn.team==t)&before(sn,season,week)]
+        games=g[['season','week','game_id']].drop_duplicates().sort_values(['season','week'])
+        cs=games[games.season==season]
+        win=(cs if len(cs)>=CS_MIN_GAMES else games).tail(AVAIL_WINDOW).game_id
+        g=g[g.game_id.isin(win)]
+        unit_tot=g.groupby('unit').s.sum(); pl=g.groupby(['gsis_id','unit']).s.sum().reset_index()
+        share={r.gsis_id:(r.unit,float(r.s/unit_tot[r.unit]) if unit_tot[r.unit]>0 else 0.) for r in pl.itertuples()}
+        listed_now=cur[cur.report_status.notna()|cur.practice_status.fillna('').str.contains('Did Not|Limited',regex=True)]
+        for pid in dict.fromkeys(list(prev.gsis_id)+list(listed_now.gsis_id)):
+            p=prev[prev.gsis_id==pid]; c=cur[cur.gsis_id==pid]
+            src=(c if len(c) else p).iloc[0]
+            unit,sh=share.get(pid,(POS_GROUP.get(src.position,'QB' if src.position=='QB' else None),0.))
+            if sh<REPORT_NOTE_MIN_SHARE and unit!='QB': continue  # no window snaps: carries no weight either
+            if state=='none': now=f'not on a week-{week} report yet'; w=0.
+            elif len(c) and pd.notna(c.report_status.iloc[0]): now=c.report_status.iloc[0]; w=STATUS_WEIGHT.get(now,0.)
+            elif len(c): now=f'practice: {c.practice_status.iloc[0]}' if pd.notna(c.practice_status.iloc[0]) else 'listed, no status'; w=0.
+            else: now='not listed (cleared)' if state=='final' else f'not on the week-{week} practice report'; w=0.
+            rows.append({'team':t,'gsis_id':pid,'player':src.full_name,'position':src.position,'unit':unit,'snap_share':sh,
+                         'prev_week':pw if len(p) else None,'prev_status':p.report_status.iloc[0] if len(p) else None,
+                         'prev_injury':p.report_primary_injury.iloc[0] if len(p) and 'report_primary_injury' in p else None,
+                         'this_week':now,'counted':w,'report_state':state})
+    out=pd.DataFrame(rows,columns=cols)
+    return out.sort_values(['team','snap_share'],ascending=[True,False]).reset_index(drop=True)
 
 
 def availability_table(targets,qb,snaps,inj,rost,audit=None):
@@ -2169,6 +2239,11 @@ def main():
                   f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
                   f'ledger until game statuses publish (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff).')
         else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
+    notes=None
+    if avail is not None:
+        wk=schedules[(schedules.season==season)&(schedules.week==cur)]
+        notes=report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur)
+        save(notes,'report_notes.csv')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}
     for half in TEAM_HALF_LIVES:
@@ -2393,6 +2468,25 @@ def _self_test():
     a8=availability_table(pd.DataFrame({'season':[2020],'week':[2],'team':['S']}),qbt,sn2,ij2.assign(week=2),
                           rs2.assign(week=1)).iloc[0]
     assert np.isclose(a8.OL_out_cs,a8.OL_out)  # only 1 current game: falls back to the standard window
+    # v1.9.4 report notes follow the week: none -> last week's listings, practice -> participation, final -> counted.
+    snr=pd.DataFrame([{'season':2020,'week':w,'game_id':f'r{w}','team':'T','gsis_id':g,'position':pos,
+                       'offense_snaps':sn_,'defense_snaps':0.} for w in (1,2,3) for g,pos,sn_ in (('rb1','RB',40.),('rb2','RB',20.),('wr','WR',60.))])
+    det=lambda rows:pd.DataFrame([dict(season=2020,team='T',position=pos,report_primary_injury='Knee',**r) for r,pos in rows])
+    last=[({'week':3,'gsis_id':'rb1','full_name':'Back One','report_status':'Out','practice_status':'Did Not Participate In Practice'},'RB'),
+          ({'week':3,'gsis_id':'wr','full_name':'Wide','report_status':None,'practice_status':'Full Participation in Practice'},'WR')]
+    n0=report_notes(det(last),snr,['T'],2020,4).set_index('gsis_id')
+    assert list(n0.index)==['rb1'] and n0.loc['rb1','report_state']=='none' and n0.loc['rb1','counted']==0
+    assert n0.loc['rb1','this_week']=='not on a week-4 report yet' and np.isclose(n0.loc['rb1','snap_share'],40/60)
+    prac=last+[({'week':4,'gsis_id':'rb1','full_name':'Back One','report_status':None,'practice_status':'Limited Participation in Practice'},'RB')]
+    n1=report_notes(det(prac),snr,['T'],2020,4).set_index('gsis_id')
+    assert n1.loc['rb1','report_state']=='practice' and n1.loc['rb1','this_week'].startswith('practice: Limited') and n1.loc['rb1','counted']==0
+    fin=last+[({'week':4,'gsis_id':'rb2','full_name':'Back Two','report_status':'Questionable','practice_status':None},'RB')]
+    n2=report_notes(det(fin),snr,['T'],2020,4).set_index('gsis_id')
+    assert n2.loc['rb1','this_week']=='not listed (cleared)' and n2.loc['rb1','counted']==0  # off the final report
+    assert n2.loc['rb2','counted']==.25 and n2.loc['rb2','report_state']=='final'
+    n3=report_notes(det(last),snr,['T'],2020,5).set_index('gsis_id')  # bye in week 4: week 3 is still the latest report
+    assert n3.loc['rb1','prev_week']==3 and n3.loc['rb1','this_week']=='not on a week-5 report yet'
+    assert report_notes(pd.DataFrame(),snr,['T'],2020,4).empty
     # v1.9.3 upstream retries: transient failures retried with backoff; persistent ones re-raised.
     calls,waits=[],[]
     def flaky():
