@@ -71,4 +71,10 @@ ROI in each group, with the null and the same-row favorite, as secondary.
 
 ## Addenda
 
-(none)
+**2026-10-07, before the first snapshot. Source figures re-measured; rules unchanged.**
+The production held-out predictions (research test 11) give:
+- **H1 rule:** n = 68, +13.4% ± 11.4, same-row favorite −7.4%, log-loss gain vs the
+  market −0.081 ± 0.053 (the model is worse). The note's +31.7% on n = 48 came from a
+  different recipe.
+- **H2:** log-loss gain weeks 5–13 ≈ −0.028 ± 0.010 vs weeks 14–18 −0.055 ± 0.014,
+  difference ≈ −0.026 ± 0.017.

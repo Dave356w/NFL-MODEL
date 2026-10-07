@@ -136,8 +136,10 @@ Paired SEs are game-level, not season-clustered.
 
 These tests used their own re-run baseline, `rates_core_avail_cs` only, picking h16_r0.1
 in all three held-out seasons: 811 bets, +2.43u, +0.3% ± 2.7, LL 0.6352. **It is not
-production.** Production is the two-family grid, frozen at **h8_r0.1** for 2026
-(+2.17u, LL 0.6364, the tables above). The paired differences are still internally
+production.** Production searches both families, and its held-out picks are
+`rates_core_adj_avail_cs_h16_r0.1` in all three seasons (+2.17u, LL 0.6364, the tables
+above; confirmed by test 10's run). The 2026 frozen recipe, `rates_core_avail_cs_h8_r0.1`,
+was selected on all five seasons and is different again. The paired differences are still internally
 valid. On the same 811 rows, the market-correct null is −4.1% and the same-row market
 favorite is +0.0%. The model's ROI is level with simply betting favorites.
 
@@ -151,8 +153,8 @@ favorite is +0.0%. The model's ROI is level with simply betting favorites.
 **Corrections and caveats to the original note:**
 - **Test 6 missed a wrong sign.** In the current fit (`data/latest/weights.csv`, h8),
   *Defense: opponents' penalty yards* is −0.091, against the direction map. That is
-  larger than either feature the test dropped. Test 10 checks the signs across every
-  weekly refit.
+  larger than either feature the test dropped. Test 10 shows it is the only stable
+  wrong sign; of the two features the test dropped, one is transient and one is noise.
 - **Tests 8–9 week-group tables** (fast decay is worse in weeks 1–4 and better in 14+)
   use fixed recipes on the same 2023–25 seasons and have no SEs. Test 9 was designed
   from test 8's crossover on those same seasons. Both are post-hoc diagnostics. Only
@@ -166,3 +168,71 @@ favorite is +0.0%. The model's ROI is level with simply betting favorites.
   across the whole held-out sample, not just late in the season.
 - **Forward test.** The forward ledger starts in **week 5** (TB@DAL, Oct 8), not week 6.
   The two forward hypotheses from this note are fixed in `PREREGISTRATION.md`.
+
+### Tests 10–11: coefficient signs, and where the held-out ROI comes from (2026-10-07)
+
+`python research/signs_and_disagreement.py [CACHE_DIR]` (≈ 7 min with a cold cache).
+The production held-out rows reproduce exactly: 811 bets, +2.17u, +0.3% ± 2.7.
+Diagnostics only; nothing here changes the model.
+
+#### Test 10: are the wrong-signed coefficients stable?
+
+The frozen recipe (`rates_core_avail_cs_h8_r0.1`) was refit before each of 90
+walk-forward weeks, 2021–2025. The table shows how often each directed coefficient
+had the sign the direction map expects. Rows not shown matched in 100% of fits.
+
+| Feature | Expected | Median coef | Expected sign, all fits | 2023–25 fits | Current 2026 fit |
+|---|:---:|---:|---:|---:|---:|
+| Off interception % | − | −0.072 | 100% | 100% | +0.041 |
+| Off penalty yards | − | +0.006 | 38% | 41% | +0.041 |
+| Off fumbles lost | − | −0.003 | 54% | 54% | −0.007 |
+| Def opponents' first downs/100 | − | −0.020 | 66% | 46% | −0.017 |
+| Def opponents' sack % | + | +0.025 | 76% | 72% | +0.009 |
+| **Def opponents' penalty yards** | + | **−0.048** | **3%** | **6%** | **−0.091** |
+| Avail LB snaps out | − | −0.007 | 58% | 48% | −0.036 |
+| Avail OL / RB / DB snaps out | − | −0.04 to −0.05 | 87–96% | 100% | expected |
+
+- **Offense interception %** has the expected sign in every 2021–25 fit. The +0.041
+  appears only in the 2026 refit, after four weeks of new data. Watch it; don't drop it.
+- **Offense penalty yards, offense fumbles, opponents' first downs and LB snaps out**
+  hover around zero and flip often. That is noise, and ridge keeps them small.
+- **Opponents' penalty yards** has the wrong sign in 97% of fits. It is a stable
+  suppressor or a real effect: more penalty yards by a team's opponents predicts that team *losing*,
+  once the other 20 inputs are held fixed. It is the only candidate for a pruning or
+  sign-constraint test, which would need a new `REVISION`.
+
+#### Test 11: where does the held-out ROI come from?
+
+Production held-out predictions (each season's recipe chosen on earlier seasons only).
+"LL gain" is the no-vig moneyline market's log loss minus the model's (positive = model
+better), paired on the same games.
+
+| Rows (held-out 2023–25) | Bets | Units | Model ROI ± SE | Same-row favorite | Market null | LL gain vs ML market |
+|---|---:|---:|---:|---:|---:|---:|
+| All games | 811 | +2.17 | +0.3% ± 2.7 | +0.0% | −4.1% | −0.0283 ± 0.0071 |
+| Model agrees with ML favorite | 675 | +7.77 | +1.2% ± 2.6 | +1.2% | −4.1% | −0.0267 ± 0.0069 |
+| Model picks ML underdog | 136 | −5.61 | −4.1% ± 9.5 | −5.6% | −4.1% | −0.0362 ± 0.0251 |
+| \|model − ML market\| ≥ 0.10 | 245 | +4.09 | +1.7% ± 5.5 | −2.1% | −4.1% | −0.0681 ± 0.0206 |
+| \|model − ML market\| > 0.17 (H1 rule) | 68 | +9.12 | +13.4% ± 11.4 | −7.4% | −4.1% | −0.0814 ± 0.0526 |
+| \|model − spread market\| > 0.17 | 64 | +5.89 | +9.2% ± 12.3 | −13.0% | −4.1% | −0.1025 ± 0.0547 |
+| Weeks 1–4 | 189 | +10.40 | +5.5% ± 5.8 | −0.7% | −4.1% | +0.0039 ± 0.0149 |
+| Weeks 5–9 | 217 | −0.52 | −0.2% ± 5.2 | +5.6% | −4.1% | −0.0349 ± 0.0134 |
+| Weeks 10–13 | 171 | +8.17 | +4.8% ± 5.5 | −1.6% | −4.1% | −0.0202 ± 0.0143 |
+| Weeks 14–18 | 234 | −15.89 | −6.8% ± 4.9 | −3.3% | −4.1% | −0.0545 ± 0.0140 |
+
+(Postseason games are not in the walk-forward rows.)
+
+- **The edge is not where the model disagrees with the market.** When the model picks
+  the moneyline underdog (136 bets), ROI is −4.1%, exactly the market-correct null.
+  The model's profit comes from the 675 games where it agrees with the favorite, and
+  there it ties the same-row favorite (+1.2% each).
+- **The big-gap slice does not reproduce at the production recipe.** At the H1 rule,
+  production gives +13.4% ± 11.4 on 68 bets (≈ 1.5 SE above the null), not +31.7% ± 18.5
+  on 48. On the same rows the model's log loss is 0.081 *worse* than the market's. The
+  model is directionally right more often than its probabilities deserve on those rows,
+  which looks more like luck than a calibrated edge. H1 stays pre-registered, but
+  expect it to fail.
+- **The late-season fade is visible in the honest held-out rows.** The log-loss gain
+  falls from about −0.028 ± 0.010 (weeks 5–13) to −0.055 ± 0.014 (weeks 14–18). The
+  difference is about −0.026 ± 0.017 (≈ −1.5 SE). Weeks 1–4 tie the market. This is the
+  same data H2 came from, so it is consistent, not confirmation.
