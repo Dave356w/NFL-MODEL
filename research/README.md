@@ -528,3 +528,22 @@ factors, |z| < ~2.9 is noise (Bonferroni 5%).
   The bye schedule is known at the start of the season, so the rule is fixed in advance.
 - **Early-season favourites underperform their price** (weeks 1–4), which fits test
   15's finding that early margins mislead.
+
+**Follow-up: distance to and from the bye.** Team-games 2010–2025; actual − implied
+for the team. A game where both teams are at the same distance cancels.
+
+| Games until bye | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10+ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Actual − implied (pts, SE ≈ 2–3) | **+4.8** | −2.3 | 0.0 | −1.9 | −0.2 | +1.3 | −4.3 | +1.9 | +2.7 | −0.3 |
+
+| Games since bye (1 = first game back) | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10+ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Actual − implied (pts, SE ≈ 2–3) | +1.0 | −0.7 | −0.7 | +0.9 | +0.3 | 0.0 | −0.4 | −1.5 | +0.1 | +0.8 |
+
+- **There is no linear trend in either direction.** The slope in games until the bye
+  is −0.16 ± 0.28 pts per game (+0.28 ± 0.33 without the bye-next-week games). The
+  slope in games since the bye is −0.02 ± 0.24.
+- **The bye effect is a one-week step,** not a ramp: only "bye next week" stands
+  out, and two weeks before the bye is −2.3. Among 20 distance cells, one at about
+  2.4 SE is what chance alone would often produce. This weakens the case for the
+  "bye next week" hypothesis.
