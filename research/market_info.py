@@ -145,9 +145,9 @@ def phases(d):
     return '\n'.join(lines + by)
 
 
-def lagged_mov(sched):
+def lagged_mov(sched, half_life=MOV_HALF_LIFE):
     """Decayed average point margin per team before each game (production profile weighting,
-    MOV_HALF_LIFE team games, OFFSEASON_RETENTION per season, PRIOR_EQUIVALENT_GAMES at zero)."""
+    half_life team games, OFFSEASON_RETENTION per season, PRIOR_EQUIVALENT_GAMES at zero)."""
     s = sched[sched.result.notna()]
     rows = pd.concat([pd.DataFrame({'team': s.home_team, 'season': s.season, 'week': s.week, 'margin': s.result}),
                       pd.DataFrame({'team': s.away_team, 'season': s.season, 'week': s.week, 'margin': -s.result})])
@@ -161,7 +161,7 @@ def lagged_mov(sched):
             n = int(prior.sum())
             if not n: out[(team, yr, wk)] = 0.; continue
             age = np.arange(n - 1, -1, -1, dtype=float)
-            wt = np.exp2(-age / MOV_HALF_LIFE) * np.power(m.OFFSEASON_RETENTION, yr - seasons[prior])
+            wt = np.exp2(-age / half_life) * np.power(m.OFFSEASON_RETENTION, yr - seasons[prior])
             out[(team, yr, wk)] = float(np.dot(wt, margins[prior]) / (wt.sum() + m.PRIOR_EQUIVALENT_GAMES))
     return out
 
