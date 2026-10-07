@@ -324,3 +324,71 @@ All five together explain 10% of the gap's variance (SD 0.46 log-odds).
 - **90% of the gap is unexplained here.** Plausible sources are preseason priors
   (roster moves, draft, coaching), player quality beyond snap share, news after the
   injury report, line moves, and the model's own estimation noise.
+
+### Test 15: what the market learns, measured with the model's own pregame stats (2026-10-07)
+
+`python research/market_mimic.py [CACHE_DIR]` (≈ 3.5 min warm). All ready, priced
+regular-season games 2021–25 (n = 1,355). Market = no-vig closing moneyline log-odds.
+
+#### A. How much of the market price do the model's stats reproduce?
+
+Linear fit of the market log-odds. R² is out of season: each season is predicted from
+the other four.
+
+| Weeks | Games | 23 model features | + decayed margin | + last- and this-season margin | Composite log-odds alone |
+|---|---:|---:|---:|---:|---:|
+| 1–4 | 318 | 62% | 62% | 63% | 55% |
+| 5–9 | 361 | 77% | 80% | 80% | 69% |
+| 10–13 | 288 | 83% | 87% | 87% | 76% |
+| 14–17 | 308 | 80% | 83% | 83% | 74% |
+| 18 | 80 | 50% | 48% | 41% | 52% |
+| All | 1,355 | 77% | 79% | 79% | 68% |
+
+#### B. What the market weights vs what predicted the outcome (per 1 SD, log-odds)
+
+| Weeks | Target | Composite | Last-season margin | This-season margin so far |
+|---|---|---:|---:|---:|
+| 1–4 | market | +0.27 ± 0.04 | +0.29 ± 0.03 | +0.11 ± 0.03 |
+| 1–4 | outcome | +0.61 ± 0.19 | +0.28 ± 0.17 | −0.29 ± 0.14 |
+| 5–9 | market | +0.35 ± 0.03 | +0.21 ± 0.02 | +0.30 ± 0.03 |
+| 5–9 | outcome | +0.53 ± 0.20 | +0.16 ± 0.13 | +0.04 ± 0.17 |
+| 10–13 | market | +0.39 ± 0.03 | +0.10 ± 0.02 | +0.40 ± 0.03 |
+| 10–13 | outcome | +0.43 ± 0.23 | +0.01 ± 0.14 | +0.46 ± 0.22 |
+| 14–17 | market | +0.44 ± 0.04 | +0.06 ± 0.02 | +0.41 ± 0.04 |
+| 14–17 | outcome | +0.43 ± 0.22 | +0.09 ± 0.14 | +0.51 ± 0.22 |
+| 18 | market | +0.37 ± 0.14 | +0.02 ± 0.08 | +0.46 ± 0.14 |
+| 18 | outcome | −0.08 ± 0.46 | −0.42 ± 0.29 | +0.70 ± 0.47 |
+
+#### C. The same features trained on market prices instead of outcomes
+
+Refit before every week by weighted ridge on earlier games' closing log-odds (earlier
+games only, so no lookahead). The ridge, and whether to add decayed margin, is chosen
+per held-out season on earlier seasons. The baseline is the frozen recipe
+(h8, unadjusted), walk-forward.
+
+| Model (held-out 2023–25) | Bets | Units | Model-side ROI ± SE | Same-row favorite | Market null | Log loss | LL gain vs market |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Market alone | 811 | +0.18 | +0.0% ± 2.5 | +0.0% | −4.1% | 0.6077 | 0 |
+| Frozen recipe, trained on outcomes | 811 | −4.71 | −0.6% ± 2.8 | +0.0% | −4.1% | 0.6333 | −0.0256 ± 0.0072 |
+| Same features, trained on market prices | 811 | −25.63 | −3.2% ± 2.7 | +0.0% | −4.1% | 0.6284 | −0.0207 ± 0.0062 |
+
+Market-trained minus outcome-trained, same games: LL gain +0.0049 ± 0.0041, ROI −2.58 pts
+± 2.27. The two models pick different sides on 84 games.
+
+**Reading.**
+- **The market is mostly a reweighting of public stats.** The model's own 23 features
+  reproduce 77% of the closing price out of season, rising to 83–87% from week 10 on.
+  The rest (about 20%, about 50% in week 18) is information the stats don't hold.
+- **The market's learning is visible as a shift in weight.** Its weight on last season's
+  margin falls from 0.29 to 0.02 across the season, while its weight on this season's
+  margin rises from 0.11 to 0.46. From week 10 on, those weights match what predicted
+  outcomes, so the market reweights about right.
+- **Early in the season the market leans on this season's margins, but they did not
+  predict outcomes** (−0.29 ± 0.14 in weeks 1–4, about 2 SE). The composite gets more
+  outcome weight than the market gives it (+0.61 vs +0.27). This fits the model's only
+  competitive window, weeks 1–4, and is a post-hoc candidate for the "early-season MOV
+  fade" (unregistered).
+- **Training on market prices cleans up the probabilities a little** (+0.0049 ± 0.0041
+  LL, unresolved), and ROI is unresolved (−2.6 ± 2.3). Copying the market's weighting
+  of public stats leaves about 0.021 of log loss that only the market's private
+  information closes.
