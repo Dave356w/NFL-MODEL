@@ -1115,9 +1115,11 @@ def lagged_features(box,schedules,half_life,avail=None):
     opp=box[['game_id','team',*COUNTS]].rename(columns={'team':'opponent',**{c:'opp_'+c for c in COUNTS}})
     both=box.merge(opp,on=['game_id','opponent'],how='left',validate='one_to_one')
     # Point margin from the official result of each game already in the box-score history.
-    res=schedules[['game_id','home_team','result']].drop_duplicates('game_id')
+    # Private names, so extra columns in a custom box-score input cannot collide.
+    res=(schedules[['game_id','home_team','result']].drop_duplicates('game_id')
+         .rename(columns={'home_team':'_margin_home','result':'_margin_result'}))
     both=both.merge(res,on='game_id',how='left',validate='many_to_one')
-    both['margin']=np.where(both.team==both.home_team,both.result,-both.result).astype(float)
+    both['margin']=np.where(both.team==both._margin_home,both._margin_result,-both._margin_result).astype(float)
     records=[]
     for (year,week),games in schedules.groupby(['season','week'],sort=True):
         year,week=int(year),int(week)
@@ -2797,6 +2799,9 @@ def _self_test():
         fm=lagged_features(box,flipped,4.)
         np.testing.assert_allclose(features[4.].loc[beforemask,MARGIN_FEATURE],fm.loc[beforemask,MARGIN_FEATURE])
         assert not np.allclose(features[4.].loc[~beforemask,MARGIN_FEATURE],fm.loc[~beforemask,MARGIN_FEATURE])
+        # Extra 'result'/'home_team' columns in a custom box-score input do not disturb the margin.
+        extra=lagged_features(box.assign(result=99.,home_team='Z'),sched,4.)
+        np.testing.assert_allclose(extra[MARGIN_FEATURE],features[4.][MARGIN_FEATURE])
         # A game's own result never enters its own margin: week-1 games of the first season have no history.
         first=features[4.][(features[4.].season==2018)&(features[4.].week==1)]
         assert np.allclose(first[MARGIN_FEATURE],0.)
