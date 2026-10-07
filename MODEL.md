@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.10), newest first; this page describes what the code
+version history (v1 to v1.11), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.10`
+## The current model: `boxscore-composite-v1.11`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -28,11 +28,19 @@ published before kickoff:
   listed Out/Doubtful (Questionable counts a quarter), moved off the most recent
   roster before the game, or no longer on it. They measure **fresh** absences.
   Returns and arrivals do not offset them.
-* QB: the available rostered QB who started the team's most recent game (week
-  1: most starts last season), else the most team dropbacks, else a rostered QB
-  with history elsewhere, else a league backup prior. The feature is his shrunk
-  net yards per dropback (all-team history) minus the team's recent dropback
-  mix.
+* QB (v1.11): from 2025 on, the highest-ranked available QB on the team's
+  latest timestamped depth chart (nflverse/ESPN) published at least 24 hours
+  before kickoff. Available means not Out/Doubtful and on the most recent
+  roster before the game. A chart older than 7 days counts as missing. With no
+  usable chart (and in every season before 2025, whose depth charts carry no
+  publish time): the available rostered QB who started the team's most recent
+  game (week 1: most starts last season), else the most team dropbacks, else a
+  rostered QB with history elsewhere, else a league backup prior. A projected
+  starter listed **Questionable** is a 50/50 blend with the next candidate
+  (incumbents listed Questionable started 56% of the time, 2019–2026). The
+  feature is the projected efficiency (shrunk net yards per dropback, all-team
+  history) minus the team's recent dropback mix. `qb_source` in
+  `availability_features.csv` says which rule applied.
 * Roster codes counted as out: RES, CUT, TRD, RET, EXE, E01, and the codes used
   mainly in 2019–23 rosters (SUS, PUP, RSN, NWT, UFA, RFA, RSR, E14, TRT, TRC),
   plus any reserve/waived status description. Unrecognized codes are audited.

@@ -615,3 +615,50 @@ nothing by week.
 **Reading.** Neither set improves the model. Log-loss changes are zero within noise,
 and ROI falls in both, by about 1–2 SE. Point margin (v1.10) already carries what
 form adds, and schedule spots are small next to the gap to the market. **Not adopted.**
+
+### Test 21: v1.11 QB projection — depth chart and questionable-starter blend (2026-10-07)
+
+`python research/qb_depth_chart.py [CACHE_DIR]` (≈ 20 min warm). Four arms on the v1.10
+production families, grid and nested selection, scored on the same 811 priced held-out
+games. `QB_QUESTIONABLE_START = 1` with no depth chart reproduces v1.10 exactly. The
+depth chart exists only from 2025, so it changes 2025 rows only; the blend changes rows
+in every season. Every arm picked `…adj_avail_cs_margin_h16_r0.1` in every held-out season.
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| v1.10 | 811 | +7.24 | +0.9% ± 2.7 | 0.6336 | −0.0255 |
+| + blend only | 811 | +11.65 | +1.4% ± 2.7 | 0.6333 | −0.0253 |
+| + depth only | 811 | +4.20 | +0.5% ± 2.7 | 0.6327 | −0.0246 |
+| v1.11 | 811 | +8.62 | +1.1% ± 2.7 | 0.6325 | −0.0244 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| + blend only vs v1.10 | +0.54 pts ± 0.50 | +0.0003 ± 0.0006 |
+| + depth only vs v1.10 | −0.37 pts ± 0.45 | +0.0009 ± 0.0011 |
+| v1.11 vs v1.10 | +0.17 pts ± 0.67 | +0.0011 ± 0.0012 |
+
+| v1.11 vs v1.10 by held-out season | Games | ROI difference | Log-loss gain |
+|---|---:|---:|---:|
+| 2023 | 272 | +1.07 pts ± 1.38 | +0.0003 ± 0.0010 |
+| 2024 | 272 | +0.00 pts ± 0.00 | +0.0002 ± 0.0010 |
+| 2025 | 271 | −0.55 pts ± 1.46 | +0.0029 ± 0.0033 |
+| Games with a changed QB input | 94 | +0.22 pts ± 4.64 | +0.0094 ± 0.0101 |
+
+Projected passer was the team's actual starter (first dropback), 544 team-games per season:
+2023 89.9% and 2024 90.8% under both rules (no chart before 2025); **2025: 91.4% (v1.10) vs
+96.9% (depth chart)**.
+
+**Reading.**
+- **Starter identification improves clearly** where the chart exists: 2025 misses fall
+  from 47 to 17 of 544 team-games.
+- **Model effect is unresolved but not negative.** Log loss +0.0011 ± 0.0012 per game
+  (≈ 0.9 SE), ROI +0.2 pts ± 0.7. Only 94 of 811 games have a changed QB input, so this
+  sample cannot resolve an effect of the size a QB fix can produce on that subset; the
+  per-game gain on those games is +0.0094 ± 0.0101.
+- The blend alone is +0.5 ± 0.5 ROI and +0.0003 ± 0.0006 log loss; the depth chart
+  alone carries most of the log-loss gain (2025 only).
+- **Caveats.** The rule was designed after the TB week-5 case and the 2025 pick backtest
+  were seen, and QB_QUESTIONABLE_START's 0.5 was read off 2019–26 data that include
+  these seasons. Twenty-one tests have now been run on these data.
+- **Adopted as v1.11** (owner decision): it fixes a known projection error, and the
+  held-out comparison shows no cost. Forward rows are the real test.
