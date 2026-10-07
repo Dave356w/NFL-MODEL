@@ -98,3 +98,14 @@ own experiment. They are reported separately and are not part of this sample.
 
 The source figures above were measured on v1.9. v1.10's held-out probabilities differ
 slightly (test 16), so H1's qualifying rows will differ a little.
+
+**2026-10-07, before the first snapshot. The sample moves to v1.11; the rules are unchanged.**
+The owner adopted v1.11 (depth-chart QB projection and the questionable-starter blend,
+research test 21) as production before any forward row existed. H1 and H2 now apply to
+the forward rows of the `boxscore-composite-v1.11` experiment: the 2026 recipe frozen in
+`data/frozen_recipe_2026_boxscore-composite-v1.11.json` and its config signature. All other
+rules above are unchanged, including that a later revision ends the sample.
+
+v1.10 rows, if any are written before v1.11 reaches main (2026_05_TB_DAL can be recorded
+once Wednesday's final report posts), stay in the ledger as their own experiment. They are
+reported separately and are not part of this sample.
