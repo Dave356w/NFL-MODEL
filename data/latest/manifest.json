@@ -1,10 +1,10 @@
 {
-  "revision": "boxscore-composite-v1.11",
-  "diagnostics": "v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-07T22:24:35.868747+00:00",
+  "revision": "boxscore-composite-v1.12",
+  "diagnostics": "v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
+  "generated_utc": "2026-10-07T22:27:16.287996+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "10fadc22d4d6e76ecacf0c5197e05b0593866edc2788846af9581213f0b1dffa",
+  "config_signature": "cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe",
   "recipe": {
     "family": "rates_core_avail_cs_margin",
     "half_life": 8.0,
@@ -89,16 +89,15 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }
