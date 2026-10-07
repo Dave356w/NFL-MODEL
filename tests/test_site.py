@@ -98,41 +98,94 @@ def render(tmp_path, **kw):
     return out, files
 
 
-def test_all_pages_render_with_nav_and_no_nan(tmp_path):
+PUBLIC = ("index.html", "grades.html", "market-calibration.html")
+
+
+def visible_text(html):
+    html = re.sub(r"<style>.*?</style>|<script>.*?</script>", "", html, flags=re.S)
+    return re.sub(r"<[^>]+>", " ", html)
+
+
+def test_three_public_pages_with_nav_and_no_nan(tmp_path):
     out, files = render(tmp_path)
-    for name in ("index.html", "grades.html", "market-calibration.html", "model.html", "board.html", "ledger_report.txt", ".nojekyll"):
-        assert name in files
-    for name, _ in b.PAGES[:4]:
+    assert set(PUBLIC) | {"ledger_report.txt", ".nojekyll"} == set(files)
+    assert "model.html" not in files and "board.html" not in files
+    for name in PUBLIC:
         html = (out / name).read_text()
         assert html.startswith("<!doctype html>") and "aria-current=\"page\"" in html
-        assert all(f"href='{h}'" in html for h, _ in b.PAGES)
-        text = re.sub(r"<[^>]+>", " ", html)
+        assert all(f"href='{h}'" in html for h, _ in b.PAGES) and "model.html" not in html
+        text = visible_text(html)
         assert not re.search(r"\bnan\b|\bNaN\b|\bNone\b", text), name
 
 
-def test_index_flags_pending_reports_qb_change_and_market_gap(tmp_path):
+def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
+    out, _ = render(tmp_path)
+    for name in PUBLIC:
+        text = visible_text((out / name).read_text())
+        for banned in ("±", " SE", "log loss", "Log loss", "no-vig q", "Excess", "excess pp", "Mkt null",
+                       "rates_core", "recipe", "Brier", "coefficient", "Wilson"):
+            assert banned not in text, (name, banned)
+
+
+def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
-    assert "Injury reports not final for 1 upcoming game." in html
-    assert "Report pending" in html and "TB QB: J.Daniels" in html and "18 pts off market" in html
-    assert "Model hit" in html and "Final 20–27" in html
-    # upcoming game first
-    assert html.index("Buccaneers") < html.index("Chiefs")
+    assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
+    assert "TB QB: J.Daniels" in html and "Pick DAL −485" in html
+    assert "Final 20–27" in html and "Pick BUF · W" in html
+    assert "pts off market" not in html and "Largest drivers" not in html
+    assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
+    # record box: forward ledger, KC@BUF picked BUF -135 and won
+    assert "Model 1-0 (100.0%) · ROI +74.1%" in html and "always favorite 1-0" in html
 
 
-def test_ledger_tiles_match_report_numbers(tmp_path):
+def test_index_before_any_graded_pick(tmp_path):
+    data = make_data(tmp_path / "data", with_ledger=False)
+    b.render_all(tmp_path / "public", data, now=NOW)
+    html = (tmp_path / "public" / "index.html").read_text()
+    assert "No graded picks yet." in html
+
+
+def test_ledger_tiles_are_comparable_controls(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "grades.html").read_text()
-    sm = g.summary(b.load_ledger(tmp_path / "data"))
-    assert sm["scored"] == 1 and f"{sm['ll_gain']:+.3f}" in html and "1-0" in html
+    for label in ("Graded", "Model", "Always favorite", "Always home"):
+        assert f">{label}<" in html
+    assert html.count("100.0% · ROI +74.1%") == 3  # BUF was model pick, favorite and home
+    assert "2026 week 5" in html and "BUF −135" in html and "ledger_report.txt" in html
     assert "native forward" in (out / "ledger_report.txt").read_text()
 
 
-def test_calibration_page_keeps_bases_separate(tmp_path):
+def test_control_records_share_rows_and_push_ties():
+    df = pd.DataFrame({"home won": [1., 0., .5, 1.], "model_wp": [.6, .6, .4, .7],
+                       "home_moneyline": [-150, 120, -120, np.nan], "away_moneyline": [130, -140, 100, 100]})
+    c = b.control_records(df)
+    # last row has no home price: dropped for all three; the tie is a push everywhere
+    assert {k: (v["bets"], v["wins"], v["losses"], v["pushes"]) for k, v in c.items()} == {
+        "model": (3, 1, 1, 1), "favorite": (3, 2, 0, 1), "home": (3, 1, 1, 1)}
+    assert np.isclose(c["model"]["units"], 100 / 150 - 1) and np.isclose(c["home"]["units"], 100 / 150 - 1)
+    # a pick'em (no favorite) is dropped for every control, so all three stay on the same rows
+    even = df.assign(home_moneyline=[-150, 120, -110, -110], away_moneyline=[130, -140, -110, -110])
+    assert {v["bets"] for v in b.control_records(even).values()} == {2}
+    assert b.control_records(df.iloc[:0]) is None
+
+
+def test_market_sides_devig_and_bands():
+    df = pd.DataFrame({"home won": [1., 0., .5], "home_moneyline": [-150, -150, -110], "away_moneyline": [130, 130, -110]})
+    s = b.market_sides(df)
+    assert len(s) == 4  # the tie is excluded, two sides per decided game
+    home = s[s.side == "home"]
+    q = (150 / 250) / (150 / 250 + 100 / 230)
+    assert np.allclose(home.q, q) and list(home.won) == [1., 0.] and set(home.band) == {"−174 to −130"}
+    assert np.allclose(s[s.side == "home"].q.to_numpy() + s[s.side == "away"].q.to_numpy(), 1.)
+
+
+def test_calibration_page_grades_the_market_and_model_confidence(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
-    assert "Forward ledger" in html and "reconstructed (300 games)" in html
-    assert html.count("<svg") == 2 and "no reliable evidence" in html
+    assert "Favorites won" in html and "Home teams won" in html and "Moneyline" in html
+    assert "Model confidence" in html and "Locked picks." in html and "Past games" in html
+    assert "<svg" not in html
 
 
 def test_empty_site_renders(tmp_path):
@@ -140,7 +193,7 @@ def test_empty_site_renders(tmp_path):
     files = b.render_all(out, tmp_path / "nothing", now=NOW)
     assert "index.html" in files and "board.html" not in files
     assert "No model run has been published yet" in (out / "index.html").read_text()
-    assert "No snapshots yet" in (out / "grades.html").read_text()
+    assert "No picks locked yet" in (out / "grades.html").read_text()
 
 
 def test_snapshot_copies_page_inputs(tmp_path):
@@ -166,45 +219,28 @@ def test_snapshot_copies_page_inputs(tmp_path):
     assert json.loads((latest / "manifest.json").read_text())["availability_audit"] == []
 
 
-def test_roi_is_the_headline_everywhere(tmp_path):
+def test_rebuilt_history_is_graded_labelled_and_secondary(tmp_path):
     out, _ = render(tmp_path)
-    data = tmp_path / "data"
-    idx = (out / "index.html").read_text()
-    # forward tile first: KC@BUF bet BUF -135 and won -> +0.74u, +74.1%
-    assert idx.index("Flat 1u ROI · forward") < idx.index("Flat 1u ROI · held-out") < idx.index("Log loss vs market")
-    assert "+74.1%" in idx and "Bet DAL −485" in idx and "BUF −135 +0.74u" in idx
-    t = pd.read_csv(data / "latest" / "roi_bands.csv")
-    r = t[(t.group == "All games") & (t.source == "model")].iloc[0]
-    assert f"{100 * r.roi:+.1f}%" in idx
-    grades = (out / "grades.html").read_text()
-    assert "Flat 1u ROI by price band" in grades and "Mkt null" in grades and "+0.74" in grades
-    assert "Flat 1u ROI by price band · reconstructed" in (out / "market-calibration.html").read_text()
-    model = (out / "model.html").read_text()
-    assert "Flat 1u ROI by season" in model and "Goal: flat 1u ROI" in model
-
-
-def test_rebuilt_history_of_the_chosen_recipe_is_graded_and_labelled(tmp_path):
-    out, _ = render(tmp_path)
-    t = pd.read_csv(tmp_path / "data" / "latest" / "retro_roi_bands.csv")
-    r = t[(t.group == "All games") & (t.source == "model")].iloc[0]
-    grades = (out / "grades.html").read_text()
-    assert "Rebuilt history · chosen recipe · reconstructed" in grades and "Hindsight, not a track record." in grades
-    assert grades.index("Forward ledger") < grades.index("Rebuilt history")  # forward record leads
-    assert f"{100 * r.roi:+.1f}%" in grades and "Rebuilt history by season" in grades and "<details open" in grades
     retro = pd.read_csv(tmp_path / "data" / "latest" / "retro_ledger.csv")
+    r = b.control_records(retro)["model"]
+    grades = (out / "grades.html").read_text()
+    assert "Rebuilt history" in grades and "Hindsight, not a track record:" in grades
+    assert grades.index("Always home") < grades.index("Rebuilt history")  # forward record leads
+    assert f"{b.wl_text(r)}" in grades and f"ROI {b.roi_short(r['roi'])}" in grades
     assert np.isclose(retro.units.sum(), m.roi_summary(m.flat_bets(retro))["units"])
-    assert "Flat 1u ROI · rebuilt history" in (out / "index.html").read_text()
+    assert "Rebuilt history" not in (out / "index.html").read_text()
 
 
-def test_candidate_table_shows_roi_but_selection_stays_log_loss(tmp_path):
-    out, _ = render(tmp_path)
-    model = (out / "model.html").read_text()
-    assert "lowest walk-forward log loss" in model and "does not choose the recipe" in model
-    assert "−0.7% ± 2.2" in model.replace("-", "−") and "selected" in model and "best ROI" in model
+def test_factor_labels_are_plain():
+    assert b.factor_label("site") == "Home field"
+    assert b.factor_label(m.MARGIN_FEATURE) == "Point margin"
+    assert b.factor_label("d__avail__qb_delta") == "Quarterback"
+    assert b.factor_label("d__avail__OL_out_cs") == "Offensive line availability"
+    assert b.factor_label("d__for__rates_core__first_down_rate") == m.feature_label("d__for__rates_core__first_down_rate")
 
 
 def test_injury_report_notes_on_the_card(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    assert "Injury report notes" in idx and "Baker Mayfield" in idx and "Out (Thumb) · wk 4" in idx
-    assert "not on a week-5 report yet" in idx and "Week 5 report not published yet" in idx
+    assert "Injury report" in idx and "Baker Mayfield" in idx
+    assert "not on a week-5 report yet" in idx and "Week 5 report not out yet" in idx

@@ -5,12 +5,11 @@ grade the forward ledger, and render static pages into public/.
     python build_site.py               # full build (what build.yml runs)
     python build_site.py --pages-only  # re-render from committed data/ only
 
-Pages
-  index.html               this week's projections (model vs market, flags, drivers)
-  grades.html              forward ledger: first pregame snapshots, graded
-  market-calibration.html  model vs market calibration and pick records in matched bands
-  model.html               recipe, held-out scorecards, coefficients, limitations
-  board.html               the model's own detailed board for the week
+Pages (public: W-L, win % and ROI only; standard errors, log loss and model
+internals stay in data/ledger_report.txt and data/latest/)
+  index.html               this week's games: model vs market, pick, biggest factors, injury reports
+  grades.html              locked picks graded, beside always-favorite and always-home; rebuilt history
+  market-calibration.html  the moneyline graded by price; model confidence vs results
 
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
@@ -220,7 +219,7 @@ a{color:rgb(var(--lean-tx))}
 .gr-stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;box-shadow:var(--shadow)}
 .gr-stat .l{font:650 12px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
 .gr-stat .v{font:800 24px/1.15 var(--mono);margin:5px 0 3px;font-variant-numeric:tabular-nums}
-.gr-stat .v.good{color:rgb(var(--good))}.gr-stat .v.bad{color:rgb(var(--bad))}
+.gr-stat .v.model{color:rgb(var(--cool-tx))}.gr-stat .v.good{color:rgb(var(--good))}.gr-stat .v.bad{color:rgb(var(--bad))}
 .gr-stat .s{font:500 12.5px/1.35 var(--mono);color:var(--muted)}
 .gr-note{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);
   padding:10px 13px;margin:0 0 14px;font-size:13.5px;color:var(--muted);max-width:none}
@@ -279,10 +278,17 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .cbar i{position:absolute;top:0;bottom:0;border-radius:var(--r-s)}
 .cbar i.pos{background:rgb(var(--cool))}.cbar i.neg{background:rgb(var(--warm))}
 .cbar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--faint)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:2px 2px 10px}
-.legend .sw{display:inline-block;width:10px;height:10px;border-radius:var(--r-s);margin-right:6px;vertical-align:-1px}
-.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:10px;margin-bottom:12px}
-.chart svg{display:block;width:100%;height:auto;max-width:560px;margin:0 auto}
+.fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin:0 0 8px}
+.fold>summary{cursor:pointer;list-style:none;padding:10px 13px;font:700 14px/1.3 var(--sans);display:flex;gap:8px}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸";color:var(--faint)}.fold[open]>summary::before{content:"▾"}
+.fold .rt{margin-left:auto;font-family:var(--mono)}
+.fold .gr-tablewrap{box-shadow:none;border-width:1px 0 0;border-radius:0;margin:0}
+.record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-top:10px;font-size:14px}
+.record .l{font:650 12px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
+.record .go{text-align:right;font:600 14px/1 var(--sans);margin-top:6px}
+.small{font-size:13px}
+.up{color:rgb(var(--cool-tx));font-weight:700}.dn{color:rgb(var(--warm-tx));font-weight:700}
 .foot{margin-top:28px;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);padding-top:10px}
 @media (max-width:640px){
   .teams{grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:6px}
@@ -298,8 +304,7 @@ window.toggleTheme=function(){var d=r.getAttribute('data-theme')||(matchMedia('(
 var n=d==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();</script>"""
 
 PAGES = (("index.html", "Projections"), ("grades.html", "Ledger"),
-         ("market-calibration.html", "Market calibration"), ("model.html", "Model"),
-         ("board.html", "Full board"))
+         ("market-calibration.html", "Market calibration"))
 
 
 def font_face_css(assets=ASSETS):
@@ -314,9 +319,9 @@ def font_face_css(assets=ASSETS):
     return "".join(out)
 
 
-def html_document(body, title, current, built, has_board=True):
+def html_document(body, title, current, built):
     nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''}>{label}</a>"
-                  for href, label in PAGES if has_board or href != "board.html")
+                  for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
             f"<title>{esc(title)}</title><meta name='description' content='NFL box-score composite win probabilities, forward ledger and market calibration'>"
@@ -324,9 +329,8 @@ def html_document(body, title, current, built, has_board=True):
             f"<div class='topbar'><a class='brand' href='index.html'>{SITE_NAME}</a>"
             "<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme'>Theme</button></div>"
             f"<nav class='nav'>{nav}</nav>{body}"
-            f"<div class='foot'>Built <span class='stamp'>{esc(built)}</span>. Win probabilities from prior-game "
-            "box-score profiles and player availability; the market is a benchmark only and never enters the model. "
-            "Not betting advice.</div></div></body></html>")
+            f"<div class='foot'>Built <span class='stamp'>{esc(built)}</span>. Win probabilities from each team's "
+            "earlier games and this week's injury reports. Not betting advice.</div></div></body></html>")
 
 
 def head(title, lead):
@@ -351,15 +355,12 @@ def table(heads, rows, num_cols=()):
 
 
 # ---------------------------------------------------------------- shared pieces
+# Public pages carry W-L, win % and ROI only. Standard errors, no-vig q, excess,
+# log loss and recipe details stay in data/ledger_report.txt and data/latest/.
 
 def kickoff_text(r):
     ko = m.kickoff_utc(r)
     return ko.astimezone(ET).strftime("%a %-I:%M %p ET") if ko else "TBD"
-
-
-def ledger_summary(ledger, revision=None):
-    g = ledger if revision is None else ledger[ledger.revision == revision]
-    return grade_ledger.summary(g) if len(g) else grade_ledger.summary(pd.DataFrame(columns=grade_ledger.COLUMNS))
 
 
 def ml_text(ml):
@@ -367,141 +368,88 @@ def ml_text(ml):
     return "—" if not math.isfinite(ml) else f"{ml:+.0f}".replace("-", "−")
 
 
-def roi_text(roi, se=math.nan):
-    if not math.isfinite(num(roi)):
+def wl_text(r):
+    return f"{int(r['wins'])}-{int(r['losses'])}" + (f"-{int(r['pushes'])}" if r.get("pushes") else "")
+
+
+def roi_short(roi):
+    return "—" if not math.isfinite(num(roi)) else f"{100 * roi:+.1f}%".replace("-", "−")
+
+
+def control_records(df):
+    """Flat 1u records for the model, always-the-favorite and always-home on the same graded, priced rows."""
+    if df is None or df.empty or "home won" not in df:
+        return None
+    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., .5, 1.])].copy()
+    if d.empty:
+        return None
+    d["_fav"] = m.market_ml_wp(d)
+    d["_home"] = .99
+    bets = {k: m.flat_bets(d, c) for k, c in (("model", "model_wp"), ("favorite", "_fav"), ("home", "_home"))}
+    keep = np.logical_and.reduce([b.units.notna().to_numpy() for b in bets.values()])
+    if not keep.any():
+        return None
+    return {k: m.roi_summary(b[keep]) for k, b in bets.items()}
+
+
+def control_tiles(ctrl, first_label, first_value, first_sub):
+    """Four same-shape tiles: a count, then the model and two do-nothing controls."""
+    tiles = [stat(first_label, first_value, first_sub)]
+    for key, label in (("model", "Model"), ("favorite", "Always favorite"), ("home", "Always home")):
+        r = (ctrl or {}).get(key)
+        if r and r["bets"]:
+            tiles.append(stat(label, wl_text(r), f"{100 * r['win_pct']:.1f}% · ROI {roi_short(r['roi'])}",
+                              "model" if key == "model" else ""))
+        else:
+            tiles.append(stat(label, "—", "no graded picks yet"))
+    return f"<div class='gr-summary'>{''.join(tiles)}</div>"
+
+
+UNIT_NAMES = {"OL": "Offensive line", "WRTE": "Receivers", "RB": "Running backs",
+              "DL": "Defensive line", "LB": "Linebackers", "DB": "Secondary"}
+
+
+def factor_label(name):
+    """Plain name for a model input on the public card."""
+    if name == "site":
+        return "Home field"
+    if name == m.MARGIN_FEATURE:
+        return "Point margin"
+    if name.startswith("d__avail__"):
+        c = name[len("d__avail__"):]
+        return "Quarterback" if c == "qb_delta" else f"{UNIT_NAMES.get(c.split('_')[0], c)} availability"
+    return m.feature_label(name)
+
+
+def result_badge(res):
+    if res not in ("W", "L", "P"):
         return "—"
-    out = f"{100 * roi:+.1f}%"
-    return out + (f" ± {100 * se:.1f}" if math.isfinite(num(se)) else "")
+    return f"<span class='badge {'w' if res == 'W' else 'l' if res == 'L' else ''}'>{res}</span>"
 
 
-def roi_tile(label, r, basis):
-    """Headline tile: 1u flat ROI on the model's side, market favorite on the same rows."""
-    if not r or not r.get("bets"):
-        return stat(label, "—", f"no graded bets yet · {basis}")
-    tone = "good" if r["roi"] > 0 else "bad"
-    se = num(r.get("roi_se"))
-    sub = (f"{r['units']:+.2f}u · {int(r['wins'])}-{int(r['losses'])}{'-' + str(int(r['pushes'])) if r['pushes'] else ''}"
-           f"{f' · ± {100 * se:.1f} SE' if math.isfinite(se) else ''}<br>market fav {roi_text(r.get('fav_roi'))} · {basis}")
-    return stat(label, f"{100 * r['roi']:+.1f}%", sub, tone)
+def pick_text(team, price):
+    return f"{esc(team)} {ml_text(price)}" if isinstance(team, str) and team else "—"
 
 
-def roi_from_table(t, group="All games"):
-    """Model row of a roi_table frame with the market-favorite ROI attached."""
-    if t is None or t.empty or "group" not in t:
-        return None
-    g = t[t.group.astype(str) == group]
-    if g.empty:
-        return None
-    r = g[g.source == "model"].iloc[0].to_dict()
-    k = g[g.source == "market favorite"]
-    r["fav_roi"] = float(k.roi.iloc[0]) if len(k) else math.nan
-    return r
+def score_text(away, home):
+    a, h = num(away), num(home)
+    return f"{int(a)}–{int(h)}" if math.isfinite(a) and math.isfinite(h) else ""
 
 
-def roi_band_table(t, by_label="Picked price"):
-    """Rows of a roi_table frame: model and same-row market favorite side by side."""
-    rows = []
-    for gi, g in t.groupby("group_index"):
-        m_ = g[g.source == "model"].iloc[0]
-        k_ = g[g.source == "market favorite"].iloc[0]
-        if not m_.bets and m_.group != "All games":
-            continue
-        rows.append({"cells": [esc(m_.group), f"{int(m_.bets)}",
-                               f"{int(m_.wins)}-{int(m_.losses)}{'-' + str(int(m_.pushes)) if m_.pushes else ''}",
-                               f"{m_.units:+.2f}" if m_.bets else "—", roi_text(m_.roi, m_.roi_se),
-                               pct(m_.mean_q, 1), f"{m_.excess_pp:+.1f}" if math.isfinite(num(m_.excess_pp)) else "—",
-                               roi_text(m_.null_roi), f"{k_.units:+.2f}" if k_.bets else "—", roi_text(k_.roi)],
-                     "_class": "total" if m_.group == "All games" else ""})
-    return table([by_label, "Bets", "W-L", "Units", "ROI ± SE", "No-vig q", "Excess pp", "Mkt null", "Fav units", "Fav ROI"],
-                 rows, num_cols=(1, 2, 3, 4, 5, 6, 7, 8, 9))
-
-
-ROI_NOTE = ("<div class='gr-note'><b>Flat 1u.</b> One unit on the side the model makes the favorite, every game it decides, "
-            "at that side's posted moneyline. <b>No-vig q</b> is the market's probability for the picked side with the hold "
-            "removed; <b>excess</b> is the win rate minus q. <b>Mkt null</b> is the ROI expected if the market were exactly "
-            "right — negative by the hold, so beating it is the bar, not zero. <b>Fav</b> bets the market favorite on the "
-            "same games. ± is one standard error; bands are descriptive, not a betting filter.</div>")
-
-
-def ledger_tiles(ledger, revision):
-    sm = ledger_summary(ledger, revision)
-    tiles = [roi_tile("Flat 1u ROI · forward", sm["roi"], "locked snapshots")]
-    if sm["scored"]:
-        tone = "good" if sm["ll_gain"] > 0 else "bad"
-        se = sm["ll_gain_se"]
-        tiles.append(stat("Log loss vs market", f"{sm['ll_gain']:+.3f}",
-                          f"± {se:.3f} SE · model {sm['model_log_loss']:.3f} / mkt {sm['market_log_loss']:.3f}"
-                          if math.isfinite(se) else f"model {sm['model_log_loss']:.3f} / mkt {sm['market_log_loss']:.3f}", tone))
-    tiles.append(stat("Forward snapshots", f"{sm['snapshots']}",
-                      f"{sm['graded']} graded · {sm['pending']} pending · {sm['ties']} ties"))
-    return tiles, sm
-
-
-def reliability_svg(cal, title):
-    """Mean forecast (x) vs realized home-win rate (y) per band, one series per source."""
-    if cal is None or cal.empty:
-        return ""
-    W, H, P = 520, 360, 46
-    x = lambda v: P + (W - 2 * P) * v / 100
-    y = lambda v: H - P - (H - 2 * P) * v / 100
-    parts = [f"<svg viewBox='0 0 {W} {H}' role='img' aria-label='{esc(title)}'>",
-             f"<rect x='{P}' y='{P}' width='{W - 2 * P}' height='{H - 2 * P}' fill='none' stroke='var(--line)'/>"]
-    for t in (0, 25, 50, 75, 100):
-        parts.append(f"<line x1='{x(t)}' y1='{y(0)}' x2='{x(t)}' y2='{y(100)}' stroke='var(--line-2)'/>"
-                     f"<line x1='{x(0)}' y1='{y(t)}' x2='{x(100)}' y2='{y(t)}' stroke='var(--line-2)'/>"
-                     f"<text x='{x(t)}' y='{H - P + 16}' text-anchor='middle' font-size='11' fill='var(--faint)' font-family='var(--mono)'>{t}</text>"
-                     f"<text x='{P - 8}' y='{y(t) + 4}' text-anchor='end' font-size='11' fill='var(--faint)' font-family='var(--mono)'>{t}</text>")
-    parts.append(f"<line x1='{x(0)}' y1='{y(0)}' x2='{x(100)}' y2='{y(100)}' stroke='var(--faint)' stroke-dasharray='4 4'/>")
-    for src, color, dx in (("market", "rgb(var(--warm))", 3), ("model", "rgb(var(--cool))", -3)):
-        s = cal[(cal.source == src) & (cal.games > 0)].sort_values("band_index")
-        pts = [(x(float(r["mean forecast %"])) + dx, y(float(r["realized home win %"]))) for _, r in s.iterrows()]
-        if len(pts) > 1:
-            parts.append(f"<polyline points='{' '.join(f'{a:.1f},{b:.1f}' for a, b in pts)}' fill='none' stroke='{color}' stroke-width='1.5' opacity='.6'/>")
-        for (_, r), (a, b) in zip(s.iterrows(), pts):
-            lo, hi = y(float(r["realized CI low %"])), y(float(r["realized CI high %"]))
-            rad = 3 + min(6, math.sqrt(float(r["games"])) / 3)
-            parts.append(f"<line x1='{a:.1f}' y1='{lo:.1f}' x2='{a:.1f}' y2='{hi:.1f}' stroke='{color}' opacity='.45'/>"
-                         f"<circle cx='{a:.1f}' cy='{b:.1f}' r='{rad:.1f}' fill='{color}'><title>{esc(src)} {esc(r['band'])}: "
-                         f"{int(r['games'])} games, forecast {float(r['mean forecast %']):.1f}%, realized {float(r['realized home win %']):.1f}%</title></circle>")
-    parts.append(f"<text x='{W / 2}' y='{H - 8}' text-anchor='middle' font-size='12' fill='var(--muted)'>Mean forecast home win %</text>"
-                 f"<text x='14' y='{H / 2}' text-anchor='middle' font-size='12' fill='var(--muted)' transform='rotate(-90 14 {H / 2})'>Realized home win %</text></svg>")
-    legend = ("<div class='legend'><span><i class='sw' style='background:rgb(var(--cool))'></i>Model</span>"
-              "<span><i class='sw' style='background:rgb(var(--warm))'></i>Market (spread-implied)</span>"
-              "<span>Dashed: perfect calibration · bars: Wilson 95% · dot size: games</span></div>")
-    return legend + f"<div class='chart'>{''.join(parts)}</div>"
-
-
-def calibration_table(cal):
-    rows = []
-    for i, g in cal.groupby("band_index"):
-        cells = [f"<span class='team-code'>{esc(g.band.iloc[0])}</span>"]
-        for src in ("model", "market"):
-            r = g[g.source == src].iloc[0]
-            if r.games:
-                off = " <span class='badge warn'>off</span>" if bool(r["forecast outside CI"]) else ""
-                cells += [f"{int(r.games)}", f"{r['mean forecast %']:.1f}%",
-                          f"{r['realized home win %']:.1f}% <span class='mut'>({r['realized CI low %']:.0f}–{r['realized CI high %']:.0f})</span>{off}"]
-            else:
-                cells += ["0", "—", "—"]
-        rows.append(cells)
-    return table(["Home-win band", "Model n", "Model fcst", "Realized", "Market n", "Market fcst", "Realized"],
-                 rows, num_cols=(1, 2, 3, 4, 5, 6))
+def folded(summary, inner, open_=False):
+    return (f"<details class='fold'{' open' if open_ else ''}><summary>{summary}</summary>{inner}</details>")
 
 
 def records_table(recs):
+    """When the model said X%, how often its pick won."""
     rows = []
-    for i, g in recs.groupby("band_index"):
-        cells = [esc(g.band.iloc[0])]
-        for src in ("model", "market"):
-            r = g[g.source == src].iloc[0]
-            if r.games:
-                cells += [f"<b>{esc(r.record)}</b>", f"{r['avg pick prob %']:.1f}%",
-                          f"{r['realized pick win %']:.1f}% <span class='mut'>({r['CI low %']:.0f}–{r['CI high %']:.0f})</span>"]
-            else:
-                cells += ["0-0", "—", "—"]
-        rows.append({"cells": cells, "_class": "total" if g.band.iloc[0] == "All picks" else ""})
-    return table(["Pick confidence", "Model W-L", "Avg prob", "Won", "Market W-L", "Avg prob", "Won"],
-                 rows, num_cols=(1, 2, 3, 4, 5, 6))
+    for _, r in recs[recs.source == "model"].sort_values("band_index").iterrows():
+        if not r.games:
+            continue
+        rows.append({"cells": [esc(r.band), f"<b>{esc(r.record)}</b>", f"{r['realized pick win %']:.1f}%",
+                               f"{r['avg pick prob %']:.1f}%"],
+                     "_class": "total" if r.band == "All picks" else ""})
+    return table(["Model said", "Picks", "Won", "Average forecast"], rows, num_cols=(1, 2, 3))
 
 
 # ---------------------------------------------------------------- pages
@@ -510,25 +458,13 @@ def render_index(latest, ledger, built, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
         body = head("Projections", "No model run has been published yet; the first build writes this page.")
-        return html_document(body, f"{SITE_NAME} projections", "index.html", built, has_board=False)
+        return html_document(body, f"{SITE_NAME} projections", "index.html", built)
     man, board = latest["manifest"], latest["board"].copy()
     rev, season, week = man["revision"], int(man["season"]), int(man["week"])
-    recipe = man.get("recipe") or {}
-    fam = recipe.get("family", "")
-    has_avail = fam in m.AVAIL_FAMILIES
-    recorded = {}
+    has_avail = (man.get("recipe") or {}).get("family", "") in m.AVAIL_FAMILIES
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
-    for r in cur.itertuples(index=False):
-        recorded[r.game_id] = r
-    generated = man.get("generated_utc", "")
-    lead = (f"Week {week}, {season}. Home-win probabilities from the frozen recipe "
-            f"<span class='mono'>{esc(m.recipe_key(recipe)) if recipe else ''}</span>, refit on every earlier game. "
-            f"Model run <span class='stamp'>{esc(generated[:16].replace('T', ' '))} UTC</span>.")
-    tiles, _ = ledger_tiles(ledger, rev)
-    tiles.insert(1, roi_tile("Flat 1u ROI · held-out", roi_from_table(latest["roi_bands"]), "reconstructed seasons"))
-    tiles.insert(2, roi_tile("Flat 1u ROI · rebuilt history", roi_from_table(latest["retro_roi_bands"]),
-                             "chosen recipe, hindsight"))
-    parts = [head(f"Week {week} projections", lead), f"<div class='gr-summary'>{''.join(tiles)}</div>"]
+    recorded = {r.game_id: r for r in cur.itertuples(index=False)}
+    parts = [head(f"Week {week}", f"Model win probabilities for every {season} week-{week} game. Tap a game for details.")]
 
     def pending(r):
         ko = m.kickoff_utc(r)
@@ -538,33 +474,33 @@ def render_index(latest, ledger, built, now=None):
     rows = board.to_dict("records")
     n_pend = sum(1 for r in rows if pending(r))
     if n_pend:
-        parts.append(f"<div class='gr-note flag-note'><b>Injury reports not final for {n_pend} upcoming "
-                     f"game{'s' if n_pend != 1 else ''}.</b> Game statuses publish Friday (Wednesday for Thursday games). "
-                     "Until then unlisted players count as healthy, and those games wait out of the forward ledger.</div>")
+        parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {n_pend} "
+                     f"game{'s' if n_pend != 1 else ''} yet, so {'those numbers' if n_pend != 1 else 'that number'} can still move.</div>")
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
     rows.sort(key=lambda r: (pd.notna(r.get("result")), m.kickoff_utc(r) or far, str(r["game_id"])))
     contrib = latest["contributions"]
     cmax = float(contrib["log-odds contribution"].abs().max()) if len(contrib) else 1.
     cards = []
     for r in rows:
-        p, q = num(r["model_wp"]), num(r.get("market_wp"))
+        p = num(r["model_wp"])
         home, away = r["home"], r["away"]
         fav_home = p > .5
-        gap = 100 * (p - q) if math.isfinite(q) else math.nan
+        q = num(m.market_ml_wp(pd.DataFrame([r]))[0])
+        bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
+        team = home if bet.side == "home" else away if bet.side == "away" else ""
         flags = []
         if pd.notna(r.get("result")):
-            y = m.won(r["result"])
-            hit = None if y == .5 or math.isclose(p, .5) else ((p > .5) == (y == 1))
-            flags.append(f"<span class='badge'>Final {int(num(r.get('away_score')))}–{int(num(r.get('home_score')))}</span>")
-            if hit is not None:
-                flags.append(f"<span class='badge {'w' if hit else 'l'}'>Model {'hit' if hit else 'miss'}</span>")
+            flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
+            if team and bet.result in ("W", "L", "P"):
+                flags.append(f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
+                             f"Pick {esc(team)} · {bet.result}</span>")
         else:
-            if math.isfinite(gap) and abs(gap) >= m.FLAG_GAP_PP:
-                flags.append(f"<span class='badge lean'>{abs(gap):.0f} pts off market</span>")
-            if pending(r):
-                flags.append("<span class='badge warn'>Report pending</span>")
+            if team and math.isfinite(num(bet.price)):
+                flags.append(f"<span class='badge lean'>Pick {esc(team)} {ml_text(bet.price)}</span>")
             if r["game_id"] in recorded:
-                flags.append("<span class='badge'>In ledger</span>")
+                flags.append("<span class='badge'>Locked</span>")
+            elif pending(r):
+                flags.append("<span class='badge warn'>Report pending</span>")
             if not bool(r.get("ready", True)):
                 flags.append("<span class='badge'>Limited history</span>")
         for side in ("away", "home"):
@@ -572,22 +508,10 @@ def render_index(latest, ledger, built, now=None):
             if isinstance(e, str) and isinstance(u, str) and e != u:
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
-        if math.isfinite(hm) and math.isfinite(am):
-            mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}"
-        else:
-            mk = f"Market {pct(q)} home" if math.isfinite(q) else "No market line"
-        bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
-        if bet.side and math.isfinite(num(bet.price)):
-            team = home if bet.side == "home" else away
-            if pd.isna(r.get("result")):
-                flags.insert(0, f"<span class='badge lean'>Bet {esc(team)} {ml_text(bet.price)}</span>")
-            elif bet.result in ("W", "L", "P"):
-                flags.insert(2, f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
-                                f"{esc(team)} {ml_text(bet.price)} {bet.units:+.2f}u</span>")
+        mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
 
         def side_html(code, wp, fav, cls):
-            name = TEAM_NAMES.get(code, code)
-            club = (f"<div class='club'><div class='nm'>{esc(name)}</div>"
+            club = (f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div>"
                     f"<div class='wp{' fav' if fav else ''}'>{pct(wp)}</div></div>")
             chip = f"<div class='chip'>{esc(code)}</div>"
             return f"<div class='side {cls}'>{chip + club if cls == 'away' else club + chip}</div>"
@@ -599,312 +523,186 @@ def render_index(latest, ledger, built, now=None):
                    f"<div class='probbar' aria-hidden='true'><i class='a' style='width:{100 * (1 - p):.1f}%'></i>"
                    f"<i class='h' style='width:{100 * p:.1f}%'></i></div>"
                    f"{f'<div class=flags>{chr(10).join(flags)}</div>' if flags else ''}<span class='chev'>⌄</span></summary>")
-        det = ["<div class='detail'>"]
-        det.append(table(["", esc(away), esc(home)], [
-            ["Model", pct(1 - p, 1), pct(p, 1)],
-            ["Market (spread-implied)", pct(1 - q, 1) if math.isfinite(q) else "—", pct(q, 1) if math.isfinite(q) else "—"],
-            ["Home-field baseline", pct(1 - num(r.get("homefield_wp")), 1), pct(num(r.get("homefield_wp")), 1)],
-            ["Moneyline", ml_text(r.get("away_moneyline")), ml_text(r.get("home_moneyline"))],
-            ["No-vig market (moneyline)", pct(1 - num(m.market_ml_wp(pd.DataFrame([r]))[0]), 1),
-             pct(num(m.market_ml_wp(pd.DataFrame([r]))[0]), 1)],
-        ], num_cols=(1, 2)))
+        det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
+            ["Model", pct(1 - p), pct(p)],
+            ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
+            ["Moneyline", ml_text(am), ml_text(hm)]], num_cols=(1, 2))]
         rec = recorded.get(r["game_id"])
         if rec is not None:
-            det.append(f"<p class='mut'>Ledger snapshot {esc(str(rec.generated_utc)[:16].replace('T', ' '))} UTC "
-                       f"({num(rec.lead_hours):.0f}h before kickoff): model {pct(rec.model_wp, 1)} home.</p>")
+            det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(ET).strftime('%a %-I:%M %p ET'))} "
+                       f"at {pct(rec.model_wp)} {esc(home)}.</p>")
         t = contrib[contrib.game_id == r["game_id"]] if len(contrib) else contrib
         if len(t):
-            t = t.loc[t["log-odds contribution"].abs().sort_values(ascending=False).index].head(6)
-            det.append("<h3>Largest drivers</h3>")
+            t = t.loc[t["log-odds contribution"].abs().sort_values(ascending=False).index].head(4)
             trs = []
             for c in t.to_dict("records"):
                 v = float(c["log-odds contribution"]); w = 50 * abs(v) / max(cmax, 1e-9)
                 style = f"left:50%;width:{w:.1f}%" if v > 0 else f"right:50%;width:{w:.1f}%"
-                trs.append([esc(m.feature_label(c["feature"])),
-                            f"<div class='cbar'><i class='{'pos' if v > 0 else 'neg'}' style='{style}'></i></div>",
-                            f"{v:+.3f}", esc(home if v > 0 else away if v < 0 else "—")])
-            det.append(table(["Feature", f"← {esc(away)} · {esc(home)} →", "Log-odds", "Toward"], trs, num_cols=(2,)))
+                trs.append([esc(factor_label(c["feature"])),
+                            f"<div class='cbar'><i class='{'pos' if v > 0 else 'neg'}' style='{style}'></i></div>"])
+            det.append("<h3>Biggest factors</h3>" + table(["", f"← {esc(away)} · {esc(home)} →"], trs))
         if has_avail:
-            cols = m.AVAIL_FAMILY_COLS.get(fam, ())
-            arows = [[esc(m.AVAIL_LABEL.get(c, c)),
-                      _fmt_avail(c, r.get(f"away__avail__{c}")), _fmt_avail(c, r.get(f"home__avail__{c}"))] for c in cols]
-            arows.insert(0, ["Projected QB (usual)", _qb(r, "away"), _qb(r, "home")])
-            arows.insert(1, ["Injury report", esc(r.get("away_injury_report") or "none"), esc(r.get("home_injury_report") or "none")])
-            det.append("<h3>Availability</h3>" + table(["", esc(away), esc(home)], arows, num_cols=(1, 2)))
+            det.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(r, 'away')} · {esc(home)} {_qb(r, 'home')}</p>")
             det.append(report_notes_html(latest.get("report_notes"), (away, home), int(r["week"])))
         det.append("</div>")
         cards.append(f"<details class='card'>{summary}{''.join(det)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built, latest.get("board_html", False))
+    graded = cur[cur.status == "graded"] if len(cur) else cur
+    ctrl = control_records(graded)
+    if ctrl and ctrl["model"]["bets"]:
+        r, f = ctrl["model"], ctrl["favorite"]
+        line = (f"Model {wl_text(r)} ({100 * r['win_pct']:.1f}%) · ROI {roi_short(r['roi'])}"
+                f"<span class='mut'> · always favorite {wl_text(f)} · ROI {roi_short(f['roi'])}</span>")
+    else:
+        line = "<span class='mut'>No graded picks yet. The record starts with the first locked pick.</span>"
+    parts.append(f"<div class='record'><div class='l'>Model record</div><div class='mono'>{line}</div>"
+                 "<div class='go'><a href='grades.html'>Ledger →</a></div></div>")
+    return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built)
 
 
 STATE_TEXT = {
-    "none": "Week {w} report not published yet. Players listed last week are counted as available until it is "
-            "(final statuses come Friday; Wednesday for Thursday games). Roster moves (IR, PUP, cut, traded) count in full now.",
-    "practice": "Week {w} practice report only: no game statuses yet, so listed players are still counted as available. "
-                "Roster moves (IR, PUP, cut, traded) count in full.",
-    "final": "Week {w} final report: the statuses below are what the model counts (Out/Doubtful 100%, Questionable 25%).",
+    "none": "Week {w} report not out yet; players listed last week count as available until it is.",
+    "practice": "Practice report only so far; listed players still count as available.",
+    "final": "Final report: Out and Doubtful count fully, Questionable a quarter.",
 }
 
 
 def report_notes_html(notes, teams, week):
-    """Per-team injury-report notes: what the reports say and what the model counts now."""
+    """Per-team injury-report notes: who is listed and how much the model counts them out."""
     if notes is None or notes.empty:
         return ""
-    out = ["<h3>Injury report notes</h3>"]
+    out = ["<h3>Injury report</h3>"]
     for t in teams:
         n = notes[notes.team == t]
-        state = n.report_state.iloc[0] if len(n) else None
         if n.empty:
             continue
         rows = []
         for x in n.itertuples(index=False):
-            prev = ""
-            if isinstance(x.prev_status, str) and x.prev_status:
-                inj = f" ({esc(x.prev_injury)})" if isinstance(x.prev_injury, str) and x.prev_injury else ""
-                prev = f"{esc(x.prev_status)}{inj} · wk {int(num(x.prev_week))}"
             counted = num(x.counted)
-            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>",
-                         f"{100 * num(x.snap_share):.0f}% <span class='mut'>{esc(x.unit)}</span>",
-                         prev or "—", esc(x.this_week),
+            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>", esc(x.this_week),
                          f"{100 * counted:.0f}%" if math.isfinite(counted) else "—"])
-        out.append(f"<p class='mut'><b>{esc(t)}</b> · {esc(STATE_TEXT.get(state, '').format(w=week))}</p>"
-                   + table(["Player", "Share of unit snaps", "Last report", f"Week {week}", "Counted out"], rows,
-                           num_cols=(1, 4)))
+        out.append(f"<p class='mut'><b>{esc(t)}</b> · {esc(STATE_TEXT.get(n.report_state.iloc[0], '').format(w=week))}</p>"
+                   + table(["Player", f"Week {week}", "Counted out"], rows, num_cols=(2,)))
     return "".join(out) if len(out) > 1 else ""
-
-
-def _fmt_avail(c, v):
-    v = num(v)
-    if not math.isfinite(v):
-        return "—"
-    return f"{v:+.2f}" if c == "qb_delta" else f"{100 * v:.0f}%"
 
 
 def _qb(r, side):
     e, u = r.get(f"{side}_qb_expected"), r.get(f"{side}_qb_usual")
     if not isinstance(e, str):
         return "—"
-    return esc(e) + (f" <span class='mut'>({esc(u)})</span>" if isinstance(u, str) and u != e else "")
+    return esc(e) + (f" (usual {esc(u)})" if isinstance(u, str) and u != e else "")
 
 
 def render_grades(ledger, latest, built):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    lead = ("Each game's <b>first</b> pregame snapshot, written before kickoff once both teams' injury reports "
-            "carry game statuses, then graded against the final score. Snapshots are never revised; a new model "
-            "revision starts a new experiment. Native forward observations only — no reconstructed rows.")
-    parts = [head("Forward ledger", lead)]
-    tiles, sm = ledger_tiles(ledger, rev)
-    parts.append(f"<div class='gr-summary'>{''.join(tiles)}</div>")
-    parts.append(f"<div class='gr-note'>Tiles score <b>{esc(rev)}</b>. <b>ROI</b> grades 1u on the model's side at the "
-                 "moneyline saved in the snapshot (the line at lock time, not necessarily the close). Log loss gain is "
-                 "market minus model per game on graded games (positive: model better), against the spread-implied "
-                 "probability from the same snapshot. ± is one standard error.</div>")
-    if ledger.empty:
-        parts.append("<div class='gr-note'>No snapshots yet. The first lands on the first build after "
-                     "a week's final injury reports publish.</div>")
+    parts = [head("Ledger", "Every pick is locked before kickoff, once both teams' injury reports are final, "
+                            "and graded at the moneyline it was locked at. One unit per game.")]
+    cur = ledger[ledger.revision == rev] if len(ledger) else ledger
+    graded = cur[cur.status == "graded"] if len(cur) else cur
+    n_pend = len(cur) - len(graded)
+    parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{n_pend} pending"))
+    if cur.empty:
+        parts.append("<div class='gr-note'>No picks locked yet. The first one locks once a week's final injury "
+                     "reports are out.</div>")
     else:
-        cur = ledger[ledger.revision == rev]
-        bands = grade_ledger.roi_bands(cur)
-        if int(bands.bets.iloc[-1]):
-            t = pd.concat([bands.assign(source="model"),
-                           bands.assign(source="market favorite", units=bands.fav_units, roi=bands.fav_roi,
-                                        bets=bands.bets)], ignore_index=True)
-            t["group_index"] = t.groupby("source").cumcount()
-            parts.append("<h2 class='sec'>Flat 1u ROI by price band</h2>" + roi_band_table(t) + ROI_NOTE)
-        s = grade_ledger.scored_frame(cur)
-        if len(s):
-            parts.append("<h2 class='sec'>Pick records by confidence</h2>" + records_table(m.band_records(s)))
-        rows = []
-        for r in ledger.itertuples(index=False):
-            ko = pd.to_datetime(r.kickoff_utc, utc=True).tz_convert(ET).strftime("%a %b %-d %-I:%M %p")
-            if r.status == "graded":
-                res = f"{int(r.away_score)}–{int(r.home_score)}"
-                mh = f"<span class='badge {'w' if r.model_hit == 1 else 'l'}'>{'W' if r.model_hit == 1 else 'L'}</span>" if pd.notna(r.model_hit) else "—"
-                kh = f"<span class='badge {'w' if r.market_hit == 1 else 'l'}'>{'W' if r.market_hit == 1 else 'L'}</span>" if pd.notna(r.market_hit) else "—"
-                d = num(r.market_log_loss) - num(r.model_log_loss)
-                dl = f"{d:+.3f}" if math.isfinite(d) else "—"
-            else:
-                res, mh, kh, dl = f"<span class='badge'>{esc(r.status)}</span>", "", "", ""
-            units = num(getattr(r, "units", math.nan))
-            ut = f"{units:+.2f}" if math.isfinite(units) else ""
-            bt = f"{esc(r.bet_team)} {ml_text(r.bet_price)}" if isinstance(getattr(r, "bet_team", None), str) and r.bet_team else "—"
-            rows.append([f"<span class='mono'>{int(r.season)} W{int(r.week)}</span>",
-                         f"<span class='team-code'>{esc(r.away)} @ {esc(r.home)}</span><div class='mut' style='font-size:12px'>{esc(ko)} ET</div>",
-                         f"{num(r.lead_hours):.0f}h", pct(r.model_wp, 1), pct(r.market_wp, 1), bt,
-                         res, mh, ut, kh, dl, f"<span class='mut' style='font-size:12px'>{esc(str(r.revision).replace('boxscore-composite-', ''))}</span>"])
-        parts.append("<h2 class='sec'>All snapshots</h2>" + table(
-            ["Week", "Game", "Lead", "Model home", "Market home", "Bet (1u)", "Final", "Model", "Units", "Market", "LL gain", "Rev"],
-            rows, num_cols=(2, 3, 4, 8, 10)))
+        weeks = sorted({(int(s), int(w)) for s, w in zip(cur.season, cur.week)}, reverse=True)
+        for i, (s, w) in enumerate(weeks):
+            g = cur[(cur.season == s) & (cur.week == w)].sort_values("kickoff_utc")
+            rows, wins, losses = [], 0, 0
+            for r in g.itertuples(index=False):
+                ko = pd.to_datetime(r.kickoff_utc, utc=True).tz_convert(ET).strftime("%a %-I:%M %p")
+                res = getattr(r, "bet_result", "")
+                wins += res == "W"; losses += res == "L"
+                final = (score_text(r.away_score, r.home_score) if r.status == "graded"
+                         else f"<span class='badge'>{esc(r.status)}</span>")
+                rows.append([f"<span class='team-code'>{esc(r.away)} @ {esc(r.home)}</span> <span class='mut'>{esc(ko)}</span>",
+                             pick_text(getattr(r, "bet_team", ""), getattr(r, "bet_price", math.nan)), final, result_badge(res)])
+            parts.append(folded(f"{s} week {w} · {len(g)} picks <span class='rt'>{wins}-{losses}</span>",
+                                table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
-    return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built, bool(latest and latest.get("board_html")))
+    parts.append("<p class='mut small'>Full statistics, including standard errors: "
+                 "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
+    return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
 
 
 def render_retro(latest):
-    """The chosen recipe graded on every backtest game: the MLB site's rebuilt history."""
+    """The current model replayed on past seasons: hindsight, labelled as such."""
     retro = latest.get("retro_ledger")
     if retro is None or retro.empty:
         return ""
-    key = m.recipe_key(latest["manifest"].get("recipe") or {}) if latest["manifest"].get("recipe") else ""
     seasons = sorted(int(x) for x in retro.season.unique())
-    out = [f"<h2 class='sec'>Rebuilt history · chosen recipe · reconstructed</h2>",
-           f"<div class='gr-note flag-note'><b>Hindsight, not a track record.</b> The current recipe "
-           f"<span class='mono'>{esc(key)}</span> graded as flat 1u moneyline bets on every game since {seasons[0]}. "
-           "Each prediction comes from coefficients refit before its week on earlier games only, but the recipe "
-           "was chosen using these same seasons, and features use today's upstream data. The forward ledger above "
-           "is the native record; the held-out seasons (Model page) choose each season's recipe from earlier seasons only. "
-           "Prices are the nflverse schedule moneylines.</div>"]
-    r = roi_from_table(latest["retro_roi_bands"])
-    tiles = [roi_tile("Flat 1u ROI · rebuilt", r, f"{seasons[0]}–{seasons[-1]}")]
-    if r and r.get("bets"):
-        tiles.append(stat("Win rate vs market", f"{100 * r['win_pct']:.1f}%",
-                          f"no-vig q {100 * r['mean_q']:.1f}% · excess {r['excess_pp']:+.1f}pp"))
-        tiles.append(stat("Market-correct null", roi_text(r["null_roi"]), "expected ROI if the market were right"))
-    out.append(f"<div class='gr-summary'>{''.join(tiles)}</div>")
-    if len(latest["retro_roi_by_season"]):
-        out.append("<h2 class='sec'>Rebuilt history by season</h2>" + roi_band_table(latest["retro_roi_by_season"], "Season"))
-    if len(latest["retro_roi_bands"]):
-        out.append("<h2 class='sec'>Rebuilt history by price band</h2>" + roi_band_table(latest["retro_roi_bands"]) + ROI_NOTE)
-    out.append("<h2 class='sec'>Rebuilt games</h2>")
-    for i, yr in enumerate(reversed(seasons)):
+    out = ["<h2 class='sec'>Rebuilt history</h2>",
+           f"<div class='gr-note flag-note'>The current model replayed on every game since {seasons[0]}, each week "
+           "predicted from earlier games only. <b>Hindsight, not a track record:</b> the model was designed after "
+           "these games were played.</div>"]
+    played = retro[pd.to_numeric(retro["home won"], errors="coerce").isin([0., .5, 1.])]
+    out.append(control_tiles(control_records(played), "Games", f"{len(played)}", f"{seasons[0]}–{seasons[-1]}"))
+    for yr in reversed(seasons):
         g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
         units = g.units.dropna()
-        rows = []
-        for x in g.itertuples(index=False):
-            res = x.bet_result if isinstance(x.bet_result, str) and x.bet_result else ""
-            badge = (f"<span class='badge {'w' if res == 'W' else 'l' if res == 'L' else ''}'>{res}</span>" if res else "—")
-            sc = (f"{int(x.away_score)}–{int(x.home_score)}" if math.isfinite(num(getattr(x, "away_score", math.nan)))
-                  and math.isfinite(num(getattr(x, "home_score", math.nan))) else "")
-            rows.append([f"<span class='mono'>W{int(x.week)}</span>",
-                         f"<span class='team-code'>{esc(x.away)} @ {esc(x.home)}</span>", pct(x.model_wp, 1),
-                         pct(getattr(x, "market_ml_wp", math.nan), 1),
-                         f"{esc(x.bet_team)} {ml_text(x.bet_price)}" if isinstance(x.bet_team, str) and x.bet_team else "—",
-                         sc, badge, f"{num(x.units):+.2f}" if math.isfinite(num(x.units)) else "—"])
-        summ = (f"{yr} · {len(units)} bets · {units.sum():+.2f}u · ROI {roi_text(units.mean())}"
-                if len(units) else f"{yr} · no priced bets")
-        out.append(f"<details{' open' if i == 0 else ''} style='margin-bottom:10px'><summary style='cursor:pointer;"
-                   f"font:700 14px/1.4 var(--sans);padding:6px 2px'>{esc(summ)}</summary>"
-                   + table(["Week", "Game", "Model home", "Market home (no-vig)", "Bet (1u)", "Final", "Result", "Units"],
-                           rows, num_cols=(2, 3, 7)) + "</details>")
+        rows = [[f"<span class='mono'>W{int(x.week)}</span>", f"<span class='team-code'>{esc(x.away)} @ {esc(x.home)}</span>",
+                 pick_text(x.bet_team, x.bet_price), score_text(getattr(x, "away_score", math.nan), getattr(x, "home_score", math.nan)),
+                 result_badge(x.bet_result if isinstance(x.bet_result, str) else "")] for x in g.itertuples(index=False)]
+        w, l = int((g.bet_result == "W").sum()), int((g.bet_result == "L").sum())
+        summ = (f"{yr} · {w}-{l} <span class='rt'>ROI {roi_short(units.mean())}</span>" if len(units) else f"{yr} · no priced picks")
+        out.append(folded(summ, table(["Week", "Game", "Pick", "Final", "Result"], rows, num_cols=(3,))))
     return "".join(out)
 
 
+def market_sides(df):
+    """One row per side of every priced, decided game: its moneyline, no-vig implied probability and result."""
+    if df is None or df.empty:
+        return pd.DataFrame(columns=["side", "price", "q", "won", "band"])
+    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., 1.])].copy()
+    q = m.market_ml_wp(d)
+    ok = np.isfinite(q)
+    d, q = d[ok], q[ok]
+    hw = d["home won"].to_numpy(float)
+    sides = pd.concat([pd.DataFrame({"side": "home", "price": d.home_moneyline.to_numpy(float), "q": q, "won": hw}),
+                       pd.DataFrame({"side": "away", "price": d.away_moneyline.to_numpy(float), "q": 1 - q, "won": 1 - hw})],
+                      ignore_index=True)
+    sides["band"] = [m.ml_band(p) for p in sides.price]
+    return sides
+
+
 def render_calibration(latest, ledger, built):
-    lead = ("Flat 1u ROI at the moneyline by price band, then model and market binned on the <b>same</b> home-win "
-            "probability bands and compared with what happened. "
-            "Each source's picks are also binned on the same confidence bands. Two bases, never pooled: native "
-            "forward snapshots, and held-out walk-forward reconstructions.")
-    parts = [head("Model–market calibration", lead)]
+    parts = [head("Market calibration", "What the moneyline implied against what happened, by price. "
+                                        "This grades the <i>market</i>, not the model.")]
+    retro = latest.get("retro_ledger") if latest else None
+    sides = market_sides(retro)
+    if len(sides):
+        seasons = sorted(int(x) for x in retro.season.unique())
+        fav = sides[sides.q > .5]
+        home = sides[sides.side == "home"]
+        parts.append("<div class='gr-summary'>"
+                     + stat("Favorites won", f"{100 * fav.won.mean():.1f}%", f"vs {100 * fav.q.mean():.1f}% implied · {len(fav)} games")
+                     + stat("Home teams won", f"{100 * home.won.mean():.1f}%", f"vs {100 * home.q.mean():.1f}% implied · {len(home)} games")
+                     + "</div>")
+
+        def cell(s):
+            if s.empty:
+                return "—"
+            tone = "up" if s.won.mean() > s.q.mean() else "dn"
+            return (f"<span class='{tone}'>{100 * s.won.mean():.1f}%</span> vs {100 * s.q.mean():.1f}% "
+                    f"<span class='mut'>· {len(s)}</span>")
+        rows = [[esc(b), cell(sides[(sides.band == b) & (sides.side == "home")]),
+                 cell(sides[(sides.band == b) & (sides.side == "away")]), cell(sides[sides.band == b])]
+                for b in m.ML_BANDS if (sides.band == b).any()]
+        parts.append(table(["Moneyline", "Home side", "Away side", "Both"], rows, num_cols=(1, 2, 3)))
+        parts.append(f"<p class='mut small'>Won % vs the price's implied % with the bookmaker's margin removed, then games. "
+                     f"Regular season {seasons[0]}–{seasons[-1]}, closing lines.</p>")
     rev = latest["manifest"]["revision"] if latest else m.REVISION
     s = grade_ledger.scored_frame(ledger[ledger.revision == rev]) if len(ledger) else pd.DataFrame()
-    parts.append(f"<h2 class='sec'>Forward ledger · {esc(rev)}</h2>")
+    parts.append("<h2 class='sec'>Model confidence</h2>")
     if len(s):
-        cal = m.calibration_bands(s)
-        parts.append(reliability_svg(cal, "Forward ledger calibration") + calibration_table(cal))
-    else:
-        parts.append("<div class='gr-note'>No graded forward snapshots yet for this revision.</div>")
-    if latest is not None and len(latest["calibration_bands"]):
-        n = int(latest["calibration_bands"].query("source=='model'").games.sum())
-        parts.append(f"<h2 class='sec'>Held-out seasons · reconstructed ({n} games)</h2>")
-        parts.append("<div class='gr-note'>Walk-forward predictions for seasons whose recipe was chosen only from "
-                     "earlier seasons. Useful for calibration shape; not forward evidence — the design was revised "
-                     "after these seasons were seen.</div>")
-        if len(latest["roi_bands"]):
-            parts.append("<h2 class='sec'>Flat 1u ROI by price band · reconstructed</h2>" + roi_band_table(latest["roi_bands"]) + ROI_NOTE)
-        parts.append("<h2 class='sec'>Calibration · reconstructed</h2>"
-                     + reliability_svg(latest["calibration_bands"], "Held-out calibration") + calibration_table(latest["calibration_bands"]))
-        if len(latest["band_records"]):
-            parts.append("<h2 class='sec'>Pick records by confidence · reconstructed</h2>" + records_table(latest["band_records"]))
-        verdict = latest["manifest"].get("market_blend_verdict")
-        if verdict:
-            parts.append(f"<div class='gr-note'><b>Market blend check.</b> {esc(verdict)}</div>")
-    parts.append("<div class='gr-note'><b>Reading the bands.</b> A realized rate inside the Wilson 95% interval is "
-                 "consistent with the forecast; <span class='badge warn'>off</span> marks a band whose mean forecast "
-                 "falls outside it. Thin bands are noisy — a gap under about two standard errors is not evidence "
-                 "of miscalibration.</div>")
-    return html_document("".join(parts), f"{SITE_NAME} market calibration", "market-calibration.html", built,
-                         bool(latest and latest.get("board_html")))
-
-
-def render_model(latest, built):
-    if latest is None:
-        body = head("Model", "No model run has been published yet.")
-        return html_document(body, f"{SITE_NAME} model", "model.html", built, has_board=False)
-    man = latest["manifest"]
-    recipe = man.get("recipe") or {}
-    lead = ("Goal: flat 1u ROI at the moneyline on the model's side. "
-            f"<span class='mono'>{esc(man['revision'])}</span> · recipe <span class='mono'>{esc(m.recipe_key(recipe))}</span>: "
-            f"{esc(recipe.get('family'))} features, {num(recipe.get('half_life')):g}-game team half-life, ridge {num(recipe.get('ridge')):g}. "
-            "Coefficients are fit by (ridge) log loss and refit before every week; the recipe is frozen for the season from earlier seasons' walk-forward log loss.")
-    parts = [head("Model", lead)]
-    sc = latest["season_scorecard"]
-    oc = latest["outer_scorecard"]
-
-    def card_rows(df):
-        rows = []
-        for r in df.to_dict("records"):
-            rows.append([esc(r["source"]), f"{r['log loss']:.4f}", f"{r['brier']:.4f}", f"{r['LL gain vs market']:+.4f}",
-                         f"{int(r['games scored'])}", f"{num(r['picked winner %']):.1f}%"])
-        return rows
-
-    heads = ["Source", "Log loss", "Brier", "LL gain vs mkt", "Games", "Picked winner"]
-    if len(latest["roi_by_season"]):
-        parts.append("<h2 class='sec'>Flat 1u ROI by season · reconstructed</h2>"
-                     + roi_band_table(latest["roi_by_season"], "Season") + ROI_NOTE)
-    if len(latest["season_roi"]) and int(num(latest["season_roi"].query("group=='All games' and source=='model'").bets.sum())):
-        parts.append(f"<h2 class='sec'>{int(man['season'])} so far · flat 1u ROI · weekly walk-forward</h2>"
-                     + roi_band_table(latest["season_roi"]))
-    if len(oc):
-        parts.append("<h2 class='sec'>Held-out seasons, pooled · log loss · reconstructed</h2>" + table(heads, card_rows(oc), (1, 2, 3, 4, 5)))
-    by = latest["outer_by_season"]
-    if len(by):
-        rows = []
-        for yr, g in by.groupby("season"):
-            c, k = g[g.source == "box-score composite"].iloc[0], g[g.source == "raw spread-derived market"].iloc[0]
-            rows.append([f"{int(yr)}", f"{c['log loss']:.4f}", f"{k['log loss']:.4f}", f"{c['LL gain vs market']:+.4f}",
-                         f"{int(c['games scored'])}", f"{c['picked winner %']:.1f}%", f"{k['picked winner %']:.1f}%"])
-        parts.append("<h2 class='sec'>Held-out by season</h2>" + table(
-            ["Season", "Model LL", "Market LL", "Gain", "Games", "Model picks", "Market picks"], rows, (1, 2, 3, 4, 5, 6)))
-    if len(sc):
-        parts.append(f"<h2 class='sec'>{int(man['season'])} so far · weekly walk-forward</h2>" + table(heads, card_rows(sc), (1, 2, 3, 4, 5)))
-    sel = latest["recipe_selection"]
-    if len(sel):
-        cr = latest["candidate_roi"]
-        if len(cr) and "key" in sel:
-            sel = sel.merge(cr[["key", "bets", "units", "roi", "roi_se"]], on="key", how="left")
-        best_roi = sel.loc[sel.roi.idxmax(), "key"] if "roi" in sel and sel.roi.notna().any() else None
-        rows = []
-        for r in sel.to_dict("records"):
-            tags = (" <span class=\"badge lean\">selected</span>" if r.get("selected") else "") + \
-                   (" <span class=\"badge\">best ROI</span>" if r.get("key") == best_roi else "")
-            rows.append([f"<span class='mono'>{esc(m.recipe_key(r))}</span>{tags}", f"{r['log loss']:.5f}",
-                         roi_text(r.get("roi"), r.get("roi_se")) if "roi" in r else "—",
-                         f"{num(r.get('units')):+.2f}" if math.isfinite(num(r.get("units"))) else "—",
-                         f"{num(r.get('games', math.nan)):.0f}"])
-        parts.append("<h2 class='sec'>Recipe selection · all candidates</h2><div class='gr-note'>The recipe is chosen by "
-                     "<b>lowest walk-forward log loss</b> over the earlier seasons and frozen for the season. Flat 1u ROI on "
-                     "the same games is shown for comparison only: it does not choose the recipe. With ROI standard errors "
-                     "near ±2.5 points, most candidates cannot be told apart by ROI.</div>"
-                     + table(["Recipe", "Walk-forward LL", "Flat 1u ROI ± SE", "Units", "Games"], rows, (1, 2, 3, 4)))
-    w = latest["weights"]
-    if len(w):
-        w = w.reindex(w["coefficient per scaled unit"].abs().sort_values(ascending=False).index)
-        rows = [[esc(r["label"]), f"{r['coefficient per scaled unit']:+.3f}", f"{num(r['training missing fraction']):.0%}"]
-                for r in w.to_dict("records")]
-        parts.append("<h2 class='sec'>Current coefficients</h2><div class='gr-note'>Per training standard deviation of the "
-                     "home-minus-away input; features overlap, so read these as the model's bookkeeping, not causes.</div>"
-                     + table(["Feature", "Coefficient", "Missing in training"], rows, (1, 2)))
-    lim = man.get("limitations") or []
-    if lim:
-        parts.append("<h2 class='sec'>Limitations</h2><div class='gr-note'><ul style='margin:0;padding-left:18px'>"
-                     + "".join(f"<li>{esc(x)}</li>" for x in lim) + "</ul></div>")
-    for a in man.get("availability_audit") or []:
-        if a.get("source") == "availability_roster_membership":
-            parts.append("<h2 class='sec'>Availability audit</h2><div class='gr-note mono' style='font-size:12.5px'>"
-                         + esc(", ".join(f"{k}={v:.3f}" if isinstance(v, float) else f"{k}={v}"
-                                         for k, v in a.items() if k not in ("source", "rule", "qb_rule"))) + "</div>")
-    return html_document("".join(parts), f"{SITE_NAME} model", "model.html", built, latest.get("board_html", False))
+        parts.append("<p class='mut small'>Locked picks.</p>" + records_table(m.band_records(s)))
+    if latest is not None and len(latest["band_records"]):
+        parts.append("<p class='mut small'>Past games, each predicted from earlier games only (reconstructed).</p>"
+                     + records_table(latest["band_records"]))
+    elif not len(s):
+        parts.append("<div class='gr-note'>No graded picks yet.</div>")
+    return html_document("".join(parts), f"{SITE_NAME} market calibration", "market-calibration.html", built)
 
 
 # ---------------------------------------------------------------- driver
@@ -918,13 +716,9 @@ def render_all(out_dir, data=DATA, now=None):
     out.mkdir(parents=True, exist_ok=True)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
-             "market-calibration.html": render_calibration(latest, ledger, built),
-             "model.html": render_model(latest, built)}
+             "market-calibration.html": render_calibration(latest, ledger, built)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
-    board = Path(data) / "latest" / "board.html"
-    if board.exists():
-        shutil.copyfile(board, out / "board.html")
     (out / "ledger_report.txt").write_text((Path(data) / "ledger_report.txt").read_text()
                                            if (Path(data) / "ledger_report.txt").exists() else "No ledger yet.\n")
     (out / ".nojekyll").write_text("")
