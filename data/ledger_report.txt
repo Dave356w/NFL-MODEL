@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-07 17:48 UTC
+NFL forward ledger report -- 2026-10-07 18:47 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
