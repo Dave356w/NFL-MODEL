@@ -262,10 +262,10 @@ def test_card_shows_price_band_for_market_and_model(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
     # TB@DAL: pick DAL -485; no held-out or forward side was priced that short
-    assert "Price band · ≤ −250 · band 1 of 8" in idx and "no games at this price yet" in idx
+    assert "At this price · DAL −485 is in the ≤ −250 range" in idx and "no games at this price yet" in idx
     # KC@BUF: pick BUF -135. Market: 300 held-out sides at -150 plus the graded forward BUF -135 side.
     # Model: held-out picks in the band plus the forward pick (BUF won).
-    assert "Price band · −174 to −130 · band 3 of 8" in idx and "301 sides" in idx
+    assert "At this price · BUF −135 is in the −174 to −130 range" in idx and "301 teams" in idx
     assert "Same games for both: 2024" in idx and "plus 1 locked pick this season" in idx
 
 
@@ -284,6 +284,15 @@ def test_band_windows_use_the_same_games_and_add_forward_picks():
     assert mkt["−174 to −130"][0] == 3 and np.isclose(mkt["−174 to −130"][1], 2 / 3)
     assert (mdl["−174 to −130"]["wins"], mdl["−174 to −130"]["losses"], mdl["−174 to −130"]["bets"]) == (2, 1, 3)
     html = b.price_band_html("BUF", -135, .55, mkt, mdl, years, n)
-    assert "band 3 of 8" in html and "3 sides" in html and "2-1" in html and "66.7%" in html and "55.0%" in html
+    assert "−174 to −130 range" in html and "3 teams · small sample" in html and "2-1" in html
+    assert "won 66.7%" in html and "55.0%" in html and "3 picks · small sample" in html
     mkt0, mdl0, _, n0 = b.band_windows(latest, None)
     assert n0 == 0 and mkt0["−174 to −130"][0] == 2 and mdl0["−174 to −130"]["bets"] == 2
+
+
+def test_price_band_flags_small_samples_only():
+    big = {"−174 to −130": (231, .628, .576)}
+    mdl = {"−174 to −130": {"wins": 103, "losses": 53, "bets": 156, "qsum": .579 * 156}}
+    html = b.price_band_html("CHI", -148, .572, big, mdl, [2023, 2024, 2025], 0)
+    assert "small sample" not in html and "won 62.8%" in html and "vs 57.6% implied · 231 teams" in html
+    assert "won 66.0%" in html and "This game" in html and "2023–2025" in html

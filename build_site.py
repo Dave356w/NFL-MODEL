@@ -514,23 +514,28 @@ def band_windows(latest, forward):
     return mkt, mdl, years, len(fwd)
 
 
+SMALL_SAMPLE = 30  # fewer games than this at a price: flag the rate as a small sample
+
+
 def price_band_html(team, price, q_pick, mkt, mdl, years, n_forward):
     """How sides at the pick's moneyline have done for the market and the model, on the same games."""
     band = m.ml_band(price)
     k, md = mkt.get(band), mdl.get(band)
     dec = (md["wins"] + md["losses"]) if md else 0
-    tiles = [stat("Market implied", pct(q_pick, 1), f"{esc(team)} {ml_text(price)}"),
-             stat("Market realized", pct(k[1], 1) if k else "—",
-                  f"{k[0]} sides · implied {pct(k[2], 1)}" if k else "no games at this price yet"),
-             stat("Model realized", pct(md["wins"] / dec, 1) if dec else "—",
-                  f"{md['bets']} picks · implied {pct(md['qsum'] / md['bets'], 1)}" if md else "no picks at this price yet"),
+    small = lambda n: " · small sample" if n < SMALL_SAMPLE else ""
+    tiles = [stat("This game", pct(q_pick, 1), f"market's chance for {esc(team)} {ml_text(price)}"),
+             stat("All teams at this price", f"won {pct(k[1], 1)}" if k else "—",
+                  f"vs {pct(k[2], 1)} implied · {k[0]} teams{small(k[0])}" if k else "no games at this price yet"),
+             stat("Model picks at this price", f"won {pct(md['wins'] / dec, 1)}" if dec else "—",
+                  f"vs {pct(md['qsum'] / md['bets'], 1)} implied · {md['bets']} picks{small(md['bets'])}"
+                  if md else "no picks at this price yet"),
              stat("Model record", f"{md['wins']}-{md['losses']}" if md else "—", "at this price")]
     span = f"{years[0]}–{years[-1]}" if len(years) > 1 else f"{years[0]}" if years else "past seasons"
     fwd = f" plus {n_forward} locked pick{'s' if n_forward != 1 else ''} this season" if n_forward else ""
-    return (f"<h3>Price band · {esc(band)} · band {m.ML_BANDS.index(band) + 1} of {len(m.ML_BANDS)}</h3>"
+    return (f"<h3>At this price · {esc(team)} {ml_text(price)} is in the {esc(band)} range</h3>"
             f"<div class='gr-summary band'>{''.join(tiles)}</div>"
-            f"<p class='mut small'>Same games for both: {span}, each season predicted by a model chosen on earlier "
-            f"seasons only{fwd}.</p>")
+            f"<p class='mut small'>Implied is the market's chance with the bookmaker's margin removed. "
+            f"Same games for both: {span}, each season predicted by a model chosen on earlier seasons only{fwd}.</p>")
 
 
 # ---------------------------------------------------------------- pages
