@@ -261,21 +261,29 @@ def test_team_logos_from_espn_with_code_fallback(tmp_path):
 def test_card_shows_price_band_for_market_and_model(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    # TB@DAL: pick DAL -485; no past side in the fixture was priced that short
-    assert "Price band · ≤ −250 · band 1 of 8" in idx and "no past games at this price" in idx
-    # KC@BUF: pick BUF -135; the fixture's -150 sides fill the same band for the market and the model
-    assert "Price band · −174 to −130 · band 3 of 8" in idx and "300 sides" in idx and "Model record" in idx
+    # TB@DAL: pick DAL -485; no held-out or forward side was priced that short
+    assert "Price band · ≤ −250 · band 1 of 8" in idx and "no games at this price yet" in idx
+    # KC@BUF: pick BUF -135. Market: 300 held-out sides at -150 plus the graded forward BUF -135 side.
+    # Model: held-out picks in the band plus the forward pick (BUF won).
+    assert "Price band · −174 to −130 · band 3 of 8" in idx and "301 sides" in idx
+    assert "Same games for both: 2024" in idx and "plus 1 locked pick this season" in idx
 
 
-def test_band_stats_match_their_sources():
-    retro = pd.DataFrame({"season": 2024, "home won": [1., 0., 1., .5], "home_moneyline": [-150, -150, 200, -110],
-                          "away_moneyline": [130, 130, -240, -110]})
-    k = b.market_band_stats(retro)
-    q = (150 / 250) / (150 / 250 + 100 / 230)
-    assert k["−174 to −130"][0] == 2 and np.isclose(k["−174 to −130"][1], .5) and np.isclose(k["−174 to −130"][2], q)
-    assert k["+175 to +249"][:2] == (1, 1.) and k["−249 to −175"][:2] == (1, 0.)  # the tie is excluded
-    rb = m.roi_table(retro.assign(model_wp=[.6, .6, .7, .5], market_wp=.5))
-    mdl = b.model_band_stats(rb)
-    assert "All games" not in mdl and int(mdl["−174 to −130"].wins) == 1 and int(mdl["−174 to −130"].losses) == 1
-    html = b.price_band_html("BUF", -135, .55, k, mdl, "2021–2026", "2023–2025")
-    assert "band 3 of 8" in html and "2 sides" in html and "1-1" in html and "55.0%" in html
+def test_band_windows_use_the_same_games_and_add_forward_picks():
+    retro = pd.DataFrame({"season": [2022, 2024, 2024, 2024], "home won": [1., 1., 0., .5],
+                          "home_moneyline": [-150, -150, -150, -110], "away_moneyline": [130, 130, 130, -110],
+                          "model_wp": [.6, .6, .6, .5]})
+    held = retro[retro.season == 2024].assign(market_wp=.5)
+    latest = {"retro_ledger": retro, "roi_bands": m.roi_table(held),
+              "roi_by_season": m.roi_table(held, by="season")}
+    fwd = pd.DataFrame({"season": [2026], "home won": [1.], "home_moneyline": [-140.], "away_moneyline": [120.],
+                        "model_wp": [.62]})
+    mkt, mdl, years, n = b.band_windows(latest, fwd)
+    assert years == [2024] and n == 1
+    # 2022 is outside the held-out window; the tie is excluded; the forward game is added
+    assert mkt["−174 to −130"][0] == 3 and np.isclose(mkt["−174 to −130"][1], 2 / 3)
+    assert (mdl["−174 to −130"]["wins"], mdl["−174 to −130"]["losses"], mdl["−174 to −130"]["bets"]) == (2, 1, 3)
+    html = b.price_band_html("BUF", -135, .55, mkt, mdl, years, n)
+    assert "band 3 of 8" in html and "3 sides" in html and "2-1" in html and "66.7%" in html and "55.0%" in html
+    mkt0, mdl0, _, n0 = b.band_windows(latest, None)
+    assert n0 == 0 and mkt0["−174 to −130"][0] == 2 and mdl0["−174 to −130"]["bets"] == 2
