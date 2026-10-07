@@ -309,6 +309,8 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .record .l{font:650 12px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
 .record .go{text-align:right;font:600 14px/1 var(--sans);margin-top:6px}
 .small{font-size:13px}
+.detail .gr-summary.band{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:0 0 4px}
+.detail .band .gr-stat{box-shadow:none;padding:8px 10px}.detail .band .gr-stat .v{font-size:19px}
 .up{color:rgb(var(--cool-tx));font-weight:700}.dn{color:rgb(var(--warm-tx));font-weight:700}
 .foot{margin-top:28px;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);padding-top:10px}
 @media (max-width:640px){
@@ -473,6 +475,41 @@ def records_table(recs):
     return table(["Model said", "Picks", "Won", "Average forecast"], rows, num_cols=(1, 2, 3))
 
 
+def market_band_stats(retro):
+    """Per moneyline band: sides, realized win rate and mean no-vig implied probability."""
+    s = market_sides(retro)
+    return {b: (len(g), float(g.won.mean()), float(g.q.mean())) for b, g in s.groupby("band")}
+
+
+def model_band_stats(roi_bands):
+    """Per moneyline band of the model's picked side: the held-out roi_table row."""
+    if roi_bands is None or roi_bands.empty or "source" not in roi_bands:
+        return {}
+    t = roi_bands[(roi_bands.source == "model") & (roi_bands.group != "All games")]
+    return {str(r.group): r for r in t.itertuples(index=False) if r.bets}
+
+
+def seasons_text(df):
+    yrs = sorted(int(x) for x in df.season.unique()) if df is not None and len(df) and "season" in df else []
+    return f"{yrs[0]}–{yrs[-1]}" if len(yrs) > 1 else f"{yrs[0]}" if yrs else ""
+
+
+def price_band_html(team, price, q_pick, mkt, mdl, mkt_years, mdl_years):
+    """How sides at the pick's moneyline have done for the market and for the model."""
+    band = m.ml_band(price)
+    k, md = mkt.get(band), mdl.get(band)
+    tiles = [stat("Market implied", pct(q_pick, 1), f"{esc(team)} {ml_text(price)}"),
+             stat("Market realized", pct(k[1], 1) if k else "—",
+                  f"{k[0]} sides · implied {pct(k[2], 1)}" if k else "no past games at this price"),
+             stat("Model realized", pct(md.win_pct, 1) if md is not None else "—",
+                  f"{int(md.bets)} picks · implied {pct(md.mean_q, 1)}" if md is not None else "no past picks at this price"),
+             stat("Model record", f"{int(md.wins)}-{int(md.losses)}" if md is not None else "—", "at this price")]
+    return (f"<h3>Price band · {esc(band)} · band {m.ML_BANDS.index(band) + 1} of {len(m.ML_BANDS)}</h3>"
+            f"<div class='gr-summary band'>{''.join(tiles)}</div>"
+            f"<p class='mut small'>Market: every side at this price, {esc(mkt_years)} closing lines. "
+            f"Model: its picks at this price in {esc(mdl_years)}, each season predicted by a model chosen on earlier seasons only.</p>")
+
+
 # ---------------------------------------------------------------- pages
 
 def render_index(latest, ledger, built, now=None):
@@ -501,6 +538,11 @@ def render_index(latest, ledger, built, now=None):
     rows.sort(key=lambda r: (pd.notna(r.get("result")), m.kickoff_utc(r) or far, str(r["game_id"])))
     contrib = latest["contributions"]
     cmax = float(contrib["log-odds contribution"].abs().max()) if len(contrib) else 1.
+    mkt_bands, mdl_bands = market_band_stats(latest.get("retro_ledger")), model_band_stats(latest.get("roi_bands"))
+    mkt_years = seasons_text(latest.get("retro_ledger"))
+    by_season = latest.get("roi_by_season")
+    mdl_years = (seasons_text(by_season[by_season.group != "All games"].assign(season=lambda x: x.group))
+                 if by_season is not None and len(by_season) and "group" in by_season else "past seasons")
     cards = []
     for r in rows:
         p = num(r["model_wp"])
@@ -548,6 +590,9 @@ def render_index(latest, ledger, built, now=None):
             ["Model", pct(1 - p), pct(p)],
             ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
             ["Moneyline", ml_text(am), ml_text(hm)]], num_cols=(1, 2))]
+        if team and math.isfinite(num(bet.price)) and math.isfinite(q):
+            det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
+                                       mkt_bands, mdl_bands, mkt_years, mdl_years))
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(ET).strftime('%a %-I:%M %p ET'))} "
