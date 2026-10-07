@@ -100,7 +100,7 @@ new `REVISION`.
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of
    each game written before kickoff, and only once both teams' injury reports
-   carry game statuses (or practice-only teams within 24h). These are native
+   carry game statuses (or practice-only teams within 6h). These are native
    forward observations. Snapshots are append-only; the experiment identity is
    `config signature : recipe : season`.
 2. **Held-out seasons** (Model and Calibration pages): walk-forward predictions
@@ -129,7 +129,7 @@ That line has no independent quote timestamp.
 | ≤150 min before kickoff | final | final | final | already locked; board refreshes once more |
 
 Thursday games run the same schedule two days earlier (final report Wednesday). Monday
-games run one day later (Saturday). A team with no designations at all still locks within 24h of kickoff.
+games run one day later (Saturday). A team with no designations at all still locks within 6h of kickoff (nflverse rebuilds injuries once a day, so a Thursday game waits for Thursday's file).
 The gate also needs nflverse to have published the report. Its injury file refreshes at
 least daily, and every build re-reads it. Same-week roster moves (for example a Friday IR
 move) are not used; the report's Out status covers them.
