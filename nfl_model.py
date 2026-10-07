@@ -5,6 +5,15 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.11.1 (ledger gate only; same REVISION, config signature, recipe and features):
+FINAL_REPORT_HOURS 24 -> 6. nflverse rebuilds the injury file once a day (nflverse-rosters
+update-injuries, cron 07:07 UTC; the 2026-10-07 file landed 14:25 UTC), replacing each
+player-week's status with the latest. A Wednesday final report for a Thursday game therefore
+reaches the model Thursday morning or midday UTC, but the 24h practice-only fallback opened at
+00:15 UTC Thursday and would have locked 2026_05_TB_DAL with no game statuses. At 6h the
+fallback still covers teams with no designations at all; Thursday games wait for the file.
+No v1.11 ledger rows existed when this changed.
+
 v1.11 (NEW experiment: new REVISION and OUTPUT_NAME; the v1.10 frozen recipe and its
 forward-ledger rows, if any, are left untouched): QB projection follows the depth chart.
 The v1.8 rule projected the available QB who started the team's most recent game, so a
@@ -420,7 +429,11 @@ ROSTER_OUT=('RES','CUT','TRD','RET','EXE','E01',
             'SUS','PUP','RSN','NWT','UFA','RFA','RSR','E14','TRT','TRC')
 ROSTER_OUT_DESC_PREFIX=('R','W')  # status_description_abbr reserve/waived codes count as out whatever the status
 ROSTER_MEMBER=('ACT','DEV','INA')  # active, practice squad, game-day inactive; anything else is audited
-FINAL_REPORT_HOURS=24.    # inside this many hours of kickoff a team with practice rows but no game status counts as reported
+# Inside this many hours of kickoff a team with practice rows but no game status counts as reported.
+# v1.11.1: 24 -> 6. nflverse rebuilds injuries once a day (cron 07:07 UTC, often hours late), so a
+# Wednesday final report for a Thursday game arrives Thursday ~07-15 UTC; at 24h the gate opened
+# Thursday 00:15 UTC and locked Thursday games before any game status existed.
+FINAL_REPORT_HOURS=6.
 ROSTER_MEMBERSHIP='most recent roster week before the game (week 1: week-1 roster); off-roster players count as out'
 MEMBERSHIP_MAX_SHARE=.5   # above this off-roster snap share, treat the roster as a data gap
 AVAIL_WINDOW=4            # team's prior games that define each player's snap share
@@ -3111,6 +3124,8 @@ def _self_test():
             prac=future.assign(game_id=future.game_id+'prac',away_injury_report='practice')
             _,n=record_forward(prac,fit,avrec,ko-dt.timedelta(hours=FINAL_REPORT_HOURS+1)); assert n==0
             _,n=record_forward(prac,fit,avrec,ko-dt.timedelta(hours=FINAL_REPORT_HOURS-1)); assert n==len(prac)
+            # v1.11.1: a Thursday game 20h out (Wednesday's final report not yet in the daily nflverse file) waits.
+            _,n=record_forward(prac.assign(game_id=prac.game_id+'thu'),fit,avrec,ko-dt.timedelta(hours=20)); assert n==0
             _,n=record_forward(early.assign(game_id=early.game_id+'x'),fit,noav,ko-dt.timedelta(days=5)); assert n==len(early)
             hp=html_board(early,fit,scorecard(outer),avrec,'t',asof=ko-dt.timedelta(days=5))
             assert 'Injury reports not final for' in hp and 'report pending' in hp
