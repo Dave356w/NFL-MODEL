@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.9), newest first; this page describes what the code
+version history (v1 to v1.10), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.9`
+## The current model: `boxscore-composite-v1.10`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -37,14 +37,25 @@ published before kickoff:
   mainly in 2019–23 rosters (SUS, PUP, RSN, NWT, UFA, RFA, RSR, E14, TRT, TRC),
   plus any reserve/waived status description. Unrecognized codes are audited.
 
+**Point margin (v1.10).** Each team's decayed average point margin per game,
+from the official result of every earlier game in its history. It uses the same
+weighting as the profiles and is shrunk toward zero with four pseudo-games. Box-score
+rates leave out red-zone finishing, special teams, return and defensive TDs and
+kicking; margin carries them. The input is the home-minus-away difference. On the
+2023–25 held-out seasons it improved log loss by 0.0028 ± 0.0010 per game over v1.9.
+The ROI change was +0.6 ± 0.9 pts, which is unresolved (research test 16; the input
+was found on those seasons, so the estimate is optimistic).
+
 **Composite.** A logistic regression on home-minus-away differences plus a
 site term, ridge-penalized, refit before every week on all earlier games
 (older games discounted with a two-season half-life).
 
-**Selection and freezing.** 24 candidates: 2 feature families × 3 team
+**Selection and freezing.** 24 candidates: 2 feature families (unadjusted and
+opponent-adjusted rates, both with availability and point margin) × 3 team
 half-lives (4, 8, 16 games) × 4 ridge strengths. The minimum walk-forward log
 loss over earlier seasons picks the recipe, which is frozen for the season in
-`data/frozen_recipe_<season>.json`. A config change that would alter the
+`data/frozen_recipe_<season>_<REVISION>.json` (v1.9's record keeps its old name,
+`data/frozen_recipe_2026.json`). A config change that would alter the
 signature refuses to run against an existing frozen record; that is why
 feature changes ship as a new `REVISION`.
 
@@ -120,7 +131,7 @@ move) are not used; the report's Out status covers them.
 ```
 schedule_gate.py ──► build_site.py
                        ├─ nfl_model.main()      → runs/<run>/ (transient), appends data/forward_predictions.jsonl,
-                       │                          writes data/frozen_recipe_<season>.json, caches in .nfl_cache/
+                       │                          writes data/frozen_recipe_<season>_<REVISION>.json, caches in .nfl_cache/
                        ├─ snapshot()            → data/latest/ (page inputs), data/projections/<season>_weekNN.csv
                        ├─ grade_ledger.main()   → data/forward_ledger.csv, data/ledger_report.txt
                        └─ render_all()          → public/ (index, grades, market-calibration, model, board)

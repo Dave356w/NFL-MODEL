@@ -1,9 +1,31 @@
-"""NFL box-score composite W/L model — v1.8 (production).
+"""NFL box-score composite W/L model — v1.10 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.10 (NEW experiment: new REVISION and OUTPUT_NAME; the v1.9 frozen recipe
+(data/frozen_recipe_2026.json) and its forward-ledger rows are left untouched):
+decayed point margin. Research tests 13-16 (research/README.md) found that the
+market's lead grows as it moves its weight from last season onto this season's
+results, and that point margin is the input it leans on that the box-score rates
+leave out (red-zone finishing, special teams, return and defensive TDs, kicking).
+  * New input d__margin: home-minus-away decayed average point margin per game
+    from earlier games only, weighted exactly like the stat profiles (team
+    half-life, OFFSEASON_RETENTION per season boundary, MAX_HISTORY_SEASONS)
+    and shrunk toward zero with PRIOR_EQUIVALENT_GAMES pseudo-games. Margins
+    come from the official schedule result of each game already in the team's
+    box-score history, so a game's own score never enters its features.
+  * Candidate families 'rates_core_avail_cs_margin' and
+    'rates_core_adj_avail_cs_margin' = the v1.9 families plus d__margin; same
+    half-lives, ridges and selection rule.
+  * Held-out 2023-25 (test 16, same 811 priced games): log loss +0.0028 +/- 0.0010
+    better than v1.9 game by game; flat ROI +0.9% vs +0.3% (+0.6 pts +/- 0.9,
+    unresolved). The candidate was found on those seasons, so the estimate is
+    optimistic.
+  * Frozen recipes are now named per revision (frozen_recipe_<season>_<REVISION>.json)
+    so two experiments can share a state folder; the v1.9 file keeps its name.
 
 v1.9.5 (reporting only; same REVISION, config signature, recipe and ledger):
 report notes also list roster removals. NFL injury reports never list players
@@ -267,11 +289,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.9'
+REVISION='boxscore-composite-v1.10'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_9'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_10'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -282,7 +304,7 @@ WARMUP_SEASONS=2
 OUTER_FIRST_SEASON=2023
 TEAM_HALF_LIVES=(4.,8.,16.)  # team games: 8 -> a game 8 appearances ago gets half weight
 RIDGE_GRID=(.01,.1,1.,10.)   # mean weighted log loss + lambda/2 * ||beta||^2
-FEATURE_FAMILIES=('rates_core_avail_cs','rates_core_adj_avail_cs')  # v1.6 winner vs its opponent-adjusted twin
+FEATURE_FAMILIES=('rates_core_avail_cs_margin','rates_core_adj_avail_cs_margin')  # v1.9 families + decayed point margin (v1.10)
 FIT_HALF_LIFE_SEASONS=2.     # separate decay on old labeled training games
 OFFSEASON_RETENTION=.5      # each season boundary halves old team-profile weight
 PRIOR_EQUIVALENT_GAMES=4.   # shrink sparse histories toward a prior league profile
@@ -301,7 +323,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -358,12 +380,15 @@ FAMILIES={'rates_core':RATES_CORE,'rates_core_adj':RATES_CORE,'rates':RATES,'box
 FAMILIES['rates_core_avail']=RATES_CORE
 FAMILIES['rates_core_avail_cs']=RATES_CORE
 FAMILIES['rates_core_adj_avail_cs']=RATES_CORE
+FAMILIES['rates_core_avail_cs_margin']=RATES_CORE
+FAMILIES['rates_core_adj_avail_cs_margin']=RATES_CORE
 # Opponent-adjusted family -> raw family whose stat definitions it reuses.
 ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 
 # Player availability (v1.4+). Availability family -> family whose stats it adds to.
 AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_core',
-                'rates_core_adj_avail_cs':'rates_core_adj'}
+                'rates_core_adj_avail_cs':'rates_core_adj',
+                'rates_core_avail_cs_margin':'rates_core','rates_core_adj_avail_cs_margin':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
 # Read from the PRIOR week's roster only. Second row: codes used mainly in 2019-2023 rosters
 # (suspended, PUP, non-football injury, not with team, free agents, exempt, transactions).
@@ -389,7 +414,14 @@ AVAIL_COLS=('qb_delta',)+tuple(f'{g}_out' for g in OFFENSE_GROUPS+DEFENSE_GROUPS
 AVAIL_COLS_CS=('qb_delta',)+tuple(f'{g}_out_cs' for g in OFFENSE_GROUPS+DEFENSE_GROUPS)
 ALL_AVAIL_COLS=tuple(dict.fromkeys(AVAIL_COLS+AVAIL_COLS_CS))
 AVAIL_FAMILY_COLS={'rates_core_avail':AVAIL_COLS,'rates_core_avail_cs':AVAIL_COLS_CS,
-                   'rates_core_adj_avail_cs':AVAIL_COLS_CS}
+                   'rates_core_adj_avail_cs':AVAIL_COLS_CS,
+                   'rates_core_avail_cs_margin':AVAIL_COLS_CS,'rates_core_adj_avail_cs_margin':AVAIL_COLS_CS}
+# Point margin (v1.10): families that add the decayed average point margin per game.
+MARGIN_FAMILIES=('rates_core_avail_cs_margin','rates_core_adj_avail_cs_margin')
+MARGIN_FEATURE='d__margin'
+MARGIN_DEFINITION=('official schedule result of each prior game in the team box-score history; '
+                   'same team-game decay, offseason retention and history window as the stat profiles; '
+                   'PRIOR_EQUIVALENT_GAMES pseudo-games at zero')
 AVAIL_LABEL={'qb_delta':'QB: projected starter vs recent QB mix (net yards per dropback)',
  'OL_out':'offensive line snaps unavailable',
  'WRTE_out':'receiver and tight end snaps unavailable','RB_out':'running back snaps unavailable',
@@ -1082,6 +1114,10 @@ def lagged_features(box,schedules,half_life,avail=None):
     av=avail.set_index(['season','week','team']) if avail is not None and len(avail) else None
     opp=box[['game_id','team',*COUNTS]].rename(columns={'team':'opponent',**{c:'opp_'+c for c in COUNTS}})
     both=box.merge(opp,on=['game_id','opponent'],how='left',validate='one_to_one')
+    # Point margin from the official result of each game already in the box-score history.
+    res=schedules[['game_id','home_team','result']].drop_duplicates('game_id')
+    both=both.merge(res,on='game_id',how='left',validate='many_to_one')
+    both['margin']=np.where(both.team==both.home_team,both.result,-both.result).astype(float)
     records=[]
     for (year,week),games in schedules.groupby(['season','week'],sort=True):
         year,week=int(year),int(week)
@@ -1094,6 +1130,8 @@ def lagged_features(box,schedules,half_life,avail=None):
             age=np.arange(n-1,-1,-1,dtype=float)
             weights=np.exp2(-age/half_life)*np.power(OFFSEASON_RETENTION,year-h.season.to_numpy(float))
             profiles[team]={}
+            mg=h.margin.to_numpy(float); ok=np.isfinite(mg)
+            profiles[team]['margin']=float(np.dot(weights[ok],mg[ok])/(weights[ok].sum()+PRIOR_EQUIVALENT_GAMES))
             for role,cols in [('for',list(COUNTS)),('allowed',['opp_'+c for c in COUNTS])]:
                 vals=h[cols].to_numpy(float)
                 for family,specs in FAMILIES.items():
@@ -1140,7 +1178,8 @@ def lagged_features(box,schedules,half_life,avail=None):
 
 def feature_names(family):
     if family in AVAIL_FAMILIES:
-        return feature_names(AVAIL_FAMILIES[family])+[f'd__avail__{c}' for c in AVAIL_FAMILY_COLS[family]]
+        return (feature_names(AVAIL_FAMILIES[family])+[f'd__avail__{c}' for c in AVAIL_FAMILY_COLS[family]]
+                +([MARGIN_FEATURE] if family in MARGIN_FAMILIES else []))
     return ['site']+[f'd__{role}__{family}__{metric}' for role in ('for','allowed') for metric in FAMILIES[family]
                      if not (role=='allowed' and metric in REDUNDANT_ALLOWED)]
 
@@ -1751,13 +1790,19 @@ def config_signature():
                   'roster_membership':ROSTER_MEMBERSHIP,'membership_max_share':MEMBERSHIP_MAX_SHARE,
                   'roster_out_desc_prefix':ROSTER_OUT_DESC_PREFIX,'injury_cache':'raw report_status',
                   'family_cols':AVAIL_FAMILY_COLS,'cs_min_games':CS_MIN_GAMES,'qb_rule':QB_RULE},
-         'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS}
+         'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
+         'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION}}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
+
+
+def frozen_recipe_name(season):
+    """Per-revision file name, so experiments can share a state folder (v1.10+)."""
+    return f'frozen_recipe_{season}_{REVISION}.json'
 
 
 def frozen_recipe(oof,season):
     sig,cfg=config_signature()
-    path=state_dir()/f'frozen_recipe_{season}.json'
+    path=state_dir()/frozen_recipe_name(season)
     if path.exists():
         rec=json.loads(path.read_text())
         if rec['config_signature']!=sig:
@@ -1851,6 +1896,7 @@ def grade_forward(records,schedules):
 def feature_label(name):
     if name=='site': return 'Home field'
     if name.startswith('d__avail__'): return 'Availability: '+AVAIL_LABEL.get(name[10:],name[10:])
+    if name==MARGIN_FEATURE: return 'Point margin per game (decayed)'
     _,role,_,metric=name.split('__',3)
     m=METRIC_LABEL.get(metric,metric)
     return f'Offense: {m}' if role=='for' else f'Defense: opponents\u2019 {m}'
@@ -2223,7 +2269,7 @@ def main():
     years=list(range(BACKTEST_FIRST_SEASON-WARMUP_SEASONS,season+1))
     if season<=OUTER_FIRST_SEASON: raise ValueError('Need at least one completed outer-test season')
     print(f'NFL box-score composite {REVISION} | season {season}')
-    print('Predictors: prior-game offense and defense only. No market features or same-game final stats.')
+    print('Predictors: prior-game offense, defense and point margin only. No market features or same-game final stats.')
     schedules=pd.concat([load_schedule(y) for y in years],ignore_index=True)
     current=schedules[schedules.season==season]
     pending=current.loc[current.result.isna(),'week']
@@ -2374,7 +2420,8 @@ def main():
                   if uses_adj else 'no explicit opponent-strength adjustment'),
                  'game-state effects in full-game statistics',
                  'design chosen after historical results reviewed; development evaluation, not untouched test',
-                 'v1.1-v1.9 changes applied after v1 results were seen',
+                 'v1.1-v1.10 changes applied after v1 results were seen',
+                 'point margin input (v1.10) chosen after the 2023-25 held-out seasons were seen',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
                    'no game-day inactives or late-week news',
@@ -2731,6 +2778,28 @@ def _self_test():
         assert not np.allclose(features[4.].loc[~beforemask,names],cf.loc[~beforemask,names],equal_nan=True)
         # Every production candidate's inputs exist in the feature table.
         for fam in FEATURE_FAMILIES: assert set(feature_names(fam))<=set(features[4.].columns),fam
+        # v1.10 point margin: the decayed, shrunk average of the official results of earlier games only.
+        assert MARGIN_FEATURE in feature_names(FEATURE_FAMILIES[0]) and MARGIN_FEATURE not in feature_names('rates_core_avail_cs')
+        g=features[4.].query('season==2021 and week==5').iloc[0]
+        def manual_margin(team):
+            rows=[]
+            for r in sched.itertuples():
+                if team in (r.home_team,r.away_team) and r.season>=2021-MAX_HISTORY_SEASONS and (r.season,r.week)<(2021,5):
+                    rows.append((r.season,r.week,r.game_id,r.result if r.home_team==team else -r.result))
+            rows.sort(); age=np.arange(len(rows)-1,-1,-1,dtype=float)
+            w=np.exp2(-age/4.)*np.power(OFFSEASON_RETENTION,2021-np.array([x[0] for x in rows],float))
+            return float(np.dot(w,[x[3] for x in rows])/(w.sum()+PRIOR_EQUIVALENT_GAMES))
+        assert np.isclose(g[MARGIN_FEATURE],manual_margin(g.home)-manual_margin(g.away))
+        assert not np.isclose(g[MARGIN_FEATURE],0.)
+        # Negative fixture: rewriting this and later games' results leaves earlier margins untouched.
+        flipped=sched.copy(); late=(flipped.season>2023)|((flipped.season==2023)&(flipped.week>=4))
+        flipped.loc[late,'result']=-flipped.loc[late,'result']+21
+        fm=lagged_features(box,flipped,4.)
+        np.testing.assert_allclose(features[4.].loc[beforemask,MARGIN_FEATURE],fm.loc[beforemask,MARGIN_FEATURE])
+        assert not np.allclose(features[4.].loc[~beforemask,MARGIN_FEATURE],fm.loc[~beforemask,MARGIN_FEATURE])
+        # A game's own result never enters its own margin: week-1 games of the first season have no history.
+        first=features[4.][(features[4.].season==2018)&(features[4.].week==1)]
+        assert np.allclose(first[MARGIN_FEATURE],0.)
         # Pure decay arithmetic: observation 8 appearances ago has half weight at h=8.
         assert np.isclose(np.exp2(-8/8),.5)
         oof=walk_forward_grid(features,2023)
@@ -2783,7 +2852,16 @@ def _self_test():
         # Freeze + first-snapshot semantics; never overwrite or backfill a final/live game.
         with tempfile.TemporaryDirectory() as tmp:
             globals()['OUTPUT_ROOT']=Path(tmp)
+            # v1.10: a legacy season-only record from another revision coexists and is never read or rewritten.
+            legacy=Path(tmp)/'frozen_recipe_2024.json'; legacy.write_text('{"config_signature":"older"}')
             rec=frozen_recipe(oof,2024)
+            assert (Path(tmp)/frozen_recipe_name(2024)).exists() and legacy.read_text()=='{"config_signature":"older"}'
+            # A record under this revision's name with another signature still refuses to run.
+            other=json.loads((Path(tmp)/frozen_recipe_name(2024)).read_text())
+            stale=Path(tmp)/frozen_recipe_name(2023); stale.write_text(json.dumps(dict(other,config_signature='x')))
+            try: frozen_recipe(oof,2023)
+            except ValueError: pass
+            else: raise AssertionError('Frozen recipe from another configuration accepted')
             assert frozen_recipe(oof.assign(**{'home won':1-oof['home won']}),2024)==rec
             future=board.copy(); future['result']=np.nan; future['gameday']='2030-10-01'; future['gametime']='20:15'
             future['home_injury_report']=future['away_injury_report']='final'
@@ -2845,7 +2923,7 @@ def _self_test():
                 assert ('Profiles are opponent-adjusted.' in h)==adj and ('No explicit opponent-strength adjustment.' in h)==(not adj)
             (Path(tmp)/'board.html').write_text(html,encoding='utf-8')
             Path('selftest_board.html').write_text(html,encoding='utf-8')
-        print('PASS: box-score definitions, same-game/future-stat exclusion, roster membership, departed players, bye weeks, '
+        print('PASS: box-score definitions, same-game/future-stat exclusion, point margin (v1.10), roster membership, departed players, bye weeks, '
               'QB-position projection, starter-based QB projection (benching, mid-game injury, week 1, new signing, data gap), '
               'injury-report gate, raw-status weights, roster status codes, current-season window, opponent-adjusted availability family, market blend, '
               'matched-band calibration and pick records, Drive migration, availability cache, '
