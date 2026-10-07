@@ -20,10 +20,10 @@ CIN,00-0037193,Bryan Cook,S,DB,0.12411626080125687,4.0,Questionable,Ankle,not on
 CIN,00-0034446,Jalen Davis,DB,DB,0.09662215239591516,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 CIN,00-0038619,Andrei Iosivas,WR,WRTE,0.07071713147410359,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 CLE,00-0035526,Elgton Jenkins,C,OL,0.14720394736842105,4.0,Out,Concussion,not on a week-5 report yet,0.0,none
-DAL,00-0035705,Jalen Thompson,DB,DB,0.13905079100749376,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
-DAL,00-0033093,Jonathan Bullard,DL,DL,0.10094637223974763,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
-DAL,00-0037839,Cobie Durant,CB,DB,0.07243963363863447,4.0,Out,Hamstring,not on a week-5 report yet,0.0,none
-DAL,00-0038556,DeMarvion Overshown,LB,LB,0.05029585798816568,4.0,Out,Hamstring,not on a week-5 report yet,0.0,none
+DAL,00-0035705,Jalen Thompson,DB,DB,0.13905079100749376,,,,Reserve/Injured (IR) on wk 4 roster,1.0,practice
+DAL,00-0033093,Jonathan Bullard,DL,DL,0.10094637223974763,,,,Reserve/Injured (IR) on wk 4 roster,1.0,practice
+DAL,00-0037839,Cobie Durant,CB,DB,0.07243963363863447,4.0,Out,Hamstring,practice: Did Not Participate In Practice,0.0,practice
+DAL,00-0038556,DeMarvion Overshown,LB,LB,0.05029585798816568,4.0,Out,Hamstring,practice: Did Not Participate In Practice,0.0,practice
 DEN,00-0041496,Jonah Coleman,RB,RB,0.10408921933085502,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 DEN,00-0037799,Dondrea Tillman,LB,LB,0.07277882797731569,4.0,Out,Hamstring,not on a week-5 report yet,0.0,none
 DET,00-0034384,D.J. Reed,CB,DB,0.2187039764359352,4.0,Questionable,Rib,not on a week-5 report yet,0.0,none
@@ -102,11 +102,13 @@ SF,00-0039148,Keion White,DE,DL,0.15517241379310345,4.0,Questionable,Hamstring,n
 SF,00-0035717,Nick Bosa,DE,DL,0.06896551724137931,4.0,Out,Knee,not on a week-5 report yet,0.0,none
 SF,00-0032775,Demarcus Robinson,WR,WRTE,0.06810035842293907,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 SF,00-0034854,KhaDarel Hodge,WR,WRTE,0.06093189964157706,,,,CUT (A01) on wk 4 roster,1.0,none
-TB,00-0034855,Baker Mayfield,QB,QB,0.7362204724409449,4.0,Out,Thumb,not on a week-5 report yet,0.0,none
-TB,00-0040143,Jacob Parrish,CB,DB,0.12568306010928962,4.0,Questionable,Not injury related - personal matter,not on a week-5 report yet,0.0,none
-TB,00-0031957,Rakeem Nunez-Roches,DT,DL,0.09572649572649573,4.0,Questionable,Ankle,not on a week-5 report yet,0.0,none
-TB,00-0040747,Benjamin Morrison,CB,DB,0.09289617486338798,4.0,Out,Quadricep,not on a week-5 report yet,0.0,none
-TB,00-0041031,Rueben Bain Jr.,LB,LB,0.07851239669421488,4.0,Out,Groin,not on a week-5 report yet,0.0,none
+TB,00-0034855,Baker Mayfield,QB,QB,0.7362204724409449,4.0,Out,Thumb,practice: Did Not Participate In Practice,0.0,practice
+TB,00-0036411,Antoine Winfield Jr.,S,DB,0.21311475409836064,,,,practice: Did Not Participate In Practice,0.0,practice
+TB,00-0040143,Jacob Parrish,CB,DB,0.12568306010928962,4.0,Questionable,Not injury related - personal matter,not on the week-5 practice report,0.0,practice
+TB,00-0031957,Rakeem Nunez-Roches,DT,DL,0.09572649572649573,4.0,Questionable,Ankle,not on the week-5 practice report,0.0,practice
+TB,00-0040747,Benjamin Morrison,CB,DB,0.09289617486338798,4.0,Out,Quadricep,practice: Did Not Participate In Practice,0.0,practice
+TB,00-0035254,Anthony Nelson,LB,LB,0.0878099173553719,,,,practice: Limited Participation in Practice,0.0,practice
+TB,00-0041031,Rueben Bain Jr.,LB,LB,0.07851239669421488,4.0,Out,Groin,practice: Full Participation in Practice,0.0,practice
 TEN,00-0039032,Tyjae Spears,RB,RB,0.41304347826086957,4.0,Questionable,Ankle,not on a week-5 report yet,0.0,none
 TEN,00-0040141,Kevin Winston Jr.,S,DB,0.21355397951142632,4.0,Questionable,Shoulder,not on a week-5 report yet,0.0,none
 TEN,00-0040881,Fernando Carmona,OL,OL,0.0913884007029877,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none

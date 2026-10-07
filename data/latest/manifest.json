@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.9",
   "diagnostics": "v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-06T19:55:00.204401+00:00",
+  "generated_utc": "2026-10-07T17:24:59.181246+00:00",
   "season": 2026,
   "week": 5,
   "config_signature": "61cdea39451eea8454e1d4f2a0410b46fb55fdd72793619138aaccefd435cc2e",
@@ -40,11 +40,11 @@
     {
       "source": "roster_status_codes",
       "counts": {
-        "ACT": 187462,
-        "DEV": 55905,
-        "RES": 37009,
+        "ACT": 187454,
+        "DEV": 55924,
+        "RES": 37016,
         "INA": 23475,
-        "CUT": 17669,
+        "CUT": 17672,
         "RET": 2113,
         "NWT": 604,
         "PUP": 321,
@@ -54,14 +54,17 @@
         "EXE": 144,
         "RSR": 119,
         "TRC": 80,
-        "TRD": 60,
+        "TRD": 61,
         "E14": 28,
-        "TRT": 14,
+        "TRT": 15,
         "RFA": 6,
-        "E01": 4
+        "E01": 4,
+        "W04": 1
       },
-      "unrecognized_counted_as_member": {},
-      "out_by_description": 206
+      "unrecognized_counted_as_member": {
+        "W04": 1
+      },
+      "out_by_description": 207
     },
     {
       "source": "availability_roster_membership",
@@ -75,8 +78,8 @@
       "qb_projected_from_other_team_history": 27,
       "qb_projected_not_last_starter": 146,
       "injury_report_final": 3771,
-      "injury_report_practice_only": 93,
-      "injury_report_none": 36,
+      "injury_report_practice_only": 95,
+      "injury_report_none": 34,
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
