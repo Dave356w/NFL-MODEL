@@ -1,17 +1,44 @@
-"""NFL box-score composite W/L model — v1.11 (production).
+"""NFL box-score composite W/L model — v1.12 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
-v1.11 (NEW experiment, based on v1.10; earlier recipes and ledger untouched):
-hand-curated personnel_events.csv closes the prior-week roster delay for dated
-retirements, trades, waivers, releases and suspensions. Only events strictly
-before the team's schedule gameday count as out; signed/activated are inert.
-This narrow exception uses knowable transaction dates, never same-week roster
-status. Events and schedule dates enter availability cache keys. Team-card
-notes show event label/date even without an injury report. No historical backfill.
+v1.12 (NEW experiment: new REVISION and OUTPUT_NAME, based on v1.11; earlier recipes and
+ledger rows untouched): dated personnel events. A hand-curated data/personnel_events.csv
+closes the prior-week roster delay for dated retirements, trades, waivers, releases and
+suspensions. Only events strictly before the team's schedule gameday count as out;
+signed/activated are inert. This narrow exception uses knowable transaction dates, never
+same-week roster status. Events and schedule dates enter availability cache keys; the event
+rules enter the config signature. Team-card notes show the event label and date even
+without an injury report. No historical backfill, so held-out seasons are unchanged from
+v1.11 (research test 21 applies). The feed is read from the state folder (data/ in
+Actions); a run that cannot find it warns loudly instead of silently dropping the events.
+
+v1.11 (NEW experiment: new REVISION and OUTPUT_NAME; the v1.10 frozen recipe and its
+forward-ledger rows, if any, are left untouched): QB projection follows the depth chart.
+The v1.8 rule projected the available QB who started the team's most recent game, so a
+starter returning from one missed week was replaced by his stand-in (2026 week 5:
+Baker Mayfield missed week 4, TB's chart kept him QB1, the model projected Jalon Daniels).
+  * From DEPTH_CHART_FIRST_SEASON (2025), the projected starter is the highest-ranked
+    QB on the latest timestamped depth chart (nflverse depth_charts, ESPN) that is at
+    least DEPTH_CHART_LEAD_HOURS (24) before kickoff, among QBs who are available
+    (not Out/Doubtful, on the most recent roster before the game) and on its QB list.
+    Charts older than DEPTH_CHART_MAX_AGE_DAYS (7) count as missing. No chart, a
+    stale chart or no available chart QB: the v1.8 start-history rule (audited).
+    Earlier nflverse depth charts are weekly files with no publish time, so they are
+    never used (lookahead risk); seasons before 2025 keep the start-history rule.
+  * A projected starter listed Questionable is projected as an even blend
+    (QB_QUESTIONABLE_START = 0.5) of his efficiency and the next candidate's (next
+    chart QB, else the start-history ranking, else the league backup prior). In
+    2019-2026, incumbents listed Questionable started 64 of 114 times (56%).
+    This applies to every season.
+  * Availability rows record qb_source (depth_chart / start_history / other_team /
+    backup_prior) and qb_depth_chart_utc. Depth charts are a cache-key input.
+  * Backtest on 2025-26 weeks 2-4 (557 team-games where both rules project a QB,
+    approximate availability): the chart rule named the actual starter 95.7% vs 91.0%.
+    Model effect on held-out 2023-25: research test 21.
 
 v1.10 (NEW experiment: new REVISION and OUTPUT_NAME; the v1.9 frozen recipe
 (data/frozen_recipe_2026.json) and its forward-ledger rows are left untouched):
@@ -297,11 +324,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.11'
+REVISION='boxscore-composite-v1.12'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_11'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_12'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -331,7 +358,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -409,10 +436,22 @@ ROSTER_MEMBERSHIP='most recent roster week before the game (week 1: week-1 roste
 MEMBERSHIP_MAX_SHARE=.5   # above this off-roster snap share, treat the roster as a data gap
 AVAIL_WINDOW=4            # team's prior games that define each player's snap share
 CS_MIN_GAMES=2            # _cs family: current-season-only window once a team has this many games
-QB_RULE='available QB on the reference roster QB list who most recently started for the team; else most team dropbacks; else most dropbacks anywhere; else league backup prior. Efficiency from all-team history.'
+QB_RULE=('from DEPTH_CHART_FIRST_SEASON: highest-ranked available QB on the reference roster QB list in the latest '
+         'timestamped depth chart at least DEPTH_CHART_LEAD_HOURS before kickoff (no older than DEPTH_CHART_MAX_AGE_DAYS); '
+         'otherwise, or if no chart QB is available: available QB on the reference roster QB list who most recently started '
+         'for the team; else most team dropbacks; else most dropbacks anywhere; else league backup prior. A projected '
+         'starter listed Questionable is blended with the next candidate (QB_QUESTIONABLE_START). Efficiency from all-team history.')
 NO_QB_LABEL='backup without team dropbacks (league backup prior)'
 QB_HALF_LIFE=8.           # team games
 QB_PRIOR_DROPBACKS=150.   # shrinkage toward backup-level efficiency
+# v1.11 depth chart. Only the timestamped (ESPN) depth charts from 2025 on are used; earlier
+# nflverse depth charts are weekly files with no publish time, so they could carry lookahead.
+DEPTH_CHART_FIRST_SEASON=2025
+DEPTH_CHART_LEAD_HOURS=24.    # latest chart at least this long before kickoff (no game-day inactives)
+DEPTH_CHART_MAX_AGE_DAYS=7.   # an older chart is stale (feed gap): fall back to the start-history rule
+# Probability a projected starter listed Questionable starts. 2019-2026 incumbents (started the
+# team's previous game) listed Questionable started 64 of 114 times (56%); 0.5 is the round coin flip.
+QB_QUESTIONABLE_START=.5
 POS_GROUP={'T':'OL','G':'OL','C':'OL','OL':'OL','OT':'OL','OG':'OL','LT':'OL','RT':'OL','LG':'OL','RG':'OL',
  'WR':'WRTE','TE':'WRTE','RB':'RB','FB':'RB','HB':'RB',
  'DE':'DL','DT':'DL','NT':'DL','DL':'DL','EDGE':'DL','LB':'LB','ILB':'LB','OLB':'LB','MLB':'LB',
@@ -744,6 +783,7 @@ def load_availability(years,season):
             if y<season: df.to_csv(paths[k],index=False)
             out[k].append(df)
     out={k:pd.concat(v,ignore_index=True) for k,v in out.items()}
+    out['depth']=load_depth_charts(years,season)
     out['inj_detail']=pd.concat(detail,ignore_index=True) if detail else pd.DataFrame()
     out['roster_detail']=pd.concat(rdetail,ignore_index=True) if rdetail else pd.DataFrame()
     st=out['rost'].status
@@ -756,6 +796,7 @@ def load_availability(years,season):
     return out
 
 
+PERSONNEL_FILE='personnel_events.csv'
 PERSONNEL_COLUMNS=['event_date','team','gsis_id','player','event','note']
 PERSONNEL_OUT=('retired','traded','waived','released','suspended')
 PERSONNEL_INERT=('signed','activated')
@@ -767,7 +808,15 @@ def load_personnel_events(path=None):
     IDs must be resolved by the curator from weekly rosters/load_player_ids.
     Dates are announcement dates, not inferred from same-week roster statuses.
     """
-    path=Path(path) if path is not None else (Path(STATE_DIR) if STATE_DIR is not None else Path('data'))/'personnel_events.csv'
+    if path is None:
+        # Actions: state_dir() is data/. Colab/Drive: state_dir() is the Drive output folder,
+        # where the committed CSV must be copied; ./data covers a local checkout.
+        found=[c for c in dict.fromkeys((state_dir()/PERSONNEL_FILE,Path('data')/PERSONNEL_FILE)) if c.exists()]
+        path=found[0] if found else state_dir()/PERSONNEL_FILE
+        if not found:
+            print(f'  WARNING: {PERSONNEL_FILE} not found in {state_dir()} or ./data; dated personnel events are NOT '
+                  f'applied (copy the repository\'s data/{PERSONNEL_FILE} there to match the Actions build)')
+    path=Path(path)
     if not path.exists():
         AUDIT.append({'source':'personnel_events','path':str(path),'missing':True,
                       'rows_loaded':0,'out_events':0,'inert_events':0,'duplicates_dropped':0})
@@ -817,6 +866,47 @@ def personnel_out_events(events,team,day):
     if events is None or events.empty or day is None:
         return pd.DataFrame(columns=PERSONNEL_COLUMNS)
     return events[(events.team==team)&events.event.isin(PERSONNEL_OUT)&(events.event_date<day)]
+
+
+DEPTH_COLS=['season','team','dt','gsis_id','player_name','pos_rank']
+
+
+def load_depth_charts(years,season):
+    """QB rows of the timestamped depth charts (DEPTH_CHART_FIRST_SEASON on): one row per
+    snapshot time, team and player, best rank. Completed seasons are cached; the current
+    season reloads every run. A failed download fails open: that season's rows are empty,
+    the QB projection falls back to the start-history rule and the gap is audited, so a
+    depth-chart outage never costs a pregame snapshot."""
+    import nflreadpy as nfl
+    cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True); parts=[]
+    for y in [y for y in years if y>=DEPTH_CHART_FIRST_SEASON]:
+        path=cache/f'avail_depthqb_{y}.csv'
+        if y<season and path.exists():
+            parts.append(pd.read_csv(path,dtype={'gsis_id':str})); continue
+        try:
+            raw=fetch_upstream(lambda:nfl.load_depth_charts(y).to_pandas(),f'depth charts {y}')
+        except Exception as exc:
+            AUDIT.append({'source':'depth_charts','season':int(y),'fallback':'start-history QB rule',
+                          'error':f'{type(exc).__name__}: {str(exc)[:200]}'})
+            print(f'  WARNING: depth charts {y} unavailable ({type(exc).__name__}); QB projection uses the start-history rule')
+            continue
+        d=depth_chart_qbs(raw,y)
+        AUDIT.append({'source':'depth_charts','season':int(y),'qb_rows':len(d),'snapshots':int(d.dt.nunique()),
+                      'latest_utc':str(d.dt.max()) if len(d) else None})
+        if y<season: d.to_csv(path,index=False)
+        parts.append(d)
+    return pd.concat(parts,ignore_index=True) if parts else pd.DataFrame(columns=DEPTH_COLS)
+
+
+def depth_chart_qbs(raw,season):
+    """Quarterback rows of one season's timestamped depth chart (needs the 'dt' column)."""
+    if 'dt' not in raw or not len(raw): return pd.DataFrame(columns=DEPTH_COLS)
+    d=raw[(raw.pos_abb=='QB')&raw.gsis_id.notna()].copy()
+    d['season']=int(season); d=normalize_teams(d)
+    d['dt']=pd.to_datetime(d.dt,utc=True).dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+    d['pos_rank']=pd.to_numeric(d.pos_rank,errors='coerce')
+    d=d.dropna(subset=['pos_rank']).sort_values(['team','dt','pos_rank','gsis_id'])
+    return d.drop_duplicates(['team','dt','gsis_id'])[DEPTH_COLS].reset_index(drop=True)
 
 
 def injury_weights(inj):
@@ -944,7 +1034,7 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
     return out.sort_values(['team','snap_share'],ascending=[True,False]).reset_index(drop=True)
 
 
-def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=None):
+def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=None,gameday=None):
     """One row per (season, week, team) to forecast. Uses the week's injury
     report, the team's most recent roster before the game (status and
     membership; week 1 uses the week-1 roster), and snaps/QB play from earlier
@@ -952,12 +1042,39 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=
     and counts as out. '_cs' unit columns use current-season games only once
     the team has CS_MIN_GAMES of them. 'injury_report' is the week's report
     state: 'final' (a game status is listed), 'practice' (rows, no status) or
-    'none' (nothing published yet). Dated personnel out-events strictly before
-    schedule gameday are a narrow exception to prior-week rosters: transaction
-    dates are knowable, unlike same-week roster-status timing. signed/activated
-    never clear or offset an absence. Optional events/gameday preserve callers."""
+    'none' (nothing published yet).
+    QB projection (v1.11): with a 'kickoff' column in targets and timestamped depth
+    charts in `depth`, the starter is the highest-ranked available QB on the latest
+    chart at least DEPTH_CHART_LEAD_HOURS before kickoff; otherwise the v1.8
+    start-history rule. A projected starter listed Questionable is blended with the
+    next candidate (QB_QUESTIONABLE_START). 'qb_source' records which rule applied.
+    Dated personnel out-events (v1.12) strictly before schedule gameday are a narrow
+    exception to prior-week rosters: transaction dates are knowable, unlike same-week
+    roster-status timing. signed/activated never clear or offset an absence.
+    Optional events/gameday preserve callers."""
     dates=personnel_gamedays(gameday)
     inj=injury_weights(inj)
+    # Questionable and not also listed Out/Doubtful that week.
+    q_status={k:set(g.gsis_id[g.report_status.eq('Questionable')])-set(g.gsis_id[g.weight>=1.])
+              for k,g in inj.groupby(['season','week','team'])}
+    charts={}
+    if depth is not None and len(depth):
+        dd=depth.assign(_t=pd.to_datetime(depth.dt,utc=True)).sort_values(['_t','pos_rank','gsis_id'])
+        charts={(int(sy),tm):g for (sy,tm),g in dd.groupby(['season','team'])}
+    def chart_for(y,t,ko):
+        """Ranked [(gsis_id, name)] of the latest chart at least DEPTH_CHART_LEAD_HOURS before
+        kickoff and its time. (None, None): the chart does not apply (no kickoff, or a season
+        before DEPTH_CHART_FIRST_SEASON). ([], time or None): it applies but is missing or stale."""
+        if ko is None or y<DEPTH_CHART_FIRST_SEASON: return None,None
+        g=charts.get((y,t))
+        if g is None: return [],None
+        cut=ko-pd.Timedelta(hours=DEPTH_CHART_LEAD_HOURS)
+        g=g[g._t<=cut]
+        if not len(g): return [],None
+        last=g._t.iloc[-1]
+        if cut-last>pd.Timedelta(days=DEPTH_CHART_MAX_AGE_DAYS): return [],last
+        snap=g[g._t==last]
+        return list(zip(snap.gsis_id,snap.player_name)),last
     inj_map={k:g.groupby('gsis_id').weight.max().to_dict() for k,g in inj.groupby(['season','week','team'])}
     report_state={k:'final' if (g.report_status.notna()|(g.weight>0)).any() else 'practice'
                   for k,g in inj.groupby(['season','week','team'])}
@@ -999,11 +1116,17 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=
     stats={'team_weeks':0,'no_reference_roster':0,'reference_older_than_prior_week':0,
            'membership_skipped_as_data_gap':0,'qb_projected_from_backup_prior':0,
            'qb_projected_from_other_team_history':0,'qb_projected_not_last_starter':0,
+           'qb_projected_from_depth_chart':0,'qb_depth_chart_missing':0,'qb_depth_chart_no_available_qb':0,
+           'qb_questionable_blend':0,
            'injury_report_final':0,'injury_report_practice_only':0,'injury_report_none':0,
            'window_snaps':0.,'off_roster_snaps':0.}
     rows=[]
-    for r in targets[['season','week','team']].drop_duplicates().itertuples(index=False):
+    tcols=['season','week','team']+(['kickoff'] if 'kickoff' in targets else [])
+    for r in targets[tcols].drop_duplicates(['season','week','team']).itertuples(index=False):
         y,w,t=int(r.season),int(r.week),r.team
+        ko=getattr(r,'kickoff',None)
+        ko=pd.Timestamp(ko) if ko is not None and pd.notna(ko) else None
+        if ko is not None and ko.tzinfo is None: ko=ko.tz_localize('UTC')
         stats['team_weeks']+=1
         ref_week=ref_week_for(y,w,t)
         out=dict(inj_map.get((y,w,t),{}))
@@ -1014,7 +1137,8 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=
         if ref is not None and w>1 and ref_week<w-1: stats['reference_older_than_prior_week']+=1
         rep_state=report_state.get((y,w,t),'none')
         stats['injury_report_'+{'final':'final','practice':'practice_only','none':'none'}[rep_state]]+=1
-        rec={'season':y,'week':w,'team':t,'qb_expected':None,'qb_usual':None,'injury_report':rep_state,
+        rec={'season':y,'week':w,'team':t,'qb_expected':None,'qb_usual':None,'qb_source':None,'qb_depth_chart_utc':None,
+             'injury_report':rep_state,
              'roster_reference_week':ref_week if ref is not None else np.nan,'off_roster_snap_share':np.nan}
         g=by_team.get(t); h=None; hcs=None
         if g is not None:
@@ -1075,26 +1199,44 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=
                 if qbl is not None:
                     if ref is None and not ok.index.isin(qbl).any(): ok=ok[ok.index.isin(starters)]
                     else: ok=ok[ok.index.isin(qbl)]
-                pid=None
-                for c in starters:  # highest-ranked starter among the candidates
-                    if c in ok.index: pid=c; break
-                if pid is None and len(ok): pid=ok.n.idxmax()
-                if pid is not None:
-                    proj,name=float(agg.loc[pid,'eff']),agg.loc[pid,'name']
-                    if not starters or pid!=starters[0]: stats['qb_projected_not_last_starter']+=1
+                # v1.8 start-history ranking: starters by recency, then team dropbacks.
+                ranked=[c for c in starters if c in ok.index]
+                ranked+=[c for c in ok.sort_values('n',ascending=False,kind='stable').index if c not in ranked]
+                # Then available rostered QBs with history elsewhere (e.g. a newly signed starter).
+                other=sorted(((player_history(c,y,w)[0],c) for c in sorted(qbl or ()) if unavail(c)<1. and c not in ranked),reverse=True)
+                order=ranked+[c for n,c in other if n>0]
+                source='start_history' if ranked else 'other_team' if order else 'backup_prior'
+                chart,chart_t=chart_for(y,t,ko); chart_name={}
+                if chart is not None:
+                    elig=[(c,nm) for c,nm in chart if unavail(c)<1.]
+                    if qbl is not None and (ref is not None or any(c in qbl for c,_ in elig)):
+                        elig=[(c,nm) for c,nm in elig if c in qbl]  # same QB-list rule as the history ranking
+                    if elig:
+                        chart_name=dict(elig); cids=list(dict.fromkeys(c for c,_ in elig))
+                        order=cids+[c for c in order if c not in cids]; source='depth_chart'
+                        rec['qb_depth_chart_utc']=chart_t.strftime('%Y-%m-%dT%H:%M:%SZ')
+                    elif chart: stats['qb_depth_chart_no_available_qb']+=1
+                    else: stats['qb_depth_chart_missing']+=1
+                def qname(c):
+                    if c in agg.index: return agg.loc[c,'name']
+                    if c in qb_player: return qb_player[c].sort_values(['season','week'])['name'].iloc[-1]
+                    return chart_name.get(c,c)
+                if order:
+                    pid=order[0]; proj,name=eff(pid),qname(pid)
+                    if source=='other_team': stats['qb_projected_from_other_team_history']+=1
+                    elif not starters or pid!=starters[0]: stats['qb_projected_not_last_starter']+=1
+                    if source=='depth_chart': stats['qb_projected_from_depth_chart']+=1
+                    if pid in q_status.get((y,w,t),()):
+                        # Questionable starter: a coin flip between him and the next candidate
+                        # (the league backup prior when there is none).
+                        alt=order[1] if len(order)>1 else None
+                        alt_eff,alt_name=(eff(alt),qname(alt)) if alt is not None else (prior,NO_QB_LABEL)
+                        proj=QB_QUESTIONABLE_START*proj+(1-QB_QUESTIONABLE_START)*alt_eff
+                        name=f'{name} (Q) / {alt_name}'; stats['qb_questionable_blend']+=1
                 else:
-                    # No candidate in the team's history (e.g. a newly signed starter): the available
-                    # rostered QB with the most recent-weighted dropbacks for any team.
-                    other=[(player_history(c,y,w)[0],c) for c in sorted(qbl or ()) if unavail(c)<1.]
-                    other=[(n,c) for n,c in other if n>0]
-                    if other:
-                        n,pid=max(other)
-                        proj=eff(pid); stats['qb_projected_from_other_team_history']+=1
-                        name=qb_player[pid].sort_values(['season','week'])['name'].iloc[-1]
-                    else:
-                        proj,name=prior,NO_QB_LABEL; stats['qb_projected_from_backup_prior']+=1
+                    proj,name=prior,NO_QB_LABEL; stats['qb_projected_from_backup_prior']+=1
                 rec['qb_delta']=proj-mix
-                rec['qb_expected']=name
+                rec['qb_expected']=name; rec['qb_source']=source
         rows.append(rec)
     if audit is not None:
         audit.append({'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**stats,
@@ -1103,6 +1245,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,events=None,gameday=
 
 AVAIL_STAT_KEYS=('team_weeks','no_reference_roster','reference_older_than_prior_week','membership_skipped_as_data_gap',
                  'qb_projected_from_backup_prior','qb_projected_from_other_team_history','qb_projected_not_last_starter',
+                 'qb_projected_from_depth_chart','qb_depth_chart_missing','qb_depth_chart_no_available_qb','qb_questionable_blend',
                  'injury_report_final','injury_report_practice_only','injury_report_none','window_snaps','off_roster_snaps')
 
 
@@ -1114,7 +1257,7 @@ def combine_avail_stats(stats):
     return {'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**tot}
 
 
-def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,events=None,gameday=None):
+def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None,events=None,gameday=None):
     """availability_table for every season, reading completed seasons from a
     per-season cache keyed on the config signature and all inputs the season
     can touch. The current season is always rebuilt. Returns (table, info)."""
@@ -1127,12 +1270,13 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,events=None,
         return df[(df.season>=y-MAX_HISTORY_SEASONS)&(df.season<=y)].sort_values(list(df.columns)[:4]).reset_index(drop=True)
     parts=[]; stats=[]; info={'cached_seasons':[],'rebuilt_seasons':[]}
     for y in sorted(int(v) for v in targets.season.unique()):
-        t=targets[targets.season==y][['season','week','team']].drop_duplicates().sort_values(['week','team']).reset_index(drop=True)
+        t=targets[targets.season==y][['season','week','team']+(['kickoff'] if 'kickoff' in targets else [])]
+        t=t.drop_duplicates(['season','week','team']).sort_values(['week','team']).reset_index(drop=True)
         if y>=season:
-            st=[]; parts.append(availability_table(t,qb,snaps,inj,rost,audit=st,events=events,gameday=dates)); stats+=st
+            st=[]; parts.append(availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth,events=events,gameday=dates)); stats+=st
             info['rebuilt_seasons'].append(y); continue
         h=hashlib.sha256((REVISION+sig).encode()); h.update(data_hash(t).encode())
-        for df in (qb,snaps,inj,rost): h.update(data_hash(window(df,y)).encode())
+        for df in (qb,snaps,inj,rost,depth): h.update(data_hash(window(df,y)).encode())
         h.update(data_hash(event_frame).encode())
         h.update(json.dumps(sorted((k,str(v)) for k,v in dates.items() if k[0]==y)).encode())
         path=cache/f'avail_features_{y}_{h.hexdigest()[:16]}.pkl'; meta=path.with_suffix('.json')
@@ -1142,7 +1286,7 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,events=None,
                 df=pd.read_pickle(path); st=[json.loads(meta.read_text())['stats']]
             except Exception: df=None  # unreadable (e.g. pandas version change): rebuild
         if df is None:
-            st=[]; df=availability_table(t,qb,snaps,inj,rost,audit=st,events=events,gameday=dates)
+            st=[]; df=availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth,events=events,gameday=dates)
             for old in cache.glob(f'avail_features_{y}_*'):
                 if old.stem!=path.stem: old.unlink()
             df.to_pickle(path); dump(meta,{'revision':REVISION,'season':y,'stats':st[0],'created_utc':now_utc().isoformat()})
@@ -1151,7 +1295,7 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,events=None,
         parts.append(df); stats+=st
     if audit is not None: audit.append({**combine_avail_stats(stats),**info})
     out=pd.concat(parts,ignore_index=True)
-    for c in ('qb_expected','qb_usual','injury_report'):  # same dtype and missing marker however seasons were combined
+    for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report'):  # same dtype and missing marker however seasons were combined
         out[c]=out[c].astype(object).where(out[c].notna(),None)
     return out,info
 
@@ -1888,7 +2032,12 @@ def config_signature():
                   'qb_half_life':QB_HALF_LIFE,'qb_prior':QB_PRIOR_DROPBACKS,'pos_group':POS_GROUP,
                   'roster_membership':ROSTER_MEMBERSHIP,'membership_max_share':MEMBERSHIP_MAX_SHARE,
                   'roster_out_desc_prefix':ROSTER_OUT_DESC_PREFIX,'injury_cache':'raw report_status',
-                  'family_cols':AVAIL_FAMILY_COLS,'cs_min_games':CS_MIN_GAMES,'qb_rule':QB_RULE},
+                  'family_cols':AVAIL_FAMILY_COLS,'cs_min_games':CS_MIN_GAMES,'qb_rule':QB_RULE,
+                  'depth_chart':{'first_season':DEPTH_CHART_FIRST_SEASON,'lead_hours':DEPTH_CHART_LEAD_HOURS,
+                                 'max_age_days':DEPTH_CHART_MAX_AGE_DAYS,'source':'nflverse depth_charts (ESPN, timestamped)'},
+                  'qb_questionable_start':QB_QUESTIONABLE_START,
+                  'personnel_events':{'out':PERSONNEL_OUT,'inert':PERSONNEL_INERT,
+                                      'rule':'event_date strictly before the team schedule gameday'}},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
          'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION}}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
@@ -1925,6 +2074,19 @@ def kickoff_utc(row):
         naive=dt.datetime.fromisoformat(str(row['gameday'])+'T'+str(row['gametime']))
         return naive.replace(tzinfo=ZoneInfo('America/New_York')).astimezone(dt.timezone.utc)
     except (ValueError,TypeError): return None
+
+
+def availability_targets(schedules):
+    """One row per scheduled team-game: season, week, team, gameday (schedule date, for the
+    v1.12 personnel-event rule) and kickoff (UTC ISO text; None when the schedule has no
+    kickoff time, which disables the depth-chart rule)."""
+    ko=[kickoff_utc(r) for r in schedules.to_dict('records')]
+    ko=[k.strftime('%Y-%m-%dT%H:%M:%SZ') if k is not None else None for k in ko]
+    base=schedules[['season','week','home_team','away_team']].assign(kickoff=ko)
+    base['gameday']=schedules['gameday'] if 'gameday' in schedules else None
+    cols=['season','week','gameday','kickoff']
+    return pd.concat([base[cols+['home_team']].rename(columns={'home_team':'team'}),
+                      base[cols+['away_team']].rename(columns={'away_team':'team'})],ignore_index=True)
 
 
 def injury_reports_ready(r,ko,asof):
@@ -2407,9 +2569,9 @@ def main():
         print('  Player availability: injury reports, weekly rosters, snap counts')
         a=load_availability(years,season)
         events=load_personnel_events()
-        targets=pd.concat([schedules[['season','week','gameday','home_team']].rename(columns={'home_team':'team'}),
-                           schedules[['season','week','gameday','away_team']].rename(columns={'away_team':'team'})])
-        avail,ainfo=availability_cached(targets,qb,a['snaps'],a['inj'],a['rost'],season,audit=AUDIT,events=events,gameday=targets)
+        targets=availability_targets(schedules)  # kickoff (v1.11 depth chart) and gameday (v1.12 personnel events)
+        avail,ainfo=availability_cached(targets,qb,a['snaps'],a['inj'],a['rost'],season,
+                                        audit=AUDIT,depth=a.get('depth'),events=events,gameday=targets)
         print(f'  Availability features: {len(ainfo["cached_seasons"])} completed seasons from cache, '
               f'rebuilt {", ".join(map(str,ainfo["rebuilt_seasons"])) or "none"}')
         save(avail,'availability_features.csv')
@@ -2423,6 +2585,13 @@ def main():
               f'{mem["reference_older_than_prior_week"]} using an older (post-bye) roster, '
               f'{mem["qb_projected_from_backup_prior"]} QB projections from the backup prior, '
               f'{mem["qb_projected_from_other_team_history"]} from history with another team')
+        print(f'  QB projection: {mem["qb_projected_from_depth_chart"]} team-weeks from the depth chart '
+              f'({mem["qb_depth_chart_missing"]} with no fresh chart, {mem["qb_depth_chart_no_available_qb"]} with no available chart QB), '
+              f'{mem["qb_questionable_blend"]} questionable-starter blends')
+        nochart=cr[(cr.season>=DEPTH_CHART_FIRST_SEASON)&(cr.qb_source!='depth_chart')&cr.qb_source.notna()]
+        if len(nochart):
+            print(f'  Note: week {cur} QB projection not from the depth chart for '
+                  f'{", ".join(f"{t} ({src})" for t,src in zip(nochart.team,nochart.qb_source))}')
         pend=cr[cr.injury_report!='final']
         if len(pend):
             print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
@@ -2526,8 +2695,11 @@ def main():
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
                    'no game-day inactives or late-week news',
                    'roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)',
-                   'QB projection: most recent starter among available rostered QBs (week 1: most starts last season); '
-                   'a newly signed starter is projected only when no rostered QB has team history',
+                   'QB projection: highest-ranked available QB on the timestamped depth chart >= 24h before kickoff '
+                   '(2025 on; earlier seasons and chart gaps: most recent starter among available rostered QBs, '
+                   'week 1: most starts last season); a Questionable starter is a 50/50 blend with the next QB',
+                   'depth charts before 2025 have no publish time and are not used, so the QB rule differs '
+                   'between training seasons (start history) and 2025 on (depth chart)',
                    'unit availability measures fresh absences; returns and arrivals do not offset them',
                    'forward ledger waits for final injury reports (game statuses) for both teams']
                   if uses_avail else ['no live starters/injuries in the selected recipe'])
@@ -2806,6 +2978,79 @@ def _self_test():
     aud=[]
     av10=availability_table(tg,gad,sn,inj2,roster(('qb','w1'),reserve=()),audit=aud).iloc[0]
     assert aud[-1]['membership_skipped_as_data_gap']==1 and av10.qb_expected=='Backup'
+    # v1.11 depth chart. The starter missed week 4 (the backup started) and is healthy for week 5:
+    # the start-history rule projects the backup; a chart that still ranks the starter first projects him.
+    miss=qbt[~((qbt.week==4)&(qbt.gsis_id=='qa'))].copy()
+    miss.loc[(miss.week==4)&(miss.gsis_id=='qb'),['dropbacks','net_yards','leader','starter']]=[35,140.,True,True]
+    ko=pd.Timestamp('2020-10-11T17:00:00Z'); tgk=tg.assign(kickoff=ko.strftime('%Y-%m-%dT%H:%M:%SZ'))
+    chart=lambda when,ranks,season=2020:pd.DataFrame([{'season':season,'team':'T','dt':when.strftime('%Y-%m-%dT%H:%M:%SZ'),
+        'gsis_id':g,'player_name':f'Chart {g}','pos_rank':k} for k,g in enumerate(ranks,1)])
+    fri=chart(ko-pd.Timedelta(hours=44),['qa','qb'])
+    old_first=globals()['DEPTH_CHART_FIRST_SEASON']; globals()['DEPTH_CHART_FIRST_SEASON']=2020
+    try:
+        hist=availability_table(tgk,miss,sn,inj,rost).iloc[0]
+        assert hist.qb_expected=='Backup' and hist.qb_source=='start_history' and hist.qb_depth_chart_utc is None
+        aud=[]
+        dc=availability_table(tgk,miss,sn,inj,rost,audit=aud,depth=fri).iloc[0]
+        assert dc.qb_expected=='Starter' and dc.qb_usual=='Backup' and dc.qb_source=='depth_chart'
+        assert dc.qb_depth_chart_utc==fri.dt.iloc[0] and dc.qb_delta>hist.qb_delta+.5
+        assert aud[-1]['qb_projected_from_depth_chart']==1 and aud[-1]['qb_projected_not_last_starter']==1
+        # No lookahead: a chart inside DEPTH_CHART_LEAD_HOURS of kickoff (game-day news) is ignored.
+        late=pd.concat([fri,chart(ko-pd.Timedelta(hours=3),['qb','qa'])])
+        assert availability_table(tgk,miss,sn,inj,rost,depth=late).iloc[0].qb_expected=='Starter'
+        assert availability_table(tgk,miss,sn,inj,rost,depth=chart(ko-pd.Timedelta(hours=3),['qa','qb'])).iloc[0].qb_expected=='Backup'
+        # Stale chart (feed gap): fall back to the start-history rule, audited.
+        aud=[]
+        st_=availability_table(tgk,miss,sn,inj,rost,audit=aud,depth=chart(ko-pd.Timedelta(days=10),['qa','qb'])).iloc[0]
+        assert st_.qb_expected=='Backup' and st_.qb_source=='start_history' and aud[-1]['qb_depth_chart_missing']==1
+        # The chart's QB1 ruled out (Doubtful): the next available chart QB.
+        d2=availability_table(tgk,miss,sn,inj2,rost,depth=fri).iloc[0]
+        assert d2.qb_expected=='Backup' and d2.qb_source=='depth_chart'
+        # The chart's QB1 is not on the reference roster (departed): skipped like any departed player.
+        d3=availability_table(tgk,miss,sn,inj,roster(('p0','p1','p3','p4','qb','w1')),depth=fri).iloc[0]
+        assert d3.qb_expected=='Backup'
+        # Every chart QB unavailable: start-history rule, audited.
+        aud=[]
+        d4=availability_table(tgk,miss,sn,inj,rost,audit=aud,depth=chart(ko-pd.Timedelta(hours=44),['zz'])).iloc[0]
+        assert d4.qb_source=='start_history' and aud[-1]['qb_depth_chart_no_available_qb']==1
+        # A chart QB with no NFL dropbacks (rookie on the roster QB list): projected at the backup prior.
+        rk=pd.concat([rost,pd.DataFrame([{'season':2020,'week':4,'team':'T','gsis_id':'r1','position':'QB','status':'ACT'}])])
+        d5=availability_table(tgk,miss,sn,inj,rk,depth=chart(ko-pd.Timedelta(hours=44),['r1','qa'])).iloc[0]
+        assert d5.qb_expected=='Chart r1' and d5.qb_source=='depth_chart' and d5.qb_delta<dc.qb_delta-.5
+        # The chart does not apply without a kickoff time or before DEPTH_CHART_FIRST_SEASON.
+        assert availability_table(tg,miss,sn,inj,rost,depth=fri).iloc[0].qb_expected=='Backup'
+        globals()['DEPTH_CHART_FIRST_SEASON']=2021
+        aud=[]
+        assert availability_table(tgk,miss,sn,inj,rost,audit=aud,depth=fri).iloc[0].qb_expected=='Backup'
+        assert aud[-1]['qb_depth_chart_missing']==0
+    finally:
+        globals()['DEPTH_CHART_FIRST_SEASON']=old_first
+    # Questionable projected starter: an even blend with the next candidate (positive), not a
+    # hard switch; Questionable plus Out on the same report counts as out (negative).
+    q_inj=pd.concat([inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qa','report_status':'Questionable'}])])
+    aud=[]
+    aq=availability_table(tg,qbt,sn,q_inj,rost,audit=aud).iloc[0]
+    assert aq.qb_expected=='Starter (Q) / Backup' and aud[-1]['qb_questionable_blend']==1
+    assert np.isclose(aq.qb_delta,QB_QUESTIONABLE_START*av.qb_delta+(1-QB_QUESTIONABLE_START)*av2.qb_delta)
+    qo=pd.concat([q_inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qa','report_status':'Out'}])])
+    assert availability_table(tg,qbt,sn,qo,rost).iloc[0].qb_expected=='Backup'
+    # A Questionable backup changes nothing; a Questionable starter with no other QB blends with the backup prior.
+    qbk=pd.concat([inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qb','report_status':'Questionable'}])])
+    assert availability_table(tg,qbt,sn,qbk,rost).iloc[0].qb_expected=='Starter'
+    solo=availability_table(tg,qbt,sn,q_inj,roster(('p0','p1','p3','p4','qa','w1'))).iloc[0]
+    assert solo.qb_expected==f'Starter (Q) / {NO_QB_LABEL}' and np.isclose(solo.qb_delta,.5*av.qb_delta+.5*av6.qb_delta)
+    # Depth-chart loader: QB rows with a GSIS id, best rank per snapshot and player, team aliases, UTC text.
+    raw=pd.DataFrame({'dt':['2025-10-01T06:00:00Z']*4+['2025-10-02T06:00:00Z'],'team':['OAK','OAK','OAK','OAK','LV'],
+                      'player_name':['A','A','B','C','A'],'gsis_id':['a','a',None,'c','a'],'pos_abb':['QB','QB','QB','WR','QB'],
+                      'pos_rank':[2,1,3,1,1]})
+    dq=depth_chart_qbs(raw,2025)
+    assert dq[['team','gsis_id','pos_rank']].values.tolist()==[['LV','a',1],['LV','a',1]] and dq.dt.tolist()==['2025-10-01T06:00:00Z','2025-10-02T06:00:00Z']
+    assert depth_chart_qbs(raw.drop(columns='dt'),2024).empty
+    # Kickoffs for the availability targets: US/Eastern schedule times in UTC; no time, no kickoff.
+    at=availability_targets(pd.DataFrame({'season':[2020,2020],'week':[5,5],'home_team':['H','J'],'away_team':['A','B'],
+                                          'gameday':['2020-10-08','2020-10-11'],'gametime':['20:15',None]}))
+    assert at.kickoff.isna().tolist()==[False,True,False,True] and at.team.tolist()==['H','J','A','B']
+    assert (at.kickoff[[0,2]]=='2020-10-09T00:15:00Z').all()
     assert 'd__avail__OL_out_cs' in feature_names('rates_core_avail_cs') and 'd__avail__OL_out' not in feature_names('rates_core_avail_cs')
     # v1.7 family: opponent-adjusted core stats plus the current-season availability columns, nothing else.
     fa=feature_names('rates_core_adj_avail_cs')
@@ -2818,7 +3063,7 @@ def _self_test():
         globals()['OUTPUT_ROOT']=Path(tmp)
         try:
             direct_aud=[]; direct=availability_table(tg2,qbt,sn,inj,rost,audit=direct_aud)
-            for c in ('qb_expected','qb_usual','injury_report'): direct[c]=direct[c].astype(object).where(direct[c].notna(),None)
+            for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report'): direct[c]=direct[c].astype(object).where(direct[c].notna(),None)
             a1,i1=availability_cached(tg2,qbt,sn,inj,rost,2020,audit=(aud1:=[]))
             a2,i2=availability_cached(tg2,qbt,sn,inj,rost,2020,audit=(aud2:=[]))
             key=['season','week','team']
@@ -2829,6 +3074,10 @@ def _self_test():
             inj3=pd.concat([inj,pd.DataFrame([{'season':2019,'week':4,'team':'T','gsis_id':'p1','report_status':'Out'}])])
             _,i3=availability_cached(tg2,qbt,sn,inj3,rost,2020)
             assert i3['rebuilt_seasons']==[2019,2020] and len(list(Path(tmp,'cache').glob('avail_features_2019_*.pkl')))==1
+            dep=pd.DataFrame([{'season':2019,'team':'T','dt':'2019-09-01T00:00:00Z','gsis_id':'qa','player_name':'A','pos_rank':1}])
+            _,i4=availability_cached(tg2,qbt,sn,inj3,rost,2020,depth=dep)  # depth charts are an input of the cache key
+            _,i5=availability_cached(tg2,qbt,sn,inj3,rost,2020,depth=dep)
+            assert i4['rebuilt_seasons']==[2019,2020] and i5['cached_seasons']==[2019]
         finally:
             globals()['OUTPUT_ROOT']=old_root
     assert 'd__avail__qb_delta' in feature_names('rates_core_avail')
@@ -3026,7 +3275,7 @@ def _self_test():
                 assert ('Profiles are opponent-adjusted.' in h)==adj and ('No explicit opponent-strength adjustment.' in h)==(not adj)
             (Path(tmp)/'board.html').write_text(html,encoding='utf-8')
             Path('selftest_board.html').write_text(html,encoding='utf-8')
-        print('PASS: box-score definitions, same-game/future-stat exclusion, point margin (v1.10), roster membership, departed players, bye weeks, '
+        print('PASS: box-score definitions, same-game/future-stat exclusion, point margin (v1.10), depth-chart QB projection and questionable blend (v1.11), roster membership, departed players, bye weeks, '
               'QB-position projection, starter-based QB projection (benching, mid-game injury, week 1, new signing, data gap), '
               'injury-report gate, raw-status weights, roster status codes, current-season window, opponent-adjusted availability family, market blend, '
               'matched-band calibration and pick records, Drive migration, availability cache, '

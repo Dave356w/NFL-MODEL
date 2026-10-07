@@ -165,3 +165,32 @@ def test_loader_accepts_arrow_string_input(tmp_path,monkeypatch):
     loaded=m.load_personnel_events(p)
     assert loaded.event_date.dtype==object
     assert loaded.iloc[0].event_date==dt.date(2026,10,9)
+
+
+def test_default_path_uses_state_dir_for_colab(tmp_path, monkeypatch, capsys):
+    # Colab/Drive: STATE_DIR is None and state_dir() is the output folder; the feed there is used.
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(m, 'STATE_DIR', None)
+    monkeypatch.setattr(m, 'OUTPUT_ROOT', tmp_path / 'drive_out')
+    (tmp_path / 'drive_out').mkdir()
+    (tmp_path / 'drive_out' / m.PERSONNEL_FILE).write_text(
+        'event_date,team,gsis_id,player,event,note\n2026-10-06,PHI,00-0030561,Lane Johnson,retired,x\n')
+    out = m.load_personnel_events()
+    assert len(out) == 1 and m.AUDIT[-1]['path'].endswith(m.PERSONNEL_FILE) and not m.AUDIT[-1]['missing']
+    assert 'WARNING' not in capsys.readouterr().out
+
+
+def test_default_path_missing_warns_loudly(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(m, 'STATE_DIR', None)
+    monkeypatch.setattr(m, 'OUTPUT_ROOT', tmp_path / 'drive_out')
+    out = m.load_personnel_events()
+    assert out.empty and m.AUDIT[-1]['missing']
+    assert 'NOT applied' in capsys.readouterr().out
+
+
+def test_availability_targets_carry_gameday():
+    sched = pd.DataFrame({'season': [2026], 'week': [5], 'home_team': ['DAL'], 'away_team': ['TB'],
+                          'gameday': ['2026-10-08'], 'gametime': ['20:15']})
+    t = m.availability_targets(sched)
+    assert t.gameday.tolist() == ['2026-10-08'] * 2 and m.personnel_gamedays(t)[(2026, 5, 'TB')].isoformat() == '2026-10-08'

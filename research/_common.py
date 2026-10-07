@@ -41,15 +41,14 @@ def load_inputs(cache_dir):
     box = m.validate_boxes(pd.concat(boxes, ignore_index=True))
     qb = pd.concat(qbs, ignore_index=True)
     a = m.load_availability(years, SEASON)
-    targets = pd.concat([sched[['season', 'week', 'home_team']].rename(columns={'home_team': 'team'}),
-                         sched[['season', 'week', 'away_team']].rename(columns={'away_team': 'team'})])
+    targets = m.availability_targets(sched)  # with kickoffs, for the v1.11 depth-chart rule
     log('inputs loaded')
     return {'sched': sched, 'box': box, 'qb': qb, 'a': a, 'targets': targets}
 
 
 def availability(inp):
     a = inp['a']
-    return m.availability_table(inp['targets'], inp['qb'], a['snaps'], a['inj'], a['rost'])
+    return m.availability_table(inp['targets'], inp['qb'], a['snaps'], a['inj'], a['rost'], depth=a.get('depth'))
 
 
 def grid(inp, avail, families, label):
