@@ -1,22 +1,23 @@
 {
-  "revision": "boxscore-composite-v1.9",
-  "diagnostics": "v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-07T17:24:59.181246+00:00",
+  "revision": "boxscore-composite-v1.10",
+  "diagnostics": "v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
+  "generated_utc": "2026-10-07T17:37:52.906240+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "61cdea39451eea8454e1d4f2a0410b46fb55fdd72793619138aaccefd435cc2e",
+  "config_signature": "2f3a759847e08c418bba813d2630124e3261f1e4b1795eeced43d1462b7c65ce",
   "recipe": {
-    "family": "rates_core_avail_cs",
+    "family": "rates_core_avail_cs_margin",
     "half_life": 8.0,
     "ridge": 0.1
   },
-  "market_blend_verdict": "Composite weight -0.121 (95% -0.560 to +0.264): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0004 log loss per game (95% -0.0028 to +0.0020; positive means the blend beat the market).",
+  "market_blend_verdict": "Composite weight -0.093 (95% -0.531 to +0.307): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0005 log loss per game (95% -0.0032 to +0.0021; positive means the blend beat the market).",
   "limitations": [
     "box score definitions approximate some official totals",
     "no explicit opponent-strength adjustment",
     "game-state effects in full-game statistics",
     "design chosen after historical results reviewed; development evaluation, not untouched test",
-    "v1.1-v1.9 changes applied after v1 results were seen",
+    "v1.1-v1.10 changes applied after v1 results were seen",
+    "point margin input (v1.10) chosen after the 2023-25 held-out seasons were seen",
     "game-bootstrap intervals omit selection and serial-dependence uncertainty",
     "availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; no game-day inactives or late-week news",
     "roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)",
@@ -83,16 +84,15 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }

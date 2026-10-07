@@ -1,0 +1,772 @@
+{
+  "revision": "boxscore-composite-v1.10",
+  "created_utc": "2026-10-07T17:44:36.471720+00:00",
+  "season": 2026,
+  "recipe": {
+    "family": "rates_core_avail_cs_margin",
+    "half_life": 8.0,
+    "ridge": 0.1
+  },
+  "config_signature": "2f3a759847e08c418bba813d2630124e3261f1e4b1795eeced43d1462b7c65ce",
+  "config": {
+    "revision": "boxscore-composite-v1.10",
+    "candidates": [
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 10.0
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 10.0
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 10.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 4.0,
+        "ridge": 10.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 8.0,
+        "ridge": 10.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 0.01
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 0.1
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 1.0
+      },
+      {
+        "family": "rates_core_adj_avail_cs_margin",
+        "half_life": 16.0,
+        "ridge": 10.0
+      }
+    ],
+    "fit_half_life_seasons": 2.0,
+    "offseason_retention": 0.5,
+    "prior_games": 4.0,
+    "max_history_seasons": 3,
+    "min_history": 4,
+    "min_train": 150,
+    "one_se": 1.0,
+    "selection_rule": "min_log_loss",
+    "families": [
+      "rates_core_avail_cs_margin",
+      "rates_core_adj_avail_cs_margin"
+    ],
+    "rates_core": {
+      "plays_per_game": [
+        "plays",
+        null,
+        1.0
+      ],
+      "net_pass_yards_per_pass_play": [
+        "net_pass_yards",
+        "pass_plays",
+        1.0
+      ],
+      "rush_yards_per_attempt": [
+        "rush_yards",
+        "rush_attempts",
+        1.0
+      ],
+      "first_down_rate": [
+        "first_downs",
+        "plays",
+        100.0
+      ],
+      "fumbles_lost_per_game": [
+        "fumbles_lost",
+        null,
+        1.0
+      ],
+      "interception_pct": [
+        "interceptions",
+        "pass_attempts",
+        100.0
+      ],
+      "sacks_taken_pct": [
+        "sacks_taken",
+        "pass_plays",
+        100.0
+      ],
+      "penalty_yards_per_game": [
+        "penalty_yards",
+        null,
+        1.0
+      ]
+    },
+    "backtest_first": 2021,
+    "warmup_seasons": 2,
+    "redundant_allowed": [
+      "possession_minutes",
+      "possession_share_pct"
+    ],
+    "adjusted_families": {
+      "rates_core_adj": "rates_core"
+    },
+    "avail": {
+      "families": {
+        "rates_core_avail": "rates_core",
+        "rates_core_avail_cs": "rates_core",
+        "rates_core_adj_avail_cs": "rates_core_adj",
+        "rates_core_avail_cs_margin": "rates_core",
+        "rates_core_adj_avail_cs_margin": "rates_core_adj"
+      },
+      "status_weight": {
+        "Out": 1.0,
+        "Doubtful": 1.0,
+        "Questionable": 0.25
+      },
+      "roster_out": [
+        "RES",
+        "CUT",
+        "TRD",
+        "RET",
+        "EXE",
+        "E01",
+        "SUS",
+        "PUP",
+        "RSN",
+        "NWT",
+        "UFA",
+        "RFA",
+        "RSR",
+        "E14",
+        "TRT",
+        "TRC"
+      ],
+      "window": 4,
+      "qb_half_life": 8.0,
+      "qb_prior": 150.0,
+      "pos_group": {
+        "T": "OL",
+        "G": "OL",
+        "C": "OL",
+        "OL": "OL",
+        "OT": "OL",
+        "OG": "OL",
+        "LT": "OL",
+        "RT": "OL",
+        "LG": "OL",
+        "RG": "OL",
+        "WR": "WRTE",
+        "TE": "WRTE",
+        "RB": "RB",
+        "FB": "RB",
+        "HB": "RB",
+        "DE": "DL",
+        "DT": "DL",
+        "NT": "DL",
+        "DL": "DL",
+        "EDGE": "DL",
+        "LB": "LB",
+        "ILB": "LB",
+        "OLB": "LB",
+        "MLB": "LB",
+        "CB": "DB",
+        "S": "DB",
+        "FS": "DB",
+        "SS": "DB",
+        "DB": "DB",
+        "SAF": "DB"
+      },
+      "roster_membership": "most recent roster week before the game (week 1: week-1 roster); off-roster players count as out",
+      "membership_max_share": 0.5,
+      "roster_out_desc_prefix": [
+        "R",
+        "W"
+      ],
+      "injury_cache": "raw report_status",
+      "family_cols": {
+        "rates_core_avail": [
+          "qb_delta",
+          "OL_out",
+          "WRTE_out",
+          "RB_out",
+          "DL_out",
+          "LB_out",
+          "DB_out"
+        ],
+        "rates_core_avail_cs": [
+          "qb_delta",
+          "OL_out_cs",
+          "WRTE_out_cs",
+          "RB_out_cs",
+          "DL_out_cs",
+          "LB_out_cs",
+          "DB_out_cs"
+        ],
+        "rates_core_adj_avail_cs": [
+          "qb_delta",
+          "OL_out_cs",
+          "WRTE_out_cs",
+          "RB_out_cs",
+          "DL_out_cs",
+          "LB_out_cs",
+          "DB_out_cs"
+        ],
+        "rates_core_avail_cs_margin": [
+          "qb_delta",
+          "OL_out_cs",
+          "WRTE_out_cs",
+          "RB_out_cs",
+          "DL_out_cs",
+          "LB_out_cs",
+          "DB_out_cs"
+        ],
+        "rates_core_adj_avail_cs_margin": [
+          "qb_delta",
+          "OL_out_cs",
+          "WRTE_out_cs",
+          "RB_out_cs",
+          "DL_out_cs",
+          "LB_out_cs",
+          "DB_out_cs"
+        ]
+      },
+      "cs_min_games": 2,
+      "qb_rule": "available QB on the reference roster QB list who most recently started for the team; else most team dropbacks; else most dropbacks anywhere; else league backup prior. Efficiency from all-team history."
+    },
+    "adjust_age": "league week-slots",
+    "rates": {
+      "plays_per_game": [
+        "plays",
+        null,
+        1.0
+      ],
+      "yards_per_play": [
+        "net_yards",
+        "plays",
+        1.0
+      ],
+      "net_pass_yards_per_pass_play": [
+        "net_pass_yards",
+        "pass_plays",
+        1.0
+      ],
+      "rush_yards_per_attempt": [
+        "rush_yards",
+        "rush_attempts",
+        1.0
+      ],
+      "first_down_rate": [
+        "first_downs",
+        "plays",
+        100.0
+      ],
+      "third_down_pct": [
+        "third_converted",
+        "third_attempts",
+        100.0
+      ],
+      "fumbles_lost_per_game": [
+        "fumbles_lost",
+        null,
+        1.0
+      ],
+      "interception_pct": [
+        "interceptions",
+        "pass_attempts",
+        100.0
+      ],
+      "sacks_taken_pct": [
+        "sacks_taken",
+        "pass_plays",
+        100.0
+      ],
+      "penalties_per_game": [
+        "penalties",
+        null,
+        1.0
+      ],
+      "penalty_yards_per_game": [
+        "penalty_yards",
+        null,
+        1.0
+      ],
+      "possession_share_pct": [
+        "top_seconds",
+        "game_seconds",
+        100.0
+      ]
+    },
+    "totals": {
+      "plays": [
+        "plays",
+        null,
+        1.0
+      ],
+      "yards_per_play": [
+        "net_yards",
+        "plays",
+        1.0
+      ],
+      "passing_yards_net": [
+        "net_pass_yards",
+        null,
+        1.0
+      ],
+      "rushing_yards": [
+        "rush_yards",
+        null,
+        1.0
+      ],
+      "first_downs": [
+        "first_downs",
+        null,
+        1.0
+      ],
+      "third_down_pct": [
+        "third_converted",
+        "third_attempts",
+        100.0
+      ],
+      "fumbles_lost": [
+        "fumbles_lost",
+        null,
+        1.0
+      ],
+      "interceptions": [
+        "interceptions",
+        null,
+        1.0
+      ],
+      "sacks_taken": [
+        "sacks_taken",
+        null,
+        1.0
+      ],
+      "penalties": [
+        "penalties",
+        null,
+        1.0
+      ],
+      "penalty_yards": [
+        "penalty_yards",
+        null,
+        1.0
+      ],
+      "possession_minutes": [
+        "top_seconds",
+        null,
+        0.016666666666666666
+      ]
+    },
+    "margin": {
+      "families": [
+        "rates_core_avail_cs_margin",
+        "rates_core_adj_avail_cs_margin"
+      ],
+      "feature": "d__margin",
+      "definition": "official schedule result of each prior game in the team box-score history; same team-game decay, offseason retention and history window as the stat profiles; PRIOR_EQUIVALENT_GAMES pseudo-games at zero"
+    }
+  },
+  "selection_max_season": 2025,
+  "selection_data_sha256": "42b6a8e6fb4f430a73d6a7effae8b4972891096183f374c5c1dd40a7726570ec",
+  "selection_scores": [
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 0.1,
+      "key": "rates_core_avail_cs_margin_h8_r0.1",
+      "log loss": 0.6360864949652942,
+      "LL worse than minimum": 0.0,
+      "paired season SE": 0.0,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": true
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 0.1,
+      "key": "rates_core_adj_avail_cs_margin_h8_r0.1",
+      "log loss": 0.6361881141455537,
+      "LL worse than minimum": 0.00010161918025946376,
+      "paired season SE": 0.0010152622968886916,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 0.1,
+      "key": "rates_core_avail_cs_margin_h16_r0.1",
+      "log loss": 0.6367953738123873,
+      "LL worse than minimum": 0.0007088788470930541,
+      "paired season SE": 0.002766337694753081,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 0.1,
+      "key": "rates_core_adj_avail_cs_margin_h16_r0.1",
+      "log loss": 0.6370756081375872,
+      "LL worse than minimum": 0.0009891131722930388,
+      "paired season SE": 0.003125732785970052,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 0.1,
+      "key": "rates_core_adj_avail_cs_margin_h4_r0.1",
+      "log loss": 0.6386290908490163,
+      "LL worse than minimum": 0.0025425958837219983,
+      "paired season SE": 0.002842888737209878,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 0.1,
+      "key": "rates_core_avail_cs_margin_h4_r0.1",
+      "log loss": 0.6387601997282043,
+      "LL worse than minimum": 0.002673704762910117,
+      "paired season SE": 0.002860075342962785,
+      "within simplicity tolerance": true,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 0.01,
+      "key": "rates_core_avail_cs_margin_h8_r0.01",
+      "log loss": 0.64054584935761,
+      "LL worse than minimum": 0.004459354392315755,
+      "paired season SE": 0.004416353597705698,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 0.01,
+      "key": "rates_core_avail_cs_margin_h16_r0.01",
+      "log loss": 0.6410048805058951,
+      "LL worse than minimum": 0.004918385540600861,
+      "paired season SE": 0.003931559398753817,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 0.01,
+      "key": "rates_core_adj_avail_cs_margin_h8_r0.01",
+      "log loss": 0.6410107789933075,
+      "LL worse than minimum": 0.00492428402801333,
+      "paired season SE": 0.0047096278602811546,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 0.01,
+      "key": "rates_core_adj_avail_cs_margin_h16_r0.01",
+      "log loss": 0.6417971838750363,
+      "LL worse than minimum": 0.005710688909742067,
+      "paired season SE": 0.004159043597155111,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 0.01,
+      "key": "rates_core_avail_cs_margin_h4_r0.01",
+      "log loss": 0.6437394210535179,
+      "LL worse than minimum": 0.007652926088223665,
+      "paired season SE": 0.006731612368646836,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 0.01,
+      "key": "rates_core_adj_avail_cs_margin_h4_r0.01",
+      "log loss": 0.6437625311250682,
+      "LL worse than minimum": 0.007676036159773984,
+      "paired season SE": 0.00707845923640072,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 1.0,
+      "key": "rates_core_adj_avail_cs_margin_h8_r1",
+      "log loss": 0.6504070812816884,
+      "LL worse than minimum": 0.014320586316394322,
+      "paired season SE": 0.006186416787203377,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 1.0,
+      "key": "rates_core_avail_cs_margin_h8_r1",
+      "log loss": 0.6504996905396889,
+      "LL worse than minimum": 0.014413195574394673,
+      "paired season SE": 0.006115007206430946,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 1.0,
+      "key": "rates_core_adj_avail_cs_margin_h16_r1",
+      "log loss": 0.650906210080623,
+      "LL worse than minimum": 0.014819715115328772,
+      "paired season SE": 0.006636377248043718,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 1.0,
+      "key": "rates_core_avail_cs_margin_h16_r1",
+      "log loss": 0.6509760450565018,
+      "LL worse than minimum": 0.01488955009120749,
+      "paired season SE": 0.006532809881767663,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 1.0,
+      "key": "rates_core_adj_avail_cs_margin_h4_r1",
+      "log loss": 0.6526174182627241,
+      "LL worse than minimum": 0.016530923297429938,
+      "paired season SE": 0.005780981454897315,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 1.0,
+      "key": "rates_core_avail_cs_margin_h4_r1",
+      "log loss": 0.6527400234181469,
+      "LL worse than minimum": 0.016653528452852596,
+      "paired season SE": 0.005763274790305334,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 10.0,
+      "key": "rates_core_avail_cs_margin_h16_r10",
+      "log loss": 0.6834435072598951,
+      "LL worse than minimum": 0.047357012294600945,
+      "paired season SE": 0.008877577034433357,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 16.0,
+      "ridge": 10.0,
+      "key": "rates_core_adj_avail_cs_margin_h16_r10",
+      "log loss": 0.6834527795695108,
+      "LL worse than minimum": 0.04736628460421656,
+      "paired season SE": 0.008875653157800997,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 10.0,
+      "key": "rates_core_avail_cs_margin_h8_r10",
+      "log loss": 0.6834947670526774,
+      "LL worse than minimum": 0.047408272087383144,
+      "paired season SE": 0.00883126987693804,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 8.0,
+      "ridge": 10.0,
+      "key": "rates_core_adj_avail_cs_margin_h8_r10",
+      "log loss": 0.6835039255721137,
+      "LL worse than minimum": 0.04741743060681951,
+      "paired season SE": 0.008835296783535208,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "key": "rates_core_avail_cs_margin_h4_r10",
+      "log loss": 0.6842313668202251,
+      "LL worse than minimum": 0.048144871854930875,
+      "paired season SE": 0.008730490905269495,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    },
+    {
+      "family": "rates_core_adj_avail_cs_margin",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "key": "rates_core_adj_avail_cs_margin_h4_r10",
+      "log loss": 0.6842408071608812,
+      "LL worse than minimum": 0.04815431219558703,
+      "paired season SE": 0.008742668734434194,
+      "within simplicity tolerance": false,
+      "games": 1355,
+      "validation seasons": 5,
+      "selected": false
+    }
+  ],
+  "freeze_scope": "Hyperparameters and feature recipe fixed; regression coefficients refit each week on earlier games."
+}
