@@ -150,3 +150,18 @@ def test_validator_directory_includes_personnel_schema(tmp_path):
     p=tmp_path/'personnel_events.csv'
     e=event();e['event']='invalid';e.to_csv(p,index=False)
     with pytest.raises(ValueError,match='unknown event'): v.validate_data_dir(tmp_path)
+
+
+def test_loader_accepts_arrow_string_input(tmp_path,monkeypatch):
+    """pandas 3 infers strict Arrow strings; dates must replace that column."""
+    p=tmp_path/'personnel_events.csv'
+    event().to_csv(p,index=False)
+    read_csv=pd.read_csv
+    def read_with_arrow_dates(*args,**kwargs):
+        frame=read_csv(*args,**kwargs)
+        frame['event_date']=frame.event_date.astype('string[pyarrow]')
+        return frame
+    monkeypatch.setattr(m.pd,'read_csv',read_with_arrow_dates)
+    loaded=m.load_personnel_events(p)
+    assert loaded.event_date.dtype==object
+    assert loaded.iloc[0].event_date==dt.date(2026,10,9)

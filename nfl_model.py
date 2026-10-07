@@ -780,6 +780,7 @@ def load_personnel_events(path=None):
     for c in PERSONNEL_COLUMNS:
         if c not in df: df[c]=''
         df[c]=df[c].str.strip()
+    dates=[]
     for i,row in df.iterrows():
         try:
             if any(not row[c] for c in required): raise ValueError('missing required value')
@@ -789,7 +790,10 @@ def load_personnel_events(path=None):
             if TEAM_ALIASES.get(row.team,row.team) not in PERSONNEL_TEAMS: raise ValueError('unrecognized team abbreviation')
         except ValueError as exc:
             raise ValueError(f'{path}: row {i+2}: {exc}; offending row: {row.to_dict()}') from exc
-        df.at[i,'event_date']=day
+        dates.append(day)
+    # Replace the strict string column (pandas 3/Arrow), rather than mutating
+    # it with incompatible date scalars. Public contract is datetime.date.
+    df['event_date']=pd.Series(dates,index=df.index,dtype=object)
     df=normalize_teams(df[PERSONNEL_COLUMNS])
     n=len(df); df=df.drop_duplicates(['gsis_id','event_date','event']).reset_index(drop=True)
     AUDIT.append({'source':'personnel_events','path':str(path),'missing':False,
