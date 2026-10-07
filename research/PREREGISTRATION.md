@@ -85,3 +85,16 @@ n = 48). Weeks 14–17 sit at −0.035 ± 0.013, the same as weeks 5–9. H2's r
 also show weeks 14–17 and week 18 separately. If H2 is supported but the gap is
 confined to week 18, the candidate response is week-18 handling (motivation, rested
 starters), not the adaptive decay.
+
+**2026-10-07, before the first snapshot. The sample moves to v1.10; the rules are unchanged.**
+The owner adopted v1.10 (decayed point margin) as production before any forward row
+existed. H1 and H2 now apply to the forward rows of the `boxscore-composite-v1.10`
+experiment: the 2026 recipe frozen in `data/frozen_recipe_2026_boxscore-composite-v1.10.json`
+and its config signature. All other rules above are unchanged, including that a
+later revision ends the sample.
+
+v1.9 rows, if any are written before v1.10 reaches main, stay in the ledger as their
+own experiment. They are reported separately and are not part of this sample.
+
+The source figures above were measured on v1.9. v1.10's held-out probabilities differ
+slightly (test 16), so H1's qualifying rows will differ a little.
