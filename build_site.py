@@ -82,6 +82,22 @@ TEAM_NAMES = {
     "PHI": "Eagles", "PIT": "Steelers", "SEA": "Seahawks", "SF": "49ers", "TB": "Buccaneers",
     "TEN": "Titans", "WAS": "Commanders"}
 
+# Team logos hotlinked from ESPN's CDN (nflverse code -> ESPN code where they differ).
+# Readers' browsers fetch them; the build needs no network. A missing logo falls back to the code.
+ESPN_CODES = {"LA": "lar", "WAS": "wsh"}
+LOGO_URL = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/{variant}/{code}.png&h=80&w=80"
+
+
+def logo_html(code):
+    """Light- and dark-theme logo over the team code; CSS shows the one matching the theme."""
+    if code not in TEAM_NAMES:
+        return ""
+    espn = ESPN_CODES.get(code, code.lower())
+    return "".join(f"<img class='logo {cls}' src='{esc(LOGO_URL.format(variant=v, code=espn))}' alt='' "
+                   "loading='lazy' decoding='async' referrerpolicy='no-referrer' "
+                   "onload=\"this.parentNode.classList.add('has-logo')\" onerror='this.remove()'>"
+                   for cls, v in (("lt", "500"), ("dk", "500-dark")))
+
 
 def esc(x):
     return escape("" if x is None else str(x), quote=True)
@@ -186,7 +202,9 @@ CSS = r"""
   --warm-tx:236,122,72; --cool-tx:96,158,208; --lean-tx:244,196,96;
   --good:88,194,125; --bad:239,127,98;
   --shadow:0 1px 2px rgba(0,0,0,.45),0 14px 32px -22px rgba(0,0,0,.8);
-}}
+}
+:root:not([data-theme="light"]) .logo.lt{display:none}:root:not([data-theme="light"]) .logo.dk{display:block}}
+html[data-theme="dark"] .logo.lt{display:none}html[data-theme="dark"] .logo.dk{display:block}
 html[data-theme="dark"]{
   --bg:#0f1418; --surface:#171d24; --surface-2:#131920; --ink:#e7ecef;
   --muted:#96a2ad; --faint:#7f8b97; --line:#242e38; --line-2:#1c242c;
@@ -257,7 +275,10 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .side{display:flex;align-items:center;gap:10px;min-width:0}
 .side.home{justify-content:flex-end;text-align:right}
 .chip{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:var(--r-pill);
-  border:1px solid var(--line);background:var(--surface-2);font:800 13px/1 var(--mono)}
+  border:1px solid var(--line);background:var(--surface-2);font:800 13px/1 var(--mono);position:relative}
+.chip .logo{position:absolute;inset:5px;width:32px;height:32px;object-fit:contain}
+.chip .logo.dk{display:none}
+.chip.has-logo span{visibility:hidden}
 .club{min-width:0}
 .club .nm{font:750 16.5px/1.15 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .club .wp{font:800 22px/1.1 var(--mono);font-variant-numeric:tabular-nums}
@@ -513,7 +534,7 @@ def render_index(latest, ledger, built, now=None):
         def side_html(code, wp, fav, cls):
             club = (f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div>"
                     f"<div class='wp{' fav' if fav else ''}'>{pct(wp)}</div></div>")
-            chip = f"<div class='chip'>{esc(code)}</div>"
+            chip = f"<div class='chip'><span>{esc(code)}</span>{logo_html(code)}</div>"
             return f"<div class='side {cls}'>{chip + club if cls == 'away' else club + chip}</div>"
 
         summary = (f"<summary class='game-summary'><div class='teams'>"
