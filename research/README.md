@@ -547,3 +547,41 @@ for the team. A game where both teams are at the same distance cancels.
   out, and two weeks before the bye is −2.3. Among 20 distance cells, one at about
   2.4 SE is what chance alone would often produce. This weakens the case for the
   "bye next week" hypothesis.
+
+### Test 19: team in-season situations vs the closing moneyline, 2010–2025 (2026-10-07)
+
+`python research/team_situations.py [CACHE_DIR]` (≈ 3 s). 8,324 decided team-games,
+from the team's perspective. Every situation uses only the team's earlier games that
+season, plus its published schedule.
+
+| Situation | Team-games | Actual − implied | z | Flat ROI backing the team (null ≈ −2.8%) |
+|---|---:|---:|---:|---:|
+| Won last game by 17+ | 1,011 | −0.5 pts ± 1.4 | −0.4 | −3.6% ± 3.0 |
+| Lost last game by 17+ | 1,007 | +1.0 ± 1.4 | +0.7 | −0.1% ± 4.5 |
+| Win streak 3+ | 1,092 | +1.4 ± 1.4 | +1.0 | −1.2% ± 2.7 |
+| Losing streak 3+ | 1,091 | −1.5 ± 1.3 | −1.1 | −11.4% ± 4.1 |
+| Beat its price last game | 3,907 | +0.8 ± 0.7 | +1.0 | −1.6% ± 1.7 |
+| Missed its price last game | 3,907 | −0.8 ± 0.7 | −1.1 | −6.0% ± 2.0 |
+| Season to date beat price by 10+ pts | 1,829 | +0.2 ± 1.1 | +0.2 | −2.8% ± 2.3 |
+| Season to date missed price by 10+ pts | 1,892 | −2.2 ± 1.0 | −2.1 | −10.2% ± 3.0 |
+| Look-ahead (next opponent strong, this one not) | 1,051 | +0.6 ± 1.4 | +0.4 | −3.5% ± 2.8 |
+| Sandwich (previous and next strong, this one not) | 337 | −1.4 ± 2.4 | −0.6 | −8.2% ± 4.6 |
+| Division revenge (lost the first meeting) | 761 | +0.6 ± 1.6 | +0.4 | −5.7% ± 4.7 |
+| Opponent won its last game by 17+ | 1,011 | +0.5 ± 1.4 | +0.4 | −3.4% ± 4.2 |
+| Opponent lost its last game by 17+ | 1,007 | −1.0 ± 1.4 | −0.7 | −6.0% ± 2.9 |
+
+**Persistence.** I regressed this game's actual − implied on the team's season-to-date
+average (3+ earlier games, n = 6,796). Slope +0.001 ± 0.033: the market fully absorbs
+a team's run of beating or missing its price. By quintile of season-to-date: −1.7,
+−0.8, +3.5, −0.6 and −0.5 pts. The quintiles aren't monotone, so there's no
+momentum or reversal.
+
+**Reading.**
+- **The closing line prices form, streaks, blowouts, look-ahead, sandwich and revenge
+  spots, and the market does not under- or over-react to a team's results against
+  its price.**
+- **The only near-signal:** teams that have missed their price by 10+ pts on average
+  this season keep missing it slightly (−2.2 ± 1.0, z −2.1), but the persistence slope
+  says that is not a general pattern.
+- **Losing streak 3+** loses −11.4% ± 4.1 backing the team, about 2 SE below the null.
+- Neither clears the multiple-testing bar.
