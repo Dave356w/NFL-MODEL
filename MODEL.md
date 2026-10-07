@@ -82,8 +82,8 @@ decision 2026-10-06: ROI is reported, not optimized). It is shown as a
 secondary score.
 
 **Is the recipe chosen by ROI? No.** Selection is the lowest walk-forward log
-loss over earlier seasons. The Model page lists all 24 candidates' flat ROI on
-the same games beside their log loss, for comparison only. Under real data
+loss over earlier seasons. `data/latest/candidate_roi.csv` lists all 24 candidates'
+flat ROI on the same games beside their log loss, for comparison only. Under real data
 (2021–25) the top log-loss group ranged −0.5% to +0.7% ROI, all with SE ≈
 ±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
 new `REVISION`.
