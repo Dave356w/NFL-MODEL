@@ -236,3 +236,91 @@ better), paired on the same games.
   falls from about −0.028 ± 0.010 (weeks 5–13) to −0.055 ± 0.014 (weeks 14–18). The
   difference is about −0.026 ± 0.017 (≈ −1.5 SE). Weeks 1–4 tie the market. This is the
   same data H2 came from, so it is consistent, not confirmation.
+
+### Tests 12–14: the market as an input, the market's phases, and what it prices (2026-10-07)
+
+`python research/market_info.py [CACHE_DIR]` (≈ 5 min warm). Production held-out
+2023–25, the same 811 priced games. Market = no-vig closing moneyline.
+
+#### Test 12: what if the model is trained with the market as an input?
+
+The box-score features are fit to what the market misses. *Offset* fixes the market's
+log-odds at weight 1; *free* gives it an unpenalized weight. Both are refit weekly
+over the production grid (24 candidates per mode), with recipes chosen on earlier
+seasons only.
+
+| Model | Bets | Units | Model-side ROI ± SE | Same-row favorite | Market null | Log loss | LL gain vs market |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Market alone | 811 | +0.18 | +0.0% ± 2.5 | +0.0% | −4.1% | 0.6077 | 0 |
+| Production composite | 811 | +2.17 | +0.3% ± 2.7 | +0.0% | −4.1% | 0.6359 | −0.0282 ± 0.0071 |
+| Market-aware, offset | 811 | +2.11 | +0.3% ± 2.5 | +0.0% | −4.1% | 0.6076 | +0.0000 ± 0.0002 |
+| Market-aware, free weight | 811 | +2.11 | +0.3% ± 2.5 | +0.0% | −4.1% | 0.6078 | −0.0002 ± 0.0011 |
+
+Exploratory value rule: bet the side the model prices ≥ 2 pts above the no-vig market.
+
+| Model | Bets | Units | ROI ± SE | Market null |
+|---|---:|---:|---:|---:|
+| Production composite | 684 | −65.08 | −9.5% ± 5.0 | −4.1% |
+| Market-aware, offset | 0 | – | – | – |
+| Market-aware, free weight | 131 | −5.21 | −4.0% ± 4.8 | −4.1% |
+
+- **The market-aware model becomes the market.** Nested selection chose the strongest
+  ridge (10) in every season for both modes. The features add nothing to the closing
+  line (+0.0000 LL), and the offset model never moves 2 pts off it.
+- **The production model's departures from the market carry no value.** Betting
+  wherever the production model sees 2+ pts of value loses −9.5% ± 5.0, about 1 SE worse
+  than the null.
+- **Limit.** Only closing lines exist historically. The forward ledger bets the snapshot
+  line (often a day or more before close), and how that differs from the close cannot be
+  tested backward.
+
+#### Test 13: why the market's performance moves in phases
+
+| Weeks | Games | Market LL | Model LL | Gain vs market ± SE | Market confidence \|q − ½\| | Blend weight: market | Blend weight: model |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 1–4 | 189 | 0.6364 | 0.6331 | +0.0033 ± 0.0150 | 0.138 | +0.53 ± 0.38 | +0.71 ± 0.40 |
+| 5–9 | 217 | 0.6081 | 0.6429 | −0.0349 ± 0.0134 | 0.153 | +1.36 ± 0.36 | −0.34 ± 0.41 |
+| 10–13 | 171 | 0.5918 | 0.6104 | −0.0186 ± 0.0144 | 0.172 | +0.97 ± 0.41 | +0.25 ± 0.50 |
+| 14–17 | 186 | 0.5962 | 0.6311 | −0.0349 ± 0.0132 | 0.170 | +1.38 ± 0.40 | −0.41 ± 0.47 |
+| 18 | 48 | 0.5936 | 0.7243 | −0.1307 ± 0.0441 | 0.186 | +2.05 ± 0.74 | −1.46 ± 0.74 |
+
+Weeks 14–18 vs weeks 1–13, by season: 2023 −0.045 vs −0.026; 2024 −0.055 vs −0.009;
+2025 −0.064 vs −0.018. The late gap is worse in all three seasons.
+
+- **The market learns the season and the model does not keep pace.** The market's log
+  loss falls from 0.636 (weeks 1–4) to about 0.59 from week 10 on, and its confidence
+  rises from 0.138 to 0.17–0.19. The model's log loss stays at 0.61–0.64.
+- **Weeks 1–4 are the model's only competitive window.** Both start from priors there,
+  and the in-sample blend gives the model a positive weight (+0.71 ± 0.40, ≈ 1.8 SE).
+- **The "late fade" is mostly week 18.** Weeks 14–17 (−0.035) are no worse than weeks
+  5–9 (−0.035). Week 18 is −0.131 ± 0.044 (≈ 3 SE). Clinched teams resting starters
+  and eliminated teams are priced by the market and invisible to box-score rates.
+  Faster decay (tests 8–9) cannot fix that.
+
+#### Test 14: what does the market price that the model lacks?
+
+One pregame covariate at a time, each scaled to 1 SD. Columns: how much it moves the
+gap logit(market) − logit(model); whether it adds to y ~ logit(model); whether it adds
+to y ~ logit(market). In-sample on the held-out rows.
+
+| Covariate | Moves the gap | Beyond model: coef, LL gain | Beyond market: coef, LL gain |
+|---|---:|---:|---:|
+| Decayed point margin (h = 8 games), home − away | +0.134 ± 0.016 | +0.414 ± 0.133, +0.0061 | −0.068 ± 0.144, +0.0001 |
+| Rest days, home − away | +0.045 ± 0.016 | +0.069 ± 0.075, +0.0005 | +0.026 ± 0.077, +0.0001 |
+| Division game | −0.001 ± 0.016 | −0.033 ± 0.075, +0.0001 | −0.031 ± 0.077, +0.0001 |
+| Wind (outdoor) | +0.035 ± 0.016 | +0.048 ± 0.074, +0.0003 | +0.014 ± 0.076, +0.0000 |
+| Week 18 indicator | −0.001 ± 0.016 | +0.000 ± 0.076, +0.0000 | +0.004 ± 0.079, +0.0000 |
+
+All five together explain 10% of the gap's variance (SD 0.46 log-odds).
+
+- **Point margin is the clear missing input.** The market leans on it (8 SE on the gap).
+  It adds to the model (+0.0061 LL, ≈ 3 SE), about a fifth of the 0.028 gap, and adds
+  nothing to the market. Points carry what box-score rates drop: red-zone finishing,
+  special teams, return and defensive TDs, kicking.
+- **Rest and wind** are priced a little, and their added value is within noise.
+  Division games are not priced.
+- **The week-18 effect is game-specific** (which team rests), so a plain indicator
+  shows nothing.
+- **90% of the gap is unexplained here.** Plausible sources are preseason priors
+  (roster moves, draft, coaching), player quality beyond snap share, news after the
+  injury report, line moves, and the model's own estimation noise.

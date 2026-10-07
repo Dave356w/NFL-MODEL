@@ -78,3 +78,10 @@ The production held-out predictions (research test 11) give:
   different recipe.
 - **H2:** log-loss gain weeks 5–13 ≈ −0.028 ± 0.010 vs weeks 14–18 −0.055 ± 0.014,
   difference ≈ −0.026 ± 0.017.
+
+**2026-10-07, before the first snapshot. H2 secondary split; the decision rule is unchanged.**
+Research test 13 shows most of the held-out late gap is week 18 (gain −0.131 ± 0.044,
+n = 48). Weeks 14–17 sit at −0.035 ± 0.013, the same as weeks 5–9. H2's report will
+also show weeks 14–17 and week 18 separately. If H2 is supported but the gap is
+confined to week 18, the candidate response is week-18 handling (motivation, rested
+starters), not the adaptive decay.
