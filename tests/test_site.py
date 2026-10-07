@@ -244,3 +244,15 @@ def test_injury_report_notes_on_the_card(tmp_path):
     idx = (out / "index.html").read_text()
     assert "Injury report" in idx and "Baker Mayfield" in idx
     assert "not on a week-5 report yet" in idx and "Week 5 report not out yet" in idx
+
+
+def test_team_logos_from_espn_with_code_fallback(tmp_path):
+    out, _ = render(tmp_path)
+    html = (out / "index.html").read_text()
+    for code in ("tb", "dal", "kc", "buf"):
+        assert f"/i/teamlogos/nfl/500/{code}.png" in html and f"/i/teamlogos/nfl/500-dark/{code}.png" in html
+    assert "<span>TB</span>" in html  # the code stays under the logo if it fails to load
+    # nflverse codes that ESPN spells differently
+    assert "/nfl/500/lar.png" in b.logo_html("LA") and "/nfl/500/wsh.png" in b.logo_html("WAS")
+    assert b.logo_html("XYZ") == "" and b.logo_html(None) == ""
+    assert "teamlogos" not in (out / "grades.html").read_text()
