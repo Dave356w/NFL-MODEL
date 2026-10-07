@@ -109,3 +109,11 @@ rules above are unchanged, including that a later revision ends the sample.
 v1.10 rows, if any are written before v1.11 reaches main (2026_05_TB_DAL can be recorded
 once Wednesday's final report posts), stay in the ledger as their own experiment. They are
 reported separately and are not part of this sample.
+
+**2026-10-07. v1.12 (dated personnel events) proposed; the rules are unchanged.**
+If the owner adopts `boxscore-composite-v1.12`, the revision change ends the v1.11 sample under
+the stopping rule. H1 and H2 then apply to the forward rows of the v1.12 experiment (the 2026
+recipe frozen in `data/frozen_recipe_2026_boxscore-composite-v1.12.json` and its config
+signature) from its first snapshot. Any v1.11 rows written before v1.12 reaches main stay in
+the ledger as their own experiment, reported separately and never pooled. v1.12 has no
+historical personnel events, so its held-out reconstructions match v1.11 (research test 21).
