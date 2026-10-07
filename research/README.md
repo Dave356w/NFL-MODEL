@@ -585,3 +585,33 @@ momentum or reversal.
   says that is not a general pattern.
 - **Losing streak 3+** loses −11.4% ± 4.1 backing the team, about 2 SE below the null.
 - Neither clears the multiple-testing bar.
+
+### Test 20: schedule and form features added to v1.10 (2026-10-07)
+
+`python research/trend_features.py [CACHE_DIR]` (≈ 6 min warm). Two home-minus-away
+feature sets, each added to the v1.10 families. No market input enters either set.
+- **Schedule:** rest, off a bye, bye next week, trip miles, time zones from home,
+  early body clock, road streak.
+- **Form:** streak entering the game, last game's margin.
+
+Production grid with nested selection; every arm picked `…adj…_h16_r0.1` in each
+held-out season. 811 priced held-out games 2023–25:
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| v1.10 production | 811 | +7.24 | +0.9% ± 2.7 | 0.6336 | −0.0255 |
+| + schedule | 811 | −5.66 | −0.7% ± 2.7 | 0.6334 | −0.0253 |
+| + form | 811 | −4.17 | −0.5% ± 2.7 | 0.6331 | −0.0251 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| + schedule vs v1.10 | −1.59 pts ± 1.45 | +0.0002 ± 0.0023 |
+| + form vs v1.10 | −1.41 pts ± 0.78 | +0.0005 ± 0.0011 |
+
+The form features hurt weeks 1–4 (−0.0031 ± 0.0014 LL), where last week's margin is
+mostly noise, and help slightly from week 10 (about +0.003). Schedule features move
+nothing by week.
+
+**Reading.** Neither set improves the model. Log-loss changes are zero within noise,
+and ROI falls in both, by about 1–2 SE. Point margin (v1.10) already carries what
+form adds, and schedule spots are small next to the gap to the market. **Not adopted.**
