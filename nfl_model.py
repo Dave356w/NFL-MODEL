@@ -1,9 +1,20 @@
-"""NFL box-score composite W/L model — v1.11 (production).
+"""NFL box-score composite W/L model — v1.12 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.12 (NEW experiment: new REVISION and OUTPUT_NAME, based on v1.11; earlier recipes and
+ledger rows untouched): dated personnel events. A hand-curated data/personnel_events.csv
+closes the prior-week roster delay for dated retirements, trades, waivers, releases and
+suspensions. Only events strictly before the team's schedule gameday count as out;
+signed/activated are inert. This narrow exception uses knowable transaction dates, never
+same-week roster status. Events and schedule dates enter availability cache keys; the event
+rules enter the config signature. Team-card notes show the event label and date even
+without an injury report. No historical backfill, so held-out seasons are unchanged from
+v1.11 (research test 21 applies). The feed is read from the state folder (data/ in
+Actions); a run that cannot find it warns loudly instead of silently dropping the events.
 
 v1.11.1 (ledger gate only; same REVISION, config signature, recipe and features):
 FINAL_REPORT_HOURS 24 -> 6. nflverse rebuilds the injury file once a day (nflverse-rosters
@@ -322,11 +333,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.11'
+REVISION='boxscore-composite-v1.12'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_11'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_12'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -356,7 +367,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -798,6 +809,78 @@ def load_availability(years,season):
     return out
 
 
+PERSONNEL_FILE='personnel_events.csv'
+PERSONNEL_COLUMNS=['event_date','team','gsis_id','player','event','note']
+PERSONNEL_OUT=('retired','traded','waived','released','suspended')
+PERSONNEL_INERT=('signed','activated')
+PERSONNEL_TEAMS=set('ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LA LAC LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS'.split())
+
+
+def load_personnel_events(path=None):
+    """Load the curated feed, validating each row; absent feed is an audited no-op.
+    IDs must be resolved by the curator from weekly rosters/load_player_ids.
+    Dates are announcement dates, not inferred from same-week roster statuses.
+    """
+    if path is None:
+        # Actions: state_dir() is data/. Colab/Drive: state_dir() is the Drive output folder,
+        # where the committed CSV must be copied; ./data covers a local checkout.
+        found=[c for c in dict.fromkeys((state_dir()/PERSONNEL_FILE,Path('data')/PERSONNEL_FILE)) if c.exists()]
+        path=found[0] if found else state_dir()/PERSONNEL_FILE
+        if not found:
+            print(f'  WARNING: {PERSONNEL_FILE} not found in {state_dir()} or ./data; dated personnel events are NOT '
+                  f'applied (copy the repository\'s data/{PERSONNEL_FILE} there to match the Actions build)')
+    path=Path(path)
+    if not path.exists():
+        AUDIT.append({'source':'personnel_events','path':str(path),'missing':True,
+                      'rows_loaded':0,'out_events':0,'inert_events':0,'duplicates_dropped':0})
+        return pd.DataFrame(columns=PERSONNEL_COLUMNS)
+    df=pd.read_csv(path,dtype=str,keep_default_na=False)
+    required=('event_date','team','gsis_id','event')
+    missing=[c for c in required if c not in df]
+    if missing:
+        raise ValueError(f'{path}: missing required columns {missing}; offending row: {df.head(1).to_dict("records")}')
+    for c in PERSONNEL_COLUMNS:
+        if c not in df: df[c]=''
+        df[c]=df[c].str.strip()
+    dates=[]
+    for i,row in df.iterrows():
+        try:
+            if any(not row[c] for c in required): raise ValueError('missing required value')
+            day=dt.date.fromisoformat(row.event_date)
+            if day.isoformat()!=row.event_date: raise ValueError('date must be YYYY-MM-DD')
+            if row.event not in PERSONNEL_OUT+PERSONNEL_INERT: raise ValueError('unknown event code')
+            if TEAM_ALIASES.get(row.team,row.team) not in PERSONNEL_TEAMS: raise ValueError('unrecognized team abbreviation')
+        except ValueError as exc:
+            raise ValueError(f'{path}: row {i+2}: {exc}; offending row: {row.to_dict()}') from exc
+        dates.append(day)
+    # Replace the strict string column (pandas 3/Arrow), rather than mutating
+    # it with incompatible date scalars. Public contract is datetime.date.
+    df['event_date']=pd.Series(dates,index=df.index,dtype=object)
+    df=normalize_teams(df[PERSONNEL_COLUMNS])
+    n=len(df); df=df.drop_duplicates(['gsis_id','event_date','event']).reset_index(drop=True)
+    AUDIT.append({'source':'personnel_events','path':str(path),'missing':False,
+                  'rows_loaded':len(df),'out_events':int(df.event.isin(PERSONNEL_OUT).sum()),
+                  'inert_events':int(df.event.isin(PERSONNEL_INERT).sum()),'duplicates_dropped':n-len(df)})
+    return df
+
+
+def personnel_gamedays(gameday):
+    """Schedule dates keyed by (season, week, team); accepts long frame or mapping.
+    Missing dates deliberately apply no events (backward-compatible callers).
+    """
+    if gameday is None: return {}
+    if isinstance(gameday,pd.DataFrame):
+        return {(int(r.season),int(r.week),r.team):pd.Timestamp(r.gameday).date()
+                for r in gameday.itertuples() if pd.notna(r.gameday)}
+    return {k:pd.Timestamp(v).date() for k,v in gameday.items() if pd.notna(v)}
+
+
+def personnel_out_events(events,team,day):
+    if events is None or events.empty or day is None:
+        return pd.DataFrame(columns=PERSONNEL_COLUMNS)
+    return events[(events.team==team)&events.event.isin(PERSONNEL_OUT)&(events.event_date<day)]
+
+
 DEPTH_COLS=['season','team','dt','gsis_id','player_name','pos_rank']
 
 
@@ -868,7 +951,7 @@ def roster_note(row):
     return ROSTER_DESC_LABEL.get(d,f'{row.get("status")}' + (f' ({d})' if isinstance(d,str) and d else ''))
 
 
-def report_notes(detail,snaps,teams,season,week,rost=None):
+def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=None):
     """Per team, what the injury reports say about players who matter to the
     window the model uses, and how that changes through the week:
       * report_state 'none'    : this week's report is not published yet. Players
@@ -884,11 +967,15 @@ def report_notes(detail,snaps,teams,season,week,rost=None):
     they are added from `rost` and counted 100%, as the model does (membership is
     skipped, as in the model, when most window snaps are off that roster). Snap share = player's share of his unit's snaps over the
     team's last AVAIL_WINDOW games before this week (current season once it has
-    CS_MIN_GAMES games), the window the _cs unit columns use."""
+    CS_MIN_GAMES games), the window the _cs unit columns use. Personnel events
+    use the same strictly-before-gameday filter as availability_table(), override
+    injury/practice status, and render even if injury detail is absent."""
     cols=['team','gsis_id','player','position','unit','snap_share','prev_week','prev_status','prev_injury',
           'this_week','counted','report_state']
-    if detail is None or detail.empty: return pd.DataFrame(columns=cols)
+    if detail is None or detail.empty:
+        detail=pd.DataFrame(columns=['season','week','team','gsis_id','full_name','position','report_status','practice_status'])
     d=detail[detail.season==season]
+    dates=personnel_gamedays(gameday)
     sn=snaps.copy()
     sn['unit']=sn.position.map(lambda p:'QB' if p=='QB' else POS_GROUP.get(p))
     sn=sn[sn.unit.notna()].copy()
@@ -908,7 +995,7 @@ def report_notes(detail,snaps,teams,season,week,rost=None):
         unit_tot=g.groupby('unit').s.sum(); pl=g.groupby(['gsis_id','unit']).s.sum().reset_index()
         share={r.gsis_id:(r.unit,float(r.s/unit_tot[r.unit]) if unit_tot[r.unit]>0 else 0.) for r in pl.itertuples()}
         listed_now=cur[cur.report_status.notna()|cur.practice_status.fillna('').str.contains('Did Not|Limited',regex=True)]
-        removed={}  # gsis_id -> (label, roster week, name, position)
+        removed={}  # gsis_id -> (label, name, position)
         if rost is not None and len(rost):
             rt=rost[(rost.season==season)&(rost.team==t)]
             weeks=sorted(int(x) for x in rt.week.unique())
@@ -926,12 +1013,25 @@ def report_notes(detail,snaps,teams,season,week,rost=None):
                         if pid not in members and pid not in removed:
                             nm=names.full_name.get(pid) if 'full_name' in names else None
                             removed[pid]=(f'not on wk {rw} roster (left team)',nm,names.position.get(pid) if 'position' in names else None)
+        event_rows=personnel_out_events(events,t,dates.get((season,week,t)))
+        event_names={}
+        for e in event_rows.sort_values('event_date').itertuples():
+            label={'retired':ROSTER_DESC_LABEL['R02'],'waived':ROSTER_DESC_LABEL['W03'],
+                   'suspended':ROSTER_DESC_LABEL['R27']}.get(e.event,e.event.capitalize())
+            old=removed.get(e.gsis_id,(None,None,None))
+            metadata=rost[rost.gsis_id==e.gsis_id] if rost is not None and len(rost) else pd.DataFrame()
+            name=e.player or (metadata.full_name.iloc[-1] if len(metadata) and 'full_name' in metadata else old[1])
+            positions=g.position[g.gsis_id==e.gsis_id]
+            pos=positions.iloc[-1] if len(positions) else old[2]
+            removed[e.gsis_id]=(f'{label} {e.event_date.strftime("%b")} {e.event_date.day} (personnel event)',name,pos)
+            event_names[e.gsis_id]=name
         for pid in dict.fromkeys(list(prev.gsis_id)+list(listed_now.gsis_id)+[p for p in removed if share.get(p,(None,0.))[1]>=REPORT_NOTE_MIN_SHARE]):
             p=prev[prev.gsis_id==pid]; c=cur[cur.gsis_id==pid]
             if len(c) or len(p):
                 src=(c if len(c) else p).iloc[0]; name,pos=src.full_name,src.position
             else:
                 name,pos=removed[pid][1],removed[pid][2]
+            if event_names.get(pid): name=event_names[pid]
             unit,sh=share.get(pid,(POS_GROUP.get(pos,'QB' if pos=='QB' else None),0.))
             if sh<REPORT_NOTE_MIN_SHARE and unit!='QB': continue  # no window snaps: carries no weight either
             if pid in removed: now=removed[pid][0]; w=1.  # the model counts roster removals fully
@@ -947,7 +1047,7 @@ def report_notes(detail,snaps,teams,season,week,rost=None):
     return out.sort_values(['team','snap_share'],ascending=[True,False]).reset_index(drop=True)
 
 
-def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None):
+def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=None,gameday=None):
     """One row per (season, week, team) to forecast. Uses the week's injury
     report, the team's most recent roster before the game (status and
     membership; week 1 uses the week-1 roster), and snaps/QB play from earlier
@@ -960,7 +1060,12 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None):
     charts in `depth`, the starter is the highest-ranked available QB on the latest
     chart at least DEPTH_CHART_LEAD_HOURS before kickoff; otherwise the v1.8
     start-history rule. A projected starter listed Questionable is blended with the
-    next candidate (QB_QUESTIONABLE_START). 'qb_source' records which rule applied."""
+    next candidate (QB_QUESTIONABLE_START). 'qb_source' records which rule applied.
+    Dated personnel out-events (v1.12) strictly before schedule gameday are a narrow
+    exception to prior-week rosters: transaction dates are knowable, unlike same-week
+    roster-status timing. signed/activated never clear or offset an absence.
+    Optional events/gameday preserve callers."""
+    dates=personnel_gamedays(gameday)
     inj=injury_weights(inj)
     # Questionable and not also listed Out/Doubtful that week.
     q_status={k:set(g.gsis_id[g.report_status.eq('Questionable')])-set(g.gsis_id[g.weight>=1.])
@@ -1040,6 +1145,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None):
         out=dict(inj_map.get((y,w,t),{}))
         if ref_week is not None and w>1:
             for pid in rost_out.get((y,ref_week,t),()): out[pid]=1.
+        for e in personnel_out_events(events,t,dates.get((y,w,t))).itertuples(): out[e.gsis_id]=1.
         ref=members.get((y,ref_week,t)) if ref_week is not None else None
         if ref is not None and w>1 and ref_week<w-1: stats['reference_older_than_prior_week']+=1
         rep_state=report_state.get((y,w,t),'none')
@@ -1164,11 +1270,13 @@ def combine_avail_stats(stats):
     return {'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**tot}
 
 
-def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None):
+def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None,events=None,gameday=None):
     """availability_table for every season, reading completed seasons from a
     per-season cache keyed on the config signature and all inputs the season
     can touch. The current season is always rebuilt. Returns (table, info)."""
     sig,_=config_signature()
+    dates=personnel_gamedays(gameday)
+    event_frame=events if events is not None else pd.DataFrame(columns=PERSONNEL_COLUMNS)
     cache=cache_dir(); cache.mkdir(parents=True,exist_ok=True)
     def window(df,y):
         if df is None or not len(df): return pd.DataFrame({'empty':[]})
@@ -1178,10 +1286,12 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None):
         t=targets[targets.season==y][['season','week','team']+(['kickoff'] if 'kickoff' in targets else [])]
         t=t.drop_duplicates(['season','week','team']).sort_values(['week','team']).reset_index(drop=True)
         if y>=season:
-            st=[]; parts.append(availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth)); stats+=st
+            st=[]; parts.append(availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth,events=events,gameday=dates)); stats+=st
             info['rebuilt_seasons'].append(y); continue
         h=hashlib.sha256((REVISION+sig).encode()); h.update(data_hash(t).encode())
         for df in (qb,snaps,inj,rost,depth): h.update(data_hash(window(df,y)).encode())
+        h.update(data_hash(event_frame).encode())
+        h.update(json.dumps(sorted((k,str(v)) for k,v in dates.items() if k[0]==y)).encode())
         path=cache/f'avail_features_{y}_{h.hexdigest()[:16]}.pkl'; meta=path.with_suffix('.json')
         df=None
         if REUSE_CACHE and path.exists() and meta.exists():
@@ -1189,7 +1299,7 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None):
                 df=pd.read_pickle(path); st=[json.loads(meta.read_text())['stats']]
             except Exception: df=None  # unreadable (e.g. pandas version change): rebuild
         if df is None:
-            st=[]; df=availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth)
+            st=[]; df=availability_table(t,qb,snaps,inj,rost,audit=st,depth=depth,events=events,gameday=dates)
             for old in cache.glob(f'avail_features_{y}_*'):
                 if old.stem!=path.stem: old.unlink()
             df.to_pickle(path); dump(meta,{'revision':REVISION,'season':y,'stats':st[0],'created_utc':now_utc().isoformat()})
@@ -1938,7 +2048,9 @@ def config_signature():
                   'family_cols':AVAIL_FAMILY_COLS,'cs_min_games':CS_MIN_GAMES,'qb_rule':QB_RULE,
                   'depth_chart':{'first_season':DEPTH_CHART_FIRST_SEASON,'lead_hours':DEPTH_CHART_LEAD_HOURS,
                                  'max_age_days':DEPTH_CHART_MAX_AGE_DAYS,'source':'nflverse depth_charts (ESPN, timestamped)'},
-                  'qb_questionable_start':QB_QUESTIONABLE_START},
+                  'qb_questionable_start':QB_QUESTIONABLE_START,
+                  'personnel_events':{'out':PERSONNEL_OUT,'inert':PERSONNEL_INERT,
+                                      'rule':'event_date strictly before the team schedule gameday'}},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
          'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION}}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
@@ -1978,13 +2090,16 @@ def kickoff_utc(row):
 
 
 def availability_targets(schedules):
-    """One row per scheduled team-game: season, week, team and kickoff (UTC ISO text;
-    None when the schedule has no kickoff time, which disables the depth-chart rule)."""
+    """One row per scheduled team-game: season, week, team, gameday (schedule date, for the
+    v1.12 personnel-event rule) and kickoff (UTC ISO text; None when the schedule has no
+    kickoff time, which disables the depth-chart rule)."""
     ko=[kickoff_utc(r) for r in schedules.to_dict('records')]
     ko=[k.strftime('%Y-%m-%dT%H:%M:%SZ') if k is not None else None for k in ko]
     base=schedules[['season','week','home_team','away_team']].assign(kickoff=ko)
-    return pd.concat([base[['season','week','home_team','kickoff']].rename(columns={'home_team':'team'}),
-                      base[['season','week','away_team','kickoff']].rename(columns={'away_team':'team'})],ignore_index=True)
+    base['gameday']=schedules['gameday'] if 'gameday' in schedules else None
+    cols=['season','week','gameday','kickoff']
+    return pd.concat([base[cols+['home_team']].rename(columns={'home_team':'team'}),
+                      base[cols+['away_team']].rename(columns={'away_team':'team'})],ignore_index=True)
 
 
 def injury_reports_ready(r,ko,asof):
@@ -2466,8 +2581,10 @@ def main():
     if any(f in AVAIL_FAMILIES for f in FEATURE_FAMILIES):
         print('  Player availability: injury reports, weekly rosters, snap counts')
         a=load_availability(years,season)
-        avail,ainfo=availability_cached(availability_targets(schedules),qb,a['snaps'],a['inj'],a['rost'],season,
-                                        audit=AUDIT,depth=a.get('depth'))
+        events=load_personnel_events()
+        targets=availability_targets(schedules)  # kickoff (v1.11 depth chart) and gameday (v1.12 personnel events)
+        avail,ainfo=availability_cached(targets,qb,a['snaps'],a['inj'],a['rost'],season,
+                                        audit=AUDIT,depth=a.get('depth'),events=events,gameday=targets)
         print(f'  Availability features: {len(ainfo["cached_seasons"])} completed seasons from cache, '
               f'rebuilt {", ".join(map(str,ainfo["rebuilt_seasons"])) or "none"}')
         save(avail,'availability_features.csv')
@@ -2499,7 +2616,7 @@ def main():
     if avail is not None:
         wk=schedules[(schedules.season==season)&(schedules.week==cur)]
         notes=report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur,
-                           rost=a.get('roster_detail'))
+                           rost=a.get('roster_detail'),events=events,gameday=targets)
         save(notes,'report_notes.csv')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}

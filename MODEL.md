@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.11), newest first; this page describes what the code
+version history (v1 to v1.12), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.11`
+## The current model: `boxscore-composite-v1.12`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -44,6 +44,23 @@ published before kickoff:
 * Roster codes counted as out: RES, CUT, TRD, RET, EXE, E01, and the codes used
   mainly in 2019–23 rosters (SUS, PUP, RSN, NWT, UFA, RFA, RSR, E14, TRT, TRC),
   plus any reserve/waived status description. Unrecognized codes are audited.
+
+**Dated personnel events (v1.12, based on v1.11).** The hand-curated
+`data/personnel_events.csv` identifies the losing team and roster-resolved GSIS
+ID. Retired, traded, waived, released and suspended players count fully out
+only when `event_date < gameday` for that team's scheduled game. Same-day and
+later events do not apply. Signed/activated rows are audit-only and never
+cancel an out. This is a narrow exception to the prior-week roster rule using
+knowable transaction dates; all other roster timing stays unchanged. Unit
+shares and QB selection consume the same out map. Card notes show the event
+label and date. Events and schedule dates are hashed in availability caches.
+A missing file is an audited no-op with a printed warning (Colab: copy `data/personnel_events.csv` into the Drive output folder); bad rows fail validation; duplicate
+(id, date, event) rows are audited and dropped. The 2026-only seed changes no
+historical availability; source-noted historical backfill is optional later
+work. No replacement weighting or receiving-team contribution is introduced.
+The output folder is `nfl_boxscore_output_v1_12`; earlier frozen recipes
+and forward-ledger rows are preserved. With no historical events, held-out seasons
+match v1.11 (research test 21).
 
 **Point margin (v1.10).** Each team's decayed average point margin per game,
 from the official result of every earlier game in its history. It uses the same
