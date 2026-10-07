@@ -431,3 +431,100 @@ scaled unit, ahead of the QB term at +0.170).
 - Adopting it means changing the features, so it needs a new `REVISION` and
   `OUTPUT_NAME`. That is the owner's decision. Prior 300 (test 3) is the other
   candidate for that revision.
+
+### Test 17: playoff-race context (clinched / eliminated / top seed) (2026-10-07)
+
+`python research/season_context.py [CACHE_DIR]` (≈ 7 min warm). Each team's status
+before each week comes only from earlier weeks' results. It is approximate: wins vs
+games left, ties as half a win, no tiebreakers. A team counts as clinched if it has
+locked a playoff spot or its division, and as eliminated only if both are out of
+reach. Checked against 2024 before week 18: KC top seed; HOU, BAL, BUF, PIT, LAC,
+DET, MIN, GB, PHI and WAS clinched.
+
+**B. v1.10 plus three home-minus-away status inputs, nested selection** (both arms
+picked `…adj…_h16_r0.1` in every season; held-out 2023–25, 811 priced games):
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| v1.10 production | 811 | +7.24 | +0.9% ± 2.7 | 0.6336 | −0.0255 |
+| + playoff-race status | 811 | +13.55 | +1.7% ± 2.7 | 0.6324 | −0.0244 |
+
+| Weeks | Games | ROI difference | Log-loss gain |
+|---|---:|---:|---:|
+| all | 811 | +0.78 pts ± 0.62 | +0.0012 ± 0.0013 |
+| 1–11 | 493 | +0.30 ± 0.30 | −0.0005 ± 0.0004 |
+| 12–16 | 226 | +1.43 ± 1.72 | +0.0007 ± 0.0020 |
+| 17 | 48 | −3.43 ± 3.43 | −0.0073 ± 0.0074 |
+| 18 | 48 | +6.85 ± 4.80 | +0.0290 ± 0.0187 |
+
+**Does the market misprice status?** Every priced game 2010–2025; "final week" is
+each season's last regular-season week:
+
+| Status (team vs opponent without it) | Weeks | Games | Actual − implied for the team | Flat ROI backing the team |
+|---|---|---:|---:|---:|
+| eliminated | final week | 145 | −1.9 pts ± 3.3 | −20.5% ± 12.4 |
+| eliminated | other weeks | 225 | +0.9 ± 2.9 | −1.4% ± 11.8 |
+| clinched | final week | 117 | −2.4 ± 3.7 | −12.6% ± 7.5 |
+| clinched | other weeks | 116 | −4.3 ± 4.0 | −12.4% ± 6.0 |
+
+**Reading.**
+- **The direction is right but the evidence is thin.** The gain is concentrated in
+  week 18 (+0.029 LL per game, about 1.6 SE), but status applies to only about 120
+  held-out games. Weeks 1–11 lose a little, because extra inputs that are zero there
+  still cost fit.
+- **The market already prices most of it.** In diagnostic A, elimination moves the
+  market–model gap at about 2.4 SE. Across 16 seasons, status residuals against the
+  market are within about 1 SE. Clinched teams lose −12.5% backing them, against a
+  null of −3%, about −2 SE pooled, which fits rested starters.
+- **Not adopted.** It is a candidate to reconsider with week-18 handling in the
+  next revision.
+
+### Test 18: schedule spots vs the closing moneyline, 2010–2025 (2026-10-07)
+
+`python research/schedule_effects.py [CACHE_DIR]` (≈ 10 s). Target: home result
+minus the no-vig closing-moneyline home probability on 4,161 priced, decided games.
+Coefficients are per 1 SD for continuous factors and per unit for indicators. With 13
+factors, |z| < ~2.9 is noise (Bonferroni 5%).
+
+| Factor | Games where it applies | Coef beyond market | z | Actual − implied | Flat ROI backing it (null ≈ −2.8%) |
+|---|---:|---:|---:|---:|---:|
+| Rest days, home − away | 1,439 | +0.004 ± 0.034 | +0.1 | −0.3 pts ± 1.2 | −5.4% ± 2.9 |
+| Off a bye | 435 | +0.054 ± 0.105 | +0.5 | +1.3 ± 2.2 | −1.3% ± 5.2 |
+| Short week (≤ 5 days) | 9 | – | – | – | (both teams usually short on Thursdays) |
+| This trip, miles | 4,148 | +0.046 ± 0.034 | +1.4 | +0.8 ± 0.7 | −1.7% ± 1.9 |
+| Miles over last 3 trips | 4,160 | −0.036 ± 0.034 | −1.1 | −0.8 ± 0.7 | −5.3% ± 1.8 |
+| Time zones from home | 4,155 | +0.046 ± 0.034 | +1.4 | +0.8 ± 0.7 | −2.9% ± 2.0 |
+| Away body clock ≤ 10:36 AM (e.g. West team at 1 PM ET) | 375 | −0.054 ± 0.118 | −0.5 | −1.7 ± 2.4 | −6.2% ± 5.5 |
+| Consecutive road games | 4,161 | +0.011 ± 0.034 | +0.3 | +0.6 ± 0.7 | −3.3% ± 2.0 |
+| **Bye next week** | 402 | **+0.286 ± 0.108** | **+2.7** | **+6.1 ± 2.3** | **+10.5% ± 5.8** |
+| Games since bye | 2,077 | +0.004 ± 0.034 | +0.1 | −0.1 ± 1.0 | −4.7% ± 2.6 |
+| Division game | 1,528 | −0.050 ± 0.070 | −0.7 | −1.3 ± 1.2 | −6.5% ± 2.6 |
+| Primetime | 833 | +0.101 ± 0.084 | +1.2 | +1.1 ± 1.6 | −1.7% ± 3.4 |
+| International | 44 | +0.138 ± 0.324 | +0.4 | +1.8 ± 6.8 | −7.6% ± 16.0 |
+
+**Temporal trends** (actual − implied ± SE):
+- **By era:** home team 0.0, −0.5, −1.8 and −0.1 pts for 2010–13, 2014–17, 2018–21
+  and 2022–25; favourites +0.7, +0.1, −1.9 and +2.1. No drift.
+- **By week:** favourites −2.9 ± 1.5 in weeks 1–4, then between +1.0 and +2.2. The
+  favourite ROI is −7.9% in weeks 1–4 against about 0% from week 14 to 17. This is
+  the only temporal pattern near 2 SE.
+- **By kickoff:** all slots are within about 1.2 SE. Monday home −3.2 ± 2.7;
+  Thursday favourites +3.3 ± 2.8.
+
+**"Bye next week" robustness:** the sign is positive in every split.
+- **By era:** 2010–13 +2.4, 2014–17 +4.4, 2018–21 +6.6, 2022–25 +10.4 pts.
+- **By side:** at home +6.8, away +5.3 pts.
+- **By price:** as favourite +5.5, as underdog +6.6 pts.
+
+**Reading.**
+- **The closing line prices rest, byes, travel, time zones, body clock, road streaks,
+  division and primetime.** None of them moves actual vs implied beyond noise, and
+  backing any of them loses about the bookmaker's margin or more.
+- **Exception: a team with a bye next week beat its price by 6 pts** (402 games,
+  +10.5% ROI). It held in every era, at home and away, and as favourite or underdog.
+  It is still one post-hoc hit among 13 factors, and z 2.7 is below the
+  multiple-testing bar.
+- **Next step:** pre-register it as a forward market hypothesis before using it.
+  The bye schedule is known at the start of the season, so the rule is fixed in advance.
+- **Early-season favourites underperform their price** (weeks 1–4), which fits test
+  15's finding that early margins mislead.
