@@ -392,3 +392,42 @@ Market-trained minus outcome-trained, same games: LL gain +0.0049 ± 0.0041, ROI
   LL, unresolved), and ROI is unresolved (−2.6 ± 2.3). Copying the market's weighting
   of public stats leaves about 0.021 of log loss that only the market's private
   information closes.
+
+### Test 16: decayed point margin as a composite input (2026-10-07)
+
+`python research/point_margin.py [CACHE_DIR]` (≈ 5 min warm). Each production family
+gains one input: the home-minus-away decayed average point margin from earlier games,
+with the same weighting as the stat profiles. The production grid and nested selection
+are unchanged. Both arms picked `…adj_avail_cs…_h16_r0.1` in every held-out season.
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| production | 811 | +2.17 | +0.3% ± 2.7 | 0.6364 | −0.0283 |
+| + decayed point margin | 811 | +7.24 | +0.9% ± 2.7 | 0.6336 | −0.0255 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| + margin vs production | +0.62 pts ± 0.90 | +0.0028 ± 0.0010 |
+
+| Weeks | Games | ROI difference | Log-loss gain |
+|---|---:|---:|---:|
+| 1–4 | 191 | −0.82 pts ± 0.82 | +0.0010 ± 0.0020 |
+| 5–9 | 217 | +1.41 pts ± 2.08 | +0.0008 ± 0.0021 |
+| 10–13 | 173 | −1.17 pts ± 1.63 | +0.0047 ± 0.0022 |
+| 14–17 | 186 | +2.27 pts ± 2.45 | +0.0047 ± 0.0022 |
+| 18 | 48 | +2.76 pts ± 2.76 | +0.0051 ± 0.0049 |
+
+In the fit through 2025, point margin becomes the largest coefficient (+0.223 per
+scaled unit, ahead of the QB term at +0.170).
+
+**Candidate for the next `REVISION`.**
+- **Log loss: +0.0028 ± 0.0010 (≈ 2.8 SE).** This is the strongest log-loss gain of
+  any variant tested so far. It closes about 10% of the gap to the market.
+- **The gain comes where the market pulls ahead:** weeks 10+, +0.0047 per game.
+- **ROI: +0.6 pts ± 0.9, unresolved.**
+- **Caveats.** Test 14 picked margin as a candidate using these same seasons, so the
+  estimate is somewhat optimistic. Sixteen tests have now been run on these data.
+  Point margin is a standard rating input, so the prior that it helps is high.
+- Adopting it means changing the features, so it needs a new `REVISION` and
+  `OUTPUT_NAME`. That is the owner's decision. Prior 300 (test 3) is the other
+  candidate for that revision.
