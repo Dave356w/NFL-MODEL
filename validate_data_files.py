@@ -6,6 +6,7 @@ Stdlib only. Runs before every ledger commit in build.yml and first in tests.yml
 
 import csv
 import json
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -32,6 +33,30 @@ def validate_csv(path):
                 raise ValueError(f"{path}:{line_number}: unresolved Git conflict marker")
             if len(row) != expected:
                 raise ValueError(f"{path}:{line_number}: expected {expected} columns, found {len(row)}")
+
+
+def validate_personnel_events(path):
+    """Stdlib schema check for the hand-curated, dated personnel feed."""
+    columns=['event_date','team','gsis_id','player','event','note']
+    teams=set('ARI ATL BAL BUF CAR CHI CIN CLE DAL DEN DET GB HOU IND JAX KC LA LAC LV MIA MIN NE NO NYG NYJ PHI PIT SEA SF TB TEN WAS'.split())
+    aliases={'OAK':'LV','SD':'LAC','STL':'LA'}
+    events={'retired','traded','waived','released','suspended','signed','activated'}
+    with Path(path).open(encoding='utf-8-sig',newline='') as src:
+        rows=csv.DictReader(src)
+        if rows.fieldnames!=columns:
+            raise ValueError(f'{path}: personnel header must be {columns}; found {rows.fieldnames}')
+        for i,row in enumerate(rows,start=2):
+            try:
+                if any(not (row.get(c) or '').strip() for c in ('event_date','team','gsis_id','event')):
+                    raise ValueError('missing required value')
+                day=row['event_date'].strip()
+                if not re.fullmatch(r'\d{4}-\d{2}-\d{2}',day): raise ValueError('date must be YYYY-MM-DD')
+                datetime.strptime(day,'%Y-%m-%d')
+                team=row['team'].strip()
+                if aliases.get(team,team) not in teams: raise ValueError('unrecognized team abbreviation')
+                if row['event'].strip() not in events: raise ValueError('unknown event code')
+            except ValueError as exc:
+                raise ValueError(f'{path}:{i}: {exc}; offending row: {row}') from exc
 
 
 def validate_ledger(path):
@@ -65,6 +90,7 @@ def validate_data_dir(data_dir="data"):
     paths = sorted(data_dir.rglob("*.csv"))
     for path in paths:
         validate_csv(path)
+        if path.name=="personnel_events.csv": validate_personnel_events(path)
     ledger = data_dir / LEDGER_NAME
     if ledger.exists():
         validate_ledger(ledger)
