@@ -128,3 +128,41 @@ Players who matter and miss a game are almost always already Out/Doubtful on the
 final report, which the model counts. Inactives mostly add healthy scratches and backups
 with few snaps. **No same-week-roster revision.** The live check of whether nflverse
 publishes inactives before kickoff is moot and was not pursued.
+
+### Tests 6–9: wrong-signed features, expected-points stats, decay speed (2026-10-07)
+
+**Reported from an uncommitted prototype; not reproduced by a committed script.**
+Paired SEs are game-level, not season-clustered.
+
+These tests used their own re-run baseline, `rates_core_avail_cs` only, picking h16_r0.1
+in all three held-out seasons: 811 bets, +2.43u, +0.3% ± 2.7, LL 0.6352. **It is not
+production.** Production is the two-family grid, frozen at **h8_r0.1** for 2026
+(+2.17u, LL 0.6364, the tables above). The paired differences are still internally
+valid. On the same 811 rows, the market-correct null is −4.1% and the same-row market
+favorite is +0.0%. The model's ROI is level with simply betting favorites.
+
+| Test | Change vs re-run baseline | ROI difference | Log-loss gain | Verdict |
+|---|---|---:|---:|---|
+| 6 | drop offense interception % and offense penalty yards | −1.83 pts ± 1.57 | −0.0033 ± 0.0023 | No change. The effect is unresolved; it was not shown to hurt. |
+| 7 | + EPA/play, dropback EPA, rush EPA, success rate, red-zone TD % | −0.79 pts ± 1.30 | +0.0024 ± 0.0023 | No change. The log-loss gain is unresolved and may be an upper bound (see below). |
+| 8 | team half-life sweep {2, 4, 8, 16, 32} | – | – | No change: nested selection picked h16 every season. |
+| 9 | adaptive decay w(n)·2^(−age/2) + (1−w)·2^(−age/16), w = n/(n+k), k ∈ {4, 8, 12} | – | – | No change: nested selection picked h16 every season. |
+
+**Corrections and caveats to the original note:**
+- **Test 6 missed a wrong sign.** In the current fit (`data/latest/weights.csv`, h8),
+  *Defense: opponents' penalty yards* is −0.091, against the direction map. That is
+  larger than either feature the test dropped. Test 10 checks the signs across every
+  weekly refit.
+- **Tests 8–9 week-group tables** (fast decay is worse in weeks 1–4 and better in 14+)
+  use fixed recipes on the same 2023–25 seasons and have no SEs. Test 9 was designed
+  from test 8's crossover on those same seasons. Both are post-hoc diagnostics. Only
+  the nested selections count as evidence, and they rejected both variants.
+- **Test 7 EPA** comes from nflverse's pretrained expected-points model. If its
+  training seasons include 2023–25, that is lookahead favoring the variant.
+- **The production half-life surface is flat:** h16 trails h8 by 0.00045 LL
+  (paired season SE 0.0027) in `data/latest/recipe_selection.csv`.
+- **The model adds little beyond the market.** In `data/latest/market_blend.csv`, the
+  pooled model weight given the market is −0.12 (CI −0.56 to +0.26). This holds
+  across the whole held-out sample, not just late in the season.
+- **Forward test.** The forward ledger starts in **week 5** (TB@DAL, Oct 8), not week 6.
+  The two forward hypotheses from this note are fixed in `PREREGISTRATION.md`.
