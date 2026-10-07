@@ -14,7 +14,7 @@ Pages
 
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
-  data/frozen_recipe_<season>.json frozen hyperparameters (nfl_model.frozen_recipe)
+  data/frozen_recipe_<season>_<REVISION>.json frozen hyperparameters (nfl_model.frozen_recipe)
   data/forward_ledger.csv, data/ledger_report.txt   graded view (grade_ledger.py)
   data/latest/                     the newest run's page inputs, so --pages-only needs no model run
   data/projections/<season>_week<NN>.csv   the latest board of each week, overwritten through the week
