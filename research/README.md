@@ -935,3 +935,53 @@ Either could be zero.
 *Known exposure.* These seasons have been used by 27 earlier tests, and production's design was
 revised after seeing them, which if anything favours production. Tests 14–16 (point margin is the
 input the market leans on) are why the margin's construction was examined for arm A.
+
+**Result (2026-10-08, run once after the plan above was committed).** `python research/margin_target.py
+[CACHE_DIR]` (≈ 9 min warm). Production reproduces exactly (811 priced bets, +8.62u, LL 0.6325). Every
+arm picked the opponent-adjusted family at half-life 16 in every held-out season (M and M + A at ridge
+0.5, the ×5 counterpart of production's 0.1). Held-out 2023–25, n = 815 games:
+
+| Arm | LL gain vs production [97.5% CI] | ± SE | Verdict |
+|---|---:|---:|---|
+| M: margin target | −0.0000 [−0.0054, +0.0056] | 0.0024 | unresolved |
+| A: schedule-adjusted margin | −0.0003 [−0.0011, +0.0005] | 0.0004 | unresolved |
+| M + A (not decisive) | −0.0003 [−0.0057, +0.0053] | 0.0025 | reported only |
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| production (v1.12) | 811 | +8.62 | +1.1% ± 2.7 | 0.6325 | −0.0244 |
+| M: margin target | 811 | +21.47 | +2.6% ± 2.7 | 0.6325 | −0.0244 |
+| A: schedule-adjusted margin | 811 | +8.81 | +1.1% ± 2.7 | 0.6328 | −0.0247 |
+| M + A | 811 | +11.73 | +1.4% ± 2.7 | 0.6328 | −0.0248 |
+
+Same priced rows: market favorite +0.0%, market-correct null −4.1%. ROI differences vs production,
+same games: M +1.59 pts ± 1.50, A +0.02 ± 0.56, M + A +0.38 ± 1.40.
+
+| LL gain vs production | 2023 | 2024 | 2025 | Wk 1–4 | Wk 5–9 | Wk 10–13 | Wk 14–17 | Wk 18 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| M | +0.0056 ± 0.0047 | −0.0093 ± 0.0040 | +0.0036 ± 0.0039 | −0.0034 ± 0.0050 | −0.0042 ± 0.0052 | +0.0013 ± 0.0047 | +0.0036 ± 0.0050 | +0.0142 ± 0.0100 |
+| A | −0.0003 ± 0.0006 | +0.0005 ± 0.0005 | −0.0011 ± 0.0008 | −0.0005 ± 0.0007 | +0.0005 ± 0.0007 | −0.0002 ± 0.0008 | −0.0011 ± 0.0008 | −0.0005 ± 0.0010 |
+
+Arm M, other secondary checks: margin RMSE 13.09 points (market spread 12.66, production's implied
+spread 13.10); residual SD 12.77 points through 2025. In the fit through 2025, 4 of 23 directed
+coefficients are against the direction map (production: 7 of 23). The four are offense fumbles lost,
+offense penalty yards, opponents' first-down rate and opponents' penalty yards; the three that M
+corrects are offense yards per rush, offense interception % and LB snaps out.
+
+**Reading.** Neither arm passes, and neither is harmful.
+- **M ties production on log loss** (−0.0000) and does not deliver the +0.002 to +0.005 expected in
+  the plan. The test also had less power than the plan assumed. M and production disagree game by
+  game far more than earlier variants did (paired SE 0.0024 vs 0.0010 for Test 16's margin input), so
+  the 97.5% interval is about ±0.0055 and could not have resolved the expected gain. The seasons
+  disagree: +0.0056, −0.0093 (≈ −2.3 SE) and +0.0036. Its ROI is +1.6 ± 1.5 pts over production
+  (unresolved), and ROI is not a selection criterion.
+- **What M does change is coefficient stability:** fewer wrong-signed inputs (4 vs 7). It is not a
+  better forecaster on these seasons, and the gap to the market (−0.0244) is the same. That fits Test
+  15C's conclusion that the gap is the market's information, not the model's estimation noise.
+- **A changes nothing measurable** (−0.0003 ± 0.0004). Its expected early-season gain did not appear
+  (weeks 1–4: −0.0005). With 17 games and rotating opponents, the opponent adjustment to the margin
+  is small next to its noise, and the `_adj` box-score inputs and the ridge already absorb most of
+  the schedule.
+- **No model change.** Neither arm is a candidate for a new `REVISION` on this evidence. M could be
+  reconsidered if a future revision needs more stable coefficients for interpretation, but it would
+  have to be justified on that basis, not on accuracy.
