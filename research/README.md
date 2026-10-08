@@ -1232,3 +1232,53 @@ Production's own held-out record on 2017–20 against the market is also printed
 the model performs on seasons its design never saw.
 
 *Expectation, stated now (not a rule).* At most about +0.001 per game; most likely unresolved.
+
+**Result (2026-10-08, run once after the plan above was committed).** `python research/fit_memory.py
+[CACHE_DIR]` (≈ 26 min including the 2013–18 downloads). Data check passed: 100% of decided held-out
+2017–20 games ready, 99.9% priced. Roster audit on 2013–20: 22 rows with no status and 1 `UDF` counted
+as members, as production does.
+
+*Primary basis, untouched seasons: held-out 2017–20, n = 1,020 games (1,013 priced bets).*
+
+| Arm | LL gain vs production [95% CI] | ± SE | Units | ROI ± SE | Log loss | LL vs ML market | Verdict |
+|---|---:|---:|---:|---:|---:|---:|---|
+| production (fit half-life 2) | — | — | +11.84 | +1.2% ± 2.4 | 0.6222 | −0.0221 | — |
+| **Test 32: half-life ∈ {2, 4, ∞} selected** | **+0.0004 [−0.0017, +0.0025]** | 0.0011 | +13.69 | +1.4% ± 2.4 | 0.6218 | −0.0218 | **unresolved** |
+| fixed half-life 4 | +0.0013 [−0.0010, +0.0036] | 0.0012 | +17.39 | +1.7% ± 2.4 | 0.6209 | −0.0209 | reported |
+| fixed half-life ∞ | +0.0023 [−0.0015, +0.0061] | 0.0019 | +18.85 | +1.9% ± 2.4 | 0.6199 | −0.0198 | reported |
+
+Same priced rows: market favorite −1.9%, market-correct null −2.6%. Nested picks: production chose the
+opponent-adjusted family at h16 in 2017–18 and the unadjusted family at h16 in 2019–20 (ridge 0.1 in
+every season); the selected arm kept half-life 2 in 2017–19 and chose ∞ in 2020.
+
+| LL gain vs production | 2017 | 2018 | 2019 | 2020 |
+|---|---:|---:|---:|---:|
+| selected half-life | +0.0000 | +0.0000 | +0.0000 | +0.0015 ± 0.0045 |
+| fixed half-life 4 | −0.0038 ± 0.0016 | +0.0044 ± 0.0019 | +0.0023 ± 0.0012 | +0.0021 ± 0.0039 |
+| fixed half-life ∞ | −0.0083 ± 0.0031 | +0.0084 ± 0.0037 | +0.0077 ± 0.0041 | +0.0015 ± 0.0045 |
+
+*Secondary basis, seen in the exploratory sweep: held-out 2023–25, n = 815 (811 priced bets).*
+
+| Arm | LL gain vs production [95% CI] | ± SE | ROI ± SE | By season 2023 / 2024 / 2025 |
+|---|---:|---:|---:|---|
+| production | — | — | +1.1% ± 2.7 | — |
+| selected half-life (picks 2 / 4 / ∞) | +0.0005 [−0.0012, +0.0022] | 0.0009 | +0.7% ± 2.7 | +0.0000 / +0.0024 / −0.0009 |
+| fixed half-life 4 | +0.0011 [−0.0004, +0.0026] | 0.0007 | +1.4% ± 2.7 | +0.0010 / +0.0024 / −0.0003 |
+| fixed half-life ∞ | +0.0016 [−0.0013, +0.0047] | 0.0015 | +1.6% ± 2.7 | +0.0015 / +0.0042 / −0.0009 |
+
+Same priced rows: market favorite +0.0%, market-correct null −4.1%.
+
+**Reading.**
+- **Unresolved under the plan's rule.** Selecting the half-life gains +0.0004 on the untouched seasons.
+  The selection barely moves: the earliest walk-forward seasons, with the least history, never favor
+  a longer memory, so it keeps 2 in three of the four held-out seasons. This is the same pattern as
+  the ridge in the exploratory sweep.
+- **The fixed longer memories point the same way on both bases, without resolving.** Half-life ∞ is
+  +0.0023 ± 0.0019 on 2017–20 and +0.0016 ± 0.0015 on 2023–25, and is positive in five of seven seasons
+  (2017 and 2025 negative). Half-life 4 is +0.0013 and +0.0011. These arms were secondary and are not
+  pooled across bases. At most this is about +0.002 per game, a tenth of the gap to the market. No
+  `REVISION` follows from this test.
+- **Production on seasons its design never saw** (side result, basis 2): log loss 0.0221 behind the
+  no-vig moneyline on 2017–20, against 0.0244 on 2023–25, so the gap to the market replicates. Flat ROI
+  +1.2% ± 2.4 (1,013 bets) against −1.9% for the same-row favorite and a −2.6% null: ROI minus null is
+  about 1.6 SE, unresolved.
