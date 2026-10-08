@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.12), newest first; this page describes what the code
+version history (v1 to v1.13), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.12`
+## The current model: `boxscore-composite-v1.13`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -62,21 +62,40 @@ The output folder is `nfl_boxscore_output_v1_12`; earlier frozen recipes
 and forward-ledger rows are preserved. With no historical events, held-out seasons
 match v1.11 (research test 21).
 
-**Point margin (v1.10).** Each team's decayed average point margin per game,
-from the official result of every earlier game in its history. It uses the same
-weighting as the profiles and is shrunk toward zero with four pseudo-games. Box-score
-rates leave out red-zone finishing, special teams, return and defensive TDs and
-kicking; margin carries them. The input is the home-minus-away difference. On the
-2023–25 held-out seasons it improved log loss by 0.0028 ± 0.0010 per game over v1.9.
-The ROI change was +0.6 ± 0.9 pts, which is unresolved (research test 16; the input
-was found on those seasons, so the estimate is optimistic).
+**Largest lead and deficit (v1.13).** Final MOV is replaced by two inputs:
+each team's decayed average largest lead and largest deficit from its earlier
+games. The full-game score peaks come from actual nflverse scoring events (`sp=1`),
+including overtime, extra points and two-point conversions; deleted plays and
+stale non-scoring administrative rows are excluded. Quarter/clock ordering,
+monotonic score checks and agreement with official final scores protect the source.
+A team that never led has largest lead zero; a team that never trailed has largest
+deficit zero. Each uses the same team-game decay, offseason retention and history
+window as the profiles, with four zero pseudo-games. The regression receives the
+home-minus-away difference of each profile. Neither peak is clipped or
+opponent-adjusted. Time spent leading is not included.
+
+This is an owner-selected new experiment following a development comparison on
+2023–2025: replacing MOV with both peaks scored log loss 0.63240 versus 0.63248
+for MOV (gain 0.000080, paired 95% interval -0.001767 to +0.001872). Flat 1u ROI
+was +2.02% versus +1.06% on 811 same-row directional bets; the ROI difference
+was unresolved. These figures do not establish superiority. The comparison
+selected each year's recipe on earlier seasons and refit coefficients weekly,
+but the feature design followed prior historical research. Future v1.13 snapshots
+start a distinct experiment; earlier recipes and forward rows are preserved.
+Legacy margin families remain available for historical research, but `d__margin`
+is absent from both production candidate families.
+
+PBP-derived box caches are revision-specific and are rebuilt for v1.13. A custom
+`TEAM_GAME_CSV` must supply finite nonnegative `max_lead` and `max_deficit` for both
+teams in every prior game, with each team's lead equal to its opponent's deficit.
+Missing peaks are an error, rather than a silent zero or inference from final MOV.
 
 **Composite.** A logistic regression on home-minus-away differences plus a
 site term, ridge-penalized, refit before every week on all earlier games
 (older games discounted with a two-season half-life).
 
 **Selection and freezing.** 24 candidates: 2 feature families (unadjusted and
-opponent-adjusted rates, both with availability and point margin) × 3 team
+opponent-adjusted rates, both with availability and lead/deficit peaks) × 3 team
 half-lives (4, 8, 16 games) × 4 ridge strengths. The minimum walk-forward log
 loss over earlier seasons picks the recipe, which is frozen for the season in
 `data/frozen_recipe_<season>_<REVISION>.json` (v1.9's record keeps its old name,

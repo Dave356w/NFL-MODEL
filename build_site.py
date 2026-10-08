@@ -470,6 +470,8 @@ def factor_label(name):
         return "Home field"
     if name == m.MARGIN_FEATURE:
         return "Point margin"
+    if name in m.PEAK_FEATURES:
+        return "Largest lead" if name == "d__max_lead" else "Largest deficit"
     if name.startswith("d__avail__"):
         c = name[len("d__avail__"):]
         return "Quarterback" if c == "qb_delta" else f"{UNIT_NAMES.get(c.split('_')[0], c)} availability"

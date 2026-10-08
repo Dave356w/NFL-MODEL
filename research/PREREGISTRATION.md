@@ -185,3 +185,15 @@ bootstrap 95% CI (`h4_summary` in `grade_ledger.py`).
 *Power, stated now.* About 250–270 forward games a season give SE(r) ≈ 0.06, so a true r of
 0.10 is likely unresolved after one season and needs about three. A 2026-only result will
 probably read "unresolved"; that is not evidence against H4.
+
+
+**2026-10-08, owner-selected v1.13: lead/deficit peaks replace final MOV.**
+This changes production features and therefore starts a new experiment,
+`boxscore-composite-v1.13`, with new candidate families and config signature.
+Existing v1.12 and earlier frozen recipes and ledger rows are not altered or
+pooled with v1.13. The development replacement comparison gave log-loss gain
+0.000080 [-0.001767, +0.001872] on 815 games, with unresolved ROI improvement on
+811 same-row directional bets. This adoption is an owner choice, not forward
+confirmation. H1/H2 stopping and experiment-specific sample rules above remain
+as written; this note does not silently extend them to the new revision. H3's
+market-based frozen ladder and H4's separately recorded matchup term are unchanged.
