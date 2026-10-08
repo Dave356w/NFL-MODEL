@@ -783,3 +783,31 @@ includes zero. Games that looked alike before kickoff did not miss the spread al
 50-neighbour mean of misses that each have SD ≈ 13 points carries about ±1.8 points of noise,
 so only a large context effect could have shown; none did. Unresolved at small effects, no
 support for a model change.
+
+### Test 23: H3 ladder-pricing backtest on Kalshi 2025–26 (2026-10-08)
+
+`python research/ladder_pricing.py --backtest`. Development evidence for pre-registered H3 (the
+rule was committed before this result was seen); not forward evidence. Kalshi game-winner and
+"wins by over X.5" books (strike ≤ 17.5) from the last hourly candle ending at least 1 hour
+before kickoff, every 2025 game and 2026 weeks 1–4 with both winner books (346 games). The
+reference table is built from 2006–2024 only, so 2025–26 is out of sample for it. Rule as
+pre-registered: one rung per game, expected profit after the estimated fee ≥ $0.03.
+
+| Version | Bets | Units | ROI ± SE | Kalshi-mid null | ROI − null | Hit vs reference vs ask |
+|---|---:|---:|---:|---:|---:|---|
+| Reference priced from the nflverse moneyline (as the rule is written) | 46 | +1.60 | +3.5% ± 24.6 | −9.0% | +12.5 ± 24.5 | 32.6% / 34.1% / 28.8% |
+| Timing-clean: favorite probability from Kalshi's own winner mids, same candle | 40 | −2.28 | −5.7% ± 26.1 | −8.7% | +3.0 ± 26.0 | 30.0% / 34.5% / 29.1% |
+
+By season (as written): 2025 +16.8% (n = 41), 2026 −105.7% (n = 5).
+
+Across **all** 6,060 rungs, not just bets: reference Brier 0.1784 vs Kalshi mid 0.1804, difference
+−0.0020 [−0.0049, +0.0004] (game-clustered 95%); the two differ by 2.2¢ on average. An interim
+look at the first 233 games had shown −0.0039 [−0.0079, −0.0005] and +21.8% ROI; both shrank
+with the full sample.
+
+**Reading.** Unresolved, with no edge once timing is matched. The nflverse moneyline is close
+to kickoff and can carry news Kalshi's 1-hour-before price had not yet absorbed, which flatters
+the as-written version; matched on timing, ROI sits at the null. Kalshi's ladder prices are
+within about 2¢ of 19 seasons of real margins. H3 stays pre-registered; forward rows use the
+moneyline saved at lock, which precedes the Kalshi capture, so the forward test has no such
+timing advantage. Expect about 13% of games to qualify.
