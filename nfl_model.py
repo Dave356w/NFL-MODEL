@@ -5,6 +5,12 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.12.3 (reporting only; same REVISION, config signature, recipe and ledger): pre-registered
+H4. matchup.py records each newly locked game's pass-matchup interaction (research Test 24:
+home pass offense x away pass defense allowed minus the reverse, season-to-date centring) in
+data/h4_terms.jsonl, append-only; grade_ledger.py reports its partial correlation with the
+margin beyond the market spread. Not a model input.
+
 v1.12.2 (reporting only; same REVISION, config signature, recipe and ledger): Kalshi as a
 second, timestamped market. kalshi.py captures Kalshi's public best bid/ask for the game-winner
 markets and the "wins by over X.5" ladder for each game newly locked in the forward ledger, one
@@ -390,7 +396,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')

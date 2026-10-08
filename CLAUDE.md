@@ -13,7 +13,8 @@ product and decides which experiments to run.
 - `build_site.py` (pages, `data/latest` snapshot), `grade_ledger.py` (grading),
   `schedule_gate.py` (when builds run), `commit_data.py` (signed data commits),
   `validate_data_files.py` (data invariants), `kalshi.py` (secondary Kalshi quotes at lock,
-  `data/kalshi_snapshots.jsonl`, append-only like the ledger).
+  `data/kalshi_snapshots.jsonl`, append-only like the ledger), `matchup.py` (pre-registered
+  H4 term at lock, `data/h4_terms.jsonl`, append-only).
 - `data/forward_predictions.jsonl` is the forward ledger, and it is **append-only
   evidence**. `data/forward_ledger.csv` and `data/ledger_report.txt` are
   regenerated views. Quote live numbers from the current report, not from old PRs.

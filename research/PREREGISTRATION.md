@@ -153,3 +153,35 @@ the ROI if each bought rung's captured mid were exactly right).
 bought rungs will be deep, low-priced ones with a per-bet SD of 2–4u, so even 50 bets
 resolve only a large edge. The backtest on Kalshi's 2025–26 books (out of sample for the
 2006–2024 table) is development evidence and will be reported as such.
+
+**2026-10-08. New hypothesis H4 (pass-matchup interaction), committed before any H4 term is
+recorded for a forward game. H1, H2, H3 and their rules are unchanged.**
+
+*Source.* Research Test 24 (`research/README.md`): of four matchup interactions fixed before
+running, only the pass term passed its Bonferroni bar on held-out 2023–25 (partial r with the
+margin beyond the spread +0.099, 98.75% CI +0.004 to +0.193; +0.09 / +0.08 / +0.13 by season),
+and it did not replicate in 2019–22 (−0.015). It is therefore a hypothesis, not evidence.
+Independent of the model and its revision.
+
+*Term (fixed).* `matchup.py`: z(home offense) × z(away defense allowed) − z(away offense) ×
+z(home defense allowed) on net pass yards per pass play (`rates_core`, half-life 16 pregame
+profiles); z = (value − mean over the season's games so far, pregame values only) / SD over
+2019–22 games. Recorded once per game, at the run that locks it in the forward ledger, in
+`data/h4_terms.jsonl`. With this season-to-date centring the held-out 2023–25 figure is +0.092
+[+0.024, +0.159] (95%), essentially Test 24's.
+
+*Sample.* Every graded game with a recorded term, one row per game whatever the experiment.
+
+*Statistic.* Partial correlation of the term with the final home margin, controlling linearly
+for the snapshot's market spread (both regressed on the spread), with a 2,000-draw game
+bootstrap 95% CI (`h4_summary` in `grade_ledger.py`).
+
+*Decision* (cumulative, at the season checkpoints above):
+- **Supported**: the 95% CI lies above zero. Even then the term enters the model only as a new
+  `REVISION`, by the owner's decision.
+- **Falsified**: the CI's upper bound is below +0.05 (too small to matter), or n ≥ 600 and r ≤ 0.
+- Otherwise **unresolved**.
+
+*Power, stated now.* About 250–270 forward games a season give SE(r) ≈ 0.06, so a true r of
+0.10 is likely unresolved after one season and needs about three. A 2026-only result will
+probably read "unresolved"; that is not evidence against H4.

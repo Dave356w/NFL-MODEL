@@ -22,6 +22,7 @@ import numpy as np
 import pandas as pd
 
 import kalshi as k
+import matchup
 import nfl_model as m
 
 DATA = Path("data")
@@ -41,7 +42,7 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "kalshi_captured_utc", "kalshi_lag_hours", "kalshi_home_mid", "kalshi_side_ask", "kalshi_units",
            "kalshi_null", "kalshi_fav_units", "alt_rule", "alt_team", "alt_strike", "alt_ask", "alt_result",
            "alt_units", "alt_fav_units", "ladder_ticker", "ladder_team", "ladder_strike", "ladder_est",
-           "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null"]
+           "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null", "h4_pass_term"]
 ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
 ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
 
@@ -58,7 +59,7 @@ def load_results(url=SCHEDULE_URL):
     return s
 
 
-def grade(records, results, kalshi=None, ladder=None):
+def grade(records, results, kalshi=None, ladder=None, h4=None):
     """Flat graded frame, one row per ledger snapshot, newest kickoff first. `kalshi` is the
     list of data/kalshi_snapshots.jsonl records (secondary prices; optional); `ladder` the
     loaded H3 reference table (kalshi.load_ladder_table; optional)."""
@@ -104,6 +105,7 @@ def grade(records, results, kalshi=None, ladder=None):
     g["fav_units"] = fav.units.where(bets.units.notna())  # same rows as the model's bets
     g["model_spread"], g["spread_gap"], g["ats_side"], g["ats_result"] = ats(g)
     g = g.join(kalshi_grades(g, kalshi or [], ladder))
+    g["h4_pass_term"] = g.game_id.map({r["game_id"]: r["pass_term"] for r in (h4 or [])})
     g = g.sort_values(["kickoff_utc", "game_id"], ascending=[False, True]).reset_index(drop=True)
     return g[COLUMNS]
 
@@ -269,6 +271,17 @@ def scored_frame(g):
     return s
 
 
+def h4_summary(g):
+    """Pre-registered H4 over every graded game with a recorded term (one row per game,
+    whatever the experiment): partial r of the term with the home margin, controlling
+    for the snapshot's market spread, with a bootstrap 95% CI."""
+    if "h4_pass_term" not in g:
+        return {"n": 0}
+    d = g[(g.status == "graded") & g.h4_pass_term.notna() & g.spread_line.notna()].drop_duplicates("game_id")
+    r, lo, hi = matchup.partial_r(d.h4_pass_term, d.result, d.spread_line)
+    return {"n": len(d), "r": r, "lo": lo, "hi": hi}
+
+
 def report_text(g, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     lines = [f"NFL forward ledger report -- {now.strftime('%Y-%m-%d %H:%M UTC')}",
@@ -346,6 +359,14 @@ def report_text(g, now=None):
                 mm, kk = b[b.source == "model"].iloc[0], b[b.source == "market"].iloc[0]
                 lines.append(f"    {mm.band:>9}  {mm.record:>16} | {kk.record:>16}")
         lines.append("")
+    h = h4_summary(g)
+    if h["n"]:
+        verdict = ("supported (95% CI above zero)" if h["lo"] > 0 else
+                   "falsified (CI below +0.05)" if h["hi"] < .05 else
+                   "falsified (n >= 600, r <= 0)" if h["n"] >= 600 and h["r"] <= 0 else "unresolved")
+        lines += ["== Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread",
+                  f"  n={h['n']} graded games" + (f", partial r {h['r']:+.3f} [{h['lo']:+.3f}, {h['hi']:+.3f}] (95%): {verdict}"
+                                                 if np.isfinite(h["r"]) else " (needs 10 to report)"), ""]
     return "\n".join(lines) + "\n"
 
 
@@ -364,7 +385,7 @@ def main(argv=None):
     results = load_results() if records else pd.DataFrame(columns=["game_id", "away_score", "home_score", "result"])
     table = Path(args.data_dir) / k.LADDER_TABLE.name
     g = grade(records, results, k.load(Path(args.data_dir) / k.SNAPSHOTS.name),
-              k.load_ladder_table(table) if table.exists() else None)
+              k.load_ladder_table(table) if table.exists() else None, matchup.load(Path(args.data_dir) / matchup.TERMS.name))
     write_outputs(g, args.data_dir)
     sm = summary(g)
     print(f"ledger: {sm['snapshots']} snapshots, {sm['graded']} graded, {sm['pending']} pending")

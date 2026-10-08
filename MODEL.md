@@ -162,6 +162,15 @@ margin-free sportsbook moneyline (difference −0.0023, 95% −0.0054 to +0.0008
 0.6335 for the model; calibration slope 0.94 ± 0.16. Kalshi agrees with the book to about one
 point of win probability, so it is a cheaper, timestamped price, not a better forecast.
 
+### Pre-registered H4: the pass matchup (reporting only, v1.12.3)
+
+`matchup.py` records, for each newly locked game, home pass offense × away pass defense
+allowed minus the reverse (net pass yards per pass play, half-life 16 profiles, centred on the
+season so far) in `data/h4_terms.jsonl`. `data/ledger_report.txt` reports its partial
+correlation with the final margin beyond the market spread, with the pre-registered verdict
+(`research/PREREGISTRATION.md`). Held out it was +0.09 in 2023–25 and −0.02 in 2019–22
+(research Test 24), so it is a forward hypothesis, not a model input.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of

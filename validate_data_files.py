@@ -14,6 +14,7 @@ from pathlib import Path
 CONFLICT_MARKERS = ("<<<<<<<", "=======", ">>>>>>>")
 LEDGER_NAME = "forward_predictions.jsonl"
 KALSHI_NAME = "kalshi_snapshots.jsonl"
+H4_NAME = "h4_terms.jsonl"
 
 
 def validate_csv(path):
@@ -112,6 +113,32 @@ def validate_kalshi(path):
     return len(seen)
 
 
+def validate_h4(path):
+    """Every line is JSON; one term per game; recorded before kickoff; finite term."""
+    path = Path(path)
+    seen = set()
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        if line.startswith(CONFLICT_MARKERS):
+            raise ValueError(f"{path}:{line_number}: unresolved Git conflict marker")
+        try:
+            r = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{line_number}: not JSON ({exc})") from exc
+        for k in ("game_id", "captured_utc", "kickoff_utc", "pass_term"):
+            if k not in r:
+                raise ValueError(f"{path}:{line_number}: missing {k}")
+        if r["game_id"] in seen:
+            raise ValueError(f"{path}:{line_number}: duplicate term for {r['game_id']}")
+        seen.add(r["game_id"])
+        if datetime.fromisoformat(r["captured_utc"]) >= datetime.fromisoformat(r["kickoff_utc"]):
+            raise ValueError(f"{path}:{line_number}: term not recorded before kickoff")
+        if not isinstance(r["pass_term"], (int, float)) or r["pass_term"] != r["pass_term"]:
+            raise ValueError(f"{path}:{line_number}: pass_term must be a finite number")
+    return len(seen)
+
+
 def validate_data_dir(data_dir="data"):
     """Validate every CSV under data_dir, the forward ledger and Kalshi captures; return checked paths."""
     data_dir = Path(data_dir)
@@ -127,6 +154,10 @@ def validate_data_dir(data_dir="data"):
     if snaps.exists():
         validate_kalshi(snaps)
         paths.append(snaps)
+    h4 = data_dir / H4_NAME
+    if h4.exists():
+        validate_h4(h4)
+        paths.append(h4)
     return paths
 
 
