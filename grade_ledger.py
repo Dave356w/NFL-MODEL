@@ -35,7 +35,10 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "away_score", "home_score", "result", "home won", "status",
            "model_pick", "model_hit", "market_hit", "model_log_loss", "market_log_loss",
            "model_brier", "market_brier", "bet_side", "bet_team", "bet_price", "bet_band",
-           "bet_q", "bet_result", "units", "null_ev", "fav_units"]
+           "bet_q", "bet_result", "units", "null_ev", "fav_units",
+           "model_spread", "spread_gap", "ats_side", "ats_result"]
+ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
+ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
 
 
 def load_records(path=LEDGER):
@@ -92,8 +95,34 @@ def grade(records, results):
     g["bet_team"] = np.where(bets.side == "home", g.home, np.where(bets.side == "away", g.away, ""))
     g["bet_result"], g["units"], g["null_ev"] = bets.result, bets.units, bets.null_ev
     g["fav_units"] = fav.units.where(bets.units.notna())  # same rows as the model's bets
+    g["model_spread"], g["spread_gap"], g["ats_side"], g["ats_result"] = ats(g)
     g = g.sort_values(["kickoff_utc", "game_id"], ascending=[False, True]).reset_index(drop=True)
     return g[COLUMNS]
+
+
+def ats(g):
+    """Diagnostic, not the goal metric (v1.12.1): the model-implied spread, its gap to
+    the snapshot spread_line (positive = model likes home more), the side that gap
+    takes against the snapshot spread, and W/L/P against that spread once final."""
+    sp = m.implied_spread(g.model_wp)
+    line = pd.to_numeric(g.spread_line, errors="coerce").to_numpy(float)
+    gap = sp - line
+    side = np.where(~np.isfinite(gap) | np.isclose(np.nan_to_num(gap), 0), "",
+                    np.where(gap > 0, "home", "away"))
+    cover = pd.to_numeric(g.result, errors="coerce").to_numpy(float) - line  # home margin over the line
+    res = np.where((side == "") | ~np.isfinite(cover), "",
+                   np.where(np.isclose(np.nan_to_num(cover), 0), "P",
+                            np.where((cover > 0) == (side == "home"), "W", "L")))
+    return sp, gap, side, res
+
+
+def ats_summary(g, min_gap=0.):
+    """W-L-P against the snapshot spread on the model's side, for |spread_gap| >= min_gap."""
+    b = g[(g.ats_result != "") & (g.spread_gap.abs() >= min_gap)]
+    w, l = int((b.ats_result == "W").sum()), int((b.ats_result == "L").sum())
+    lo, hi = m.wilson(w, w + l)
+    return {"wins": w, "losses": l, "pushes": int((b.ats_result == "P").sum()),
+            "win_pct": w / (w + l) if w + l else np.nan, "lo": lo, "hi": hi}
 
 
 def roi(g):
@@ -174,6 +203,17 @@ def report_text(g, now=None):
                                  f"{row.units:+7.2f}u  ROI {100 * row.roi:+6.1f}%  q {100 * row.mean_q:.1f}%")
         else:
             lines.append("  No graded bets with a saved moneyline yet.")
+        decided = part.ats_result.isin(["W", "L"]).sum()
+        if decided:
+            lines.append(f"  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread "
+                         f"(break-even at -110: {100 * ATS_BREAKEVEN:.1f}%)")
+            for lab, gap in (("all games", 0.), (f"|gap| >= {ATS_GAP_POINTS:g} pts", ATS_GAP_POINTS)):
+                a = ats_summary(part, gap)
+                if a["wins"] + a["losses"]:
+                    lines.append(f"    {lab:>15}  {a['wins']}-{a['losses']}-{a['pushes']}  "
+                                 f"cover {100 * a['win_pct']:.1f}% (Wilson 95% {100 * a['lo']:.1f}-{100 * a['hi']:.1f})")
+                else:
+                    lines.append(f"    {lab:>15}  no decided games")
         if sm["scored"]:
             lines += [f"  Scored rows (graded, market present): {sm['scored']}",
                       f"  Model picks  {m.record_text(sm['model_wins'], sm['model_losses'])}",

@@ -113,6 +113,23 @@ flat ROI on the same games beside their log loss, for comparison only. Under rea
 ±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
 new `REVISION`.
 
+### Model-implied spread (reporting only, v1.12.1)
+
+`model_spread = 12.37 × Φ⁻¹(model_wp)`: the inverse of the market comparator, in
+points with the schedule's `spread_line` sign (positive = home favored). It appears in
+`data/latest/board.csv`, `retro_ledger.csv` and `data/forward_ledger.csv`; it is
+derived from `model_wp`, never stored in the forward JSONL, and does not change the
+config signature. On held-out 2023–25 (n=815) it misses the realized margin by
+13.10 points RMSE against 12.66 for the market spread; a linear recalibration fit on
+earlier held-out seasons did not help.
+
+`forward_ledger.csv` also carries `spread_gap` (`model_spread − spread_line`), the
+side that gap takes against the snapshot spread (`ats_side`) and its W/L/P
+(`ats_result`). The ledger report shows this as a **diagnostic, not the goal metric**,
+for all games and for |gap| ≥ 3 points, against the 52.4% break-even at −110. The
+3-point cut was chosen after the held-out seasons were seen (held-out: 136-118, 53.5%
+± 3.1), so only forward games can test it.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of
