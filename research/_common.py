@@ -112,3 +112,58 @@ DHEAD = "| Comparison (same games) | ROI difference | Log-loss gain |\n|---|---:
 
 def cache_dir_from_argv(default='.nfl_cache'):
     return Path(sys.argv[1]) if len(sys.argv) > 1 else Path(os.environ.get('NFL_CACHE_DIR', default))
+
+
+# Shared reporting for tests run as a family (Tests 29-31): bootstrap CI of the per-game
+# log-loss gain, plus the secondary goal-metric and by-season / by-week tables.
+WEEK_GROUPS = ((1, 4, '1–4'), (5, 9, '5–9'), (10, 13, '10–13'), (14, 17, '14–17'), (18, 18, '18'))
+
+
+def boot_ci(d, level, reps=4000):
+    """Game-bootstrap interval of the mean of per-game values d."""
+    d = np.asarray(d, float); rng = np.random.default_rng(m.SEED)
+    means = np.array([d[rng.integers(0, len(d), len(d))].mean() for _ in range(reps)])
+    a = (1 - level) / 2
+    return float(np.quantile(means, a)), float(np.quantile(means, 1 - a))
+
+
+def same_rows(*held):
+    """Held-out frames from outer() must hold the same games in the same order."""
+    ids = held[0].game_id.to_numpy()
+    for h in held[1:]:
+        if not (h.game_id.to_numpy() == ids).all(): raise ValueError('held-out rows differ between arms')
+
+
+def null_and_favorite(df):
+    """Market-correct null and the market favorite's ROI on the rows score() grades."""
+    d = df.copy(); d['market_ml_wp'] = m.market_ml_wp(d)
+    mb, kb = m.flat_bets(d, 'model_wp'), m.flat_bets(d, 'market_ml_wp')
+    keep = mb.units.notna() & kb.units.notna()
+    return m.roi_summary(mb[keep])['null_roi'], m.roi_summary(kb[keep])['roi']
+
+
+def report_family(prod_held, sc, level):
+    """sc: {name: score()} with production first. Prints the goal-metric table, paired
+    differences and the gain by season and week group; returns {arm: (gain vector)}."""
+    names = list(sc); base = sc[names[0]]
+    print('\n' + HEAD)
+    for n in names: print(row(n, sc[n]))
+    null, fav = null_and_favorite(prod_held)
+    print(f'\nSame priced rows: market favorite {100 * fav:+.1f}%, market-correct null {100 * null:+.1f}%.')
+    print('\n' + DHEAD)
+    for n in names[1:]: print(diff_row(f'{n} vs {names[0]}', sc[n], base))
+    seas = prod_held.season.to_numpy(); wk = prod_held.week.to_numpy()
+    groups = [(str(s), seas == s) for s in OUTER] + [(f'wk {g}', (wk >= lo) & (wk <= hi)) for lo, hi, g in WEEK_GROUPS]
+    print('\n| LL gain vs production | ' + ' | '.join(g for g, _ in groups) + ' |\n|---|' + '---:|' * len(groups))
+    gains = {}
+    for n in names[1:]:
+        d = base['ll_vec'] - sc[n]['ll_vec']; gains[n] = d
+        print(f'| {n} | ' + ' | '.join(f'{d[k].mean():+.4f} ± {d[k].std(ddof=1) / np.sqrt(k.sum()):.4f} (n={k.sum()})'
+                                       for _, k in groups) + ' |')
+    return gains
+
+
+def primary_row(name, d, level, verdict):
+    lo, hi = boot_ci(d, level)
+    print(f'| {name} | {d.mean():+.4f} [{lo:+.4f}, {hi:+.4f}] | {d.std(ddof=1) / np.sqrt(len(d)):.4f} | {verdict(d.mean(), lo, hi)} |')
+    return lo, hi

@@ -9,8 +9,11 @@ from scipy.special import ndtr
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research"))
 import _common as c  # noqa: E402
+import final_week  # noqa: E402
 import margin_target  # noqa: E402
 import qb_variants  # noqa: E402
+import returning_players  # noqa: E402
+import stat_shrinkage  # noqa: E402
 
 
 def oof():
@@ -99,3 +102,103 @@ def test_margin_fit_recovers_coefficients_and_probability():
     future = df.assign(season=2023, week=2)
     with pytest.raises(ValueError):
         margin_target.fit_margin(pd.concat([df, future]), {"family": "f", "half_life": 8., "ridge": 1.}, 2023, 1)
+
+
+def _league(seed=7, teams=16, seasons=(2019, 2020, 2021, 2022), weeks=16):
+    """Synthetic league: first-down rate tracks a fixed team strength; fumbles are pure noise."""
+    rng = np.random.default_rng(seed)
+    names = [f"T{i:02d}" for i in range(teams)]
+    strength = dict(zip(names, np.linspace(-.06, .06, teams)))
+    sched, box = [], []
+    for yr in seasons:
+        for wk in range(1, weeks + 1):
+            order = list(rng.permutation(names))
+            for i in range(0, teams, 2):
+                h, a = order[i], order[i + 1]; gid = f"{yr}_{wk:02d}_{a}_{h}"
+                res = float(round(2 + 100 * (strength[h] - strength[a]) + rng.normal(0, 10)))
+                sched.append({"game_id": gid, "season": yr, "week": wk, "home_team": h, "away_team": a,
+                              "gameday": f"{yr}-09-{wk:02d}", "gametime": "13:00", "site": 1., "result": res,
+                              "home won": c.m.won(res), "spread_line": 0., "market WP": .5})
+                for t, o in ((h, a), (a, h)):
+                    plays = 64.; pp = 34.
+                    box.append({"game_id": gid, "season": yr, "week": wk, "team": t, "opponent": o, "plays": plays,
+                                "net_yards": 330., "net_pass_yards": 210., "rush_yards": 120., "pass_plays": pp,
+                                "pass_attempts": pp - 2, "rush_attempts": plays - pp,
+                                "first_downs": float(rng.binomial(int(plays), .3 + strength[t])),
+                                "third_converted": 5., "third_attempts": 13.,
+                                "fumbles_lost": float(rng.poisson(.8)), "interceptions": float(rng.poisson(.8)),
+                                "sacks_taken": 2., "penalties": 6., "penalty_yards": 50.,
+                                "top_seconds": 1800., "game_seconds": 3600.})
+    return pd.DataFrame(sched), pd.DataFrame(box)
+
+
+def test_reliability_k_small_for_stable_stats_large_for_noise():
+    sched, box = _league()
+    k, table, n = stat_shrinkage.reliability_k(box, sched)
+    assert 7.5 < n < 8.5
+    assert k[("for", "first_down_rate")] < 3        # strong team effect: little shrinkage
+    assert k[("for", "fumbles_lost_per_game")] > 15  # pure noise: heavy shrinkage
+    assert stat_shrinkage.k_from_r(-.2, 8.) == 64. and stat_shrinkage.k_from_r(.99, 8.) == 1.
+
+
+def test_per_stat_k_of_four_reproduces_production_profiles():
+    sched, box = _league(seasons=(2019, 2020), weeks=6, teams=8)
+    prod = c.m.lagged_features(box, sched, 8.)
+    keys = [(r, mt) for r in ("for", "allowed") for mt in c.m.RATES_CORE] + ["margin"]
+    same, cols = stat_shrinkage.with_k(prod, box, sched, 8., {key: 4. for key in keys})
+    assert len(cols) == 33 and "d__margin" in cols
+    for col in cols:
+        assert np.allclose(same[col], prod[col], equal_nan=True, rtol=0, atol=1e-9), col
+    big, _ = stat_shrinkage.with_k(prod, box, sched, 8., {key: 64. for key in keys})
+    col = "d__for__rates_core__first_down_rate"
+    assert np.nanstd(big[col]) < .5 * np.nanstd(prod[col])  # more pseudo-games: profiles pulled together
+
+
+def test_final_week_inputs_are_zero_outside_the_final_week():
+    sched = pd.DataFrame({"season": [2021] * 3, "week": [16, 17, 18]})
+    f = pd.DataFrame({"season": [2021] * 3, "week": [16, 17, 18], "home": ["A"] * 3, "away": ["B"] * 3})
+    status = {("A", 2021, w): {"eliminated": 0., "clinched": 1., "top_seed": 1.} for w in (16, 17, 18)}
+    status.update({("B", 2021, w): {"eliminated": 1., "clinched": 0., "top_seed": 0.} for w in (16, 17, 18)})
+    out = final_week.add_final_week(f, status, sched)
+    assert out["d__fw_clinched"].tolist() == [0., 0., 1.] and out["d__fw_eliminated"].tolist() == [0., 0., -1.]
+
+
+def _returning_fixture(week9_status=None, p1_roster_week8="ACT"):
+    """OL unit of five; P1 plays weeks 1-4 then is Out weeks 5-8; P2 is benched weeks 5-8 (no injury)."""
+    snaps, inj, rost = [], [], []
+    for wk in range(1, 9):
+        players = ["P1", "P2", "P3", "P4", "P5"] if wk <= 4 else ["P3", "P4", "P5", "R1", "R2"]
+        for pid in players:
+            snaps.append({"season": 2021, "week": wk, "game_id": f"g{wk}", "team": "T", "gsis_id": pid,
+                          "position": "T", "offense_snaps": 60., "defense_snaps": 0.})
+        if wk >= 5: inj.append({"season": 2021, "week": wk, "team": "T", "gsis_id": "P1", "report_status": "Out"})
+        for pid in ["P1", "P2", "P3", "P4", "P5", "R1", "R2"]:
+            st = p1_roster_week8 if (pid == "P1" and wk == 8) else "ACT"
+            rost.append({"season": 2021, "week": wk, "team": "T", "gsis_id": pid, "position": "T",
+                         "status": st, "status_description_abbr": None})
+    if week9_status:
+        inj.append({"season": 2021, "week": 9, "team": "T", "gsis_id": "P1", "report_status": week9_status})
+    targets = pd.DataFrame({"season": [2021], "week": [9], "team": ["T"]})
+    ret = returning_players.returning_shares(targets, pd.DataFrame(snaps), pd.DataFrame(inj), pd.DataFrame(rost))
+    return ret.set_index("team").loc["T"]
+
+
+def test_returning_starter_is_credited_with_his_pre_absence_share():
+    r = _returning_fixture()
+    assert np.isclose(r.OL_ret, .2)                 # P1 only: 60 of 300 OL snaps; benched P2 earns nothing
+    assert np.isclose(_returning_fixture("Questionable").OL_ret, .15)
+    assert r.DL_ret == 0. and r.WRTE_ret == 0.
+
+
+def test_returning_player_still_out_or_off_the_roster_earns_nothing():
+    assert _returning_fixture("Out").OL_ret == 0.
+    assert _returning_fixture(p1_roster_week8="RES").OL_ret == 0.  # prior-week roster still has him on reserve
+
+
+def test_net_availability_subtracts_returning_share():
+    avail = pd.DataFrame({"season": [2021], "week": [9], "team": ["T"], "OL_out_cs": [.3], "DL_out_cs": [np.nan],
+                          **{f"{g}_out_cs": [0.] for g in ("WRTE", "RB", "LB", "DB")}})
+    ret = pd.DataFrame({"season": [2021], "week": [9], "team": ["T"], "OL_ret": [.2],
+                        **{f"{g}_ret": [0.] for g in ("WRTE", "RB", "DL", "LB", "DB")}})
+    net = returning_players.net_availability(avail, ret)
+    assert np.isclose(net.OL_out_cs[0], .1) and np.isnan(net.DL_out_cs[0]) and "OL_ret" not in net
