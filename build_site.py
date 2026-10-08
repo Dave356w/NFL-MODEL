@@ -495,16 +495,29 @@ def folded(summary, inner, open_=False):
     return (f"<details class='fold'{' open' if open_ else ''}><summary>{summary}</summary>{inner}</details>")
 
 
+def margin_text(margin, spread):
+    """Average realized margin of a pick, beside the average market spread for it."""
+    mg, sp = num(margin), num(spread)
+    if not math.isfinite(mg):
+        return "—"
+    tone = "up" if math.isfinite(sp) and mg > sp else "dn" if math.isfinite(sp) else ""
+    out = f"<span class='{tone}'>{mg:+.1f}</span>".replace("-", "−")
+    return out + (f" vs {sp:+.1f}".replace("-", "−") if math.isfinite(sp) else "")
+
+
 def records_table(recs):
-    """When the model said X%, how often its pick won."""
+    """When the model said X%, how often its pick won, and by how much on average."""
     rows = []
+    margins = "avg pick margin" in recs
     for _, r in recs[recs.source == "model"].sort_values("band_index").iterrows():
         if not r.games:
             continue
-        rows.append({"cells": [esc(r.band), f"<b>{esc(r.record)}</b>", f"{r['realized pick win %']:.1f}%",
-                               f"{r['avg pick prob %']:.1f}%"],
-                     "_class": "total" if r.band == "All picks" else ""})
-    return table(["Model said", "Picks", "Won", "Average forecast"], rows, num_cols=(1, 2, 3))
+        cells = [esc(r.band), f"<b>{esc(r.record)}</b>", f"{r['realized pick win %']:.1f}%", f"{r['avg pick prob %']:.1f}%"]
+        if margins:
+            cells.append(margin_text(r["avg pick margin"], r.get("avg pick spread")))
+        rows.append({"cells": cells, "_class": "total" if r.band == "All picks" else ""})
+    heads = ["Model said", "Picks", "Won", "Average forecast"] + (["Avg margin"] if margins else [])
+    return table(heads, rows, num_cols=tuple(range(1, len(heads))))
 
 
 def market_band_stats(retro):
@@ -780,16 +793,21 @@ def render_retro(latest):
 
 
 def market_sides(df):
-    """One row per side of every priced, decided game: its moneyline, no-vig implied probability and result."""
+    """One row per side of every priced, decided game: its moneyline, no-vig implied probability and result,
+    plus that side's realized margin and the market spread for it (positive = the side favored/won by)."""
     if df is None or df.empty:
-        return pd.DataFrame(columns=["side", "price", "q", "won", "band"])
+        return pd.DataFrame(columns=["side", "price", "q", "won", "band", "margin", "spread"])
     d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., 1.])].copy()
     q = m.market_ml_wp(d)
     ok = np.isfinite(q)
     d, q = d[ok], q[ok]
     hw = d["home won"].to_numpy(float)
-    sides = pd.concat([pd.DataFrame({"side": "home", "price": d.home_moneyline.to_numpy(float), "q": q, "won": hw}),
-                       pd.DataFrame({"side": "away", "price": d.away_moneyline.to_numpy(float), "q": 1 - q, "won": 1 - hw})],
+    res = pd.to_numeric(d.get("result", pd.Series(np.nan, index=d.index)), errors="coerce").to_numpy(float)
+    spr = pd.to_numeric(d.get("spread_line", pd.Series(np.nan, index=d.index)), errors="coerce").to_numpy(float)
+    sides = pd.concat([pd.DataFrame({"side": "home", "price": d.home_moneyline.to_numpy(float), "q": q, "won": hw,
+                                     "margin": res, "spread": spr}),
+                       pd.DataFrame({"side": "away", "price": d.away_moneyline.to_numpy(float), "q": 1 - q, "won": 1 - hw,
+                                     "margin": -res, "spread": -spr})],
                       ignore_index=True)
     sides["band"] = [m.ml_band(p) for p in sides.price]
     return sides
@@ -815,11 +833,16 @@ def render_calibration(latest, ledger, built):
             tone = "up" if s.won.mean() > s.q.mean() else "dn"
             return (f"<span class='{tone}'>{100 * s.won.mean():.1f}%</span> vs {100 * s.q.mean():.1f}% "
                     f"<span class='mut'>· {len(s)}</span>")
+        def margin_cell(s):
+            s = s[np.isfinite(s.margin.astype(float))]
+            return "—" if s.empty else margin_text(s.margin.mean(), s.spread.mean())
         rows = [[esc(b), cell(sides[(sides.band == b) & (sides.side == "home")]),
-                 cell(sides[(sides.band == b) & (sides.side == "away")]), cell(sides[sides.band == b])]
+                 cell(sides[(sides.band == b) & (sides.side == "away")]), cell(sides[sides.band == b]),
+                 margin_cell(sides[sides.band == b])]
                 for b in m.ML_BANDS if (sides.band == b).any()]
-        parts.append(table(["Moneyline", "Home side", "Away side", "Both"], rows, num_cols=(1, 2, 3)))
+        parts.append(table(["Moneyline", "Home side", "Away side", "Both", "Avg margin"], rows, num_cols=(1, 2, 3, 4)))
         parts.append(f"<p class='mut small'>Won % vs the price's implied % with the bookmaker's margin removed, then games. "
+                     f"Avg margin: points the side won or lost by on average, vs the average spread for it. "
                      f"Regular season {seasons[0]}–{seasons[-1]}, closing lines.</p>")
     rev = latest["manifest"]["revision"] if latest else m.REVISION
     s = grade_ledger.scored_frame(ledger[ledger.revision == rev]) if len(ledger) else pd.DataFrame()
