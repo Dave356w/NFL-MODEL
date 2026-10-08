@@ -10,6 +10,7 @@ from scipy.special import ndtr
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "research"))
 import _common as c  # noqa: E402
 import final_week  # noqa: E402
+import fit_memory  # noqa: E402
 import margin_target  # noqa: E402
 import qb_variants  # noqa: E402
 import returning_players  # noqa: E402
@@ -202,3 +203,54 @@ def test_net_availability_subtracts_returning_share():
                         **{f"{g}_ret": [0.] for g in ("WRTE", "RB", "DL", "LB", "DB")}})
     net = returning_players.net_availability(avail, ret)
     assert np.isclose(net.OL_out_cs[0], .1) and np.isnan(net.DL_out_cs[0]) and "OL_ret" not in net
+
+
+def test_infinite_fit_half_life_weights_every_training_game_equally():
+    sched, box = _league(seasons=(2019, 2020, 2021), weeks=8, teams=8)
+    f = c.m.lagged_features(box, sched, 8.)
+    tr = f[c.m.before(f, 2022, 1)]
+    n = int((tr["home won"].isin([0., 1.]) & tr.ready).sum())
+    saved = c.m.FIT_HALF_LIFE_SEASONS, c.m.MIN_TRAIN_GAMES
+    try:
+        c.m.MIN_TRAIN_GAMES = 20
+        c.m.FIT_HALF_LIFE_SEASONS = np.inf
+        flat = c.m.fit_composite(tr, {"family": "rates_core", "half_life": 8., "ridge": .1}, 2022, 1)
+        c.m.FIT_HALF_LIFE_SEASONS = 2.
+        decayed = c.m.fit_composite(tr, {"family": "rates_core", "half_life": 8., "ridge": .1}, 2022, 1)
+    finally:
+        c.m.FIT_HALF_LIFE_SEASONS, c.m.MIN_TRAIN_GAMES = saved
+    assert np.isclose(flat["effective_training_games"], n)          # equal weights
+    assert decayed["effective_training_games"] < .95 * n             # older seasons count less
+
+
+def test_fit_memory_nested_selection_uses_earlier_seasons_only():
+    rows = pd.DataFrame({"season": np.repeat([2015, 2016, 2017, 2018], 50), "home won": np.tile([1., 0.], 100)})
+    y = rows["home won"].to_numpy()
+    good_early = np.where(rows.season < 2017, np.where(y == 1, .8, .2), .5)   # tracks outcomes before 2017 only
+    clairvoyant_late = np.where(rows.season >= 2017, np.where(y == 1, .95, .05), .5)
+    held, picks = fit_memory.nested({(2., "a"): good_early, (np.inf, "b"): clairvoyant_late}, rows, (2017, 2018))
+    assert picks[2017] == (2., "a")                    # 2018's pick may use 2017, but 2017's may not
+    assert set(held.season) == {2017, 2018} and len(held) == 100
+
+
+def test_fit_memory_restores_module_settings_and_crosses_half_lives():
+    sched, box = _league(seasons=(2018, 2019, 2020, 2021), weeks=8, teams=8)
+    feats = {h: c.m.lagged_features(box, sched, h) for h in (4., 8.)}
+    keys = ("TEAM_HALF_LIVES", "RIDGE_GRID", "FEATURE_FAMILIES", "MIN_TRAIN_GAMES")
+    saved = {k: getattr(c.m, k) for k in keys}
+    before = c.m.BACKTEST_FIRST_SEASON, c.m.FIT_HALF_LIFE_SEASONS
+    try:
+        c.m.TEAM_HALF_LIVES, c.m.RIDGE_GRID, c.m.FEATURE_FAMILIES, c.m.MIN_TRAIN_GAMES = (4., 8.), (.1,), ("rates_core",), 20
+        cands, rows = fit_memory.candidates_by_half_life(feats, 2020, 2021, sched)
+    finally:
+        for k, v in saved.items(): setattr(c.m, k, v)
+    assert (c.m.BACKTEST_FIRST_SEASON, c.m.FIT_HALF_LIFE_SEASONS) == before
+    assert {k[0] for k in cands} == set(fit_memory.HALF_LIVES) and len(cands) == 3 * 2
+    assert set(rows.season) == {2020, 2021}
+    assert not np.allclose(cands[(2., "rates_core_h8_r0.1")], cands[(np.inf, "rates_core_h8_r0.1")])
+
+
+def test_ready_share_counts_decided_games_only():
+    f = pd.DataFrame({"season": [2017] * 4 + [2016], "home won": [1., 0., .5, np.nan, 1.],
+                      "ready": [True, False, True, True, False]})
+    assert fit_memory.ready_share(f, (2017,)) == .5   # ties and unplayed games are not counted

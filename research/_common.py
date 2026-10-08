@@ -65,12 +65,12 @@ def _ll(y, p):
     return -(y * np.log(p) + (1 - y) * np.log(1 - p))
 
 
-def outer(oof, families):
+def outer(oof, families, seasons=OUTER):
     """Production selection: each held-out season's recipe = min mean LL on earlier seasons."""
     cols = [c for c in oof.columns if c.startswith('p__') and any(c[3:].startswith(f + '_h') for f in families)]
     y = oof['home won'].to_numpy(float)
     parts, picks = [], {}
-    for yr in OUTER:
+    for yr in seasons:
         tr = (oof.season < yr).to_numpy()
         best = min(cols, key=lambda c: _ll(y[tr], oof[c].to_numpy()[tr]).mean())
         te = oof[oof.season == yr].copy()

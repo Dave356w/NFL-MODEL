@@ -1138,3 +1138,97 @@ DL 0.121, LB 0.119, DB 0.090. Held-out games with a returning regular (n = 317):
 - **No model change from Tests 28–31.** Across four structural candidates (target, margin adjustment,
   shrinkage, playoff context) and one availability change, the best held-out log-loss gain is
   +0.0019 (unresolved) against a gap to the market of 0.0244.
+
+### Exploratory: is the coefficient logic well tuned? (2026-10-08, not pre-registered)
+
+`python research/coefficient_diagnostics.py [CACHE_DIR]` (≈ 6 min warm). `fit_composite` is
+reimplemented with its fixed settings exposed: the ridge value, the decay of older training games
+(`FIT_HALF_LIFE_SEASONS` = 2), sign constraints from the direction map, and the site-penalty ratio
+(0.1). It reproduces production's walk-forward to 1.2e−6. Production features, walk-forward 2021–25,
+held-out 2023–25 (n = 815); grids are compared with nested selection. **Post-hoc on seasons used by
+31 earlier tests: hypotheses only.**
+
+| Production grid plus | Nested picks 2023 / 2024 / 2025 (adjusted family, h16) | LL gain vs production [95% CI] |
+|---|---|---:|
+| finer ridge {0.02, 0.03, 0.05, 0.2, 0.3, 0.5} | ridge 0.2 in every season | −0.0013 [−0.0042, +0.0019] |
+| fit half-life {0.5, 1, 4, ∞} | production / 4 / ∞ | +0.0005 [−0.0012, +0.0022] |
+| sign constraints, ridge {0.01 … 1} | ridge 0.1 / 0.3 / 0.1 | **−0.0041 [−0.0073, −0.0006]** |
+| site penalty 0× or 1× | 0× in every season | −0.0000 [−0.0003, +0.0002] |
+
+At the production recipe (adjusted family, h16, ridge 0.1), walk-forward log loss:
+
+| Setting | 2021–22 | 2023–25 |
+|---|---:|---:|
+| production | 0.6416 | 0.6325 |
+| ridge 0.05 / 0.2 | 0.6447 / 0.6403 | 0.6325 / 0.6338 |
+| fit half-life 4 / ∞ | 0.6417 / 0.6420 | 0.6314 / 0.6309 |
+| sign-constrained | 0.6398 | 0.6330 |
+
+Lookahead ceiling (production recipe; coefficients allowed to see the season being predicted, which
+flatters them by roughly the in-sample optimism, ≈ 0.01 here):
+
+| Season | Walk-forward | Fit including the season | Fit on the season alone | Market spread |
+|---|---:|---:|---:|---:|
+| 2023 | 0.6574 | 0.6443 | 0.6385 | 0.6231 |
+| 2024 | 0.6065 | 0.5883 | 0.5621 | 0.5901 |
+| 2025 | 0.6335 | 0.6121 | 0.5822 | 0.6091 |
+
+Coefficient stability over the 54 weekly refits of 2023–25: the main inputs are steady (SD 0.01–0.03
+per scaled unit; first-down rate, net yards per dropback, margin, QB, sack %, most unit columns).
+Seven flip sign in 10–57% of fits (offense fumbles and penalties, defense net yards per dropback,
+first-down rate, sack % and penalties allowed, LB snaps out), all with |mean| ≤ 0.03.
+
+**Reading.**
+- **The implementation is right** and the settings are near a flat optimum. Ridge 0.05 and 0.1 tie on
+  2023–25. The best ridge swings by season (0.3 in 2021 and 2023, ≤ 0.02 in 2024–25), in a way earlier
+  seasons do not predict, so a finer grid loses a little under nested selection.
+- **Sign constraints hurt** (−0.0041, interval below zero). With correlated inputs a "wrong" sign
+  carries information about the others. Constraints help only when training data is thin (2021–22,
+  +0.0019 at the production recipe).
+- **The site-penalty ratio does not matter.**
+- **The one lead is the training-game memory.** A longer `FIT_HALF_LIFE_SEASONS` is better on 2023–25 at
+  the production recipe (∞: +0.0016) but not on 2021–22 (−0.0004), and nested selection gives +0.0005
+  (unresolved). These seasons have been seen, so Test 32 decides it on seasons no test has scored.
+- **The ceiling is low.** Even coefficients fit with lookahead stay behind the market in 2023 and only
+  tie it in 2024–25 (pooled 0.6149 vs 0.6074; walk-forward 0.6325). The gap to the market is
+  information the features lack, not estimation.
+
+### Test 32 (plan, committed before any result): how long should old training games count? (2026-10-08)
+
+*Question.* `fit_composite` weights each earlier training game by 2^(−age / `FIT_HALF_LIFE_SEASONS`),
+age in seasons, with `FIT_HALF_LIFE_SEASONS` = 2 set by hand and never tuned. Too short a memory throws
+away useful history about how box-score rates turn into wins. The exploratory sweep above found a
+lead on 2023–25 but nothing on 2021–22, so the decision is made on seasons not yet used.
+
+*Primary basis: seasons no test has scored the composite on.* 2013–2020 are rebuilt with the v1.12
+code unchanged (snap counts start in 2013): warm-up 2013–14, walk-forward 2015–20, nested held-out
+2017, 2018, 2019, 2020 (each season's recipe chosen on earlier walk-forward seasons, the first on
+2015–16), mirroring production's 2019–20 / 2021–25 / 2023–25 layout. *Exposure.* Only data
+availability was checked before this plan (every 2012–18 regular-season game has both moneylines;
+snap counts from 2013). Seasons 2019–20 are production's warm-up (training only); Test 24 used
+2019–22 to standardize and replicate the matchup term, and Tests 17–19 used 2010–25 for checks
+against the market that do not involve the composite's fit.
+
+*Arms.* Production: the v1.12 grid (2 families × half-lives 4, 8, 16 × ridge 0.01, 0.1, 1, 10) with
+`FIT_HALF_LIFE_SEASONS` = 2. **Arm:** the same grid crossed with `FIT_HALF_LIFE_SEASONS` ∈ {2, 4, ∞}
+(∞ = every earlier game counts equally; 72 candidates), nested selection choosing the half-life
+along with the recipe.
+
+*Primary statistic.* Per-game log-loss gain over production on held-out 2017–20, mean with a
+4,000-draw game-bootstrap 95% CI (one decisive arm).
+
+*Decision.* **Supported** if the CI lies above zero; **dropped** if it lies below zero or its upper end
+is under +0.001 (too small to matter); otherwise **unresolved**. A supported arm is a candidate for a
+new `REVISION` (the fit half-life joins the selection grid) by the owner's decision.
+
+*Data check, fixed now.* The primary basis is usable only if at least 90% of decided held-out games
+are ready and at least 90% of those are priced. Otherwise the test is reported as not run on that
+basis; it does not switch to another basis.
+
+*Secondary (reported, not decisive).* The fixed half-lives 4 and ∞, each with nested selection over
+the 24 production candidates; flat 1u ROI ± SE beside the same-row market favorite and the
+market-correct null; the gain by season; the same comparisons on 2023–25 (seen in the sweep above).
+Production's own held-out record on 2017–20 against the market is also printed: a new basis for how
+the model performs on seasons its design never saw.
+
+*Expectation, stated now (not a rule).* At most about +0.001 per game; most likely unresolved.
