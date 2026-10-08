@@ -1069,3 +1069,72 @@ returning regular); otherwise **unresolved**. Also reported: the number of such 
 
 *Expectation (not a rule).* A small gain overall, carried by the returning-regular games.
 *Exposure.* Designed from reading the code; no returning-player statistic has been computed.
+
+#### Results for Tests 29–31 (2026-10-08, each run once after the plans above were committed)
+
+`python research/stat_shrinkage.py`, `research/final_week.py`, `research/returning_players.py`
+`[CACHE_DIR]` (≈ 6–9 min each, warm). In every script production reproduces exactly (811 priced bets,
++8.62u, LL 0.6325), and every arm picked production's recipe (`…adj_avail_cs_margin_h16_r0.1`) in
+every held-out season. Held-out 2023–25, n = 815 games; same priced rows: market favorite +0.0%,
+market-correct null −4.1%.
+
+| Test | LL gain vs production [98.33% CI] | ± SE | Flat 1u ROI (811 bets) | ROI vs production | Verdict |
+|---|---:|---:|---:|---:|---|
+| production (v1.12) | — | — | +1.1% ± 2.7 | — | — |
+| 29: per-stat shrinkage | +0.0001 [−0.0016, +0.0018] | 0.0007 | −0.1% ± 2.7 | −1.16 pts ± 0.73 | unresolved |
+| 30: final-week playoff inputs | +0.0019 [−0.0020, +0.0063] | 0.0017 | +0.3% ± 2.7 | −0.75 pts ± 0.75 | unresolved |
+| 31: returning-player credit | −0.0020 [−0.0045, +0.0008] | 0.0011 | +0.2% ± 2.7 | −0.88 pts ± 0.82 | **dropped** |
+
+| LL gain vs production | 2023 | 2024 | 2025 | Wk 1–4 | Wk 5–9 | Wk 10–13 | Wk 14–17 | Wk 18 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| 29 | −0.0015 ± 0.0014 | +0.0009 ± 0.0012 | +0.0009 ± 0.0011 | −0.0001 ± 0.0016 | +0.0008 ± 0.0012 | +0.0000 ± 0.0015 | +0.0008 ± 0.0015 | −0.0053 ± 0.0038 |
+| 30 | +0.0039 ± 0.0032 | +0.0013 ± 0.0036 | +0.0005 ± 0.0020 | −0.0006 ± 0.0008 | −0.0005 ± 0.0007 | +0.0007 ± 0.0006 | +0.0002 ± 0.0005 | +0.0337 ± 0.0287 |
+| 31 | −0.0034 ± 0.0020 | +0.0004 ± 0.0019 | −0.0029 ± 0.0018 | −0.0056 ± 0.0030 | −0.0011 ± 0.0017 | −0.0026 ± 0.0018 | −0.0004 ± 0.0021 | +0.0048 ± 0.0059 |
+
+**Test 29: k per stat** (2019–22 split halves, 8.24 games per half):
+
+| Stat | Offense r | Offense k | Defense ("allowed") r | Defense k |
+|---|---:|---:|---:|---:|
+| plays per game | 0.378 | 13.6 | 0.191 | 34.9 |
+| net yards per dropback | 0.458 | 9.8 | 0.432 | 10.9 |
+| yards per rush | 0.321 | 17.5 | 0.239 | 26.2 |
+| first-down rate | 0.582 | 5.9 | 0.364 | 14.4 |
+| fumbles lost per game | −0.079 | 64 | 0.065 | 64 |
+| interception % | 0.106 | 64 | 0.181 | 37.3 |
+| sack % | 0.447 | 10.2 | 0.265 | 22.8 |
+| penalty yards per game | 0.365 | 14.3 | 0.253 | 24.3 |
+| point margin | 0.563 | 6.4 | | |
+
+**Test 30, final-week detail.** Held-out final-week games with a nonzero input: eliminated 24,
+clinched 25, top seed 2. Final-week games (n = 48): LL gain +0.0337 ± 0.0287; all other weeks
+(n = 767): −0.0001 ± 0.0003. Final-week flat ROI: production −13.3% ± 10.9 (−6.38u), the arm
+−20.0% ± 10.8 (−9.59u); same-row favorite −2.9%, null −4.1%. Development only, 2021–22 final weeks
+(n = 32, recipes selected on those seasons): −0.0006 ± 0.0222.
+
+**Test 31, returning-player detail.** 43.9% of team-weeks have some returning share and 25.0% a
+returning regular (≥ 0.10 in some unit); mean share where nonzero: OL 0.138, WR/TE 0.090, RB 0.151,
+DL 0.121, LB 0.119, DB 0.090. Held-out games with a returning regular (n = 317): LL gain
+−0.0033 ± 0.0021; other games −0.0011 ± 0.0012.
+
+**Reading.**
+- **Test 29, unresolved and flat.** The 2019–22 k's are 6 to 64, all above production's 4, so
+  every profile is under-shrunk by this measure, yet giving each stat its own k moves log loss by
+  +0.0001 and costs ROI −1.2 ± 0.7 pts (secondary, unresolved). The likely reason is that the ridge
+  already does this work: a stat whose profile is noise gets a small coefficient, and with decayed
+  multi-season histories the profiles carry 10 or more effective games, where 4 and 15 pseudo-games
+  differ little. The upper end of the interval (+0.0018) clears the plan's +0.001 bar, so the test
+  is unresolved rather than dropped. Nothing suggests a gain worth a revision.
+- **Test 30, unresolved, as stated before the run.** The probabilities improve where intended (final
+  week +0.034 ± 0.029, other weeks unchanged), but the final-week sides got worse at the moneyline
+  (−20.0% vs −13.3%, 48 bets, both ± 11), and the 2021–22 final weeks show nothing. The statuses
+  tell the model which games are unpredictable, not who wins them. The final week is still the
+  model's worst; neither this nor Test 17 fixes it.
+- **Test 31, dropped** under its rule: the gain on returning-regular games is −0.0033 ± 0.0021, and
+  the overall interval leans negative (−0.0020, about −1.8 SE), worst in weeks 1–4 (−0.0056 ± 0.0030),
+  where returns from last season's injuries dominate. Crediting a returning player at his pre-absence
+  snap share overstates what he adds: returning players are often not at full strength, and the
+  box-score profile still carries most of his earlier games. The fresh-absence asymmetry in
+  production is a documented limitation, but it is not a measurable defect.
+- **No model change from Tests 28–31.** Across four structural candidates (target, margin adjustment,
+  shrinkage, playoff context) and one availability change, the best held-out log-loss gain is
+  +0.0019 (unresolved) against a gap to the market of 0.0244.
