@@ -62,12 +62,15 @@ def build_table(g):
     return pd.DataFrame(rows)
 
 
-def candles_mid_ask(get, ticker, end, series):
-    q = f"?start_ts={end - 30 * 3600}&end_ts={end}&period_interval=60"
+def candles_mid_ask(get, ticker, end, series, historical):
+    q = f"?start_ts={end - 4 * 3600}&end_ts={end}&period_interval=60"
+    first, second = (f"/historical/markets/{ticker}/candlesticks{q}", f"/series/{series}/markets/{ticker}/candlesticks{q}")
+    if not historical:
+        first, second = second, first
     try:
-        cs = get(f"/series/{series}/markets/{ticker}/candlesticks{q}").get("candlesticks", [])
-    except Exception:  # noqa: BLE001 - settled markets move to the historical endpoint
-        cs = get(f"/historical/markets/{ticker}/candlesticks{q}").get("candlesticks", [])
+        cs = get(first).get("candlesticks", [])
+    except Exception:  # noqa: BLE001 - markets move to the historical endpoint after settling
+        cs = get(second).get("candlesticks", [])
     c = [x for x in cs if x["end_period_ts"] <= end - 3600]
     if not c:
         return None
@@ -103,12 +106,15 @@ def pull_ladders(cache, get=k.fetch):
             tk = k.match_event(events[series], r.away_team, r.home_team, ko.isoformat())
             if not tk:
                 continue
-            mk = get(f"/markets?event_ticker={tk}").get("markets", []) or get(f"/historical/markets?event_ticker={tk}").get("markets", [])
+            mk = get(f"/markets?event_ticker={tk}").get("markets", [])
+            historical = not mk
+            if historical:
+                mk = get(f"/historical/markets?event_ticker={tk}").get("markets", [])
             for x in mk:
                 code = x["ticker"].rsplit("-", 1)[-1]
                 if series == k.GAME_SERIES:
                     side = "home" if k.team(code) == r.home_team else "away" if k.team(code) == r.away_team else None
-                    q = candles_mid_ask(get, x["ticker"], end, series) if side else None
+                    q = candles_mid_ask(get, x["ticker"], end, series, historical) if side else None
                     if q:
                         snap["winner"][side] = {"ticker": x["ticker"], **q}
                 else:
@@ -116,7 +122,7 @@ def pull_ladders(cache, get=k.fetch):
                     t = k.team(code.rstrip("0123456789"))
                     if strike is None or strike > 17.5 or t not in (r.home_team, r.away_team):
                         continue
-                    q = candles_mid_ask(get, x["ticker"], end, series)
+                    q = candles_mid_ask(get, x["ticker"], end, series, historical)
                     if q:
                         snap["spread_ladder"].append({"team": t, "strike": float(strike), "ticker": x["ticker"], **q})
         out.write_text(json.dumps(snap))
