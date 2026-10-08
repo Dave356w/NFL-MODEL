@@ -1,9 +1,20 @@
-"""NFL box-score composite W/L model — v1.12 (production).
+"""NFL box-score composite W/L model — v1.13 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.13 (NEW experiment): replace final MOV with each team's decayed largest lead
+and largest deficit from prior games. Actual scoring events (sp=1) supply the
+full-game peaks, including overtime and conversions; deleted and stale non-scoring
+rows are excluded. The same team-game decay, offseason discount, history window
+and four zero pseudo-games apply. Both peaks enter as home-minus-away differences;
+final MOV is absent from the production regression. New REVISION/OUTPUT_NAME,
+candidate families and configuration signature; earlier frozen recipes and ledger
+rows remain intact. Owner-selected after the 2023-2025 development comparison:
+replacement LL 0.63240 vs MOV 0.63248; the improvement is unresolved, not a claim
+of superiority. Time-leading is not included. Reporting and availability unchanged.
 
 v1.12.4 (reporting only; same REVISION, config signature, recipe and ledger): realized margin on
 the calibration page. band_records adds the picked side's average realized margin and average
@@ -367,11 +378,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.12'
+REVISION='boxscore-composite-v1.13'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_12'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_13'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -382,7 +393,7 @@ WARMUP_SEASONS=2
 OUTER_FIRST_SEASON=2023
 TEAM_HALF_LIVES=(4.,8.,16.)  # team games: 8 -> a game 8 appearances ago gets half weight
 RIDGE_GRID=(.01,.1,1.,10.)   # mean weighted log loss + lambda/2 * ||beta||^2
-FEATURE_FAMILIES=('rates_core_avail_cs_margin','rates_core_adj_avail_cs_margin')  # v1.9 families + decayed point margin (v1.10)
+FEATURE_FAMILIES=('rates_core_avail_cs_peaks','rates_core_adj_avail_cs_peaks')  # v1.13: replace final MOV with lead/deficit peaks
 FIT_HALF_LIFE_SEASONS=2.     # separate decay on old labeled training games
 OFFSEASON_RETENTION=.5      # each season boundary halves old team-profile weight
 PRIOR_EQUIVALENT_GAMES=4.   # shrink sparse histories toward a prior league profile
@@ -401,7 +412,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -460,13 +471,16 @@ FAMILIES['rates_core_avail_cs']=RATES_CORE
 FAMILIES['rates_core_adj_avail_cs']=RATES_CORE
 FAMILIES['rates_core_avail_cs_margin']=RATES_CORE
 FAMILIES['rates_core_adj_avail_cs_margin']=RATES_CORE
+FAMILIES['rates_core_avail_cs_peaks']=RATES_CORE
+FAMILIES['rates_core_adj_avail_cs_peaks']=RATES_CORE
 # Opponent-adjusted family -> raw family whose stat definitions it reuses.
 ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 
 # Player availability (v1.4+). Availability family -> family whose stats it adds to.
 AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_core',
                 'rates_core_adj_avail_cs':'rates_core_adj',
-                'rates_core_avail_cs_margin':'rates_core','rates_core_adj_avail_cs_margin':'rates_core_adj'}
+                'rates_core_avail_cs_margin':'rates_core','rates_core_adj_avail_cs_margin':'rates_core_adj',
+                'rates_core_avail_cs_peaks':'rates_core','rates_core_adj_avail_cs_peaks':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
 # Read from the PRIOR week's roster only. Second row: codes used mainly in 2019-2023 rosters
 # (suspended, PUP, non-football injury, not with team, free agents, exempt, transactions).
@@ -509,13 +523,22 @@ AVAIL_COLS_CS=('qb_delta',)+tuple(f'{g}_out_cs' for g in OFFENSE_GROUPS+DEFENSE_
 ALL_AVAIL_COLS=tuple(dict.fromkeys(AVAIL_COLS+AVAIL_COLS_CS))
 AVAIL_FAMILY_COLS={'rates_core_avail':AVAIL_COLS,'rates_core_avail_cs':AVAIL_COLS_CS,
                    'rates_core_adj_avail_cs':AVAIL_COLS_CS,
-                   'rates_core_avail_cs_margin':AVAIL_COLS_CS,'rates_core_adj_avail_cs_margin':AVAIL_COLS_CS}
+                   'rates_core_avail_cs_margin':AVAIL_COLS_CS,'rates_core_adj_avail_cs_margin':AVAIL_COLS_CS,
+                   'rates_core_avail_cs_peaks':AVAIL_COLS_CS,'rates_core_adj_avail_cs_peaks':AVAIL_COLS_CS}
 # Point margin (v1.10): families that add the decayed average point margin per game.
 MARGIN_FAMILIES=('rates_core_avail_cs_margin','rates_core_adj_avail_cs_margin')
 MARGIN_FEATURE='d__margin'
 MARGIN_DEFINITION=('official schedule result of each prior game in the team box-score history; '
                    'same team-game decay, offseason retention and history window as the stat profiles; '
                    'PRIOR_EQUIVALENT_GAMES pseudo-games at zero')
+PEAK_FAMILIES=('rates_core_avail_cs_peaks','rates_core_adj_avail_cs_peaks')
+PEAK_COLUMNS=('max_lead','max_deficit')
+PEAK_FEATURES=tuple('d__'+c for c in PEAK_COLUMNS)
+PEAK_DEFINITION=('largest nonnegative team lead and deficit at actual full-game scoring events '
+                 '(nflverse sp=1), including overtime and conversions, excluding deleted plays; '
+                 'official final-score and monotonic-score validation; only prior box-score games; '
+                 'same team-game decay, offseason retention and history window as stat profiles; '
+                 'PRIOR_EQUIVALENT_GAMES pseudo-games at zero; no peak clipping or opponent adjustment')
 AVAIL_LABEL={'qb_delta':'QB: projected starter vs recent QB mix (net yards per dropback)',
  'OL_out':'offensive line snaps unavailable',
  'WRTE_out':'receiver and tight end snaps unavailable','RB_out':'running back snaps unavailable',
@@ -692,6 +715,38 @@ def aggregate_boxscores(p,schedule,year):
     return box
 
 
+def aggregate_score_peaks(p,schedule):
+    """Full-game actual scoring-event peaks, never inferred from final MOV.
+
+    Scoring rows include conversions and overtime. Administrative rows can carry
+    stale scores/late play IDs: only sp=1 rows change score, ordered by quarter
+    and clock with play ID as tie breaker. Reject missing/inconsistent histories.
+    """
+    required={'game_id','play_id','season_type','qtr','game_seconds_remaining',
+              'total_home_score','total_away_score','sp'}
+    if not required<=set(p): raise ValueError(f'Score peaks: missing PBP fields {sorted(required-set(p))}')
+    p=p[p.season_type.eq('REG')].copy()
+    if 'play_deleted' in p: p=p[numeric(p,'play_deleted')!=1]
+    groups={gid:g for gid,g in p.groupby('game_id',sort=False)}
+    rows=[]
+    for g in schedule[schedule.result.notna()].itertuples():
+        if g.game_id not in groups: raise ValueError(f'{g.game_id}: score peaks missing PBP')
+        states=groups[g.game_id].sort_values(['qtr','game_seconds_remaining','play_id'],ascending=[True,False,True])
+        states=states[states.sp.eq(1)]
+        if states.empty or states[['total_home_score','total_away_score','qtr','game_seconds_remaining']].isna().any().any():
+            raise ValueError(f'{g.game_id}: incomplete scoring-event history')
+        end=states.iloc[-1]
+        if (end.total_home_score,end.total_away_score)!=(g.home_score,g.away_score):
+            raise ValueError(f'{g.game_id}: scoring-event final disagrees with official score')
+        if (states[['total_home_score','total_away_score']].diff()<0).any().any():
+            raise ValueError(f'{g.game_id}: scoring events are not monotone')
+        margin=(states.total_home_score-states.total_away_score).to_numpy(float)
+        lead=max(0.,float(margin.max())); deficit=max(0.,float(-margin.min()))
+        rows.extend([{'game_id':g.game_id,'team':g.home_team,'max_lead':lead,'max_deficit':deficit},
+                     {'game_id':g.game_id,'team':g.away_team,'max_lead':deficit,'max_deficit':lead}])
+    return pd.DataFrame(rows,columns=['game_id','team',*PEAK_COLUMNS])
+
+
 def validate_boxes(box):
     required={'game_id','season','week','team','opponent',*COUNTS}
     if not required<=set(box): raise ValueError(f'Team-game data missing: {sorted(required-set(box))}')
@@ -701,6 +756,13 @@ def validate_boxes(box):
     if (box.plays<=0).any(): raise ValueError('Nonpositive play count')
     if not np.allclose(box.net_yards,box.net_pass_yards+box.rush_yards,equal_nan=True):
         raise ValueError('net_yards must equal net_pass_yards + rush_yards')
+    if set(PEAK_COLUMNS)&set(box):
+        if not set(PEAK_COLUMNS)<=set(box): raise ValueError('Score peaks require both max_lead and max_deficit')
+        peaks=box[list(PEAK_COLUMNS)].to_numpy(float)
+        if not np.isfinite(peaks).all() or (peaks<0).any(): raise ValueError('Score peaks must be finite and nonnegative')
+        for _,g in box.groupby('game_id'):
+            if not np.allclose(g.max_lead.to_numpy(),g.max_deficit.to_numpy()[::-1]):
+                raise ValueError('Each team largest lead must equal its opponent largest deficit')
     return box.sort_values(['season','week','game_id','team']).reset_index(drop=True)
 
 
@@ -741,10 +803,13 @@ def load_boxes(year,schedule):
           'sack','interception','fumble_lost','third_down_converted','third_down_failed','first_down_rush',
           'first_down_pass','first_down_penalty','penalty','penalty_team','penalty_yards','two_point_attempt',
           'drive','drive_time_of_possession','play_deleted','fumbled_1_team','fumbled_2_team',
-          'fumble_recovery_1_team','fumble_recovery_2_team','passer_player_id','passer_player_name']
+          'fumble_recovery_1_team','fumble_recovery_2_team','passer_player_id','passer_player_name',
+          'qtr','game_seconds_remaining','total_home_score','total_away_score','sp']
     p=raw.select([c for c in cols if c in raw.columns]).to_pandas(); del raw
     source_hash=data_hash(p); p=normalize_teams(p)
-    box=aggregate_boxscores(p,schedule,year); qb=aggregate_qb(p,schedule); del p
+    box=aggregate_boxscores(p,schedule,year); qb=aggregate_qb(p,schedule)
+    peaks=aggregate_score_peaks(p,schedule)
+    box=box.merge(peaks,on=['game_id','team'],how='left',validate='one_to_one'); del p
     if box.empty: return box,qb
     box=validate_boxes(box)
     path.parent.mkdir(parents=True,exist_ok=True); box.to_csv(path,index=False); qb.to_csv(qbpath,index=False)
@@ -1399,6 +1464,10 @@ def opponent_adjust(offense,defense,num,den,weights,prior_games):
 
 def lagged_features(box,schedules,half_life,avail=None):
     box=validate_boxes(box)
+    has_peaks=set(PEAK_COLUMNS)<=set(box)
+    if any(f in PEAK_FAMILIES for f in FEATURE_FAMILIES) and not has_peaks:
+        raise ValueError('Lead/deficit model requires max_lead and max_deficit in every prior team-game box score; '
+                         'rebuild PBP caches or supply both fields in TEAM_GAME_CSV')
     av=avail.set_index(['season','week','team']) if avail is not None and len(avail) else None
     opp=box[['game_id','team',*COUNTS]].rename(columns={'team':'opponent',**{c:'opp_'+c for c in COUNTS}})
     both=box.merge(opp,on=['game_id','opponent'],how='left',validate='one_to_one')
@@ -1422,6 +1491,9 @@ def lagged_features(box,schedules,half_life,avail=None):
             profiles[team]={}
             mg=h.margin.to_numpy(float); ok=np.isfinite(mg)
             profiles[team]['margin']=float(np.dot(weights[ok],mg[ok])/(weights[ok].sum()+PRIOR_EQUIVALENT_GAMES))
+            if has_peaks:
+                for c in PEAK_COLUMNS:
+                    profiles[team][c]=float(np.dot(weights,h[c].to_numpy(float))/(weights.sum()+PRIOR_EQUIVALENT_GAMES))
             for role,cols in [('for',list(COUNTS)),('allowed',['opp_'+c for c in COUNTS])]:
                 vals=h[cols].to_numpy(float)
                 for family,specs in FAMILIES.items():
@@ -1469,7 +1541,8 @@ def lagged_features(box,schedules,half_life,avail=None):
 def feature_names(family):
     if family in AVAIL_FAMILIES:
         return (feature_names(AVAIL_FAMILIES[family])+[f'd__avail__{c}' for c in AVAIL_FAMILY_COLS[family]]
-                +([MARGIN_FEATURE] if family in MARGIN_FAMILIES else []))
+                +([MARGIN_FEATURE] if family in MARGIN_FAMILIES else [])
+                +(list(PEAK_FEATURES) if family in PEAK_FAMILIES else []))
     return ['site']+[f'd__{role}__{family}__{metric}' for role in ('for','allowed') for metric in FAMILIES[family]
                      if not (role=='allowed' and metric in REDUNDANT_ALLOWED)]
 
@@ -2102,7 +2175,8 @@ def config_signature():
                   'personnel_events':{'out':PERSONNEL_OUT,'inert':PERSONNEL_INERT,
                                       'rule':'event_date strictly before the team schedule gameday'}},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
-         'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION}}
+         'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION},
+         'score_peaks':{'families':list(PEAK_FAMILIES),'features':list(PEAK_FEATURES),'definition':PEAK_DEFINITION}}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -2221,6 +2295,7 @@ def feature_label(name):
     if name=='site': return 'Home field'
     if name.startswith('d__avail__'): return 'Availability: '+AVAIL_LABEL.get(name[10:],name[10:])
     if name==MARGIN_FEATURE: return 'Point margin per game (decayed)'
+    if name in PEAK_FEATURES: return 'Largest '+('lead' if name=='d__max_lead' else 'deficit')+' per game (decayed)'
     _,role,_,metric=name.split('__',3)
     m=METRIC_LABEL.get(metric,metric)
     return f'Offense: {m}' if role=='for' else f'Defense: opponents\u2019 {m}'
@@ -2593,7 +2668,7 @@ def main():
     years=list(range(BACKTEST_FIRST_SEASON-WARMUP_SEASONS,season+1))
     if season<=OUTER_FIRST_SEASON: raise ValueError('Need at least one completed outer-test season')
     print(f'NFL box-score composite {REVISION} | season {season}')
-    print('Predictors: prior-game offense, defense and point margin only. No market features or same-game final stats.')
+    print('Predictors: prior-game offense, defense, largest lead/deficit and player availability. No market features or same-game final stats.')
     schedules=pd.concat([load_schedule(y) for y in years],ignore_index=True)
     current=schedules[schedules.season==season]
     pending=current.loc[current.result.isna(),'week']
@@ -2755,6 +2830,8 @@ def main():
                  'design chosen after historical results reviewed; development evaluation, not untouched test',
                  'v1.1-v1.10 changes applied after v1 results were seen',
                  'point margin input (v1.10) chosen after the 2023-25 held-out seasons were seen',
+                 'v1.13 replaces final MOV with lead/deficit peaks by owner choice after development comparison; gain unresolved',
+                 'lead/deficit peaks are not clipped or opponent-adjusted',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
                    'no game-day inactives or late-week news',
@@ -3172,7 +3249,9 @@ def _self_test():
                         'pass_attempts':pp-2,'rush_attempts':rush,'first_downs':float(rng.integers(12,25)),
                         'third_converted':float(rng.integers(3,9)),'third_attempts':14.,
                         'fumbles_lost':float(rng.integers(0,2)),'interceptions':float(rng.integers(0,3)),
-                        'sacks_taken':2.,'penalties':6.,'penalty_yards':45.,'top_seconds':1800.,'game_seconds':3600.})
+                        'sacks_taken':2.,'penalties':6.,'penalty_yards':45.,'top_seconds':1800.,'game_seconds':3600.,
+                        'max_lead':max(0.,result if team==home else -result)+3.,
+                        'max_deficit':max(0.,-result if team==home else result)+3.})
     box,sched=pd.DataFrame(boxes),pd.DataFrame(schedules)
     keys=['TEAM_HALF_LIVES','RIDGE_GRID','MIN_TRAIN_GAMES','BACKTEST_FIRST_SEASON','OUTER_FIRST_SEASON','OUTPUT_ROOT','BOOTSTRAP_REPS']
     old={k:globals()[k] for k in keys}
@@ -3192,7 +3271,9 @@ def _self_test():
         # Every production candidate's inputs exist in the feature table.
         for fam in FEATURE_FAMILIES: assert set(feature_names(fam))<=set(features[4.].columns),fam
         # v1.10 point margin: the decayed, shrunk average of the official results of earlier games only.
-        assert MARGIN_FEATURE in feature_names(FEATURE_FAMILIES[0]) and MARGIN_FEATURE not in feature_names('rates_core_avail_cs')
+        assert MARGIN_FEATURE in feature_names(MARGIN_FAMILIES[0]) and MARGIN_FEATURE not in feature_names('rates_core_avail_cs')
+        for fam in FEATURE_FAMILIES:
+            assert set(PEAK_FEATURES)<=set(feature_names(fam)) and MARGIN_FEATURE not in feature_names(fam)
         g=features[4.].query('season==2021 and week==5').iloc[0]
         def manual_margin(team):
             rows=[]
