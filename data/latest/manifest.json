@@ -1,16 +1,16 @@
 {
-  "revision": "boxscore-composite-v1.12",
-  "diagnostics": "v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-08T20:01:13.565396+00:00",
+  "revision": "boxscore-composite-v1.13",
+  "diagnostics": "v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
+  "generated_utc": "2026-10-08T23:30:56.241433+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe",
+  "config_signature": "f60cc7a964979f3345f05bc7a2d1d5952e79ca5c991649da414443517209d920",
   "recipe": {
-    "family": "rates_core_avail_cs_margin",
+    "family": "rates_core_avail_cs_peaks",
     "half_life": 8.0,
     "ridge": 0.1
   },
-  "market_blend_verdict": "Composite weight -0.101 (95% -0.533 to +0.303): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0005 log loss per game (95% -0.0032 to +0.0022; positive means the blend beat the market).",
+  "market_blend_verdict": "Composite weight -0.121 (95% -0.542 to +0.282): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0003 log loss per game (95% -0.0034 to +0.0026; positive means the blend beat the market).",
   "limitations": [
     "box score definitions approximate some official totals",
     "no explicit opponent-strength adjustment",
@@ -18,6 +18,8 @@
     "design chosen after historical results reviewed; development evaluation, not untouched test",
     "v1.1-v1.10 changes applied after v1 results were seen",
     "point margin input (v1.10) chosen after the 2023-25 held-out seasons were seen",
+    "v1.13 replaces final MOV with lead/deficit peaks by owner choice after development comparison; gain unresolved",
+    "lead/deficit peaks are not clipped or opponent-adjusted",
     "game-bootstrap intervals omit selection and serial-dependence uncertainty",
     "availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; no game-day inactives or late-week news",
     "roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)",
@@ -86,16 +88,15 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }

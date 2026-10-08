@@ -1,26 +1,27 @@
 feature,label,coefficient per scaled unit,training scale,training missing fraction
-site,Home field,0.18399371706640535,1.0,0.0
-d__for__rates_core__plays_per_game,Offense: plays per game,0.016353475979933595,2.4374001142994888,0.0
-d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,0.12310429689901285,0.7157099830883294,0.0
-d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,0.004767530860594164,0.4055891864725226,0.0
-d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.18478443452792645,2.3383791746365516,0.0
-d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,0.01418081553914612,0.1673459130887043,0.0
-d__for__rates_core__interception_pct,Offense: interception %,0.06749262976864404,0.6998650608007839,0.0
-d__for__rates_core__sacks_taken_pct,Offense: sack %,-0.08926037989195282,1.7799124919165872,0.0
-d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.04628010511685832,6.886208127941813,0.0
-d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.04094936050291661,2.26865261217003,0.0
-d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.08931669108884463,0.5311676209643116,0.0
-d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.07137503629371914,0.35819950101067083,0.0
-d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.01847041307847177,1.8537622580838986,0.0
-d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.04379437244686162,0.17430656820077042,0.0
-d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.10222947923470896,0.7286437052945064,0.0
-d__allowed__rates_core__sacks_taken_pct,Defense: opponents’ sack %,0.00440361915025055,1.3151524725948422,0.0
-d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.09257355097823355,6.456414067973898,0.0
-d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.1661986926962033,0.3784987421079473,0.0
-d__avail__OL_out_cs,Availability: offensive line snaps unavailable (this-season window),-0.03137187936498432,0.14503853536915104,0.0
-d__avail__WRTE_out_cs,Availability: receiver and tight end snaps unavailable (this-season window),-0.045739537507208536,0.1453218755949105,0.0
-d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),-0.03335768284242194,0.236385517678872,0.0
-d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.06413949432503256,0.14601800266208365,0.0
-d__avail__LB_out_cs,Availability: linebacker snaps unavailable (this-season window),-0.03365076142039919,0.19589132263687645,0.0
-d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),-0.06894695260804502,0.15413550375434937,0.0
-d__margin,Point margin per game (decayed),0.2295818970444232,5.3400018973349725,0.0
+site,Home field,0.1851636780855399,1.0,0.0
+d__for__rates_core__plays_per_game,Offense: plays per game,0.019114860556928657,2.4374001142994888,0.0
+d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,0.11403042984854661,0.7157099830883294,0.0
+d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,0.00039043173352250885,0.4055891864725226,0.0
+d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.18072329557168176,2.3383791746365516,0.0
+d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,0.017259615182128627,0.1673459130887043,0.0
+d__for__rates_core__interception_pct,Offense: interception %,0.0692458156519517,0.6998650608007839,0.0
+d__for__rates_core__sacks_taken_pct,Offense: sack %,-0.09161707308254091,1.7799124919165872,0.0
+d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.044690822144903455,6.886208127941813,0.0
+d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.043153369364013455,2.2686526121700297,0.0
+d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.08154089781837552,0.5311676209643116,0.0
+d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.0661563600464579,0.35819950101067083,0.0
+d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.013771910787368667,1.8537622580838986,0.0
+d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.03839401048251585,0.17430656820077042,0.0
+d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.09893402980345699,0.7286437052945064,0.0
+d__allowed__rates_core__sacks_taken_pct,Defense: opponents’ sack %,0.007699582093581392,1.3151524725948422,0.0
+d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.09031510909502974,6.456414067973898,0.0
+d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.1666798231768711,0.3784987421079473,0.0
+d__avail__OL_out_cs,Availability: offensive line snaps unavailable (this-season window),-0.03111467346267179,0.14503853536915104,0.0
+d__avail__WRTE_out_cs,Availability: receiver and tight end snaps unavailable (this-season window),-0.0467503428832134,0.1453218755949105,0.0
+d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),-0.03284880902798618,0.236385517678872,0.0
+d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.0673608112450306,0.14601800266208365,0.0
+d__avail__LB_out_cs,Availability: linebacker snaps unavailable (this-season window),-0.034136353253596326,0.19589132263687645,0.0
+d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),-0.07279615403956627,0.15413550375434937,0.0
+d__max_lead,Largest lead per game (decayed),0.13101199333510652,3.181321412015691,0.0
+d__max_deficit,Largest deficit per game (decayed),-0.14126135442762444,3.0467033297810873,0.0
