@@ -70,7 +70,10 @@ def candles_mid_ask(get, ticker, end, series, historical):
     try:
         cs = get(first).get("candlesticks", [])
     except Exception:  # noqa: BLE001 - markets move to the historical endpoint after settling
-        cs = get(second).get("candlesticks", [])
+        try:
+            cs = get(second).get("candlesticks", [])
+        except Exception:  # noqa: BLE001 - a rung with no price history counts as no quote
+            return None
     c = [x for x in cs if x["end_period_ts"] <= end - 3600]
     if not c:
         return None
