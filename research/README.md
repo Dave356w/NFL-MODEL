@@ -838,3 +838,51 @@ fade lands near the null and below the current rule on every basis. The useful c
 on its own: the model's own EV (model probability against the price) is not a usable betting
 signal; when the model disagrees with the market, the market has been right more often. No
 model, ledger or page change.
+
+### Test 27 (plan, committed before any data was pulled): does the market move toward the model? (2026-10-08)
+
+*Question.* The model shows no edge against the near-closing line (tests 11, 22, 26). It could
+still be useful if it is right *early*: prices moving toward its view before kickoff
+(closing-line value). Kalshi's hourly order-book history makes this testable.
+
+*Games.* Every 2025 regular-season and playoff game and 2026 weeks 1–4 with a Kalshi game-winner
+market. Model probability: held-out 2025 (`outer_chronological_predictions.csv`, recipe selected
+through 2024) and the 2026 current-season walk-forward (`retro_ledger.csv`), production revision
+`boxscore-composite-v1.12`.
+
+*Prices.* Kalshi home mid (best bid/ask) from the last hourly candle ending at or before
+**early = kickoff − 26 h** and **close = kickoff − 1 h**. 26 hours is after every game's final
+injury report (Friday for Sunday games, Wednesday for Thursday, Saturday for Monday), so the
+model's availability inputs were knowable at the early price. Normalized with the away mid.
+
+*Primary statistic.* Pearson r between (model − early price) and (close − early price), home
+side, with a 4,000-draw game bootstrap 95% CI. **Supported** if the CI lies above zero.
+
+*Secondary* (reported, not decisive): mean movement toward the model's favourite and toward the
+market's early favourite on the same games (points of win probability); flat 1u ROI of the
+model's favourite bought at the early ask vs at the close ask (estimated Kalshi fee
+0.07 × P × (1 − P) per contract); and the same r with **early = kickoff − 72 h**, which flatters
+the model (its availability inputs were not yet public) and is reported only as an upper bound.
+
+**Result (2026-10-08, run once after the plan above was committed).** 334 games with Kalshi prices
+at both times (2025: 270 held-out; 2026 weeks 1–4: 64 current-season walk-forward).
+
+| Statistic | Value [95% CI] |
+|---|---|
+| **Primary:** r(model − early, close − early), early = kickoff − 26 h | **+0.091 [−0.013, +0.193]**, not supported |
+| By season | 2025 +0.067 (n = 270); 2026 +0.296 (n = 64) |
+| Price movement toward the model (sign of model − early) | +0.18 pts [−0.03, +0.39] |
+| Movement toward the model's favourite | +0.12 pts [−0.09, +0.33] |
+| Movement toward the early market favourite | +0.09 pts [−0.12, +0.30] |
+| Model's favourite at the early Kalshi ask / at the close ask (est. fee incl.) | −6.4% ± 4.2 / −6.5% ± 4.2 |
+| Upper bound, early = kickoff − 72 h (availability not yet public) | +0.123 [+0.003, +0.244] |
+
+Typical gap between the model and the early price: 7.8 points of win probability; typical
+price move over the last 25 hours: 1.3 points.
+
+**Reading.** Unresolved, and too small to use even if real. The point estimate is positive, but
+the price moves toward the model by about 0.2 points of win probability on average, against a
+cost of about 1.5–2 points to trade (half the 1¢ spread plus the fee); buying the model's
+favourite a day early returned the same as buying it at the close. The 72-hour window clears
+zero only barely, and it flatters the model because its injury inputs were not public yet. No
+evidence that the model's value is in timing; the conclusion of tests 22–26 stands.
