@@ -762,3 +762,24 @@ moneyline adjustment logit(q) + b·(neighbour mean residual), b fit on 2021–22
 *Decision.* Two descriptors: a descriptor counts only if its 97.5% bootstrap interval for r
 (Bonferroni 0.05/2) excludes zero; a passing descriptor would need a forward
 pre-registration before any model change.
+
+**Result (2026-10-08, run once after the plan above was committed).** Held-out 2023–25; neighbours
+from 1,642 games (2019 week 16 onward, the first week with enough earlier games to fit):
+
+| Descriptor | Neighbours | r with (margin − spread) [97.5% CI] | By season 2023 / 24 / 25 |
+|---|---|---:|---|
+| (A) per-game contributions | k = 50 | +0.053 [−0.018, +0.126] | +0.01 / +0.06 / +0.08 |
+| (A) per-game contributions | radius (≈184) | +0.021 [−0.064, +0.112] | −0.04 / +0.16 / −0.02 |
+| (B) home + away team profiles | k = 50 | −0.061 [−0.133, +0.014] | −0.08 / −0.08 / −0.03 |
+| (B) home + away team profiles | radius (≈115) | −0.050 [−0.128, +0.030] | −0.04 / −0.02 / −0.09 |
+
+Goal metric (k = 50, weight fit on 2021–22): (A) +0.021 ± 0.054 log-odds per point of neighbour
+residual, log loss vs the moneyline −0.0001 [−0.0014, +0.0011], ROI +0.5% ± 2.5 vs the market
+favourite +0.0% (n = 811, 4 sides flipped); (B) −0.019 ± 0.049, −0.0007 [−0.0018, +0.0003],
++0.0% (2 flipped).
+
+**Reading.** Neither descriptor passes; the two point the opposite way and every interval
+includes zero. Games that looked alike before kickoff did not miss the spread alike. A
+50-neighbour mean of misses that each have SD ≈ 13 points carries about ±1.8 points of noise,
+so only a large context effect could have shown; none did. Unresolved at small effects, no
+support for a model change.
