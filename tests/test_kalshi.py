@@ -145,3 +145,62 @@ def test_report_lines_once_graded(tmp_path):
     text = g.report_text(g.grade([rec], res, k.load(tmp_path / "kalshi_snapshots.jsonl")))
     assert "Secondary: model's side at the Kalshi ask" in text and "Kalshi-correct null -2.0%" in text
     assert "alt-line rule at Kalshi prices: 1-0" in text
+
+
+def toy_table(p_win=.75):
+    """Reference table where the favorite's margin is uniform on -10..19 (no ties) at every fav_wp."""
+    over, tie = {}, {}
+    m = np.arange(-10, 20)
+    for w in np.round(np.arange(.5, .98, .01), 2):
+        tie[w] = 0.
+        for s in np.arange(-30.5, 31, 1.):
+            over[(w, s)] = float((m > s).mean())
+    return over, tie
+
+
+def ladder_snap(asks):
+    """DAL (home) favorite. asks: {(team, strike): ask}; strike 0 = game-winner market."""
+    win = {("home" if t == "DAL" else "away"): {"ticker": f"W-{t}", "bid": a - .01, "ask": a}
+           for (t, s), a in asks.items() if s == 0}
+    lad = [{"team": t, "strike": s, "ticker": f"L-{t}{s}", "bid": a - .01, "ask": a}
+           for (t, s), a in asks.items() if s]
+    return {"home": "DAL", "away": "TB", "winner": win, "spread_ladder": lad}
+
+
+def test_ladder_probability_both_sides_and_winner_market():
+    t = toy_table()
+    assert np.isclose(k.ladder_probability(t, .75, True, 4.5), 15 / 30)    # m > 4.5: 5..19
+    assert np.isclose(k.ladder_probability(t, .75, False, 4.5), 6 / 30)    # m < -4.5: -10..-5
+    assert np.isclose(k.ladder_probability(t, .75, True, 0), 19 / 30)      # m > 0, no ties
+    assert np.isclose(k.ladder_probability(t, .999, True, 4.5), 15 / 30)   # clamped to the grid
+
+
+def test_ladder_pick_takes_the_best_rung_after_fee_and_respects_limits():
+    t = toy_table()
+    # fair DAL>4.5 = .50; ask .44 -> edge .06 - fee .017 = .043 (bet); TB>4.5 fair .167 at .16 (no edge)
+    s = ladder_snap({("DAL", 0): .64, ("TB", 0): .37, ("DAL", 4.5): .44, ("TB", 4.5): .16, ("DAL", 7.5): .40})
+    p = k.ladder_pick(s, -300, 250, t)
+    assert p["ticker"] == "L-DAL4.5" and p["side"] == "home" and np.isclose(p["edge"], .5 - .44 - .07 * .44 * .56)
+    assert k.ladder_pick(s, -300, 250, t, min_edge=.05) is None                     # threshold is binding
+    deep = ladder_snap({("DAL", 0): .64, ("TB", 0): .37, ("DAL", 18.5): .001})     # beyond the strike cap
+    assert k.ladder_pick(deep, -300, 250, t) is None
+    assert k.ladder_pick(s, None, 250, t) is None                                   # no moneyline, no bet
+
+
+def test_h3_ladder_grading_and_report(tmp_path):
+    (tmp_path / "forward_predictions.jsonl").write_text(json.dumps(ledger_rec()) + "\n")
+    k.record(tmp_path, NOW, fake_get)
+    snaps = k.load(tmp_path / "kalshi_snapshots.jsonl")
+    snaps[0]["spread_ladder"] = [{"team": "DAL", "strike": 9.5, "ticker": "X-DAL10", "bid": .20, "ask": .21},
+                                 {"team": "TB", "strike": 1.5, "ticker": "X-TB2", "bid": .29, "ask": .30}]
+    snaps[0]["winner"] = {"home": {"ticker": "W-DAL", "bid": .70, "ask": .71}, "away": {"ticker": "W-TB", "bid": .32, "ask": .33}}
+    rec = ledger_rec()
+    def run(result):
+        res = pd.DataFrame({"game_id": [rec["game_id"]], "away_score": [0], "home_score": [result], "result": [result]})
+        return g.grade([rec], res, snaps, toy_table())
+    hit, miss = run(12).iloc[0], run(9).iloc[0]   # toy fair DAL>9.5 = 10/30 vs ask .21: the best rung
+    assert hit.ladder_ticker == "X-DAL10" and hit.ladder_result == "W" and np.isclose(hit.ladder_units, 1 / .21 - 1 - .07 * .79)
+    assert miss.ladder_result == "L" and np.isclose(miss.ladder_null, .205 / .21 - 1 - .07 * .79)
+    assert "Pre-registered H3" in g.report_text(run(12))
+    none = g.grade([rec], pd.DataFrame(columns=["game_id", "away_score", "home_score", "result"]), snaps, None)
+    assert none.ladder_ticker.isna().all() and "H3" not in g.report_text(none)

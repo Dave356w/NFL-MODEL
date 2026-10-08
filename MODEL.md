@@ -150,6 +150,12 @@ failure is logged and skipped; it never costs a pregame snapshot.
   it), beside the favorite's game-winner ask on the same rows. The rule was chosen after
   seeing held-out data; only these forward rows test it.
 
+* **pre-registered H3** (`research/PREREGISTRATION.md`): price every rung (strike ≤ 17.5)
+  from the frozen 2006–2024 margin distribution at the snapshot's no-vig moneyline
+  (`data/kalshi_ladder_reference.csv`, built by `research/ladder_pricing.py --build`) and buy
+  the one rung per game whose expected profit after the fee is at least $0.03, beside the
+  Kalshi-mid null on the same bets. Independent of the model.
+
 Is Kalshi a good benchmark? `research/kalshi_calibration.py` (2025 held-out games with a
 Kalshi price 1 hour before kickoff, n = 271): Kalshi log loss 0.6117 against 0.6094 for the
 margin-free sportsbook moneyline (difference −0.0023, 95% −0.0054 to +0.0008, unresolved) and

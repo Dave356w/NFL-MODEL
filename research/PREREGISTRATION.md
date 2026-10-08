@@ -117,3 +117,39 @@ recipe frozen in `data/frozen_recipe_2026_boxscore-composite-v1.12.json` and its
 signature) from its first snapshot. Any v1.11 rows written before v1.12 reaches main stay in
 the ledger as their own experiment, reported separately and never pooled. v1.12 has no
 historical personnel events, so its held-out reconstructions match v1.11 (research test 21).
+
+**2026-10-08. New hypothesis H3 (Kalshi ladder pricing), committed before any Kalshi
+capture exists and before its backtest result was seen. H1, H2 and their rules are unchanged.**
+
+*Source.* Research discussion 2026-10-08: once the moneyline is known, the margin's spread
+is about the same at every win probability (research tests on quantile widths), and the
+model adds nothing measurable to a moneyline-based margin estimate (held-out 2023–25). So
+the only plausible ladder edge is the shape of real margins (3, 7, 10) against how Kalshi
+prices its "wins by over X.5" rungs. Independent of the model.
+
+*Reference (frozen).* `data/kalshi_ladder_reference.csv`, built once by
+`research/ladder_pricing.py --build` from 2006–2024 games: for each favorite no-vig
+moneyline probability (0.01 grid; games within ±0.03, widened to ±0.05 below 150), the
+share in which the favorite's margin exceeded each half-point strike, and the tie share.
+It is not refit while H3 runs.
+
+*Rule.* Every game with a Kalshi capture in `data/kalshi_snapshots.jsonl` (games locked in
+the forward ledger). Using the snapshot's two moneylines, price every captured rung with
+strike ≤ 17.5 on both teams' ladders and both game-winner markets (a tie pays $0.50). Buy
+at most **one** rung per game: the one with the largest expected profit per contract after
+the estimated fee, est − ask − 0.07 × ask × (1 − ask), and only if that is ≥ $0.03.
+1u staked at the captured ask (`ladder_units`).
+
+*Report.* n, W-L, units, ROI ± SE, and the Kalshi-mid null on the same bets (`ladder_null`:
+the ROI if each bought rung's captured mid were exactly right).
+
+*Decision* (cumulative, at the season checkpoints above):
+- **Supported**: ROI − null ≥ 2 SE with n ≥ 50.
+- **Falsified**: n ≥ 50 and ROI ≤ null.
+- Otherwise **unresolved**.
+
+*Power, stated now.* Kalshi's ladder sat within 1–3¢ of the reference on every TB@DAL rung
+(best edge 1.9¢), so qualifying bets may be rare; the count is reported each week. Most
+bought rungs will be deep, low-priced ones with a per-bet SD of 2–4u, so even 50 bets
+resolve only a large edge. The backtest on Kalshi's 2025–26 books (out of sample for the
+2006–2024 table) is development evidence and will be reported as such.

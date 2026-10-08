@@ -40,7 +40,8 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "model_spread", "spread_gap", "ats_side", "ats_result",
            "kalshi_captured_utc", "kalshi_lag_hours", "kalshi_home_mid", "kalshi_side_ask", "kalshi_units",
            "kalshi_null", "kalshi_fav_units", "alt_rule", "alt_team", "alt_strike", "alt_ask", "alt_result",
-           "alt_units", "alt_fav_units"]
+           "alt_units", "alt_fav_units", "ladder_ticker", "ladder_team", "ladder_strike", "ladder_est",
+           "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null"]
 ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
 ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
 
@@ -57,9 +58,10 @@ def load_results(url=SCHEDULE_URL):
     return s
 
 
-def grade(records, results, kalshi=None):
+def grade(records, results, kalshi=None, ladder=None):
     """Flat graded frame, one row per ledger snapshot, newest kickoff first. `kalshi` is the
-    list of data/kalshi_snapshots.jsonl records (secondary prices; optional)."""
+    list of data/kalshi_snapshots.jsonl records (secondary prices; optional); `ladder` the
+    loaded H3 reference table (kalshi.load_ladder_table; optional)."""
     if not records:
         return pd.DataFrame(columns=COLUMNS)
     rows = []
@@ -101,7 +103,7 @@ def grade(records, results, kalshi=None):
     g["bet_result"], g["units"], g["null_ev"] = bets.result, bets.units, bets.null_ev
     g["fav_units"] = fav.units.where(bets.units.notna())  # same rows as the model's bets
     g["model_spread"], g["spread_gap"], g["ats_side"], g["ats_result"] = ats(g)
-    g = g.join(kalshi_grades(g, kalshi or []))
+    g = g.join(kalshi_grades(g, kalshi or [], ladder))
     g = g.sort_values(["kickoff_utc", "game_id"], ascending=[False, True]).reset_index(drop=True)
     return g[COLUMNS]
 
@@ -130,7 +132,7 @@ def kalshi_units(won, ask):
     return won / ask - 1 - k.FEE_RATE * (1 - ask)
 
 
-def kalshi_grades(g, snaps):
+def kalshi_grades(g, snaps, ladder=None):
     """Secondary prices from the first Kalshi capture per game (v1.12.2, reporting only).
 
     kalshi_*: 1u on the model's side at that side's game-winner ask, beside the Kalshi
@@ -139,7 +141,11 @@ def kalshi_grades(g, snaps):
     alt_*: the alt-line rule. When the model and the market spread make the same team
     the favorite and the model's spread is smaller, buy "favorite wins by over X.5" at
     the largest Kalshi strike below the model's spread (the game-winner market when no
-    strike is below it). alt_fav_units: the favorite's game-winner ask on the same rows."""
+    strike is below it). alt_fav_units: the favorite's game-winner ask on the same rows.
+    ladder_*: pre-registered H3 (research/PREREGISTRATION.md). The one Kalshi rung whose
+    frozen reference probability (kalshi_ladder_reference.csv, 2006-2024 margins at the
+    snapshot's no-vig moneyline) beats the ask by the most after the fee, if by >= $0.03;
+    ladder_null is the ROI if that rung's Kalshi mid were exactly right."""
     by = {r["game_id"]: r for r in snaps}
     rows = []
     for r in g.itertuples(index=False):
@@ -176,8 +182,20 @@ def kalshi_grades(g, snaps):
                            alt_units=kalshi_units(won, pick["ask"]),
                            alt_fav_units=kalshi_units(np.nan if not np.isfinite(res) else 1. if margin > 0 else .5 if margin == 0 else 0.,
                                                       s["winner"][fside]["ask"]))
+        if s and ladder is not None:
+            pick = k.ladder_pick(s, r.home_moneyline, r.away_moneyline, ladder)
+            if pick:
+                res = float(r.result) if pd.notna(r.result) else np.nan
+                margin = res if pick["side"] == "home" else -res
+                won = np.nan if not np.isfinite(res) else (1. if margin > pick["strike"] else
+                                                          .5 if pick["strike"] == 0 and margin == 0 else 0.)
+                a = pick["ask"]
+                out.update(ladder_ticker=pick["ticker"], ladder_team=pick["team"], ladder_strike=pick["strike"],
+                           ladder_est=pick["est"], ladder_ask=a, ladder_edge=pick["edge"],
+                           ladder_result="" if not np.isfinite(won) else "W" if won == 1 else "P" if won == .5 else "L",
+                           ladder_units=kalshi_units(won, a), ladder_null=pick["mid"] / a - 1 - k.FEE_RATE * (1 - a))
         rows.append(out)
-    cols = [c for c in COLUMNS if c.startswith(("kalshi_", "alt_"))]
+    cols = [c for c in COLUMNS if c.startswith(("kalshi_", "alt_", "ladder_"))]
     out = pd.DataFrame(rows, index=g.index, columns=cols)
     out["alt_rule"] = out.alt_rule.eq(True)
     return out
@@ -306,6 +324,15 @@ def report_text(g, now=None):
                       f"{al['units']:+.2f}u, ROI {100 * al['roi']:+.1f}%"
                       + (f" +/- {100 * al['roi_se']:.1f}" if np.isfinite(al["roi_se"]) else ""),
                       f"    same rows, favorite at its Kalshi game-winner ask: {al['base_units']:+.2f}u, ROI {100 * al['base_roi']:+.1f}%"]
+        lb = part[part.ladder_units.notna()]
+        if len(lb):
+            u = lb.ladder_units.astype(float)
+            lines += [f"  Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins "
+                      f"(edge >= ${k.LADDER_MIN_EDGE:.2f}/contract after fee): {(u > 0).sum()}-{(u < -.5).sum()}, "
+                      f"{u.sum():+.2f}u, ROI {100 * u.mean():+.1f}%"
+                      + (f" +/- {100 * u.std(ddof=1) / np.sqrt(len(u)):.1f}" if len(u) > 1 else ""),
+                      f"    Kalshi-mid null {100 * lb.ladder_null.mean():+.1f}% on the same bets; "
+                      f"{int(part.ladder_ticker.notna().sum())} games qualified so far"]
         if sm["scored"]:
             lines += [f"  Scored rows (graded, market present): {sm['scored']}",
                       f"  Model picks  {m.record_text(sm['model_wins'], sm['model_losses'])}",
@@ -335,7 +362,9 @@ def main(argv=None):
     args = ap.parse_args(argv)
     records = load_records(Path(args.data_dir) / LEDGER.name)
     results = load_results() if records else pd.DataFrame(columns=["game_id", "away_score", "home_score", "result"])
-    g = grade(records, results, k.load(Path(args.data_dir) / k.SNAPSHOTS.name))
+    table = Path(args.data_dir) / k.LADDER_TABLE.name
+    g = grade(records, results, k.load(Path(args.data_dir) / k.SNAPSHOTS.name),
+              k.load_ladder_table(table) if table.exists() else None)
     write_outputs(g, args.data_dir)
     sm = summary(g)
     print(f"ledger: {sm['snapshots']} snapshots, {sm['graded']} graded, {sm['pending']} pending")

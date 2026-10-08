@@ -122,6 +122,73 @@ def spread_ladder(markets, away, home):
     return sorted(rows, key=lambda r: (r["team"], r["strike"]))
 
 
+# ---------------------------------------------------------------- ladder pricing (H3)
+# Frozen reference: share of past games in which the moneyline favorite's margin
+# exceeded each half-point strike, by the favorite's no-vig moneyline probability.
+# Built once from seasons 2006-2024 by research/ladder_pricing.py; never refit on
+# the seasons it is used to price.
+LADDER_TABLE = DATA / "kalshi_ladder_reference.csv"
+LADDER_MIN_EDGE = 0.03  # expected profit per contract after the fee, in dollars
+LADDER_MAX_STRIKE = 17.5  # deeper rungs rest on thin tails of the reference distribution
+
+
+def ml_implied(ml):
+    ml = float(ml)
+    return -ml / (-ml + 100) if ml < 0 else 100 / (ml + 100)
+
+
+def load_ladder_table(path=LADDER_TABLE):
+    """{(fav_wp, strike): p_over} and {fav_wp: tie}; fav_wp on a 0.01 grid."""
+    import csv
+    over, tie = {}, {}
+    with Path(path).open(encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            w = round(float(r["fav_wp"]), 2)
+            over[(w, float(r["strike"]))] = float(r["p_over"])
+            tie[w] = float(r["tie"])
+    return over, tie
+
+
+def ladder_probability(table, fav_wp, team_is_fav, strike):
+    """Reference chance that `team` wins by over `strike` (0 = the game-winner market,
+    where a tie pays half). The favorite's margin m: fav over X.5 = P(m > X.5); dog over
+    X.5 = P(m < -X.5) = 1 - P(m > -X.5)."""
+    over, tie = table
+    w = min(max(round(fav_wp, 2), min(tie)), max(tie))
+    if strike == 0:
+        t = tie[w]
+        return (over[(w, .5)] if team_is_fav else 1 - over[(w, -.5)]) + t / 2
+    return over[(w, strike)] if team_is_fav else 1 - over[(w, -strike)]
+
+
+def ladder_pick(snap, home_ml, away_ml, table, min_edge=LADDER_MIN_EDGE, max_strike=LADDER_MAX_STRIKE):
+    """The single rung (either team's ladder or game-winner market) with the largest
+    expected profit per contract after the fee, if that is at least `min_edge`; else None.
+    Returns {team, side, strike, ask, mid, est, edge, ticker}."""
+    try:
+        ih, ia = ml_implied(home_ml), ml_implied(away_ml)
+    except (TypeError, ValueError):
+        return None
+    hp = ih / (ih + ia)
+    fav_side = "home" if hp >= .5 else "away"
+    fav_wp = max(hp, 1 - hp)
+    best = None
+    rungs = [(side, 0., q) for side, q in snap["winner"].items()]
+    rungs += [("home" if x["team"] == snap["home"] else "away", x["strike"], x) for x in snap["spread_ladder"]]
+    for side, strike, q in rungs:
+        if strike > max_strike:
+            continue
+        try:
+            est = ladder_probability(table, fav_wp, side == fav_side, strike)
+        except KeyError:  # a strike outside the reference table
+            continue
+        edge = est - q["ask"] - FEE_RATE * q["ask"] * (1 - q["ask"])
+        if edge >= min_edge and (best is None or edge > best["edge"]):
+            best = {"team": snap[side], "side": side, "strike": strike, "ask": q["ask"],
+                    "mid": (q["bid"] + q["ask"]) / 2, "est": est, "edge": edge, "ticker": q["ticker"]}
+    return best
+
+
 def capture(game, events, get=fetch, now=None):
     """One snapshot record for a game, or None when Kalshi lists no winner market."""
     now = now or dt.datetime.now(dt.timezone.utc)
