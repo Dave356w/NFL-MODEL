@@ -985,3 +985,87 @@ corrects are offense yards per rush, offense interception % and LB snaps out.
 - **No model change.** Neither arm is a candidate for a new `REVISION` on this evidence. M could be
   reconsidered if a future revision needs more stable coefficients for interpretation, but it would
   have to be justified on that basis, not on accuracy.
+
+### Tests 29–31 (plans, committed together before any result): per-stat shrinkage, final-week playoff inputs, returning players (2026-10-08)
+
+The three candidates that came out of the Test 28 review, chosen by the owner to run together.
+**Shared method.** v1.12 production families, half-lives (4, 8, 16), ridge grid, walk-forward
+2021–25 and nested selection; each arm is scored game by game against production on the same
+held-out 2023–25 games. **Primary statistic** for each test: per-game log-loss gain over production
+(positive = arm better), mean with a 4,000-draw game-bootstrap **98.33% CI** (Bonferroni 0.05/3
+across the three tests). **Secondary, reported, not decisive:** flat 1u ROI ± SE on the same priced
+games beside production, the same-row market favorite and the market-correct null; the gain by
+season and by week group (1–4, 5–9, 10–13, 14–17, 18). Nothing here changes v1.12, its frozen
+recipe or the ledger; a supported arm is a candidate for a new `REVISION` by the owner's decision.
+
+#### Test 29: shrink each stat by its own reliability
+
+*Question.* Every profile is pulled toward the league average by the same `PRIOR_EQUIVALENT_GAMES`
+= 4 pseudo-games, and the point margin toward zero by the same 4. Stats differ greatly in how
+stable they are within a season, so noisy stats (fumbles, interceptions) are under-shrunk and the
+composite cannot tell a stable profile from a noisy one, above all early in the season.
+
+*Arm, fixed now.* For each core rate and side (offense, and defense "allowed") and for the point
+margin: split every 2019–22 team-season's games into odd and even games in schedule order; compute
+each half's ratio of sums (count stats per game; margin: mean margin); r = Pearson correlation of
+the two halves across team-seasons; n = mean games per half; **k = n(1 − r)/r**, clamped to [1, 64]
+(r ≤ 0 gives 64). k replaces 4 for that stat and side as the pseudo-game count in the raw profile
+(`metric_profile`), as the ridge on the offense or defense effects in the opponent adjustment
+(`opponent_adjust`, κ = k × mean denominator, separately for offense and defense effects), and for
+the margin. Nothing else changes. With every k = 4 the script must reproduce production's features
+exactly.
+
+*Decision.* **Supported** if the CI lies above zero; **dropped** if it lies below zero or its upper
+end is under +0.001 (too small to matter); otherwise **unresolved**. Also reported: the k table.
+
+*Expectation (not a rule).* A small gain, concentrated before week 10. *Exposure.* During the Test 28
+review a split-half table on 2019–25 (which includes the held-out seasons) was seen; the k's here
+use 2019–22 only.
+
+#### Test 30: playoff-race inputs in the final week only
+
+*Question.* The final week is the model's worst (held-out 2023–25: log loss 0.127 behind the no-vig
+moneyline, flat ROI −13.3% ± 10.9 on 48 bets, seen in the Test 28 review). Test 17 added playoff-race
+status in every week and its gain was concentrated in week 18 (+0.029 ± 0.019), with small losses
+in other weeks.
+
+*Arm, fixed now.* v1.12 families plus three inputs: home minus away of Test 17's eliminated,
+clinched and top-seed flags (`research/season_context.py`, earlier weeks' results only), each
+multiplied by an indicator for the season's final regular-season week (17 in 2019–20, 18 from
+2021), so they are zero in every other week.
+
+*Decision.* Primary over all held-out games: **supported** if the CI lies above zero, **harmful** if
+below, otherwise **unresolved**. Also reported: the final-week games alone (gain, and ROI of both
+models with the same-row favorite and null), weeks 1–17 (expected ≈ 0), and the 2021–22 final weeks
+(walk-forward, but those seasons inform recipe selection: development only).
+
+*Power, stated now.* About 48 held-out final-week games. Test 17's +0.029 per final-week game is
+about +0.0017 per game over all 815, against an SE near 0.001: **expect unresolved.** The no-bet
+alternative is not graded here (owner's choice).
+
+#### Test 31: credit returning players
+
+*Question.* The unit columns (`*_out_cs`) count fresh absences only: a player who played in the
+window and is out now. A regular who missed the window injured and is back is never credited,
+though the profile carries the games he missed.
+
+*Arm, fixed now.* For each team-week and unit group, **returning share** = Σ s_p × (1 − u_p) over
+returning players p:
+- p had no unit snaps for the team in the window games (the same games as `_out_cs`);
+- in at least one week of those window games, p was listed Out or Doubtful on the team's injury
+  report, or carried a reserve status (`roster_out_mask`) on the team's roster that week;
+- u_p is production's unavailability for this game (1 if off the reference roster, otherwise this
+  week's injury weight: Out/Doubtful 1, Questionable 0.25);
+- s_p is p's share of the unit's snaps over his most recent (up to 4) games with snaps for the team
+  before the window, within this season and the previous one.
+
+Each `{g}_out_cs` is replaced by `{g}_out_cs − returning share` (the net lineup change since the
+window). No new inputs; QBs untouched (the QB term already projects a returning starter).
+Historical seasons have no dated personnel events, as in production.
+
+*Decision.* **Supported** if the primary CI lies above zero; **dropped** if it lies below zero or if
+the gain is ≤ 0 on held-out games where either team has a returning share ≥ 0.10 in some unit (a
+returning regular); otherwise **unresolved**. Also reported: the number of such games.
+
+*Expectation (not a rule).* A small gain overall, carried by the returning-regular games.
+*Exposure.* Designed from reading the code; no returning-player statistic has been computed.
