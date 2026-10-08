@@ -811,3 +811,30 @@ the as-written version; matched on timing, ROI sits at the null. Kalshi's ladder
 within about 2¢ of 19 seasons of real margins. H3 stays pre-registered; forward rows use the
 moneyline saved at lock, which precedes the Kalshi capture, so the forward test has no such
 timing advantage. Expect about 13% of games to qualify.
+
+### Test 26: fade the model's value side (H5 candidate), graded retrospectively and dropped (2026-10-08)
+
+*Idea.* The goal metric bets the model's favorite, which is often a bet the model itself rates
+as negative EV (11 of 15 week-5 games). On held-out 2023–25 the model's **value side** (the side
+it rates above the no-vig moneyline) lost −10.2% ± 4.4 (n = 815; −16.1% ± 8.4 when the model and
+market differ by ≥ 10 points). Candidate H5: bet the opposite of the value side, i.e. the side
+the model rates *below* its no-vig price.
+
+*Retrospective grade* (flat 1u at the moneyline, same rows, market-correct null in brackets):
+
+| Basis | H5 | Model's side (goal metric) | Market favorite |
+|---|---:|---:|---:|
+| Held-out 2023–25, n = 815 (idea drawn from these) [−4.1%] | −0.9% ± 3.3 | +0.8% ± 2.7 | +0.2% |
+| Backtest 2021–22, n = 540 (idea not drawn from these) [−2.7%] | −2.5% ± 3.9 | +0.4% ± 3.5 | −7.2% |
+| Backtest 2023–25, in-sample recipe, n = 815 [−4.1%] | −3.7% ± 3.2 | +0.4% ± 2.7 | +0.2% |
+| 2026 weeks 1–4, current-season walk-forward, n = 64 [−4.1%] | −20.2% ± 10.2 | −19.2% ± 9.6 | −4.8% |
+
+Held-out by season, H5 vs model side: 2023 +4.1% vs −1.5%, 2024 +0.1% vs +8.2%, 2025 −6.9% vs −4.3%.
+H5 bets the market favorite in about 70% of games; on the other 30% (market underdogs, n = 261
+held out) it returned −5.5%.
+
+**Dropped by the owner.** Fading a losing side does not win: both sides pay the hold, so the
+fade lands near the null and below the current rule on every basis. The useful conclusion stands
+on its own: the model's own EV (model probability against the price) is not a usable betting
+signal; when the model disagrees with the market, the market has been right more often. No
+model, ledger or page change.
