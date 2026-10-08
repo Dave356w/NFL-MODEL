@@ -688,3 +688,25 @@ cost and time: a 1¢ bid/ask spread, so the Kalshi-correct null is about −1% t
 estimated fee instead of about −4% at the sportsbook, and quotes with a capture time. v1.12.2
 records them at lock (`kalshi.py`). On these 333 games the model's side returned −4.2% ± 4.3 at
 the Kalshi mid + ½¢ before fees and −7.1% ± 4.1 at the sportsbook moneyline (unresolved).
+
+### Test 24 (plan, committed before any result): matchup interactions (2026-10-08)
+
+*Question.* Does a matchup carry information that team strength alone does not, e.g. a strong
+pass offense against a weak pass defense? The composite uses home-minus-away differences of
+each team's offense and defense rates (main effects), never products across the matchup.
+
+*Terms, fixed now* (inputs `rates_core`, half-life 16 profiles; each standardized with
+2019–22 means and SDs; z = standardized; antisymmetric, positive favors home):
+1. pass: z(home offense net pass yds/pass play) × z(away defense allowed) − z(away offense) × z(home defense allowed)
+2. rush: the same with rush yards per attempt
+3. protection: the same with sacks-taken %, offense sacks taken × defense sacks made
+4. interceptions: the same with interception %
+
+*Outcome.* Partial correlation with the home margin, controlling for the market spread
+(primary), and controlling for the spread and the model's composite log-odds (secondary).
+Held-out 2023–25 games (`ready`, final scores); no fitting on these seasons.
+
+*Decision.* Four terms: a term counts only if its 98.75% bootstrap interval (Bonferroni
+0.05/4) excludes zero. A passing term would still need a forward pre-registration before
+any model change. Known exposure: single-feature partial correlations (test on 2026-10-08,
+not committed) were seen; no product term had been computed.
