@@ -5,6 +5,17 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.12.1 (reporting only; same REVISION, config signature, recipe and ledger):
+model-implied spread. model_spread = MARKET_SIGMA * Phi^-1(model_wp), the inverse of the
+spread-to-WP comparator, in points with the schedule's spread_line sign (positive = home
+favored). It is added to the week board and retro_ledger CSVs, and grade_ledger.py adds
+it to forward_ledger.csv with spread_gap (model_spread - spread_line) and an
+against-the-spread diagnostic graded at the snapshot's spread. Held-out 2023-25 (n=815):
+RMSE vs realized margin 13.10 (market spread 12.66); a linear recalibration fit on earlier
+held-out seasons did not help, so the plain inverse is used. ATS is a diagnostic, not the
+goal metric; the hypothesis under test (|spread_gap| >= 3 covers above the 52.4% -110
+break-even) was chosen after seeing held-out data and needs forward games.
+
 v1.12 (NEW experiment: new REVISION and OUTPUT_NAME, based on v1.11; earlier recipes and
 ledger rows untouched): dated personnel events. A hand-curated data/personnel_events.csv
 closes the prior-week roster delay for dated retirements, trades, waivers, releases and
@@ -322,7 +333,7 @@ from html import escape
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
-from scipy.special import expit,ndtr
+from scipy.special import expit,ndtr,ndtri
 try:
     from IPython.display import display,HTML
     HAS_IPY=True
@@ -367,7 +378,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1754,6 +1765,14 @@ def roi_table(df,by=None):
     return pd.DataFrame(rows)
 
 
+def implied_spread(p):
+    """Model-implied home spread in points (v1.12.1, reporting only): the inverse of
+    the spread-to-WP comparator, MARKET_SIGMA * Phi^-1(p), same sign as spread_line
+    (positive = home favored). Clipped to [.005,.995] (about +/-31.9 points); NaN stays NaN."""
+    p=pd.to_numeric(pd.Series(p),errors='coerce').to_numpy(float)
+    return MARKET_SIGMA*ndtri(np.clip(p,.005,.995))
+
+
 RETRO_COLS=['game_id','season','week','home','away','home won','market_wp','result','spread_line']
 
 
@@ -1774,6 +1793,7 @@ def retrospective_ledger(oof,gw,recipe,schedules,season,cur):
     for c in ('price','band','q','result','units','null_ev'): r['bet_'+c if c in ('price','band','q','result') else c]=bets[c]
     r['market_ml_wp']=market_ml_wp(r)
     r['fav_units']=flat_bets(r,'market_ml_wp').units
+    r['model_spread']=implied_spread(r.model_wp)
     return r.sort_values(['season','week','game_id']).reset_index(drop=True)
 
 
@@ -2676,6 +2696,7 @@ def main():
     print(f'Realized pick records in matched bands ({rec_label}):')
     display(band_records_wide(recs))
     board=gw[gw.week==cur].copy()
+    board['model_spread']=implied_spread(board.model_wp)  # reporting only; not written to the ledger
     save(board,f'week{cur}_board.csv')
     week_card=scorecard(board); save(week_card,'week_scorecard.csv')
     weights=coefficient_table(fit); save(weights,'current_composite_weights.csv')

@@ -6,11 +6,11 @@ import pandas as pd
 import grade_ledger as g
 
 
-def rec(gid, wp, mkt, exp="e", rev="r1", week=5, hm=-150, am=130):
+def rec(gid, wp, mkt, exp="e", rev="r1", week=5, hm=-150, am=130, sp=3.0):
     return {"experiment": exp, "revision": rev, "game_id": gid, "season": 2026, "week": week,
             "home": "H" + gid, "away": "A" + gid, "generated_utc": "2026-10-10T12:00:00+00:00",
             "kickoff_utc": "2026-10-11T17:00:00+00:00", "model_wp": wp, "market_wp": mkt,
-            "homefield_wp": .55, "spread_line": 3.0, "home_moneyline": hm, "away_moneyline": am,
+            "homefield_wp": .55, "spread_line": sp, "home_moneyline": hm, "away_moneyline": am,
             "injury_report": {"home": "final", "away": "final"}}
 
 
@@ -72,3 +72,39 @@ def test_flat_roi_at_saved_moneyline_with_same_row_baseline():
     bands = g.roi_bands(out).set_index("group")
     assert bands.loc["All games", "bets"] == 3 and bands.loc["−174 to −130", "bets"] == 2
     assert "HEADLINE flat 1u" in g.report_text(out)
+
+
+def test_model_spread_and_ats_diagnostic():
+    from scipy.special import ndtr
+    even = float(ndtr(3 / g.m.MARKET_SIGMA))  # model spread equals the 3-point line: no side
+    # a: model +6.5 vs 3 -> home; home won by 10 -> W.  b: model -3.1 -> away; home lost by 3 -> W.
+    # c: model +3.1 -> home; tie, home 3 short of the line -> L.  d: pending -> no result.
+    # e: line 10, home won by 10 -> push.  f: model equals the line -> no side.  g: no line -> no side.
+    res = pd.concat([RESULTS, pd.DataFrame({"game_id": ["e", "f", "g"], "away_score": [10, 10, 10],
+                                            "home_score": [20, 20, 20], "result": [10, 10, 10]})])
+    out = g.grade([rec("a", .7, .6), rec("b", .4, .6), rec("c", .6, .6), rec("d", .6, .6),
+                   rec("e", .9, .8, sp=10.0), rec("f", even, .6), rec("g", .6, None, sp=None)], res)
+    s = out.set_index("game_id")
+    assert np.isclose(s.loc["a", "model_spread"], g.m.MARKET_SIGMA * 0.5244005127080407)
+    assert np.isclose(s.loc["a", "spread_gap"], s.loc["a", "model_spread"] - 3)
+    assert (s.loc["a", "ats_side"], s.loc["a", "ats_result"]) == ("home", "W")
+    assert (s.loc["b", "ats_side"], s.loc["b", "ats_result"]) == ("away", "W")
+    assert (s.loc["c", "ats_side"], s.loc["c", "ats_result"]) == ("home", "L")
+    assert s.loc["d", "ats_side"] == "home" and s.loc["d", "ats_result"] == ""
+    assert s.loc["e", "ats_result"] == "P"
+    assert s.loc["f", "ats_side"] == "" and s.loc["f", "ats_result"] == ""
+    assert s.loc["g", "ats_side"] == "" and np.isnan(s.loc["g", "spread_gap"])
+    a = g.ats_summary(out)
+    assert (a["wins"], a["losses"], a["pushes"]) == (2, 1, 1)
+    big = g.ats_summary(out, g.ATS_GAP_POINTS)  # a (+3.5), b (-6.1), e (+5.9) qualify; c (+0.1) does not
+    assert (big["wins"], big["losses"], big["pushes"]) == (2, 0, 1) and big["lo"] < big["hi"]
+    text = g.report_text(out)
+    assert "Diagnostic, not the goal metric" in text and "|gap| >= 3 pts  2-0-1" in text
+    # The headline still grades every priced, final game at the moneyline (a, b, c push, e, f, g),
+    # including g, which has no spread and so no ATS side.
+    assert g.summary(out)["roi"]["bets"] == 6
+
+
+def test_no_ats_lines_before_any_decided_game():
+    out = g.grade([rec("d", .6, .6)], RESULTS)
+    assert out.loc[0, "ats_result"] == "" and "Diagnostic, not the goal metric" not in g.report_text(out)
