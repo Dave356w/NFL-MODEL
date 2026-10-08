@@ -710,3 +710,31 @@ Held-out 2023–25 games (`ready`, final scores); no fitting on these seasons.
 0.05/4) excludes zero. A passing term would still need a forward pre-registration before
 any model change. Known exposure: single-feature partial correlations (test on 2026-10-08,
 not committed) were seen; no product term had been computed.
+
+**Result (2026-10-08, run once after the plan above was committed).** Held-out 2023–25, n = 815:
+
+| Term | Partial r with margin, spread controlled [98.75% CI] | + composite controlled | By season 2023 / 24 / 25 |
+|---|---:|---:|---|
+| pass | **+0.099 [+0.004, +0.193]** (passes) | +0.102 [+0.010, +0.194] | +0.09 / +0.08 / +0.13 |
+| rush | −0.046 [−0.130, +0.040] | −0.046 | −0.05 / −0.11 / +0.02 |
+| protection | +0.043 [−0.047, +0.129] | +0.045 | +0.06 / +0.03 / +0.05 |
+| interceptions | −0.035 [−0.124, +0.053] | −0.036 | −0.15 / −0.00 / +0.02 |
+
+*Checks not in the plan (reported because they change the reading):*
+- **Drift.** League net pass yards per pass play fell from ≈6.37 (2019–21) to ≈6.12 (2023–25),
+  so 2019–22-standardized inputs are off-centre in the test seasons and the planned product
+  picks up main effects (its correlation with the spread is −0.48 in 2023–25 vs −0.04 in
+  2019–22). Re-centred within each season (pregame inputs only), the pass term is uncorrelated
+  with the spread (+0.02) and still gives +0.098 [+0.016, +0.189] (98.75%) in 2023–25. Not a
+  drift artifact in the test seasons.
+- **No replication in 2019–22** (used only for standardizing): −0.015 [−0.080, +0.048]
+  (planned form), −0.022 [−0.099, +0.065] (season-centred).
+- **Goal metric.** A moneyline adjustment fit on 2019–22 gives the term ≈ 0 weight
+  (+0.018 ± 0.050 log-odds per unit), so on 2023–25 it changes log loss by −0.0009
+  [−0.0034, +0.0018] and ROI by +0.1% (side flips on 12 of 811 games).
+
+**Reading.** The planned test passes in 2023–25, the effect is steady across those three seasons
+(about 1.2 points of margin per SD of the term) and survives re-centring, but it is absent in
+2019–22 and does not move moneyline results. Unresolved: a candidate for a forward test, not a
+model input. With about 270 games a season and SE(r) ≈ 0.06, a true r of 0.10 needs roughly
+three forward seasons to resolve.
