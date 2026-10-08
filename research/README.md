@@ -738,3 +738,27 @@ not committed) were seen; no product term had been computed.
 2019–22 and does not move moneyline results. Unresolved: a candidate for a forward test, not a
 model input. With about 270 games a season and SE(r) ≈ 0.06, a true r of 0.10 needs roughly
 three forward seasons to resolve.
+
+### Test 25 (plan, committed before any result): nearest-neighbour game contexts (2026-10-08)
+
+*Question.* Do past games with a similar matchup profile ended differently from their market
+spread, in a way that carries over to the current game? (kNN over per-game profiles.)
+
+*Descriptors, fixed now.* (A) the 25 per-game contributions (coefficient × scaled input) of
+the production held-out recipe `rates_core_adj_avail_cs_margin_h16_r0.1`, refit weekly on
+earlier games only; (B) the 32 raw pregame `rates_core` profiles (home offense, home
+defense, away offense, away defense; 8 rates each), centred within season and scaled by the
+2019–22 SD. Home/away orientation kept.
+
+*Neighbours.* For each test game, the k = 50 nearest games by Euclidean distance among games
+from 2019 on in strictly earlier weeks. Also reported, not decisive: all earlier games within
+a radius equal to the 2019–22 median 50th-neighbour distance.
+
+*Prediction and outcome.* Neighbour mean of (home margin − market spread) predicts the test
+game's (home margin − market spread). Primary: Pearson r on held-out 2023–25. Secondary: a
+moneyline adjustment logit(q) + b·(neighbour mean residual), b fit on 2021–22, scored on
+2023–25 (log loss, flat 1u ROI vs the market favourite).
+
+*Decision.* Two descriptors: a descriptor counts only if its 97.5% bootstrap interval for r
+(Bonferroni 0.05/2) excludes zero; a passing descriptor would need a forward
+pre-registration before any model change.
