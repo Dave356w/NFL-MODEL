@@ -171,6 +171,12 @@ correlation with the final margin beyond the market spread, with the pre-registe
 (`research/PREREGISTRATION.md`). Held out it was +0.09 in 2023–25 and −0.02 in 2019–22
 (research Test 24), so it is a forward hypothesis, not a model input.
 
+### Realized margin on the calibration page (reporting only, v1.12.4)
+
+`market-calibration.html` shows, per moneyline band, the side's average realized margin beside
+its average market spread, and per model confidence band the model pick's average margin beside
+the spread (`band_records`: `avg pick margin`, `avg pick spread`). Descriptive only.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of

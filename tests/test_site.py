@@ -321,3 +321,35 @@ def test_spread_text_sides_pickem_and_missing():
 
 def test_snapshot_keeps_model_spread():
     assert "model_spread" in b.BOARD_COLS
+
+
+def test_market_sides_margin_is_from_each_sides_view():
+    df = pd.DataFrame({"home won": [1., 0.], "home_moneyline": [-150, -150], "away_moneyline": [130, 130],
+                       "result": [7., -3.], "spread_line": [3., 3.]})
+    s = b.market_sides(df)
+    assert list(s[s.side == "home"].margin) == [7., -3.] and list(s[s.side == "away"].margin) == [-7., 3.]
+    assert list(s[s.side == "home"].spread) == [3., 3.] and list(s[s.side == "away"].spread) == [-3., -3.]
+    no_scores = b.market_sides(df.drop(columns=["result", "spread_line"]))
+    assert no_scores.margin.isna().all()  # older inputs without scores still render
+
+
+def test_calibration_page_shows_avg_margin(tmp_path):
+    out, _ = render(tmp_path)
+    html = (out / "market-calibration.html").read_text()
+    assert "<th class=n>Avg margin</th>" in html and "vs the average spread for it" in html
+    # fixture retro: home favorites at -150 win by 3 or lose by 3 on a 1-point line
+    assert re.search(r"<span class='(up|dn)'>[+−]\d+\.\d</span> vs [+−]\d+\.\d", html)
+
+
+def test_model_confidence_rows_carry_avg_margin():
+    hist = pd.DataFrame({"season": 2024, "week": 1, "home won": [1., 0., 1., 0.], "model_wp": [.7, .7, .3, .3],
+                         "market_wp": [.6, .6, .6, .6], "result": [10., -4., 3., -7.], "spread_line": [3., 3., -2., -2.]})
+    recs = m.band_records(hist)
+    tot = recs[(recs.source == "model") & (recs.band == "All picks")].iloc[0]
+    # picks: home (+10, -4), away (-3, +7); spreads from the pick's view: +3, +3, +2, +2
+    assert np.isclose(tot["avg pick margin"], (10 - 4 - 3 + 7) / 4) and np.isclose(tot["avg pick spread"], 2.5)
+    html = b.records_table(recs)
+    assert "<th class=n>Avg margin</th>" in html and "+2.5" in html
+    old = recs.drop(columns=["avg pick margin", "avg pick spread"])  # a band_records.csv written before v1.12.4
+    assert "Avg margin" not in b.records_table(old)
+    assert np.isnan(m.band_records(hist.drop(columns=["result", "spread_line"]))["avg pick margin"]).all()
