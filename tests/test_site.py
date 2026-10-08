@@ -296,3 +296,28 @@ def test_price_band_flags_small_samples_only():
     html = b.price_band_html("CHI", -148, .572, big, mdl, [2023, 2024, 2025], 0)
     assert "small sample" not in html and "won 62.8%" in html and "vs 57.6% implied · 231 teams" in html
     assert "won 66.0%" in html and "This game" in html and "2023–2025" in html
+
+
+def test_card_shows_model_and_market_spread(tmp_path):
+    out, _ = render(tmp_path)
+    idx = (out / "index.html").read_text()
+    # TB@DAL: board has no model_spread column (published before v1.12.1), so it is derived from
+    # model_wp .60 -> DAL by 12.37 * Phi^-1(.6) = 3.13; the market line 9.5 favors DAL too.
+    assert "<span>Model DAL −3.1</span> · <span>Market DAL −9.5</span>" in idx
+    assert "<td>Model spread</td><td class=n>+3.1</td><td class=n>−3.1</td>" in idx
+    assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
+
+
+def test_spread_text_sides_pickem_and_missing():
+    assert b.spread_text(4.58, True) == "−4.6" and b.spread_text(4.58, False) == "+4.6"
+    assert b.spread_text(-2.5, True) == "+2.5" and b.spread_text(.04, True) == "PK"
+    assert b.spread_text(float("nan"), True) == "—"
+    assert b.favorite_spread_text(-3.2, "GB", "CHI") == "CHI −3.2"
+    assert b.favorite_spread_text(0., "GB", "CHI") == "PK" and b.favorite_spread_text(None, "GB", "CHI") == "—"
+    # A board that carries model_spread uses it; an older board falls back to model_wp.
+    assert b.model_spread({"model_spread": 7.25, "model_wp": .5}) == 7.25
+    assert np.isclose(b.model_spread({"model_wp": .5}), 0.)
+
+
+def test_snapshot_keeps_model_spread():
+    assert "model_spread" in b.BOARD_COLS

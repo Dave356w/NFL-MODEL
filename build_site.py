@@ -70,7 +70,7 @@ SNAPSHOT = {
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
               "home_moneyline", "away_moneyline",
-              "market_wp", "model_wp", "homefield_wp", "composite_log_odds", "recipe",
+              "market_wp", "model_wp", "model_spread", "homefield_wp", "composite_log_odds", "recipe",
               "away_qb_expected", "away_qb_usual", "home_qb_expected", "home_qb_usual",
               "away_injury_report", "home_injury_report"]
 TEAM_NAMES = {
@@ -286,6 +286,7 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .mid{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
 .mid .t{font:800 15px/1 var(--mono)}
 .mid .mk{font:600 12.5px/1.2 var(--mono);color:var(--muted)}
+.mid .mk span{white-space:nowrap}
 .chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--faint);font:800 18px/1 var(--sans)}
 .card[open] .chev{transform:translateY(-50%) rotate(180deg);color:var(--ink)}
 .flags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:9px}
@@ -389,6 +390,33 @@ def kickoff_text(r):
 def ml_text(ml):
     ml = num(ml)
     return "—" if not math.isfinite(ml) else f"{ml:+.0f}".replace("-", "−")
+
+
+def spread_text(home_margin, home, digits=1):
+    """A team's point spread from an expected home margin (positive = home favored):
+    the home side gets -margin, the away side +margin. "PK" when it rounds to zero."""
+    x = num(home_margin)
+    if not math.isfinite(x):
+        return "—"
+    x = -x if home else x
+    t = f"{x:+.{digits}f}"
+    return "PK" if float(t) == 0 else t.replace("-", "−")
+
+
+def favorite_spread_text(home_margin, home, away, digits=1):
+    """The favorite and its spread, e.g. "DAL −4.6"; "PK" for a pick'em."""
+    x = num(home_margin)
+    if not math.isfinite(x):
+        return "—"
+    t = spread_text(x, x > 0, digits)
+    return t if t == "PK" else f"{esc(home if x > 0 else away)} {t}"
+
+
+def model_spread(r):
+    """Model-implied home margin: the board's model_spread, or derived from model_wp
+    for a board published before the column existed."""
+    x = num(r.get("model_spread"))
+    return x if math.isfinite(x) else float(m.implied_spread([r.get("model_wp")])[0])
 
 
 def wl_text(r):
@@ -597,6 +625,9 @@ def render_index(latest, ledger, built, now=None):
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
+        ms, ks = model_spread(r), num(r.get("spread_line"))
+        sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
+              + (f" · <span>Market {favorite_spread_text(ks, home, away)}</span>" if math.isfinite(ks) else ""))
 
         def side_html(code, wp, fav, cls):
             club = (f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div>"
@@ -606,7 +637,8 @@ def render_index(latest, ledger, built, now=None):
 
         summary = (f"<summary class='game-summary'><div class='teams'>"
                    f"{side_html(away, 1 - p, not fav_home and not math.isclose(p, .5), 'away')}"
-                   f"<div class='mid'><div class='t'>{esc(kickoff_text(r))}</div><div class='mk'>{mk}</div></div>"
+                   f"<div class='mid'><div class='t'>{esc(kickoff_text(r))}</div><div class='mk'>{mk}</div>"
+                   f"<div class='mk sp'>{sp}</div></div>"
                    f"{side_html(home, p, fav_home, 'home')}</div>"
                    f"<div class='probbar' aria-hidden='true'><i class='a' style='width:{100 * (1 - p):.1f}%'></i>"
                    f"<i class='h' style='width:{100 * p:.1f}%'></i></div>"
@@ -614,7 +646,9 @@ def render_index(latest, ledger, built, now=None):
         det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
             ["Model", pct(1 - p), pct(p)],
             ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
-            ["Moneyline", ml_text(am), ml_text(hm)]], num_cols=(1, 2))]
+            ["Moneyline", ml_text(am), ml_text(hm)],
+            ["Model spread", spread_text(ms, False), spread_text(ms, True)],
+            ["Market spread", spread_text(ks, False), spread_text(ks, True)]], num_cols=(1, 2))]
         if team and math.isfinite(num(bet.price)) and math.isfinite(q):
             det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
                                        mkt_bands, mdl_bands, band_years, n_fwd))
