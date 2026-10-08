@@ -886,3 +886,52 @@ cost of about 1.5–2 points to trade (half the 1¢ spread plus the fee); buying
 favourite a day early returned the same as buying it at the close. The 72-hour window clears
 zero only barely, and it flatters the model because its injury inputs were not public yet. No
 evidence that the model's value is in timing; the conclusion of tests 22–26 stands.
+
+### Test 28 (plan, committed before any result): margin as the fitting target, and a schedule-adjusted margin (2026-10-08)
+
+*Question.* Two structural choices found by reading `nfl_model.py`, not by looking at held-out
+results:
+- **(M) Target.** `fit_composite` fits binary home W/L. The final margin carries more information
+  per game: near p = ½ a probit on W/L keeps about 2/π of the information a normal model of the
+  margin has, and less away from ½, so the 25 coefficients are estimated from what is in effect a
+  smaller sample. Test 15C found that a less noisy target helps (training on market prices,
+  +0.0049 ± 0.0041 LL, unresolved); the margin is the version that uses no market input.
+- **(A) Margin input.** `d__margin` is a raw decayed average. Unlike the `_adj` box-score family it
+  is not adjusted for the opponents a team has played or for how many of its games were at home.
+
+*Arms, fixed now.* v1.12 production families, half-lives (4, 8, 16), walk-forward 2021–25 and
+nested selection (each held-out season's recipe is the minimum mean walk-forward log loss on
+earlier seasons), scored on the same held-out 2023–25 games as production.
+- **M:** same features, standardization, time-decay weights and site-penalty ratio, but the fit is
+  weighted ridge least squares of the home point margin (ties included as 0), and the win
+  probability is Φ(μ̂ / σ̂), with σ̂ the weighted RMS training residual of that week's fit. Ridge grid
+  = production grid × 5 = {0.05, 0.5, 5, 50}: the logistic loss has curvature p(1 − p) ≈ 0.2, so
+  each value shrinks the coefficients by about the same fraction as the production value it
+  replaces.
+- **A:** production logistic fit with `d__margin` replaced by `d__margin_adj` = r_home − r_away.
+  The ratings come from a weighted ridge fit of each earlier game's home margin on a home-site term
+  plus r_home − r_away, with the `_adj` family's decay (league week slots, `OFFSEASON_RETENTION`
+  per season boundary, `MAX_HISTORY_SEASONS`) and `PRIOR_EQUIVALENT_GAMES` (4) of ridge on each
+  rating, i.e. shrunk toward 0 like the raw margin.
+- Reported, not decisive: **M + A** together.
+
+*Primary statistic.* Per-game log-loss gain over production on the same held-out games (positive
+= arm better): mean with a 4,000-draw game-bootstrap 97.5% CI (Bonferroni 0.05/2).
+
+*Decision.* Two arms. An arm is **supported** if its CI lies above zero, **harmful** if it lies
+below zero, otherwise **unresolved**. A supported arm is a candidate for a new `REVISION` by the
+owner's decision; nothing here changes v1.12, its frozen recipe or the ledger.
+
+*Secondary (reported, not decisive).* Flat 1u ROI ± SE on the same priced games beside production,
+the same-row market favorite and the market-correct null; log-loss gain by season and by week
+group (1–4, 5–9, 10–13, 14–17, 18); log loss against the no-vig moneyline. For M, the RMSE of μ̂
+against the realized margin beside the market spread and production's implied spread, and the
+number of coefficients against the direction map in the fit through 2025.
+
+*Expectation, stated now (not a rule).* M: a gain of roughly +0.002 to +0.005 per game, spread
+across weeks. A: a smaller gain, concentrated before week 10, when schedules are least balanced.
+Either could be zero.
+
+*Known exposure.* These seasons have been used by 27 earlier tests, and production's design was
+revised after seeing them, which if anything favours production. Tests 14–16 (point margin is the
+input the market leans on) are why the margin's construction was examined for arm A.
