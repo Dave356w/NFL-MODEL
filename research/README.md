@@ -662,3 +662,29 @@ Projected passer was the team's actual starter (first dropback), 544 team-games 
   these seasons. Twenty-one tests have now been run on these data.
 - **Adopted as v1.11** (owner decision): it fixes a known projection error, and the
   held-out comparison shows no cost. Forward rows are the real test.
+
+### Test 22: Kalshi as a market benchmark (2026-10-08)
+
+`python research/kalshi_calibration.py --outer RUN/outer_chronological_predictions.csv`.
+Kalshi's game-winner mid price (best bid/ask) from the last hourly candle ending at least 1 hour
+before kickoff, scored on the same games as the sportsbook moneyline (margin removed), the
+spread-derived probability and the model's held-out 2025 probability (`boxscore-composite-v1.12`,
+recipe selected through 2024). Kalshi lists NFL games from 2025 only; ties excluded.
+
+| Source (2025 held-out, n = 271) | Log loss | Brier | Calibration slope | LL vs Kalshi [95% CI] |
+|---|---:|---:|---:|---:|
+| Kalshi, 1h before kickoff | 0.6117 | 0.2133 | 0.94 ± 0.16 | — |
+| Sportsbook moneyline, margin removed | 0.6094 | 0.2121 | 0.98 ± 0.16 | −0.0023 [−0.0054, +0.0008] |
+| Spread-derived | 0.6091 | 0.2120 | 1.10 ± 0.18 | −0.0026 [−0.0107, +0.0051] |
+| Model | 0.6335 | 0.2222 | 0.98 ± 0.19 | +0.0218 [−0.0005, +0.0438] |
+
+Negative "LL vs Kalshi" means the source scored better than Kalshi. Adding 2026 weeks 1–4
+(n = 333, model from the current-season walk-forward) gives the same picture: Kalshi −0.0016
+[−0.0045, +0.0013] against the book; its 24h-before price is no worse than its 1h price.
+
+**Kalshi is a benchmark, not a better forecast.** It agrees with the margin-free moneyline to
+about one point of win probability and is calibrated within its interval. What it adds is
+cost and time: a 1¢ bid/ask spread, so the Kalshi-correct null is about −1% to −2% with the
+estimated fee instead of about −4% at the sportsbook, and quotes with a capture time. v1.12.2
+records them at lock (`kalshi.py`). On these 333 games the model's side returned −4.2% ± 4.3 at
+the Kalshi mid + ½¢ before fees and −7.1% ± 4.1 at the sportsbook moneyline (unresolved).

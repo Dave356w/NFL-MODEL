@@ -14,6 +14,7 @@ internals stay in data/ledger_report.txt and data/latest/)
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
   data/frozen_recipe_<season>_<REVISION>.json frozen hyperparameters (nfl_model.frozen_recipe)
+  data/kalshi_snapshots.jsonl      append-only Kalshi quotes captured for newly locked games (kalshi.py)
   data/forward_ledger.csv, data/ledger_report.txt   graded view (grade_ledger.py)
   data/latest/                     the newest run's page inputs, so --pages-only needs no model run
   data/projections/<season>_week<NN>.csv   the latest board of each week, overwritten through the week
@@ -38,6 +39,7 @@ import numpy as np
 import pandas as pd
 
 import grade_ledger
+import kalshi
 import nfl_model as m
 
 DATA = Path("data")
@@ -859,6 +861,7 @@ def main(argv=None):
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
+        kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         grade_ledger.main([])
     files = render_all(args.out)
     print(f"site: {len(files)} files -> {args.out}")

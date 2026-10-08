@@ -5,6 +5,18 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.12.2 (reporting only; same REVISION, config signature, recipe and ledger): Kalshi as a
+second, timestamped market. kalshi.py captures Kalshi's public best bid/ask for the game-winner
+markets and the "wins by over X.5" ladder for each game newly locked in the forward ledger, one
+first capture per game in data/kalshi_snapshots.jsonl (append-only, separate from the ledger;
+a Kalshi failure never fails the build). grade_ledger.py grades the model's side at the Kalshi
+ask (estimated taker fee 0.07 * P * (1 - P) per contract) beside the Kalshi favorite and the
+Kalshi-correct null, plus the alt-line rule (same favorite, smaller model spread: favorite
+"wins by over" the largest strike below the model spread) beside the favorite's game-winner
+ask. Research (research/kalshi_calibration.py, 2025 held-out, n=271): Kalshi 1h before kickoff
+scores like the sportsbook (log loss 0.6117 vs 0.6094 for the margin-free moneyline; difference
+-0.0023, 95% -0.0054 to +0.0008), so it is a benchmark and a cheaper price, not a better forecast.
+
 v1.12.1 (reporting only; same REVISION, config signature, recipe and ledger):
 model-implied spread. model_spread = MARKET_SIGMA * Phi^-1(model_wp), the inverse of the
 spread-to-WP comparator, in points with the schedule's spread_line sign (positive = home
@@ -378,7 +390,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')

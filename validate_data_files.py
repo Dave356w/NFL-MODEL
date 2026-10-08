@@ -13,6 +13,7 @@ from pathlib import Path
 
 CONFLICT_MARKERS = ("<<<<<<<", "=======", ">>>>>>>")
 LEDGER_NAME = "forward_predictions.jsonl"
+KALSHI_NAME = "kalshi_snapshots.jsonl"
 
 
 def validate_csv(path):
@@ -84,8 +85,35 @@ def validate_ledger(path):
     return len(seen)
 
 
+def validate_kalshi(path):
+    """Every line is JSON; one capture per game; captured before kickoff; 0 <= bid < ask <= 1."""
+    path = Path(path)
+    seen = set()
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        if line.startswith(CONFLICT_MARKERS):
+            raise ValueError(f"{path}:{line_number}: unresolved Git conflict marker")
+        try:
+            r = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{line_number}: not JSON ({exc})") from exc
+        for k in ("game_id", "captured_utc", "kickoff_utc", "winner", "spread_ladder"):
+            if k not in r:
+                raise ValueError(f"{path}:{line_number}: missing {k}")
+        if r["game_id"] in seen:
+            raise ValueError(f"{path}:{line_number}: duplicate capture for {r['game_id']}")
+        seen.add(r["game_id"])
+        if datetime.fromisoformat(r["captured_utc"]) >= datetime.fromisoformat(r["kickoff_utc"]):
+            raise ValueError(f"{path}:{line_number}: capture not before kickoff")
+        for q in list(r["winner"].values()) + list(r["spread_ladder"]):
+            if not 0 <= q["bid"] < q["ask"] <= 1:
+                raise ValueError(f"{path}:{line_number}: bad quote {q}")
+    return len(seen)
+
+
 def validate_data_dir(data_dir="data"):
-    """Validate every CSV under data_dir and the forward ledger; return checked paths."""
+    """Validate every CSV under data_dir, the forward ledger and Kalshi captures; return checked paths."""
     data_dir = Path(data_dir)
     paths = sorted(data_dir.rglob("*.csv"))
     for path in paths:
@@ -95,6 +123,10 @@ def validate_data_dir(data_dir="data"):
     if ledger.exists():
         validate_ledger(ledger)
         paths.append(ledger)
+    snaps = data_dir / KALSHI_NAME
+    if snaps.exists():
+        validate_kalshi(snaps)
+        paths.append(snaps)
     return paths
 
 
