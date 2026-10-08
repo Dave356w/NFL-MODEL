@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.12",
   "diagnostics": "v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-08T00:23:44.147603+00:00",
+  "generated_utc": "2026-10-08T06:37:14.214326+00:00",
   "season": 2026,
   "week": 5,
   "config_signature": "cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe",
@@ -42,11 +42,11 @@
     {
       "source": "roster_status_codes",
       "counts": {
-        "ACT": 187454,
-        "DEV": 55924,
-        "RES": 37016,
+        "ACT": 187459,
+        "DEV": 55938,
+        "RES": 37021,
         "INA": 23475,
-        "CUT": 17672,
+        "CUT": 17666,
         "RET": 2113,
         "NWT": 604,
         "PUP": 321,
@@ -60,13 +60,10 @@
         "E14": 28,
         "TRT": 15,
         "RFA": 6,
-        "E01": 4,
-        "W04": 1
+        "E01": 4
       },
-      "unrecognized_counted_as_member": {
-        "W04": 1
-      },
-      "out_by_description": 207
+      "unrecognized_counted_as_member": {},
+      "out_by_description": 208
     },
     {
       "source": "availability_roster_membership",
@@ -78,14 +75,14 @@
       "membership_skipped_as_data_gap": 12,
       "qb_projected_from_backup_prior": 3,
       "qb_projected_from_other_team_history": 17,
-      "qb_projected_not_last_starter": 207,
+      "qb_projected_not_last_starter": 206,
       "qb_projected_from_depth_chart": 702,
       "qb_depth_chart_missing": 0,
       "qb_depth_chart_no_available_qb": 0,
       "qb_questionable_blend": 135,
-      "injury_report_final": 3771,
-      "injury_report_practice_only": 95,
-      "injury_report_none": 34,
+      "injury_report_final": 3773,
+      "injury_report_practice_only": 112,
+      "injury_report_none": 15,
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
