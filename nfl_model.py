@@ -5,6 +5,11 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.12.4 (reporting only; same REVISION, config signature, recipe and ledger): realized margin on
+the calibration page. band_records adds the picked side's average realized margin and average
+market spread per confidence band; the market-calibration page shows them for the model's picks
+and, per moneyline band, for the market.
+
 v1.12.3 (reporting only; same REVISION, config signature, recipe and ledger): pre-registered
 H4. matchup.py records each newly locked game's pass-matchup interaction (research Test 24:
 home pass offense x away pass defense allowed minus the reverse, season-to-date centring) in
@@ -396,7 +401,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.10 decayed point margin; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1941,11 +1946,16 @@ def pick_band_index(p):
 
 
 def band_records(hist):
-    """W-L of each source's picks by pick-confidence band (same edges for both)."""
+    """W-L of each source's picks by pick-confidence band (same edges for both). With result and
+    spread_line present (v1.12.4, reporting only), also the picked side's average realized margin
+    and average market spread (positive = the pick won by / was favored by)."""
     h=hist[hist['home won'].isin([0.,1.])&hist.model_wp.notna()&hist.market_wp.notna()]
+    res=pd.to_numeric(h['result'],errors='coerce').to_numpy(float) if 'result' in h else np.full(len(h),np.nan)
+    spr=pd.to_numeric(h['spread_line'],errors='coerce').to_numpy(float) if 'spread_line' in h else np.full(len(h),np.nan)
     rows=[]
     for src,col in (('model','model_wp'),('market','market_wp')):
         conf,pick,won,idx=pick_view(h,col)
+        sgn=np.where(h[col].to_numpy(float)>.5,1.,-1.)
         for i,lab in list(enumerate(PICK_BAND_LABELS))+[(len(PICK_BAND_LABELS),'All picks')]:
             m=pick&((idx==i) if i<len(PICK_BAND_LABELS) else True)
             n=int(m.sum()); w=int(won[m].sum()); lo,hi=wilson(w,n)
@@ -1953,7 +1963,9 @@ def band_records(hist):
                          'record':record_text(w,n-w),
                          'avg pick prob %':100*float(conf[m].mean()) if n else np.nan,
                          'realized pick win %':100*w/n if n else np.nan,
-                         'CI low %':100*lo if n else np.nan,'CI high %':100*hi if n else np.nan})
+                         'CI low %':100*lo if n else np.nan,'CI high %':100*hi if n else np.nan,
+                         'avg pick margin':float(np.nanmean((sgn*res)[m])) if n and np.isfinite(res[m]).any() else np.nan,
+                         'avg pick spread':float(np.nanmean((sgn*spr)[m])) if n and np.isfinite(spr[m]).any() else np.nan})
     return pd.DataFrame(rows)
 
 
@@ -2707,7 +2719,7 @@ def main():
     print(f'  Chosen recipe {recipe_key(recipe)} rebuilt history (reconstructed): {int(t.bets)} bets, '
           f'{t.units:+.2f}u, ROI {100*t.roi:+.1f}% +/- {100*t.roi_se:.1f}')
     season_card=scorecard(gw); save(season_card,'season_scorecard.csv')
-    rcols=['season','week','home won','model_wp','market_wp']
+    rcols=['season','week','home won','model_wp','market_wp','result','spread_line']
     rec_hist=pd.concat([outer[rcols],gw.loc[(gw.week<cur)&gw.result.notna(),rcols]],ignore_index=True)
     recs=band_records(rec_hist); save(recs,'band_records.csv')
     rec_label=records_source_label(rec_hist,season,cur)
