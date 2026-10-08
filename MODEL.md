@@ -130,6 +130,47 @@ for all games and for |gap| ≥ 3 points, against the 52.4% break-even at −110
 3-point cut was chosen after the held-out seasons were seen (held-out: 136-118, 53.5%
 ± 3.1), so only forward games can test it.
 
+### Kalshi: a second, timestamped market (reporting only, v1.12.2)
+
+The sportsbook moneyline in a ledger snapshot comes from the nflverse schedule and has no
+independent quote time. For every game newly locked, the build now also captures Kalshi's
+public order book (best bid and ask) for both game-winner markets and the "team wins by over
+X.5 points" ladder, once, into `data/kalshi_snapshots.jsonl` (append-only, separate from the
+forward ledger; `kalshi_lag_hours` records how long after the lock it was taken). A Kalshi
+failure is logged and skipped; it never costs a pregame snapshot.
+
+`data/ledger_report.txt` then adds, as **secondary** lines (the moneyline headline is unchanged):
+
+* the model's side at the Kalshi ask, including an estimated taker fee of 0.07 × P × (1 − P)
+  per contract, beside the Kalshi favorite on the same rows, and the **Kalshi-correct null**
+  (about −1% to −2%: half the 1¢ spread plus the fee, against about −4% at the sportsbook);
+* a **diagnostic** for the alt-line rule: when the model and the market spread make the same
+  team the favorite and the model's spread is smaller, buy "favorite wins by over X.5" at the
+  largest Kalshi strike below the model's spread (the game-winner market when none is below
+  it), beside the favorite's game-winner ask on the same rows. The rule was chosen after
+  seeing held-out data; only these forward rows test it.
+
+* **pre-registered H3** (`research/PREREGISTRATION.md`): price every rung (strike ≤ 17.5)
+  from the frozen 2006–2024 margin distribution at the snapshot's no-vig moneyline
+  (`data/kalshi_ladder_reference.csv`, built by `research/ladder_pricing.py --build`) and buy
+  the one rung per game whose expected profit after the fee is at least $0.03, beside the
+  Kalshi-mid null on the same bets. Independent of the model.
+
+Is Kalshi a good benchmark? `research/kalshi_calibration.py` (2025 held-out games with a
+Kalshi price 1 hour before kickoff, n = 271): Kalshi log loss 0.6117 against 0.6094 for the
+margin-free sportsbook moneyline (difference −0.0023, 95% −0.0054 to +0.0008, unresolved) and
+0.6335 for the model; calibration slope 0.94 ± 0.16. Kalshi agrees with the book to about one
+point of win probability, so it is a cheaper, timestamped price, not a better forecast.
+
+### Pre-registered H4: the pass matchup (reporting only, v1.12.3)
+
+`matchup.py` records, for each newly locked game, home pass offense × away pass defense
+allowed minus the reverse (net pass yards per pass play, half-life 16 profiles, centred on the
+season so far) in `data/h4_terms.jsonl`. `data/ledger_report.txt` reports its partial
+correlation with the final margin beyond the market spread, with the pre-registered verdict
+(`research/PREREGISTRATION.md`). Held out it was +0.09 in 2023–25 and −0.02 in 2019–22
+(research Test 24), so it is a forward hypothesis, not a model input.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of

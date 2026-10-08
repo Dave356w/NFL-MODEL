@@ -662,3 +662,124 @@ Projected passer was the team's actual starter (first dropback), 544 team-games 
   these seasons. Twenty-one tests have now been run on these data.
 - **Adopted as v1.11** (owner decision): it fixes a known projection error, and the
   held-out comparison shows no cost. Forward rows are the real test.
+
+### Test 22: Kalshi as a market benchmark (2026-10-08)
+
+`python research/kalshi_calibration.py --outer RUN/outer_chronological_predictions.csv`.
+Kalshi's game-winner mid price (best bid/ask) from the last hourly candle ending at least 1 hour
+before kickoff, scored on the same games as the sportsbook moneyline (margin removed), the
+spread-derived probability and the model's held-out 2025 probability (`boxscore-composite-v1.12`,
+recipe selected through 2024). Kalshi lists NFL games from 2025 only; ties excluded.
+
+| Source (2025 held-out, n = 271) | Log loss | Brier | Calibration slope | LL vs Kalshi [95% CI] |
+|---|---:|---:|---:|---:|
+| Kalshi, 1h before kickoff | 0.6117 | 0.2133 | 0.94 ± 0.16 | — |
+| Sportsbook moneyline, margin removed | 0.6094 | 0.2121 | 0.98 ± 0.16 | −0.0023 [−0.0054, +0.0008] |
+| Spread-derived | 0.6091 | 0.2120 | 1.10 ± 0.18 | −0.0026 [−0.0107, +0.0051] |
+| Model | 0.6335 | 0.2222 | 0.98 ± 0.19 | +0.0218 [−0.0005, +0.0438] |
+
+Negative "LL vs Kalshi" means the source scored better than Kalshi. Adding 2026 weeks 1–4
+(n = 333, model from the current-season walk-forward) gives the same picture: Kalshi −0.0016
+[−0.0045, +0.0013] against the book; its 24h-before price is no worse than its 1h price.
+
+**Kalshi is a benchmark, not a better forecast.** It agrees with the margin-free moneyline to
+about one point of win probability and is calibrated within its interval. What it adds is
+cost and time: a 1¢ bid/ask spread, so the Kalshi-correct null is about −1% to −2% with the
+estimated fee instead of about −4% at the sportsbook, and quotes with a capture time. v1.12.2
+records them at lock (`kalshi.py`). On these 333 games the model's side returned −4.2% ± 4.3 at
+the Kalshi mid + ½¢ before fees and −7.1% ± 4.1 at the sportsbook moneyline (unresolved).
+
+### Test 24 (plan, committed before any result): matchup interactions (2026-10-08)
+
+*Question.* Does a matchup carry information that team strength alone does not, e.g. a strong
+pass offense against a weak pass defense? The composite uses home-minus-away differences of
+each team's offense and defense rates (main effects), never products across the matchup.
+
+*Terms, fixed now* (inputs `rates_core`, half-life 16 profiles; each standardized with
+2019–22 means and SDs; z = standardized; antisymmetric, positive favors home):
+1. pass: z(home offense net pass yds/pass play) × z(away defense allowed) − z(away offense) × z(home defense allowed)
+2. rush: the same with rush yards per attempt
+3. protection: the same with sacks-taken %, offense sacks taken × defense sacks made
+4. interceptions: the same with interception %
+
+*Outcome.* Partial correlation with the home margin, controlling for the market spread
+(primary), and controlling for the spread and the model's composite log-odds (secondary).
+Held-out 2023–25 games (`ready`, final scores); no fitting on these seasons.
+
+*Decision.* Four terms: a term counts only if its 98.75% bootstrap interval (Bonferroni
+0.05/4) excludes zero. A passing term would still need a forward pre-registration before
+any model change. Known exposure: single-feature partial correlations (test on 2026-10-08,
+not committed) were seen; no product term had been computed.
+
+**Result (2026-10-08, run once after the plan above was committed).** Held-out 2023–25, n = 815:
+
+| Term | Partial r with margin, spread controlled [98.75% CI] | + composite controlled | By season 2023 / 24 / 25 |
+|---|---:|---:|---|
+| pass | **+0.099 [+0.004, +0.193]** (passes) | +0.102 [+0.010, +0.194] | +0.09 / +0.08 / +0.13 |
+| rush | −0.046 [−0.130, +0.040] | −0.046 | −0.05 / −0.11 / +0.02 |
+| protection | +0.043 [−0.047, +0.129] | +0.045 | +0.06 / +0.03 / +0.05 |
+| interceptions | −0.035 [−0.124, +0.053] | −0.036 | −0.15 / −0.00 / +0.02 |
+
+*Checks not in the plan (reported because they change the reading):*
+- **Drift.** League net pass yards per pass play fell from ≈6.37 (2019–21) to ≈6.12 (2023–25),
+  so 2019–22-standardized inputs are off-centre in the test seasons and the planned product
+  picks up main effects (its correlation with the spread is −0.48 in 2023–25 vs −0.04 in
+  2019–22). Re-centred within each season (pregame inputs only), the pass term is uncorrelated
+  with the spread (+0.02) and still gives +0.098 [+0.016, +0.189] (98.75%) in 2023–25. Not a
+  drift artifact in the test seasons.
+- **No replication in 2019–22** (used only for standardizing): −0.015 [−0.080, +0.048]
+  (planned form), −0.022 [−0.099, +0.065] (season-centred).
+- **Goal metric.** A moneyline adjustment fit on 2019–22 gives the term ≈ 0 weight
+  (+0.018 ± 0.050 log-odds per unit), so on 2023–25 it changes log loss by −0.0009
+  [−0.0034, +0.0018] and ROI by +0.1% (side flips on 12 of 811 games).
+
+**Reading.** The planned test passes in 2023–25, the effect is steady across those three seasons
+(about 1.2 points of margin per SD of the term) and survives re-centring, but it is absent in
+2019–22 and does not move moneyline results. Unresolved: a candidate for a forward test, not a
+model input. With about 270 games a season and SE(r) ≈ 0.06, a true r of 0.10 needs roughly
+three forward seasons to resolve.
+
+### Test 25 (plan, committed before any result): nearest-neighbour game contexts (2026-10-08)
+
+*Question.* Do past games with a similar matchup profile ended differently from their market
+spread, in a way that carries over to the current game? (kNN over per-game profiles.)
+
+*Descriptors, fixed now.* (A) the 25 per-game contributions (coefficient × scaled input) of
+the production held-out recipe `rates_core_adj_avail_cs_margin_h16_r0.1`, refit weekly on
+earlier games only; (B) the 32 raw pregame `rates_core` profiles (home offense, home
+defense, away offense, away defense; 8 rates each), centred within season and scaled by the
+2019–22 SD. Home/away orientation kept.
+
+*Neighbours.* For each test game, the k = 50 nearest games by Euclidean distance among games
+from 2019 on in strictly earlier weeks. Also reported, not decisive: all earlier games within
+a radius equal to the 2019–22 median 50th-neighbour distance.
+
+*Prediction and outcome.* Neighbour mean of (home margin − market spread) predicts the test
+game's (home margin − market spread). Primary: Pearson r on held-out 2023–25. Secondary: a
+moneyline adjustment logit(q) + b·(neighbour mean residual), b fit on 2021–22, scored on
+2023–25 (log loss, flat 1u ROI vs the market favourite).
+
+*Decision.* Two descriptors: a descriptor counts only if its 97.5% bootstrap interval for r
+(Bonferroni 0.05/2) excludes zero; a passing descriptor would need a forward
+pre-registration before any model change.
+
+**Result (2026-10-08, run once after the plan above was committed).** Held-out 2023–25; neighbours
+from 1,642 games (2019 week 16 onward, the first week with enough earlier games to fit):
+
+| Descriptor | Neighbours | r with (margin − spread) [97.5% CI] | By season 2023 / 24 / 25 |
+|---|---|---:|---|
+| (A) per-game contributions | k = 50 | +0.053 [−0.018, +0.126] | +0.01 / +0.06 / +0.08 |
+| (A) per-game contributions | radius (≈184) | +0.021 [−0.064, +0.112] | −0.04 / +0.16 / −0.02 |
+| (B) home + away team profiles | k = 50 | −0.061 [−0.133, +0.014] | −0.08 / −0.08 / −0.03 |
+| (B) home + away team profiles | radius (≈115) | −0.050 [−0.128, +0.030] | −0.04 / −0.02 / −0.09 |
+
+Goal metric (k = 50, weight fit on 2021–22): (A) +0.021 ± 0.054 log-odds per point of neighbour
+residual, log loss vs the moneyline −0.0001 [−0.0014, +0.0011], ROI +0.5% ± 2.5 vs the market
+favourite +0.0% (n = 811, 4 sides flipped); (B) −0.019 ± 0.049, −0.0007 [−0.0018, +0.0003],
++0.0% (2 flipped).
+
+**Reading.** Neither descriptor passes; the two point the opposite way and every interval
+includes zero. Games that looked alike before kickoff did not miss the spread alike. A
+50-neighbour mean of misses that each have SD ≈ 13 points carries about ±1.8 points of noise,
+so only a large context effect could have shown; none did. Unresolved at small effects, no
+support for a model change.
