@@ -116,3 +116,16 @@ def test_v114_excludes_only_separate_sack_rates():
     assert cfg['regressor_exclusions']['families']==list(m.FEATURE_FAMILIES)
     assert set(cfg['regressor_exclusions']['features'])==set(m.NO_SACK_FEATURES)
     assert sig!='f60cc7a964979f3345f05bc7a2d1d5952e79ca5c991649da414443517209d920'
+
+
+def test_finals_without_pbp_are_skipped_like_boxes_but_present_games_stay_strict():
+    s=pd.concat([schedule(),pd.DataFrame([dict(game_id='nopbp',home_team='X',away_team='Y',
+        result=3,home_score=10,away_score=7)])],ignore_index=True)
+    with pytest.raises(ValueError,match='nopbp: score peaks missing PBP'):m.aggregate_score_peaks(pbp(),s)
+    box=pd.DataFrame(dict(game_id=['g','g'],team=['H','A']))
+    x=m.merge_score_peaks(box,pbp(),s).set_index('team')
+    assert x.loc['H','max_lead']==10 and x.loc['A','max_deficit']==10
+    # A game that has a box row but a broken scoring history still fails.
+    bad=pbp();bad.loc[2,'total_home_score']=6
+    with pytest.raises(ValueError,match='not monotone'):m.merge_score_peaks(box,bad,s)
+    assert m.merge_score_peaks(box.iloc[:0],pbp(),s).empty
