@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-09 05:23 UTC
+NFL forward ledger report -- 2026-10-09 05:46 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -8,6 +8,7 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
     win 0.0% vs no-vig q 79.1% (excess -79.1pp); market-correct null ROI -4.0%
     same rows, market favorite every game: -1.00u, ROI -100.0%
+  Model vs favorite, games where they pick different sides (all other bets are identical): n=0
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
@@ -37,6 +38,7 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
     win 0.0% vs no-vig q 80.0% (excess -80.0pp); market-correct null ROI -4.0%
     same rows, market favorite every game: -1.00u, ROI -100.0%
+  Model vs favorite, games where they pick different sides (all other bets are identical): n=0
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
@@ -66,6 +68,7 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
     win 0.0% vs no-vig q 80.8% (excess -80.8pp); market-correct null ROI -4.1%
     same rows, market favorite every game: -1.00u, ROI -100.0%
+  Model vs favorite, games where they pick different sides (all other bets are identical): n=0
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
