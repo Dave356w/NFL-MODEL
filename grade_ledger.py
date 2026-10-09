@@ -135,7 +135,11 @@ def kalshi_units(won, ask):
 
 
 def kalshi_grades(g, snaps, ladder=None):
-    """Secondary prices from the first Kalshi capture per game (v1.12.2, reporting only).
+    """Secondary prices from Kalshi captures (v1.12.2, reporting only).
+
+    Each snapshot uses its game's first capture at or after its lock (generated_utc).
+    Snapshots locked after the game's last capture fall back to that earlier capture;
+    kalshi_lag_hours is then negative and the report counts them.
 
     kalshi_*: 1u on the model's side at that side's game-winner ask, beside the Kalshi
     favorite (higher mid) at its ask on the same rows; kalshi_null is the ROI if the
@@ -148,10 +152,14 @@ def kalshi_grades(g, snaps, ladder=None):
     frozen reference probability (kalshi_ladder_reference.csv, 2006-2024 margins at the
     snapshot's no-vig moneyline) beats the ask by the most after the fee, if by >= $0.03;
     ladder_null is the ROI if that rung's Kalshi mid were exactly right."""
-    by = {r["game_id"]: r for r in snaps}
+    by = {}
+    for s in sorted(snaps or [], key=lambda s: pd.Timestamp(s["captured_utc"])):
+        by.setdefault(s["game_id"], []).append(s)
     rows = []
     for r in g.itertuples(index=False):
-        s, out = by.get(r.game_id), {}
+        caps, out = by.get(r.game_id, []), {}
+        lock = pd.Timestamp(r.generated_utc)
+        s = next((c for c in caps if pd.Timestamp(c["captured_utc"]) >= lock), caps[-1] if caps else None)
         if s:
             hq, aq = s["winner"].get("home"), s["winner"].get("away")
             mids = {sd: (q["bid"] + q["ask"]) / 2 for sd, q in (("home", hq), ("away", aq)) if q}
@@ -326,11 +334,13 @@ def report_text(g, now=None):
         if ks["n"]:
             nl = part.loc[part.kalshi_units.notna(), "kalshi_null"].mean()
             lag = part.loc[part.kalshi_units.notna(), "kalshi_lag_hours"]
-            lines += [f"  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): "
+            early = int((lag < 0).sum())
+            lines += [f"  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): "
                       f"{ks['wins']}-{ks['losses']}, {ks['units']:+.2f}u, ROI {100 * ks['roi']:+.1f}%"
                       + (f" +/- {100 * ks['roi_se']:.1f}" if np.isfinite(ks["roi_se"]) else ""),
                       f"    Kalshi-correct null {100 * nl:+.1f}%; same rows, Kalshi favorite {ks['base_units']:+.2f}u, "
-                      f"ROI {100 * ks['base_roi']:+.1f}%; capture lag after lock median {lag.median():.1f}h, max {lag.max():.1f}h"]
+                      f"ROI {100 * ks['base_roi']:+.1f}%; capture lag after lock median {lag.median():.1f}h, max {lag.max():.1f}h"
+                      + (f"; {early} captured BEFORE lock (no later capture; min {lag.min():.1f}h)" if early else "")]
         al = kalshi_summary(part[part.alt_rule], "alt_units", "alt_fav_units")
         if al["n"]:
             lines += [f"  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: {al['wins']}-{al['losses']}, "

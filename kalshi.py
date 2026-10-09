@@ -8,9 +8,11 @@ the build captures Kalshi's public order-book top (best bid and ask) for:
   * the game-winner market for each team (series KXNFLGAME), and
   * the "<team> wins by over X.5 points" ladder (series KXNFLSPREAD),
 
-and appends ONE record per game to data/kalshi_snapshots.jsonl, the first capture
-only, never rewritten. grade_ledger.py joins it to grade the model's side at the
-Kalshi price and the alt-line diagnostic. Public market-data endpoints need no
+and appends a record to data/kalshi_snapshots.jsonl, never rewritten. A game gets a
+new capture whenever one of its ledger snapshots (any revision) has no capture at or
+after its lock, so a revision that locks later is not priced at an older quote.
+grade_ledger.py joins each snapshot to its first capture at or after its lock to grade
+the model's side at the Kalshi price and the alt-line diagnostic. Public market-data endpoints need no
 key. A Kalshi failure is logged and skipped; it never costs a pregame snapshot.
 
     python kalshi.py            # capture quotes for locked, not-yet-started games
@@ -229,16 +231,20 @@ def load(path):
 
 
 def record(data_dir=DATA, now=None, get=fetch):
-    """Append first captures for ledger games that have kicked off later than `now` and
-    have no Kalshi snapshot yet. Returns the number of records written."""
+    """Append captures for ledger games that kick off later than `now` and have a ledger
+    snapshot with no capture at or after its lock (generated_utc). Returns the number of
+    records written."""
     data_dir = Path(data_dir)
     now = now or dt.datetime.now(dt.timezone.utc)
-    have = {r["game_id"] for r in load(data_dir / SNAPSHOTS.name)}
+    last = {}
+    for r in load(data_dir / SNAPSHOTS.name):
+        t = dt.datetime.fromisoformat(r["captured_utc"])
+        last[r["game_id"]] = max(last.get(r["game_id"], t), t)
     todo = {}
     for r in load(data_dir / LEDGER.name):
-        if r["game_id"] in have or r["game_id"] in todo:
+        if r["game_id"] in todo or dt.datetime.fromisoformat(r["kickoff_utc"]) <= now:
             continue
-        if dt.datetime.fromisoformat(r["kickoff_utc"]) > now:
+        if r["game_id"] not in last or last[r["game_id"]] < dt.datetime.fromisoformat(r["generated_utc"]):
             todo[r["game_id"]] = r
     if not todo:
         return 0

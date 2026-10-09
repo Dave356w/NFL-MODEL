@@ -204,3 +204,30 @@ def test_h3_ladder_grading_and_report(tmp_path):
     assert "Pre-registered H3" in g.report_text(run(12))
     none = g.grade([rec], pd.DataFrame(columns=["game_id", "away_score", "home_score", "result"]), snaps, None)
     assert none.ladder_ticker.isna().all() and "H3" not in g.report_text(none)
+
+
+def test_later_revision_gets_its_own_capture_and_grades_at_it(tmp_path):
+    early = ledger_rec()
+    late = {**ledger_rec(), "experiment": "e2", "revision": "r2", "generated_utc": "2026-10-08T23:36:00+00:00"}
+    led = tmp_path / "forward_predictions.jsonl"
+    led.write_text(json.dumps(early) + "\n")
+    assert k.record(tmp_path, NOW, fake_get) == 1
+    assert k.record(tmp_path, NOW, fake_get) == 0               # every locked row already has a capture after its lock
+    led.write_text(json.dumps(early) + "\n" + json.dumps(late) + "\n")
+    later = dt.datetime(2026, 10, 8, 23, 50, tzinfo=dt.timezone.utc)
+    assert k.record(tmp_path, later, fake_get) == 1              # r2 locked after the 16:00 capture
+    assert k.record(tmp_path, later, fake_get) == 0
+    snaps_path = tmp_path / "kalshi_snapshots.jsonl"
+    v.validate_kalshi(snaps_path)                                 # two captures of one game at different times are valid
+    snaps = k.load(snaps_path)
+    res = pd.DataFrame({"game_id": [early["game_id"]], "away_score": [0], "home_score": [5], "result": [5]})
+    x = g.grade([early, late], res, snaps).set_index("revision")
+    assert x.loc["r1", "kalshi_captured_utc"] == snaps[0]["captured_utc"] and 9 < x.loc["r1", "kalshi_lag_hours"] < 10
+    assert x.loc["r2", "kalshi_captured_utc"] == snaps[1]["captured_utc"] and 0 <= x.loc["r2", "kalshi_lag_hours"] < .3
+    # Kickoff passed: no more captures, and a snapshot locked after the last capture is flagged, not dropped.
+    assert k.record(tmp_path, dt.datetime(2026, 10, 9, 1, tzinfo=dt.timezone.utc), fake_get) == 0
+    stale = g.grade([late], res, snaps[:1]).iloc[0]
+    assert stale.kalshi_lag_hours < 0 and np.isfinite(stale.kalshi_units)
+    text = g.report_text(g.grade([early, late], res, snaps[:1]))
+    assert "1 captured BEFORE lock" in text and "first capture at or after lock" in text
+    assert "BEFORE lock" not in g.report_text(g.grade([early, late], res, snaps))
