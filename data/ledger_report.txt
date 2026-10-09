@@ -1,15 +1,96 @@
-NFL forward ledger report -- 2026-10-09 00:11 UTC
+NFL forward ledger report -- 2026-10-09 04:23 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
 Log loss/Brier market: spread-derived home win probability from the same snapshot.
 
-== boxscore-composite-v1.12: 1 snapshots, 0 graded, 1 pending, 0 ties
-  No graded bets with a saved moneyline yet.
+== boxscore-composite-v1.12: 1 snapshots, 1 graded, 0 pending, 0 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
+    win 0.0% vs no-vig q 79.1% (excess -79.1pp); market-correct null ROI -4.0%
+    same rows, market favorite every game: -1.00u, ROI -100.0%
+  ROI by the picked side's price band (model):
+            ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
+         All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
+  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+          all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+     |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median 10.4h, max 10.4h
+  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.4%
+    same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Scored rows (graded, market present): 1
+  Model picks  0-1 (.000)
+  Market picks 0-1 (.000)
+  Log loss  model 1.0344  market 1.4024  gain +0.3681 +/- nan (1 SE; positive = model better)
+  Brier     model 0.4154  market 0.5685
+  Pick records by confidence band (model | market):
+       50-55%               0-0 |              0-0
+       55-60%               0-0 |              0-0
+       60-65%        0-1 (.000) |              0-0
+       65-70%               0-0 |              0-0
+       70-75%               0-0 |              0-0
+       75-80%               0-0 |       0-1 (.000)
+         80%+               0-0 |              0-0
+    All picks        0-1 (.000) |       0-1 (.000)
 
-== boxscore-composite-v1.13: 1 snapshots, 0 graded, 1 pending, 0 ties
-  No graded bets with a saved moneyline yet.
+== boxscore-composite-v1.13: 1 snapshots, 1 graded, 0 pending, 0 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
+    win 0.0% vs no-vig q 80.0% (excess -80.0pp); market-correct null ROI -4.0%
+    same rows, market favorite every game: -1.00u, ROI -100.0%
+  ROI by the picked side's price band (model):
+            ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
+         All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
+  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+          all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+     |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -6.6h, max -6.6h
+  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
+    same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Scored rows (graded, market present): 1
+  Model picks  0-1 (.000)
+  Market picks 0-1 (.000)
+  Log loss  model 1.0022  market 1.4024  gain +0.4003 +/- nan (1 SE; positive = model better)
+  Brier     model 0.4006  market 0.5685
+  Pick records by confidence band (model | market):
+       50-55%               0-0 |              0-0
+       55-60%               0-0 |              0-0
+       60-65%        0-1 (.000) |              0-0
+       65-70%               0-0 |              0-0
+       70-75%               0-0 |              0-0
+       75-80%               0-0 |       0-1 (.000)
+         80%+               0-0 |              0-0
+    All picks        0-1 (.000) |       0-1 (.000)
 
-== boxscore-composite-v1.14: 1 snapshots, 0 graded, 1 pending, 0 ties
-  No graded bets with a saved moneyline yet.
+== boxscore-composite-v1.14: 1 snapshots, 1 graded, 0 pending, 0 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
+    win 0.0% vs no-vig q 80.8% (excess -80.8pp); market-correct null ROI -4.1%
+    same rows, market favorite every game: -1.00u, ROI -100.0%
+  ROI by the picked side's price band (model):
+            ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
+         All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
+  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+          all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+     |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
+  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -7.2h, max -7.2h
+  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
+    same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Scored rows (graded, market present): 1
+  Model picks  0-1 (.000)
+  Market picks 0-1 (.000)
+  Log loss  model 0.9655  market 1.5085  gain +0.5430 +/- nan (1 SE; positive = model better)
+  Brier     model 0.3834  market 0.6065
+  Pick records by confidence band (model | market):
+       50-55%               0-0 |              0-0
+       55-60%               0-0 |              0-0
+       60-65%        0-1 (.000) |              0-0
+       65-70%               0-0 |              0-0
+       70-75%               0-0 |              0-0
+       75-80%               0-0 |       0-1 (.000)
+         80%+               0-0 |              0-0
+    All picks        0-1 (.000) |       0-1 (.000)
+
+== Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread
+  n=1 graded games (needs 10 to report)
 
