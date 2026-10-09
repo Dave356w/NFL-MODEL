@@ -85,11 +85,34 @@ def test_family_features_signature_and_display_labels():
     for fam in m.FEATURE_FAMILIES:
         names=m.feature_names(fam)
         assert set(m.PEAK_FEATURES)<=set(names) and m.MARGIN_FEATURE not in names
-    assert m.REVISION=='boxscore-composite-v1.13'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_13'
-    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.13.json'
+    assert m.REVISION=='boxscore-composite-v1.14'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_14'
+    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.14.json'
     sig,cfg=m.config_signature()
     assert cfg['score_peaks']['features']==list(m.PEAK_FEATURES)
     assert sig!='cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe'
     assert b.factor_label('d__max_lead')=='Largest lead'
     assert b.factor_label('d__max_deficit')=='Largest deficit'
+
+
+def test_v114_excludes_only_separate_sack_rates():
+    assert len(m.candidates())==24
+    for family in m.FEATURE_FAMILIES:
+        legacy=family.removesuffix('_nosacks')
+        old=m.feature_names(legacy)
+        new=m.feature_names(family)
+        removed=[c for c in old if c.endswith('__sacks_taken_pct')]
+        assert len(removed)==2 and len(old)==26 and len(new)==24
+        assert new==[c for c in old if c not in removed]
+        assert set(m.PEAK_FEATURES)<=set(new)
+        assert 'd__avail__qb_delta' in new
+        assert sum(c.endswith('__net_pass_yards_per_pass_play') for c in new)==2
+        assert sum(c.endswith('__first_down_rate') for c in new)==2
+    # Source sacks and legacy families retain their definitions and behavior.
+    assert m.RATES_CORE['net_pass_yards_per_pass_play']==('net_pass_yards','pass_plays',1.)
+    assert m.RATES_CORE['sacks_taken_pct']==('sacks_taken','pass_plays',100.)
+    assert 'sacks_taken' in m.COUNTS
+    sig,cfg=m.config_signature()
+    assert cfg['regressor_exclusions']['families']==list(m.FEATURE_FAMILIES)
+    assert set(cfg['regressor_exclusions']['features'])==set(m.NO_SACK_FEATURES)
+    assert sig!='f60cc7a964979f3345f05bc7a2d1d5952e79ca5c991649da414443517209d920'

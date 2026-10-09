@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.13), newest first; this page describes what the code
+version history (v1 to v1.14), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.13`
+## The current model: `boxscore-composite-v1.14`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -14,7 +14,8 @@ weeks, play-by-play is aggregated into team box scores (sacks counted once,
 net passing includes sack yards, accepted-penalty proxy, deduplicated
 possession time). Eight core rates per side: plays/game, net yards per
 dropback, rush yards/attempt, first-down rate, fumbles lost/game, interception
-%, sack %, penalty yards/game. Profiles are ratios of decayed counts
+%, sack %, penalty yards/game. v1.14 uses seven of these rates per side in the
+regression, excluding the separate sack percentage. Profiles are ratios of decayed counts
 (`2^(-age/half-life)`, halved again at each season boundary) shrunk toward four
 league-average pseudo-games. The `_adj` family splits each stat into league
 mean plus offense and defense effects with a weighted ridge fit, so a defense
@@ -85,10 +86,28 @@ start a distinct experiment; earlier recipes and forward rows are preserved.
 Legacy margin families remain available for historical research, but `d__margin`
 is absent from both production candidate families.
 
-PBP-derived box caches are revision-specific and are rebuilt for v1.13. A custom
+PBP-derived box caches are revision-specific and are rebuilt for each new revision. A custom
 `TEAM_GAME_CSV` must supply finite nonnegative `max_lead` and `max_deficit` for both
 teams in every prior game, with each team's lead equal to its opponent's deficit.
 Missing peaks are an error, rather than a silent zero or inference from final MOV.
+
+**Separate sack-rate removal (v1.14).** Both active raw/adjusted candidate
+families omit offensive and defensive `sacks_taken_pct` regressors. Net passing
+yards per dropback retains sack yards and sack plays; source sack counts and
+legacy family definitions are retained. First-down rates, lead/deficit peaks,
+availability, fitting and the 24-candidate grid keep their existing definitions.
+The active families are `rates_core_avail_cs_peaks_nosacks` and
+`rates_core_adj_avail_cs_peaks_nosacks`, with 24 fitted terms each rather than 26.
+
+The owner chose this simplification after exploratory 2023–2025 ablation.
+Under the current raw h8/r0.1 settings, removing both sack rates scored log loss
+0.629536 versus 0.630226; flat 1u ROI was +0.77% versus +0.19% on 811 same-row
+games. The paired unadjusted week-bootstrap ROI-difference interval was
+−1.90 to +3.26 percentage points. Chronological recipe selection also slightly
+improved pooled scores, but improvement was not uniform by season and neither
+gain nor variance reduction was established. This is development evidence,
+not forward confirmation or a formal equivalence result. The new output folder
+is `nfl_boxscore_output_v1_14`; v1.13 and earlier recipes/snapshots remain intact.
 
 **Composite.** A logistic regression on home-minus-away differences plus a
 site term, ridge-penalized, refit before every week on all earlier games
