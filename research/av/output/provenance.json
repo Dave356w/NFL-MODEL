@@ -1,0 +1,103 @@
+{
+  "nflreadpy": "0.1.5",
+  "pandas": "3.0.5",
+  "seasons": [
+    2013,
+    2025
+  ],
+  "season_type": "REG",
+  "sources": [
+    "nflverse player_stats (weekly)",
+    "nflverse snap_counts (PFR)",
+    "nflverse players",
+    "nflverse draft_picks",
+    "nflverse schedules"
+  ],
+  "pfr_av": "NOT USED AS A FEATURE: per-season PFR AV unavailable (pro-football-reference.com HTTP 403 from this environment; nflverse has career totals only). Career w_av is used only to validate rAV.",
+  "audit": {
+    "snap_rows": 310476,
+    "snap_share_mapped_to_gsis": 0.9998004544456681,
+    "stat_yards_without_snap_row": 7.215847550934077e-05,
+    "rows_without_unit": 21042
+  },
+  "coverage_by_season": {
+    "2013": {
+      "player_games": 22820,
+      "players": 1927,
+      "games": 256,
+      "no_unit": 1535
+    },
+    "2014": {
+      "player_games": 22879,
+      "players": 1962,
+      "games": 256,
+      "no_unit": 1555
+    },
+    "2015": {
+      "player_games": 22863,
+      "players": 1971,
+      "games": 256,
+      "no_unit": 1550
+    },
+    "2016": {
+      "player_games": 22902,
+      "players": 1993,
+      "games": 256,
+      "no_unit": 1539
+    },
+    "2017": {
+      "player_games": 22877,
+      "players": 2008,
+      "games": 256,
+      "no_unit": 1535
+    },
+    "2018": {
+      "player_games": 22895,
+      "players": 2020,
+      "games": 256,
+      "no_unit": 1535
+    },
+    "2019": {
+      "player_games": 22871,
+      "players": 2025,
+      "games": 256,
+      "no_unit": 1534
+    },
+    "2020": {
+      "player_games": 23778,
+      "players": 2189,
+      "games": 256,
+      "no_unit": 2107
+    },
+    "2021": {
+      "player_games": 25248,
+      "players": 2296,
+      "games": 272,
+      "no_unit": 1630
+    },
+    "2022": {
+      "player_games": 25162,
+      "players": 2190,
+      "games": 271,
+      "no_unit": 1629
+    },
+    "2023": {
+      "player_games": 25322,
+      "players": 2142,
+      "games": 272,
+      "no_unit": 1631
+    },
+    "2024": {
+      "player_games": 25373,
+      "players": 2189,
+      "games": 272,
+      "no_unit": 1631
+    },
+    "2025": {
+      "player_games": 25374,
+      "players": 2187,
+      "games": 272,
+      "no_unit": 1631
+    }
+  }
+}
