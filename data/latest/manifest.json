@@ -1,16 +1,16 @@
 {
-  "revision": "boxscore-composite-v1.14",
-  "diagnostics": "v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-09T05:45:22.886124+00:00",
+  "revision": "boxscore-composite-v1.15",
+  "diagnostics": "v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
+  "generated_utc": "2026-10-09T15:36:05.092404+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "035443ef46ffa5d68c96c4c847657adac2f9eb6182d10308952090b4ddd4a90d",
+  "config_signature": "47cc1c8fead80119ddabd02a06b2ed8390b6442771db8e6ae6123ee5a0a71dc2",
   "recipe": {
     "family": "rates_core_avail_cs_peaks_nosacks",
     "half_life": 8.0,
     "ridge": 0.1
   },
-  "market_blend_verdict": "Composite weight -0.165 (95% -0.609 to +0.268): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0003 log loss per game (95% -0.0040 to +0.0032; positive means the blend beat the market).",
+  "market_blend_verdict": "Composite weight -0.173 (95% -0.623 to +0.264): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0006 log loss per game (95% -0.0049 to +0.0036; positive means the blend beat the market).",
   "limitations": [
     "box score definitions approximate some official totals",
     "no explicit opponent-strength adjustment",
@@ -22,7 +22,8 @@
     "v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved",
     "lead/deficit peaks are not clipped or opponent-adjusted",
     "game-bootstrap intervals omit selection and serial-dependence uncertainty",
-    "availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; no game-day inactives or late-week news",
+    "availability: final injury-report status (no intra-week timestamps); of the game week's own roster only the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); no game-day inactives or late-week news",
+    "v1.15 game-week reserve list adopted by owner decision after research test 28 (participation and market diagnostics); held-out comparison after adoption (test 29): log loss +0.0001 +/- 0.0010, ROI -1.2 +/- 0.9 pts, unresolved",
     "roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)",
     "QB projection: highest-ranked available QB on the timestamped depth chart >= 24h before kickoff (2025 on; earlier seasons and chart gaps: most recent starter among available rostered QBs, week 1: most starts last season); a Questionable starter is a 50/50 blend with the next QB",
     "depth charts before 2025 have no publish time and are not used, so the QB rule differs between training seasons (start history) and 2025 on (depth chart)",
@@ -39,17 +40,17 @@
     "pandas": "3.0.6",
     "scipy": "1.18.1",
     "nflreadpy": "0.1.5",
-    "pyarrow": "25.0.1"
+    "pyarrow": "26.0.0"
   },
   "availability_audit": [
     {
       "source": "roster_status_codes",
       "counts": {
-        "ACT": 187459,
-        "DEV": 55938,
-        "RES": 37021,
-        "INA": 23475,
-        "CUT": 17666,
+        "ACT": 187449,
+        "DEV": 55935,
+        "RES": 37020,
+        "INA": 23489,
+        "CUT": 17668,
         "RET": 2113,
         "NWT": 604,
         "PUP": 321,
@@ -66,7 +67,7 @@
         "E01": 4
       },
       "unrecognized_counted_as_member": {},
-      "out_by_description": 208
+      "out_by_description": 207
     },
     {
       "source": "availability_roster_membership",
@@ -76,29 +77,29 @@
       "no_reference_roster": 0,
       "reference_older_than_prior_week": 220,
       "membership_skipped_as_data_gap": 12,
-      "qb_projected_from_backup_prior": 3,
-      "qb_projected_from_other_team_history": 17,
-      "qb_projected_not_last_starter": 206,
+      "qb_projected_from_backup_prior": 8,
+      "qb_projected_from_other_team_history": 18,
+      "qb_projected_not_last_starter": 242,
       "qb_projected_from_depth_chart": 702,
       "qb_depth_chart_missing": 0,
       "qb_depth_chart_no_available_qb": 0,
-      "qb_questionable_blend": 135,
+      "qb_questionable_blend": 136,
+      "game_week_reserve_added": 5213,
       "injury_report_final": 3773,
-      "injury_report_practice_only": 112,
-      "injury_report_none": 15,
+      "injury_report_practice_only": 121,
+      "injury_report_none": 6,
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }
