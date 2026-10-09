@@ -763,6 +763,16 @@ def aggregate_score_peaks(p,schedule):
     return pd.DataFrame(rows,columns=['game_id','team',*PEAK_COLUMNS])
 
 
+def merge_score_peaks(box,p,schedule):
+    """Attach score peaks to reconstructed team-games only. Finals that
+    aggregate_boxscores skipped for missing PBP are already audited there and
+    have no box row, so they are not asked for peaks; every game that does have
+    a box row still needs a complete scoring-event history."""
+    peaks=aggregate_score_peaks(p,schedule[schedule.game_id.isin(box.game_id)]) if len(box) else \
+        pd.DataFrame(columns=['game_id','team',*PEAK_COLUMNS])
+    return box.merge(peaks,on=['game_id','team'],how='left',validate='one_to_one')
+
+
 def validate_boxes(box):
     required={'game_id','season','week','team','opponent',*COUNTS}
     if not required<=set(box): raise ValueError(f'Team-game data missing: {sorted(required-set(box))}')
@@ -824,8 +834,7 @@ def load_boxes(year,schedule):
     p=raw.select([c for c in cols if c in raw.columns]).to_pandas(); del raw
     source_hash=data_hash(p); p=normalize_teams(p)
     box=aggregate_boxscores(p,schedule,year); qb=aggregate_qb(p,schedule)
-    peaks=aggregate_score_peaks(p,schedule)
-    box=box.merge(peaks,on=['game_id','team'],how='left',validate='one_to_one'); del p
+    box=merge_score_peaks(box,p,schedule); del p
     if box.empty: return box,qb
     box=validate_boxes(box)
     path.parent.mkdir(parents=True,exist_ok=True); box.to_csv(path,index=False); qb.to_csv(qbpath,index=False)
