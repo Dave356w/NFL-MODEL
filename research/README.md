@@ -1074,3 +1074,39 @@ detectably. The likely reason is that unit columns carry little weight next to t
 the box profiles, and on 811 games ±0.9 ROI points is the resolution. The interval allows a gain
 or a loss of about 1–2 ROI points; it does not show the effect is zero. Forward v1.15 snapshots
 are the test.
+
+### Test 30: availability-adjusted player value (rAV) vs v1.15, held-out (2026-10-09)
+
+`research/av/` (run instructions in [`research/av/README.md`](av/README.md), full write-up in
+[`research/av/REPORT.md`](av/REPORT.md)). Per-season PFR AV could not be obtained (PFR returns 403;
+nflverse has only career AV, which is lookahead). The test therefore uses **rAV**, a game-level
+reconstruction of PFR's allocation from nflverse box scores and snap counts. Weighted career rAV
+against PFR career `w_av`: r = 0.956 (per game, 0.891). Participation follows v1.15's membership,
+reserve, injury and QB rules, with multipliers Out 0, Doubtful .15, Questionable .65, and lost snaps
+redistributed. Same 815 held-out games (811 priced); recipes chosen on earlier seasons by log loss.
+The v1.15 control reproduced Test 29 exactly. Same-row favorite +0.0%; market-correct null −4.1%.
+
+| Variant | ROI ± SE | ROI vs v1.15 (pts) | Log loss | LL gain vs v1.15 |
+|---|---:|---:|---:|---:|
+| A v1.15 | +2.0% ± 2.7 | — | 0.6316 | — |
+| B1 pure rAV, linear | −1.8% ± 2.8 | −3.8 ± 2.5 | 0.6442 | −0.0125 ± 0.0062 |
+| B2 pure rAV, replacement + weak-link | −3.0% ± 2.7 | −5.0 ± 2.5 | 0.6420 | −0.0103 ± 0.0062 |
+| C1 v1.15, unit absences → rAV losses | −0.0% ± 2.6 | −2.0 ± 1.7 | 0.6286 | +0.0030 ± 0.0026 |
+| C2 v1.15 + rAV losses | −0.3% ± 2.7 | −2.3 ± 1.2 | 0.6289 | +0.0027 ± 0.0021 |
+| D1 rAV roster prior + team residual | −2.6% ± 2.7 | −4.6 ± 2.6 | 0.6409 | −0.0093 ± 0.0062 |
+| D2 D1, opponent-adjusted | −1.4% ± 2.7 | −3.5 ± 2.5 | 0.6414 | −0.0098 ± 0.0062 |
+
+SEs are week-clustered bootstrap.
+
+**Reading.**
+
+* **AV alone fails.** It is worse in log loss and ROI. Box-score team rates (C vs B) or a shrunk team
+  residual (D vs its roster prior) restore most of what it lacks.
+* **The hybrid is unresolved and unstable.** It gains in log loss mainly in 2024 and loses about 5–6
+  ROI points in 2023.
+* **No injury responsiveness was shown.** Backup-QB and high-absence games show no AV gain beyond SE.
+* **QB rAV does not substitute for the QB efficiency term:** −4.5 ± 2.0 ROI points.
+* **Week 18 is a hypothesis only.** AV-only models do better there (n = 48; one of 11 pre-specified
+  subgroups).
+
+No change to production.
