@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.14), newest first; this page describes what the code
+version history (v1 to v1.15), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.14`
+## The current model: `boxscore-composite-v1.15`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -27,12 +27,13 @@ published before kickoff:
 * Unit columns (OL, WR/TE, RB, DL, LB, DB): the share of the unit's snaps over
   the team's last 4 games (this season only, once 2 exist) belonging to players
   listed Out/Doubtful (Questionable counts a quarter), moved off the most recent
-  roster before the game, or no longer on it. They measure **fresh** absences.
+  roster before the game, or no longer on it, or (v1.15) on the reserve list of the
+  game week's own roster. They measure **fresh** absences.
   Returns and arrivals do not offset them.
 * QB (v1.11): from 2025 on, the highest-ranked available QB on the team's
   latest timestamped depth chart (nflverse/ESPN) published at least 24 hours
-  before kickoff. Available means not Out/Doubtful and on the most recent
-  roster before the game. A chart older than 7 days counts as missing. With no
+  before kickoff. Available means not Out/Doubtful, on the most recent
+  roster before the game and (v1.15) not on the game week's reserve list. A chart older than 7 days counts as missing. With no
   usable chart (and in every season before 2025, whose depth charts carry no
   publish time): the available rostered QB who started the team's most recent
   game (week 1: most starts last season), else the most team dropbacks, else a
@@ -45,6 +46,38 @@ published before kickoff:
 * Roster codes counted as out: RES, CUT, TRD, RET, EXE, E01, and the codes used
   mainly in 2019–23 rosters (SUS, PUP, RSN, NWT, UFA, RFA, RSR, E14, TRT, TRC),
   plus any reserve/waived status description. Unrecognized codes are audited.
+  They are read from the most recent roster before the game and, from week 2, from the
+  game week's own roster (v1.15).
+
+**The game week's own reserve list (v1.15, based on v1.14; owner decision 2026-10-09).**
+From week 2, a player whose row on the game week's weekly roster carries one of the
+roster-out codes above (IR, PUP, NFI, suspension, cut, traded, reserve/waived
+descriptions) counts fully out, in the unit columns and for QB eligibility. Before v1.15
+only the roster before the game week was read. A regular hurt on Sunday and placed on IR
+by Tuesday was then on neither that roster nor the injury report, which never lists
+reserve players, so he counted as available. Research Test 28 found 1,849 such regulars in
+2019–25, 99.7% of whom did not play. In 2022–25 weeks 5+ they add 13.1% to the absence mass
+already counted, and the closing moneyline prices them at +0.66 ± 0.17 of the model's unit
+weight (+0.55 for the absences already counted). Only the reserve list is read from the game
+week. Membership, activations and absence from that roster keep the prior-week rule, and
+game-day inactives stay members; nothing on the game-week roster clears an out. Card notes
+list these players ("… on wk N roster"), counted 100%.
+
+*Timing.* Weekly roster rows have no publish time. Of the players newly on a game-week out
+list in 2019–25, 10 of 6,086 (0.16%, 9 of them in 2020–21) took an offensive or defensive snap
+in that game, so the file is pregame. The
+2026 week-5 rows were already published on the Friday. Forward snapshots read the file as
+it stands at lock. Historical rows use the final weekly file, which can include a move
+made between the final injury report and kickoff. A team with no game-week rows yet falls
+back to the prior-week rule. `GAME_WEEK_RESERVE = False` reproduces v1.14. The output
+folder is `nfl_boxscore_output_v1_15`; v1.14 and earlier recipes and snapshots remain
+intact.
+
+Held-out development comparison (research Test 29, run after adoption, not a gate; 2023–25, 811
+priced games, the same recipe in every season): log loss +0.0001 ± 0.0010, flat 1u ROI +2.0% ±
+2.7 against +3.2% ± 2.7 for v1.14 (paired −1.2 pts ± 0.9), same-row favorite +0.0%,
+market-correct null −4.1%; 15 of 815 picked sides change. The effect is unresolved: the rule
+fixes a measured input error, but the held-out seasons cannot show whether that moves results.
 
 **Dated personnel events (v1.12, based on v1.11).** The hand-curated
 `data/personnel_events.csv` identifies the losing team and roster-resolved GSIS
@@ -270,7 +303,7 @@ That line has no independent quote timestamp.
 
 | When (Sunday game) | Injury data for the week | Model counts | Card shows | Ledger |
 |---|---|---|---|---|
-| Tue (daily 06:13 ET build) | none yet | everyone on the latest roster as available (IR/departures already out) | last week's Out/Doubtful/Questionable players: "not on a week-N report yet", 0% counted; "Report pending" | waits |
+| Tue (daily 06:13 ET build) | none yet | everyone on the latest roster as available (IR/departures already out, plus game-week reserve moves once that week's roster is published) | last week's Out/Doubtful/Questionable players: "not on a week-N report yet", 0% counted; "Report pending" | waits |
 | Wed–Thu | practice participation only | still available | each listed player's practice status (DNP/Limited) | waits |
 | Fri ~4pm ET | final report: game statuses | Out/Doubtful 100%, Questionable 25% of the player's unit-snap share | the statuses as counted; last week's players absent from the report: "cleared" | locks at the first build after nflverse publishes it: the daily pass, or hourly builds from 30h before kickoff |
 | ≤150 min before kickoff | final | final | final | already locked; board refreshes once more |
@@ -278,11 +311,11 @@ That line has no independent quote timestamp.
 Thursday games run the same schedule two days earlier (final report Wednesday). Monday
 games run one day later (Saturday). A team with no designations at all still locks within 6h of kickoff (nflverse rebuilds injuries once a day, so a Thursday game waits for Thursday's file).
 The gate also needs nflverse to have published the report. Its injury file refreshes at
-least daily, and every build re-reads it. Same-week roster moves are not used. The report's Out
-status covers a player listed before the move (for example a Friday IR move). A player moved to a
-reserve list before the report (hurt on Sunday, on IR by Tuesday) is on neither the report nor the
-prior week's roster, so he counts as available: 1,849 regular player-games in 2019–25, 99.7% of
-whom did not play (research Test 28).
+least daily, and every build re-reads it. From v1.15 the game week's own reserve list counts
+too, so a regular moved to IR before the report (hurt on Sunday, on IR by Tuesday) is out even
+though the report never lists him (1,849 regular player-games in 2019–25, 99.7% of whom did not
+play; research Test 28). Other same-week roster changes (activations, signings, game-day
+inactives) are still not used.
 
 ## Pipeline
 

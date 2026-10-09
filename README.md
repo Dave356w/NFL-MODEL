@@ -11,9 +11,9 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model: `boxscore-composite-v1.14`. A ridge-penalized logistic composite
+Current model: `boxscore-composite-v1.15`. A ridge-penalized logistic composite
 of decayed, opponent-adjusted (or raw) offense/defense rate profiles plus a
-player-availability layer: injury-report status, roster membership and a
+player-availability layer: injury-report status, roster membership (plus, from v1.15, the game week's own reserve list) and a
 projected-starter QB term (depth chart from 2025), dated personnel events, plus each team's decayed largest lead and largest deficit from prior games. These two score peaks replace final MOV; time leading is excluded. v1.14 removes the separate offensive and defensive sack-rate regressors while retaining net passing efficiency, which includes sacks. This owner-selected simplification follows exploratory ablation; improvement remains unresolved. Hyperparameters are frozen per season from earlier
 seasons' walk-forward log loss; coefficients refit before every week. The
 market spread is a benchmark only and never enters the model.

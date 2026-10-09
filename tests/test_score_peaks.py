@@ -85,12 +85,13 @@ def test_family_features_signature_and_display_labels():
     for fam in m.FEATURE_FAMILIES:
         names=m.feature_names(fam)
         assert set(m.PEAK_FEATURES)<=set(names) and m.MARGIN_FEATURE not in names
-    assert m.REVISION=='boxscore-composite-v1.14'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_14'
-    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.14.json'
+    assert m.REVISION=='boxscore-composite-v1.15'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_15'
+    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.15.json'
     sig,cfg=m.config_signature()
     assert cfg['score_peaks']['features']==list(m.PEAK_FEATURES)
-    assert sig!='cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe'
+    assert sig not in ('cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe',
+                       '035443ef46ffa5d68c96c4c847657adac2f9eb6182d10308952090b4ddd4a90d')  # v1.13, v1.14
     assert b.factor_label('d__max_lead')=='Largest lead'
     assert b.factor_label('d__max_deficit')=='Largest deficit'
 

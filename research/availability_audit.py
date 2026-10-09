@@ -18,6 +18,8 @@ B. Window vs profile. Production unit columns count absences over the last 4 gam
    The 3-season versions (OFFSEASON_RETENTION, MAX_HISTORY_SEASONS) are reported for contrast.
      samewk  production's window share of players it counts available who are on a reserve list
              in the game week's own roster or gone from it (weeks 2+)
+   v1.15 adopted the same-week reserve list; main() pins GAME_WEEK_RESERVE = False so this audit
+   still reproduces v1.14 production.
 C. Market pricing. OLS of the no-vig closing moneyline log-odds on the frozen recipe's 24 features
    plus each signal, converted to model log-odds with that recipe's unit coefficients (fit once on
    2021-25 games). A coefficient of 1 means the market moves as much as the model's own unit
@@ -373,6 +375,7 @@ def md(df, digits=3):
 
 
 def main():
+    m.GAME_WEEK_RESERVE = False  # Test 28 audits v1.14 production; v1.15 adopted its same-week finding
     inp = load_inputs(cache_dir_from_argv())
     a = inp['a']
     years = sorted(int(y) for y in inp['sched'].season.unique())

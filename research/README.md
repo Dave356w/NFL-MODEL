@@ -1011,7 +1011,9 @@ the frozen fit's wrong-signed LB coefficient (+0.11) does not drive the results.
   pooled, 5.1 SE with equal weights).
 
 **Candidates** (each changes features, so each needs a new `REVISION`):
-1. **Count same-week reserve/departures out.** For weeks 2+, a window player on a reserve list in
+1. **Count same-week reserve/departures out.** *Adopted as v1.15 (owner decision 2026-10-09), for
+   the reserve list only: absence from the game-week roster is not read. Held-out effect: Test 29.*
+   For weeks 2+, a window player on a reserve list in
    the game week's own roster, or gone from it, counts as unavailable, for unit columns and QB
    eligibility. This **conflicts with the engineering contract** ("same-week roster status is
    ignored"), so it is the owner's call. Two things support the timing: a post-game snapshot would
@@ -1035,3 +1037,40 @@ selection on the same 811 games; the primary result is the paired log-loss gain,
 is flat 1u ROI against v1.14 and the same-row favorite. Separately, a reporting-only change
 (no `REVISION`) could log the current week's reserve/departure list at each lock to an
 append-only file, so the timing question gets a forward answer.
+
+### Test 29: v1.15 game week's own reserve list vs v1.14, held-out (2026-10-09)
+
+`python research/game_week_reserve.py [CACHE_DIR]` (≈ 15 min warm). **Run after the owner adopted
+v1.15 on Test 28's diagnostics; reported, not a gate.** Two arms on the production families, grid
+and nested selection: `GAME_WEEK_RESERVE = False` (v1.14) and `True` (v1.15). Both picked
+`…adj_avail_cs_peaks_nosacks_h16_r0.1` in every held-out season. Same-row market favorite +0.0%;
+market-correct null −4.1%.
+
+| Variant | Bets | Units | ROI ± SE | Log loss | LL vs ML market |
+|---|---:|---:|---:|---:|---:|
+| v1.14 | 811 | +26.05 | +3.2% ± 2.7 | 0.6318 | −0.0237 |
+| v1.15 | 811 | +16.30 | +2.0% ± 2.7 | 0.6316 | −0.0236 |
+
+| Comparison (same games) | ROI difference | Log-loss gain |
+|---|---:|---:|
+| v1.15 vs v1.14 | −1.20 pts ± 0.90 | +0.0001 ± 0.0010 |
+| 2023 (272) | −1.21 pts ± 0.86 | −0.0016 ± 0.0014 |
+| 2024 (272) | +0.29 pts ± 1.77 | +0.0009 ± 0.0020 |
+| 2025 (271) | −2.69 pts ± 1.85 | +0.0010 ± 0.0019 |
+| games with a changed availability input (498) | −1.98 pts ± 1.29 | +0.0007 ± 0.0015 |
+
+620 of 1,632 held-out team-weeks have a changed availability input (14 of them a changed QB
+term); the picked side changes in 15 of 815 games.
+
+*Timing check behind the rule.* Of 6,086 players newly on a game-week out list (weeks 2+,
+2019–25), 10 took an offensive or defensive snap in that game (0.16%): 9 in 2020–21, 1 in 2025,
+none in 2022–24. The weekly file is pregame. A move made between the final injury report and
+kickoff cannot be detected this way.
+
+**Reading.** **No measurable held-out effect.** Log loss is flat (+0.0001 ± 0.0010) and the ROI
+difference is negative but unresolved (−1.2 pts ± 0.9, ≈ 1.3 SE; it varies in sign by season).
+The rule corrects a measured input error, but correcting it does not move held-out results
+detectably. The likely reason is that unit columns carry little weight next to the QB term and
+the box profiles, and on 811 games ±0.9 ROI points is the resolution. The interval allows a gain
+or a loss of about 1–2 ROI points; it does not show the effect is zero. Forward v1.15 snapshots
+are the test.
