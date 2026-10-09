@@ -151,6 +151,30 @@ flat ROI on the same games beside their log loss, for comparison only. Under rea
 ±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
 new `REVISION`.
 
+### Where the model's bets differ from the favorite's (reporting only, v1.14.2)
+
+Wherever the model's favorite is also the market favorite, the model's flat bet is the same as
+always betting the favorite. On held-out 2023–25 that was 694 of 811 games (86%), so the
+headline ROI mostly reflects how favorites fared. Only the games where the model picks the
+market underdog separate it from the favorite baseline; they carry the whole difference in
+units. `disagreement_table` reports them: `data/latest/disagree_roi_by_season.csv` (held-out),
+a line in `data/ledger_report.txt` per revision, and a note on the ledger page for locked picks
+and the rebuilt history. Held-out 2023–25: 117 games, model +9.4u (+8.1% ± 10.4) against
+−16.4u for the favorite, unresolved (−4.8% / +23.0% / +4.4% by season).
+
+The model's probabilities are not used as prices. On the same held-out games, betting whichever
+side the model calls positive expected value at the moneyline returned −9.6% ± 5.2 on 661 bets,
+below the −4.1% null: the model is less sharp than the market (log-odds SD 0.73 against 0.85) and
+adds nothing beyond it in the market-blend fit, so it rates most underdogs as value.
+
+### Pre-registered H5: low-total underdogs (reporting only, v1.14.2)
+
+`totals.py` records each newly locked game's total and moneylines in `data/h5_totals.jsonl`;
+`data/ledger_report.txt` grades 1u on the moneyline underdog whenever the total is ≤ 41, beside
+the market-correct null and the favorite on the same rows, with the verdict fixed in
+`research/PREREGISTRATION.md`. Independent of the model; nothing here changes the model, the
+recipe or the headline.
+
 ### Model-implied spread (reporting only, v1.12.1)
 
 `model_spread = 12.37 × Φ⁻¹(model_wp)`: the inverse of the market comparator, in

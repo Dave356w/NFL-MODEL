@@ -16,6 +16,7 @@ Data written (committed by build.yml through commit_data.py)
   data/frozen_recipe_<season>_<REVISION>.json frozen hyperparameters (nfl_model.frozen_recipe)
   data/kalshi_snapshots.jsonl      append-only Kalshi quotes captured for newly locked games (kalshi.py)
   data/h4_terms.jsonl              append-only pass-matchup terms for newly locked games (matchup.py, H4)
+  data/h5_totals.jsonl             append-only totals and moneylines for newly locked games (totals.py, H5)
   data/forward_ledger.csv, data/ledger_report.txt   graded view (grade_ledger.py)
   data/latest/                     the newest run's page inputs, so --pages-only needs no model run
   data/projections/<season>_week<NN>.csv   the latest board of each week, overwritten through the week
@@ -43,6 +44,7 @@ import grade_ledger
 import kalshi
 import matchup
 import nfl_model as m
+import totals
 
 DATA = Path("data")
 LATEST = DATA / "latest"
@@ -64,6 +66,7 @@ SNAPSHOT = {
     "season_scorecard.csv": "season_scorecard.csv",
     "roi_bands.csv": "roi_bands.csv",
     "roi_by_season.csv": "roi_by_season.csv",
+    "disagree_roi_by_season.csv": "disagree_roi_by_season.csv",
     "season_roi.csv": "season_roi.csv",
     "retro_ledger.csv": "retro_ledger.csv",
     "retro_roi_by_season.csv": "retro_roi_by_season.csv",
@@ -447,6 +450,27 @@ def control_records(df):
     return {k: m.roi_summary(b[keep]) for k, b in bets.items()}
 
 
+def disagreement_note(df, where):
+    """The games that separate the model from always betting the favorite (v1.14.2):
+    on every other game the two make the same bet."""
+    if df is None or df.empty or "home won" not in df:
+        return ""
+    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., .5, 1.])]
+    t = m.disagreement_table(d, by="season") if len(d) else None
+    if t is None or t.empty:
+        return ""
+    t = t[t.group == "All games"].set_index("source")
+    r, f = t.loc["model"], t.loc["market favorite"]
+    if not r.bets:
+        return (f"<p class='mut small'>{where}: the model has not yet picked against the market favorite, "
+                "so its record equals always betting the favorite.</p>")
+    units = lambda u: f"{u:+.1f}u".replace("-", "−")
+    return (f"<p class='mut small'>{where}: the model picked against the market favorite in {int(r.bets)} game{'s' if r.bets != 1 else ''}, "
+            f"the only games where its bets differ from always betting the favorite. There it went "
+            f"{int(r.wins)}-{int(r.losses)}, {units(r.units)} (ROI {roi_short(r.roi)}), against "
+            f"{units(f.units)} for the favorite: a difference of {units(r.units - f.units)}.</p>")
+
+
 def control_tiles(ctrl, first_label, first_value, first_sub):
     """Four same-shape tiles: a count, then the model and two do-nothing controls."""
     tiles = [stat(first_label, first_value, first_sub)]
@@ -745,6 +769,7 @@ def render_grades(ledger, latest, built):
     graded = cur[cur.status == "graded"] if len(cur) else cur
     n_pend = len(cur) - len(graded)
     parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{n_pend} pending"))
+    parts.append(disagreement_note(graded, "Locked picks"))
     if cur.empty:
         parts.append("<div class='gr-note'>No picks locked yet. The first one locks once a week's final injury "
                      "reports are out.</div>")
@@ -782,6 +807,7 @@ def render_retro(latest):
            "these games were played.</div>"]
     played = retro[pd.to_numeric(retro["home won"], errors="coerce").isin([0., .5, 1.])]
     out.append(control_tiles(control_records(played), "Games", f"{len(played)}", f"{seasons[0]}–{seasons[-1]}"))
+    out.append(disagreement_note(played, "Rebuilt history"))
     for yr in reversed(seasons):
         g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
         units = g.units.dropna()
@@ -890,6 +916,7 @@ def main(argv=None):
         print(f"snapshot: {season} week {week} -> {LATEST}")
         kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
+        totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
     files = render_all(args.out)
     print(f"site: {len(files)} files -> {args.out}")

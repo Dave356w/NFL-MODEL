@@ -24,6 +24,7 @@ import pandas as pd
 import kalshi as k
 import matchup
 import nfl_model as m
+import totals
 
 DATA = Path("data")
 LEDGER = DATA / "forward_predictions.jsonl"
@@ -290,7 +291,55 @@ def h4_summary(g):
     return {"n": len(d), "r": r, "lo": lo, "hi": hi}
 
 
-def report_text(g, now=None):
+def disagreement(part):
+    """Model and market favorite on the graded games where they pick different sides
+    (v1.14.2): everywhere else they make the same bet, so this is the whole difference."""
+    t = m.disagreement_table(part, by="season")
+    t = t[t.group == "All games"].set_index("source")
+    return t.loc["model"].to_dict(), t.loc["market favorite"].to_dict()
+
+
+def h5_grades(h5, results):
+    """Pre-registered H5: 1u on the moneyline underdog of every recorded game whose total
+    at lock is <= totals.H5_MAX_TOTAL, at the moneylines recorded with it; the market
+    favorite is scored on the same rows. One row per game, independent of the model."""
+    cols = ["game_id", "season", "week", "home", "away", "total_line", "home_moneyline", "away_moneyline"]
+    d = pd.DataFrame(h5 or [], columns=cols).drop_duplicates("game_id")
+    d = d[pd.to_numeric(d.total_line, errors="coerce") <= totals.H5_MAX_TOTAL]
+    res = results.drop_duplicates("game_id")[["game_id", "result"]]
+    d = d.merge(res, on="game_id", how="left")
+    d["home won"] = d.result.map(m.won)
+    d["fav_wp"] = m.market_ml_wp(d)
+    d["dog_wp"] = 1 - d.fav_wp
+    dog, fav = m.flat_bets(d, "dog_wp"), m.flat_bets(d, "fav_wp")
+    d["bet_side"], d["bet_result"], d["units"], d["null_ev"], d["bet_q"] = dog.side, dog.result, dog.units, dog.null_ev, dog.q
+    d["fav_units"] = fav.units.where(dog.units.notna())
+    return d
+
+
+def h5_summary(d):
+    b = d[d.units.notna()] if len(d) else d
+    out = m.roi_summary(pd.DataFrame({"result": b.get("bet_result", []), "units": b.get("units", []),
+                                      "q": b.get("bet_q", []), "null_ev": b.get("null_ev", [])}))
+    out["recorded"] = len(d)
+    out["fav_units"] = float(b.fav_units.sum()) if len(b) else 0.
+    out["fav_roi"] = float(b.fav_units.mean()) if len(b) else np.nan
+    return out
+
+
+def h5_verdict(s):
+    """Decision rule fixed in research/PREREGISTRATION.md (H5)."""
+    if s["bets"] < 10 or not np.isfinite(s["roi_se"]):
+        return "needs 10 graded bets to report"
+    edge = s["roi"] - s["null_roi"]
+    if edge - 1.96 * s["roi_se"] > 0:
+        return "supported (95% CI of ROI minus null above zero)"
+    if s["bets"] >= 300 and edge <= 0:
+        return "falsified (n >= 300, ROI at or below the null)"
+    return "unresolved"
+
+
+def report_text(g, now=None, h5=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     lines = [f"NFL forward ledger report -- {now.strftime('%Y-%m-%d %H:%M UTC')}",
              "Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).",
@@ -311,7 +360,13 @@ def report_text(g, now=None):
                       f"    win {100 * r['win_pct']:.1f}% vs no-vig q {100 * r['mean_q']:.1f}% (excess {r['excess_pp']:+.1f}pp); "
                       f"market-correct null ROI {100 * r['null_roi']:+.1f}%",
                       f"    same rows, market favorite every game: {r['fav_units']:+.2f}u, ROI {100 * r['fav_roi']:+.1f}%",
-                      "  ROI by the picked side's price band (model):"]
+                      ]
+            dm, df_ = disagreement(part)
+            lines.append(f"  Model vs favorite, games where they pick different sides (all other bets are identical): "
+                         f"n={dm['bets']}" + (f", model {dm['units']:+.2f}u (ROI {100 * dm['roi']:+.1f}%) vs favorite "
+                                              f"{df_['units']:+.2f}u (ROI {100 * df_['roi']:+.1f}%); "
+                                              f"difference {dm['units'] - df_['units']:+.2f}u" if dm["bets"] else ""))
+            lines.append("  ROI by the picked side's price band (model):")
             bt = roi_bands(part)
             for row in bt.itertuples(index=False):
                 if row.bets:
@@ -377,14 +432,25 @@ def report_text(g, now=None):
         lines += ["== Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread",
                   f"  n={h['n']} graded games" + (f", partial r {h['r']:+.3f} [{h['lo']:+.3f}, {h['hi']:+.3f}] (95%): {verdict}"
                                                  if np.isfinite(h["r"]) else " (needs 10 to report)"), ""]
+    if h5 is not None and len(h5):
+        s = h5_summary(h5)
+        lines += [f"== Pre-registered H5 (one row per game, independent of the model): 1u on the moneyline underdog "
+                  f"when the total at lock is <= {totals.H5_MAX_TOTAL:g}",
+                  f"  {s['recorded']} qualifying games recorded, {s['bets']} graded"]
+        if s["bets"]:
+            lines += [f"  {s['wins']}-{s['losses']}-{s['pushes']}, {s['units']:+.2f}u, ROI {100 * s['roi']:+.1f}%"
+                      + (f" +/- {100 * s['roi_se']:.1f} (1 SE)" if np.isfinite(s["roi_se"]) else "")
+                      + f"; market-correct null {100 * s['null_roi']:+.1f}%; same rows, favorite {s['fav_units']:+.2f}u",
+                      f"  verdict: {h5_verdict(s)}"]
+        lines.append("")
     return "\n".join(lines) + "\n"
 
 
-def write_outputs(g, data_dir=DATA, now=None):
+def write_outputs(g, data_dir=DATA, now=None, h5=None):
     data_dir = Path(data_dir)
     data_dir.mkdir(parents=True, exist_ok=True)
     g.to_csv(data_dir / GRADED.name, index=False, float_format="%.6g")
-    (data_dir / REPORT.name).write_text(report_text(g, now), encoding="utf-8")
+    (data_dir / REPORT.name).write_text(report_text(g, now, h5), encoding="utf-8")
 
 
 def main(argv=None):
@@ -396,7 +462,8 @@ def main(argv=None):
     table = Path(args.data_dir) / k.LADDER_TABLE.name
     g = grade(records, results, k.load(Path(args.data_dir) / k.SNAPSHOTS.name),
               k.load_ladder_table(table) if table.exists() else None, matchup.load(Path(args.data_dir) / matchup.TERMS.name))
-    write_outputs(g, args.data_dir)
+    h5 = h5_grades(totals.load(Path(args.data_dir) / totals.TOTALS.name), results)
+    write_outputs(g, args.data_dir, h5=h5)
     sm = summary(g)
     print(f"ledger: {sm['snapshots']} snapshots, {sm['graded']} graded, {sm['pending']} pending")
     return 0

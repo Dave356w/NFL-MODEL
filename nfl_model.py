@@ -5,6 +5,13 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.14.2 (reporting only; same REVISION, config signature, recipe and ledger): the model's
+flat bets differ from the market favorite's only where the two pick different sides, so
+disagreement_table reports those games (held-out disagree_roi_by_season.csv, the forward
+ledger report and the ledger page). Pre-registered H5 (totals.py): 1u on the moneyline
+underdog when the total at lock is <= 41, recorded in data/h5_totals.jsonl, independent
+of the model.
+
 v1.14.1 (reporting only; same REVISION, config signature, recipe and ledger): a game is
 captured on Kalshi again when a later revision locks it after its last capture, and each
 ledger snapshot is graded at its first Kalshi capture at or after its lock. Snapshots locked
@@ -1892,6 +1899,15 @@ def roi_table(df,by=None):
     return pd.DataFrame(rows)
 
 
+def disagreement_table(df,by=None):
+    """roi_table on the games where the model's side differs from the market favorite
+    (v1.14.2, reporting only). Everywhere else both make the same bet, so these rows
+    alone carry the model-minus-favorite difference in units."""
+    d=df.copy(); d['market_ml_wp']=market_ml_wp(d)
+    differ=(flat_bets(d,'model_wp').side!=flat_bets(d,'market_ml_wp').side).to_numpy()
+    return roi_table(df[differ],by)
+
+
 def implied_spread(p):
     """Model-implied home spread in points (v1.12.1, reporting only): the inverse of
     the spread-to-WP comparator, MARKET_SIGMA * Phi^-1(p), same sign as spread_line
@@ -2801,6 +2817,7 @@ def main():
     cal=calibration_bands(outer); save(cal,'calibration_bands.csv')
     roi=roi_table(outer); save(roi,'roi_bands.csv')
     roi_years=roi_table(outer,by='season'); save(roi_years,'roi_by_season.csv')
+    save(disagreement_table(outer,by='season'),'disagree_roi_by_season.csv')
     t=roi[(roi.group=='All games')].set_index('source')
     for src in ('model','market favorite'):
         r=t.loc[src]

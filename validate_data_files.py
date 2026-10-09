@@ -15,6 +15,7 @@ CONFLICT_MARKERS = ("<<<<<<<", "=======", ">>>>>>>")
 LEDGER_NAME = "forward_predictions.jsonl"
 KALSHI_NAME = "kalshi_snapshots.jsonl"
 H4_NAME = "h4_terms.jsonl"
+H5_NAME = "h5_totals.jsonl"
 
 
 def validate_csv(path):
@@ -140,6 +141,38 @@ def validate_h4(path):
     return len(seen)
 
 
+def validate_h5(path):
+    """Every line is JSON; one record per game; recorded before kickoff; finite total;
+    moneylines missing or American odds (|ML| >= 100)."""
+    path = Path(path)
+    seen = set()
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
+        if not line.strip():
+            continue
+        if line.startswith(CONFLICT_MARKERS):
+            raise ValueError(f"{path}:{line_number}: unresolved Git conflict marker")
+        try:
+            r = json.loads(line)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}:{line_number}: not JSON ({exc})") from exc
+        for k in ("game_id", "captured_utc", "kickoff_utc", "total_line", "home_moneyline", "away_moneyline"):
+            if k not in r:
+                raise ValueError(f"{path}:{line_number}: missing {k}")
+        if r["game_id"] in seen:
+            raise ValueError(f"{path}:{line_number}: duplicate H5 record for {r['game_id']}")
+        seen.add(r["game_id"])
+        if datetime.fromisoformat(r["captured_utc"]) >= datetime.fromisoformat(r["kickoff_utc"]):
+            raise ValueError(f"{path}:{line_number}: H5 record not captured before kickoff")
+        t = r["total_line"]
+        if not isinstance(t, (int, float)) or t != t or t <= 0:
+            raise ValueError(f"{path}:{line_number}: total_line must be a positive number")
+        for k in ("home_moneyline", "away_moneyline"):
+            v = r[k]
+            if v is not None and (not isinstance(v, (int, float)) or v != v or abs(v) < 100):
+                raise ValueError(f"{path}:{line_number}: {k} must be null or American odds")
+    return len(seen)
+
+
 def validate_data_dir(data_dir="data"):
     """Validate every CSV under data_dir, the forward ledger and Kalshi captures; return checked paths."""
     data_dir = Path(data_dir)
@@ -159,6 +192,10 @@ def validate_data_dir(data_dir="data"):
     if h4.exists():
         validate_h4(h4)
         paths.append(h4)
+    h5 = data_dir / H5_NAME
+    if h5.exists():
+        validate_h5(h5)
+        paths.append(h5)
     return paths
 
 
