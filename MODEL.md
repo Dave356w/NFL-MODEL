@@ -173,8 +173,12 @@ for all games and for |gap| ≥ 3 points, against the 52.4% break-even at −110
 The sportsbook moneyline in a ledger snapshot comes from the nflverse schedule and has no
 independent quote time. For every game newly locked, the build now also captures Kalshi's
 public order book (best bid and ask) for both game-winner markets and the "team wins by over
-X.5 points" ladder, once, into `data/kalshi_snapshots.jsonl` (append-only, separate from the
-forward ledger; `kalshi_lag_hours` records how long after the lock it was taken). A Kalshi
+X.5 points" ladder into `data/kalshi_snapshots.jsonl` (append-only, separate from the
+forward ledger). A game is captured again when a later revision locks it after its last
+capture, and each snapshot is graded at its first capture at or after its lock;
+`kalshi_lag_hours` records how long after the lock that was. Snapshots locked before
+this rule (v1.13/v1.14 for 2026_05_TB_DAL) have only an earlier capture: their lag is
+negative and the report counts them as captured before lock. A Kalshi
 failure is logged and skipped; it never costs a pregame snapshot.
 
 `data/ledger_report.txt` then adds, as **secondary** lines (the moneyline headline is unchanged):

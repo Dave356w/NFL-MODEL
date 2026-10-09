@@ -5,6 +5,11 @@ GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
 
+v1.14.1 (reporting only; same REVISION, config signature, recipe and ledger): a game is
+captured on Kalshi again when a later revision locks it after its last capture, and each
+ledger snapshot is graded at its first Kalshi capture at or after its lock. Snapshots locked
+after the last pre-kickoff capture keep the earlier quote and are counted as captured before lock.
+
 v1.14 (NEW experiment): omit the separate offensive and defensive sack-rate
 regressors from both production families. Keep net passing yards per dropback
 (including sack yards and sack plays), source sack counts, first downs, peaks,

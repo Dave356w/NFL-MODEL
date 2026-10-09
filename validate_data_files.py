@@ -87,7 +87,7 @@ def validate_ledger(path):
 
 
 def validate_kalshi(path):
-    """Every line is JSON; one capture per game; captured before kickoff; 0 <= bid < ask <= 1."""
+    """Every line is JSON; one capture per game and capture time; captured before kickoff; 0 <= bid < ask <= 1."""
     path = Path(path)
     seen = set()
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
@@ -102,9 +102,10 @@ def validate_kalshi(path):
         for k in ("game_id", "captured_utc", "kickoff_utc", "winner", "spread_ladder"):
             if k not in r:
                 raise ValueError(f"{path}:{line_number}: missing {k}")
-        if r["game_id"] in seen:
-            raise ValueError(f"{path}:{line_number}: duplicate capture for {r['game_id']}")
-        seen.add(r["game_id"])
+        key = (r["game_id"], r["captured_utc"])
+        if key in seen:
+            raise ValueError(f"{path}:{line_number}: duplicate capture for {r['game_id']} at {r['captured_utc']}")
+        seen.add(key)
         if datetime.fromisoformat(r["captured_utc"]) >= datetime.fromisoformat(r["kickoff_utc"]):
             raise ValueError(f"{path}:{line_number}: capture not before kickoff")
         for q in list(r["winner"].values()) + list(r["spread_ladder"]):
