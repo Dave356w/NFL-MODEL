@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-08 23:36 UTC
+NFL forward ledger report -- 2026-10-09 00:11 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -8,5 +8,8 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   No graded bets with a saved moneyline yet.
 
 == boxscore-composite-v1.13: 1 snapshots, 0 graded, 1 pending, 0 ties
+  No graded bets with a saved moneyline yet.
+
+== boxscore-composite-v1.14: 1 snapshots, 0 graded, 1 pending, 0 ties
   No graded bets with a saved moneyline yet.
 
