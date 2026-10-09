@@ -886,3 +886,152 @@ cost of about 1.5–2 points to trade (half the 1¢ spread plus the fee); buying
 favourite a day early returned the same as buying it at the close. The 72-hour window clears
 zero only barely, and it flatters the model because its injury inputs were not public yet. No
 evidence that the model's value is in timing; the conclusion of tests 22–26 stands.
+
+### Test 28: player-availability signal audit (2026-10-09)
+
+`python research/availability_audit.py [CACHE_DIR] [OUT_DIR]` (≈ 7 min warm). **No game outcomes
+are used.** Every table measures either the snaps players actually played or the closing market's
+price, so this audit does not spend the held-out seasons. It is a diagnostic only and changes
+nothing in the model. The script first reproduces production's six unit columns exactly
+(3,742 team-weeks, 2019–25, max difference 0).
+
+*Population (A).* A regular is a player with ≥ 25% of his unit's snaps, on average, in the games he
+played among the team's previous 4. For each regular, compare the snaps he played in the listed
+game with that normal share. A status's **weight** is its snap loss in excess of healthy regulars
+(not listed, still on the roster: loss 0.037), scaled so that Out = 1. That is the quantity a
+unit column's weight stands for.
+
+#### A. What each status costs in snaps (2019–25)
+
+| Final-report status | Regulars | Did not play | Snap loss ± SE | Weight 2019–22 | Weight 2023–25 | Production weight |
+|---|---:|---:|---:|---:|---:|---:|
+| not listed | 83,396 | 6.5% | 0.037 ± 0.001 | 0 | 0 | 0 |
+| **not listed, on a reserve list in the game week's own roster or gone from it** | **1,849** | **99.7%** | **0.996 ± 0.001** | **0.99** | **1.00** | **0** |
+| practice report only (Full / Limited / DNP) | 14,795 | 2.6–3.2% | 0.02–0.03 | −0.02 to −0.00 | −0.02 to +0.02 | 0 |
+| Questionable, practised Full | 1,028 | 13.6% | 0.124 ± 0.014 | 0.06 | 0.14 | 0.25 |
+| Questionable, Limited | 4,296 | 28.1% | 0.293 ± 0.008 | 0.26 | 0.27 | 0.25 |
+| Questionable, DNP | 1,174 | 51.1% | 0.536 ± 0.015 | 0.55 | 0.48 | 0.25 |
+| Doubtful | 700 | 99.0% | 0.992 ± 0.003 | 0.99 | 0.99 | 1 |
+| Out | 4,422 | 100.0% | 1.000 | 1.00 | 1.00 | 1 |
+| roster out (prior-week reserve list or gone) | 13,494 | 96.5% | 0.964 ± 0.002 | 0.94 | 0.99 | 1 |
+
+* **The weights for Out, Doubtful and the prior-week roster rule are right.** The 2021 roster-out
+  weight (0.87) reflects quick returns from the Reserve/COVID-19 list (code R59; checked outside
+  the script). It is 0.99–1.00 every season since 2022.
+* **Pooled, Questionable is close to its 0.25 weight (measured 0.29), but the pool hides a 0.06–0.55
+  spread.** Final practice participation separates the cases, and the ordering holds in every
+  season. Weights fitted on 2019–22 reduce the 2023–25 snap-weighted squared error from 0.2720
+  (flat 0.25) to 0.2609 (−4%). Q/Full drifted up (0.06 → 0.14) and Q/DNP down in 2025 (0.38).
+* **Same-week reserve moves are invisible to production.** A regular hurt on Sunday and placed on
+  IR by Tuesday is not on the injury report (it never lists reserve players). He is also not on a
+  reserve list in the prior week's roster, the only roster production reads. Production counts
+  him fully available, yet 99.7% of these 1,849 did not play. In 2022–25, weeks 5+, they carry
+  **13.1% on top of the window snaps production already counts out.** Live check (2026-10-09
+  14:38 UTC, a Friday): the 2026 file already held week-5 rows with 13 players newly on reserve
+  since week 4, 1 of them on the week-5 injury report. They include Paris Johnson Jr. (ARI OL),
+  Donovan Jackson (MIN OL), Edgerrin Cooper (GB LB) and Derrick Harmon (PIT DL), all counted
+  available for week 5.
+* **The QB projection had the same blind spot before the depth chart.** In 44 team-games (2019–25,
+  weeks 2+, all from the start-history rule) the projected QB was on the game week's reserve list
+  or gone, and he started 0 of them. Examples: 2023 wk 10 NYG D. Jones (T. DeVito started), 2023
+  wk 15 LAC J. Herbert (E. Stick), 2024 wk 3 MIA T. Tagovailoa (S. Thompson). From 2025 the
+  timestamped chart rule covers it: none of the 44 are depth-chart projections. The training rows
+  before 2025 keep these errors.
+* **A regular back from an absence plays his normal share** if he is on the practice report and
+  still rostered. His snap loss after 1 missed game is 0.036 ± 0.017 (602), after 2–3 games 0.113
+  ± 0.020 (446), and after 4+ games 0.243 ± 0.055 (75). Every returnee who was on a reserve list
+  or gone that week (163) did not play.
+
+#### B. What production's unit columns leave out (2021–25 team-weeks, unit snap shares)
+
+Production counts absences over the last 4 games (this season once 2 exist). The box-score
+profile it adjusts decays over all prior games. The profile measures below use the profile's own
+weights (half-life 8 team games, this season once 2 exist).
+*Lingering* = decayed share of players unavailable now, minus production's column. It covers
+absences older than the window. *Return* = available players' healthy share × the profile weight
+of games they missed while listed Out/Doubtful or on a reserve list. *Same-week* = the
+reserve/gone players from A.
+
+| Unit | Production | Same-week mean (≥ 0.10) | Lingering mean (≥ 0.10) | Return mean (≥ 0.10) |
+|---|---:|---:|---:|---:|
+| OL | 0.097 | 0.013 (6.0%) | 0.020 (6.2%) | 0.043 (14.3%) |
+| WR/TE | 0.103 | 0.013 (5.3%) | 0.023 (7.2%) | 0.046 (14.0%) |
+| RB | 0.106 | 0.015 (3.9%) | 0.024 (11.0%) | 0.044 (15.5%) |
+| DL | 0.093 | 0.013 (5.1%) | 0.019 (5.5%) | 0.037 (10.2%) |
+| LB | 0.101 | 0.015 (5.3%) | 0.022 (9.7%) | 0.043 (15.5%) |
+| DB | 0.113 | 0.015 (7.0%) | 0.024 (8.2%) | 0.049 (15.7%) |
+
+By week (OL): production 0.273 (weeks 1–2), 0.061 (3–4), 0.073 (5–9), 0.071 (10–13), 0.082
+(14–18). Lingering absence 0.013 → 0.044 and return 0.035 → 0.054 from weeks 5–9 to weeks 14–18.
+By late season the profile carries about as much lineup change as production measures. In weeks
+1–2 production's columns are mostly offseason departures, with arrivals uncredited.
+
+#### C. Does the closing market price what production leaves out? (2021–25, 1,359 games)
+
+OLS of the no-vig closing moneyline log-odds on the frozen recipe's features (h8, no unit
+columns) plus each signal, in model log-odds. Each signal is converted with that recipe's unit
+coefficients, fit once on games through 2025. A coefficient of 1 means the market moves as much
+as the model's own weights would; 0 means it ignores the signal. SEs are clustered by week.
+
+| Rows | Production units | Practice-split Questionable | Same-week reserve | Lingering absence | Return credit |
+|---|---:|---:|---:|---:|---:|
+| all weeks | +0.55 ± 0.09 | +0.69 ± 0.45 | **+0.66 ± 0.17** | +0.55 ± 0.22 | −0.13 ± 0.14 |
+| weeks 1–4 | +0.26 ± 0.14 | +0.99 ± 1.13 | +0.03 ± 0.34 | −0.41 ± 0.81 | +0.09 ± 0.28 |
+| weeks 5+ | +0.69 ± 0.09 | +0.50 ± 0.48 | +0.71 ± 0.18 | +0.49 ± 0.22 | −0.19 ± 0.16 |
+| every unit weighted equally (all weeks) | +0.53 ± 0.09 | +0.63 ± 0.43 | +0.71 ± 0.14 | +0.67 ± 0.21 | +0.07 ± 0.14 |
+| games moved ≥ 0.10 log-odds | 47.2% | 0.2% | 12.1% | 8.6% | 16.0% |
+
+By week, production units: +0.23 ± 0.13 (weeks 1–2), +0.44 ± 0.25 (3–4), +0.42 ± 0.14 (5–9), +0.84
+± 0.12 (10–13), +0.76 ± 0.15 (14–18). Same-week reserve: −0.10 ± 0.45, +0.24 ± 0.49, −0.25 ± 0.29,
++0.29 ± 0.32, +1.13 ± 0.19. Lingering: the all-weeks estimate comes from weeks 5–9 (+2.22 ± 0.61;
+weeks 10–18 about +0.24 ± 0.3). Different signals are nearly uncorrelated (|r| ≤ 0.08); only the this-season and
+3-season versions of the same measure correlate (lingering 0.51, return 0.76). The equal-weight row checks that
+the frozen fit's wrong-signed LB coefficient (+0.11) does not drive the results.
+
+**Reading.**
+- **What works today.** The status weights for Out/Doubtful and the roster rule match observed
+  participation, and the market prices production's unit columns at 0.55 of the model's weight
+  (0.69 from week 5). Test 1 showed the layer earns its place on held-out outcomes.
+- **The largest gap is same-week reserve moves.** They are 13% more absence mass, in 12% of
+  games, and the market prices them at the same rate as the absences production counts
+  (+0.66 ± 0.17 against +0.55 ± 0.09). The by-week estimates are uneven: they are strongest in
+  weeks 14–18 and unresolved in weeks 5–13. The closing line also knows the inactives, so "the
+  market prices it" does not prove the model would gain. That needs an outcome test.
+- **The Questionable split is real but small.** The market prices it in proportion, but it moves
+  only 0.2% of games by 0.10 log-odds, too few for an outcome test to resolve.
+- **The market discounts production's weeks 1–2 columns** (+0.23 ± 0.13 against ≈ +0.8 from week
+  10). There they count offseason departures without arrivals. Whether the model or the market
+  has the right weight is an outcome question. Weeks 1–4 are the model's only competitive window
+  (test 13).
+- **Return credit is not priced** (−0.13 ± 0.14), and returning regulars on the practice report play
+  their normal share. Lingering absence is priced on aggregate, but the estimate is concentrated
+  in weeks 5–9, and test 2's longer windows scored slightly worse. Neither is a candidate now.
+- **Caveats.** These are development-data diagnostics, not forward evidence. Five signals × several
+  week groups were examined. The same-week finding is the one that holds up across rows (≈ 4 SE
+  pooled, 5.1 SE with equal weights).
+
+**Candidates** (each changes features, so each needs a new `REVISION`):
+1. **Count same-week reserve/departures out.** For weeks 2+, a window player on a reserve list in
+   the game week's own roster, or gone from it, counts as unavailable, for unit columns and QB
+   eligibility. This **conflicts with the engineering contract** ("same-week roster status is
+   ignored"), so it is the owner's call. Two things support the timing: a post-game snapshot would
+   show players who played, yet 99.7% of these did not play; and the 2026 week-5 rows were
+   published by Friday. *Falsified if* the held-out log-loss gain vs v1.14 is negative, or a lock-time
+   log shows that more than a tenth of the final file's moves for unlisted regulars were not yet
+   in the file at lock (the historical feature would then leak).
+   *Contract-safe alternative:* the timestamped ESPN depth chart (≥ 24 h before kickoff, already
+   loaded for QBs) for all positions. It exists only from 2025.
+2. **Weight Questionable by final practice status** (≈ Full 0.1, Limited 0.25, DNP 0.5). This is a
+   measurement fix whose model effect is too small to resolve on outcomes. It needs the injury
+   cache to keep `practice_status`. *Falsified if* forward participation (measurable weekly
+   without outcomes) shows the DNP-versus-Full gap closing.
+3. **Weeks 1–2 without offseason departures.** Keep injury-report and reserve outs, and drop
+   off-roster departures until the team has `CS_MIN_GAMES` games. *Falsified if* held-out weeks
+   1–4 log loss worsens. It risks the model's best window, so test it only after 1.
+
+**Proposed next test (not run; the owner decides).** A held-out test of candidate 1 with the
+decision rule committed first. Use the v1.14 families, the production grid and nested
+selection on the same 811 games; the primary result is the paired log-loss gain, the secondary
+is flat 1u ROI against v1.14 and the same-row favorite. Separately, a reporting-only change
+(no `REVISION`) could log the current week's reserve/departure list at each lock to an
+append-only file, so the timing question gets a forward answer.

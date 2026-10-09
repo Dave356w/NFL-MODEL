@@ -278,8 +278,11 @@ That line has no independent quote timestamp.
 Thursday games run the same schedule two days earlier (final report Wednesday). Monday
 games run one day later (Saturday). A team with no designations at all still locks within 6h of kickoff (nflverse rebuilds injuries once a day, so a Thursday game waits for Thursday's file).
 The gate also needs nflverse to have published the report. Its injury file refreshes at
-least daily, and every build re-reads it. Same-week roster moves (for example a Friday IR
-move) are not used; the report's Out status covers them.
+least daily, and every build re-reads it. Same-week roster moves are not used. The report's Out
+status covers a player listed before the move (for example a Friday IR move). A player moved to a
+reserve list before the report (hurt on Sunday, on IR by Tuesday) is on neither the report nor the
+prior week's roster, so he counts as available: 1,849 regular player-games in 2019–25, 99.7% of
+whom did not play (research Test 28).
 
 ## Pipeline
 
