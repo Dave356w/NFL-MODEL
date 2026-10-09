@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-09 04:23 UTC
+NFL forward ledger report -- 2026-10-09 05:23 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -14,7 +14,7 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
-  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
     Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median 10.4h, max 10.4h
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.4%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
@@ -43,8 +43,8 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
-  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
-    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -6.6h, max -6.6h
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -6.6h, max -6.6h; 1 captured BEFORE lock (no later capture; min -6.6h)
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
   Scored rows (graded, market present): 1
@@ -72,8 +72,8 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
   Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
-  Secondary: model's side at the Kalshi ask captured after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
-    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -7.2h, max -7.2h
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
+    Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -7.2h, max -7.2h; 1 captured BEFORE lock (no later capture; min -7.2h)
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
   Scored rows (graded, market present): 1

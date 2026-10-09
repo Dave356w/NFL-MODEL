@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.14",
   "diagnostics": "v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-09T04:22:16.872871+00:00",
+  "generated_utc": "2026-10-09T05:21:18.415929+00:00",
   "season": 2026,
   "week": 5,
   "config_signature": "035443ef46ffa5d68c96c4c847657adac2f9eb6182d10308952090b4ddd4a90d",
