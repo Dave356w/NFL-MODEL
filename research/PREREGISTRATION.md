@@ -209,3 +209,37 @@ season. This adoption does not establish superiority or reduced variance.
 Existing v1.13 and earlier recipes/snapshots remain separate and intact.
 H1/H2 stopping and experiment-specific sample rules remain as written; this
 note does not silently extend them to v1.14. H3/H4 definitions are unchanged.
+
+**2026-10-09. New hypothesis H5 (low-total moneyline underdogs), committed before any H5 record
+exists. H1–H4, their rules and the v1.14 experiment are unchanged.**
+
+*Source.* Owner's question whether moneyline prices reflect the spread of possible margins, not
+only the expected margin. On 2006–2025 regular seasons (nflverse schedules, n = 5,199), realized
+dispersion of (margin − spread) was flat at about 13.2 points across total quartiles and spread
+sizes, and favorites won at their no-vig moneyline rate overall. One post-hoc slice stood out: in
+the lowest-total quartile (total ≤ 41) favorites won 2.8 points less often than priced (±1.4), and
+1u on every underdog there returned +5.8% ± 4.9 (n = 1,067) against a −2.5% market-correct null,
++4.8% in 2006–15 and +7.3% in 2016–25; underdogs in all other games returned −6.5%. The cut is
+that quartile's edge, chosen after looking at four quartiles: a hypothesis, not evidence.
+Independent of the model and its revision.
+
+*Rule (fixed).* `totals.py` records, once per game at the build that locks it in the forward
+ledger, the nflverse schedule's `total_line` and both moneylines in `data/h5_totals.jsonl`. Every
+recorded game with total ≤ 41.0 gets 1u on the moneyline underdog (lower no-vig probability) at
+the recorded price; a pick'em is skipped and a tie is a push.
+
+*Sample.* Every graded qualifying game, one row per game whatever the experiment.
+
+*Report* (`h5_summary` in `grade_ledger.py`). W-L-P, units, ROI ± SE, the market-correct null
+(mean of q × payout − (1 − q) for the underdog), and the market favorite on the same rows.
+
+*Decision* (cumulative, at the season checkpoints above):
+- **Supported**: ROI minus the null, less 1.96 SE, is above zero. Even then nothing enters the
+  model or the headline without the owner's decision.
+- **Falsified**: n ≥ 300 and ROI at or below the null.
+- Otherwise **unresolved**. No verdict before 10 graded bets.
+
+*Power, stated now.* 11–92 qualifying games a season in 2016–2025 (median about 42). A per-bet SD
+near 1.4u gives SE ≈ 20 points after one season, so a true edge of +8 points over the null is
+very likely unresolved for several seasons, and the falsification bar needs about seven. A
+2026-only result will read "unresolved"; that is not evidence against H5.
