@@ -197,3 +197,15 @@ pooled with v1.13. The development replacement comparison gave log-loss gain
 confirmation. H1/H2 stopping and experiment-specific sample rules above remain
 as written; this note does not silently extend them to the new revision. H3's
 market-based frozen ladder and H4's separately recorded matchup term are unchanged.
+
+**2026-10-08, owner-selected v1.14: omit separate offensive/defensive sack rates.**
+This simplification starts `boxscore-composite-v1.14` with new active families,
+output identity and configuration signature. Net passing retains sack yards and
+sack plays; other features and the candidate grid keep their definitions.
+Exploratory fixed-recipe ablation on 2023–2025 gave log loss 0.629536 versus
+0.630226 and flat 1u ROI +0.77% versus +0.19% on 811 same-row games. The gain
+was unresolved even before multiple-test correction and was not uniform by
+season. This adoption does not establish superiority or reduced variance.
+Existing v1.13 and earlier recipes/snapshots remain separate and intact.
+H1/H2 stopping and experiment-specific sample rules remain as written; this
+note does not silently extend them to v1.14. H3/H4 definitions are unchanged.

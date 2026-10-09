@@ -1,9 +1,18 @@
-"""NFL box-score composite W/L model — v1.13 (production).
+"""NFL box-score composite W/L model — v1.14 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.14 (NEW experiment): omit the separate offensive and defensive sack-rate
+regressors from both production families. Keep net passing yards per dropback
+(including sack yards and sack plays), source sack counts, first downs, peaks,
+availability, decay, fitting and the 24-candidate grid. Owner-selected simplification
+after exploratory ablation: fixed h8/r0.1 sack-free LL 0.62954 vs 0.63023;
+paired gain and ROI difference unresolved, not a demonstrated variance reduction
+or superiority claim. New REVISION/OUTPUT_NAME and families preserve earlier
+frozen recipes and snapshots; legacy feature families still include sack rates.
 
 v1.13 (NEW experiment): replace final MOV with each team's decayed largest lead
 and largest deficit from prior games. Actual scoring events (sp=1) supply the
@@ -378,11 +387,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.13'
+REVISION='boxscore-composite-v1.14'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_13'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_14'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -393,7 +402,7 @@ WARMUP_SEASONS=2
 OUTER_FIRST_SEASON=2023
 TEAM_HALF_LIVES=(4.,8.,16.)  # team games: 8 -> a game 8 appearances ago gets half weight
 RIDGE_GRID=(.01,.1,1.,10.)   # mean weighted log loss + lambda/2 * ||beta||^2
-FEATURE_FAMILIES=('rates_core_avail_cs_peaks','rates_core_adj_avail_cs_peaks')  # v1.13: replace final MOV with lead/deficit peaks
+FEATURE_FAMILIES=('rates_core_avail_cs_peaks_nosacks','rates_core_adj_avail_cs_peaks_nosacks')  # v1.14: omit separate sack-rate regressors
 FIT_HALF_LIFE_SEASONS=2.     # separate decay on old labeled training games
 OFFSEASON_RETENTION=.5      # each season boundary halves old team-profile weight
 PRIOR_EQUIVALENT_GAMES=4.   # shrink sparse histories toward a prior league profile
@@ -412,7 +421,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -473,6 +482,8 @@ FAMILIES['rates_core_avail_cs_margin']=RATES_CORE
 FAMILIES['rates_core_adj_avail_cs_margin']=RATES_CORE
 FAMILIES['rates_core_avail_cs_peaks']=RATES_CORE
 FAMILIES['rates_core_adj_avail_cs_peaks']=RATES_CORE
+FAMILIES['rates_core_avail_cs_peaks_nosacks']=RATES_CORE
+FAMILIES['rates_core_adj_avail_cs_peaks_nosacks']=RATES_CORE
 # Opponent-adjusted family -> raw family whose stat definitions it reuses.
 ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 
@@ -480,7 +491,8 @@ ADJUSTED_FAMILIES={'rates_core_adj':'rates_core'}
 AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_core',
                 'rates_core_adj_avail_cs':'rates_core_adj',
                 'rates_core_avail_cs_margin':'rates_core','rates_core_adj_avail_cs_margin':'rates_core_adj',
-                'rates_core_avail_cs_peaks':'rates_core','rates_core_adj_avail_cs_peaks':'rates_core_adj'}
+                'rates_core_avail_cs_peaks':'rates_core','rates_core_adj_avail_cs_peaks':'rates_core_adj',
+                'rates_core_avail_cs_peaks_nosacks':'rates_core','rates_core_adj_avail_cs_peaks_nosacks':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
 # Read from the PRIOR week's roster only. Second row: codes used mainly in 2019-2023 rosters
 # (suspended, PUP, non-football injury, not with team, free agents, exempt, transactions).
@@ -524,14 +536,18 @@ ALL_AVAIL_COLS=tuple(dict.fromkeys(AVAIL_COLS+AVAIL_COLS_CS))
 AVAIL_FAMILY_COLS={'rates_core_avail':AVAIL_COLS,'rates_core_avail_cs':AVAIL_COLS_CS,
                    'rates_core_adj_avail_cs':AVAIL_COLS_CS,
                    'rates_core_avail_cs_margin':AVAIL_COLS_CS,'rates_core_adj_avail_cs_margin':AVAIL_COLS_CS,
-                   'rates_core_avail_cs_peaks':AVAIL_COLS_CS,'rates_core_adj_avail_cs_peaks':AVAIL_COLS_CS}
+                   'rates_core_avail_cs_peaks':AVAIL_COLS_CS,'rates_core_adj_avail_cs_peaks':AVAIL_COLS_CS,
+                   'rates_core_avail_cs_peaks_nosacks':AVAIL_COLS_CS,'rates_core_adj_avail_cs_peaks_nosacks':AVAIL_COLS_CS}
 # Point margin (v1.10): families that add the decayed average point margin per game.
 MARGIN_FAMILIES=('rates_core_avail_cs_margin','rates_core_adj_avail_cs_margin')
 MARGIN_FEATURE='d__margin'
 MARGIN_DEFINITION=('official schedule result of each prior game in the team box-score history; '
                    'same team-game decay, offseason retention and history window as the stat profiles; '
                    'PRIOR_EQUIVALENT_GAMES pseudo-games at zero')
-PEAK_FAMILIES=('rates_core_avail_cs_peaks','rates_core_adj_avail_cs_peaks')
+NO_SACK_FAMILIES=('rates_core_avail_cs_peaks_nosacks','rates_core_adj_avail_cs_peaks_nosacks')
+NO_SACK_FEATURES=tuple(f'd__{role}__{family}__sacks_taken_pct'
+                       for role in ('for','allowed') for family in ('rates_core','rates_core_adj'))
+PEAK_FAMILIES=('rates_core_avail_cs_peaks','rates_core_adj_avail_cs_peaks')+NO_SACK_FAMILIES
 PEAK_COLUMNS=('max_lead','max_deficit')
 PEAK_FEATURES=tuple('d__'+c for c in PEAK_COLUMNS)
 PEAK_DEFINITION=('largest nonnegative team lead and deficit at actual full-game scoring events '
@@ -1540,9 +1556,10 @@ def lagged_features(box,schedules,half_life,avail=None):
 
 def feature_names(family):
     if family in AVAIL_FAMILIES:
-        return (feature_names(AVAIL_FAMILIES[family])+[f'd__avail__{c}' for c in AVAIL_FAMILY_COLS[family]]
+        names=(feature_names(AVAIL_FAMILIES[family])+[f'd__avail__{c}' for c in AVAIL_FAMILY_COLS[family]]
                 +([MARGIN_FEATURE] if family in MARGIN_FAMILIES else [])
                 +(list(PEAK_FEATURES) if family in PEAK_FAMILIES else []))
+        return [c for c in names if c not in NO_SACK_FEATURES] if family in NO_SACK_FAMILIES else names
     return ['site']+[f'd__{role}__{family}__{metric}' for role in ('for','allowed') for metric in FAMILIES[family]
                      if not (role=='allowed' and metric in REDUNDANT_ALLOWED)]
 
@@ -2176,7 +2193,9 @@ def config_signature():
                                       'rule':'event_date strictly before the team schedule gameday'}},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
          'margin':{'families':list(MARGIN_FAMILIES),'feature':MARGIN_FEATURE,'definition':MARGIN_DEFINITION},
-         'score_peaks':{'families':list(PEAK_FAMILIES),'features':list(PEAK_FEATURES),'definition':PEAK_DEFINITION}}
+         'score_peaks':{'families':list(PEAK_FAMILIES),'features':list(PEAK_FEATURES),'definition':PEAK_DEFINITION},
+         'regressor_exclusions':{'families':list(NO_SACK_FAMILIES),'features':list(NO_SACK_FEATURES),
+                                 'definition':'omit separate offensive and defensive sack rates; retain sack source counts and net passing including sacks'}}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -2831,6 +2850,7 @@ def main():
                  'v1.1-v1.10 changes applied after v1 results were seen',
                  'point margin input (v1.10) chosen after the 2023-25 held-out seasons were seen',
                  'v1.13 replaces final MOV with lead/deficit peaks by owner choice after development comparison; gain unresolved',
+                 'v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved',
                  'lead/deficit peaks are not clipped or opponent-adjusted',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
@@ -3274,6 +3294,7 @@ def _self_test():
         assert MARGIN_FEATURE in feature_names(MARGIN_FAMILIES[0]) and MARGIN_FEATURE not in feature_names('rates_core_avail_cs')
         for fam in FEATURE_FAMILIES:
             assert set(PEAK_FEATURES)<=set(feature_names(fam)) and MARGIN_FEATURE not in feature_names(fam)
+            assert not set(NO_SACK_FEATURES)&set(feature_names(fam))
         g=features[4.].query('season==2021 and week==5').iloc[0]
         def manual_margin(team):
             rows=[]
