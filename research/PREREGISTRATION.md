@@ -243,3 +243,12 @@ the recorded price; a pick'em is skipped and a tie is a push.
 near 1.4u gives SE ≈ 20 points after one season, so a true edge of +8 points over the null is
 very likely unresolved for several seasons, and the falsification bar needs about seven. A
 2026-only result will read "unresolved"; that is not evidence against H5.
+
+**2026-10-09, owner-selected v1.15: the game week's own reserve list counts out.**
+This changes availability features and starts `boxscore-composite-v1.15`, with a new output
+identity and configuration signature; families, the candidate grid and every other feature keep
+their definitions. The evidence was research Test 28 (participation and closing-market
+diagnostics, no game outcomes); the held-out comparison (Test 29) was run after the adoption
+decision and is reported, not used as a gate. Existing v1.14 and earlier recipes/snapshots
+remain separate and intact. H1/H2 stopping and experiment-specific sample rules remain as
+written; this note does not silently extend them to v1.15. H3/H4/H5 definitions are unchanged.

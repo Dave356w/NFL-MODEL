@@ -46,8 +46,9 @@ effect is zero. Pick accuracy is not calibration.
 ## Engineering contract
 
 - **No lookahead.** Never let a game's own or later stats, snaps or labels
-  into its features. Same-week roster status is ignored, and only the most
-  recent roster before the game is used.
+  into its features. Same-week roster status is ignored except the game week's
+  own reserve list (v1.15, owner decision 2026-10-09). Membership and
+  activations come only from the most recent roster before the game.
 - **Protect the ledger.** Never rewrite, backfill or delete snapshots. A
   change to features, the selection grid or config that changes
   `config_signature()` needs a new `REVISION` and `OUTPUT_NAME`. That starts a

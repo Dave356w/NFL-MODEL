@@ -1,9 +1,31 @@
-"""NFL box-score composite W/L model — v1.14 (production).
+"""NFL box-score composite W/L model — v1.15 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.15 (NEW experiment, owner decision 2026-10-09; new REVISION/OUTPUT_NAME, based on v1.14):
+the game week's own reserve list. A player whose row on the game week's weekly roster carries
+a roster-out status (ROSTER_OUT codes, or a reserve/waived status description: IR, PUP, NFI,
+suspension, cut, traded) counts fully unavailable for that game, in the unit columns and for QB
+eligibility, from week 2 (week 1 already reads its own roster). Before v1.15 only the most recent
+roster BEFORE the game week was read, so a regular hurt on Sunday and placed on IR by Tuesday was
+on neither that roster nor the injury report (which never lists reserve players) and counted as
+available. Research test 28: 1,849 such regulars in 2019-25, 99.7% of whom did not play; in
+2022-25 weeks 5+ they add 13.1% to the absence mass already counted; the closing moneyline prices
+them at +0.66 +/- 0.17 of the model's unit weight (+0.55 for the absences already counted). Only
+the reserve list is read: membership, activations and absence from the game-week roster keep the
+prior-week rule, and game-day inactives (INA) stay members. Timing: weekly roster rows carry no
+publish time. Of 6,086 players newly on a game-week out list (2019-25), 10 took an offensive or
+defensive snap in that game (0.16%; 9 in 2020-21; research test 29), so the file is pregame; the
+2026 week-5 rows were published by Friday.
+Forward snapshots read the file as it stands at lock; historical rows use the final weekly file,
+which can include a move made between the final injury report and kickoff. A team with no rows
+for the game week yet falls back to the prior-week rule. GAME_WEEK_RESERVE=False reproduces v1.14.
+Held-out 2023-25 (research test 29, run after adoption, not a gate; 811 priced games, same recipe
+in every season): log loss +0.0001 +/- 0.0010; flat ROI +2.0% vs +3.2% (-1.2 pts +/- 0.9),
+unresolved; 15 of 815 picked sides change.
 
 v1.14.2 (reporting only; same REVISION, config signature, recipe and ledger): the model's
 flat bets differ from the market favorite's only where the two pick different sides, so
@@ -399,11 +421,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.14'
+REVISION='boxscore-composite-v1.15'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_14'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_15'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -433,7 +455,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -506,12 +528,16 @@ AVAIL_FAMILIES={'rates_core_avail':'rates_core','rates_core_avail_cs':'rates_cor
                 'rates_core_avail_cs_peaks':'rates_core','rates_core_adj_avail_cs_peaks':'rates_core_adj',
                 'rates_core_avail_cs_peaks_nosacks':'rates_core','rates_core_adj_avail_cs_peaks_nosacks':'rates_core_adj'}
 STATUS_WEIGHT={'Out':1.,'Doubtful':1.,'Questionable':.25}
-# Read from the PRIOR week's roster only. Second row: codes used mainly in 2019-2023 rosters
-# (suspended, PUP, non-football injury, not with team, free agents, exempt, transactions).
+# Read from the PRIOR week's roster and (v1.15, GAME_WEEK_RESERVE) the game week's own roster. Second
+# row: codes used mainly in 2019-2023 rosters (suspended, PUP, non-football injury, not with team,
+# free agents, exempt, transactions).
 ROSTER_OUT=('RES','CUT','TRD','RET','EXE','E01',
             'SUS','PUP','RSN','NWT','UFA','RFA','RSR','E14','TRT','TRC')
 ROSTER_OUT_DESC_PREFIX=('R','W')  # status_description_abbr reserve/waived codes count as out whatever the status
 ROSTER_MEMBER=('ACT','DEV','INA')  # active, practice squad, game-day inactive; anything else is audited
+# v1.15: from week 2, roster-out rows (roster_out_mask) on the game week's own roster also count out.
+# Membership and activations still come from the prior-week roster only.
+GAME_WEEK_RESERVE=True
 # Inside this many hours of kickoff a team with practice rows but no game status counts as reported.
 # v1.11.1: 24 -> 6. nflverse rebuilds injuries once a day (cron 07:07 UTC, often hours late), so a
 # Wednesday final report for a Thursday game arrives Thursday ~07-15 UTC; at 24h the gate opened
@@ -1101,7 +1127,8 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
     are shown as cleared. Roster removals (IR, PUP, suspension, cut, traded, or no
     longer on the most recent roster before the game) are never on an injury report;
     they are added from `rost` and counted 100%, as the model does (membership is
-    skipped, as in the model, when most window snaps are off that roster). Snap share = player's share of his unit's snaps over the
+    skipped, as in the model, when most window snaps are off that roster). v1.15: reserve-list rows
+    on the game week's own roster are added the same way (GAME_WEEK_RESERVE). Snap share = player's share of his unit's snaps over the
     team's last AVAIL_WINDOW games before this week (current season once it has
     CS_MIN_GAMES games), the window the _cs unit columns use. Personnel events
     use the same strictly-before-gameday filter as availability_table(), override
@@ -1149,6 +1176,11 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
                         if pid not in members and pid not in removed:
                             nm=names.full_name.get(pid) if 'full_name' in names else None
                             removed[pid]=(f'not on wk {rw} roster (left team)',nm,names.position.get(pid) if 'position' in names else None)
+            if GAME_WEEK_RESERVE and week>1:  # v1.15: the game week's own reserve list, as availability_table()
+                gw=rt[rt.week==week]
+                for r_ in gw[roster_out_mask(gw)].to_dict('records'):
+                    if r_['gsis_id'] not in removed:
+                        removed[r_['gsis_id']]=(f'{roster_note(r_)} on wk {week} roster',r_.get('full_name'),r_.get('position'))
         event_rows=personnel_out_events(events,t,dates.get((season,week,t)))
         event_names={}
         for e in event_rows.sort_values('event_date').itertuples():
@@ -1200,6 +1232,8 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
     Dated personnel out-events (v1.12) strictly before schedule gameday are a narrow
     exception to prior-week rosters: transaction dates are knowable, unlike same-week
     roster-status timing. signed/activated never clear or offset an absence.
+    v1.15 (GAME_WEEK_RESERVE): from week 2, roster-out rows on the game week's own roster
+    (the reserve list, cut, traded) also count out; nothing on that roster clears an out.
     Optional events/gameday preserve callers."""
     dates=personnel_gamedays(gameday)
     inj=injury_weights(inj)
@@ -1266,7 +1300,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
            'membership_skipped_as_data_gap':0,'qb_projected_from_backup_prior':0,
            'qb_projected_from_other_team_history':0,'qb_projected_not_last_starter':0,
            'qb_projected_from_depth_chart':0,'qb_depth_chart_missing':0,'qb_depth_chart_no_available_qb':0,
-           'qb_questionable_blend':0,
+           'qb_questionable_blend':0,'game_week_reserve_added':0,
            'injury_report_final':0,'injury_report_practice_only':0,'injury_report_none':0,
            'window_snaps':0.,'off_roster_snaps':0.}
     rows=[]
@@ -1281,6 +1315,10 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
         out=dict(inj_map.get((y,w,t),{}))
         if ref_week is not None and w>1:
             for pid in rost_out.get((y,ref_week,t),()): out[pid]=1.
+        if GAME_WEEK_RESERVE and w>1:  # v1.15: the game week's own reserve list
+            for pid in rost_out.get((y,w,t),()):
+                if out.get(pid,0.)<1.: stats['game_week_reserve_added']+=1
+                out[pid]=1.
         for e in personnel_out_events(events,t,dates.get((y,w,t))).itertuples(): out[e.gsis_id]=1.
         ref=members.get((y,ref_week,t)) if ref_week is not None else None
         if ref is not None and w>1 and ref_week<w-1: stats['reference_older_than_prior_week']+=1
@@ -1395,6 +1433,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
 AVAIL_STAT_KEYS=('team_weeks','no_reference_roster','reference_older_than_prior_week','membership_skipped_as_data_gap',
                  'qb_projected_from_backup_prior','qb_projected_from_other_team_history','qb_projected_not_last_starter',
                  'qb_projected_from_depth_chart','qb_depth_chart_missing','qb_depth_chart_no_available_qb','qb_questionable_blend',
+                 'game_week_reserve_added',
                  'injury_report_final','injury_report_practice_only','injury_report_none','window_snaps','off_roster_snaps')
 
 
@@ -2219,6 +2258,9 @@ def config_signature():
                   'depth_chart':{'first_season':DEPTH_CHART_FIRST_SEASON,'lead_hours':DEPTH_CHART_LEAD_HOURS,
                                  'max_age_days':DEPTH_CHART_MAX_AGE_DAYS,'source':'nflverse depth_charts (ESPN, timestamped)'},
                   'qb_questionable_start':QB_QUESTIONABLE_START,
+                  'game_week_reserve':{'enabled':GAME_WEEK_RESERVE,'from_week':2,
+                                       'rule':'roster_out_mask rows on the game week own weekly roster count out; '
+                                              'membership and activations from the prior-week roster only'},
                   'personnel_events':{'out':PERSONNEL_OUT,'inert':PERSONNEL_INERT,
                                       'rule':'event_date strictly before the team schedule gameday'}},
          'adjust_age':'league week-slots','rates':RATES,'totals':TOTALS,
@@ -2884,8 +2926,12 @@ def main():
                  'v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved',
                  'lead/deficit peaks are not clipped or opponent-adjusted',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty']
-    limitations+=(['availability: final injury-report status (no intra-week timestamps); same-week roster status ignored; '
+    limitations+=(['availability: final injury-report status (no intra-week timestamps); of the game week\'s own roster only '
+                   'the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); '
                    'no game-day inactives or late-week news',
+                   'v1.15 game-week reserve list adopted by owner decision after research test 28 (participation and market '
+                   'diagnostics); held-out comparison after adoption (test 29): log loss +0.0001 +/- 0.0010, '
+                   'ROI -1.2 +/- 0.9 pts, unresolved',
                    'roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)',
                    'QB projection: highest-ranked available QB on the timestamped depth chart >= 24h before kickoff '
                    '(2025 on; earlier seasons and chart gaps: most recent starter among available rostered QBs, '
@@ -2992,8 +3038,12 @@ def _self_test():
                       {'season':2020,'week':5,'team':'T','gsis_id':'p4','report_status':'Questionable'}])
     aud=[]
     av=availability_table(tg,qbt,sn,inj,rost,audit=aud).iloc[0]
-    # p0 out, p2 prior-week RES, p4 questionable, p5 departed; p3 same-week RES ignored.
-    assert np.isclose(av.OL_out,(1+1+.25+1)/6) and av.roster_reference_week==4
+    # p0 out, p2 prior-week RES, p4 questionable, p5 departed; p3 on the game week's own reserve list (v1.15).
+    assert np.isclose(av.OL_out,(1+1+.25+1+1)/6) and av.roster_reference_week==4
+    assert aud[-1]['game_week_reserve_added']==1
+    globals()['GAME_WEEK_RESERVE']=False  # v1.14: same-week roster status ignored entirely
+    try: assert np.isclose(availability_table(tg,qbt,sn,inj,rost).iloc[0].OL_out,(1+1+.25+1)/6)
+    finally: globals()['GAME_WEEK_RESERVE']=True
     assert np.isclose(av.off_roster_snap_share,2/6) and aud[-1]['membership_skipped_as_data_gap']==0
     assert av.qb_expected=='Starter' and abs(av.qb_delta)<.2
     inj2=pd.concat([inj,pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'qa','report_status':'Doubtful'}])])
@@ -3005,7 +3055,7 @@ def _self_test():
     # A roster that misses most window players is treated as a data gap, not mass departures.
     aud=[]
     av4=availability_table(tg,qbt,sn,inj,roster((),reserve=('p2',)),audit=aud).iloc[0]
-    assert np.isclose(av4.OL_out,(1+1+.25)/6) and aud[-1]['membership_skipped_as_data_gap']==1
+    assert np.isclose(av4.OL_out,(1+1+.25+1)/6) and aud[-1]['membership_skipped_as_data_gap']==1  # p3: game-week reserve
     # Post-bye: no week-4 roster row, so the week-3 roster is the reference (status and membership).
     aud=[]
     av5=availability_table(tg,qbt,sn,inj,roster(full,week=3),audit=aud).iloc[0]
@@ -3128,12 +3178,12 @@ def _self_test():
     prac=pd.DataFrame([{'season':2020,'week':5,'team':'T','gsis_id':'p0','report_status':None}])
     assert availability_table(tg,qbt,sn,prac,rost).iloc[0].injury_report=='practice'
     av_none=availability_table(tg,qbt,sn,inj.iloc[:0],rost).iloc[0]
-    assert av_none.injury_report=='none' and np.isclose(av_none.OL_out,(1+1)/6)  # only prior-week RES and departure
+    assert av_none.injury_report=='none' and np.isclose(av_none.OL_out,(1+1+1)/6)  # prior-week RES, departure, game-week RES
     # v1.8 raw statuses are weighted at load time: a STATUS_WEIGHT change takes effect without a stale cache.
     old_sw=dict(STATUS_WEIGHT)
     try:
         STATUS_WEIGHT['Questionable']=.5
-        assert np.isclose(availability_table(tg,qbt,sn,inj,rost).iloc[0].OL_out,(1+1+.5+1)/6)
+        assert np.isclose(availability_table(tg,qbt,sn,inj,rost).iloc[0].OL_out,(1+1+.5+1+1)/6)
     finally:
         STATUS_WEIGHT.clear(); STATUS_WEIGHT.update(old_sw)
     # v1.8 roster codes: a reserve/waived description counts as out even under status ACT; DEV stays a member.
@@ -3474,7 +3524,7 @@ def _self_test():
                 assert ('Profiles are opponent-adjusted.' in h)==adj and ('No explicit opponent-strength adjustment.' in h)==(not adj)
             (Path(tmp)/'board.html').write_text(html,encoding='utf-8')
             Path('selftest_board.html').write_text(html,encoding='utf-8')
-        print('PASS: box-score definitions, same-game/future-stat exclusion, point margin (v1.10), depth-chart QB projection and questionable blend (v1.11), roster membership, departed players, bye weeks, '
+        print('PASS: box-score definitions, same-game/future-stat exclusion, point margin (v1.10), depth-chart QB projection and questionable blend (v1.11), game-week reserve list (v1.15), roster membership, departed players, bye weeks, '
               'QB-position projection, starter-based QB projection (benching, mid-game injury, week 1, new signing, data gap), '
               'injury-report gate, raw-status weights, roster status codes, current-season window, opponent-adjusted availability family, market blend, '
               'matched-band calibration and pick records, Drive migration, availability cache, '
