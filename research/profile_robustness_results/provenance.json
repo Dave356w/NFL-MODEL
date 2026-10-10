@@ -1,0 +1,9 @@
+{
+  "research/profile_robustness.py": "23618f4182e39367ca3c7e029240cfe98b31388909064dab4a4ad3ed09e64e12",
+  "research/PROFILE_ROBUSTNESS.md": "289fd14727cb41bf4cb5ed7ae763e054ca9ac2c265ea965c80b8c7a004305e7e",
+  "nfl_model.py": "4096d2db61d545cbc1240ff0f0f6efb84a8e3b34d0ed5d789b35a7588dad63b6",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/profile_robustness_results/passing_sufficient_statistics.csv.gz": "644c1bb2853a5e7d094faeb1cf3f3973f9cb334360ce9d8ce8bb37d9cad27cac",
+  "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826",
+  "raw_boxes_source_sha256": "1ead781bbc50a7650908123d1cadde2f579a37d7fe8d68537ed33a46ee587e72"
+}

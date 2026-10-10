@@ -1,0 +1,13 @@
+{
+  "revision": "boxscore-composite-v1.16",
+  "as_of_utc": "2026-10-10T16:18:00Z",
+  "snapshots": 13,
+  "graded_games": 0,
+  "pending_games": 13,
+  "unique_first_snapshots": true,
+  "all_pregame": true,
+  "all_final_reports": true,
+  "all_saved_moneylines": true,
+  "ledger_sha256": "40e98327259dc80c75bb7325d83e7f89b0857c48bca12906f022ed0bd0890a86",
+  "basis": "Native forward ledger; no rows created or altered; future results unavailable."
+}
