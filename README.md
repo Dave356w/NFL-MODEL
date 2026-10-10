@@ -90,3 +90,7 @@ own ledger on Drive; the Actions ledger in `data/` is the published one.
 
 The first deploy needs **Settings → Pages → Source: GitHub Actions** if the
 workflow's `configure-pages` step cannot enable it on its own.
+
+## Additional interaction context battle
+
+[Protocol](research/CONTEXT_BATTLE.md) and [executed results](research/context_results/REPORT.md) compare eight context families and fixed-penalty sensitivities against `fixed_market_product` and production. Run `python research/context_battle.py`; the separate research workflow also executes it. These are historical development results for selecting a forward challenger. No production deployment or ledger change is made.

@@ -1,0 +1,11 @@
+{
+  "research/context_battle.py": "0c9bb7204268aff769f12929ee752cd2f2d66a8f289dd09a53a0a39518937b6f",
+  "research/CONTEXT_BATTLE.md": "2e50ccf180ceaaac065f29a41721ab37c7a2305dc531a197a973fed9924e563d",
+  "research/production_qualification.py": "9ba2a2eadbc291cfd8e022946010fb3382956206361b90ca231a8aacc4ccf2ab",
+  "research/qualified_interactions.py": "4c84746dab633d0fe9d1d0fb922ef1683d70d535b9af249f012a54de12b09d94",
+  "nfl_model.py": "7a79523a1366667596a121cdc11a5b1e03ff79cf330798e1760b3c3ead10f3cb",
+  "research/qualified_output/schedule.csv": "ff626ee700813b4dd6be18429e14a7cc6073f22cd68f162f2c26c85ba0f2b183",
+  "research/qualified_output/boxes.csv": "09e8ce94f29bfc2b259ab83c740e5ea9f1e78b0df3579bd714c9b046da3d72c2",
+  "research/qualified_output/availability.pkl": "3b1c711f640efc3475d09452acb9919af510462053704464bb782b00ab621ea9",
+  ".nfl_cache/production_qualification/candidate_predictions.csv.gz": "e6219f92d95641347feefbd663b74266e565255bcbffd1fa700c970c895bb51d"
+}

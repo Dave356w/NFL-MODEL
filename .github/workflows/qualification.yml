@@ -7,6 +7,9 @@ on:
       - research/production_qualification.py
       - research/qualified_interactions.py
       - research/PRODUCTION_QUALIFICATION.md
+      - research/context_battle.py
+      - research/CONTEXT_BATTLE.md
+      - tests/test_context_battle.py
       - .github/workflows/qualification.yml
 
 permissions:
@@ -31,14 +34,17 @@ jobs:
           key: qualification-inputs-${{ github.run_id }}
           restore-keys: qualification-inputs-
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_qualified_interactions.py tests/test_production_qualification.py -q
+      - run: python -m pytest tests/test_qualified_interactions.py tests/test_production_qualification.py tests/test_context_battle.py -q
       - run: python research/production_qualification.py
+      - run: python research/context_battle.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: production-qualification
           path: |
             research/qualification_results/
+            research/context_results/
+            .nfl_cache/production_qualification/context_fit_audit.csv.gz
             .nfl_cache/production_qualification/fit_audit.csv.gz
             .nfl_cache/production_qualification_inputs/reference_audit.csv
           if-no-files-found: warn

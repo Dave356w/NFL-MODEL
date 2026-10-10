@@ -1,0 +1,19 @@
+{
+  "arm": "hinge_1",
+  "status": "exposed_historical_ROI_leader_for_forward_comparison",
+  "main_family": "rates_core_avail_cs_peaks_nosacks",
+  "main_half_life": 8.0,
+  "main_ridge": 0.1,
+  "pass_half_life": 16.0,
+  "market_logit_coefficient": 1.0,
+  "interaction_ridge": 0.1,
+  "extras": [
+    "product",
+    "h1_pp",
+    "h1_pn",
+    "h1_np",
+    "h1_nn"
+  ],
+  "selection_through_season": 2025,
+  "production_deployed": false
+}
