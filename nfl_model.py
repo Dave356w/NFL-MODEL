@@ -465,7 +465,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1881,7 +1881,7 @@ def apply_blend(b,market,composite):
 
 
 def market_blend_diagnostic(oof,outer,folds):
-    """Reporting only: does the composite carry information the spread lacks?"""
+    """Reporting only: does the composite carry information the market comparator lacks?"""
     o=outer[outer['home won'].isin([0.,1.])&outer.market_wp.notna()&outer.model_wp.notna()]
     y=o['home won'].to_numpy(float); m=o.market_wp.to_numpy(float); c=o.model_wp.to_numpy(float)
     rows=[]
@@ -2279,9 +2279,9 @@ def card_records_html(r,recs):
 def blend_verdict(blend):
     if blend.empty: return 'Market-blend check: not enough held-out games.'
     w=blend[blend.term=='composite log-odds weight'].iloc[0]
-    if w['CI low']>0: v='the composite adds information the spread lacks'
-    elif w['CI high']<0: v='the composite enters with a NEGATIVE weight (it mostly echoes the spread with noise)'
-    else: v='no reliable evidence the composite adds anything beyond the spread'
+    if w['CI low']>0: v='the composite adds information the market comparator lacks'
+    elif w['CI high']<0: v='the composite enters with a NEGATIVE weight (it mostly echoes the market comparator with noise)'
+    else: v='no reliable evidence the composite adds anything beyond the market comparator'
     out=f"Composite weight {w.estimate:+.3f} (95% {w['CI low']:+.3f} to {w['CI high']:+.3f}): {v}."
     g=blend[(blend.term=='LL gain vs market')&(blend.season=='pooled')]
     if len(g):
@@ -3020,7 +3020,7 @@ def main():
         print('Held-out seasons, one at a time:'); display(byyear.round(4))
     save(byyear,'outer_scorecard_by_season.csv')
     blend=market_blend_diagnostic(oof,outer,folds)
-    print('Market-blend check (does the composite carry information the spread lacks?):')
+    print('Market-blend check (does the composite carry information the market comparator lacks?):')
     if len(blend): display(blend.round(4))
     print('  '+blend_verdict(blend)); save(blend,'market_blend_diagnostic.csv')
     cal=calibration_bands(outer); save(cal,'calibration_bands.csv')
