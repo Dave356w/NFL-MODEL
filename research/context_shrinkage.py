@@ -30,7 +30,7 @@ def effective_support(raw, weights, mode):
     return np.divide(mass.sum(axis=0)**2, den, out=np.zeros(x.shape[1]), where=den > 0)
 
 
-def fit(train, year, week, mode='active', strength=0., product_only=False):
+def fit(train, year, week, mode='active', strength=0., product_only=False, market_offset=True):
     if not np.isfinite(strength) or strength < 0: raise ValueError('Invalid strength')
     if not m.before(train, year, week).all(): raise ValueError('Training includes current/future week')
     extras = CONTEXTS[:1] if product_only else CONTEXTS
@@ -49,13 +49,14 @@ def fit(train, year, week, mode='active', strength=0., product_only=False):
     multipliers = np.ones(len(extras))
     multipliers[1:] += strength/np.maximum(support[1:], 1.)
     penalty[-len(extras):] *= multipliers
-    base = logit(np.clip(t.q.to_numpy(), 1e-5, 1-1e-5)); y = t['home won'].to_numpy()
+    base = logit(np.clip(t.q.to_numpy(), 1e-5, 1-1e-5)) if market_offset else np.zeros(len(t))
+    y = t['home won'].to_numpy()
     def objective(beta):
         eta = base + X@beta
         return (np.sum(w*(np.logaddexp(0, eta)-y*eta))+.5*np.sum(penalty*beta**2),
                 X.T@(w*(expit(eta)-y))+penalty*beta)
     beta = m.checked_optimize(objective, len(names))
-    return {'names': names, 'scale': scale.tolist(), 'beta': beta.tolist(), 'market_offset': True,
+    return {'names': names, 'scale': scale.tolist(), 'beta': beta.tolist(), 'market_offset': bool(market_offset),
             'mode': mode, 'strength': strength, 'support': dict(zip(extras, support.tolist())),
             'penalty_multiplier': dict(zip(extras, multipliers.tolist())),
             'training_games': len(t), 'training_max_season': int(t.season.max()),
