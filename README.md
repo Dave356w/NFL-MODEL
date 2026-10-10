@@ -34,7 +34,31 @@ and `data/latest/`.
 | [`CLAUDE.md`](CLAUDE.md) | Working standards: evidence ladder, ledger protection, versioning, validation before a PR. |
 | [`data/ledger_report.txt`](data/ledger_report.txt) | Latest graded forward results (regenerated every build). |
 
-## How it runs
+## Production qualification research
+
+The goal is a reliable out-of-sample advantage over the market. The current
+model is an experimental baseline; deployment is not evidence of an edge.
+[The qualification runner](research/production_qualification.py) compares the
+full production grid with market-offset and context-dependent pass candidates,
+using earlier-season recipe selection and weekly prior-game coefficient fits.
+
+```bash
+python research/production_qualification.py
+```
+
+See the [fixed protocol](research/PRODUCTION_QUALIFICATION.md),
+[executed results](research/qualification_results/REPORT.md), and
+[nominated candidate](research/qualification_results/nominated_candidate.json).
+The [prospective qualification contract](research/FORWARD_QUALIFICATION.md)
+defines the evidence required beyond historical screening.
+The latest development run evaluated 337 configurations in six families;
+none passed the multiplicity-adjusted profitability and market-comparison gate.
+The command records input/source hashes, selections and per-game predictions.
+The separate **Research production qualification** workflow reruns it and
+uploads results; it neither deploys the site nor changes production recipes or
+the append-only forward ledger.
+
+## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full
 build when a game is within 30 hours and not yet in the ledger, or within 150

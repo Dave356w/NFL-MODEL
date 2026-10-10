@@ -1,0 +1,44 @@
+name: Research production qualification
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/production_qualification.py
+      - research/qualified_interactions.py
+      - research/PRODUCTION_QUALIFICATION.md
+      - .github/workflows/qualification.yml
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/cache@v4
+        with:
+          path: .nfl_cache
+          key: qualification-inputs-${{ github.run_id }}
+          restore-keys: qualification-inputs-
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_qualified_interactions.py tests/test_production_qualification.py -q
+      - run: python research/production_qualification.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: production-qualification
+          path: |
+            research/qualification_results/
+            .nfl_cache/production_qualification/fit_audit.csv.gz
+            .nfl_cache/production_qualification_inputs/reference_audit.csv
+          if-no-files-found: warn

@@ -1,0 +1,10 @@
+{
+  "fits_audited": 30330,
+  "all_fits_strictly_prior_week": true,
+  "normalization_reference_weeks": 123,
+  "all_references_strictly_prior_week": true,
+  "unique_evaluation_games": 816,
+  "proper_score_games": 815,
+  "primary_bets": 812,
+  "candidate_configurations": 337
+}

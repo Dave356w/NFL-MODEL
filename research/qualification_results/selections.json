@@ -1,0 +1,254 @@
+[
+  {
+    "evaluation_season": 2023,
+    "arm": "production",
+    "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+    "recipe": {
+      "arm": "production",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 16.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2023,
+    "arm": "market_additive",
+    "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_additive",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2023,
+    "arm": "market_product",
+    "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+    "recipe": {
+      "arm": "market_product",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 1.0
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2023,
+    "arm": "market_qualified",
+    "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+    "recipe": {
+      "arm": "market_qualified",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 1.0
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2023,
+    "arm": "market_extreme",
+    "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i10",
+    "recipe": {
+      "arm": "market_extreme",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 10.0
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2023,
+    "arm": "fixed_market_product",
+    "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+    "recipe": {
+      "arm": "fixed_market_product",
+      "family": "rates_core_avail_cs_peaks_nosacks",
+      "half_life": 8.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2022,
+    "validation_games": 543
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "production",
+    "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+    "recipe": {
+      "arm": "production",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 16.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "market_additive",
+    "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_additive",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "market_product",
+    "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_product",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "market_qualified",
+    "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+    "recipe": {
+      "arm": "market_qualified",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 1.0
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "market_extreme",
+    "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_extreme",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2024,
+    "arm": "fixed_market_product",
+    "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+    "recipe": {
+      "arm": "fixed_market_product",
+      "family": "rates_core_avail_cs_peaks_nosacks",
+      "half_life": 8.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2023,
+    "validation_games": 815
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "production",
+    "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+    "recipe": {
+      "arm": "production",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 16.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "market_additive",
+    "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_additive",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "market_product",
+    "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+    "recipe": {
+      "arm": "market_product",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "market_qualified",
+    "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.01",
+    "recipe": {
+      "arm": "market_qualified",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.01
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "market_extreme",
+    "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+    "recipe": {
+      "arm": "market_extreme",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 1.0
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  },
+  {
+    "evaluation_season": 2025,
+    "arm": "fixed_market_product",
+    "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+    "recipe": {
+      "arm": "fixed_market_product",
+      "family": "rates_core_avail_cs_peaks_nosacks",
+      "half_life": 8.0,
+      "ridge": 0.1,
+      "interaction_ridge": 0.1
+    },
+    "selection_through_season": 2024,
+    "validation_games": 1087
+  }
+]

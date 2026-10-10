@@ -9,3 +9,6 @@ runs/
 nfl_boxscore_output_*/
 selftest_board.html
 *.tmp
+# Reproducible research caches and full candidate grids; compact results are committed.
+research/qualified_output/
+research/qualification_cache/

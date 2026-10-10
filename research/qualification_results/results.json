@@ -1,0 +1,899 @@
+{
+  "basis": "exposed chronological historical development; no native forward evidence",
+  "production_qualified": false,
+  "backtest_passing_arms": [],
+  "nomination": {
+    "arm": "market_product",
+    "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.01",
+    "recipe": {
+      "arm": "market_product",
+      "family": "rates_core_adj_avail_cs_peaks_nosacks",
+      "half_life": 4.0,
+      "ridge": 10.0,
+      "interaction_ridge": 0.01
+    },
+    "selection_through_season": 2025,
+    "status": "unqualified_forward_candidate",
+    "market_offset": true,
+    "market_quote_contract": "first qualifying pregame snapshot; input and grading use same moneylines",
+    "pass_profile_half_life": 16.0,
+    "normalization": "prior-week season center; trailing-four-season SD; orientations pooled",
+    "coefficient_refit": "weekly, earlier weeks only, two-season fit decay",
+    "extras": [
+      "product"
+    ]
+  },
+  "results": [
+    {
+      "arm": "production",
+      "bets": 812,
+      "wins": 547,
+      "losses": 264,
+      "pushes": 1,
+      "units": 16.304392666770042,
+      "roi": 0.02007930131375621,
+      "roi_se": 0.026535070313832967,
+      "win_pct": 0.6744759556103576,
+      "mean_q": 0.6394757211656147,
+      "excess_pp": 3.5129202747987476,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.05252033078316747,
+        0.09530230827762053
+      ],
+      "roi_difference_vs_favorite": 0.019857479966745657,
+      "favorite_difference_interval": [
+        -0.04023946230337177,
+        0.0812946127865978
+      ],
+      "excess_over_null": 0.06107426472973245,
+      "null_excess_interval": [
+        -0.01150035596409201,
+        0.13631777049746127
+      ],
+      "log_loss": 0.6316296173771409,
+      "brier": 0.22019045764991169,
+      "log_loss_gain_vs_market": -0.023557585351677478,
+      "log_loss_gain_interval_95": [
+        -0.03490934599465833,
+        -0.01224104549551531
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "market_additive",
+      "bets": 812,
+      "wins": 555,
+      "losses": 256,
+      "pushes": 1,
+      "units": 0.1801189337725777,
+      "roi": 0.00022182134701056368,
+      "roi_se": 0.024662637555025065,
+      "win_pct": 0.6843403205918619,
+      "mean_q": 0.6594384206200097,
+      "excess_pp": 2.5006253355917663,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.06878649575055046,
+        0.0697252500148201
+      ],
+      "roi_difference_vs_favorite": 0.0,
+      "favorite_difference_interval": [
+        0.0,
+        0.0
+      ],
+      "excess_over_null": 0.0412167847629868,
+      "null_excess_interval": [
+        -0.02779452768369637,
+        0.11072584347305582
+      ],
+      "log_loss": 0.6080050541879152,
+      "brier": 0.21029033120695068,
+      "log_loss_gain_vs_market": 6.697783754819584e-05,
+      "log_loss_gain_interval_95": [
+        -0.00029790298606379524,
+        0.00042876503409153234
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "market_product",
+      "bets": 812,
+      "wins": 554,
+      "losses": 257,
+      "pushes": 1,
+      "units": -1.1084523137611857,
+      "roi": -0.00136508905635614,
+      "roi_se": 0.02470194995085735,
+      "win_pct": 0.6831072749691739,
+      "mean_q": 0.6590176018316577,
+      "excess_pp": 2.41945454103466,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.07123825792023299,
+        0.06626863530860944
+      ],
+      "roi_difference_vs_favorite": -0.0015869104033667007,
+      "favorite_difference_interval": [
+        -0.01768546873350971,
+        0.014965105228969282
+      ],
+      "excess_over_null": 0.0396298743596201,
+      "null_excess_interval": [
+        -0.03026144199763413,
+        0.10723521687953247
+      ],
+      "log_loss": 0.6061617734455469,
+      "brier": 0.2093900718669541,
+      "log_loss_gain_vs_market": 0.0019102585799166236,
+      "log_loss_gain_interval_95": [
+        -0.0002849220973369698,
+        0.00400427920013501
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "market_qualified",
+      "bets": 812,
+      "wins": 556,
+      "losses": 255,
+      "pushes": 1,
+      "units": 3.7324027704042404,
+      "roi": 0.004596555135965814,
+      "roi_se": 0.02476677041057614,
+      "win_pct": 0.6855733662145499,
+      "mean_q": 0.6585144122458351,
+      "excess_pp": 2.7164446697261257,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.06177461320157021,
+        0.07015183515837187
+      ],
+      "roi_difference_vs_favorite": 0.0043747337889552505,
+      "favorite_difference_interval": [
+        -0.01995880838382286,
+        0.02665490602451804
+      ],
+      "excess_over_null": 0.04559151855194205,
+      "null_excess_interval": [
+        -0.020843316319130997,
+        0.11114871446495413
+      ],
+      "log_loss": 0.6078869885445398,
+      "brier": 0.2099380267697495,
+      "log_loss_gain_vs_market": 0.00018504348092363324,
+      "log_loss_gain_interval_95": [
+        -0.004665773624547165,
+        0.004715901129876976
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "market_extreme",
+      "bets": 812,
+      "wins": 558,
+      "losses": 253,
+      "pushes": 1,
+      "units": 6.882870256523898,
+      "roi": 0.008476441202615637,
+      "roi_se": 0.024702240425066968,
+      "win_pct": 0.688039457459926,
+      "mean_q": 0.658820049472616,
+      "excess_pp": 2.932452385121198,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.06294482721723914,
+        0.07881751269407282
+      ],
+      "roi_difference_vs_favorite": 0.008254619855605078,
+      "favorite_difference_interval": [
+        -0.004059601201090001,
+        0.0235362436429886
+      ],
+      "excess_over_null": 0.04947140461859189,
+      "null_excess_interval": [
+        -0.021948463884931654,
+        0.1197950059724864
+      ],
+      "log_loss": 0.6077225543202499,
+      "brier": 0.20998534979117217,
+      "log_loss_gain_vs_market": 0.00034947770521353395,
+      "log_loss_gain_interval_95": [
+        -0.0027373309218497277,
+        0.002934355972653012
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "fixed_market_product",
+      "bets": 812,
+      "wins": 562,
+      "losses": 249,
+      "pushes": 1,
+      "units": 19.317085072203827,
+      "roi": 0.023789513635719,
+      "roi_se": 0.02494971499451167,
+      "win_pct": 0.6929716399506781,
+      "mean_q": 0.655858489839415,
+      "excess_pp": 3.7221917713307073,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.04336565847743636,
+        0.08971357486469878
+      ],
+      "roi_difference_vs_favorite": 0.023567692288708433,
+      "favorite_difference_interval": [
+        -0.018258381782336502,
+        0.06793990565245288
+      ],
+      "excess_over_null": 0.06478447705169525,
+      "null_excess_interval": [
+        -0.002366527313219697,
+        0.13069381772096753
+      ],
+      "log_loss": 0.6075836180030707,
+      "brier": 0.2098590880789843,
+      "log_loss_gain_vs_market": 0.000488414022392696,
+      "log_loss_gain_interval_95": [
+        -0.006289762296557756,
+        0.007374589595177959
+      ],
+      "backtest_gate": "unresolved"
+    },
+    {
+      "arm": "q",
+      "bets": 812,
+      "wins": 555,
+      "losses": 256,
+      "pushes": 1,
+      "units": 0.1801189337725777,
+      "roi": 0.00022182134701056368,
+      "roi_se": 0.024662637555025065,
+      "win_pct": 0.6843403205918619,
+      "mean_q": 0.6594384206200097,
+      "excess_pp": 2.5006253355917663,
+      "null_roi": -0.04099496341597624,
+      "roi_interval": [
+        -0.06878649575055046,
+        0.0697252500148201
+      ],
+      "roi_difference_vs_favorite": 0.0,
+      "favorite_difference_interval": [
+        0.0,
+        0.0
+      ],
+      "excess_over_null": 0.0412167847629868,
+      "null_excess_interval": [
+        -0.02779452768369637,
+        0.11072584347305582
+      ],
+      "log_loss": 0.6080720320254634,
+      "brier": 0.21033448921692602,
+      "log_loss_gain_vs_market": 0.0,
+      "log_loss_gain_interval_95": [
+        0.0,
+        0.0
+      ],
+      "backtest_gate": "control"
+    }
+  ],
+  "by_season": [
+    {
+      "arm": "production",
+      "season": 2023,
+      "bets": 270,
+      "wins": 176,
+      "losses": 94,
+      "pushes": 0,
+      "units": -0.24264603367127968,
+      "roi": -0.0008986890135973322,
+      "roi_se": 0.047201156997778215,
+      "win_pct": 0.6518518518518519,
+      "mean_q": 0.6312501270537092,
+      "excess_pp": 2.0601724798142707,
+      "null_roi": -0.04100696306312493,
+      "log_loss": 0.6565054510216413
+    },
+    {
+      "arm": "production",
+      "season": 2024,
+      "bets": 271,
+      "wins": 199,
+      "losses": 72,
+      "pushes": 0,
+      "units": 34.05348123106044,
+      "roi": 0.1256586023286363,
+      "roi_se": 0.044544651242891004,
+      "win_pct": 0.7343173431734318,
+      "mean_q": 0.6361317270154755,
+      "excess_pp": 9.818561615795629,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.6057715718379886
+    },
+    {
+      "arm": "production",
+      "season": 2025,
+      "bets": 271,
+      "wins": 172,
+      "losses": 98,
+      "pushes": 1,
+      "units": -17.50644253061911,
+      "roi": -0.06459941893217384,
+      "roi_se": 0.04551713647979832,
+      "win_pct": 0.6370370370370371,
+      "mean_q": 0.6510149566818594,
+      "excess_pp": -1.3633274984025223,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6326154536699281
+    },
+    {
+      "arm": "market_additive",
+      "season": 2023,
+      "bets": 270,
+      "wins": 184,
+      "losses": 86,
+      "pushes": 0,
+      "units": 4.118752961751932,
+      "roi": 0.01525464059908123,
+      "roi_se": 0.043747997617985465,
+      "win_pct": 0.6814814814814815,
+      "mean_q": 0.6520842827045307,
+      "excess_pp": 2.9397198776950795,
+      "null_roi": -0.04100696306312492,
+      "log_loss": 0.6275730604910921
+    },
+    {
+      "arm": "market_additive",
+      "season": 2024,
+      "bets": 271,
+      "wins": 194,
+      "losses": 77,
+      "pushes": 0,
+      "units": 14.108509306160053,
+      "roi": 0.052060919948930084,
+      "roi_se": 0.04159743966850347,
+      "win_pct": 0.7158671586715867,
+      "mean_q": 0.6538133887740332,
+      "excess_pp": 6.205376989755351,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5871613025065844
+    },
+    {
+      "arm": "market_additive",
+      "season": 2025,
+      "bets": 271,
+      "wins": 177,
+      "losses": 93,
+      "pushes": 1,
+      "units": -18.047143334139413,
+      "roi": -0.06659462484922293,
+      "roi_se": 0.04262389482560202,
+      "win_pct": 0.6555555555555556,
+      "mean_q": 0.6723904533411865,
+      "excess_pp": -1.656942163097952,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6092855071135902
+    },
+    {
+      "arm": "market_product",
+      "season": 2023,
+      "bets": 270,
+      "wins": 184,
+      "losses": 86,
+      "pushes": 0,
+      "units": 4.118752961751932,
+      "roi": 0.01525464059908123,
+      "roi_se": 0.043747997617985465,
+      "win_pct": 0.6814814814814815,
+      "mean_q": 0.6520842827045307,
+      "excess_pp": 2.9397198776950795,
+      "null_roi": -0.04100696306312492,
+      "log_loss": 0.6273972029696452
+    },
+    {
+      "arm": "market_product",
+      "season": 2024,
+      "bets": 271,
+      "wins": 193,
+      "losses": 78,
+      "pushes": 0,
+      "units": 12.471987358162693,
+      "roi": 0.046022093572556065,
+      "roi_se": 0.04172930185858083,
+      "win_pct": 0.7121771217712177,
+      "mean_q": 0.6532254599163546,
+      "excess_pp": 5.895166185486311,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5861674362484964
+    },
+    {
+      "arm": "market_product",
+      "season": 2025,
+      "bets": 271,
+      "wins": 177,
+      "losses": 93,
+      "pushes": 1,
+      "units": -17.699192633675807,
+      "roi": -0.06531067392500298,
+      "roi_se": 0.042733074989299805,
+      "win_pct": 0.6555555555555556,
+      "mean_q": 0.6717174786706667,
+      "excess_pp": -1.589395446167996,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6049161014420151
+    },
+    {
+      "arm": "market_qualified",
+      "season": 2023,
+      "bets": 270,
+      "wins": 185,
+      "losses": 85,
+      "pushes": 0,
+      "units": 6.0446788876778585,
+      "roi": 0.022387699583992067,
+      "roi_se": 0.043714127204450844,
+      "win_pct": 0.6851851851851852,
+      "mean_q": 0.6520522104521606,
+      "excess_pp": 3.313297473302468,
+      "null_roi": -0.04100696306312492,
+      "log_loss": 0.6276003562748803
+    },
+    {
+      "arm": "market_qualified",
+      "season": 2024,
+      "bets": 271,
+      "wins": 195,
+      "losses": 76,
+      "pushes": 0,
+      "units": 16.060890258541004,
+      "roi": 0.05926527770679337,
+      "roi_se": 0.04154643043330363,
+      "win_pct": 0.7195571955719557,
+      "mean_q": 0.6537334313114033,
+      "excess_pp": 6.582376426055248,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5848186974594691
+    },
+    {
+      "arm": "market_qualified",
+      "season": 2025,
+      "bets": 271,
+      "wins": 176,
+      "losses": 94,
+      "pushes": 1,
+      "units": -18.373166375814627,
+      "roi": -0.06779766190337501,
+      "roi_se": 0.04319695620142771,
+      "win_pct": 0.6518518518518519,
+      "mean_q": 0.6697337492108654,
+      "excess_pp": -1.7606581559435064,
+      "null_roi": -0.04103009978913353,
+      "log_loss": 0.6112542916902467
+    },
+    {
+      "arm": "market_extreme",
+      "season": 2023,
+      "bets": 270,
+      "wins": 184,
+      "losses": 86,
+      "pushes": 0,
+      "units": 4.118752961751932,
+      "roi": 0.01525464059908123,
+      "roi_se": 0.043747997617985465,
+      "win_pct": 0.6814814814814815,
+      "mean_q": 0.6520842827045307,
+      "excess_pp": 2.9397198776950795,
+      "null_roi": -0.04100696306312492,
+      "log_loss": 0.6272793675379311
+    },
+    {
+      "arm": "market_extreme",
+      "season": 2024,
+      "bets": 271,
+      "wins": 195,
+      "losses": 76,
+      "pushes": 0,
+      "units": 16.86533470298545,
+      "roi": 0.06223370739109022,
+      "roi_se": 0.04178313140275522,
+      "win_pct": 0.7195571955719557,
+      "mean_q": 0.6521850319732202,
+      "excess_pp": 6.737216359873555,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5883358056130801
+    },
+    {
+      "arm": "market_extreme",
+      "season": 2025,
+      "bets": 271,
+      "wins": 179,
+      "losses": 91,
+      "pushes": 1,
+      "units": -14.101217408213483,
+      "roi": -0.052034012576433517,
+      "roi_se": 0.042682505254474166,
+      "win_pct": 0.662962962962963,
+      "mean_q": 0.6721659785121704,
+      "excess_pp": -0.893670800630042,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6075518622654191
+    },
+    {
+      "arm": "fixed_market_product",
+      "season": 2023,
+      "bets": 270,
+      "wins": 183,
+      "losses": 87,
+      "pushes": 0,
+      "units": 3.8627184403429844,
+      "roi": 0.014306364593862905,
+      "roi_se": 0.044258896652517296,
+      "win_pct": 0.6777777777777778,
+      "mean_q": 0.6488867997917313,
+      "excess_pp": 2.889097798604656,
+      "null_roi": -0.04100696306312493,
+      "log_loss": 0.6364429561712366
+    },
+    {
+      "arm": "fixed_market_product",
+      "season": 2024,
+      "bets": 271,
+      "wins": 196,
+      "losses": 75,
+      "pushes": 0,
+      "units": 19.20521033303395,
+      "roi": 0.07086793480824335,
+      "roi_se": 0.04182039442861579,
+      "win_pct": 0.7232472324723247,
+      "mean_q": 0.6513251951521397,
+      "excess_pp": 7.192203732018498,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5816449124904386
+    },
+    {
+      "arm": "fixed_market_product",
+      "season": 2025,
+      "bets": 271,
+      "wins": 183,
+      "losses": 87,
+      "pushes": 1,
+      "units": -3.7508437011731086,
+      "roi": -0.013840751664845418,
+      "roi_se": 0.04353489888290085,
+      "win_pct": 0.6777777777777778,
+      "mean_q": 0.6673377487808403,
+      "excess_pp": 1.0724218872182778,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6046522081052655
+    },
+    {
+      "arm": "q",
+      "season": 2023,
+      "bets": 270,
+      "wins": 184,
+      "losses": 86,
+      "pushes": 0,
+      "units": 4.118752961751932,
+      "roi": 0.01525464059908123,
+      "roi_se": 0.043747997617985465,
+      "win_pct": 0.6814814814814815,
+      "mean_q": 0.6520842827045307,
+      "excess_pp": 2.9397198776950795,
+      "null_roi": -0.04100696306312492,
+      "log_loss": 0.627348797217123
+    },
+    {
+      "arm": "q",
+      "season": 2024,
+      "bets": 271,
+      "wins": 194,
+      "losses": 77,
+      "pushes": 0,
+      "units": 14.108509306160053,
+      "roi": 0.052060919948930084,
+      "roi_se": 0.04159743966850347,
+      "win_pct": 0.7158671586715867,
+      "mean_q": 0.6538133887740332,
+      "excess_pp": 6.205376989755351,
+      "null_roi": -0.040947871674811044,
+      "log_loss": 0.5874888995056521
+    },
+    {
+      "arm": "q",
+      "season": 2025,
+      "bets": 271,
+      "wins": 177,
+      "losses": 93,
+      "pushes": 1,
+      "units": -18.047143334139413,
+      "roi": -0.06659462484922293,
+      "roi_se": 0.04262389482560202,
+      "win_pct": 0.6555555555555556,
+      "mean_q": 0.6723904533411865,
+      "excess_pp": -1.656942163097952,
+      "null_roi": -0.04103009978913352,
+      "log_loss": 0.6093832198972614
+    }
+  ],
+  "sample": {
+    "proper_score_games": 815,
+    "ties_predicted": 1,
+    "primary_bet_games": 812,
+    "excluded_from_primary": [
+      {
+        "game_id": "2023_02_IND_HOU",
+        "q": 0.5
+      },
+      {
+        "game_id": "2023_03_LAC_MIN",
+        "q": 0.5
+      },
+      {
+        "game_id": "2024_11_CIN_LAC",
+        "q": 0.5
+      },
+      {
+        "game_id": "2025_10_PHI_GB",
+        "q": 0.5
+      }
+    ]
+  },
+  "primary_confidence_level": 0.9916666666666667,
+  "bootstrap_draws": 8000,
+  "seed": 20261010,
+  "candidate_configurations": 337,
+  "selections": [
+    {
+      "evaluation_season": 2023,
+      "arm": "production",
+      "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+      "recipe": {
+        "arm": "production",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 16.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "market_additive",
+      "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_additive",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "market_product",
+      "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+      "recipe": {
+        "arm": "market_product",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 1.0
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "market_qualified",
+      "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+      "recipe": {
+        "arm": "market_qualified",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 1.0
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "market_extreme",
+      "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i10",
+      "recipe": {
+        "arm": "market_extreme",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 10.0
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "fixed_market_product",
+      "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+      "recipe": {
+        "arm": "fixed_market_product",
+        "family": "rates_core_avail_cs_peaks_nosacks",
+        "half_life": 8.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2022,
+      "validation_games": 543
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "production",
+      "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+      "recipe": {
+        "arm": "production",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 16.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "market_additive",
+      "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_additive",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "market_product",
+      "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_product",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "market_qualified",
+      "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+      "recipe": {
+        "arm": "market_qualified",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 1.0
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "market_extreme",
+      "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_extreme",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "fixed_market_product",
+      "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+      "recipe": {
+        "arm": "fixed_market_product",
+        "family": "rates_core_avail_cs_peaks_nosacks",
+        "half_life": 8.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2023,
+      "validation_games": 815
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "production",
+      "key": "production__rates_core_adj_avail_cs_peaks_nosacks_h16_r0.1__i0.1",
+      "recipe": {
+        "arm": "production",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 16.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "market_additive",
+      "key": "market_additive__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_additive",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "market_product",
+      "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.1",
+      "recipe": {
+        "arm": "market_product",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "market_qualified",
+      "key": "market_qualified__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.01",
+      "recipe": {
+        "arm": "market_qualified",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 0.01
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "market_extreme",
+      "key": "market_extreme__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i1",
+      "recipe": {
+        "arm": "market_extreme",
+        "family": "rates_core_adj_avail_cs_peaks_nosacks",
+        "half_life": 4.0,
+        "ridge": 10.0,
+        "interaction_ridge": 1.0
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "fixed_market_product",
+      "key": "fixed_market_product__rates_core_avail_cs_peaks_nosacks_h8_r0.1__i0.1",
+      "recipe": {
+        "arm": "fixed_market_product",
+        "family": "rates_core_avail_cs_peaks_nosacks",
+        "half_life": 8.0,
+        "ridge": 0.1,
+        "interaction_ridge": 0.1
+      },
+      "selection_through_season": 2024,
+      "validation_games": 1087
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "arm": "market_product",
+  "key": "market_product__rates_core_adj_avail_cs_peaks_nosacks_h4_r10__i0.01",
+  "recipe": {
+    "arm": "market_product",
+    "family": "rates_core_adj_avail_cs_peaks_nosacks",
+    "half_life": 4.0,
+    "ridge": 10.0,
+    "interaction_ridge": 0.01
+  },
+  "selection_through_season": 2025,
+  "status": "unqualified_forward_candidate",
+  "market_offset": true,
+  "market_quote_contract": "first qualifying pregame snapshot; input and grading use same moneylines",
+  "pass_profile_half_life": 16.0,
+  "normalization": "prior-week season center; trailing-four-season SD; orientations pooled",
+  "coefficient_refit": "weekly, earlier weeks only, two-season fit decay",
+  "extras": [
+    "product"
+  ]
+}
