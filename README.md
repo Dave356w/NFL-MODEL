@@ -11,12 +11,15 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model: `boxscore-composite-v1.15`. A ridge-penalized logistic composite
-of decayed, opponent-adjusted (or raw) offense/defense rate profiles plus a
-player-availability layer: injury-report status, roster membership (plus, from v1.15, the game week's own reserve list) and a
-projected-starter QB term (depth chart from 2025), dated personnel events, plus each team's decayed largest lead and largest deficit from prior games. These two score peaks replace final MOV; time leading is excluded. v1.14 removes the separate offensive and defensive sack-rate regressors while retaining net passing efficiency, which includes sacks. This owner-selected simplification follows exploratory ablation; improvement remains unresolved. Hyperparameters are frozen per season from earlier
-seasons' walk-forward log loss; coefficients refit before every week. The
-market spread is a benchmark only and never enters the model.
+Current model: `boxscore-composite-v1.16`, the owner-fixed **Product + 1 SD**
+market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
+defense, availability and prior lead/deficit profiles provide additive corrections;
+raw h16 pass profiles provide the shared product and four signed 1 SD contexts.
+Both penalties are fixed at 0.1; coefficients refit before every week using earlier
+weeks only. Missing market quotes produce no forecast. Original pregame snapshots
+remain unchanged; retrospective replay at their original quotes is separately labelled.
+Adoption follows exposed historical development, with reliable profit superiority
+still unresolved.
 
 | Page | For |
 |---|---|
@@ -36,10 +39,13 @@ and `data/latest/`.
 
 ## Production qualification research
 
+Production now uses the owner-adopted fixed **market-offset Product + 1 SD** recipe (raw h8 main, raw h16 pass contexts, both penalties 0.1). Adoption follows exposed historical development; reliable profit superiority remains unresolved. Original snapshots are preserved, with a separately labelled retrospective replay at their own quotes. See [MODEL.md](MODEL.md).
+
+
 The goal is a reliable out-of-sample advantage over the market. The current
 model is an experimental baseline; deployment is not evidence of an edge.
 [The qualification runner](research/production_qualification.py) compares the
-full production grid with market-offset and context-dependent pass candidates,
+legacy v1.15 additive grid with market-offset and context-dependent pass candidates,
 using earlier-season recipe selection and weekly prior-game coefficient fits.
 
 ```bash

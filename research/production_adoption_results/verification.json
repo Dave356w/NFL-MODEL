@@ -1,0 +1,30 @@
+{
+  "revision": "boxscore-composite-v1.16",
+  "recipe": {
+    "family": "rates_core_avail_cs_peaks_nosacks",
+    "half_life": 8.0,
+    "ridge": 0.1,
+    "architecture": "market_product_1sd",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0
+  },
+  "current_games": 15,
+  "current_pending_games": 14,
+  "replayed_snapshots": 3,
+  "unique_ledger_games": 1,
+  "all_original_snapshots_unchanged": true,
+  "current_probabilities_and_contributions_verified": true,
+  "full_data_historical_games_compared": 815,
+  "max_historical_probability_difference": 9.150702418025958e-11,
+  "all_historical_sides_identical": true,
+  "all_reference_weeks_strictly_prior": true,
+  "fit_training_through_season": 2026,
+  "fit_training_through_week": 4,
+  "full_model_and_site_render_completed": true,
+  "tests_passed": 193,
+  "source_sha256": {
+    "nfl_model.py": "1c300ce26850e862239bf11ae450ff473dbe72a311feb7704f20e6e28f858c63",
+    "build_site.py": "c229a5eb4774ab715ca6ed38ce2da5d19e39c53ed6db895803d8a8af85575df4",
+    "data/forward_predictions.jsonl": "cddd82d06fc146b71e0480e18969074f0f38bac0a24e9564188c8896f0942547"
+  }
+}

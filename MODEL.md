@@ -1,10 +1,10 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.15), newest first; this page describes what the code
+version history (v1 to v1.16), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.15`
+## The current model: `boxscore-composite-v1.16`
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -142,18 +142,42 @@ gain nor variance reduction was established. This is development evidence,
 not forward confirmation or a formal equivalence result. The new output folder
 is `nfl_boxscore_output_v1_14`; v1.13 and earlier recipes/snapshots remain intact.
 
-**Composite.** A logistic regression on home-minus-away differences plus a
-site term, ridge-penalized, refit before every week on all earlier games
-(older games discounted with a two-season half-life).
+**Composite (v1.16).** The owner-fixed Product + 1 SD recipe uses raw main
+profiles at h8 and raw pass profiles at h16. Start from the two-moneyline
+no-vig home probability q. The forecast is
+`sigmoid(logit(q) + main_features @ beta + pass_contexts @ gamma)`.
+The market logit coefficient is fixed at 1. Main and context penalties are
+both 0.1, with the site penalty multiplied by 0.1. Coefficients refit each week
+using earlier weeks only and two-season fit decay. Train only on priced,
+ready binary outcomes with valid pass contexts. Missing moneylines or contexts
+produce no forecast and cannot enter the native ledger.
 
-**Selection and freezing.** 24 candidates: 2 feature families (unadjusted and
-opponent-adjusted rates, both with availability and lead/deficit peaks) × 3 team
-half-lives (4, 8, 16 games) × 4 ridge strengths. The minimum walk-forward log
-loss over earlier seasons picks the recipe, which is frozen for the season in
-`data/frozen_recipe_<season>_<REVISION>.json` (v1.9's record keeps its old name,
-`data/frozen_recipe_2026.json`). A config change that would alter the
-signature refuses to run against an existing frozen record; that is why
-feature changes ship as a new `REVISION`.
+Pass offense and opposing defense allowed are centered on earlier current-season
+weeks (previous season at week 1), with SD from prior weeks of the trailing four
+seasons; both home and away orientations are pooled for each role. The shared
+interaction is `z(home offense)*z(away defense) - z(away offense)*z(home defense)`.
+Four additional signed products use `max(sign*z-1,0)` on both offense and defense,
+differenced home minus away. All historical rows retain their original pregame
+normalization; later reference values never rewrite them.
+
+**Freezing.** The formula, h8/h16 and both 0.1 penalties are owner-fixed after
+exposed historical development. They are not annually reselected. The old
+24-candidate additive grid remains available for legacy research and tests;
+the production run fits one recipe. A new revision and frozen recipe file keep
+all earlier experiments intact. The market contribution appears in the score
+explanation; raw input values and the exact market q are saved in new snapshots.
+
+**Adoption basis.** The fixed 1 SD extension returned +30.06u / +3.71% ROI
+on the context battle's 811 common 2023–2025 bets, vs fixed product +2.51% and
+old production +1.90%. Paired ROI uncertainty crosses zero; all still lost
+money in 2025. These are development results, not demonstrated reliable profit.
+See `research/context_results/DECISION.md`.
+
+**Retrospective snapshot grading.** `regraded_ledger.csv` replays every ledger
+snapshot at its original moneylines with reconstructed pregame features and
+strictly prior-week fitted coefficients. It retains original probabilities,
+revision and timestamp beside the new forecast. Repeated snapshots of one game
+are not independent games. The native JSONL is never replaced or backfilled.
 
 ## The goal: flat 1u ROI at the moneyline
 
@@ -177,12 +201,10 @@ close. Log loss still fits the coefficients and selects the recipe (owner's
 decision 2026-10-06: ROI is reported, not optimized). It is shown as a
 secondary score.
 
-**Is the recipe chosen by ROI? No.** Selection is the lowest walk-forward log
-loss over earlier seasons. `data/latest/candidate_roi.csv` lists all 24 candidates'
-flat ROI on the same games beside their log loss, for comparison only. Under real data
-(2021–25) the top log-loss group ranged −0.5% to +0.7% ROI, all with SE ≈
-±2.2 pts, so ROI cannot separate them. Switching selection to ROI would need a
-new `REVISION`.
+**Is the recipe chosen by ROI?** The owner adopted v1.16 after comparing
+historical ROI and forecast scores. Its hyperparameters are fixed rather than
+optimized annually; weekly coefficient fitting remains penalized log loss.
+Historical ranking does not substitute for native forward evidence.
 
 ### Where the model's bets differ from the favorite's (reporting only, v1.14.2)
 
@@ -268,7 +290,7 @@ allowed minus the reverse (net pass yards per pass play, half-life 16 profiles, 
 season so far) in `data/h4_terms.jsonl`. `data/ledger_report.txt` reports its partial
 correlation with the final margin beyond the market spread, with the pre-registered verdict
 (`research/PREREGISTRATION.md`). Held out it was +0.09 in 2023–25 and −0.02 in 2019–22
-(research Test 24), so it is a forward hypothesis, not a model input.
+(research Test 24), so it remains a separate forward hypothesis. Its recorded term and normalization are distinct from the v1.16 production pass contexts.
 
 ### Realized margin on the calibration page (reporting only, v1.12.4)
 
