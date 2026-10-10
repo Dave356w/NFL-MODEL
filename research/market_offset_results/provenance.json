@@ -1,0 +1,8 @@
+{
+  "research/market_offset_ablation.py": "71fd6b129477d14abaadb22310dc59973110d271285dff2c45e22f487c53e7b1",
+  "research/MARKET_OFFSET_ABLATION.md": "508d6131776703d2cf133892dc89f9b910cbc6aba493bd7069bc4d99b33604f3",
+  "research/context_shrinkage.py": "5e28bc59841e0b39ca14d5a7cf7edb0ebca775de2ce30f1669949cac94392479",
+  "nfl_model.py": "4096d2db61d545cbc1240ff0f0f6efb84a8e3b34d0ed5d789b35a7588dad63b6",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826"
+}

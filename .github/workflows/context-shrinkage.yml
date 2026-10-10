@@ -6,10 +6,13 @@ on:
     paths:
       - research/context_shrinkage.py
       - research/CONTEXT_SHRINKAGE.md
+      - research/market_offset_ablation.py
+      - research/MARKET_OFFSET_ABLATION.md
       - research/shrinkage_results/frozen_training_features.csv.gz
       - research/shrinkage_results/normalization_references.csv
       - research/shrinkage_results/archived_current_inputs.jsonl
       - tests/test_context_shrinkage.py
+      - tests/test_market_offset_ablation.py
       - .github/workflows/context-shrinkage.yml
 
 permissions:
@@ -29,11 +32,14 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: pip install -r requirements.txt pytest
-      - run: python -m pytest tests/test_context_shrinkage.py -q
+      - run: python -m pytest tests/test_context_shrinkage.py tests/test_market_offset_ablation.py -q
       - run: python research/context_shrinkage.py
+      - run: python research/market_offset_ablation.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: context-support-shrinkage
-          path: research/shrinkage_results/
+          path: |
+            research/shrinkage_results/
+            research/market_offset_results/
           if-no-files-found: error
