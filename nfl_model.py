@@ -1898,7 +1898,7 @@ def fit_composite(train,recipe,year,week,baseline=False):
     mu=np.sum(weights[:,None]*X,axis=0)
     scale=np.sqrt(np.sum(weights[:,None]*(X-mu)**2,axis=0))
     scale=np.where(scale>1e-8,scale,1.); scale[0]=1.
-    Z=X/scale  # scale without centering: neutral-site team symmetry stays exact
+    Z=X/scale  # no centering: zero matchup inputs retain zero contributions
     y=t['home won'].to_numpy(float)
     lam=float(recipe['ridge']) if not baseline else .01
     penalty=np.full(len(names),lam); penalty[0]*=.1
@@ -3014,6 +3014,10 @@ def regrade_product_ledger(features,schedules,outdir):
         te['q']=market_ml_wp(te)
         if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
             te['margin_line']=record.get('spread_line',te.margin_line.iloc[0])
+        target_quotes=record.get('market_target_inputs',{})
+        captured_targets=all(np.isfinite(target_quotes.get(name,np.nan)) for name in ('total_line','market_cover_q','market_over_q'))
+        if captured_targets:
+            for name in ('total_line','market_cover_q','market_over_q'):te[name]=target_quotes[name]
         if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':te=replay_market_targets(te,features,year,week)
         probability=float(apply_fit(te,fits[key])[0])
         result=float(results.loc[game,'result'])
@@ -3023,7 +3027,7 @@ def regrade_product_ledger(features,schedules,outdir):
             'model_wp':probability,'market_wp':float(te.q.iloc[0]),
             'home_moneyline':record.get('home_moneyline'),'away_moneyline':record.get('away_moneyline'),
             'result':result,'home won':won(result),'revision':REVISION,
-            'basis':'retrospective reconstructed features at original moneyline/spread quotes; schedule total/cover/over capture times unknown; not forward evidence'})
+            'basis':('retrospective reconstructed features at original captured market quotes; not forward evidence' if captured_targets else 'retrospective reconstructed features at original moneyline/spread quotes; schedule total/cover/over capture times unknown; not forward evidence')})
     columns=['original_experiment','original_revision','original_generated_utc','game_id','season','week','home','away','original_model_wp','model_wp','market_wp','home_moneyline','away_moneyline','result','home won','revision','basis']
     replay=pd.DataFrame(rows,columns=columns)
     bets=flat_bets(replay)

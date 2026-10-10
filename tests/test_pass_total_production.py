@@ -102,3 +102,28 @@ def test_walk_forward_retains_ties_as_pushes_and_names_actual_market(monkeypatch
     card=m.scorecard(oof)
     assert 'no-vig moneyline market' in card.source.to_list()
     assert set(card['games scored'])=={2}
+
+
+def test_regrade_uses_captured_total_prices_instead_of_changed_schedule(tmp_path,monkeypatch):
+    import json
+    train,test=fixture();test=test.iloc[:1].copy()
+    test['margin_line']=3.;test['total_line']=60.;test['market_cover_q']=.6;test['market_over_q']=.6
+    f=pd.concat([train,test],ignore_index=True)
+    f.loc[f.game_id.isna(),'game_id']=[f't{i}' for i in range(len(train))]
+    record={'experiment':'snapshot','revision':m.REVISION,'generated_utc':'2023-09-09T00:00:00Z',
+            'game_id':'a','season':2023,'week':1,'home':'H','away':'A','model_wp':.9,
+            'home_moneyline':120.,'away_moneyline':-140.,'spread_line':3.,
+            'market_target_inputs':{'total_line':42.,'market_cover_q':.51,'market_over_q':.48}}
+    path=tmp_path/'forward_predictions.jsonl';path.write_text(json.dumps(record)+'\n');before=path.read_bytes()
+    fits={'2023_1':{'margin:market_relationships':{'names':['intercept','moneyline_logit'],'scale':[1.],'beta':[0.,.01]},
+                    'total:market_relationships':{'names':['intercept','total_context_price','over_logit'],'scale':[1.,1.],'beta':[0.,.2,.1]}}}
+    features={8.:f,'market_target_fits':fits,'market_target_selections':[{'season':2023,'target':t,'chosen':'market_relationships'} for t in m.MARKET_TARGETS]}
+    monkeypatch.setattr(m,'STATE_DIR',str(tmp_path))
+    m.regrade_product_ledger(features,pd.DataFrame({'game_id':['a'],'result':[-3.]}),tmp_path)
+    actual=pd.read_csv(tmp_path/'regraded_ledger.csv').iloc[0]
+    expected=test.copy();expected['q']=m.market_ml_wp(pd.DataFrame([record]))
+    for k,v in record['market_target_inputs'].items():expected[k]=v
+    expected=m.replay_market_targets(expected,features,2023,1)
+    expected_p=m.apply_fit(expected,m.fit_composite(train,m.PRODUCT_RECIPE,2023,1))[0]
+    assert actual.model_wp==pytest.approx(expected_p,abs=1e-12)
+    assert 'original captured market quotes' in actual.basis and path.read_bytes()==before
