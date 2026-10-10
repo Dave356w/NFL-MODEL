@@ -1,19 +1,31 @@
 {
-  "revision": "boxscore-composite-v1.16",
-  "diagnostics": "v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-10T16:48:53.510394+00:00",
+  "revision": "boxscore-composite-v1.17",
+  "diagnostics": "v1.17 passing \u00d7 predicted total; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
+  "generated_utc": "2026-10-10T22:26:02.974781+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26",
+  "config_signature": "70a1e09c4e3b71daa6e39d446f9b2e2553618ada59cf1f8fce017bcc85c3973f",
   "recipe": {
     "family": "rates_core_avail_cs_peaks_nosacks",
     "half_life": 8.0,
     "ridge": 0.1,
-    "architecture": "market_product_1sd",
+    "architecture": "market_pass_predicted_total",
     "interaction_ridge": 0.1,
-    "pass_half_life": 16.0
+    "pass_half_life": 16.0,
+    "target_first_season": 2020,
+    "target_mean_ridge": 0.1,
+    "target_selection": "prior_season_integer_bin_nll",
+    "target_rules": [
+      "market_relationships",
+      "resid_h4_k4",
+      "resid_h4_k12",
+      "resid_h16_k4",
+      "resid_h16_k12"
+    ],
+    "total_reference_points": 45.0,
+    "target_unit_points": 10.0
   },
-  "market_blend_verdict": "Composite weight +0.639 (95% +0.056 to +1.212): the composite adds information the market comparator lacks. Chronological blend vs market: -0.0034 log loss per game (95% -0.0084 to +0.0012; positive means the blend beat the market).",
+  "market_blend_verdict": "Composite weight +0.549 (95% +0.111 to +1.018): the composite adds information the market comparator lacks. Chronological blend vs market: -0.0040 log loss per game (95% -0.0085 to +0.0003; positive means the blend beat the market).",
   "limitations": [
     "box score definitions approximate some official totals",
     "no explicit opponent-strength adjustment",
@@ -25,7 +37,8 @@
     "v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved",
     "lead/deficit peaks are not clipped or opponent-adjusted",
     "game-bootstrap intervals omit selection and serial-dependence uncertainty",
-    "v1.16 market-offset Product + 1 SD contexts adopted after exposed 2023-25 development; reliable profit edge unresolved",
+    "v1.17 passing \u00d7 predicted total adopted for strongest tested historical ROI after exposed development; reliable profit edge unresolved",
+    "market target forecasts use schedule quotes with unknown capture times; historical residual rule selection uses strictly prior-season OOF NLL",
     "historical moneylines have no independent capture timestamp; no quote means no prediction",
     "availability: final injury-report status (no intra-week timestamps); of the game week's own roster only the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); no game-day inactives or late-week news",
     "v1.15 game-week reserve list adopted by owner decision after research test 28 (participation and market diagnostics); held-out comparison after adoption (test 29): log loss +0.0001 +/- 0.0010, ROI -1.2 +/- 0.9 pts, unresolved",
@@ -41,7 +54,7 @@
   "profile_decay": "2^(-team-game age / selected half-life) times offseason retention per season boundary",
   "fit_decay": "2^(-age in NFL-season units / FIT_HALF_LIFE_SEASONS)",
   "package_versions": {
-    "numpy": "2.5.3",
+    "numpy": "2.5.4",
     "pandas": "3.0.6",
     "scipy": "1.18.1",
     "nflreadpy": "0.1.5",
@@ -96,16 +109,15 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }

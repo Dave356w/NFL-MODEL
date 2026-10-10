@@ -1,2 +1,2 @@
-family,half_life,ridge,architecture,interaction_ridge,pass_half_life,key,log loss,games,validation seasons,selected,selection_basis
-rates_core_avail_cs_peaks_nosacks,8.0,0.1,market_product_1sd,0.1,16.0,rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1,0.6142703585805472,1355,5,True,owner-fixed after exposed historical development
+family,half_life,ridge,architecture,interaction_ridge,pass_half_life,target_first_season,target_mean_ridge,target_selection,target_rules,total_reference_points,target_unit_points,key,log loss,games,validation seasons,selected,selection_basis
+rates_core_avail_cs_peaks_nosacks,8.0,0.1,market_pass_predicted_total,0.1,16.0,2020,0.1,prior_season_integer_bin_nll,"['market_relationships', 'resid_h4_k4', 'resid_h4_k12', 'resid_h16_k4', 'resid_h16_k12']",45.0,10.0,rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_pass_predicted_total_i0.1,0.6219252849510853,1355,5,True,owner-fixed after exposed historical development
