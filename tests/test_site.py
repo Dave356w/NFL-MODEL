@@ -236,7 +236,46 @@ def test_factor_labels_are_plain():
     assert b.factor_label(m.MARGIN_FEATURE) == "Point margin"
     assert b.factor_label("d__avail__qb_delta") == "Quarterback"
     assert b.factor_label("d__avail__OL_out_cs") == "Offensive line availability"
-    assert b.factor_label("d__for__rates_core__first_down_rate") == m.feature_label("d__for__rates_core__first_down_rate")
+    assert b.factor_label("d__for__rates_core__first_down_rate") == "Sustaining drives"
+    assert b.factor_label("d__allowed__rates_core__interception_pct") == "Interceptions forced"
+    assert b.factor_label("pass_product") == "Passing matchup balance"
+
+
+def test_passing_context_names_and_direction_are_independent():
+    label, note = b.factor_description("pass_1sd_pn", -1.62, "SF", "SEA")
+    assert label == "SF passing vs SEA defense"
+    assert note == "Strong attack, strong defense"
+    cells = "".join(b.factor_cells({"feature": "pass_1sd_pn", "home-minus-away input": -1.62,
+                                  "log-odds contribution": 1.7}, "SF", "SEA", 1.7))
+    assert "Toward SEA" in cells and "aria-label='Toward SEA'" in cells
+    assert "SF passing vs SEA defense" in cells and "width:50.0%" in cells
+    for suffix, words in b.PASS_CONTEXT_LABELS.items():
+        label, note = b.factor_description("pass_1sd_"+suffix, .2, "SF", "SEA")
+        assert label == "SEA passing vs SF defense" and note == words
+
+
+def test_factor_cells_escape_names_and_handle_zero_or_missing_impact():
+    c = {"feature": "pass_1sd_pn", "home-minus-away input": -1., "log-odds contribution": -.2}
+    html = "".join(b.factor_cells(c, "SF<script>", "SEA", 1.))
+    assert "<script>" not in html and "SF&lt;script&gt;" in html
+    c["log-odds contribution"] = 0.
+    assert "Neutral" in "".join(b.factor_cells(c, "SF", "SEA", 1.))
+    c["log-odds contribution"] = np.nan
+    assert b.factor_cells(c, "SF", "SEA", 1.) is None
+
+
+def test_biggest_factors_use_readable_game_descriptions(tmp_path):
+    data = tmp_path / "data"
+    make_data(data)
+    pd.DataFrame([{"game_id": "2026_05_TB_DAL", "feature": "pass_1sd_pn",
+                   "home-minus-away input": -1.6, "log-odds contribution": 1.7}]).to_csv(
+                       data / "latest" / "contributions.csv", index=False)
+    out = tmp_path / "public"
+    b.render_all(out, data=data, now=NOW)
+    page = (out / "index.html").read_text()
+    assert "TB passing vs DAL defense" in page and "Strong attack, strong defense" in page
+    assert "Toward DAL" in page and "Model impact" in page
+    assert "1 SD context" not in page and "Pass matchup product" not in page
 
 
 def test_injury_report_notes_on_the_card(tmp_path):

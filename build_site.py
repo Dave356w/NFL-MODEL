@@ -310,6 +310,12 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .cbar i{position:absolute;top:0;bottom:0;border-radius:var(--r-s)}
 .cbar i.pos{background:rgb(var(--cool))}.cbar i.neg{background:rgb(var(--warm))}
 .cbar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--faint)}
+.factor-name{font-weight:650;line-height:1.3}
+.factor-note{color:var(--muted);font-size:12px;line-height:1.4;margin-top:3px}
+.factor-impact{min-width:96px;max-width:145px;margin-left:auto}
+.factor-toward{font:650 12px/1.3 var(--sans);text-align:right;margin-bottom:7px;white-space:nowrap}
+.factor-toward.pos{color:rgb(var(--cool-tx))}.factor-toward.neg{color:rgb(var(--warm-tx))}
+.factor-impact .cbar{height:6px}
 .fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin:0 0 8px}
 .fold>summary{cursor:pointer;list-style:none;padding:10px 13px;font:700 14px/1.3 var(--sans);display:flex;gap:8px}
 .fold>summary::-webkit-details-marker{display:none}
@@ -490,9 +496,29 @@ def control_tiles(ctrl, first_label, first_value, first_sub):
 UNIT_NAMES = {"OL": "Offensive line", "WRTE": "Receivers", "RB": "Running backs",
               "DL": "Defensive line", "LB": "Linebackers", "DB": "Secondary"}
 
+PASS_CONTEXT_LABELS = {"pp": "Strong attack, vulnerable defense",
+                       "pn": "Strong attack, strong defense",
+                       "np": "Struggling attack, vulnerable defense",
+                       "nn": "Struggling attack, strong defense"}
+FACTOR_METRICS = {
+    "net_pass_yards_per_pass_play": ("Passing efficiency", "Pass defense", "Net yards per pass play"),
+    "rush_yards_per_attempt": ("Rushing efficiency", "Run defense", "Yards per rush"),
+    "first_down_rate": ("Sustaining drives", "Stopping drives", "First-down rate"),
+    "interception_pct": ("Interceptions thrown", "Interceptions forced", "Interceptions per pass attempt"),
+    "fumbles_lost_per_game": ("Fumbles lost", "Fumble takeaways", "Fumbles lost per game"),
+    "plays_per_game": ("Offensive pace", "Plays faced", "Plays per game"),
+    "penalty_yards_per_game": ("Offensive penalties", "Opponent penalties", "Penalty yards per game"),
+}
+
 
 def factor_label(name):
     """Plain name for a model input on the public card."""
+    if name == "market_log_odds":
+        return "Market starting point"
+    if name == "pass_product":
+        return "Passing matchup balance"
+    if name.startswith("pass_1sd_"):
+        return PASS_CONTEXT_LABELS.get(name[-2:], "Passing matchup pattern")
     if name == "site":
         return "Home field"
     if name == m.MARGIN_FEATURE:
@@ -502,7 +528,60 @@ def factor_label(name):
     if name.startswith("d__avail__"):
         c = name[len("d__avail__"):]
         return "Quarterback" if c == "qb_delta" else f"{UNIT_NAMES.get(c.split('_')[0], c)} availability"
-    return m.feature_label(name)
+    pieces = name.split("__", 3)
+    if len(pieces) == 4 and pieces[-1] in FACTOR_METRICS:
+        offense, defense, _ = FACTOR_METRICS[pieces[-1]]
+        return offense if pieces[1] == "for" else defense
+    try:
+        return m.feature_label(name)
+    except (ValueError, KeyError):
+        return "Other team profile"
+
+
+def factor_description(name, raw_input, away, home):
+    """Short, game-specific labels; strength describes inputs, not guaranteed effects."""
+    label, note = factor_label(name), ""
+    if name.startswith("pass_1sd_"):
+        if math.isfinite(num(raw_input)) and abs(num(raw_input)) > 1e-12:
+            attack, defense = (home, away) if num(raw_input) > 0 else (away, home)
+            note = label
+            label = f"{attack} passing vs {defense} defense"
+        else:
+            note = "Historical passing matchup pattern"
+    elif name == "pass_product":
+        note = "Each passing attack matched with the opposing pass defense"
+    elif name == "market_log_odds":
+        note = "Starting probability from the moneyline prices"
+    elif name == "site":
+        note = "Home-field term in the fitted model"
+    elif name == m.MARGIN_FEATURE:
+        note = "Recent scoring margins"
+    elif name in m.PEAK_FEATURES:
+        note = "How far teams led or trailed during recent games"
+    elif name.startswith("d__avail__"):
+        note = ("Expected starter compared with recent quarterback play" if name.endswith("qb_delta")
+                else "Expected absences among recent contributors")
+    else:
+        pieces = name.split("__", 3)
+        if len(pieces) == 4 and pieces[-1] in FACTOR_METRICS:
+            note = FACTOR_METRICS[pieces[-1]][2]
+            if pieces[1] == "allowed":
+                note = "Opponents’ " + note[0].lower() + note[1:]
+    return label, note
+
+
+def factor_cells(c, away, home, cmax):
+    v = num(c.get("log-odds contribution"))
+    if not math.isfinite(v):
+        return None
+    label, note = factor_description(c["feature"], c.get("home-minus-away input"), away, home)
+    tone = "pos" if v > 0 else "neg" if v < 0 else ""
+    toward = f"Toward {home if v > 0 else away}" if v else "Neutral"
+    w = min(50., 50 * abs(v) / max(cmax, 1e-9))
+    style = f"left:50%;width:{w:.1f}%" if v >= 0 else f"right:50%;width:{w:.1f}%"
+    return [f"<div class='factor-name'>{esc(label)}</div><div class='factor-note'>{esc(note)}</div>",
+            f"<div class='factor-impact'><div class='factor-toward {tone}'>{esc(toward)}</div>"
+            f"<div class='cbar' role='img' aria-label='{esc(toward)}'><i class='{tone}' style='{style}'></i></div></div>"]
 
 
 def result_badge(res):
@@ -639,7 +718,9 @@ def render_index(latest, ledger, built, now=None):
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
     rows.sort(key=lambda r: (pd.notna(r.get("result")), m.kickoff_utc(r) or far, str(r["game_id"])))
     contrib = latest["contributions"]
-    cmax = float(contrib["log-odds contribution"].abs().max()) if len(contrib) else 1.
+    impacts = contrib["log-odds contribution"] if len(contrib) else pd.Series(dtype=float)
+    impacts = impacts[np.isfinite(impacts)]
+    cmax = float(impacts.abs().max()) if len(impacts) else 1.
     graded = cur[cur.status == "graded"] if len(cur) else cur
     mkt_bands, mdl_bands, band_years, n_fwd = band_windows(latest, graded)
     cards = []
@@ -704,14 +785,17 @@ def render_index(latest, ledger, built, now=None):
                        f"at {pct(rec.model_wp)} {esc(home)}.</p>")
         t = contrib[contrib.game_id == r["game_id"]] if len(contrib) else contrib
         if len(t):
+            t = t[np.isfinite(t["log-odds contribution"]) & t["log-odds contribution"].ne(0)]
             t = t.loc[t["log-odds contribution"].abs().sort_values(ascending=False).index].head(4)
             trs = []
             for c in t.to_dict("records"):
-                v = float(c["log-odds contribution"]); w = 50 * abs(v) / max(cmax, 1e-9)
-                style = f"left:50%;width:{w:.1f}%" if v > 0 else f"right:50%;width:{w:.1f}%"
-                trs.append([esc(factor_label(c["feature"])),
-                            f"<div class='cbar'><i class='{'pos' if v > 0 else 'neg'}' style='{style}'></i></div>"])
-            det.append("<h3>Biggest factors</h3>" + table(["", f"← {esc(away)} · {esc(home)} →"], trs))
+                cells = factor_cells(c, away, home, cmax)
+                if cells:
+                    trs.append(cells)
+            if trs:
+                det.append("<h3>Biggest factors</h3>" + table(["Factor", "Model impact"], trs)
+                           + "<p class='mut small'>Direction shows each term’s contribution to this forecast. "
+                             "Bars share one scale across this week’s games.</p>")
         if has_avail:
             det.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(r, 'away')} · {esc(home)} {_qb(r, 'home')}</p>")
             det.append(report_notes_html(latest.get("report_notes"), (away, home), int(r["week"])))
