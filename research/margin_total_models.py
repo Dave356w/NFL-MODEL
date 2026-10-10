@@ -231,7 +231,7 @@ def run(out):
     current=[];current_fits={}
     archive=ROOT/'research/shrinkage_results/archived_current_inputs.jsonl'
     for r in map(json.loads,archive.read_text().splitlines()):
-        year,week=r['season'],r['week'];row=f[f.game_id==r['game_id']].copy()
+        year,week=r['season'],r['week'];cutoff_fits=current_fits.setdefault(f'{year}_{week}',{});row=f[f.game_id==r['game_id']].copy()
         if len(row)!=1:raise ValueError('Archive alignment')
         for c,v in r['model_inputs'].items():row[c]=v
         row['q']=r['market_no_vig_wp'];row['margin_line']=r['spread_line']
@@ -239,11 +239,11 @@ def run(out):
         item={'game_id':r['game_id'],'generated_utc':r['generated_utc'],'archived_production':r['model_wp'],'market_q':r['market_no_vig_wp'],'margin_line':float(row.margin_line.iloc[0]),'total_line':float(row.total_line.iloc[0]),'total_line_basis':'schedule quote, capture time unknown'}
         for target,names in [('margin',MARGIN_NAMES),('total',total_names)]:
             for arm in DISTRIBUTIONS:
-                mean,fit=fit_mean(tr,row,target,names,arm);sd,da=dispersion(earlier,tr,target,arm,year,week);row[f'{target}__{arm}__mean']=mean;row[f'{target}__{arm}__sd']=sd;item[f'{target}__{arm}__mean']=float(mean[0]);item[f'{target}__{arm}__sd']=sd;current_fits[str((target,arm))]={**fit,**da}
+                mean,fit=fit_mean(tr,row,target,names,arm);sd,da=dispersion(earlier,tr,target,arm,year,week);row[f'{target}__{arm}__mean']=mean;row[f'{target}__{arm}__sd']=sd;item[f'{target}__{arm}__mean']=float(mean[0]);item[f'{target}__{arm}__sd']=sd;cutoff_fits[str((target,arm))]={**fit,**da}
         te=stack_features(row);stack_train=oof[eligible&m.before(oof,year,week)]
         for arm in STACKS:
-            pp,fit=stack_fit(stack_train,te,arm);item[arm]=float(pp[0]);current_fits[arm]=fit
-        full=s.fit(f[f.ready&f['home won'].isin([0.,1.])&np.isfinite(f.q)&m.before(f,year,week)],year,week);item['production_full']=float(s.predict(te,full)[0]);current_fits['production_full']=full
+            pp,fit=stack_fit(stack_train,te,arm);item[arm]=float(pp[0]);cutoff_fits[arm]=fit
+        full=s.fit(f[f.ready&f['home won'].isin([0.,1.])&np.isfinite(f.q)&m.before(f,year,week)],year,week);item['production_full']=float(s.predict(te,full)[0]);cutoff_fits['production_full']=full
         item['direct_margin_corrected']=float(event_prob(row.margin__corrected__mean.to_numpy(),row.margin__corrected__sd.to_numpy(),np.array([0.]))[0][0]);current.append(item)
     archive_error=max(abs(r['production_full']-r['archived_production']) for r in current)
     if archive_error>1e-7:raise ValueError('Archive production reproduction')
@@ -252,7 +252,7 @@ def run(out):
     result={'basis':'Exposed historical development; schedule market quotes lack capture timestamps','revision':m.REVISION,'distribution':dist_summary(pred),'stack':stack_summary(held),'selections':choices,'historical_full_production_error':err,'all_cutoffs_prior_week':True,'archived_production_error':archive_error}
     pred.to_csv(out/'weekly_oof_forecasts.csv.gz',index=False,compression={'method':'gzip','mtime':0});held.to_csv(out/'heldout_win_predictions.csv',index=False);pd.DataFrame(audit).to_csv(out/'distribution_fit_audit.csv',index=False);pd.DataFrame(sa).to_csv(out/'stack_fit_audit.csv',index=False)
     (out/'results.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
-    sources=[Path(__file__),ROOT/'research/MARGIN_TOTAL_MODELS.md',ROOT/'nfl_model.py',ROOT/'research/context_shrinkage.py',out/'frozen_feature_prices.csv.gz',archive]
+    sources=[ROOT/'research/qualified_interactions.py',ROOT/'research/production_qualification.py',ROOT/'research/shrinkage_results/frozen_training_features.csv.gz',ROOT/'research/production_adoption_results/historical_reproduction.csv',ROOT/'research/shrinkage_results/archived_current_inputs.jsonl',Path(__file__),ROOT/'research/MARGIN_TOTAL_MODELS.md',ROOT/'nfl_model.py',ROOT/'research/context_shrinkage.py',out/'frozen_feature_prices.csv.gz',archive]
     (out/'provenance.json').write_text(json.dumps({str(x.relative_to(ROOT)):hashlib.sha256(x.read_bytes()).hexdigest() for x in sources},indent=2)+'\n')
     write_report(result,out);print(json.dumps(result['stack']['results'],indent=2),flush=True)
 

@@ -1,8 +1,9 @@
-name: Research margin total and production interactions
+name: Research market only rolling residuals
 on:
   workflow_dispatch:
   pull_request:
     paths:
+      - research/margin_total_models.py
       - requirements.txt
       - nfl_model.py
       - research/context_shrinkage.py
@@ -11,11 +12,11 @@ on:
       - research/shrinkage_results/frozen_training_features.csv.gz
       - research/shrinkage_results/archived_current_inputs.jsonl
       - research/production_adoption_results/historical_reproduction.csv
-      - research/margin_total_models.py
-      - research/MARGIN_TOTAL_MODELS.md
-      - research/margin_total_results/frozen_feature_prices.csv.gz
-      - tests/test_margin_total_models.py
-      - .github/workflows/margin-total-research.yml
+      - research/market_residual_models.py
+      - research/MARKET_RESIDUAL_MODELS.md
+      - research/market_residual_results/frozen_market_outcomes.csv.gz
+      - tests/test_market_residual_models.py
+      - .github/workflows/market-residual-research.yml
 permissions:
   contents: read
 jobs:
@@ -32,12 +33,12 @@ jobs:
           python-version: '3.12'
           cache: pip
       - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
-      - run: python -m pytest tests/test_margin_total_models.py -q
-      - run: python research/margin_total_models.py
-      - run: git diff --exit-code -- research/margin_total_results/
+      - run: python -m pytest tests/test_market_residual_models.py -q
+      - run: python research/market_residual_models.py
+      - run: git diff --exit-code -- research/market_residual_results/
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: margin-total-interaction-results
-          path: research/margin_total_results/
+          name: market-residual-results
+          path: research/market_residual_results/
           if-no-files-found: error
