@@ -1,16 +1,19 @@
 {
-  "revision": "boxscore-composite-v1.15",
+  "revision": "boxscore-composite-v1.16",
   "diagnostics": "v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-09T19:48:08.682280+00:00",
+  "generated_utc": "2026-10-10T04:35:17.918207+00:00",
   "season": 2026,
   "week": 5,
-  "config_signature": "47cc1c8fead80119ddabd02a06b2ed8390b6442771db8e6ae6123ee5a0a71dc2",
+  "config_signature": "9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26",
   "recipe": {
     "family": "rates_core_avail_cs_peaks_nosacks",
     "half_life": 8.0,
-    "ridge": 0.1
+    "ridge": 0.1,
+    "architecture": "market_product_1sd",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0
   },
-  "market_blend_verdict": "Composite weight -0.173 (95% -0.623 to +0.264): no reliable evidence the composite adds anything beyond the spread. Chronological blend vs market: -0.0006 log loss per game (95% -0.0049 to +0.0036; positive means the blend beat the market).",
+  "market_blend_verdict": "Composite weight +0.639 (95% +0.056 to +1.212): the composite adds information the spread lacks. Chronological blend vs market: -0.0034 log loss per game (95% -0.0084 to +0.0012; positive means the blend beat the market).",
   "limitations": [
     "box score definitions approximate some official totals",
     "no explicit opponent-strength adjustment",
@@ -22,6 +25,8 @@
     "v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved",
     "lead/deficit peaks are not clipped or opponent-adjusted",
     "game-bootstrap intervals omit selection and serial-dependence uncertainty",
+    "v1.16 market-offset Product + 1 SD contexts adopted after exposed 2023-25 development; reliable profit edge unresolved",
+    "historical moneylines have no independent capture timestamp; no quote means no prediction",
     "availability: final injury-report status (no intra-week timestamps); of the game week's own roster only the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); no game-day inactives or late-week news",
     "v1.15 game-week reserve list adopted by owner decision after research test 28 (participation and market diagnostics); held-out comparison after adoption (test 29): log loss +0.0001 +/- 0.0010, ROI -1.2 +/- 0.9 pts, unresolved",
     "roster membership: week 1 uses week-1 roster membership (reserve-listed players there count as out)",
@@ -32,7 +37,7 @@
   ],
   "target": "binary home W/L; ties excluded from fit/evaluation but their prior stats retained",
   "fit_timing": "whole prior weeks only; no within-week coefficient updates",
-  "validation": "prior-season-only recipe selection; weekly coefficients trained only on earlier game rows",
+  "validation": "owner-fixed recipe after exposed development; weekly coefficients trained only on earlier game rows",
   "profile_decay": "2^(-team-game age / selected half-life) times offseason retention per season boundary",
   "fit_decay": "2^(-age in NFL-season units / FIT_HALF_LIFE_SEASONS)",
   "package_versions": {
@@ -91,16 +96,15 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [
+      "cached_seasons": [],
+      "rebuilt_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025
-      ],
-      "rebuilt_seasons": [
+        2025,
         2026
       ]
     }
