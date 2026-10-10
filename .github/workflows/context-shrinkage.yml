@@ -1,0 +1,39 @@
+name: Research context support shrinkage
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/context_shrinkage.py
+      - research/CONTEXT_SHRINKAGE.md
+      - research/shrinkage_results/frozen_training_features.csv.gz
+      - research/shrinkage_results/normalization_references.csv
+      - research/shrinkage_results/archived_current_inputs.jsonl
+      - tests/test_context_shrinkage.py
+      - .github/workflows/context-shrinkage.yml
+
+permissions:
+  contents: read
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_context_shrinkage.py -q
+      - run: python research/context_shrinkage.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: context-support-shrinkage
+          path: research/shrinkage_results/
+          if-no-files-found: error
