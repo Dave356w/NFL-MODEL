@@ -1,0 +1,34 @@
+name: Research margin total and production interactions
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/margin_total_models.py
+      - research/MARGIN_TOTAL_MODELS.md
+      - research/margin_total_results/frozen_feature_prices.csv.gz
+      - tests/test_margin_total_models.py
+      - .github/workflows/margin-total-research.yml
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_margin_total_models.py -q
+      - run: python research/margin_total_models.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: margin-total-interaction-results
+          path: research/margin_total_results/
+          if-no-files-found: error

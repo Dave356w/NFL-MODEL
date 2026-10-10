@@ -1,0 +1,6 @@
+{
+  ".nfl_cache/shrinkage_inputs/schedule.csv": "92348279723e9c50a932a8fff9ed19271c77406567f59472e06376e1bffb2d2a",
+  ".nfl_cache/shrinkage_inputs/boxes.csv": "1ead781bbc50a7650908123d1cadde2f579a37d7fe8d68537ed33a46ee587e72",
+  ".nfl_cache/shrinkage_inputs/availability.pkl": "d5d6b30db736a753fe2581f99d55a784a9f50742a7f93d7afa4be659dee478b6",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f"
+}
