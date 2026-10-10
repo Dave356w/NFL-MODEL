@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.17",
   "diagnostics": "v1.17 passing \u00d7 predicted total; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-10T22:26:02.974781+00:00",
+  "generated_utc": "2026-10-10T22:31:53.759133+00:00",
   "season": 2026,
   "week": 5,
   "config_signature": "70a1e09c4e3b71daa6e39d446f9b2e2553618ada59cf1f8fce017bcc85c3973f",
@@ -109,15 +109,16 @@
       "window_snaps": 20982214.0,
       "off_roster_snaps": 1401370.0,
       "off_roster_snap_share": 0.06678847141679138,
-      "cached_seasons": [],
-      "rebuilt_seasons": [
+      "cached_seasons": [
         2019,
         2020,
         2021,
         2022,
         2023,
         2024,
-        2025,
+        2025
+      ],
+      "rebuilt_seasons": [
         2026
       ]
     }
