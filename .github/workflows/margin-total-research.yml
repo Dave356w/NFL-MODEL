@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - research/check_replay.py
       - requirements.txt
       - nfl_model.py
       - research/context_shrinkage.py
@@ -33,7 +34,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
       - run: python -m pytest tests/test_margin_total_models.py -q
-      - run: python research/margin_total_models.py
+      - run: python research/check_replay.py research/margin_total_results -- python research/margin_total_models.py
       - run: git diff --exit-code -- research/margin_total_results/
       - uses: actions/upload-artifact@v4
         if: always()

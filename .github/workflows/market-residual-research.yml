@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
+      - research/check_replay.py
       - research/margin_total_models.py
       - requirements.txt
       - nfl_model.py
@@ -34,7 +35,7 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
       - run: python -m pytest tests/test_market_residual_models.py -q
-      - run: python research/market_residual_models.py
+      - run: python research/check_replay.py research/market_residual_results -- python research/market_residual_models.py
       - run: git diff --exit-code -- research/market_residual_results/
       - uses: actions/upload-artifact@v4
         if: always()
