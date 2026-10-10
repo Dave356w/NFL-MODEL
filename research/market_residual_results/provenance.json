@@ -6,8 +6,8 @@
   "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826",
   "research/market_residual_models.py": "bfa77d77831c6eeb169edd04dbc1b8ec2a0b7d8685eaecc053c494f0cc060dc9",
   "research/MARKET_RESIDUAL_MODELS.md": "90ef87db5da946d277a61ebbc50e3a85c4dd42f4276eeb44c2044a0c68631a5f",
-  "research/margin_total_models.py": "accbfde551f7dddf980553a6c36743afc5da907d9de2cd45e48ce3b4ad2bcc90",
-  "research/context_shrinkage.py": "5e28bc59841e0b39ca14d5a7cf7edb0ebca775de2ce30f1669949cac94392479",
-  "nfl_model.py": "4096d2db61d545cbc1240ff0f0f6efb84a8e3b34d0ed5d789b35a7588dad63b6",
+  "research/margin_total_models.py": "cce82dd1910f74ac005e32c56cbbfca03ee81d1893d38d43d5335829fd6058cd",
+  "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
+  "nfl_model.py": "dc0aa5da382188968c501cbe234b858c6e040e2c99be6e4dc2731091de0937e4",
   "research/market_residual_results/frozen_market_outcomes.csv.gz": "f7f95ebf253cd6b8b998f96bcb1978365ee505426b969d8e2ad8218c64e0e62f"
 }

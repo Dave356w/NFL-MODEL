@@ -249,7 +249,7 @@ def run(out):
     if archive_error>1e-7:raise ValueError('Archive production reproduction')
     pd.DataFrame(current).to_csv(out/'current_counterfactuals.csv',index=False)
     (out/'current_fits.json').write_text(json.dumps(current_fits,indent=2)+'\n')
-    result={'basis':'Exposed historical development; schedule market quotes lack capture timestamps','revision':m.REVISION,'distribution':dist_summary(pred),'stack':stack_summary(held),'selections':choices,'historical_full_production_error':err,'all_cutoffs_prior_week':True,'archived_production_error':archive_error}
+    result={'basis':'Exposed historical development; schedule market quotes lack capture timestamps','revision':'boxscore-composite-v1.16','distribution':dist_summary(pred),'stack':stack_summary(held),'selections':choices,'historical_full_production_error':err,'all_cutoffs_prior_week':True,'archived_production_error':archive_error}
     pred.to_csv(out/'weekly_oof_forecasts.csv.gz',index=False,compression={'method':'gzip','mtime':0});held.to_csv(out/'heldout_win_predictions.csv',index=False);pd.DataFrame(audit).to_csv(out/'distribution_fit_audit.csv',index=False);pd.DataFrame(sa).to_csv(out/'stack_fit_audit.csv',index=False)
     (out/'results.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     sources=[ROOT/'research/qualified_interactions.py',ROOT/'research/production_qualification.py',ROOT/'research/shrinkage_results/frozen_training_features.csv.gz',ROOT/'research/production_adoption_results/historical_reproduction.csv',ROOT/'research/shrinkage_results/archived_current_inputs.jsonl',Path(__file__),ROOT/'research/MARGIN_TOTAL_MODELS.md',ROOT/'nfl_model.py',ROOT/'research/context_shrinkage.py',out/'frozen_feature_prices.csv.gz',archive]

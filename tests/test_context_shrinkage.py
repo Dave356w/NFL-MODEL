@@ -38,7 +38,7 @@ def fixture():
 
 
 def test_zero_strength_reproduces_production_and_penalties():
-    f=fixture();a=s.fit(f,2023,1);b=s.m.fit_composite(f,s.m.PRODUCT_RECIPE,2023,1)
+    f=fixture();a=s.fit(f,2023,1);b=s.m.fit_composite(f,s.m.LEGACY_PRODUCT_RECIPE,2023,1)
     assert np.allclose(s.predict(f,a),s.m.apply_fit(f,b),atol=1e-10,rtol=0)
     shr=s.fit(f,2023,1,'active',30.)
     assert shr['penalty_multiplier']['pass_product']==1.

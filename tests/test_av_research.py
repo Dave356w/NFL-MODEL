@@ -342,7 +342,7 @@ def test_production_ledger_and_frozen_config_untouched():
     md.team_residual_states(_games(), pd.Series(0., index=_games().index), .9, 4.)
     assert {f: _sha(f) for f in files} == before
     assert (m.config_signature(), m.REVISION, tuple(m.FEATURE_FAMILIES), m.feature_names) == (sig, rev, fams, names)
-    assert m.REVISION == 'boxscore-composite-v1.16'
+    assert m.REVISION == 'boxscore-composite-v1.17'
     src = '\n'.join(p.read_text() for p in (ROOT / 'research' / 'av').glob('*.py'))
     assert 'forward_predictions' not in src and 'frozen_recipe' not in src and 'STATE_DIR' not in src
 

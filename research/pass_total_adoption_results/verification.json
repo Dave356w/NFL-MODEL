@@ -1,0 +1,35 @@
+{
+  "revision": "boxscore-composite-v1.17",
+  "target_max_error": 7.105427357601002e-15,
+  "win_max_error": 5.137484881956311e-11,
+  "historical_games": 816,
+  "ledger_sha256": "40e98327259dc80c75bb7325d83e7f89b0857c48bca12906f022ed0bd0890a86",
+  "ledger_unchanged": true,
+  "common_812_roi": {
+    "bets": 812,
+    "wins": 572,
+    "losses": 239,
+    "pushes": 1,
+    "units": 46.32174591067102,
+    "roi": 0.05704648511166382,
+    "roi_se": 0.02540420767214011,
+    "win_pct": 0.7053020961775586,
+    "mean_q": 0.6514806476802707,
+    "excess_pp": 5.393561417844284,
+    "null_roi": -0.04099496341597624
+  },
+  "all_eligible_roi": {
+    "bets": 816,
+    "wins": 574,
+    "losses": 241,
+    "pushes": 1,
+    "units": 46.13992772885284,
+    "roi": 0.05654402907947652,
+    "roi_se": 0.025389001872796805,
+    "win_pct": 0.7042944785276074,
+    "mean_q": 0.6507380954857599,
+    "excess_pp": 5.367089950762837,
+    "null_roi": -0.04101682411224375
+  },
+  "log_loss": 0.6064258123514615
+}

@@ -1,0 +1,172 @@
+[
+  {
+    "season": 2020,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": null,
+    "prior_scores": {}
+  },
+  {
+    "season": 2020,
+    "target": "total",
+    "chosen": "market_relationships",
+    "selection_through": null,
+    "prior_scores": {}
+  },
+  {
+    "season": 2021,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": 2020,
+    "prior_scores": {
+      "market_relationships": 3.9721411308881747,
+      "resid_h4_k4": 3.9732739130527888,
+      "resid_h4_k12": 3.9733820303585103,
+      "resid_h16_k4": 3.9732417847244728,
+      "resid_h16_k12": 3.973431885533116
+    }
+  },
+  {
+    "season": 2021,
+    "target": "total",
+    "chosen": "resid_h4_k4",
+    "selection_through": 2020,
+    "prior_scores": {
+      "market_relationships": 3.9682724156325255,
+      "resid_h4_k4": 3.966222849510737,
+      "resid_h4_k12": 3.966641525012048,
+      "resid_h16_k4": 3.9665573166236134,
+      "resid_h16_k12": 3.9672644458808644
+    }
+  },
+  {
+    "season": 2022,
+    "target": "margin",
+    "chosen": "resid_h4_k4",
+    "selection_through": 2021,
+    "prior_scores": {
+      "market_relationships": 4.009317914595339,
+      "resid_h4_k4": 4.008987991768719,
+      "resid_h4_k12": 4.009022304758765,
+      "resid_h16_k4": 4.009564291777108,
+      "resid_h16_k12": 4.0096593386585555
+    }
+  },
+  {
+    "season": 2022,
+    "target": "total",
+    "chosen": "resid_h16_k4",
+    "selection_through": 2021,
+    "prior_scores": {
+      "market_relationships": 3.9930809518263555,
+      "resid_h4_k4": 3.9935717612310255,
+      "resid_h4_k12": 3.993762389058702,
+      "resid_h16_k4": 3.9923578787617116,
+      "resid_h16_k12": 3.9927390078835443
+    }
+  },
+  {
+    "season": 2023,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": 2022,
+    "prior_scores": {
+      "market_relationships": 3.9647733186056664,
+      "resid_h4_k4": 3.9653841161752155,
+      "resid_h4_k12": 3.9654383362208905,
+      "resid_h16_k4": 3.965348573622271,
+      "resid_h16_k12": 3.9654519282089753
+    }
+  },
+  {
+    "season": 2023,
+    "target": "total",
+    "chosen": "resid_h16_k4",
+    "selection_through": 2022,
+    "prior_scores": {
+      "market_relationships": 3.99634208206801,
+      "resid_h4_k4": 3.996961452002181,
+      "resid_h4_k12": 3.9970744843881834,
+      "resid_h16_k4": 3.9955081894403452,
+      "resid_h16_k12": 3.9957279427974255
+    }
+  },
+  {
+    "season": 2024,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": 2023,
+    "prior_scores": {
+      "market_relationships": 3.9715082271277042,
+      "resid_h4_k4": 3.9718297961505042,
+      "resid_h4_k12": 3.9718851112864493,
+      "resid_h16_k4": 3.9718599378716504,
+      "resid_h16_k12": 3.971945641960747
+    }
+  },
+  {
+    "season": 2024,
+    "target": "total",
+    "chosen": "resid_h16_k4",
+    "selection_through": 2023,
+    "prior_scores": {
+      "market_relationships": 3.9942191780596596,
+      "resid_h4_k4": 3.995096007830461,
+      "resid_h4_k12": 3.9951927976093358,
+      "resid_h16_k4": 3.9940759546124918,
+      "resid_h16_k12": 3.994238020731805
+    }
+  },
+  {
+    "season": 2025,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": 2024,
+    "prior_scores": {
+      "market_relationships": 3.967914434010879,
+      "resid_h4_k4": 3.968430665726798,
+      "resid_h4_k12": 3.968462175930949,
+      "resid_h16_k4": 3.9684290593795257,
+      "resid_h16_k12": 3.9685010239555876
+    }
+  },
+  {
+    "season": 2025,
+    "target": "total",
+    "chosen": "market_relationships",
+    "selection_through": 2024,
+    "prior_scores": {
+      "market_relationships": 3.984816333334582,
+      "resid_h4_k4": 3.9856762271204254,
+      "resid_h4_k12": 3.9857605560119262,
+      "resid_h16_k4": 3.9849403846397635,
+      "resid_h16_k12": 3.9850799096386527
+    }
+  },
+  {
+    "season": 2026,
+    "target": "margin",
+    "chosen": "market_relationships",
+    "selection_through": 2025,
+    "prior_scores": {
+      "market_relationships": 3.9606180174705963,
+      "resid_h4_k4": 3.961123269945451,
+      "resid_h4_k12": 3.9611533339192246,
+      "resid_h16_k4": 3.961076397090193,
+      "resid_h16_k12": 3.961151862698982
+    }
+  },
+  {
+    "season": 2026,
+    "target": "total",
+    "chosen": "market_relationships",
+    "selection_through": 2025,
+    "prior_scores": {
+      "market_relationships": 3.9871596825026843,
+      "resid_h4_k4": 3.9878571336642663,
+      "resid_h4_k12": 3.9879307262051653,
+      "resid_h16_k4": 3.987378425586078,
+      "resid_h16_k12": 3.987501500597093
+    }
+  }
+]
