@@ -85,9 +85,9 @@ def test_family_features_signature_and_display_labels():
     for fam in m.FEATURE_FAMILIES:
         names=m.feature_names(fam)
         assert set(m.PEAK_FEATURES)<=set(names) and m.MARGIN_FEATURE not in names
-    assert m.REVISION=='boxscore-composite-v1.15'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_15'
-    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.15.json'
+    assert m.REVISION=='boxscore-composite-v1.16'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_16'
+    assert m.frozen_recipe_name(2026)=='frozen_recipe_2026_boxscore-composite-v1.16.json'
     sig,cfg=m.config_signature()
     assert cfg['score_peaks']['features']==list(m.PEAK_FEATURES)
     assert sig not in ('cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe',

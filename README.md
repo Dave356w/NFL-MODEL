@@ -11,12 +11,15 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model: `boxscore-composite-v1.15`. A ridge-penalized logistic composite
-of decayed, opponent-adjusted (or raw) offense/defense rate profiles plus a
-player-availability layer: injury-report status, roster membership (plus, from v1.15, the game week's own reserve list) and a
-projected-starter QB term (depth chart from 2025), dated personnel events, plus each team's decayed largest lead and largest deficit from prior games. These two score peaks replace final MOV; time leading is excluded. v1.14 removes the separate offensive and defensive sack-rate regressors while retaining net passing efficiency, which includes sacks. This owner-selected simplification follows exploratory ablation; improvement remains unresolved. Hyperparameters are frozen per season from earlier
-seasons' walk-forward log loss; coefficients refit before every week. The
-market spread is a benchmark only and never enters the model.
+Current model: `boxscore-composite-v1.16`, the owner-fixed **Product + 1 SD**
+market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
+defense, availability and prior lead/deficit profiles provide additive corrections;
+raw h16 pass profiles provide the shared product and four signed 1 SD contexts.
+Both penalties are fixed at 0.1; coefficients refit before every week using earlier
+weeks only. Missing market quotes produce no forecast. Original pregame snapshots
+remain unchanged; retrospective replay at their original quotes is separately labelled.
+Adoption follows exposed historical development, with reliable profit superiority
+still unresolved.
 
 | Page | For |
 |---|---|
@@ -34,7 +37,34 @@ and `data/latest/`.
 | [`CLAUDE.md`](CLAUDE.md) | Working standards: evidence ladder, ledger protection, versioning, validation before a PR. |
 | [`data/ledger_report.txt`](data/ledger_report.txt) | Latest graded forward results (regenerated every build). |
 
-## How it runs
+## Production qualification research
+
+Production now uses the owner-adopted fixed **market-offset Product + 1 SD** recipe (raw h8 main, raw h16 pass contexts, both penalties 0.1). Adoption follows exposed historical development; reliable profit superiority remains unresolved. Original snapshots are preserved, with a separately labelled retrospective replay at their own quotes. See [MODEL.md](MODEL.md).
+
+
+The goal is a reliable out-of-sample advantage over the market. The current
+model is an experimental baseline; deployment is not evidence of an edge.
+[The qualification runner](research/production_qualification.py) compares the
+legacy v1.15 additive grid with market-offset and context-dependent pass candidates,
+using earlier-season recipe selection and weekly prior-game coefficient fits.
+
+```bash
+python research/production_qualification.py
+```
+
+See the [fixed protocol](research/PRODUCTION_QUALIFICATION.md),
+[executed results](research/qualification_results/REPORT.md), and
+[nominated candidate](research/qualification_results/nominated_candidate.json).
+The [prospective qualification contract](research/FORWARD_QUALIFICATION.md)
+defines the evidence required beyond historical screening.
+The latest development run evaluated 337 configurations in six families;
+none passed the multiplicity-adjusted profitability and market-comparison gate.
+The command records input/source hashes, selections and per-game predictions.
+The separate **Research production qualification** workflow reruns it and
+uploads results; it neither deploys the site nor changes production recipes or
+the append-only forward ledger.
+
+## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full
 build when a game is within 30 hours and not yet in the ledger, or within 150
@@ -66,3 +96,7 @@ own ledger on Drive; the Actions ledger in `data/` is the published one.
 
 The first deploy needs **Settings → Pages → Source: GitHub Actions** if the
 workflow's `configure-pages` step cannot enable it on its own.
+
+## Additional interaction context battle
+
+[Protocol](research/CONTEXT_BATTLE.md) and [executed results](research/context_results/REPORT.md) compare eight context families and fixed-penalty sensitivities against `fixed_market_product` and production. Run `python research/context_battle.py`; the separate research workflow also executes it. These are historical development results for selecting a forward challenger. No production deployment or ledger change is made.

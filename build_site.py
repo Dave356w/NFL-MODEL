@@ -73,6 +73,7 @@ SNAPSHOT = {
     "retro_roi_bands.csv": "retro_roi_bands.csv",
     "candidate_roi.csv": "candidate_roi.csv",
     "report_notes.csv": "report_notes.csv",
+    "regraded_ledger.csv": "regraded_ledger.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
@@ -161,6 +162,8 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
     keep["availability_audit"] = [a for a in man.get("source_audit", [])
                                   if a.get("source") in ("availability_roster_membership", "roster_status_codes")]
     (latest / "manifest.json").write_text(json.dumps(keep, indent=2, allow_nan=False, default=str))
+    if (outdir / "regraded_ledger_report.md").exists():
+        shutil.copyfile(outdir / "regraded_ledger_report.md", latest / "regraded_ledger_report.md")
     return season, week
 
 
@@ -606,7 +609,7 @@ def price_band_html(team, price, q_pick, mkt, mdl, years, n_forward):
     return (f"<h3>At this price · {esc(team)} {ml_text(price)} is in the {esc(band)} range</h3>"
             f"<div class='gr-summary band'>{''.join(tiles)}</div>"
             f"<p class='mut small'>Implied is the market's chance with the bookmaker's margin removed. "
-            f"Same games for both: {span}, each season predicted by a model chosen on earlier seasons only{fwd}.</p>")
+            f"Same games for both: {span}, each game reconstructed using earlier weeks; the current formula was chosen after historical review{fwd}.</p>")
 
 
 # ---------------------------------------------------------------- pages
@@ -790,9 +793,25 @@ def render_grades(ledger, latest, built):
                                 table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
+        parts.append(render_regraded_snapshots(latest))
     parts.append("<p class='mut small'>Full statistics, including standard errors: "
                  "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
     return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
+
+
+def render_regraded_snapshots(latest):
+    replay=latest.get("regraded_ledger")
+    if replay is None or replay.empty:
+        return ""
+    rows=[]
+    for r in replay.itertuples(index=False):
+        rows.append([esc(r.original_revision),esc(r.game_id),pct(r.original_model_wp,1),
+                     pct(r.model_wp,1),result_badge(r.bet_result if isinstance(r.bet_result,str) else ""),
+                     f"{r.bet_units:+.2f}" if math.isfinite(num(r.bet_units)) else "—"])
+    return ("<h2 class='sec'>Original snapshots replayed with the current model</h2>"
+            "<div class='gr-note flag-note'>Retrospective reconstructed features at each original snapshot's moneylines. "
+            "Original pregame forecasts remain unchanged. Repeated snapshots are the same game, not independent evidence.</div>"
+            +table(["Original revision","Game","Original home %","Replayed home %","Result","Units"],rows,num_cols=(2,3,5)))
 
 
 def render_retro(latest):

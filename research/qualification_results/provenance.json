@@ -1,0 +1,20 @@
+{
+  "git_commit": "966b308bb1be06ecaa9b0ec81f9897345dd4ac60",
+  "source_and_input_sha256": {
+    "research/qualified_output/schedule.csv": "ff626ee700813b4dd6be18429e14a7cc6073f22cd68f162f2c26c85ba0f2b183",
+    "research/qualified_output/boxes.csv": "09e8ce94f29bfc2b259ab83c740e5ea9f1e78b0df3579bd714c9b046da3d72c2",
+    "research/qualified_output/availability.pkl": "3b1c711f640efc3475d09452acb9919af510462053704464bb782b00ab621ea9",
+    "research/production_qualification.py": "9ba2a2eadbc291cfd8e022946010fb3382956206361b90ca231a8aacc4ccf2ab",
+    "research/qualified_interactions.py": "4c84746dab633d0fe9d1d0fb922ef1683d70d535b9af249f012a54de12b09d94",
+    "nfl_model.py": "7a79523a1366667596a121cdc11a5b1e03ff79cf330798e1760b3c3ead10f3cb",
+    "research/PRODUCTION_QUALIFICATION.md": "b1f6df0c5e3be91147d76eb1d056adc95092a847e533e5bc4c3f92600c79ae9e"
+  },
+  "cache_signature": "0c7057ab7b1a3d19d4adb46af04d0255725a4e514c0594b20dcd9635bd5608e2",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "nflreadpy": "0.1.5",
+    "pyarrow": "26.0.0"
+  }
+}
