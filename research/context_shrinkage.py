@@ -136,7 +136,7 @@ def run(input_dir, output_dir, rebuild_inputs=False):
         f.to_csv(pack,index=False,compression={'method':'gzip','mtime':0})
         refs.to_csv(ref_path,index=False)
         raw=[json.loads(x) for x in (ROOT/'data/forward_predictions.jsonl').read_text().splitlines()]
-        raw=[r for r in raw if r['revision']==m.REVISION and 'model_inputs' in r]
+        raw=[r for r in raw if r['revision']=='boxscore-composite-v1.16' and 'model_inputs' in r]
         snapshot_path.write_text(''.join(json.dumps(r)+'\n' for r in raw))
     # Normalize column naming for binary scoring and evaluation output.
     eligible=f.ready & f['home won'].isin([0.,1.]) & np.isfinite(f.q) & np.isfinite(f[CONTEXTS]).all(axis=1)
@@ -152,7 +152,7 @@ def run(input_dir, output_dir, rebuild_inputs=False):
             audit.append({'arm':arm,'evaluation_season':int(year),'evaluation_week':int(week),
                           **{k:v for k,v in fitted.items() if k not in ('names','scale','beta')}})
             if arm=='production':
-                reference=m.fit_composite(train,m.PRODUCT_RECIPE,int(year),int(week))
+                reference=m.fit_composite(train,m.LEGACY_PRODUCT_RECIPE,int(year),int(week))
                 if not np.allclose(out.loc[rows.index,arm],m.apply_fit(test,reference),atol=1e-10,rtol=0):
                     raise ValueError('Zero-shrinkage production math failed')
         if week==1: print(f'Fit season {year}',flush=True)

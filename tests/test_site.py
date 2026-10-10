@@ -207,6 +207,9 @@ def test_snapshot_copies_page_inputs(tmp_path):
     pd.DataFrame().to_csv(run / "market_blend_diagnostic.csv", index=False)  # empty: must not be copied
     (run / "week5_board.html").write_text("<html></html>")
     latest, proj = tmp_path / "latest", tmp_path / "proj"
+    proj.mkdir()
+    pd.DataFrame({"game_id": ["old"], "model_wp": [.99]}).to_csv(proj / "2026_week04.csv", index=False)
+    pd.DataFrame({"game_id": ["prior"], "model_wp": [.61]}).to_csv(run / "week4_board.csv", index=False)
     latest.mkdir()
     (latest / "stale.csv").write_text("x\n1\n")
     assert b.snapshot(run, latest, proj) == (2026, 5)
@@ -216,6 +219,8 @@ def test_snapshot_copies_page_inputs(tmp_path):
     board = pd.read_csv(latest / "board.csv")
     assert "d__x" not in board.columns and "home__avail__qb_delta" in board.columns
     assert (proj / "2026_week05.csv").exists()
+    assert pd.read_csv(proj / "2026_week04.csv").model_wp.iloc[0] == .61
+    assert pd.read_csv(proj / "2026_week04.csv").game_id.iloc[0] == "prior"
     assert json.loads((latest / "manifest.json").read_text())["availability_audit"] == []
 
 

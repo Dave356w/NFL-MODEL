@@ -1,9 +1,18 @@
-"""NFL box-score composite W/L model — v1.16 (production).
+"""NFL box-score composite W/L model — v1.17 (production).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
 by actions/cache) set; see README.md.
+
+v1.17 (NEW experiment, owner decision 2026-10-10): Passing × predicted total.
+Adopts the exact market-only stage-one forecasts and pass_total stack tested in
+research/market_residual_models.py: margin edge, site × total context, and passing
+product × total context added to v1.16. Targets use prices and earlier outcomes;
+weekly OOF means/dispersion and prior-season NLL rule selection prevent lookahead.
+Coefficients remain fit on log loss; the owner selected this recipe for historical
+ROI after exposed development. New revision/output; old snapshots remain immutable.
+
 
 v1.16 (NEW experiment, owner decision 2026-10-09): adopt frozen market-offset
 Product + 1 SD contexts. Raw main profiles h8/ridge 0.1, raw pass profiles h16,
@@ -420,7 +429,7 @@ from html import escape
 import numpy as np
 import pandas as pd
 from scipy.optimize import minimize
-from scipy.special import logit, expit,ndtr,ndtri
+from scipy.special import logit,expit,ndtr,ndtri
 try:
     from IPython.display import display,HTML
     HAS_IPY=True
@@ -431,11 +440,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.16'
+REVISION='boxscore-composite-v1.17'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_16'  # new experiment; keep earlier folders untouched
+OUTPUT_NAME='nfl_boxscore_output_v1_17'  # new experiment; keep earlier folders untouched
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -465,7 +474,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.17 passing × predicted total; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1642,8 +1651,12 @@ def checked_optimize(obj,p):
 
 
 PRODUCT_CONTEXT_NAMES=('pass_product','pass_1sd_pp','pass_1sd_pn','pass_1sd_np','pass_1sd_nn')
-PRODUCT_RECIPE={'family':'rates_core_avail_cs_peaks_nosacks','half_life':8.,'ridge':.1,
+LEGACY_PRODUCT_RECIPE={'family':'rates_core_avail_cs_peaks_nosacks','half_life':8.,'ridge':.1,
                 'architecture':'market_product_1sd','interaction_ridge':.1,'pass_half_life':16.}
+PRODUCT_RECIPE={**LEGACY_PRODUCT_RECIPE,'architecture':'market_pass_predicted_total',
+ 'target_first_season':2020,'target_mean_ridge':.1,'target_selection':'prior_season_integer_bin_nll',
+ 'target_rules':['market_relationships','resid_h4_k4','resid_h4_k12','resid_h16_k4','resid_h16_k12'],
+ 'total_reference_points':45.,'target_unit_points':10.}
 
 
 def pass_contexts(f):
@@ -1678,6 +1691,176 @@ def pass_contexts(f):
     return d,pd.DataFrame(audit)
 
 
+MARKET_TARGETS=('margin','total')
+MARKET_RESIDUAL_RULES={f'resid_h{h}_k{k}':(h,k) for h in (4,16) for k in (4,12)}
+MARKET_TARGET_PRICE_NAMES={'margin':['spread10','moneyline_logit','total_context_price','spread_total_price','cover_logit'],
+ 'total':['total_context_price','abs_spread10','abs_moneyline_logit','spread_squared','over_logit']}
+PASS_TOTAL_NAMES=('margin_edge','total_homefield','pass_total_interaction')
+
+
+def market_target_weights(frame,year,week):
+    if not before(frame,year,week).all():raise ValueError('Current/future training')
+    age=((year-frame.season.to_numpy())*19+week-frame.week.to_numpy())/(19*FIT_HALF_LIFE_SEASONS)
+    w=np.exp2(-age);return w/w.sum()
+
+def market_target_bin(y,mu,sd):
+    y,mu,sd=np.asarray(y),np.asarray(mu),np.asarray(sd)
+    if np.any(sd<=0) or not np.isfinite(sd).all():raise ValueError('Invalid market_target_dispersion')
+    lo=(y-.5-mu)/sd;hi=(y+.5-mu)/sd
+    # Survival function avoids catastrophic cancellation in the upper tail.
+    return np.maximum(np.where(lo>0,ndtr(-lo)-ndtr(-hi),ndtr(hi)-ndtr(lo)),1e-15)
+
+def fit_market_target_mean(train,test,target,names,arm):
+    year,week=int(test.season.iloc[0]),int(test.week.iloc[0])
+    t=train[np.isfinite(train[target])&np.isfinite(train[target+'_line'])&train.ready].copy()
+    if len(t)<MIN_TRAIN_GAMES:raise ValueError('Insufficient target training')
+    w=market_target_weights(t,year,week)
+    if arm=='market_centered':return test[target+'_line'].to_numpy(float),{'training_games':len(t),'center_only':True}
+    raw=np.nan_to_num(t[names].to_numpy(float),nan=0.,posinf=0.,neginf=0.)
+    mu=w@raw;scale=np.sqrt(w@((raw-mu)**2));scale[scale<1e-8]=1.
+    X=np.column_stack([np.ones(len(t)),raw/scale]);T=np.column_stack([np.ones(len(test)),np.nan_to_num(test[names].to_numpy(float),nan=0.,posinf=0.,neginf=0.)/scale])
+    offset=t[target+'_line'].to_numpy() if arm=='corrected' else np.zeros(len(t))
+    y=(t[target].to_numpy()-offset)/10.;pen=np.r_[0.,np.full(len(names),.1)]
+    beta=np.linalg.solve(X.T@(w[:,None]*X)+np.diag(pen),X.T@(w*y))
+    base=test[target+'_line'].to_numpy() if arm=='corrected' else np.zeros(len(test))
+    return base+10*(T@beta),{'training_games':len(t),'names':['intercept',*names],'scale':scale.tolist(),'beta':beta.tolist()}
+
+def market_target_dispersion(earlier,train,target,arm,year,week):
+    col=f'{target}__{arm}__mean'
+    if len(earlier) and col in earlier:
+        t=earlier[np.isfinite(earlier[col])&np.isfinite(earlier[target])].copy()
+    else:t=pd.DataFrame()
+    if len(t)>=80:
+        residual=t[target].to_numpy()-t[col].to_numpy();source='prior_weekly_forecast_errors'
+    else:
+        t=train[train.ready&np.isfinite(train[target])&np.isfinite(train[target+'_line'])].copy()
+        residual=t[target].to_numpy()-t[target+'_line'].to_numpy();source='prior_market_residual_fallback'
+    w=market_target_weights(t,year,week);sigma=max(float(np.sqrt(w@(residual*residual))),3.)
+    return sigma,{'dispersion_source':source,'dispersion_games':len(t),'dispersion_max_season':int(t.season.max()),'dispersion_max_week':int(t[t.season==t.season.max()].week.max())}
+
+def market_target_price_features(f):
+    f=f.copy();f['spread10']=f.margin_line/10.;f['moneyline_logit']=logit(np.clip(f.q,1e-5,1-1e-5))
+    f['total_context_price']=(f.total_line-45.)/10.;f['spread_total_price']=f.spread10*f.total_context_price
+    f['abs_spread10']=abs(f.spread10);f['abs_moneyline_logit']=abs(f.moneyline_logit);f['spread_squared']=f.spread10**2
+    f['cover_logit']=logit(np.clip(f.market_cover_q,1e-5,1-1e-5));f['over_logit']=logit(np.clip(f.market_over_q,1e-5,1-1e-5))
+    return f
+
+def market_residual_profile(history,year,week,team,half,prior):
+    if half<=0 or prior<0:raise ValueError('Invalid decay/prior')
+    h=history[before(history,year,week)&(history.season>=year-3)&((history.home==team)|(history.away==team))].sort_values(['season','week','game_id'])
+    if h.empty:return 0.,0.,0.,0.,-1,-1
+    w=np.exp2(-np.arange(len(h)-1,-1,-1,dtype=float)/half)*np.power(.5,year-h.season.to_numpy())
+    mr=(h.margin-h.margin_line).to_numpy()*np.where(h.home==team,1.,-1.)
+    tr=(h.total-h.total_line).to_numpy();den=w.sum()+prior
+    return float(w@mr/den),float(w@tr/den),float(w.sum()),float(w.sum()**2/(w@w)),int(h.season.max()),int(h[h.season==h.season.max()].week.max())
+
+def add_market_residuals(f):
+    f=f.copy();audit=[]
+    eligible=np.isfinite(f[['margin','total','margin_line','total_line']]).all(axis=1)
+    history=f.loc[eligible].copy()
+    for (year,week),g in f.groupby(['season','week'],sort=True):
+        for arm,(half,prior) in MARKET_RESIDUAL_RULES.items():
+            profiles={team:market_residual_profile(history,int(year),int(week),team,half,prior) for team in set(g.home)|set(g.away)}
+            for ix,row in g.iterrows():
+                h,a=profiles[row.home],profiles[row.away]
+                f.loc[ix,arm+'__margin_history']=(h[0]-a[0])/10.
+                f.loc[ix,arm+'__total_history']=(h[1]+a[1])/20.
+                for side,z in [('home',h),('away',a)]:audit.append({'game_id':row.game_id,'season':int(year),'week':int(week),'arm':arm,'side':side,'margin_residual_mean':z[0],'total_residual_mean':z[1],'decayed_game_mass':z[2],'effective_games':z[3],'max_source_season':z[4],'max_source_week':z[5]})
+    return f,pd.DataFrame(audit)
+
+def select_market_target_forecasts(pred):
+    pred=pred.copy();selections=[]
+    for year in sorted(pred.season.unique()):
+        earlier=pred[(pred.season<year)&np.isfinite(pred[['margin','total']]).all(axis=1)]
+        for target in MARKET_TARGETS:
+            scores={}
+            for arm in ('market_relationships',*MARKET_RESIDUAL_RULES):
+                if len(earlier):scores[arm]=float((-np.log(market_target_bin(earlier[target].to_numpy(),earlier[f'{target}__{arm}__mean'].to_numpy(),earlier[f'{target}__{arm}__sd'].to_numpy()))).mean())
+            choice=min(scores,key=lambda a:(scores[a],a)) if scores else 'market_relationships'
+            mask=pred.season==year
+            for field in ('mean','sd'):pred.loc[mask,f'{target}__selected__{field}']=pred.loc[mask,f'{target}__{choice}__{field}']
+            selections.append({'season':int(year),'target':target,'chosen':choice,'selection_through':int(earlier.season.max()) if len(earlier) else None,'prior_scores':scores})
+    return pred,selections
+
+
+def prepare_market_target_forecasts(frame):
+    """Rebuild the tested prequential targets, including prior-season selection.
+
+    Outcome availability controls training/scoring only; priced pending games also
+    receive forecasts. Stage-two rows retain their original weekly OOF inputs.
+    """
+    f=frame.copy();f['ready']=True
+    f=market_target_price_features(f);f,support=add_market_residuals(f)
+    priced=np.isfinite(f[['margin_line','total_line','q','market_cover_q','market_over_q']]).all(axis=1)
+    labeled=priced&np.isfinite(f[['margin','total']]).all(axis=1)
+    pred=f.loc[priced&(f.season>=2020)].copy();audit=[];fits={}
+    arms=('market_relationships',*MARKET_RESIDUAL_RULES)
+    for (year,week),g in pred.groupby(['season','week'],sort=True):
+        train=f[labeled&before(f,year,week)]
+        if len(train)<MIN_TRAIN_GAMES:raise ValueError('Insufficient market target warm-up')
+        earlier=pred[before(pred,year,week)&np.isfinite(pred[['margin','total']]).all(axis=1)]
+        through_year=int(train.season.max());through_week=int(train[train.season==through_year].week.max())
+        pred.loc[g.index,'stage1_through_season']=through_year;pred.loc[g.index,'stage1_through_week']=through_week
+        cutoff_fits=fits.setdefault(f'{int(year)}_{int(week)}',{})
+        for target in MARKET_TARGETS:
+            for arm in arms:
+                names=MARKET_TARGET_PRICE_NAMES[target]+([arm+f'__{target}_history'] if arm in MARKET_RESIDUAL_RULES else [])
+                mean,fit=fit_market_target_mean(train,g,target,names,'corrected')
+                sigma,da=market_target_dispersion(earlier,train,target,arm,int(year),int(week))
+                pred.loc[g.index,f'{target}__{arm}__mean']=mean;pred.loc[g.index,f'{target}__{arm}__sd']=sigma
+                metadata={'season':int(year),'week':int(week),'target':target,'arm':arm,
+                          'training_max_season':through_year,'training_max_week':through_week,**da}
+                cutoff_fits[f'{target}:{arm}']={**fit,**metadata};audit.append(metadata)
+    pred,selections=select_market_target_forecasts(pred)
+    pred['margin_edge']=(pred.margin__selected__mean-pred.margin_line)/10.
+    pred['total_context']=(pred.total__selected__mean-45.)/10.
+    return pred,pd.DataFrame(audit),support,selections,fits
+
+
+def attach_market_target_forecasts(features,schedules):
+    f=features[8.]
+    prices=['total_line','home_spread_odds','away_spread_odds','over_odds','under_odds']
+    frame=f.drop(columns=[c for c in prices if c in f]).merge(schedules[['game_id',*prices]],on='game_id',how='left',validate='one_to_one')
+    frame['margin']=frame.home_score-frame.away_score;frame['total']=frame.home_score+frame.away_score
+    frame['margin_line']=frame.spread_line
+    frame['market_cover_q']=market_ml_wp(frame.rename(columns={'home_moneyline':'original_home_ml','away_moneyline':'original_away_ml','home_spread_odds':'home_moneyline','away_spread_odds':'away_moneyline'}))
+    frame['market_over_q']=market_ml_wp(frame.rename(columns={'home_moneyline':'original_home_ml','away_moneyline':'original_away_ml','over_odds':'home_moneyline','under_odds':'away_moneyline'}))
+    pred,audit,support,selections,fits=prepare_market_target_forecasts(frame)
+    fields=['margin_edge','total_context','stage1_through_season','stage1_through_week',
+            *[f'{t}__selected__{c}' for t in MARKET_TARGETS for c in ('mean','sd')],
+            *[f'{a}__{t}_history' for a in MARKET_RESIDUAL_RULES for t in MARKET_TARGETS]]
+    frame=frame.merge(pred[['game_id',*fields]],on='game_id',how='left',validate='one_to_one')
+    frame['total_homefield']=frame.site*frame.total_context
+    frame['pass_total_interaction']=frame.pass_product*frame.total_context
+    features[8.]=frame
+    features['market_target_audit']=audit;features['market_residual_support']=support
+    features['market_target_selections']=selections;features['market_target_fits']=fits
+    return pred
+
+
+def validate_market_target_oof(frame):
+    fields=['stage1_through_season','stage1_through_week','season','week']
+    if not set(fields)<=set(frame) or not np.isfinite(frame[fields]).all().all():
+        raise ValueError('Missing market target OOF cutoff')
+    prior=(frame.stage1_through_season<frame.season)|((frame.stage1_through_season==frame.season)&(frame.stage1_through_week<frame.week))
+    if not prior.all():raise ValueError('Market target fit includes own/current/future outcome')
+
+
+def replay_market_targets(row,features,year,week):
+    """Recompute targets at an archived snapshot's own moneyline/spread quotes."""
+    row=market_target_price_features(row)
+    selected={r['target']:r['chosen'] for r in features['market_target_selections'] if r['season']==year}
+    fits=features['market_target_fits'][f'{year}_{week}']
+    for target in MARKET_TARGETS:
+        arm=selected[target];fit=fits[f'{target}:{arm}'];names=fit['names'][1:]
+        raw=row[names].to_numpy(float)/np.asarray(fit['scale'])
+        row[f'{target}__selected__mean']=row[target+'_line'].to_numpy()+10*(np.column_stack([np.ones(len(row)),raw])@np.asarray(fit['beta']))
+    row['margin_edge']=(row.margin__selected__mean-row.margin_line)/10.
+    row['total_context']=(row.total__selected__mean-45.)/10.
+    row['total_homefield']=row.site*row.total_context;row['pass_total_interaction']=row.pass_product*row.total_context
+    return row
+
+
 def prepare_product_features(features,schedules):
     if features[8.].game_id.tolist()!=features[16.].game_id.tolist():
         raise ValueError('Pass/main profile alignment mismatch')
@@ -1687,18 +1870,25 @@ def prepare_product_features(features,schedules):
     # The headline market comparator must be the actual market input.
     f['market_wp']=f.q
     features[8.]=pd.concat([f,desc],axis=1)
+    attach_market_target_forecasts(features,schedules)
     return audit
 
 
 def fit_composite(train,recipe,year,week,baseline=False):
     t=train[train['home won'].isin([0.,1.])&train.ready].copy()
-    offset=not baseline and recipe.get('architecture')=='market_product_1sd'
+    stack=not baseline and recipe.get('architecture')=='market_pass_predicted_total'
+    offset=not baseline and recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total')
+    if stack:
+        cols=feature_names(recipe['family'])+list(PRODUCT_CONTEXT_NAMES)+list(PASS_TOTAL_NAMES)
+        t=t[np.isfinite(t[cols]).all(axis=1)].copy()
+        validate_market_target_oof(t)
     if offset:
         t=t[np.isfinite(t.q)&np.isfinite(t[list(PRODUCT_CONTEXT_NAMES)]).all(axis=1)].copy()
     if len(t)<MIN_TRAIN_GAMES: raise ValueError(f'Only {len(t)} eligible labeled games; need {MIN_TRAIN_GAMES}')
     if not before(t,year,week).all(): raise ValueError('Training includes current/future week')
     names=['site'] if baseline else feature_names(recipe['family'])
     if offset: names=names+list(PRODUCT_CONTEXT_NAMES)
+    if stack: names=names+list(PASS_TOTAL_NAMES)
     raw=t[names].to_numpy(float)
     missing=~np.isfinite(raw)
     # Zero difference represents an unavailable/league-neutral matchup, not a future mean.
@@ -1712,7 +1902,7 @@ def fit_composite(train,recipe,year,week,baseline=False):
     y=t['home won'].to_numpy(float)
     lam=float(recipe['ridge']) if not baseline else .01
     penalty=np.full(len(names),lam); penalty[0]*=.1
-    if offset: penalty[-len(PRODUCT_CONTEXT_NAMES):]=float(recipe['interaction_ridge'])
+    if offset: penalty[len(feature_names(recipe['family'])):]=float(recipe['interaction_ridge'])
     base=logit(np.clip(t.q.to_numpy(),1e-5,1-1e-5)) if offset else np.zeros(len(t))
     def obj(beta):
         eta=base+Z@beta
@@ -1736,12 +1926,16 @@ def apply_fit(df,fit,contributions=False):
     if fit.get('market_offset'):
         score=score+logit(np.clip(df.q.to_numpy(float),1e-5,1-1e-5))
         valid=np.isfinite(df.q.to_numpy(float))&np.isfinite(df[list(PRODUCT_CONTEXT_NAMES)].to_numpy(float)).all(axis=1)
+        if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
+            valid &= np.isfinite(df[list(PASS_TOTAL_NAMES)]).all(axis=1)
+            validate_market_target_oof(df.loc[valid])
         score=np.where(valid,score,np.nan)
     return (expit(score),score,parts) if contributions else expit(score)
 
 
 def recipe_key(r):
     key=f'{r["family"]}_h{r["half_life"]:g}_r{r["ridge"]:g}'
+    if r.get('architecture')=='market_pass_predicted_total':return key+f'_market_pass_predicted_total_i{r["interaction_ridge"]:g}'
     return key+f'_market_product_1sd_i{r["interaction_ridge"]:g}' if r.get('architecture')=='market_product_1sd' else key
 def candidates():
     return [{'family':f,'half_life':h,'ridge':r} for f in FEATURE_FAMILIES for h in TEAM_HALF_LIVES for r in RIDGE_GRID]
@@ -1842,7 +2036,7 @@ def bootstrap_ci(delta):
 
 
 def scorecard(df):
-    product=any('market_product_1sd' in str(c) for c in df.columns) or ('recipe' in df and df.recipe.astype(str).str.contains('market_product_1sd').any())
+    product=any(('market_product_1sd' in str(c) or 'market_pass_predicted_total' in str(c)) for c in df.columns) or ('recipe' in df and df.recipe.astype(str).str.contains('market_product_1sd|market_pass_predicted_total',regex=True).any())
     market='no-vig moneyline market' if product else 'raw spread-derived market'
     cols={'box-score composite':'model_wp',market:'market_wp','home-field baseline':'homefield_wp'}
     s=df[df['home won'].isin([0.,1.])].replace([np.inf,-np.inf],np.nan).dropna(subset=list(cols.values()))
@@ -2073,7 +2267,7 @@ def candidate_roi(oof):
         key=recipe_key(r)
         b=flat_bets(oof.assign(model_wp=oof['p__'+key]))  # oof carries moneylines
         sm=roi_summary(b[fav])
-        rows.append({'key':key,'log loss':float(ll(y,oof['p__'+key]).mean()),**sm})
+        rows.append({'key':key,'log loss':float(ll(y[np.isin(y,[0.,1.])],oof.loc[np.isin(y,[0.,1.]),'p__'+key]).mean()),**sm})
     return pd.DataFrame(rows)
 
 
@@ -2298,6 +2492,9 @@ def current_predictions(features,recipe,year,through_week):
         if te.empty: continue
         tr=f[before(f,year,week)]
         fit=fit_composite(tr,recipe,year,week)
+        if recipe.get('architecture')=='market_pass_predicted_total':
+            fit['market_target_fit']=features['market_target_fits'][f'{year}_{week}']
+            fit['market_target_selection']=[r for r in features['market_target_selections'] if r['season']==year]
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
@@ -2335,7 +2532,7 @@ def contribution_table(board,fit):
 
 # Frozen recipe and genuine pre-kickoff snapshots.
 def config_signature():
-    cfg={'production_recipe':PRODUCT_RECIPE,'legacy_additive_candidates':candidates(),
+    cfg={'evaluation_ties':'graded as pushes; excluded from binary fitting/scoring','production_recipe':PRODUCT_RECIPE,'market_targets':{'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'},'legacy_additive_candidates':candidates(),
          'pass_contexts':{'threshold_sd':1.,'names':PRODUCT_CONTEXT_NAMES,
                          'center':'prior-week season; previous season at week 1',
                          'sd':'prior weeks trailing four seasons; pooled orientations',
@@ -2446,6 +2643,15 @@ def record_forward(board,fit,recipe_record,asof=None):
         if (identity,r['game_id']) in seen: continue
         if gate and not injury_reports_ready(r,ko,asof): continue
         if not np.isfinite(r['model_wp']): continue
+        if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
+            target_fields=('total_line','margin_line','market_cover_q','market_over_q','margin__selected__mean','total__selected__mean','stage1_through_season','stage1_through_week')
+            if not all(np.isfinite(r.get(name,np.nan)) for name in target_fields):
+                raise ValueError('Native passing-total forecast missing target prices/means/cutoffs')
+            expected=[(r['margin__selected__mean']-r['margin_line'])/10.,r['site']*(r['total__selected__mean']-45.)/10.,r['pass_product']*(r['total__selected__mean']-45.)/10.]
+            if not np.allclose([r[name] for name in PASS_TOTAL_NAMES],expected,rtol=0,atol=1e-12):
+                raise ValueError('Native passing-total inputs do not match target forecasts')
+            if not fit.get('market_target_fit') or not fit.get('market_target_selection'):
+                raise ValueError('Native passing-total forecast missing target fit/selection audit')
         if fit.get('market_offset'):
             if not np.isfinite(r.get('q',np.nan)): continue
             quote_q=market_ml_wp(pd.DataFrame([r]))[0]
@@ -2468,6 +2674,11 @@ def record_forward(board,fit,recipe_record,asof=None):
             record['market_no_vig_wp']=float(r['q'])
             record['model_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in fit['names']}
             record['pass_context_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in ('pass_ho','pass_ad','pass_ao','pass_hd')}
+            if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
+                record['market_target_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in ('total_line','margin_line','market_cover_q','market_over_q','margin__selected__mean','total__selected__mean','stage1_through_season','stage1_through_week')}
+                record['market_target_prices']={name:float(r[name]) if np.isfinite(r.get(name,np.nan)) else None for name in ('home_spread_odds','away_spread_odds','over_odds','under_odds')}
+                record['market_target_fit']=fit.get('market_target_fit')
+                record['market_target_selection']=fit.get('market_target_selection')
         new.append(record); seen.add((identity,r['game_id']))
     if new:
         path.parent.mkdir(parents=True,exist_ok=True)
@@ -2494,6 +2705,7 @@ def feature_label(name):
     if name=='market_log_odds': return 'Market baseline'
     if name=='pass_product': return 'Pass matchup product'
     if name.startswith('pass_1sd_'): return 'Pass matchup 1 SD context '+name[-2:].upper()
+    if name in PASS_TOTAL_NAMES:return {'margin_edge':'Expected margin above market','total_homefield':'Home field at expected scoring level','pass_total_interaction':'Passing matchup at expected scoring level'}[name]
     if name=='site': return 'Home field'
     if name.startswith('d__avail__'): return 'Availability: '+AVAIL_LABEL.get(name[10:],name[10:])
     if name==MARGIN_FEATURE: return 'Point margin per game (decayed)'
@@ -2635,7 +2847,7 @@ def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,wee
     out+=[f'<h1>Week {", ".join(map(str,weeks))} win probabilities</h1>',
           f'<p class="mut">{esc(seasons[0]) if seasons else ""} season. Generated {esc(generated)}. '
           f'Recipe {esc(recipe_key(recipe))}: {esc(fam)} features, {recipe["half_life"]:g}-game team half-life, ridge {recipe["ridge"]:g}, '+
-          (f'owner-fixed after historical development through {recipe_record["selection_max_season"]}. ' if recipe.get('architecture')=='market_product_1sd' else f'chosen from seasons through {recipe_record["selection_max_season"]}. ')+
+          (f'owner-fixed after historical development through {recipe_record["selection_max_season"]}. ' if recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total') else f'chosen from seasons through {recipe_record["selection_max_season"]}. ')+
           'Coefficients refit each week on earlier games only.</p>',
           '<div class="key"><span><i class="sw" style="background:var(--away)"></i>Away</span>'
           '<span><i class="sw" style="background:var(--home)"></i>Home</span>'
@@ -2769,7 +2981,7 @@ def definitions_table():
 
 def walk_forward_product(features,last_historical_season):
     f=features[8.]
-    valid=(f.season>=BACKTEST_FIRST_SEASON)&(f.season<=last_historical_season)&f['home won'].isin([0.,1.])&f.ready&np.isfinite(f.q)&np.isfinite(f['pass_product'])
+    valid=(f.season>=BACKTEST_FIRST_SEASON)&(f.season<=last_historical_season)&f['home won'].isin([0.,.5,1.])&f.ready&np.isfinite(f.q)&np.isfinite(f['pass_product'])&np.isfinite(f[list(PASS_TOTAL_NAMES)]).all(axis=1)
     out=f.loc[valid,['game_id','season','week','home','away','home won','market_wp','result','spread_line','home_moneyline','away_moneyline']].copy()
     col='p__'+recipe_key(PRODUCT_RECIPE)
     out[col]=np.nan; out['homefield_wp']=np.nan
@@ -2793,11 +3005,16 @@ def regrade_product_ledger(features,schedules,outdir):
         game=record['game_id']
         if game not in f.index: raise ValueError(f'Ledger game missing reconstructed profiles: {game}')
         te=f.loc[[game]].copy(); year,week=int(record['season']),int(record['week'])
+        for name,value in record.get('model_inputs',{}).items():
+            if name in feature_names(PRODUCT_RECIPE['family'])+list(PRODUCT_CONTEXT_NAMES):te[name]=np.nan if value is None else value
         key=(year,week)
         if key not in fits:
             fits[key]=fit_composite(features[8.][before(features[8.],year,week)],PRODUCT_RECIPE,year,week)
         for col in ('home_moneyline','away_moneyline'): te[col]=record.get(col,np.nan)
         te['q']=market_ml_wp(te)
+        if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
+            te['margin_line']=record.get('spread_line',te.margin_line.iloc[0])
+        if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':te=replay_market_targets(te,features,year,week)
         probability=float(apply_fit(te,fits[key])[0])
         result=float(results.loc[game,'result'])
         rows.append({'original_experiment':record['experiment'],'original_revision':record['revision'],
@@ -2806,7 +3023,7 @@ def regrade_product_ledger(features,schedules,outdir):
             'model_wp':probability,'market_wp':float(te.q.iloc[0]),
             'home_moneyline':record.get('home_moneyline'),'away_moneyline':record.get('away_moneyline'),
             'result':result,'home won':won(result),'revision':REVISION,
-            'basis':'retrospective reconstructed features at original snapshot quotes; not forward evidence'})
+            'basis':'retrospective reconstructed features at original moneyline/spread quotes; schedule total/cover/over capture times unknown; not forward evidence'})
     columns=['original_experiment','original_revision','original_generated_utc','game_id','season','week','home','away','original_model_wp','model_wp','market_wp','home_moneyline','away_moneyline','result','home won','revision','basis']
     replay=pd.DataFrame(rows,columns=columns)
     bets=flat_bets(replay)
@@ -2923,7 +3140,7 @@ def main():
     years=list(range(BACKTEST_FIRST_SEASON-WARMUP_SEASONS,season+1))
     if season<=OUTER_FIRST_SEASON: raise ValueError('Need at least one completed outer-test season')
     print(f'NFL box-score composite {REVISION} | season {season}')
-    print('Fixed market-offset Product + 1 SD contexts; prior-game profiles and availability; no same-game final stats.')
+    print('Fixed market-offset passing × predicted total; prior-game profiles and availability; no same-game final stats.')
     schedules=pd.concat([load_schedule(y) for y in years],ignore_index=True)
     current=schedules[schedules.season==season]
     pending=current.loc[current.result.isna(),'week']
@@ -3006,6 +3223,10 @@ def main():
         save(features[half],f'pregame_features_half_life_{half:g}.csv')
     context_audit=prepare_product_features(features,schedules)
     save(context_audit,'pass_context_reference_audit.csv')
+    save(features['market_target_audit'],'market_target_fit_audit.csv')
+    save(features['market_residual_support'],'market_residual_support.csv')
+    dump(outdir/'market_target_selections.json',features['market_target_selections'])
+    dump(outdir/'market_target_fits.json',features['market_target_fits'])
     save(features[8.],'pregame_features_half_life_8.csv')
     print('[3/4] Weekly fits of the owner-fixed production recipe')
     oof=cached_grid(features,season)
@@ -3044,6 +3265,9 @@ def main():
     gw,fit=current_predictions(features,recipe,season,cur)
     gw=attach_moneylines(gw,schedules)
     save(gw,'current_season_predictions.csv')
+    for wk,prior_board in gw.groupby('week'):
+        prior_board=prior_board.copy();prior_board['model_spread']=implied_spread(prior_board.model_wp)
+        save(prior_board,f'week{int(wk)}_board.csv')
     save(roi_table(gw[gw.week<cur]),'season_roi.csv')
     retro=retrospective_ledger(oof,gw,recipe,schedules,season,cur); save(retro,'retro_ledger.csv')
     save(roi_table(retro,by='season'),'retro_roi_by_season.csv'); save(roi_table(retro),'retro_roi_bands.csv')
@@ -3094,7 +3318,8 @@ def main():
                  'v1.14 omits separate offensive and defensive sack-rate regressors by owner choice after exploratory ablation; gain and variance reduction unresolved',
                  'lead/deficit peaks are not clipped or opponent-adjusted',
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty',
-                 'v1.16 market-offset Product + 1 SD contexts adopted after exposed 2023-25 development; reliable profit edge unresolved',
+                 'v1.17 passing × predicted total adopted for strongest tested historical ROI after exposed development; reliable profit edge unresolved',
+                 'market target forecasts use schedule quotes with unknown capture times; historical residual rule selection uses strictly prior-season OOF NLL',
                  'historical moneylines have no independent capture timestamp; no quote means no prediction']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); of the game week\'s own roster only '
                    'the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); '

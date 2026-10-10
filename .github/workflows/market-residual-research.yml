@@ -1,0 +1,45 @@
+name: Research market only rolling residuals
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/check_replay.py
+      - research/margin_total_models.py
+      - requirements.txt
+      - nfl_model.py
+      - research/context_shrinkage.py
+      - research/qualified_interactions.py
+      - research/production_qualification.py
+      - research/shrinkage_results/frozen_training_features.csv.gz
+      - research/shrinkage_results/archived_current_inputs.jsonl
+      - research/production_adoption_results/historical_reproduction.csv
+      - research/market_residual_models.py
+      - research/MARKET_RESIDUAL_MODELS.md
+      - research/market_residual_results/frozen_market_outcomes.csv.gz
+      - tests/test_market_residual_models.py
+      - .github/workflows/market-residual-research.yml
+permissions:
+  contents: read
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_market_residual_models.py -q
+      - run: python research/check_replay.py research/market_residual_results -- python research/market_residual_models.py
+      - run: git diff --exit-code -- research/market_residual_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: market-residual-results
+          path: research/market_residual_results/
+          if-no-files-found: error

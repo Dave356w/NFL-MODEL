@@ -1,0 +1,13 @@
+{
+  "research/qualified_interactions.py": "4c84746dab633d0fe9d1d0fb922ef1683d70d535b9af249f012a54de12b09d94",
+  "research/production_qualification.py": "9ba2a2eadbc291cfd8e022946010fb3382956206361b90ca231a8aacc4ccf2ab",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/production_adoption_results/historical_reproduction.csv": "e2472e2e79d01d4a1e2db83812277266299c432cad2e1bc12b0e931855cb737f",
+  "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826",
+  "research/market_residual_models.py": "bfa77d77831c6eeb169edd04dbc1b8ec2a0b7d8685eaecc053c494f0cc060dc9",
+  "research/MARKET_RESIDUAL_MODELS.md": "90ef87db5da946d277a61ebbc50e3a85c4dd42f4276eeb44c2044a0c68631a5f",
+  "research/margin_total_models.py": "cce82dd1910f74ac005e32c56cbbfca03ee81d1893d38d43d5335829fd6058cd",
+  "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
+  "nfl_model.py": "dc0aa5da382188968c501cbe234b858c6e040e2c99be6e4dc2731091de0937e4",
+  "research/market_residual_results/frozen_market_outcomes.csv.gz": "f7f95ebf253cd6b8b998f96bcb1978365ee505426b969d8e2ad8218c64e0e62f"
+}

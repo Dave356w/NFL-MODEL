@@ -74,11 +74,12 @@ SNAPSHOT = {
     "candidate_roi.csv": "candidate_roi.csv",
     "report_notes.csv": "report_notes.csv",
     "regraded_ledger.csv": "regraded_ledger.csv",
+    "market_target_fit_audit.csv": "market_target_fit_audit.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
               "home_moneyline", "away_moneyline",
-              "market_wp", "model_wp", "model_spread", "homefield_wp", "composite_log_odds", "recipe",
+              "total_line", "margin__selected__mean", "total__selected__mean", "market_wp", "model_wp", "model_spread", "homefield_wp", "composite_log_odds", "recipe",
               "away_qb_expected", "away_qb_usual", "home_qb_expected", "home_qb_usual",
               "away_injury_report", "home_injury_report"]
 TEAM_NAMES = {
@@ -151,6 +152,13 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
     compact = board[[c for c in BOARD_COLS if c in board.columns] + avail]
     compact.to_csv(latest / "board.csv", index=False, float_format="%.6g")
     Path(projections).mkdir(parents=True, exist_ok=True)
+    for prior in outdir.glob("week*_board.csv"):
+        full = pd.read_csv(prior)
+        if full.empty:
+            continue
+        prior_week = int(prior.stem.removeprefix("week").removesuffix("_board"))
+        fields = [c for c in BOARD_COLS if c in full] + [c for c in full if c.startswith(("home__avail__", "away__avail__"))]
+        full[fields].to_csv(Path(projections) / f"{season}_week{prior_week:02d}.csv", index=False, float_format="%.6g")
     compact.to_csv(Path(projections) / f"{season}_week{week:02d}.csv", index=False, float_format="%.6g")
     html = outdir / f"week{week}_board.html"
     if html.exists():
@@ -548,6 +556,8 @@ def factor_description(name, raw_input, away, home):
             label = f"{attack} passing vs {defense} defense"
         else:
             note = "Historical passing matchup pattern"
+    elif name in m.PASS_TOTAL_NAMES:
+        note = {"margin_edge":"Expected margin relative to the spread", "total_homefield":"Home-field effect at the expected combined score", "pass_total_interaction":"Passing matchup effect at the expected combined score"}[name]
     elif name == "pass_product":
         note = "Each passing attack matched with the opposing pass defense"
     elif name == "market_log_odds":

@@ -1,0 +1,38 @@
+name: Verify passing total production adoption
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/check_replay.py
+      - nfl_model.py
+      - research/adopt_pass_total.py
+      - research/pass_total_adoption_inputs/**
+      - research/market_residual_results/**
+      - research/margin_total_results/frozen_feature_prices.csv.gz
+      - research/shrinkage_results/frozen_training_features.csv.gz
+      - tests/test_pass_total_production.py
+      - .github/workflows/pass-total-adoption.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_pass_total_production.py tests/test_product_production.py -q
+      - run: python research/check_replay.py research/pass_total_adoption_results -- python research/adopt_pass_total.py
+      - run: git diff --exit-code -- research/pass_total_adoption_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pass-total-production-verification
+          path: research/pass_total_adoption_results/

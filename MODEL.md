@@ -1,10 +1,20 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.16), newest first; this page describes what the code
+version history (v1 to v1.17), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.16`
+## The current model: `boxscore-composite-v1.17`
+
+**Production adoption (2026-10-10).** Owner-selected **Passing × predicted total** after exposed historical comparisons, with a new revision/output folder. This is the exact `pass_total` candidate from `research/market_residual_models.py`, not a new blend or a refit on retrospective ROI. Win coefficients still fit penalized log loss. The production formula retains all v1.16 main and signed passing terms and adds:
+
+* `(predicted margin − market spread)/10`;
+* `site × (predicted total − 45)/10`;
+* `pass_product × (predicted total − 45)/10`.
+
+Margin/total means use fixed ridge 0.1 on market prices and strictly earlier actual outcomes. Their rules are selected once per season by strictly earlier-season weekly OOF integer-bin NLL among market relationships and four shrunk residual rules (half-life 4/16, pseudo-games 4/12, .5 offseason retention, three prior seasons). The tested winner includes this selection mechanism: totals used a residual rule in 2023–24; 2026 selects market relationships alone for both targets. Forecast dispersion uses earlier weekly errors, with an earlier-market-error warm-up. Box profiles enter only the win stack, trained on ready priced binary OOF rows from 2020 onward. Missing target prices or OOF inputs yield no prediction.
+
+On the same 812 historical comparison bets, it returned +46.32u, 5.70% ±2.54 pp SE versus v1.16 +29.06u, 3.58% ±2.52 pp. The adjusted ROI-gain interval [-.27,+4.89] includes a decline. Win LL .606426 beats market .608072 but trails v1.16 .605605. The owner prioritizes the stronger historical return candidate; reliability remains unresolved. Exposed history, Gaussian approximations and unknown schedule quote capture times remain limitations. New native snapshots save target prices, means, selection, fits and cutoff metadata. Original forward snapshots are unchanged; all historical tables, prior current-season projection files and separate snapshot replays regenerate with the new revision.
 
 **Target.** Binary home win. Ties are excluded from fitting and scoring, but
 their box scores still feed later profiles.
@@ -142,7 +152,7 @@ gain nor variance reduction was established. This is development evidence,
 not forward confirmation or a formal equivalence result. The new output folder
 is `nfl_boxscore_output_v1_14`; v1.13 and earlier recipes/snapshots remain intact.
 
-**Composite (v1.16).** The owner-fixed Product + 1 SD recipe uses raw main
+**Base composite retained from v1.16.** The owner-fixed Product + 1 SD recipe uses raw main
 profiles at h8 and raw pass profiles at h16. Start from the two-moneyline
 no-vig home probability q. The forecast is
 `sigmoid(logit(q) + main_features @ beta + pass_contexts @ gamma)`.
@@ -197,11 +207,11 @@ and a tie is a push. Each ROI is reported with:
 
 Prices: historical seasons use the nflverse schedule moneyline. A ledger
 snapshot saves the moneyline it saw at lock time, which is not necessarily the
-close. Log loss still fits the coefficients and selects the recipe (owner's
+close. Log loss still fits the coefficients and selects the market target rules (owner's
 decision 2026-10-06: ROI is reported, not optimized). It is shown as a
 secondary score.
 
-**Is the recipe chosen by ROI?** The owner adopted v1.16 after comparing
+**Is the recipe chosen by ROI?** The owner adopted v1.17 passing × predicted total after comparing
 historical ROI and forecast scores. Its hyperparameters are fixed rather than
 optimized annually; weekly coefficient fitting remains penalized log loss.
 Historical ranking does not substitute for native forward evidence.

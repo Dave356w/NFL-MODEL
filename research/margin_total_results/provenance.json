@@ -1,0 +1,12 @@
+{
+  "research/qualified_interactions.py": "4c84746dab633d0fe9d1d0fb922ef1683d70d535b9af249f012a54de12b09d94",
+  "research/production_qualification.py": "9ba2a2eadbc291cfd8e022946010fb3382956206361b90ca231a8aacc4ccf2ab",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/production_adoption_results/historical_reproduction.csv": "e2472e2e79d01d4a1e2db83812277266299c432cad2e1bc12b0e931855cb737f",
+  "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826",
+  "research/margin_total_models.py": "cce82dd1910f74ac005e32c56cbbfca03ee81d1893d38d43d5335829fd6058cd",
+  "research/MARGIN_TOTAL_MODELS.md": "7ec457a0811a28f6b4f6e5eaa0a8e6631fa4687fed27fd8528805704b7068d40",
+  "nfl_model.py": "dc0aa5da382188968c501cbe234b858c6e040e2c99be6e4dc2731091de0937e4",
+  "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
+  "research/margin_total_results/frozen_feature_prices.csv.gz": "91788712d42c61195124951b3dda62b32c65e42499700ebeb41dbe9115c6abd2"
+}
