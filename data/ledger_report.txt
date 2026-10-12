@@ -1,8 +1,8 @@
-NFL forward ledger report -- 2026-10-12 19:50 UTC
+NFL forward ledger report -- 2026-10-12 21:59 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
-Log loss/Brier market: spread-derived home win probability from the same snapshot.
+Log loss/Brier market: the probability saved in each original snapshot; no-vig moneylines for v1.16/v1.17, spread-derived for earlier revisions.
 
 == boxscore-composite-v1.17: 14 snapshots, 12 graded, 1 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 8-4-1, -0.34u, ROI -2.6% +/- 19.5 (1 SE)
@@ -39,7 +39,7 @@ Log loss/Brier market: spread-derived home win probability from the same snapsho
          80%+        1-1 (.500) |              0-0
     All picks        8-4 (.667) |       9-3 (.750)
 
-== boxscore-composite-v1.16: 13 snapshots, 12 graded, 0 pending, 1 ties
+== boxscore-composite-v1.16: 14 snapshots, 12 graded, 1 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 9-3-1, +1.37u, ROI +10.6% +/- 18.4 (1 SE)
     win 75.0% vs no-vig q 63.4% (excess +11.3pp); market-correct null ROI -4.1%
     same rows, market favorite every game: +1.37u, ROI +10.6%
