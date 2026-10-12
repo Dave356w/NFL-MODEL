@@ -28,10 +28,13 @@ jobs:
         run: python research/monte_carlo.py --output-dir research/monte_carlo_stability --feature-draws 512 --coefficient-draws 128 --seed 20261013
       - name: Summarize doubled-draw sensitivity
         run: python research/monte_carlo_stability.py
+      - name: Diagnose favorite mix and score concentration
+        run: python research/log_loss_diagnostics.py
       - uses: actions/upload-artifact@v4
         with:
           name: monte-carlo-uncertainty-results
           path: |
             research/monte_carlo_results/
             research/monte_carlo_stability/
+            research/log_loss_diagnostics_results/
           if-no-files-found: error

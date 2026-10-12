@@ -76,6 +76,11 @@ Run `python research/monte_carlo.py --prepare-boxes`, then
 `python research/monte_carlo.py`. The separate **Monte Carlo uncertainty research**
 workflow runs the experiment and a doubled-draw stability check without deployment.
 
+[Favorite-mix and upset diagnostics](research/log_loss_diagnostics_results/REPORT.md)
+compare paired log loss/Brier by market probability band, calibration,
+contribution concentration, leave-one-week/season sensitivity and a conditional
+market-correct simulation. Run `python research/log_loss_diagnostics.py`.
+
 ## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full
