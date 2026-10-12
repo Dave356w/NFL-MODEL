@@ -1,0 +1,9 @@
+{
+  "research/monte_carlo.py": "f9b28ba57e9373f38912830c05cafb40a8d1b098c353f4a7e416d0d35e035260",
+  "research/MONTE_CARLO.md": "87bf4a20fae53b7a4a8e6469d63cede3adb831e86c14d2a17601197e090a6657",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/market_residual_results/weekly_market_forecasts.csv.gz": "2fb38055342e0ff952fc427bf75710a0d80c91e1dab6a91c2c64e26e18c1d4e5",
+  "research/monte_carlo_inputs/boxes.csv.gz": "05c8fefba2bb28a0bc8aa447c538dfbf0513f57b50ea9ee8b14a586fb690cf25",
+  "research/monte_carlo_inputs/schedule.csv": "ff626ee700813b4dd6be18429e14a7cc6073f22cd68f162f2c26c85ba0f2b183",
+  "nfl_model.py": "61d00213f600b4e4388c8a4c437918ec64441c43c86d777cb4c7c95846953313"
+}

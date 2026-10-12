@@ -1,0 +1,39 @@
+{
+  "first_seed": 20261012,
+  "repeat_seed": 20261013,
+  "exact_arm_max_error": 0.0,
+  "first_common_bets": 811,
+  "repeat_common_bets": 812,
+  "rows": [
+    {
+      "arm": "feature_bootstrap",
+      "mean_absolute_probability_change": 0.002753715872781628,
+      "max_absolute_probability_change": 0.0356958900554043,
+      "changed_sides": 1,
+      "first_log_loss": 0.6058516511427068,
+      "repeat_log_loss": 0.6059075319773235,
+      "first_roi": 0.02156147757504446,
+      "repeat_roi": 0.024704616850819018
+    },
+    {
+      "arm": "coefficient_bootstrap",
+      "mean_absolute_probability_change": 0.005159953487141677,
+      "max_absolute_probability_change": 0.06455866634942148,
+      "changed_sides": 4,
+      "first_log_loss": 0.6064223196123842,
+      "repeat_log_loss": 0.6055840175219015,
+      "first_roi": 0.021015549792958117,
+      "repeat_roi": 0.026209567994807635
+    },
+    {
+      "arm": "combined",
+      "mean_absolute_probability_change": 0.006103590751320789,
+      "max_absolute_probability_change": 0.031913763224225344,
+      "changed_sides": 6,
+      "first_log_loss": 0.6061128399000528,
+      "repeat_log_loss": 0.6056762787174104,
+      "first_roi": 0.01746631318394912,
+      "repeat_roi": 0.021598573020433963
+    }
+  ]
+}

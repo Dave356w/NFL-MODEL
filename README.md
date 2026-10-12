@@ -57,12 +57,33 @@ See the [fixed protocol](research/PRODUCTION_QUALIFICATION.md),
 [nominated candidate](research/qualification_results/nominated_candidate.json).
 The [prospective qualification contract](research/FORWARD_QUALIFICATION.md)
 defines the evidence required beyond historical screening.
+
 The latest development run evaluated 337 configurations in six families;
 none passed the multiplicity-adjusted profitability and market-comparison gate.
 The command records input/source hashes, selections and per-game predictions.
 The separate **Research production qualification** workflow reruns it and
 uploads results; it neither deploys the site nor changes production recipes or
 the append-only forward ledger.
+
+## Monte Carlo uncertainty research
+
+[Protocol](research/MONTE_CARLO.md) and [results](research/monte_carlo_results/REPORT.md)
+test joint empirical market outcomes, price calibration, whole-game feature
+bootstrap, week-cluster coefficient refits and combined uncertainty on 2023–2025.
+The experiments provide outcome ranges and forecast sensitivity diagnostics;
+no challenger establishes improved predictive accuracy. Production remains v1.16.
+Run `python research/monte_carlo.py --prepare-boxes`, then
+`python research/monte_carlo.py`. The separate **Monte Carlo uncertainty research**
+workflow runs the experiment and a doubled-draw stability check without deployment.
+
+[Favorite-mix and upset diagnostics](research/log_loss_diagnostics_results/REPORT.md)
+compare paired log loss/Brier by market probability band, calibration,
+contribution concentration, leave-one-week/season sensitivity and a conditional
+market-correct simulation. Run `python research/log_loss_diagnostics.py`.
+
+[Earlier-season calibration follow-up](research/chronological_calibration_results/REPORT.md)
+tests close-matchup annual consistency and calibration fitted on earlier-season
+OOF predictions only. Run `python research/chronological_calibration.py`.
 
 ## Site build
 

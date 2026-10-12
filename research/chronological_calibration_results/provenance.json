@@ -1,0 +1,7 @@
+{
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/chronological_calibration.py": "ac7dcca9398ff61b5634d3d0d9a04eda66ab43f9d09a579a403c96e03b201130",
+  "research/CHRONOLOGICAL_CALIBRATION.md": "132c7feb9c01d1491d0aa60769e5dd5a91923025ef69a8d3f0389e61fd88f046",
+  "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
+  "research/monte_carlo_results/heldout_predictions.csv": "4a96ba134e409378118fafe916b81753d00e9bd2f125acb15959dabb6429b707"
+}
