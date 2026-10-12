@@ -1,0 +1,956 @@
+{
+  "basis": "Exposed historical development; each evaluation season calibrated/selected using earlier-season OOF forecasts only",
+  "production_max_error": 1.1102230246251565e-16,
+  "binary_games": 815,
+  "close_games": 294,
+  "summaries": [
+    {
+      "arm": "market",
+      "slice": "all",
+      "games": 815,
+      "log_loss": 0.6080720320254634,
+      "brier": 0.21033448921692602,
+      "ll_gain_vs_production": -0.002466753524705913,
+      "ll_ci95": [
+        -0.010502790218456307,
+        0.005517161511940085
+      ],
+      "ll_family_ci": [
+        -0.012211643992996884,
+        0.0072877692620719105
+      ],
+      "brier_gain_vs_production": -0.0013456636384723585,
+      "brier_ci95": [
+        -0.0048765417395044645,
+        0.0022591429252062263
+      ]
+    },
+    {
+      "arm": "production",
+      "slice": "all",
+      "games": 815,
+      "log_loss": 0.6056052785007575,
+      "brier": 0.20898882557845366,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "arm": "global_calibration",
+      "slice": "all",
+      "games": 815,
+      "log_loss": 0.604969621300966,
+      "brier": 0.20888406655315506,
+      "ll_gain_vs_production": 0.0006356571997915072,
+      "ll_ci95": [
+        -0.004467135403230063,
+        0.005688049598893171
+      ],
+      "ll_family_ci": [
+        -0.005414590695400664,
+        0.006884201823474111
+      ],
+      "brier_gain_vs_production": 0.00010475902529861222,
+      "brier_ci95": [
+        -0.0021558272906601118,
+        0.0024134527492995156
+      ]
+    },
+    {
+      "arm": "close_only_calibration",
+      "slice": "all",
+      "games": 815,
+      "log_loss": 0.6073245009552064,
+      "brier": 0.2097928755030298,
+      "ll_gain_vs_production": -0.0017192224544489048,
+      "ll_ci95": [
+        -0.005503087361701808,
+        0.0014101371079217682
+      ],
+      "ll_family_ci": [
+        -0.006397253135445042,
+        0.0020147975345072844
+      ],
+      "brier_gain_vs_production": -0.0008040499245761406,
+      "brier_ci95": [
+        -0.0025592089047236006,
+        0.0006697156275911172
+      ]
+    },
+    {
+      "arm": "selected_scale",
+      "slice": "all",
+      "games": 815,
+      "log_loss": 0.6080720320254634,
+      "brier": 0.21033448921692602,
+      "ll_gain_vs_production": -0.0024667535247059123,
+      "ll_ci95": [
+        -0.010502790218456303,
+        0.005517161511940088
+      ],
+      "ll_family_ci": [
+        -0.01221164399299688,
+        0.007287769262071912
+      ],
+      "brier_gain_vs_production": -0.0013456636384723566,
+      "brier_ci95": [
+        -0.004876541739504464,
+        0.002259142925206228
+      ]
+    },
+    {
+      "arm": "market",
+      "slice": "market confidence <60%",
+      "games": 294,
+      "log_loss": 0.6710794944281497,
+      "brier": 0.2390449197521735,
+      "ll_gain_vs_production": -0.009377298153844284,
+      "ll_ci95": [
+        -0.02332427332059239,
+        0.004792945741826083
+      ],
+      "ll_family_ci": [
+        -0.02645809110252257,
+        0.007693990149780356
+      ],
+      "brier_gain_vs_production": -0.004512286747655139,
+      "brier_ci95": [
+        -0.01115789437170503,
+        0.00228685294677638
+      ]
+    },
+    {
+      "arm": "production",
+      "slice": "market confidence <60%",
+      "games": 294,
+      "log_loss": 0.6617021962743056,
+      "brier": 0.2345326330045184,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "arm": "global_calibration",
+      "slice": "market confidence <60%",
+      "games": 294,
+      "log_loss": 0.6650645458033367,
+      "brier": 0.23607341689277278,
+      "ll_gain_vs_production": -0.003362349529031074,
+      "ll_ci95": [
+        -0.012362016518867619,
+        0.005635399671134513
+      ],
+      "ll_family_ci": [
+        -0.01431476862711359,
+        0.007581209384685289
+      ],
+      "brier_gain_vs_production": -0.0015407838882543837,
+      "brier_ci95": [
+        -0.005759535303664388,
+        0.0027562168141072206
+      ]
+    },
+    {
+      "arm": "close_only_calibration",
+      "slice": "market confidence <60%",
+      "games": 294,
+      "log_loss": 0.6664680680442915,
+      "brier": 0.23676154691108153,
+      "ll_gain_vs_production": -0.004765871769985909,
+      "ll_ci95": [
+        -0.014846126688255952,
+        0.0040039841786486344
+      ],
+      "ll_family_ci": [
+        -0.017200556431023126,
+        0.005666593689852389
+      ],
+      "brier_gain_vs_production": -0.002228913906563111,
+      "brier_ci95": [
+        -0.006919699103094467,
+        0.001895013847435248
+      ]
+    },
+    {
+      "arm": "selected_scale",
+      "slice": "market confidence <60%",
+      "games": 294,
+      "log_loss": 0.6710794944281497,
+      "brier": 0.2390449197521735,
+      "ll_gain_vs_production": -0.009377298153844284,
+      "ll_ci95": [
+        -0.023324273320592392,
+        0.004792945741826077
+      ],
+      "ll_family_ci": [
+        -0.026458091102522577,
+        0.007693990149780355
+      ],
+      "brier_gain_vs_production": -0.00451228674765514,
+      "brier_ci95": [
+        -0.01115789437170503,
+        0.002286852946776379
+      ]
+    }
+  ],
+  "annual": [
+    {
+      "season": 2023,
+      "arm": "market",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.627348797217123,
+      "brier": 0.21870951462559265,
+      "ll_gain_vs_production": 0.003465071098054459,
+      "ll_ci95": [
+        -0.011087827135681306,
+        0.01846463233484052
+      ],
+      "ll_family_ci": [
+        -0.01425513736908641,
+        0.022002018702031525
+      ],
+      "brier_gain_vs_production": 0.0013579462583110404,
+      "brier_ci95": [
+        -0.005325751972775248,
+        0.008244740137164837
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "production",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.6308138683151775,
+      "brier": 0.2200674608839037,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "global_calibration",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.6265609857529748,
+      "brier": 0.21826539537855294,
+      "ll_gain_vs_production": 0.004252882562202681,
+      "ll_ci95": [
+        -0.007020404489194546,
+        0.01592944575408743
+      ],
+      "ll_family_ci": [
+        -0.009719092557935042,
+        0.018791552755940827
+      ],
+      "brier_gain_vs_production": 0.0018020655053507468,
+      "brier_ci95": [
+        -0.003361241451660694,
+        0.0071753862696884415
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "close_only_calibration",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.6340727370801001,
+      "brier": 0.22152064339280234,
+      "ll_gain_vs_production": -0.003258868764922731,
+      "ll_ci95": [
+        -0.013601158225394261,
+        0.00507908157448012
+      ],
+      "ll_family_ci": [
+        -0.016479096891297694,
+        0.006485486035749974
+      ],
+      "brier_gain_vs_production": -0.0014531825088986362,
+      "brier_ci95": [
+        -0.006282583030825225,
+        0.002475123851831904
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "selected_scale",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.627348797217123,
+      "brier": 0.21870951462559265,
+      "ll_gain_vs_production": 0.0034650710980544575,
+      "ll_ci95": [
+        -0.011087827135681304,
+        0.018464632334840535
+      ],
+      "ll_family_ci": [
+        -0.014255137369086408,
+        0.022002018702031525
+      ],
+      "brier_gain_vs_production": 0.0013579462583110417,
+      "brier_ci95": [
+        -0.005325751972775247,
+        0.00824474013716484
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "market",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.5874888995056521,
+      "brier": 0.2001616187888562,
+      "ll_gain_vs_production": -0.004319408654755198,
+      "ll_ci95": [
+        -0.015879444444755753,
+        0.007171833282377922
+      ],
+      "ll_family_ci": [
+        -0.018082333380580837,
+        0.010054667716629133
+      ],
+      "brier_gain_vs_production": -0.0024431936104427373,
+      "brier_ci95": [
+        -0.007423973218859632,
+        0.002621707373849641
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "production",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.5831694908508969,
+      "brier": 0.19771842517841343,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "global_calibration",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.5845495565636967,
+      "brier": 0.1987599827950556,
+      "ll_gain_vs_production": -0.0013800657127998903,
+      "ll_ci95": [
+        -0.008960462685702948,
+        0.0061668036630019895
+      ],
+      "ll_family_ci": [
+        -0.010299148112999888,
+        0.00793261418244087
+      ],
+      "brier_gain_vs_production": -0.0010415576166421829,
+      "brier_ci95": [
+        -0.004335025745676827,
+        0.0023757389009638873
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "close_only_calibration",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.5844021819868991,
+      "brier": 0.19834925464204345,
+      "ll_gain_vs_production": -0.0012326911360022884,
+      "ll_ci95": [
+        -0.004820502137954661,
+        0.0024474108236912555
+      ],
+      "ll_family_ci": [
+        -0.005530314866928142,
+        0.0033564410172957754
+      ],
+      "brier_gain_vs_production": -0.0006308294636299941,
+      "brier_ci95": [
+        -0.002332018669592833,
+        0.0010944258252837348
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "selected_scale",
+      "slice": "all",
+      "games": 272,
+      "log_loss": 0.5874888995056521,
+      "brier": 0.2001616187888562,
+      "ll_gain_vs_production": -0.004319408654755202,
+      "ll_ci95": [
+        -0.015879444444755756,
+        0.007171833282377921
+      ],
+      "ll_family_ci": [
+        -0.01808233338058084,
+        0.010054667716629136
+      ],
+      "brier_gain_vs_production": -0.0024431936104427356,
+      "brier_ci95": [
+        -0.007423973218859629,
+        0.0026217073738496435
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "market",
+      "slice": "all",
+      "games": 271,
+      "log_loss": 0.6093832198972614,
+      "brier": 0.21213896835079202,
+      "ll_gain_vs_production": -0.006560975303367967,
+      "ll_ci95": [
+        -0.020382800273515227,
+        0.008836516776189367
+      ],
+      "ll_family_ci": [
+        -0.023145375384062195,
+        0.01238668213597628
+      ],
+      "brier_gain_vs_production": -0.0029576700574728805,
+      "brier_ci95": [
+        -0.008975642520734468,
+        0.003611947268966257
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "production",
+      "slice": "all",
+      "games": 271,
+      "log_loss": 0.6028222445938934,
+      "brier": 0.2091812982933191,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "global_calibration",
+      "slice": "all",
+      "games": 271,
+      "log_loss": 0.6037939994470577,
+      "brier": 0.2096295622789662,
+      "ll_gain_vs_production": -0.0009717548531641344,
+      "ll_ci95": [
+        -0.006952227625469198,
+        0.005641604390196555
+      ],
+      "ll_family_ci": [
+        -0.008164823633415216,
+        0.007231960453842048
+      ],
+      "brier_gain_vs_production": -0.0004482639856470863,
+      "brier_ci95": [
+        -0.003026042705906054,
+        0.002333503553054218
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "close_only_calibration",
+      "slice": "all",
+      "games": 271,
+      "log_loss": 0.6034844660231342,
+      "brier": 0.2095076799612223,
+      "ll_gain_vs_production": -0.0006622214292407831,
+      "ll_ci95": [
+        -0.0024755404152875735,
+        0.001255993696313683
+      ],
+      "ll_family_ci": [
+        -0.002884045435222599,
+        0.0016628219211097727
+      ],
+      "brier_gain_vs_production": -0.00032638166790319986,
+      "brier_ci95": [
+        -0.0011726637106823225,
+        0.0005806810180727813
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "selected_scale",
+      "slice": "all",
+      "games": 271,
+      "log_loss": 0.6093832198972614,
+      "brier": 0.21213896835079202,
+      "ll_gain_vs_production": -0.00656097530336796,
+      "ll_ci95": [
+        -0.020382800273515224,
+        0.00883651677618937
+      ],
+      "ll_family_ci": [
+        -0.02314537538406219,
+        0.01238668213597629
+      ],
+      "brier_gain_vs_production": -0.002957670057472879,
+      "brier_ci95": [
+        -0.008975642520734465,
+        0.0036119472689662606
+      ]
+    }
+  ],
+  "annual_close": [
+    {
+      "season": 2023,
+      "arm": "market",
+      "slice": "market confidence <60%",
+      "games": 109,
+      "log_loss": 0.66961312711068,
+      "brier": 0.2382969736692341,
+      "ll_gain_vs_production": -0.0021186699933553248,
+      "ll_ci95": [
+        -0.026715492039823114,
+        0.021901597274248497
+      ],
+      "ll_family_ci": [
+        -0.03227376479042518,
+        0.027358213928594558
+      ],
+      "brier_gain_vs_production": -0.0006700679092493519,
+      "brier_ci95": [
+        -0.012265218230686135,
+        0.010725640779657403
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "production",
+      "slice": "market confidence <60%",
+      "games": 109,
+      "log_loss": 0.6674944571173247,
+      "brier": 0.2376269057599847,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "market",
+      "slice": "market confidence <60%",
+      "games": 95,
+      "log_loss": 0.6699538864100919,
+      "brier": 0.23849116430044895,
+      "ll_gain_vs_production": -0.010555002027595193,
+      "ll_ci95": [
+        -0.03235154495624912,
+        0.012654688586303251
+      ],
+      "ll_family_ci": [
+        -0.036577627210411905,
+        0.018114184723552605
+      ],
+      "brier_gain_vs_production": -0.005292378008221715,
+      "brier_ci95": [
+        -0.015797247350918357,
+        0.005780792826902961
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "production",
+      "slice": "market confidence <60%",
+      "games": 95,
+      "log_loss": 0.6593988843824967,
+      "brier": 0.2331987862922272,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "market",
+      "slice": "market confidence <60%",
+      "games": 90,
+      "log_loss": 0.6740435699761463,
+      "brier": 0.2405352852072205,
+      "ll_gain_vs_production": -0.016925171503699394,
+      "ll_ci95": [
+        -0.04162828898311132,
+        0.01005314002120643
+      ],
+      "ll_family_ci": [
+        -0.04687330714050551,
+        0.016281045486332288
+      ],
+      "brier_gain_vs_production": -0.008342211010237431,
+      "brier_ci95": [
+        -0.02040308332222248,
+        0.004723152995191561
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "production",
+      "slice": "market confidence <60%",
+      "games": 90,
+      "log_loss": 0.6571183984724469,
+      "brier": 0.23219307419698307,
+      "ll_gain_vs_production": 0.0,
+      "ll_ci95": [
+        0.0,
+        0.0
+      ],
+      "ll_family_ci": [
+        0.0,
+        0.0
+      ],
+      "brier_gain_vs_production": 0.0,
+      "brier_ci95": [
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "close_concentration": [
+    {
+      "label": "close games, drop 0 largest absolute contributions",
+      "games": 294,
+      "market_ll": 0.6710794944281498,
+      "production_ll": 0.6617021962743056,
+      "ll_gain": 0.009377298153844282,
+      "ll_ci95": [
+        -0.004792945741826084,
+        0.02332427332059239
+      ],
+      "ll_family_ci": [
+        -0.009231086485582954,
+        0.02760440971679721
+      ],
+      "market_brier": 0.2390449197521735,
+      "production_brier": 0.2345326330045184,
+      "brier_gain": 0.00451228674765514,
+      "brier_ci95": [
+        -0.002286852946776383,
+        0.011157894371705028
+      ],
+      "expected_market_entropy": 0.6847152388496301,
+      "upsets": 117,
+      "market_favorite_probability": 0.5580610856700665
+    },
+    {
+      "label": "close games, drop 1 largest absolute contributions",
+      "games": 293,
+      "market_ll": 0.6702456767676404,
+      "production_ll": 0.6592485194746125,
+      "ll_gain": 0.01099715729302781,
+      "ll_ci95": [
+        -0.003167345006938301,
+        0.02488175634112656
+      ],
+      "ll_family_ci": [
+        -0.007100059674432728,
+        0.029019580431817744
+      ],
+      "market_brier": 0.2386335827660893,
+      "production_brier": 0.23342055439621548,
+      "brier_gain": 0.005213028369873847,
+      "brier_ci95": [
+        -0.0016262565767566203,
+        0.011860676595748921
+      ],
+      "expected_market_entropy": 0.6847546838265487,
+      "upsets": 116,
+      "market_favorite_probability": 0.5579191823043527
+    },
+    {
+      "label": "close games, drop 5 largest absolute contributions",
+      "games": 289,
+      "market_ll": 0.6693340545358424,
+      "production_ll": 0.6580065619120716,
+      "ll_gain": 0.011327492623770766,
+      "ll_ci95": [
+        -0.0014550112255580028,
+        0.023961648360757114
+      ],
+      "ll_family_ci": [
+        -0.005338846629034576,
+        0.02762940416997144
+      ],
+      "market_brier": 0.23818423670509675,
+      "production_brier": 0.23281547581266013,
+      "brier_gain": 0.0053687608924366395,
+      "brier_ci95": [
+        -0.0008779481956887374,
+        0.01150832638669272
+      ],
+      "expected_market_entropy": 0.6847140282225715,
+      "upsets": 114,
+      "market_favorite_probability": 0.5582108186356981
+    },
+    {
+      "label": "close games, drop 10 largest absolute contributions",
+      "games": 284,
+      "market_ll": 0.6702045203883847,
+      "production_ll": 0.6598904276963856,
+      "ll_gain": 0.01031409269199903,
+      "ll_ci95": [
+        -0.0017088713878701924,
+        0.021911223330056226
+      ],
+      "ll_family_ci": [
+        -0.0058378115338912845,
+        0.025187918973506522
+      ],
+      "market_brier": 0.23861479741324412,
+      "production_brier": 0.23361030715573997,
+      "brier_gain": 0.005004490257504148,
+      "brier_ci95": [
+        -0.0008729976229749188,
+        0.010685022458806613
+      ],
+      "expected_market_entropy": 0.6847053350203197,
+      "upsets": 112,
+      "market_favorite_probability": 0.5582674677697711
+    }
+  ],
+  "fit_audit": [
+    {
+      "evaluation_season": 2023,
+      "arm": "global_calibration",
+      "intercept": -0.011362212728576947,
+      "correction_scale": 0.2125319209596046,
+      "training_games": 540,
+      "max_source_season": 2022,
+      "close_only": false
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "close_only_calibration",
+      "intercept": -0.16608925720019882,
+      "correction_scale": 0.10167210208435623,
+      "training_games": 165,
+      "max_source_season": 2022,
+      "close_only": true
+    },
+    {
+      "evaluation_season": 2023,
+      "arm": "selected_scale",
+      "chosen_scale": 0.0,
+      "scores": {
+        "0.0": 0.6150770302513804,
+        "0.25": 0.6168620972095205,
+        "0.5": 0.619517044814119,
+        "0.75": 0.6230208263037531,
+        "1.0": 0.6273482109225128,
+        "1.25": 0.6324710364563261
+      },
+      "max_source_season": 2022
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "global_calibration",
+      "intercept": 0.0215832546892929,
+      "correction_scale": 0.4071179148355127,
+      "training_games": 812,
+      "max_source_season": 2023,
+      "close_only": false
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "close_only_calibration",
+      "intercept": -0.0024720950903126125,
+      "correction_scale": 0.5407807028381412,
+      "training_games": 274,
+      "max_source_season": 2023,
+      "close_only": true
+    },
+    {
+      "evaluation_season": 2024,
+      "arm": "selected_scale",
+      "chosen_scale": 0.0,
+      "scores": {
+        "0.0": 0.6191877699246341,
+        "0.25": 0.6200616874498805,
+        "0.5": 0.6219226271557619,
+        "0.75": 0.6247554871715889,
+        "1.0": 0.6285091207880359,
+        "1.25": 0.6331154593124062
+      },
+      "max_source_season": 2023
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "global_calibration",
+      "intercept": 0.013206734315266954,
+      "correction_scale": 0.5884007901452873,
+      "training_games": 1084,
+      "max_source_season": 2024,
+      "close_only": false
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "close_only_calibration",
+      "intercept": 0.00011035349548468629,
+      "correction_scale": 0.7855854158542078,
+      "training_games": 369,
+      "max_source_season": 2024,
+      "close_only": true
+    },
+    {
+      "evaluation_season": 2025,
+      "arm": "selected_scale",
+      "chosen_scale": 0.0,
+      "scores": {
+        "0.0": 0.611233809819502,
+        "0.25": 0.6113473654141641,
+        "0.5": 0.6123836961740337,
+        "0.75": 0.6143267028928773,
+        "1.0": 0.6171323870768719,
+        "1.25": 0.6207433746939598
+      },
+      "max_source_season": 2024
+    }
+  ],
+  "historical_returns": [
+    {
+      "arm": "market",
+      "bets": 811,
+      "wins": 555,
+      "losses": 256,
+      "pushes": 0,
+      "units": 0.18011893377257948,
+      "roi": 0.000222094862851516,
+      "roi_se": 0.02469306648248256,
+      "win_pct": 0.6843403205918619,
+      "mean_q": 0.6593340672359442,
+      "excess_pp": 2.5006253355917663,
+      "null_roi": -0.0409958711308986
+    },
+    {
+      "arm": "production",
+      "bets": 811,
+      "wins": 565,
+      "losses": 246,
+      "pushes": 0,
+      "units": 29.055959781287775,
+      "roi": 0.035827324021316616,
+      "roi_se": 0.025273144635216713,
+      "win_pct": 0.6966707768187423,
+      "mean_q": 0.6536271487002137,
+      "excess_pp": 4.304362811852869,
+      "null_roi": -0.0409958711308986
+    },
+    {
+      "arm": "global_calibration",
+      "bets": 811,
+      "wins": 560,
+      "losses": 251,
+      "pushes": 0,
+      "units": 10.735677179669803,
+      "roi": 0.013237579752983729,
+      "roi_se": 0.02472193848028443,
+      "win_pct": 0.6905055487053021,
+      "mean_q": 0.6587324832331395,
+      "excess_pp": 3.177306547216263,
+      "null_roi": -0.0409958711308986
+    },
+    {
+      "arm": "close_only_calibration",
+      "bets": 811,
+      "wins": 560,
+      "losses": 251,
+      "pushes": 0,
+      "units": 16.354427276818516,
+      "roi": 0.020165754965250946,
+      "roi_se": 0.025136113437711296,
+      "win_pct": 0.6905055487053021,
+      "mean_q": 0.6555945834103264,
+      "excess_pp": 3.4910965294975727,
+      "null_roi": -0.0409958711308986
+    },
+    {
+      "arm": "selected_scale",
+      "bets": 811,
+      "wins": 555,
+      "losses": 256,
+      "pushes": 0,
+      "units": 0.18011893377257948,
+      "roi": 0.000222094862851516,
+      "roi_se": 0.02469306648248256,
+      "win_pct": 0.6843403205918619,
+      "mean_q": 0.6593340672359442,
+      "excess_pp": 2.5006253355917663,
+      "null_roi": -0.0409958711308986
+    }
+  ]
+}

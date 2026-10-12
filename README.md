@@ -81,6 +81,10 @@ compare paired log loss/Brier by market probability band, calibration,
 contribution concentration, leave-one-week/season sensitivity and a conditional
 market-correct simulation. Run `python research/log_loss_diagnostics.py`.
 
+[Earlier-season calibration follow-up](research/chronological_calibration_results/REPORT.md)
+tests close-matchup annual consistency and calibration fitted on earlier-season
+OOF predictions only. Run `python research/chronological_calibration.py`.
+
 ## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full
