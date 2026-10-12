@@ -9,6 +9,12 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'research'))
 import margin_total_models as research
 
 
+@pytest.fixture(autouse=True)
+def archived_v117_configuration(monkeypatch):
+    monkeypatch.setattr(m,'PRODUCT_RECIPE',dict(m.PASS_TOTAL_RECIPE))
+    monkeypatch.setattr(m,'REVISION','boxscore-composite-v1.17')
+
+
 def fixture():
     rng=np.random.default_rng(817);n=400
     train=pd.DataFrame({'season':2022,'week':np.arange(n)%18+1,'home won':rng.integers(0,2,n).astype(float),

@@ -1,0 +1,13 @@
+{
+  "production_revision": "boxscore-composite-v1.16",
+  "configuration": "9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26",
+  "original_configuration_restored": true,
+  "historical_games": 816,
+  "historical_max_error": 7.325329232088507e-11,
+  "native_v116_max_error": 4.440892098500626e-16,
+  "original_snapshots": 30,
+  "unique_games": 15,
+  "original_ledger_sha256": "34bab78bae1527b1cbf31391228d807c736929254a419267feb8db531b19267c",
+  "ledger_unchanged": true,
+  "basis": "frozen retrospective verification; not new native forward forecasts"
+}
