@@ -1,0 +1,40 @@
+name: Verify v1.16 restoration and all-version reports
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - nfl_model.py
+      - build_site.py
+      - grade_ledger.py
+      - research/restore_v116.py
+      - research/restore_v116_inputs/**
+      - research/version_report.py
+      - research/shrinkage_results/**
+      - research/*_results/results.json
+      - tests/test_restore_v116.py
+      - tests/test_version_report.py
+      - .github/workflows/restore-v116.yml
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_restore_v116.py tests/test_version_report.py tests/test_product_production.py tests/test_pass_total_production.py -q
+      - run: python research/check_replay.py research/restore_v116_results -- python research/restore_v116.py
+      - run: git diff --exit-code -- research/restore_v116_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v116-restoration-and-all-version-reports
+          path: research/restore_v116_results/

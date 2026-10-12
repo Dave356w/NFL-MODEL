@@ -11,7 +11,7 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model: `boxscore-composite-v1.16`, the owner-fixed **Product + 1 SD**
+Current model (restored 2026-10-12): `boxscore-composite-v1.16`, the owner-fixed **Product + 1 SD**
 market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
 defense, availability and prior lead/deficit profiles provide additive corrections;
 raw h16 pass profiles provide the shared product and four signed 1 SD contexts.

@@ -11,6 +11,17 @@ import nfl_model as m
 
 
 def run():
+    # Verify the archived v1.17 specification independently of live production.
+    original=(m.PRODUCT_RECIPE,m.REVISION)
+    m.PRODUCT_RECIPE=dict(m.PASS_TOTAL_RECIPE)
+    m.REVISION='boxscore-composite-v1.17'
+    try:
+        return verify()
+    finally:
+        m.PRODUCT_RECIPE,m.REVISION=original
+
+
+def verify():
     out=ROOT/'research/pass_total_adoption_results';out.mkdir(exist_ok=True)
     pack=pd.read_csv(ROOT/'research/market_residual_results/frozen_market_outcomes.csv.gz')
     original=pd.read_csv(ROOT/'research/shrinkage_results/frozen_training_features.csv.gz').set_index('game_id')

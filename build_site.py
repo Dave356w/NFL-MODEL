@@ -45,6 +45,7 @@ import kalshi
 import matchup
 import nfl_model as m
 import totals
+from research import version_report
 
 DATA = Path("data")
 LATEST = DATA / "latest"
@@ -74,6 +75,10 @@ SNAPSHOT = {
     "candidate_roi.csv": "candidate_roi.csv",
     "report_notes.csv": "report_notes.csv",
     "regraded_ledger.csv": "regraded_ledger.csv",
+    "regraded_summary.csv": "regraded_summary.csv",
+    "version_historical.csv": "version_historical.csv",
+    "version_archived.csv": "version_archived.csv",
+    "version_native.csv": "version_native.csv",
     "market_target_fit_audit.csv": "market_target_fit_audit.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
@@ -888,9 +893,31 @@ def render_grades(ledger, latest, built):
     if latest is not None:
         parts.append(render_retro(latest))
         parts.append(render_regraded_snapshots(latest))
+        parts.append(render_version_comparisons(latest))
     parts.append("<p class='mut small'>Full statistics, including standard errors: "
                  "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
     return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
+
+
+def render_version_comparisons(latest):
+    out=[]
+    for name,title,note in [
+        ('version_native','Original competing versions: native forecasts','Original first pregame snapshots. Revision groups overlap and lock quotes differ; do not pool them.'),
+        ('version_archived','Competing models at frozen archived inputs','Retrospective counterfactuals, not native forward evidence. Same archived moneylines; target quote capture times unknown.'),
+        ('version_historical','All historical competing-model tests','Exposed 2023–2025 development. Compare within each study: cohorts and training histories differ. Older production labels describe the pre-v1.16 model.')]:
+        frame=latest.get(name)
+        if frame is None or frame.empty:continue
+        rows=[]
+        for r in frame.to_dict('records'):
+            label=r.get('revision',f"{r.get('study')}: {r.get('arm')}")
+            count=r.get('bets',r.get('games'))
+            rows.append([esc(label),str(int(count)),f"{int(r['wins'])}-{int(r['losses'])}-{int(r['pushes'])}",
+                         f"{r['units']:+.2f}",roi_short(r['roi']),f"{r['favorite_units']:+.2f}"])
+        out.append(f"<h2 class='sec'>{esc(title)}</h2><div class='gr-note flag-note'>{esc(note)}</div>"+
+                   folded('Show every tested arm',table(['Version / arm','Games or bets','W-L-P','Units','ROI','Favorite units'],rows,num_cols=(1,3,4,5))))
+    if out:
+        out.append("<p class='gr-note'>Detailed scores, uncertainty, pending counts and sources: <a href='version_report.md'>full comparison report</a> · <a href='version_historical.csv'>historical CSV</a> · <a href='version_archived.csv'>archived CSV</a> · <a href='version_native.csv'>native CSV</a>.</p>")
+    return ''.join(out)
 
 
 def render_regraded_snapshots(latest):
@@ -902,9 +929,22 @@ def render_regraded_snapshots(latest):
         rows.append([esc(r.original_revision),esc(r.game_id),pct(r.original_model_wp,1),
                      pct(r.model_wp,1),result_badge(r.bet_result if isinstance(r.bet_result,str) else ""),
                      f"{r.bet_units:+.2f}" if math.isfinite(num(r.bet_units)) else "—"])
-    return ("<h2 class='sec'>Original snapshots replayed with the current model</h2>"
+    summary=latest.get('regraded_summary')
+    overview=''
+    if summary is not None and not summary.empty:
+        entries=[]
+        for r in summary.itertuples(index=False):
+            entries.append([esc(r.group),str(int(r.games)),str(int(r.pending)),
+                            f'{int(r.wins)}-{int(r.losses)}-{int(r.pushes)}',
+                            f'{r.units:+.2f}',roi_short(r.roi),f'{r.favorite_units:+.2f}',
+                            f'{r.log_loss:.4f}' if math.isfinite(num(r.log_loss)) else '—'])
+        overview=table(['Original snapshot group','Unique games','Pending','W-L-P','Units','ROI','Favorite units','Log loss'],entries,num_cols=(1,2,4,5,6,7))
+    revision=latest.get('manifest',{}).get('revision','current model')
+    return (f"<h2 class='sec'>Original snapshots replayed with {esc(revision)}</h2>"
             "<div class='gr-note flag-note'>Retrospective reconstructed features at each original snapshot's moneylines. "
-            "Original pregame forecasts remain unchanged. Repeated snapshots are the same game, not independent evidence.</div>"
+            "Original pregame forecasts remain unchanged. Summaries use the earliest snapshot per unique game. "
+            "Revision groups overlap; do not add their results together. Pending games stay ungraded.</div>"
+            +overview
             +table(["Original revision","Game","Original home %","Replayed home %","Result","Units"],rows,num_cols=(2,3,5)))
 
 
@@ -1015,6 +1055,9 @@ def render_all(out_dir, data=DATA, now=None):
     (out / "ledger_report.txt").write_text((Path(data) / "ledger_report.txt").read_text()
                                            if (Path(data) / "ledger_report.txt").exists() else "No ledger yet.\n")
     (out / ".nojekyll").write_text("")
+    for name in ('version_report.md','version_historical.csv','version_archived.csv','version_native.csv','regraded_summary.csv','regraded_ledger_report.md','regraded_ledger.csv'):
+        source=Path(data)/'latest'/name
+        if source.exists():shutil.copyfile(source,out/name)
     return sorted(p.name for p in out.iterdir())
 
 
@@ -1031,6 +1074,7 @@ def main(argv=None):
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
+        version_report.run(DATA,LATEST)
     files = render_all(args.out)
     print(f"site: {len(files)} files -> {args.out}")
     return 0

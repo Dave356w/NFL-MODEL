@@ -4,7 +4,32 @@
 version history (v1 to v1.17), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.17`
+## The current model: `boxscore-composite-v1.16`
+
+**Production restored (2026-10-12).** Owner-directed return to the exact original
+market-offset **Product + 1 SD** recipe: raw main h8, passing h16, fixed no-vig
+moneyline logit coefficient 1, and main/context ridge 0.1. Weekly fits use only
+earlier games. The original configuration hash and frozen recipe resume; no
+new hyperparameters, confidence caps, target forecasts or outcome-driven tuning
+are introduced. v1.17 remains an independently reproducible research/archive
+specification in `PASS_TOTAL_RECIPE` and `research/adopt_pass_total.py`.
+
+Every original snapshot is preserved. The build refreshes all historical and
+current-season projection tables with v1.16 and separately replays every saved
+snapshot at its original moneylines. Retrospective summaries use each game's
+earliest snapshot; original-revision groups overlap and must not be pooled.
+Pending games remain pending, ties push in returns and are excluded from binary
+scores. Native reports continue to grade each original version unchanged.
+
+The grades page also reports every committed competing-model arm, separating
+historical development, frozen archived-input counterfactuals and native locks.
+`research/version_report.py` regenerates these comparisons each build without
+fitting or selecting another model. Full scores, uncertainty and sources are
+published as CSVs and `version_report.md`. The frozen restoration check is
+`python research/restore_v116.py`; its inputs/results live under the matching
+research directories. No restored model is claimed reliably profitable.
+
+### Archived v1.17 adoption: `boxscore-composite-v1.17`
 
 **Production adoption (2026-10-10).** Owner-selected **Passing × predicted total** after exposed historical comparisons, with a new revision/output folder. This is the exact `pass_total` candidate from `research/market_residual_models.py`, not a new blend or a refit on retrospective ROI. Win coefficients still fit penalized log loss. The production formula retains all v1.16 main and signed passing terms and adds:
 
@@ -152,7 +177,7 @@ gain nor variance reduction was established. This is development evidence,
 not forward confirmation or a formal equivalence result. The new output folder
 is `nfl_boxscore_output_v1_14`; v1.13 and earlier recipes/snapshots remain intact.
 
-**Base composite retained from v1.16.** The owner-fixed Product + 1 SD recipe uses raw main
+**Restored production composite (v1.16).** The owner-fixed Product + 1 SD recipe uses raw main
 profiles at h8 and raw pass profiles at h16. Start from the two-moneyline
 no-vig home probability q. The forecast is
 `sigmoid(logit(q) + main_features @ beta + pass_contexts @ gamma)`.
@@ -207,14 +232,15 @@ and a tie is a push. Each ROI is reported with:
 
 Prices: historical seasons use the nflverse schedule moneyline. A ledger
 snapshot saves the moneyline it saw at lock time, which is not necessarily the
-close. Log loss still fits the coefficients and selects the market target rules (owner's
+close. Log loss still fits the coefficients (archived v1.17 also selects market target rules by prior-season NLL) (owner's
 decision 2026-10-06: ROI is reported, not optimized). It is shown as a
 secondary score.
 
-**Is the recipe chosen by ROI?** The owner adopted v1.17 passing × predicted total after comparing
-historical ROI and forecast scores. Its hyperparameters are fixed rather than
-optimized annually; weekly coefficient fitting remains penalized log loss.
-Historical ranking does not substitute for native forward evidence.
+**Is the recipe chosen by ROI?** The owner restored v1.16 on 2026-10-12 after
+reviewing returns, probability scores and complexity. Its original formula is
+fixed; coefficients still fit penalized log loss. The earlier v1.17 adoption
+followed exposed historical ROI comparisons and is retained as archived research.
+Neither decision establishes native forward superiority.
 
 ### Where the model's bets differ from the favorite's (reporting only, v1.14.2)
 

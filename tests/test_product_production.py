@@ -76,7 +76,7 @@ def test_owner_recipe_does_not_reselect_from_historical_outcomes():
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
     o['home won']=1-o['home won']
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
-    assert m.REVISION=='boxscore-composite-v1.17'
+    assert m.REVISION=='boxscore-composite-v1.16'
     assert m.config_signature()[1]['production_recipe']==m.PRODUCT_RECIPE
 
 
@@ -119,7 +119,7 @@ def test_native_capture_requires_forecast_and_saves_replay_inputs(tmp_path,monke
     rec={'config_signature':m.config_signature()[0],'recipe':m.LEGACY_PRODUCT_RECIPE,'season':2023}
     records,n=m.record_forward(board,fit,rec,asof=dt.datetime(2023,9,9,tzinfo=dt.timezone.utc))
     assert n==1 and records[0]['game_id']=='b'
-    assert records[0]['revision']=='boxscore-composite-v1.17'
+    assert records[0]['revision']=='boxscore-composite-v1.16'
     assert records[0]['market_no_vig_wp']==board.q.iloc[1]
     assert set(records[0]['model_inputs'])==set(fit['names'])
     assert set(records[0]['pass_context_inputs'])=={'pass_ho','pass_ad','pass_ao','pass_hd'}

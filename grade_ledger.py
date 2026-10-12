@@ -345,7 +345,7 @@ def report_text(g, now=None, h5=None):
              "Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).",
              "Basis: native forward observations only; no reconstructed or backfilled rows.",
              "Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).",
-             "Log loss/Brier market: spread-derived home win probability from the same snapshot.",
+             "Log loss/Brier market: the probability saved in each original snapshot; no-vig moneylines for v1.16/v1.17, spread-derived for earlier revisions.",
              ""]
     if g.empty:
         return "\n".join(lines + ["No snapshots recorded yet."]) + "\n"
