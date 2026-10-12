@@ -12,3 +12,6 @@ selftest_board.html
 # Reproducible research caches and full candidate grids; compact results are committed.
 research/qualified_output/
 research/qualification_cache/
+research/monte_carlo_inputs/cache/
+research/monte_carlo_results/feature_covariance.jsonl
+research/monte_carlo_stability/feature_covariance.jsonl

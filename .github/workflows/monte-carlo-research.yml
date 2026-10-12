@@ -1,0 +1,37 @@
+name: Monte Carlo uncertainty research
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build historical team-game records
+        run: python research/monte_carlo.py --prepare-boxes
+      - name: Run fixed chronological experiment
+        run: python research/monte_carlo.py
+      - name: Check simulation numerical stability
+        run: python research/monte_carlo.py --output-dir research/monte_carlo_stability --feature-draws 512 --coefficient-draws 128 --seed 20261013
+      - name: Summarize doubled-draw sensitivity
+        run: python research/monte_carlo_stability.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: monte-carlo-uncertainty-results
+          path: |
+            research/monte_carlo_results/
+            research/monte_carlo_stability/
+          if-no-files-found: error
