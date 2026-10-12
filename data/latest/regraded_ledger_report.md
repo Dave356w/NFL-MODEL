@@ -8,7 +8,7 @@ Snapshots: 30; unique games: 15. Repeated snapshots are not independent games.
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.810119          L  -1.000000
 boxscore-composite-v1.13  2026_05_TB_DAL           0.632918  0.818149          L  -1.000000
 boxscore-composite-v1.14  2026_05_TB_DAL           0.619215  0.825522          L  -1.000000
-boxscore-composite-v1.16 2026_05_BAL_ATL           0.709701  0.701098                   NaN
+boxscore-composite-v1.16 2026_05_BAL_ATL           0.709701  0.710549          L  -1.000000
 boxscore-composite-v1.16  2026_05_CHI_GB           0.498569  0.500274          W   1.050000
 boxscore-composite-v1.16 2026_05_CIN_MIA           0.257985  0.255577          W   0.281690
 boxscore-composite-v1.16 2026_05_CLE_NYJ           0.543821  0.532607          W   0.740741
@@ -21,7 +21,7 @@ boxscore-composite-v1.16  2026_05_MIN_NO           0.482003  0.496298          W
 boxscore-composite-v1.16 2026_05_NYG_WAS           0.576515  0.580121          P   0.000000
 boxscore-composite-v1.16 2026_05_PHI_JAX           0.795347  0.796193          W   0.253165
 boxscore-composite-v1.16  2026_05_SF_SEA           0.939039  0.941918          L  -1.000000
-boxscore-composite-v1.17 2026_05_BAL_ATL           0.700461  0.700461                   NaN
+boxscore-composite-v1.17 2026_05_BAL_ATL           0.700461  0.700461          L  -1.000000
 boxscore-composite-v1.17  2026_05_CHI_GB           0.490153  0.490153          L  -1.000000
 boxscore-composite-v1.17 2026_05_CIN_MIA           0.260088  0.260088          W   0.289855
 boxscore-composite-v1.17 2026_05_CLE_NYJ           0.536092  0.536092          W   0.740741
