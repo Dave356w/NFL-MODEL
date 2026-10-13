@@ -1,2 +1,2 @@
-family,half_life,ridge,architecture,interaction_ridge,pass_half_life,key,log loss,games,validation seasons,selected,selection_basis
-rates_core_avail_cs_peaks_nosacks,8.0,0.1,market_product_1sd,0.1,16.0,rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1,0.6142703585805472,1355,5,True,owner-fixed after exposed historical development
+family,half_life,ridge,architecture,interaction_ridge,pass_half_life,favorite_penalty,key,log loss,games,validation seasons,selected,selection_basis
+rates_core_avail_cs_peaks_nosacks,8.0,0.1,market_product_1sd,0.1,16.0,0.2,rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1_fp0.2,0.6119605905234639,1355,5,True,owner-fixed after exposed historical development

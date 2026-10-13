@@ -1,7 +1,7 @@
 # Production restoration and all competing-model results
 
-Current production: **boxscore-composite-v1.16**, exact original Product + 1 SD recipe.
-Configuration: `9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26`. Owner-directed restoration on 2026-10-12.
+Current production: **boxscore-composite-v1.18**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
+Configuration: `73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20`. Owner decision 2026-10-13.
 Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.
 
 ## Native forward results
