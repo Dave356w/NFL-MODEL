@@ -1,0 +1,765 @@
+{
+  "protocol": "research/CONTEXT_SUPPORT_CAP.md",
+  "revision": "boxscore-composite-v1.16",
+  "model_revision_at_run": "boxscore-composite-v1.16",
+  "recipe": {
+    "family": "rates_core_avail_cs_peaks_nosacks",
+    "half_life": 8.0,
+    "ridge": 0.1,
+    "architecture": "market_product_1sd",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0
+  },
+  "candidates": {
+    "cap_k5": 5,
+    "cap_k1": 1,
+    "cap_k10": 10
+  },
+  "primary": "cap_k5",
+  "confidence_level": 0.9833333333333333,
+  "bases": {
+    "heldout": "Exposed historical development: 2023-2025 held-out walk-forward, prior-week fits",
+    "current": "Current-season walk-forward diagnostic: 2026 games with outcomes in the frozen pack; not pooled",
+    "replay": "Counterfactual replay of native v1.16 snapshots at archived inputs; not forward evidence"
+  },
+  "heldout": {
+    "results": [
+      {
+        "arm": "production",
+        "bets": 812,
+        "wins": 565,
+        "losses": 246,
+        "pushes": 1,
+        "units": 29.055959781287775,
+        "roi": 0.03578320170109332,
+        "roi_se": 0.02524203944611706,
+        "win_pct": 0.6966707768187423,
+        "mean_q": 0.6537385303090767,
+        "excess_pp": 4.304362811852869,
+        "null_roi": -0.04099496341597624,
+        "log_loss": 0.6056052785011516,
+        "brier": 0.20898882557864693
+      },
+      {
+        "arm": "cap_k5",
+        "bets": 812,
+        "wins": 563,
+        "losses": 248,
+        "pushes": 1,
+        "units": 24.021733717461935,
+        "roi": 0.029583415908204354,
+        "roi_se": 0.02509578026748656,
+        "win_pct": 0.6942046855733662,
+        "mean_q": 0.6533519904718467,
+        "excess_pp": 4.036265687023855,
+        "null_roi": -0.04099496341597624,
+        "log_loss": 0.6060456739518488,
+        "brier": 0.20926750810854222
+      },
+      {
+        "arm": "cap_k1",
+        "bets": 812,
+        "wins": 565,
+        "losses": 246,
+        "pushes": 1,
+        "units": 29.055959781287775,
+        "roi": 0.03578320170109332,
+        "roi_se": 0.02524203944611706,
+        "win_pct": 0.6966707768187423,
+        "mean_q": 0.6537385303090767,
+        "excess_pp": 4.304362811852869,
+        "null_roi": -0.04099496341597624,
+        "log_loss": 0.6056416753508201,
+        "brier": 0.2090134061286227
+      },
+      {
+        "arm": "cap_k10",
+        "bets": 812,
+        "wins": 564,
+        "losses": 247,
+        "pushes": 1,
+        "units": 26.934304839308417,
+        "roi": 0.033170326156783767,
+        "roi_se": 0.02519330734844683,
+        "win_pct": 0.6954377311960542,
+        "mean_q": 0.6537812353208585,
+        "excess_pp": 4.176782482683095,
+        "null_roi": -0.04099496341597624,
+        "log_loss": 0.6059963753904081,
+        "brier": 0.20919452701341434
+      },
+      {
+        "arm": "market",
+        "bets": 812,
+        "wins": 555,
+        "losses": 256,
+        "pushes": 1,
+        "units": 0.1801189337725777,
+        "roi": 0.00022182134701056368,
+        "roi_se": 0.024662637555025065,
+        "win_pct": 0.6843403205918619,
+        "mean_q": 0.6594384206200097,
+        "excess_pp": 2.5006253355917663,
+        "null_roi": -0.04099496341597624,
+        "log_loss": 0.6080720320254634,
+        "brier": 0.21033448921692602
+      }
+    ],
+    "comparisons": [
+      {
+        "arm": "cap_k5",
+        "support_k": 5,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": -0.00619978579288897,
+        "roi_delta_ci": [
+          -0.02456958071741705,
+          0.009636893037653636
+        ],
+        "ll_gain": -0.00044039545069709624,
+        "ll_gain_ci": [
+          -0.004576028615606084,
+          0.003225222007221055
+        ],
+        "brier_gain": -0.0002786825298953371,
+        "side_flips": 7,
+        "flip_units_delta": -5.034226063825844,
+        "capped_games": 19,
+        "capped_proper_games": 19,
+        "capped_ll_gain_total": -0.2273316238129373,
+        "uncapped_ll_gain_total": -0.13159066850519627,
+        "capped_units_delta": -3.75,
+        "capped_flips": [
+          "2023_16_BAL_SF"
+        ]
+      },
+      {
+        "arm": "cap_k1",
+        "support_k": 1,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": 0.0,
+        "roi_delta_ci": [
+          0.0,
+          0.0
+        ],
+        "ll_gain": -3.639684966851909e-05,
+        "ll_gain_ci": [
+          -0.0006104131769736978,
+          0.0004943567639822678
+        ],
+        "brier_gain": -2.4580549975823054e-05,
+        "side_flips": 0,
+        "flip_units_delta": 0.0,
+        "capped_games": 3,
+        "capped_proper_games": 3,
+        "capped_ll_gain_total": -0.029663432479843044,
+        "uncapped_ll_gain_total": 0.0,
+        "capped_units_delta": 0.0,
+        "capped_flips": []
+      },
+      {
+        "arm": "cap_k10",
+        "support_k": 10,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": -0.0026128755443095564,
+        "roi_delta_ci": [
+          -0.024782427750990987,
+          0.019163459900786686
+        ],
+        "ll_gain": -0.0003910968892564559,
+        "ll_gain_ci": [
+          -0.005604527370808997,
+          0.004473609682771361
+        ],
+        "brier_gain": -0.0002057014347674488,
+        "side_flips": 11,
+        "flip_units_delta": -2.12165494197936,
+        "capped_games": 40,
+        "capped_proper_games": 39,
+        "capped_ll_gain_total": 0.33405658750164224,
+        "uncapped_ll_gain_total": -0.6528005522456537,
+        "capped_units_delta": 0.6398550724637682,
+        "capped_flips": [
+          "2023_15_NYJ_MIA",
+          "2023_16_BAL_SF",
+          "2025_12_BUF_HOU"
+        ]
+      }
+    ],
+    "by_season": [
+      {
+        "arm": "production",
+        "season": 2023,
+        "bets": 270,
+        "wins": 184,
+        "losses": 86,
+        "pushes": 0,
+        "units": 8.437476573834946,
+        "roi": 0.031249913236425727,
+        "roi_se": 0.04539252768997185,
+        "win_pct": 0.6814814814814815,
+        "mean_q": 0.6447417743093927,
+        "excess_pp": 3.6739707172088742,
+        "null_roi": -0.04100696306312492,
+        "log_loss": 0.6308138683151775
+      },
+      {
+        "arm": "production",
+        "season": 2024,
+        "bets": 271,
+        "wins": 198,
+        "losses": 73,
+        "pushes": 0,
+        "units": 24.469326908625938,
+        "roi": 0.09029271922002191,
+        "roi_se": 0.04215468792793397,
+        "win_pct": 0.7306273062730627,
+        "mean_q": 0.6489589537738651,
+        "excess_pp": 8.166835249919757,
+        "null_roi": -0.04094787167481105,
+        "log_loss": 0.5831694908508351
+      },
+      {
+        "arm": "production",
+        "season": 2025,
+        "bets": 271,
+        "wins": 183,
+        "losses": 87,
+        "pushes": 1,
+        "units": -3.8508437011731083,
+        "roi": -0.014209755354882319,
+        "roi_se": 0.043495199549311636,
+        "win_pct": 0.6777777777777778,
+        "mean_q": 0.6674816644823498,
+        "excess_pp": 1.0579770149556467,
+        "null_roi": -0.04103009978913353,
+        "log_loss": 0.6028222445951408
+      },
+      {
+        "arm": "cap_k5",
+        "season": 2023,
+        "bets": 270,
+        "wins": 182,
+        "losses": 88,
+        "pushes": 0,
+        "units": 2.674679081437674,
+        "roi": 0.009906218820139534,
+        "roi_se": 0.04442622346539439,
+        "win_pct": 0.674074074074074,
+        "mean_q": 0.6468111277663299,
+        "excess_pp": 2.7262946307744174,
+        "null_roi": -0.04100696306312493,
+        "log_loss": 0.633043369713278
+      },
+      {
+        "arm": "cap_k5",
+        "season": 2024,
+        "bets": 271,
+        "wins": 197,
+        "losses": 74,
+        "pushes": 0,
+        "units": 22.897898337197365,
+        "roi": 0.08449408980515632,
+        "roi_se": 0.04230810419195316,
+        "win_pct": 0.7269372693726938,
+        "mean_q": 0.6481527823018485,
+        "excess_pp": 7.878448707084528,
+        "null_roi": -0.04094787167481105,
+        "log_loss": 0.5818287838418659
+      },
+      {
+        "arm": "cap_k5",
+        "season": 2025,
+        "bets": 271,
+        "wins": 184,
+        "losses": 86,
+        "pushes": 1,
+        "units": -1.5508437011731093,
+        "roi": -0.0057226704840336136,
+        "roi_se": 0.043610652677830986,
+        "win_pct": 0.6814814814814815,
+        "mean_q": 0.665067925322618,
+        "excess_pp": 1.4898234157309176,
+        "null_roi": -0.04103009978913353,
+        "log_loss": 0.6032546070249358
+      },
+      {
+        "arm": "cap_k1",
+        "season": 2023,
+        "bets": 270,
+        "wins": 184,
+        "losses": 86,
+        "pushes": 0,
+        "units": 8.437476573834946,
+        "roi": 0.031249913236425727,
+        "roi_se": 0.04539252768997185,
+        "win_pct": 0.6814814814814815,
+        "mean_q": 0.6447417743093927,
+        "excess_pp": 3.6739707172088742,
+        "null_roi": -0.04100696306312492,
+        "log_loss": 0.6313225928832455
+      },
+      {
+        "arm": "cap_k1",
+        "season": 2024,
+        "bets": 271,
+        "wins": 198,
+        "losses": 73,
+        "pushes": 0,
+        "units": 24.469326908625938,
+        "roi": 0.09029271922002191,
+        "roi_se": 0.04215468792793397,
+        "win_pct": 0.7306273062730627,
+        "mean_q": 0.6489589537738651,
+        "excess_pp": 8.166835249919757,
+        "null_roi": -0.04094787167481105,
+        "log_loss": 0.5827698230198254
+      },
+      {
+        "arm": "cap_k1",
+        "season": 2025,
+        "bets": 271,
+        "wins": 183,
+        "losses": 87,
+        "pushes": 1,
+        "units": -3.8508437011731083,
+        "roi": -0.014209755354882319,
+        "roi_se": 0.043495199549311636,
+        "win_pct": 0.6777777777777778,
+        "mean_q": 0.6674816644823498,
+        "excess_pp": 1.0579770149556467,
+        "null_roi": -0.04103009978913353,
+        "log_loss": 0.6028222445951408
+      },
+      {
+        "arm": "cap_k10",
+        "season": 2023,
+        "bets": 270,
+        "wins": 183,
+        "losses": 87,
+        "pushes": 0,
+        "units": 3.9645341539014427,
+        "roi": 0.014683459829264603,
+        "roi_se": 0.04427912587558731,
+        "win_pct": 0.6777777777777778,
+        "mean_q": 0.6486190463966783,
+        "excess_pp": 2.915873138109948,
+        "null_roi": -0.04100696306312493,
+        "log_loss": 0.635919634445592
+      },
+      {
+        "arm": "cap_k10",
+        "season": 2024,
+        "bets": 271,
+        "wins": 197,
+        "losses": 74,
+        "pushes": 0,
+        "units": 23.42061438658008,
+        "roi": 0.08642293131579365,
+        "roi_se": 0.042441824413187196,
+        "win_pct": 0.7269372693726938,
+        "mean_q": 0.6470840674023947,
+        "excess_pp": 7.98532019702991,
+        "null_roi": -0.04094787167481105,
+        "log_loss": 0.5801578577014184
+      },
+      {
+        "arm": "cap_k10",
+        "season": 2025,
+        "bets": 271,
+        "wins": 184,
+        "losses": 86,
+        "pushes": 1,
+        "units": -0.4508437011731097,
+        "roi": -0.001663629893627711,
+        "roi_se": 0.04414299342119687,
+        "win_pct": 0.6814814814814815,
+        "mean_q": 0.6656215434958856,
+        "excess_pp": 1.6150484176711166,
+        "null_roi": -0.04103009978913353,
+        "log_loss": 0.6018965611778442
+      },
+      {
+        "arm": "market",
+        "season": 2023,
+        "bets": 270,
+        "wins": 184,
+        "losses": 86,
+        "pushes": 0,
+        "units": 4.118752961751932,
+        "roi": 0.01525464059908123,
+        "roi_se": 0.043747997617985465,
+        "win_pct": 0.6814814814814815,
+        "mean_q": 0.6520842827045307,
+        "excess_pp": 2.9397198776950795,
+        "null_roi": -0.04100696306312492,
+        "log_loss": 0.627348797217123
+      },
+      {
+        "arm": "market",
+        "season": 2024,
+        "bets": 271,
+        "wins": 194,
+        "losses": 77,
+        "pushes": 0,
+        "units": 14.108509306160053,
+        "roi": 0.052060919948930084,
+        "roi_se": 0.04159743966850347,
+        "win_pct": 0.7158671586715867,
+        "mean_q": 0.6538133887740332,
+        "excess_pp": 6.205376989755351,
+        "null_roi": -0.040947871674811044,
+        "log_loss": 0.5874888995056521
+      },
+      {
+        "arm": "market",
+        "season": 2025,
+        "bets": 271,
+        "wins": 177,
+        "losses": 93,
+        "pushes": 1,
+        "units": -18.047143334139413,
+        "roi": -0.06659462484922293,
+        "roi_se": 0.04262389482560202,
+        "win_pct": 0.6555555555555556,
+        "mean_q": 0.6723904533411865,
+        "excess_pp": -1.656942163097952,
+        "null_roi": -0.04103009978913352,
+        "log_loss": 0.6093832198972614
+      }
+    ],
+    "bets": 812,
+    "proper_games": 815,
+    "excluded_bets": [
+      "2023_02_IND_HOU",
+      "2023_03_LAC_MIN",
+      "2024_11_CIN_LAC",
+      "2025_10_PHI_GB"
+    ]
+  },
+  "current": {
+    "results": [
+      {
+        "arm": "production",
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6846676904394275,
+        "brier": 0.24384881118495716
+      },
+      {
+        "arm": "cap_k5",
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6850351921617784,
+        "brier": 0.24401240005351485
+      },
+      {
+        "arm": "cap_k1",
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6846676904394275,
+        "brier": 0.24384881118495716
+      },
+      {
+        "arm": "cap_k10",
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6849884456309312,
+        "brier": 0.24385288388501325
+      },
+      {
+        "arm": "market",
+        "bets": 65,
+        "wins": 41,
+        "losses": 24,
+        "pushes": 0,
+        "units": -4.0502901783289875,
+        "roi": -0.06231215658967673,
+        "roi_se": 0.0920250033404975,
+        "win_pct": 0.6307692307692307,
+        "mean_q": 0.6531697385121592,
+        "excess_pp": -2.2400507742928455,
+        "null_roi": -0.04104157053956889,
+        "log_loss": 0.6662695690464726,
+        "brier": 0.23590681081018522
+      }
+    ],
+    "comparisons": [
+      {
+        "arm": "cap_k5",
+        "support_k": 5,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": 0.0,
+        "roi_delta_ci": [
+          0.0,
+          0.0
+        ],
+        "ll_gain": -0.0003675017223507847,
+        "ll_gain_ci": [
+          -0.007625632764206414,
+          0.005384401128206687
+        ],
+        "brier_gain": -0.00016358886855769082,
+        "side_flips": 0,
+        "flip_units_delta": 0.0,
+        "capped_games": 1,
+        "capped_proper_games": 1,
+        "capped_ll_gain_total": -0.16082769957955345,
+        "uncapped_ll_gain_total": 0.13694008762675244,
+        "capped_units_delta": 0.0,
+        "capped_flips": []
+      },
+      {
+        "arm": "cap_k1",
+        "support_k": 1,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": 0.0,
+        "roi_delta_ci": [
+          0.0,
+          0.0
+        ],
+        "ll_gain": 0.0,
+        "ll_gain_ci": [
+          0.0,
+          0.0
+        ],
+        "brier_gain": 0.0,
+        "side_flips": 0,
+        "flip_units_delta": 0.0,
+        "capped_games": 0,
+        "capped_proper_games": 0,
+        "capped_ll_gain_total": 0.0,
+        "uncapped_ll_gain_total": 0.0,
+        "capped_units_delta": 0.0,
+        "capped_flips": []
+      },
+      {
+        "arm": "cap_k10",
+        "support_k": 10,
+        "confidence_level": 0.9833333333333333,
+        "roi_delta": 0.0,
+        "roi_delta_ci": [
+          0.0,
+          0.0
+        ],
+        "ll_gain": -0.00032075519150360604,
+        "ll_gain_ci": [
+          -0.0019403596204674353,
+          0.0033604453032183147
+        ],
+        "brier_gain": -4.072700056077687e-06,
+        "side_flips": 0,
+        "flip_units_delta": 0.0,
+        "capped_games": 6,
+        "capped_proper_games": 6,
+        "capped_ll_gain_total": -0.1811967141713923,
+        "uncapped_ll_gain_total": 0.1603476267236579,
+        "capped_units_delta": 0.0,
+        "capped_flips": []
+      }
+    ],
+    "by_season": [
+      {
+        "arm": "production",
+        "season": 2026,
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6846676904394275
+      },
+      {
+        "arm": "cap_k5",
+        "season": 2026,
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6850351921617784
+      },
+      {
+        "arm": "cap_k1",
+        "season": 2026,
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6846676904394275
+      },
+      {
+        "arm": "cap_k10",
+        "season": 2026,
+        "bets": 65,
+        "wins": 40,
+        "losses": 25,
+        "pushes": 0,
+        "units": -5.196860558102769,
+        "roi": -0.07995170089388876,
+        "roi_se": 0.09372384518617023,
+        "win_pct": 0.6153846153846154,
+        "mean_q": 0.6464547353542637,
+        "excess_pp": -3.1070119969648258,
+        "null_roi": -0.04104157053956888,
+        "log_loss": 0.6849884456309312
+      },
+      {
+        "arm": "market",
+        "season": 2026,
+        "bets": 65,
+        "wins": 41,
+        "losses": 24,
+        "pushes": 0,
+        "units": -4.0502901783289875,
+        "roi": -0.06231215658967673,
+        "roi_se": 0.0920250033404975,
+        "win_pct": 0.6307692307692307,
+        "mean_q": 0.6531697385121592,
+        "excess_pp": -2.2400507742928455,
+        "null_roi": -0.04104157053956889,
+        "log_loss": 0.6662695690464726
+      }
+    ],
+    "bets": 65,
+    "proper_games": 65,
+    "excluded_bets": []
+  },
+  "historical_max_probability_error": 1.1102230246251565e-16,
+  "replay_max_probability_error": 2.220446049250313e-16,
+  "fits": 236,
+  "all_training_cutoffs_prior": true,
+  "verdict": "not supported",
+  "posthoc": {
+    "note": "Added after the primary result; descriptive only and not part of the decision rule",
+    "median_slope": {
+      "pass_product": {
+        "production": 0.04780414818079037,
+        "cap_k5": 0.03601888563415176,
+        "cap_k1": 0.04780414818079037,
+        "cap_k10": 0.029407643161160454
+      },
+      "pass_1sd_pp": {
+        "production": -1.1331179896439758,
+        "cap_k5": -0.932069360981385,
+        "cap_k1": -1.1331179896439758,
+        "cap_k10": -0.02645691486797578
+      },
+      "pass_1sd_pn": {
+        "production": -1.080339124271455,
+        "cap_k5": -1.7445046149069696,
+        "cap_k1": -1.080339124271455,
+        "cap_k10": -3.2222745992432795
+      },
+      "pass_1sd_np": {
+        "production": -0.10732626050651704,
+        "cap_k5": -0.7600830966471863,
+        "cap_k1": -0.10732626050651704,
+        "cap_k10": -1.0708430913342182
+      },
+      "pass_1sd_nn": {
+        "production": 0.02098612245571833,
+        "cap_k5": 0.7489903647118824,
+        "cap_k1": 0.02098612245571833,
+        "cap_k10": 0.9831765018410227
+      }
+    },
+    "sf_sea_hinge_logit": {
+      "production": 1.7041526537497975,
+      "cap_k5": 1.0800944771703405,
+      "cap_k1": 1.7041526537497975,
+      "cap_k10": 1.0805708188837178
+    },
+    "sf_sea_probability": {
+      "production": 0.9390388806510197,
+      "cap_k5": 0.8894918073281011,
+      "cap_k1": 0.9390388806510197,
+      "cap_k10": 0.884007641260186
+    }
+  },
+  "replay": {
+    "snapshots": 13,
+    "graded": 13,
+    "pending": 0,
+    "production": {
+      "units": 1.3749409107806327,
+      "bets": 13,
+      "log_loss": 0.7386271738412105,
+      "capped_games": 0
+    },
+    "cap_k5": {
+      "units": 1.3749409107806327,
+      "bets": 13,
+      "log_loss": 0.6894749062733246,
+      "capped_games": 1
+    },
+    "cap_k1": {
+      "units": 1.3749409107806327,
+      "bets": 13,
+      "log_loss": 0.7386271738412105,
+      "capped_games": 0
+    },
+    "cap_k10": {
+      "units": 1.3749409107806327,
+      "bets": 13,
+      "log_loss": 0.6844583866440016,
+      "capped_games": 1
+    },
+    "market_log_loss": 0.540710010143605,
+    "favorite_units": 1.3749409107806327
+  }
+}
