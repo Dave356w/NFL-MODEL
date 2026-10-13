@@ -252,3 +252,50 @@ diagnostics, no game outcomes); the held-out comparison (Test 29) was run after 
 decision and is reported, not used as a gate. Existing v1.14 and earlier recipes/snapshots
 remain separate and intact. H1/H2 stopping and experiment-specific sample rules remain as
 written; this note does not silently extend them to v1.15. H3/H4/H5 definitions are unchanged.
+
+**2026-10-13, owner decision, committed before any week-6 snapshot exists. H1 and H2 apply to
+v1.16 from 2026 week 6; their rules are unchanged.**
+The v1.12 sample ended when v1.13 was adopted, with one graded game, and no addendum extended
+H1/H2 to v1.13–v1.17. The owner restored v1.16 as production on 2026-10-12. H1 and H2 now apply
+to the forward rows of the `boxscore-composite-v1.16` experiment (config signature
+`9dad9b9a…62dcd26`, frozen 2026 recipe `rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1`)
+for games in 2026 week 6 or later, first pregame snapshot per game only. When this was committed
+the newest snapshot was written 2026-10-12 21:59 UTC for a week-5 game; no week-6 snapshot existed.
+
+- **Excluded:** the 14 week-5 v1.16 rows. They were written and graded before this addendum, and
+  the author has seen them: one qualified for H1 (2026_05_SF_SEA, model − q = +0.35, lost 1u).
+  v1.17 and v1.12–v1.14 rows stay their own experiments; nothing is pooled.
+- **Market:** q as in the Sample section, from the snapshot moneylines. For v1.16 it equals the
+  stored `market_wp` and the model's own market input.
+- **H2 groups:** weeks 14–18 against weeks 5–13 as written; in 2026 the mid group starts at
+  week 6. The postseason stays excluded from H2.
+- **Stopping:** unchanged. A change to `REVISION`, the config signature or the frozen recipe ends
+  this sample. Reporting-only changes that leave all three unchanged (v1.16.1) do not.
+- **Checkpoints and decision rules:** unchanged and cumulative: the end of the 2026 regular
+  season, after the postseason, then once per season.
+- **Grading:** `h1_summary` and `h2_summary` in `grade_ledger.py`, printed in
+  `data/ledger_report.txt`.
+
+*Source figures re-measured on v1.16, known to the author.*
+- 2023–25 held-out reproduction (`research/restore_v116_results/historical_reproduction.csv`;
+  exposed, since v1.16 was chosen on these seasons). H1: 10 of 816 rows qualify (4, 1, 5 by
+  season), 7-2-1, +5.0u, +50.0% ± 34.1 against a −4.1% null and +20.8% for the same-row
+  favorite; log-loss gain vs q +0.155 ± 0.194. H2: weeks 5–13 +0.0070 ± 0.0059 (n = 390),
+  weeks 14–18 −0.0053 ± 0.0093 (n = 234), difference −0.0123 ± 0.0110; week 18 alone
+  −0.0171 ± 0.0199 (n = 48).
+- 2017–20 out of sample (`research/out_of_sample_results/predictions.csv`; protocol committed
+  before any forecast existed). H1: 7 of 1,023 rows qualify, 2-4-1, −1.56u, −22.3% ± 42.3
+  against a −2.4% null. H2: weeks 5–13 −0.0038 ± 0.0049 (n = 516), weeks 14–17 −0.0109 ± 0.0070
+  (n = 256; no week 18 before 2021), difference −0.0071 ± 0.0086.
+
+*Power, stated now.*
+- **H1:** v1.16 starts from the market's log-odds, so it rarely departs from q by more than 0.17
+  (median |model − q| about 0.03, 99th percentile 0.15–0.18). Expect two or three qualifying bets
+  a season. With a per-bet SD near 1.1u, one season's SE is about 70 points, and the
+  falsification bar (n ≥ 50) is roughly two decades away. H1 will read "unresolved" for many
+  seasons, which is not evidence either way. A different threshold would be a new hypothesis,
+  registered on its own, not a correction of this one.
+- **H2:** about 110 mid and 80 late graded games in 2026, with a per-game SD of 0.12–0.14,
+  give a difference SE near 0.019. The held-out difference (−0.012) is well inside that, so a
+  2026 verdict is likely "unresolved". If that difference is the truth, the observed late − mid
+  still lands at or above zero (the falsification bar) about a quarter of the time.

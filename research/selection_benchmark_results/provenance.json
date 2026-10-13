@@ -1,0 +1,13 @@
+{
+  "research/selection_benchmark.py": "12cd85d3d48b37864deb737174326f88a10900f0333975cb4794a0b59582a612",
+  "research/qualification_results/heldout_predictions.csv": "20ede664178e2fd3b6831e5480060c88ea4a860dcd593113bb62b5b4e5a01699",
+  "research/context_results/heldout_predictions.csv": "865a5967f9b5afde9e77b510c8663ff3a1113ccd844951065a8db57379bbdb16",
+  "research/market_offset_results/heldout_predictions.csv": "7b812e1e3a640da6b5840b3294851b80e94a1b90ae24886a3c76197534260f55",
+  "research/shrinkage_results/heldout_predictions.csv": "3709403fcbdeb147dc6c184d6717958ce9ade31b075eff0d17f7657b9476e5c7",
+  "research/profile_robustness_results/heldout_predictions.csv": "b39cdd7aa8740f6a7fd6f4259c4a64b0a67c00b306b28fc3633a929034905b2c",
+  "research/margin_total_results/heldout_win_predictions.csv": "7eb5f67b42e4a7c2e46b5aeac0a2580ea413431841b1f1872744dd61fa3f5080",
+  "research/market_residual_results/heldout_win_predictions.csv": "5f023728727d95ff024da7f4e939b31f950335b61ca3ec4415feac549e5dadbf",
+  "research/monte_carlo_results/heldout_predictions.csv": "4a96ba134e409378118fafe916b81753d00e9bd2f125acb15959dabb6429b707",
+  "research/chronological_calibration_results/heldout_predictions.csv": "9e56f9650ec27eb19e8bd3348603e18429134e0f37470274312b0cccb85d9c50",
+  "research/support_cap_results/heldout_predictions.csv": "7d43a0278e36ea15063bfa05f647e2ac6aab3c109e25cea68ab05ea4e8e0d4bd"
+}

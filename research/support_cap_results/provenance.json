@@ -2,7 +2,7 @@
   "research/context_support_cap.py": "59d073732560e783e3249a981dcbfc5471b2d6a89f0dc99e402bfadf7b1b0cc9",
   "research/CONTEXT_SUPPORT_CAP.md": "5c3c9f101a35d99c388b082dbee55e72c428a0c43b5993f5a746134f4773abe0",
   "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
-  "nfl_model.py": "61d00213f600b4e4388c8a4c437918ec64441c43c86d777cb4c7c95846953313",
+  "nfl_model.py": "07b53d19ed2f235231d51951a1bdcd8878b64396dede680dcc34bf74ab232273",
   "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
   "research/restore_v116_results/historical_reproduction.csv": "28852b269f01994c4851ef51919801b5ef26cdcf2a13eef4048f1b8a3014eb85",
   "research/restore_v116_inputs/forward_predictions.jsonl": "34bab78bae1527b1cbf31391228d807c736929254a419267feb8db531b19267c",

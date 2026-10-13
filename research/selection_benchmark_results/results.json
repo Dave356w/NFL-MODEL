@@ -1,0 +1,42 @@
+{
+  "basis": "Exposed 2023-2025 held-out walk-forward; fixed committed forecasts; not forward evidence",
+  "games": 809,
+  "arms": 53,
+  "draws": 20000,
+  "bootstrap": 10000,
+  "seed": 20261013,
+  "units_vs_favorite": {
+    "best_arm": "market_residual:pass_total",
+    "best_units": 46.14162697689846,
+    "null_best_median_units": 16.687634580141395,
+    "null_best_p95_units": 44.65409128054735,
+    "market_null_p": 0.042,
+    "reality_check_p": 0.0366,
+    "reality_check_critical_per_game": 0.05395612733598082
+  },
+  "log_loss_gain": {
+    "best_arm": "margin_total:pass_market_total",
+    "best_gain": 0.0034711666967098863,
+    "null_best_median": 0.0005255480500974785,
+    "null_best_p95": 0.003403680529124485,
+    "market_null_p": 0.0472,
+    "reality_check_p": 0.6966,
+    "reality_check_critical": 0.012985259649204913
+  },
+  "named": {
+    "v1.16": {
+      "arm": "context:hinge_1_fixed_r0.1",
+      "units_vs_favorite": 30.58006619962788,
+      "ll_gain": 0.0027005485739511085,
+      "unadjusted_market_null_p": 0.007,
+      "market_null_p_against_best_arm": 0.17985
+    },
+    "v1.17": {
+      "arm": "market_residual:pass_total",
+      "units_vs_favorite": 46.14162697689846,
+      "ll_gain": 0.0019515983757507646,
+      "unadjusted_market_null_p": 0.00065,
+      "market_null_p_against_best_arm": 0.042
+    }
+  }
+}

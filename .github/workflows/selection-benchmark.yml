@@ -1,0 +1,46 @@
+name: Research selection-adjusted benchmark
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/check_replay.py
+      - requirements.txt
+      - research/selection_benchmark.py
+      - research/selection_benchmark_results/**
+      - research/qualification_results/heldout_predictions.csv
+      - research/context_results/heldout_predictions.csv
+      - research/market_offset_results/heldout_predictions.csv
+      - research/shrinkage_results/heldout_predictions.csv
+      - research/profile_robustness_results/heldout_predictions.csv
+      - research/margin_total_results/heldout_win_predictions.csv
+      - research/market_residual_results/heldout_win_predictions.csv
+      - research/monte_carlo_results/heldout_predictions.csv
+      - research/chronological_calibration_results/heldout_predictions.csv
+      - research/support_cap_results/heldout_predictions.csv
+      - tests/test_selection_benchmark.py
+      - .github/workflows/selection-benchmark.yml
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_selection_benchmark.py -q
+      - run: python research/check_replay.py research/selection_benchmark_results -- python research/selection_benchmark.py
+      - run: git diff --exit-code -- research/selection_benchmark_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: selection-benchmark-results
+          path: research/selection_benchmark_results/
+          if-no-files-found: error

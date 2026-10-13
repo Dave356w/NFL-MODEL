@@ -43,9 +43,18 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "kalshi_captured_utc", "kalshi_lag_hours", "kalshi_home_mid", "kalshi_side_ask", "kalshi_units",
            "kalshi_null", "kalshi_fav_units", "alt_rule", "alt_team", "alt_strike", "alt_ask", "alt_result",
            "alt_units", "alt_fav_units", "ladder_ticker", "ladder_team", "ladder_strike", "ladder_est",
-           "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null", "h4_pass_term"]
+           "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null", "h4_pass_term",
+           "close_home_moneyline", "close_away_moneyline", "close_q", "clv_pp"]
 ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
 ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
+# research/PREREGISTRATION.md, addendum 2026-10-13: H1/H2 apply to the forward rows of v1.16 under
+# its frozen configuration for games from 2026 week 6 on (cumulative across seasons). Changing
+# REVISION, the config signature or the recipe ends the sample. Earlier samples (to v1.12) ended.
+H12_REVISION = "boxscore-composite-v1.16"
+H12_EXPERIMENT = ("9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26:"
+                  "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1:")  # + season
+H12_FROM = (2026, 6)  # (season, week): the first week after the addendum
+H1_MIN_GAP = .17
 
 
 def load_records(path=LEDGER):
@@ -56,8 +65,9 @@ def load_records(path=LEDGER):
 
 
 def load_results(url=SCHEDULE_URL):
-    s = pd.read_csv(url, usecols=["game_id", "away_score", "home_score", "result"])
-    return s
+    """Final scores, plus nflverse's moneylines after the game (its closing line; no quote timestamp)."""
+    s = pd.read_csv(url, usecols=["game_id", "away_score", "home_score", "result", "away_moneyline", "home_moneyline"])
+    return s.rename(columns={"away_moneyline": "close_away_moneyline", "home_moneyline": "close_home_moneyline"})
 
 
 def grade(records, results, kalshi=None, ladder=None, h4=None):
@@ -105,6 +115,11 @@ def grade(records, results, kalshi=None, ladder=None, h4=None):
     g["bet_result"], g["units"], g["null_ev"] = bets.result, bets.units, bets.null_ev
     g["fav_units"] = fav.units.where(bets.units.notna())  # same rows as the model's bets
     g["model_spread"], g["spread_gap"], g["ats_side"], g["ats_result"] = ats(g)
+    close_cols = ["close_home_moneyline", "close_away_moneyline"]
+    for c in close_cols:
+        g[c] = pd.to_numeric(g[c], errors="coerce").astype(float) if c in g else np.nan
+    g.loc[g.status == "pending", close_cols] = np.nan  # a pre-game price is not a close
+    g["close_q"], g["clv_pp"] = closing_value(g)
     g = g.join(kalshi_grades(g, kalshi or [], ladder))
     g["h4_pass_term"] = g.game_id.map({r["game_id"]: r["pass_term"] for r in (h4 or [])})
     g = g.sort_values(["kickoff_utc", "game_id"], ascending=[False, True]).reset_index(drop=True)
@@ -125,6 +140,120 @@ def ats(g):
                    np.where(np.isclose(np.nan_to_num(cover), 0), "P",
                             np.where((cover > 0) == (side == "home"), "W", "L")))
     return sp, gap, side, res
+
+
+def closing_value(g):
+    """Diagnostic, not the goal metric: nflverse's no-vig closing home probability (its
+    moneylines once the game is over) and how far the model's side moved from the snapshot
+    quote, in percentage points. Positive = the market moved toward the model's side."""
+    close = pd.DataFrame({"home_moneyline": g.get("close_home_moneyline", np.nan),
+                          "away_moneyline": g.get("close_away_moneyline", np.nan)}, index=g.index)
+    close_q = pd.Series(m.market_ml_wp(close), index=g.index).where(g.status != "pending")
+    lock_q = pd.Series(m.market_ml_wp(g), index=g.index)
+    sign = np.where(g.bet_side.eq("home"), 1., np.where(g.bet_side.eq("away"), -1., np.nan))
+    return close_q, 100 * sign * (close_q - lock_q)
+
+
+def _logit(p):
+    p = np.clip(np.asarray(p, float), 1e-6, 1 - 1e-6)
+    return np.log(p / (1 - p))
+
+
+def clv_summary(part):
+    """Mean closing-line value on the model's side, the same on games where the model
+    backs the market underdog, and the slope of the line move on the model's departure."""
+    d = part[part.clv_pp.notna()]
+    if not len(d):
+        return {"n": 0}
+    v = d.clv_pp.astype(float)
+    lock_q = m.market_ml_wp(d)
+    dog = d.bet_side.eq(np.where(lock_q > .5, "away", "home")).to_numpy()
+    out = {"n": len(d), "mean": float(v.mean()), "se": float(v.std(ddof=1) / np.sqrt(len(v))) if len(v) > 1 else np.nan,
+           "dog_n": int(dog.sum()), "dog_mean": float(v[dog].mean()) if dog.any() else np.nan,
+           "slope": np.nan, "slope_se": np.nan}
+    x = _logit(d.model_wp) - _logit(lock_q)
+    y = _logit(d.close_q) - _logit(lock_q)
+    if len(d) >= 3 and np.var(x) > 0:
+        b, a = np.polyfit(x, y, 1)
+        resid = y - (a + b * x)
+        out["slope"] = float(b)
+        out["slope_se"] = float(np.sqrt(resid @ resid / (len(d) - 2) / np.sum((x - x.mean()) ** 2)))
+    return out
+
+
+def h12_rows(g):
+    """The registered H1/H2 sample: the first v1.16 snapshot per game under its frozen
+    configuration, from 2026 week 6, with the no-vig q from the snapshot moneylines."""
+    season, week = H12_FROM
+    later = (g.season > season) | ((g.season == season) & (g.week >= week))
+    d = g[g.revision.eq(H12_REVISION) & g.experiment.astype(str).str.startswith(H12_EXPERIMENT) & later]
+    d = d.sort_values("generated_utc").drop_duplicates("game_id").copy()
+    d["h_q"] = m.market_ml_wp(d)
+    return d[np.isfinite(d.h_q)]
+
+
+def h1_summary(g):
+    """Pre-registered H1: rows with |model_wp - q| > 0.17, flat 1u on the model's side."""
+    d = h12_rows(g)
+    d = d[(d.model_wp - d.h_q).abs() > H1_MIN_GAP]
+    b = d[d.units.notna()]
+    out = m.roi_summary(pd.DataFrame({"result": b.bet_result, "units": b.units, "q": b.bet_q, "null_ev": b.null_ev}))
+    out["fav_roi"] = float(b.fav_units.mean()) if len(b) else np.nan
+    s = b[b.status == "graded"]
+    y, p, q = s["home won"].astype(float), s.model_wp.astype(float), s.h_q.astype(float)
+    gain = -(y * np.log(q) + (1 - y) * np.log(1 - q)) + (y * np.log(p) + (1 - y) * np.log(1 - p))
+    out["ll_gain"] = float(gain.mean()) if len(gain) else np.nan
+    out["rows"] = int(len(h12_rows(g)))
+    return out
+
+
+def h1_verdict(s):
+    """Decision rule fixed in research/PREREGISTRATION.md (H1)."""
+    if not s["bets"]:
+        return "no qualifying graded rows"
+    edge = s["roi"] - s["null_roi"]
+    if np.isfinite(s["roi_se"]) and edge >= 2 * s["roi_se"]:
+        return "supported (ROI minus null >= 2 SE)"
+    if s["bets"] >= 50 and s["roi"] <= s["null_roi"]:
+        return "falsified (n >= 50, ROI at or below the null)"
+    return "unresolved"
+
+
+def h2_summary(g):
+    """Pre-registered H2: per-game log-loss gain over q, weeks 14-18 against weeks 5-13;
+    flat 1u ROI per group, with its null and the same-row favorite, as secondary."""
+    rows = h12_rows(g)
+    d = rows[rows.status == "graded"].copy()
+    y, p, q = d["home won"].astype(float), d.model_wp.astype(float), d.h_q.astype(float)
+    d["gain"] = -(y * np.log(q) + (1 - y) * np.log(1 - q)) + (y * np.log(p) + (1 - y) * np.log(1 - p))
+    bets = rows[rows.units.notna()]
+
+    def grp(lo, hi):
+        v = d.loc[d.week.between(lo, hi), "gain"].astype(float)
+        b = bets[bets.week.between(lo, hi)]
+        r = m.roi_summary(pd.DataFrame({"result": b.bet_result, "units": b.units, "q": b.bet_q, "null_ev": b.null_ev}))
+        return {"n": len(v), "mean": float(v.mean()) if len(v) else np.nan,
+                "se": float(v.std(ddof=1) / np.sqrt(len(v))) if len(v) > 1 else np.nan,
+                "bets": r["bets"], "roi": r["roi"], "roi_se": r["roi_se"], "null_roi": r["null_roi"],
+                "fav_roi": float(b.fav_units.mean()) if len(b) else np.nan}
+    out = {"mid": grp(5, 13), "late": grp(14, 18), "late_14_17": grp(14, 17), "week_18": grp(18, 18)}
+    mid, late = out["mid"], out["late"]
+    out["diff"] = late["mean"] - mid["mean"] if mid["n"] and late["n"] else np.nan
+    out["diff_se"] = float(np.hypot(mid["se"], late["se"])) if mid["n"] > 1 and late["n"] > 1 else np.nan
+    return out
+
+
+def h2_verdict(s):
+    """Decision rule fixed in research/PREREGISTRATION.md (H2)."""
+    if not s["late"]["n"] or not s["mid"]["n"]:
+        return "no late-season rows" if s["mid"]["n"] else "no graded rows"
+    if not np.isfinite(s["diff_se"]):
+        return "unresolved (too few rows for a standard error)"
+    if s["diff"] <= -2 * s["diff_se"]:
+        return "supported (late minus mid <= -2 SE)"
+    if s["diff"] >= 0:
+        return "falsified (late minus mid >= 0)"
+    return "unresolved"
 
 
 def kalshi_units(won, ask):
@@ -411,6 +540,17 @@ def report_text(g, now=None, h5=None):
                       + (f" +/- {100 * u.std(ddof=1) / np.sqrt(len(u)):.1f}" if len(u) > 1 else ""),
                       f"    Kalshi-mid null {100 * lb.ladder_null.mean():+.1f}% on the same bets; "
                       f"{int(part.ladder_ticker.notna().sum())} games qualified so far"]
+        cv = clv_summary(part)
+        if cv["n"]:
+            lines += ["  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game "
+                      "(its closing line; no independent quote timestamp)",
+                      f"    model's side, n={cv['n']}: the no-vig price moved {cv['mean']:+.2f} pts"
+                      + (f" +/- {cv['se']:.2f}" if np.isfinite(cv["se"]) else "")
+                      + " on average (positive = toward the model's side)"
+                      + (f"; on its underdog picks (n={cv['dog_n']}) {cv['dog_mean']:+.2f} pts" if cv["dog_n"] else "")]
+            if np.isfinite(cv["slope"]):
+                lines.append(f"    line move vs the model's departure from the lock price: slope {cv['slope']:+.3f} "
+                             f"+/- {cv['slope_se']:.3f} (positive = the market moved toward the model)")
         if sm["scored"]:
             lines += [f"  Scored rows (graded, market present): {sm['scored']}",
                       f"  Model picks  {m.record_text(sm['model_wins'], sm['model_losses'])}",
@@ -432,6 +572,31 @@ def report_text(g, now=None, h5=None):
         lines += ["== Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread",
                   f"  n={h['n']} graded games" + (f", partial r {h['r']:+.3f} [{h['lo']:+.3f}, {h['hi']:+.3f}] (95%): {verdict}"
                                                  if np.isfinite(h["r"]) else " (needs 10 to report)"), ""]
+    if g.revision.eq(H12_REVISION).any():
+        s1, s2 = h1_summary(g), h2_summary(g)
+        lines += [f"== Pre-registered H1/H2 (sample: first {H12_REVISION} snapshots, config {H12_EXPERIMENT[:8]}, for games "
+                  f"from {H12_FROM[0]} week {H12_FROM[1]} on; addendum 2026-10-13 in research/PREREGISTRATION.md)",
+                  f"  H1, |model - q| > {H1_MIN_GAP:g} with q from the snapshot moneylines: {s1['bets']} qualifying graded "
+                  f"bets of {s1['rows']} priced rows"
+                  + (f"; {s1['wins']}-{s1['losses']}-{s1['pushes']}, {s1['units']:+.2f}u, ROI {100 * s1['roi']:+.1f}%"
+                     + (f" +/- {100 * s1['roi_se']:.1f}" if np.isfinite(s1["roi_se"]) else "")
+                     + f", null {100 * s1['null_roi']:+.1f}%, same-row favorite {100 * s1['fav_roi']:+.1f}%"
+                     + (f", log-loss gain vs q {s1['ll_gain']:+.4f}" if np.isfinite(s1["ll_gain"]) else "")
+                     if s1["bets"] else "")
+                  + f"; verdict: {h1_verdict(s1)}",
+                  "  H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: "
+                  + "; ".join(f"{label} n={s2[key]['n']}" + (f" {s2[key]['mean']:+.4f}" if s2[key]["n"] else "")
+                              for key, label in (("mid", "weeks 5-13"), ("late", "weeks 14-18"),
+                                                 ("late_14_17", "14-17"), ("week_18", "18")))
+                  + f"; verdict: {h2_verdict(s2)}",
+                  "  H2 secondary, flat 1u ROI: "
+                  + "; ".join(f"{label} n={s2[key]['bets']}"
+                              + (f" {100 * s2[key]['roi']:+.1f}%"
+                                 + (f" +/- {100 * s2[key]['roi_se']:.1f}" if np.isfinite(s2[key]["roi_se"]) else "")
+                                 + f" (null {100 * s2[key]['null_roi']:+.1f}%, favorite {100 * s2[key]['fav_roi']:+.1f}%)"
+                                 if s2[key]["bets"] else "")
+                              for key, label in (("mid", "weeks 5-13"), ("late", "weeks 14-18"))),
+                  "  Judged only at the season checkpoints; interim numbers are not acted on.", ""]
     if h5 is not None and len(h5):
         s = h5_summary(h5)
         lines += [f"== Pre-registered H5 (one row per game, independent of the model): 1u on the moneyline underdog "

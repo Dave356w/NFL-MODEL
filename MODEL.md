@@ -268,7 +268,8 @@ recipe or the headline.
 
 ### Model-implied spread (reporting only, v1.12.1)
 
-`model_spread = 12.37 × Φ⁻¹(model_wp)`: the inverse of the market comparator, in
+`model_spread = 12.37 × Φ⁻¹(model_wp)`: the inverse of the fixed spread-to-probability map
+`Φ(spread / 12.37)` (`MARKET_SIGMA`, the market comparator before v1.16), in
 points with the schedule's `spread_line` sign (positive = home favored). It appears in
 `data/latest/board.csv`, `retro_ledger.csv` and `data/forward_ledger.csv`; it is
 derived from `model_wp`, never stored in the forward JSONL, and does not change the
@@ -334,6 +335,47 @@ correlation with the final margin beyond the market spread, with the pre-registe
 its average market spread, and per model confidence band the model pick's average margin beside
 the spread (`band_records`: `avg pick margin`, `avg pick spread`). Descriptive only.
 
+### Closing-line value (reporting only)
+
+`grade_ledger.py` also reads nflverse's moneylines once a game is final and treats
+them as its closing line; the schedule has no quote timestamp, so "close" means the
+last price nflverse recorded. `forward_ledger.csv` adds `close_home_moneyline`,
+`close_away_moneyline`, `close_q` (no-vig) and `clv_pp`: how far the no-vig
+probability of the model's side moved from the snapshot's lock price to the close, in
+percentage points (positive = toward the model). Pending games have no close.
+`data/ledger_report.txt` shows, per revision, the mean ± SE, the mean on the model's
+underdog picks, and the slope of the logit line move on the model's logit departure
+from the lock price (positive = the market moved toward the model). Price moves are
+far less noisy than game results, so this answers sooner whether the model's
+departures anticipate the market. It is a diagnostic, not profit and not the goal
+metric.
+
+### Pre-registered H1/H2 grading (reporting only)
+
+`data/ledger_report.txt` grades H1 (|model − q| > 0.17) and H2 (late-season log-loss
+fade, with ROI per week group as secondary) exactly as `research/PREREGISTRATION.md`
+fixes them. The owner's addendum of 2026-10-13, committed before any week-6 snapshot,
+applies them to the first v1.16 snapshot of each game under its frozen configuration,
+for games from 2026 week 6 on (cumulative across seasons), with q from the snapshot
+moneylines. The 14 week-5 v1.16 rows predate it and are excluded. The earlier samples
+(through v1.12) ended under the stopping rule; a change of revision, configuration
+signature or recipe ends this one too. Because v1.16 starts from the market's log-odds,
+only about 1% of its games move more than 0.17 from q (10 of 816 in 2023–25), so H1
+will read unresolved for many seasons; H2 is likely unresolved after 2026.
+
+### Model range on the board (reporting only)
+
+Board rows carry `offset_se`, `model_wp_lo` and `model_wp_hi`, and the card shows
+**Model range**: a 90% range for the model's probability from the uncertainty in its
+fitted weights alone (`offset_band`: the penalized fit's curvature at the weekly fit,
+scaled by the decay weights' effective size). On 2023–25 the range averages 18 points
+wide (probability SD 5.7 points, against 4.1 for the Monte Carlo week-cluster
+coefficient bootstrap). It leaves out uncertainty in the team profiles, which the
+Monte Carlo research put at about the same size again (feature bootstrap 4.6; both
+together 7.1), so the real range is wider. It is never written to snapshots, does
+not enter the config signature, and is blank when the fit's training rows cannot be
+rebuilt exactly.
+
 ## Bases of evidence: never pooled
 
 1. **Forward ledger** (`data/forward_predictions.jsonl`): the first snapshot of
@@ -354,8 +396,29 @@ the spread (`band_records`: `avg pick margin`, `avg pick spread`). Descriptive o
    "rebuilt" history. The recipe was chosen on those seasons, so it is
    hindsight, not a track record.
 
-The market comparator is `Φ(spread / 12.37)` from the nflverse schedule line.
-That line has no independent quote timestamp.
+From v1.16 the market comparator is the model's own market input: the no-vig
+probability q from the snapshot's moneylines (`market_wp` equals `market_no_vig_wp`).
+The v1.12–v1.14 ledger rows stored `Φ(spread / 12.37)` from the schedule's spread
+line instead. Neither nflverse quote has an independent timestamp.
+
+**2017–2020 out of sample** (`research/out_of_sample_results/REPORT.md`): a one-time
+reconstruction of the repository's least-used seasons (not untouched: an earlier
+test scored them once and 2019–20 were warm-up training seasons; the protocol lists
+the exposure). 2013–2016 are the only training history, and the protocol was pushed
+before any forecast existed. It is held-out evidence of the second kind, not forward
+evidence. v1.16 beat the same-row favorite by +18.76u on
+1,017 bets (+1.84 pts per bet, 97.5% interval −0.81 to +4.61): unresolved. Its log
+loss trailed the market's (−0.0052, interval −0.0144 to +0.0034). The close-game
+challenger did not beat v1.16 (−22.64u; not supported).
+
+**Selection-adjusted benchmark** (`research/selection_benchmark_results/REPORT.md`):
+the 2023–2025 numbers above are the best of many tried configurations. Across the 53
+distinct committed arms, if the market were exactly right the best arm would beat
+the same-row favorite by a median +16.7u on 809 games by luck alone (95th percentile
++44.7u). v1.16's +30.6u has p 0.180 against that best-arm null (0.007 unadjusted);
+v1.17's +46.1u is the best arm (p 0.042; Reality Check p 0.037). Only committed arms
+are included and forecasts are held fixed, so these p-values are optimistic. The
+version report repeats this section each build from the committed results.
 
 ## How a week's forecast updates as injury reports arrive
 

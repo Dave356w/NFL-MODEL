@@ -84,7 +84,8 @@ SNAPSHOT = {
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
               "home_moneyline", "away_moneyline",
-              "total_line", "margin__selected__mean", "total__selected__mean", "market_wp", "model_wp", "model_spread", "homefield_wp", "composite_log_odds", "recipe",
+              "total_line", "margin__selected__mean", "total__selected__mean", "market_wp", "model_wp", "model_spread", "homefield_wp", "composite_log_odds",
+              "offset_se", "model_wp_lo", "model_wp_hi", "recipe",
               "away_qb_expected", "away_qb_usual", "home_qb_expected", "home_qb_usual",
               "away_injury_report", "home_injury_report"]
 TEAM_NAMES = {
@@ -768,6 +769,8 @@ def render_index(latest, ledger, built, now=None):
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
         ms, ks = model_spread(r), num(r.get("spread_line"))
+        lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
+        band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
               + (f" · <span>Market {favorite_spread_text(ks, home, away)}</span>" if math.isfinite(ks) else ""))
 
@@ -790,7 +793,12 @@ def render_index(latest, ledger, built, now=None):
             ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
             ["Moneyline", ml_text(am), ml_text(hm)],
             ["Model spread", spread_text(ms, False), spread_text(ms, True)],
-            ["Market spread", spread_text(ks, False), spread_text(ks, True)]], num_cols=(1, 2))]
+            ["Market spread", spread_text(ks, False), spread_text(ks, True)]]
+            + ([["Model range", f"{pct(1 - hi)}–{pct(1 - lo)}", f"{pct(lo)}–{pct(hi)}"]] if band else []), num_cols=(1, 2))]
+        if band:
+            det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
+                       "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
+                       "adds more, so the real range is wider.</p>")
         if team and math.isfinite(num(bet.price)) and math.isfinite(q):
             det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
                                        mkt_bands, mdl_bands, band_years, n_fwd))
