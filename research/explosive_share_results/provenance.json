@@ -1,0 +1,9 @@
+{
+  "research/explosive_share.py": "b2bac1422d4ad70b98175ad27c5557f023653a3a917e0ad753b900c2343ce9de",
+  "research/explosive_plays.py": "1cd8cee646b7a7c981455ad40e14b795bb8a539e7bd9ac256106d551c799ad6f",
+  "research/EXPLOSIVE_SHARE.md": "4a45e6f54dc757ce75253c128a1fdbc53553277438818dbfc22bd27e985e062d",
+  "nfl_model.py": "7ff1e7b66090793cdcd65189fc43d9fda2d41f5738d72ec52abe50f8b62a74c4",
+  "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "research/out_of_sample_results/predictions.csv": "b93f0d18a189d7ef760b78f19d46be0f81ac625fd5e2af1c6c2784617dc8f6d0",
+  "research/explosive_share_results/explosive_share_team_games.csv.gz": "7722d3e2ec89c7464f677e8963f8dc74e7bc8d9ffdd279aaa5b1c7be24ed7d14"
+}
