@@ -167,6 +167,37 @@ def test_h1_h2_wait_for_week_6_rows():
     assert "0 qualifying graded bets of 0 priced rows" in g.report_text(out)
 
 
+def test_h6_grades_only_underdog_picks_in_the_registered_sample():
+    res = pd.DataFrame({"game_id": list("abcdefgh"), "away_score": [24, 10, 10, 24, 24, 24, 24, np.nan],
+                        "home_score": [21, 20, 20, 21, 21, 21, 21, np.nan], "result": [-3, 10, 10, -3, -3, -3, -3, np.nan]})
+    pickem_market = {"home_moneyline": -110, "away_moneyline": -110}
+    rows = [h12("a", .30, 7), h12("b", .45, 8),                    # the +130 underdog: one win, one loss
+            h12("c", .70, 9),                                      # the -150 favorite: not H6
+            h12("d", .30, 5),                                      # week 5: before the addendum
+            h12("e", .30, 9, rev="boxscore-composite-v1.17"),      # another revision
+            {**h12("f", .30, 9), **pickem_market},                 # market pick'em: no underdog
+            h12("g", .50, 9),                                      # model pick'em: no bet
+            h12("h", .30, 10)]                                     # pending
+    out = g.grade(rows, res)
+    s6 = g.h6_summary(out)
+    assert s6["rows"] == 6 and s6["bets"] == 2 and np.isclose(s6["units"], 1.3 - 1)
+    assert np.isclose(s6["fav_roi"], (-1 + 1 / 1.5) / 2)          # the -150 side of the same two games
+    assert np.isclose(s6["null_roi"], (100 / 230) / (100 / 230 + 150 / 250) * 2.3 - 1)
+    assert g.h6_verdict(s6) == "no verdict before 10 graded bets"
+    text = g.report_text(out)
+    assert "Pre-registered H1/H2/H6" in text and "H6, the model backs the market underdog" in text
+    assert "H6" not in g.report_text(g.grade([rec("a", .3, .6)], RESULTS))
+
+
+def test_h6_decision_rules():
+    base = {"null_roi": -.03, "roi_se": .15}
+    assert g.h6_verdict({**base, "bets": 9, "roi": .9}) == "no verdict before 10 graded bets"
+    assert g.h6_verdict({**base, "bets": 20, "roi": .27}).startswith("supported")
+    assert g.h6_verdict({**base, "bets": 20, "roi": .26}) == "unresolved"
+    assert g.h6_verdict({**base, "bets": 60, "roi": -.03}).startswith("falsified")
+    assert g.h6_verdict({**base, "bets": 49, "roi": -.20}) == "unresolved"
+
+
 def test_integer_closing_prices_with_a_pending_game():
     res = pd.DataFrame({"game_id": ["a", "d"], "away_score": [10, np.nan], "home_score": [20, np.nan],
                         "result": [10, np.nan], "close_home_moneyline": [-200, -300], "close_away_moneyline": [170, 250]})

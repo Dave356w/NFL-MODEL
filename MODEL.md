@@ -350,7 +350,7 @@ far less noisy than game results, so this answers sooner whether the model's
 departures anticipate the market. It is a diagnostic, not profit and not the goal
 metric.
 
-### Pre-registered H1/H2 grading (reporting only)
+### Pre-registered H1, H2 and H6 grading (reporting only)
 
 `data/ledger_report.txt` grades H1 (|model − q| > 0.17) and H2 (late-season log-loss
 fade, with ROI per week group as secondary) exactly as `research/PREREGISTRATION.md`
@@ -362,6 +362,13 @@ moneylines. The 14 week-5 v1.16 rows predate it and are excluded. The earlier sa
 signature or recipe ends this one too. Because v1.16 starts from the market's log-odds,
 only about 1% of its games move more than 0.17 from q (10 of 816 in 2023–25), so H1
 will read unresolved for many seasons; H2 is likely unresolved after 2026.
+
+H6 (a second owner addendum the same day) grades, on the same sample, the bets where
+v1.16 backs the market underdog. Those are the only games where its flat bets differ
+from betting the favorite. In 2017–20 its 49 such picks returned +19.3% ± 15.2 against
+a −2.4% null (2023–25, exposed: 42 picks, +34.2% ± 17.0); the slice was proposed after
+both were seen. At 11–16 picks a season it needs several seasons: no verdict before 10
+bets, falsified at n ≥ 50 with ROI at or below the null.
 
 ### Model range on the board (reporting only)
 
