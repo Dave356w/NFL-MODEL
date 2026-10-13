@@ -192,10 +192,9 @@ def h12_rows(g):
     return d[np.isfinite(d.h_q)]
 
 
-def h1_summary(g):
-    """Pre-registered H1: rows with |model_wp - q| > 0.17, flat 1u on the model's side."""
-    d = h12_rows(g)
-    d = d[(d.model_wp - d.h_q).abs() > H1_MIN_GAP]
+def _subset_summary(rows, d):
+    """Flat 1u on the model's side over the qualifying rows d of the registered sample `rows`:
+    ROI with its null and the same-row favorite, and the paired log-loss gain over q."""
     b = d[d.units.notna()]
     out = m.roi_summary(pd.DataFrame({"result": b.bet_result, "units": b.units, "q": b.bet_q, "null_ev": b.null_ev}))
     out["fav_roi"] = float(b.fav_units.mean()) if len(b) else np.nan
@@ -203,8 +202,30 @@ def h1_summary(g):
     y, p, q = s["home won"].astype(float), s.model_wp.astype(float), s.h_q.astype(float)
     gain = -(y * np.log(q) + (1 - y) * np.log(1 - q)) + (y * np.log(p) + (1 - y) * np.log(1 - p))
     out["ll_gain"] = float(gain.mean()) if len(gain) else np.nan
-    out["rows"] = int(len(h12_rows(g)))
+    out["rows"] = int(len(rows))
     return out
+
+
+def _subset_text(s):
+    if not s["bets"]:
+        return ""
+    return (f"; {s['wins']}-{s['losses']}-{s['pushes']}, {s['units']:+.2f}u, ROI {100 * s['roi']:+.1f}%"
+            + (f" +/- {100 * s['roi_se']:.1f}" if np.isfinite(s["roi_se"]) else "")
+            + f", null {100 * s['null_roi']:+.1f}%, same-row favorite {100 * s['fav_roi']:+.1f}%"
+            + (f", log-loss gain vs q {s['ll_gain']:+.4f}" if np.isfinite(s["ll_gain"]) else ""))
+
+
+def h1_summary(g):
+    """Pre-registered H1: rows with |model_wp - q| > 0.17, flat 1u on the model's side."""
+    rows = h12_rows(g)
+    return _subset_summary(rows, rows[(rows.model_wp - rows.h_q).abs() > H1_MIN_GAP])
+
+
+def h6_summary(g):
+    """Pre-registered H6, on the H1/H2 sample: rows where the model backs the market underdog
+    (the no-vig probability of its side, from the snapshot moneylines, is below 0.5)."""
+    rows = h12_rows(g)
+    return _subset_summary(rows, rows[pd.to_numeric(rows.bet_q, errors="coerce") < .5])
 
 
 def h1_verdict(s):
@@ -213,6 +234,17 @@ def h1_verdict(s):
         return "no qualifying graded rows"
     edge = s["roi"] - s["null_roi"]
     if np.isfinite(s["roi_se"]) and edge >= 2 * s["roi_se"]:
+        return "supported (ROI minus null >= 2 SE)"
+    if s["bets"] >= 50 and s["roi"] <= s["null_roi"]:
+        return "falsified (n >= 50, ROI at or below the null)"
+    return "unresolved"
+
+
+def h6_verdict(s):
+    """Decision rule fixed in research/PREREGISTRATION.md (H6)."""
+    if s["bets"] < 10 or not np.isfinite(s["roi_se"]):
+        return "no verdict before 10 graded bets"
+    if s["roi"] - s["null_roi"] >= 2 * s["roi_se"]:
         return "supported (ROI minus null >= 2 SE)"
     if s["bets"] >= 50 and s["roi"] <= s["null_roi"]:
         return "falsified (n >= 50, ROI at or below the null)"
@@ -573,17 +605,11 @@ def report_text(g, now=None, h5=None):
                   f"  n={h['n']} graded games" + (f", partial r {h['r']:+.3f} [{h['lo']:+.3f}, {h['hi']:+.3f}] (95%): {verdict}"
                                                  if np.isfinite(h["r"]) else " (needs 10 to report)"), ""]
     if g.revision.eq(H12_REVISION).any():
-        s1, s2 = h1_summary(g), h2_summary(g)
-        lines += [f"== Pre-registered H1/H2 (sample: first {H12_REVISION} snapshots, config {H12_EXPERIMENT[:8]}, for games "
-                  f"from {H12_FROM[0]} week {H12_FROM[1]} on; addendum 2026-10-13 in research/PREREGISTRATION.md)",
+        s1, s2, s6 = h1_summary(g), h2_summary(g), h6_summary(g)
+        lines += [f"== Pre-registered H1/H2/H6 (sample: first {H12_REVISION} snapshots, config {H12_EXPERIMENT[:8]}, for games "
+                  f"from {H12_FROM[0]} week {H12_FROM[1]} on; addenda 2026-10-13 in research/PREREGISTRATION.md)",
                   f"  H1, |model - q| > {H1_MIN_GAP:g} with q from the snapshot moneylines: {s1['bets']} qualifying graded "
-                  f"bets of {s1['rows']} priced rows"
-                  + (f"; {s1['wins']}-{s1['losses']}-{s1['pushes']}, {s1['units']:+.2f}u, ROI {100 * s1['roi']:+.1f}%"
-                     + (f" +/- {100 * s1['roi_se']:.1f}" if np.isfinite(s1["roi_se"]) else "")
-                     + f", null {100 * s1['null_roi']:+.1f}%, same-row favorite {100 * s1['fav_roi']:+.1f}%"
-                     + (f", log-loss gain vs q {s1['ll_gain']:+.4f}" if np.isfinite(s1["ll_gain"]) else "")
-                     if s1["bets"] else "")
-                  + f"; verdict: {h1_verdict(s1)}",
+                  f"bets of {s1['rows']} priced rows" + _subset_text(s1) + f"; verdict: {h1_verdict(s1)}",
                   "  H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: "
                   + "; ".join(f"{label} n={s2[key]['n']}" + (f" {s2[key]['mean']:+.4f}" if s2[key]["n"] else "")
                               for key, label in (("mid", "weeks 5-13"), ("late", "weeks 14-18"),
@@ -596,6 +622,8 @@ def report_text(g, now=None, h5=None):
                                  + f" (null {100 * s2[key]['null_roi']:+.1f}%, favorite {100 * s2[key]['fav_roi']:+.1f}%)"
                                  if s2[key]["bets"] else "")
                               for key, label in (("mid", "weeks 5-13"), ("late", "weeks 14-18"))),
+                  f"  H6, the model backs the market underdog (its side's no-vig q < 0.5): {s6['bets']} graded bets of "
+                  f"{s6['rows']} priced rows" + _subset_text(s6) + f"; verdict: {h6_verdict(s6)}",
                   "  Judged only at the season checkpoints; interim numbers are not acted on.", ""]
     if h5 is not None and len(h5):
         s = h5_summary(h5)
