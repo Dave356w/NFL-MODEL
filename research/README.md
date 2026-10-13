@@ -1148,3 +1148,44 @@ favorite more strongly than the no-vig price, keep 0.2 of its log-odds departure
 
 Implementation check passed (positive on both exposed bases, every bet identical). Forward verdict
 at 200 native v1.16 games. v1.16's forecasts and config signature are unchanged.
+
+### Test 31: explosive-play rates added to v1.16 (2026-10-13): no change
+
+`python research/explosive_plays.py` (≈ 25 min cold: downloads 2016–26 play-by-play; the team-game
+counts are then cached in `explosive_plays_results/`). The idea came from a podcast's use of explosive
+play rate; these features had never been computed in this repository before the run. The rule was
+fixed in the script before the first run. **Explosive pass**: a pass play (attempt or sack, as in the
+box scores) gaining ≥ 20 yards, per pass play. **Explosive rush**: a rush attempt gaining ≥ 10 yards,
+per attempt. Plays are filtered the same way as the box scores. Profiles follow the main-profile rule
+(strictly earlier games, h8, offseason halving, four league pseudo-games). The four home-minus-away
+differences (offense and defense, pass and rush) are added to v1.16's fixed recipe at ridge 0.1. Both
+arms are refit before every week from 2021. The v1.16 arm reproduces the adoption reconstruction to
+1e-10. A lookahead audit checks that every profile ends before its game week. **Gate:** a positive
+log-loss gain on held-out 2023–25 whose 95% week-clustered interval excludes zero. Unlike tests
+1–30, there is no grid or nested selection, because production's recipe is now fixed.
+
+| Basis | Bets | v1.16 ROI ± SE | + explosive ROI ± SE | Null | Same-row favorite | LL gain vs v1.16 [95%] | ROI diff, pts [95%] |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| held-out 2023–25 | 812 | +3.6% ± 2.5 | +2.8% ± 2.5 | −4.1% | +0.0% | −0.00096 [−0.00263, +0.00063] | −0.82 [−2.32, +0.62] |
+| walk-forward 2021–22 | 542 | −4.4% ± 3.1 | −4.1% ± 3.2 | −2.7% | −7.4% | +0.00003 [−0.00325, +0.00332] | +0.26 [−2.30, +3.22] |
+| 2026 wks 1–5 (diagnostic) | 65 | −8.0% ± 9.4 | −8.0% ± 9.4 | −4.1% | −6.2% | −0.00254 [−0.00759, +0.00408] | 0 (no side changed) |
+
+With the v1.18 favorite penalty applied to both arms, the held-out gain is −0.00083 [−0.00201, +0.00033].
+On held-out games, 9 of 812 sides flip.
+
+**Reading.**
+
+* **Fails the gate.** The held-out point estimate is worse in log loss and ROI. Neither difference
+  is resolved, so a small effect either way is not excluded. Nothing supports adding these features.
+* **Mostly redundant.** Each explosive rate correlates +0.75 to +0.83 with the matching main
+  feature (net yards per pass play, rush yards per attempt).
+* **Offense signs are negative given yardage.** The median coefficients on offensive explosive pass
+  and rush rates are −0.045 and −0.042 (positive in 31% and 14% of weekly fits). At equal yards per
+  play, more of a team's yardage from big plays predicts slightly *worse* results than the market
+  expects. That fits the claim that explosive yardage is less repeatable than steady gains, but it
+  is a conditional diagnostic, not a tested hypothesis. Defensive explosive rush rate has the
+  expected sign in 98% of fits; defensive explosive pass rate is about zero.
+
+No change to production. A follow-up could split yardage into non-explosive and explosive parts in
+place of the current rates. That would be a new hypothesis, and it would need its own rule fixed
+before any run.
