@@ -1,0 +1,220 @@
+{
+  "protocol": "research/AVAILABILITY_WEIGHTS.md",
+  "revision": "boxscore-composite-v1.16",
+  "recipe": {
+    "family": "rates_core_avail_cs_peaks_nosacks",
+    "half_life": 8.0,
+    "ridge": 0.1,
+    "architecture": "market_product_1sd",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0
+  },
+  "questionable_practice_weights": {
+    "Q/Full": 0.06,
+    "Q/Lim": 0.26,
+    "Q/DNP": 0.55
+  },
+  "confidence_level": 0.975,
+  "bases": {
+    "2017-2020": {
+      "pipeline_check": {
+        "games": 2048,
+        "input_seasons": [
+          2013,
+          2020
+        ],
+        "missingness_identical": true,
+        "max_abs_difference": 1.1102230246251565e-16,
+        "rows_differing": 0,
+        "questionable_rows": 10519,
+        "questionable_practice_labels": {
+          "0.06": 1851,
+          "0.25": 37,
+          "0.26": 6850,
+          "0.55": 1781
+        },
+        "exact": true
+      },
+      "control_vs_committed_v116_max_abs": 1.1102230246251565e-16,
+      "arms": {
+        "control": {
+          "bets": 1017,
+          "wins": 691,
+          "losses": 322,
+          "pushes": 4,
+          "units": -0.4200196577083055,
+          "roi": -0.00041299868014582647,
+          "roi_se": 0.02228766405800074,
+          "null_roi": -0.02553650974717336,
+          "favorite_units": -19.182987671479488,
+          "favorite_roi": -0.018862328093883468,
+          "binary_games": 1019,
+          "log_loss": 0.6056035366600712
+        },
+        "A_practice": {
+          "bets": 1017,
+          "wins": 686,
+          "losses": 327,
+          "pushes": 4,
+          "units": -9.920799668491677,
+          "roi": -0.009754965259087195,
+          "roi_se": 0.022301195793639355,
+          "null_roi": -0.02553650974717336,
+          "favorite_units": -19.182987671479488,
+          "favorite_roi": -0.018862328093883468,
+          "binary_games": 1019,
+          "log_loss": 0.6051604398773478
+        },
+        "B_split": {
+          "bets": 1017,
+          "wins": 687,
+          "losses": 326,
+          "pushes": 4,
+          "units": -8.185685308687145,
+          "roi": -0.008048854777470152,
+          "roi_se": 0.022288400992143746,
+          "null_roi": -0.02553650974717336,
+          "favorite_units": -19.182987671479488,
+          "favorite_roi": -0.018862328093883468,
+          "binary_games": 1019,
+          "log_loss": 0.60565433308136
+        }
+      },
+      "paired": {
+        "A_practice": {
+          "games": 1019,
+          "ll_gain": 0.000443096782723341,
+          "ll_interval": [
+            -0.0004422657930046427,
+            0.0013131156615244332
+          ],
+          "units_vs_control": -9.500780010783373,
+          "side_flips": 9
+        },
+        "B_split": {
+          "games": 1019,
+          "ll_gain": -5.079642128888263e-05,
+          "ll_interval": [
+            -0.0018297653623501478,
+            0.0017841980530207066
+          ],
+          "units_vs_control": -7.765665650978841,
+          "side_flips": 14
+        }
+      }
+    },
+    "2023-2025": {
+      "pipeline_check": {
+        "games": 1871,
+        "input_seasons": [
+          2019,
+          2025
+        ],
+        "missingness_identical": true,
+        "max_abs_difference": 1.1102230246251565e-16,
+        "rows_differing": 0,
+        "questionable_rows": 9834,
+        "questionable_practice_labels": {
+          "0.06": 1923,
+          "0.25": 158,
+          "0.26": 6121,
+          "0.55": 1632
+        },
+        "exact": true
+      },
+      "control_vs_committed_v116_max_abs": 1.1102230246251565e-16,
+      "arms": {
+        "control": {
+          "bets": 812,
+          "wins": 565,
+          "losses": 246,
+          "pushes": 1,
+          "units": 29.055959781287775,
+          "roi": 0.03578320170109332,
+          "roi_se": 0.02524203944611706,
+          "null_roi": -0.04099496341597624,
+          "favorite_units": 0.1801189337725777,
+          "favorite_roi": 0.00022182134701056368,
+          "binary_games": 815,
+          "log_loss": 0.6056052785011516
+        },
+        "A_practice": {
+          "bets": 812,
+          "wins": 564,
+          "losses": 247,
+          "pushes": 1,
+          "units": 27.208502154169132,
+          "roi": 0.03350800757902603,
+          "roi_se": 0.025254363808214733,
+          "null_roi": -0.04099496341597624,
+          "favorite_units": 0.1801189337725777,
+          "favorite_roi": 0.00022182134701056368,
+          "binary_games": 815,
+          "log_loss": 0.6054609800244568
+        },
+        "B_split": {
+          "bets": 812,
+          "wins": 556,
+          "losses": 255,
+          "pushes": 1,
+          "units": 13.19274755326614,
+          "roi": 0.01624722605082037,
+          "roi_se": 0.025374760536864494,
+          "null_roi": -0.04099496341597624,
+          "favorite_units": 0.1801189337725777,
+          "favorite_roi": 0.00022182134701056368,
+          "binary_games": 815,
+          "log_loss": 0.6056136690959579
+        }
+      },
+      "paired": {
+        "A_practice": {
+          "games": 815,
+          "ll_gain": 0.00014429847669485298,
+          "ll_interval": [
+            -0.0004934822799200247,
+            0.0008111130053000294
+          ],
+          "units_vs_control": -1.8474576271186436,
+          "side_flips": 3
+        },
+        "B_split": {
+          "games": 815,
+          "ll_gain": -8.390594806227968e-06,
+          "ll_interval": [
+            -0.003985801705058249,
+            0.00368121744878973
+          ],
+          "units_vs_control": -15.863212228021638,
+          "side_flips": 17
+        }
+      }
+    }
+  },
+  "pooled": {
+    "A_practice": {
+      "games": 1834,
+      "ll_gain": 0.00031031563800511974,
+      "ll_interval": [
+        -0.0002603665096258083,
+        0.0008713845797275607
+      ],
+      "units_vs_control": -11.34823763790202,
+      "side_flips": 12
+    },
+    "B_split": {
+      "games": 1834,
+      "ll_gain": -3.195195641245751e-05,
+      "ll_interval": [
+        -0.0021657938302523843,
+        0.0019730668204331714
+      ],
+      "units_vs_control": -23.62887787900048,
+      "side_flips": 31
+    }
+  },
+  "verdicts": {
+    "A_practice": "unresolved",
+    "B_split": "falsified"
+  }
+}

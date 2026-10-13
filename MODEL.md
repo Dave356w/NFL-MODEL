@@ -445,6 +445,13 @@ though the report never lists him (1,849 regular player-games in 2019–25, 99.7
 play; research Test 28). Other same-week roster changes (activations, signings, game-day
 inactives) are still not used.
 
+Two changes to these weights were replayed against v1.16 on 2017–20 and 2023–25 with a
+protocol committed first (`research/availability_weights_results/REPORT.md`). Weighting a
+Questionable player by his final practice (Test 28's 0.06 full, 0.26 limited, 0.55 none) is
+unresolved: log loss improved slightly on both bases (pooled +0.0003, 97.5% interval −0.0003
+to +0.0009), and its 12 changed picks lost 11.4u. Separate WR/TE and CB/S units are falsified
+(pooled log-loss gain −0.00003; −23.6u). Production keeps Questionable at 25% and the six units.
+
 ## Pipeline
 
 ```

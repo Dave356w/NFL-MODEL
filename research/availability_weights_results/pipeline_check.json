@@ -1,0 +1,38 @@
+{
+  "2017-2020": {
+    "games": 2048,
+    "input_seasons": [
+      2013,
+      2020
+    ],
+    "missingness_identical": true,
+    "max_abs_difference": 1.1102230246251565e-16,
+    "rows_differing": 0,
+    "questionable_rows": 10519,
+    "questionable_practice_labels": {
+      "0.06": 1851,
+      "0.25": 37,
+      "0.26": 6850,
+      "0.55": 1781
+    },
+    "exact": true
+  },
+  "2023-2025": {
+    "games": 1871,
+    "input_seasons": [
+      2019,
+      2025
+    ],
+    "missingness_identical": true,
+    "max_abs_difference": 1.1102230246251565e-16,
+    "rows_differing": 0,
+    "questionable_rows": 9834,
+    "questionable_practice_labels": {
+      "0.06": 1923,
+      "0.25": 158,
+      "0.26": 6121,
+      "0.55": 1632
+    },
+    "exact": true
+  }
+}

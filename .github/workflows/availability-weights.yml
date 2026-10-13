@@ -1,0 +1,44 @@
+name: Research availability weighting candidates
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/check_replay.py
+      - requirements.txt
+      - nfl_model.py
+      - research/availability_audit.py
+      - research/_common.py
+      - research/availability_weights.py
+      - research/AVAILABILITY_WEIGHTS.md
+      - research/availability_weights_results/**
+      - research/out_of_sample_results/frozen_features_2013_2020.csv.gz
+      - research/out_of_sample_results/predictions.csv
+      - research/shrinkage_results/frozen_training_features.csv.gz
+      - research/restore_v116_results/historical_reproduction.csv
+      - tests/test_availability_weights.py
+      - .github/workflows/availability-weights.yml
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_availability_weights.py -q
+      - run: python research/check_replay.py research/availability_weights_results -- python research/availability_weights.py
+      - run: git diff --exit-code -- research/availability_weights_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: availability-weights-results
+          path: research/availability_weights_results/
+          if-no-files-found: error
