@@ -14,6 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 import nfl_model as m
 import grade_ledger
+from research import selection_benchmark
 
 STUDIES=('qualification','context','market_offset','shrinkage','profile_robustness','margin_total','market_residual')
 LEGACY_STUDIES=('qualification','context')
@@ -87,6 +88,14 @@ def native_tests(ledger):
     return pd.DataFrame(rows)
 
 
+def selection_lines(path=selection_benchmark.OUT/'results.json'):
+    """Committed selection-adjusted benchmark, or a plain note when it is absent."""
+    if not Path(path).exists():return ['The selection-adjusted benchmark has not been committed.']
+    info=json.loads(Path(path).read_text())
+    return ['Basis: '+info['basis']+'.','',*selection_benchmark.summary_lines(info),'',
+            'Source: `research/selection_benchmark_results/REPORT.md`.']
+
+
 def markdown_table(frame,identity):
     lines=['| '+identity+' | N | W-L-P | Units | ROI ± SE | Favorite units | Null ROI | LL ↓ | Market LL ↓ |',
            '|---|---:|---:|---:|---:|---:|---:|---:|---:|']
@@ -114,7 +123,8 @@ def run(data,out):
            'These forecasts use the archived v1.16 input cohort and original moneylines. Total/cover/over schedule quote capture times are unknown. They are reconstructed research forecasts, not executable native locks. No missing games are backfilled. Outcomes are taken from the current graded ledger.', '',
            markdown_table(archived,'Study and arm'), '', '## All committed historical tests', '',
            'Exposed 2023–2025 chronological development. Compare arms within each study; cohorts differ (811 versus 812 bets), warm-up training histories differ, and the label production in the older qualification/context studies describes the pre-v1.16 model. Repeated control rows are not independent evidence.', '',
-           markdown_table(historical,'Study and arm'), '', '## Interpretation', '',
+           markdown_table(historical,'Study and arm'), '', '## Selection-adjusted benchmark', '',
+           *selection_lines(), '', '## Interpretation', '',
            'v1.17 has the highest tested historical return among the recent fixed challengers, but its paired advantage over v1.16 remains unresolved (98.75% ROI-difference interval −0.27 to +4.89 percentage points). v1.16 has better historical binary scores than v1.17. The extra passing-by-total interaction beats the additive market-target challenger on returns through one changed historical pick. Shrinkage and bounded variants do not establish replacement superiority.',
            'Historical intervals condition on exposed model development and omit design-selection uncertainty. ROI ± SE is one standard error, not a confidence interval. Native results are small-sample descriptive evidence. Source reports retain paired week-cluster intervals and annual comparisons.',
            'The restored production is not qualified as reliably profitable. Retrospective snapshot grades are reported separately from native outcomes, and repeated snapshots are never counted as independent games.','']

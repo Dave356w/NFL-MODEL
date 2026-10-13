@@ -108,3 +108,51 @@ def test_model_spread_and_ats_diagnostic():
 def test_no_ats_lines_before_any_decided_game():
     out = g.grade([rec("d", .6, .6)], RESULTS)
     assert out.loc[0, "ats_result"] == "" and "Diagnostic, not the goal metric" not in g.report_text(out)
+
+
+CLOSE = pd.DataFrame({"game_id": ["a", "b", "d", "f"], "away_score": [10, 24, np.nan, 13],
+                      "home_score": [20, 21, np.nan, 20], "result": [10, -3, np.nan, 7],
+                      "close_home_moneyline": [-200, -200, -300, np.nan], "close_away_moneyline": [170, 170, 250, np.nan]})
+
+
+def test_closing_line_value_sign_and_missing_closes():
+    # Lock -150/+130 (home q .5798); close -200/+170 (home q .6429).
+    out = g.grade([rec("a", .7, .6), rec("b", .3, .4), rec("d", .7, .6), rec("f", .7, .6)], CLOSE).set_index("game_id")
+    assert np.isclose(out.loc["a", "close_q"], .6667 / (.6667 + 100 / 270), atol=1e-4)
+    assert np.isclose(out.loc["a", "clv_pp"], 6.31, atol=.01)        # home pick, price moved toward it
+    assert np.isclose(out.loc["b", "clv_pp"], -6.31, atol=.01)       # away pick, price moved away from it
+    assert np.isnan(out.loc["d", "close_q"]) and np.isnan(out.loc["d", "close_home_moneyline"])  # pending: no close
+    assert np.isnan(out.loc["f", "clv_pp"])                          # no closing quote
+    s = g.clv_summary(out.reset_index())
+    assert s["n"] == 2 and np.isclose(s["mean"], 0, atol=1e-9) and s["dog_n"] == 1 and np.isclose(s["dog_mean"], -6.31, atol=.01)
+
+
+def test_h1_h2_use_only_the_registered_sample():
+    rev = g.H12_REVISIONS[0]
+    res = pd.DataFrame({"game_id": list("pqrst"), "away_score": [10, 30, 10, 30, 10],
+                        "home_score": [20, 20, 20, 20, 20], "result": [10, -10, 10, -10, 10]})
+    # q from the snapshot moneylines is .580: gaps .27 and .22 qualify, .04 and .03 do not.
+    rows = [rec("p", .85, .6, rev=rev), rec("q", .62, .6, rev=rev),
+            rec("r", .80, .6, rev="r1"), rec("s", .80, .6, rev=rev, week=15),   # r: other revision, ignored
+            rec("t", .55, .6, rev=rev, week=18)]
+    out = g.grade(rows, res)
+    s1 = g.h1_summary(out)
+    assert s1["rows"] == 4 and s1["bets"] == 2 and g.h1_verdict(s1) == "unresolved"
+    assert g.h1_verdict({**s1, "bets": 0}) == "no qualifying graded rows"
+    s2 = g.h2_summary(out)
+    assert (s2["mid"]["n"], s2["late"]["n"], s2["late_14_17"]["n"], s2["week_18"]["n"]) == (2, 2, 1, 1)
+    assert np.isclose(s2["diff"], s2["late"]["mean"] - s2["mid"]["mean"])
+    assert (s2["mid"]["bets"], s2["late"]["bets"]) == (2, 2)              # secondary ROI on the same sample
+    assert np.isclose(s2["late"]["roi"], (-1 + 1 / 1.5) / 2) and np.isclose(s2["late"]["fav_roi"], (-1 + 1 / 1.5) / 2)
+    only_mid = g.h2_summary(g.grade(rows[:2], res))
+    assert g.h2_verdict(only_mid) == "no late-season rows"
+    text = g.report_text(out)
+    assert "Pre-registered H1/H2" in text and "verdict" in text and "H2 secondary, flat 1u ROI" in text
+    assert "Pre-registered H1/H2" not in g.report_text(g.grade([rec("a", .7, .6)], RESULTS))
+
+
+def test_integer_closing_prices_with_a_pending_game():
+    res = pd.DataFrame({"game_id": ["a", "d"], "away_score": [10, np.nan], "home_score": [20, np.nan],
+                        "result": [10, np.nan], "close_home_moneyline": [-200, -300], "close_away_moneyline": [170, 250]})
+    out = g.grade([rec("a", .7, .6), rec("d", .7, .6)], res).set_index("game_id")
+    assert np.isclose(out.loc["a", "clv_pp"], 6.31, atol=.01) and np.isnan(out.loc["d", "close_home_moneyline"])

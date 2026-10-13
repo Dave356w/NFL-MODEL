@@ -16,7 +16,7 @@ def test_historical_controls_and_cohorts_are_explicit():
 
 def test_archived_pending_games_are_not_scored_or_backfilled():
     records=pd.read_csv(v.ROOT/'data/forward_ledger.csv')
-    outcomes=records.copy();outcomes.loc[:,['result','home won']]=np.nan
+    outcomes=records.assign(result=np.nan,**{'home won':np.nan})  # replace whole columns: an all-graded ledger stores integer results
     report=v.archived_tests(outcomes)
     assert report.bets.eq(0).all() and report.binary_games.eq(0).all()
     assert report.pending.eq(report.games).all()
@@ -35,3 +35,10 @@ def test_native_experiments_cannot_count_a_game_twice():
     records=pd.read_csv(v.ROOT/'data/forward_ledger.csv')
     with pytest.raises(ValueError,match='repeats a game'):
         v.native_tests(pd.concat([records,records.iloc[:1]],ignore_index=True))
+
+
+def test_selection_benchmark_section_reports_the_committed_adjustment(tmp_path):
+    lines='\n'.join(v.selection_lines())
+    assert 'not forward evidence' in lines and 'v1.16 beats it by' in lines and 'Reality Check p' in lines
+    assert 'p-values are optimistic' in lines
+    assert v.selection_lines(tmp_path/'missing.json')==['The selection-adjusted benchmark has not been committed.']

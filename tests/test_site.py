@@ -22,6 +22,7 @@ def make_data(root, with_ledger=True):
         {"game_id": "2026_05_TB_DAL", "season": 2026, "week": 5, "away": "TB", "home": "DAL",
          "gameday": "2026-10-08", "gametime": "20:15", "site": 1., "result": np.nan, "ready": True,
          "spread_line": 9.5, "market_wp": .78, "model_wp": .60, "homefield_wp": .54,
+         "model_wp_lo": .52, "model_wp_hi": .67, "offset_se": .19,
          "home_moneyline": -485, "away_moneyline": 370,
          "away_qb_expected": "J.Daniels", "away_qb_usual": "B.Mayfield", "home_qb_expected": "D.Prescott",
          "home_qb_usual": "D.Prescott", "away_injury_report": "none", "home_injury_report": "none",
@@ -397,3 +398,12 @@ def test_model_confidence_rows_carry_avg_margin():
     old = recs.drop(columns=["avg pick margin", "avg pick spread"])  # a band_records.csv written before v1.12.4
     assert "Avg margin" not in b.records_table(old)
     assert np.isnan(m.band_records(hist.drop(columns=["result", "spread_line"]))["avg pick margin"]).all()
+
+
+def test_card_shows_the_model_range_only_where_the_board_has_one(tmp_path):
+    out, _ = render(tmp_path)
+    html = (out / "index.html").read_text()
+    dal = html[html.index("Buccaneers"):html.index("Chiefs")]
+    assert "Model range" in dal and "52%–67%" in dal and "33%–48%" in dal and "fitted weights" in dal
+    buf = html[html.index("Chiefs"):]
+    assert "Model range" not in buf.split("</details>")[0]

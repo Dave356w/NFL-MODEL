@@ -10,6 +10,12 @@ recipe and configuration identity. v1.17 stays available for independent
 research verification. Original forecasts remain immutable; all snapshots
 and historical games are retrospectively regraded in separate reports.
 
+v1.16.1 (reporting only; same REVISION, config signature, recipe and ledger): the board
+carries a 90% model-probability range from coefficient uncertainty alone (offset_band; never
+written to snapshots). grade_ledger adds closing-line value against nflverse's post-game
+moneylines and grades pre-registered H1/H2 on their registered v1.12 sample.
+research/selection_benchmark.py adjusts the committed 2023-25 arms for selection.
+
 v1.17 (research/archive, owner adoption 2026-10-10): Passing × predicted total.
 Adopts the exact market-only stage-one forecasts and pass_total stack tested in
 research/market_residual_models.py: margin edge, site × total context, and passing
@@ -1940,6 +1946,40 @@ def apply_fit(df,fit,contributions=False):
     return (expit(score),score,parts) if contributions else expit(score)
 
 
+BAND_LEVEL=.90  # reporting only: central range of the model probability on the board
+
+
+def offset_band(train,fit,rows,level=BAND_LEVEL):
+    """Reporting only; never written to snapshots or the config signature. Penalized-Hessian
+    (Laplace) standard error of each row's departure from the market log-odds, from
+    coefficient uncertainty alone, scaled by the training weights' Kish effective size, and
+    the implied central model-probability range. Profile (feature) uncertainty is excluded,
+    so the range understates total uncertainty (research/monte_carlo_results). Rebuilds the
+    fit's own training rows and returns NaN unless they match the fit exactly."""
+    nan=np.full(len(rows),np.nan)
+    if not fit.get('market_offset'): return nan,nan,nan
+    recipe=fit['recipe']; year,week=fit['fit_season'],fit['fit_week']
+    t=train[train['home won'].isin([0.,1.])&train.ready&before(train,year,week)]
+    if recipe.get('architecture')=='market_pass_predicted_total':
+        cols=feature_names(recipe['family'])+list(PRODUCT_CONTEXT_NAMES)+list(PASS_TOTAL_NAMES)
+        t=t[np.isfinite(t[cols]).all(axis=1)]
+    t=t[np.isfinite(t.q)&np.isfinite(t[list(PRODUCT_CONTEXT_NAMES)]).all(axis=1)]
+    if len(t)!=fit['training_games']: return nan,nan,nan
+    names,scale,beta=fit['names'],np.asarray(fit['scale']),np.asarray(fit['beta'])
+    raw=t[names].to_numpy(float); X=np.where(np.isfinite(raw),raw,0.)/scale
+    age=((year-t.season.to_numpy())*19+(week-t.week.to_numpy()))/(19*FIT_HALF_LIFE_SEASONS)
+    w=np.exp2(-age); w/=w.sum()
+    p=expit(logit(np.clip(t.q.to_numpy(),1e-5,1-1e-5))+X@beta)
+    penalty=np.full(len(names),float(recipe['ridge'])); penalty[0]*=.1
+    penalty[len(feature_names(recipe['family'])):]=float(recipe['interaction_ridge'])
+    cov=np.linalg.inv((X.T@((w*p*(1-p))[:,None]*X)+np.diag(penalty))/np.sum(w*w))
+    raw=rows[names].to_numpy(float); Z=np.where(np.isfinite(raw),raw,0.)/scale
+    se=np.sqrt(np.einsum('ij,jk,ik->i',Z,cov,Z))
+    _,score,_=apply_fit(rows,fit,True)
+    half=ndtri(.5+level/2)*se
+    return np.where(np.isfinite(score),se,np.nan),expit(score-half),expit(score+half)
+
+
 def recipe_key(r):
     key=f'{r["family"]}_h{r["half_life"]:g}_r{r["ridge"]:g}'
     if r.get('architecture')=='market_pass_predicted_total':return key+f'_market_pass_predicted_total_i{r["interaction_ridge"]:g}'
@@ -2505,6 +2545,10 @@ def current_predictions(features,recipe,year,through_week):
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
+        try: te['offset_se'],te['model_wp_lo'],te['model_wp_hi']=offset_band(tr,fit,te)
+        except (ValueError,np.linalg.LinAlgError) as e:  # reporting only: never costs a forecast
+            print(f'  Note: week {week} probability range unavailable ({e})')
+            te['offset_se']=te['model_wp_lo']=te['model_wp_hi']=np.nan
         te['homefield_wp']=apply_fit(te,baseline)
         te['recipe']=recipe_key(recipe)
         rows.append(te)

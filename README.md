@@ -85,6 +85,25 @@ market-correct simulation. Run `python research/log_loss_diagnostics.py`.
 tests close-matchup annual consistency and calibration fitted on earlier-season
 OOF predictions only. Run `python research/chronological_calibration.py`.
 
+## Research checks of v1.16 (2026-10-13)
+
+Each runs from committed frozen inputs, has its own replay workflow, and changes
+neither production nor the ledger.
+
+- [Context support cap](research/support_cap_results/REPORT.md)
+  ([protocol](research/CONTEXT_SUPPORT_CAP.md)): capping the pass contexts at their
+  training support was not supported (2023–25 log-loss gain −0.00044, interval
+  −0.0046 to +0.0032; 7 side flips worth −5.03u). `python research/context_support_cap.py`
+- [2017–2020 out of sample](research/out_of_sample_results/REPORT.md)
+  ([protocol](research/OUT_OF_SAMPLE_2017_2020.md), pushed before any forecast existed):
+  v1.16 beat the same-row favorite by +18.76u on 1,017 bets, unresolved (+1.84 pts per
+  bet, 97.5% interval −0.81 to +4.61); the close-game challenger was not supported.
+  `python research/out_of_sample_2017_2020.py`
+- [Selection-adjusted benchmark](research/selection_benchmark_results/REPORT.md): if the
+  market were exactly right, the best of the 53 committed arms would beat the favorite
+  by a median +16.7u on 2023–25 by luck alone; v1.16's +30.6u has p 0.180 against that
+  bar. `python research/selection_benchmark.py`
+
 ## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full
