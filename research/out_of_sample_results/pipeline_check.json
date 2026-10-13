@@ -1,0 +1,15 @@
+{
+  "games_compared": 512,
+  "missing_in_rebuild": 0,
+  "ready_agreement": 1.0,
+  "missingness_agreement": 1.0,
+  "max_abs_difference": 3.552713678800501e-15,
+  "games_identical_within_1e-9": 1.0,
+  "worst_columns": {
+    "d__for__rates_core__penalty_yards_per_game": 0.0,
+    "d__allowed__rates_core__penalty_yards_per_game": 0.0,
+    "d__max_lead": 0.0,
+    "d__max_deficit": 0.0,
+    "d__allowed__rates_core__plays_per_game": 0.0
+  }
+}

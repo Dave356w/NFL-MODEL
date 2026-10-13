@@ -1,0 +1,42 @@
+name: Research out-of-sample 2017-2020
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/check_replay.py
+      - requirements.txt
+      - nfl_model.py
+      - research/context_shrinkage.py
+      - research/qualified_interactions.py
+      - research/production_qualification.py
+      - research/out_of_sample_2017_2020.py
+      - research/OUT_OF_SAMPLE_2017_2020.md
+      - research/out_of_sample_results/**
+      - research/shrinkage_results/frozen_training_features.csv.gz
+      - tests/test_out_of_sample_2017_2020.py
+      - .github/workflows/out-of-sample-2017-2020.yml
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_out_of_sample_2017_2020.py -q
+      - run: python research/check_replay.py research/out_of_sample_results -- python research/out_of_sample_2017_2020.py
+      - run: git diff --exit-code -- research/out_of_sample_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: out-of-sample-2017-2020-results
+          path: research/out_of_sample_results/
+          if-no-files-found: error
