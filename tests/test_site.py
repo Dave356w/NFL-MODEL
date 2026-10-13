@@ -407,3 +407,36 @@ def test_card_shows_the_model_range_only_where_the_board_has_one(tmp_path):
     assert "Model range" in dal and "52%–67%" in dal and "33%–48%" in dal and "fitted weights" in dal
     buf = html[html.index("Chiefs"):]
     assert "Model range" not in buf.split("</details>")[0]
+
+
+def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
+    data = make_data(tmp_path / "data")
+    latest = data / "latest"
+    (latest / "version_report.md").write_text("# Production restoration and all competing-model results\nARM-MARKER\n")
+    (latest / "regraded_ledger_report.md").write_text("REPLAY-MARKER\n")
+    for name in ("version_native.csv", "version_archived.csv", "version_historical.csv"):
+        pd.DataFrame([{"study": "s", "arm": "secret_arm", "bets": 3, "wins": 2, "losses": 1, "pushes": 0,
+                       "units": 1., "roi": .3, "favorite_units": 0.}]).to_csv(latest / name, index=False)
+    pd.DataFrame([{"original_revision": "old", "game_id": "x", "original_model_wp": .6, "model_wp": .6,
+                   "bet_result": "W", "bet_units": 1.}]).to_csv(latest / "regraded_ledger.csv", index=False)
+    # a shadow v1.16 lock beside the production pick must not reach the public ledger
+    recs = [{"experiment": e, "revision": rev, "game_id": "2026_05_KC_BUF", "season": 2026, "week": 5,
+             "home": "BUF", "away": "KC", "generated_utc": "2026-10-03T12:00:00+00:00",
+             "kickoff_utc": "2026-10-04T20:25:00+00:00", "model_wp": wp, "market_wp": .58, "homefield_wp": .54,
+             "spread_line": 2.5, "home_moneyline": -135, "away_moneyline": 115,
+             "injury_report": {"home": "final", "away": "final"}}
+            for e, rev, wp in (("e", m.REVISION, .55), ("shadow", m.SHADOW_REVISION, .45))]
+    res = pd.DataFrame({"game_id": ["2026_05_KC_BUF"], "away_score": [20], "home_score": [27], "result": [7]})
+    g.write_outputs(g.grade(recs, res), data)
+    out = tmp_path / "public"
+    files = b.render_all(out, data, now=NOW)
+    assert set(files) == {*PUBLIC, "ledger_report.txt", ".nojekyll"}
+    pages = "".join((out / p).read_text() for p in PUBLIC)
+    for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
+        assert marker not in pages
+    grades = (out / "grades.html").read_text()
+    assert "@ BUF" in grades and grades.count("@ BUF</span>") == 1          # one pick: production only
+    report = (out / "ledger_report.txt").read_text()
+    assert report.startswith((data / "ledger_report.txt").read_text())
+    assert "Appendix A" in report and "ARM-MARKER" in report and "Appendix B" in report and "REPLAY-MARKER" in report
+    assert f"== {m.SHADOW_REVISION}" in report and f"== {m.REVISION}" in report

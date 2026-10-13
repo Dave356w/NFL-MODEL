@@ -11,7 +11,11 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model (restored 2026-10-12): `boxscore-composite-v1.16`, the owner-fixed **Product + 1 SD**
+Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
+penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
+lean is kept. Picks and bets are identical to v1.16's; only those probabilities change. v1.16 keeps
+locking as a shadow for its pre-registered tests, reported in the ledger report only.
+v1.16 is the owner-fixed **Product + 1 SD**
 market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
 defense, availability and prior lead/deficit profiles provide additive corrections;
 raw h16 pass profiles provide the shared product and four signed 1 SD contexts.
@@ -27,9 +31,10 @@ still unresolved.
 | [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pick graded at its moneyline, beside always-favorite and always-home on the same games; then the current model's rebuilt history since 2021 (hindsight) |
 | [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | What each moneyline implied vs what happened; how often the model's picks won at each confidence |
 
-The public pages show W-L, win % and ROI only. Standard errors, log loss, held-out
-scorecards and recipe selection are in [`data/ledger_report.txt`](data/ledger_report.txt)
-and `data/latest/`.
+The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
+held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research
+arm are in [`data/ledger_report.txt`](data/ledger_report.txt) and `data/latest/`; the site's
+published `ledger_report.txt` carries the version comparison and snapshot replays as appendices.
 
 | Where to look | For |
 |---|---|

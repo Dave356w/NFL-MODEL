@@ -13,6 +13,11 @@ from research import version_report
 
 
 def run():
+    # v1.18 runs production with a favorite penalty; this verification replays v1.16 itself.
+    with m.revision_identity('boxscore-composite-v1.16',m.LEGACY_PRODUCT_RECIPE):_run()
+
+
+def _run():
     out=ROOT/'research/restore_v116_results';out.mkdir(exist_ok=True)
     inputs=ROOT/'research/restore_v116_inputs'
     original=json.loads((ROOT/'data/frozen_recipe_2026_boxscore-composite-v1.16.json').read_text())

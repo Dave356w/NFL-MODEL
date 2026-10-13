@@ -1,10 +1,35 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.17), newest first; this page describes what the code
+version history (v1 to v1.18), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.16`
+## The current model: `boxscore-composite-v1.18`
+
+**v1.16 with the favorite-confidence penalty (owner decision 2026-10-13).** New `REVISION`,
+`OUTPUT_NAME` (`nfl_boxscore_output_v1_18`) and config signature. Same features, fit and
+coefficients as v1.16 below. The recipe carries `favorite_penalty: 0.2`, and `apply_fit` applies it
+after the market offset: where v1.16 backs the market favorite more strongly than the no-vig q, the
+forecast keeps 0.2 of its log-odds departure from q; elsewhere it is v1.16's. The result lies between
+q and v1.16 on the same side of 50%, so **every pick and flat bet is v1.16's**; only probabilities on
+favorite-bullish games change. The board's model range applies the same map to its bounds.
+
+**v1.16 shadow lock.** Each build also locks the unpenalized v1.16 forecast for the same games,
+under v1.16's own frozen recipe and signature (`9dad9b9a…`), with the same injury-report gate and
+first-snapshot rule. This keeps the pre-registered H1/H2/H6 sample (first v1.16 snapshots from 2026
+week 6) and the penalty's forward verdict (`research/FAVORITE_PENALTY.md`: 200 graded native games)
+running as registered. Shadow rows are graded in `ledger_report.txt` only.
+
+**Public site.** The pages show the production revision only. Earlier revisions, the shadow lock,
+the competing-model comparison and snapshot replays are in `ledger_report.txt`; the published copy
+appends `version_report.md` and `regraded_ledger_report.md`.
+
+Evidence for the penalty (log-loss gain vs v1.16; picks identical): +0.0040 ± 0.0027 on 2017–20 out
+of sample and +0.0023 ± 0.0017 on 2021–25 (both exposed; λ chosen on 2021–25), +0.026 ± 0.025 on
+2026 weeks 1–5 and +0.147 on 13 native games. It still trails the market. No profit claim follows:
+ROI is identical to v1.16 by construction.
+
+## v1.16: the shared base model
 
 **Production restored (2026-10-12).** Owner-directed return to the exact original
 market-offset **Product + 1 SD** recipe: raw main h8, passing h16, fixed no-vig
@@ -370,9 +395,11 @@ a −2.4% null (2023–25, exposed: 42 picks, +34.2% ± 17.0); the slice was pro
 both were seen. At 11–16 picks a season it needs several seasons: no verdict before 10
 bets, falsified at n ≥ 50 with ROI at or below the null.
 
-### Favorite-confidence penalty (reporting only, v1.16.2)
+### Favorite-confidence penalty (v1.16.2 reporting; production from v1.18)
 
-Where v1.16 backs the market favorite more strongly than the no-vig price q, `model_wp_fp` keeps
+v1.18 makes this the production forecast (see the top of this page); `retro_ledger.csv` no longer
+carries `model_wp_fp`, because its `model_wp` is already penalized. As first added in v1.16.2:
+where v1.16 backs the market favorite more strongly than the no-vig price q, `model_wp_fp` keeps
 `FAVORITE_PENALTY` (0.2) of its log-odds departure from q; everywhere else it equals `model_wp`.
 It always lies between q and the model on the same side of 50%, so **no pick and no bet changes**.
 v1.16's forecasts, snapshots, recipe, `REVISION` and `config_signature()` are unchanged: the column

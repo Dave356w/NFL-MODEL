@@ -52,6 +52,14 @@ implementation, not the idea. Not yet examined with the penalty:
 Log loss is secondary to the owner's goal metric. This rule cannot change ROI,
 so ROI is reported only to confirm it is identical.
 
+## Adoption (2026-10-13)
+
+The owner made the penalty the production forecast as `boxscore-composite-v1.18`. The decision
+rules above are unchanged. Native v1.16 rows continue through the v1.16 shadow lock (same
+signature `9dad9b9a…`, same gate), so `fp_wp`/`fp_log_loss` on those rows still grade the forward
+verdict. `research/favorite_penalty.py --freeze` read v1.16 forecasts from `retro_ledger.csv`; from
+v1.18 that file holds penalized forecasts, so the frozen `inputs.csv` must not be refrozen from it.
+
 ## Outputs
 
 * `nfl_model.favorite_penalized_wp` and `FAVORITE_PENALTY` (reporting only);

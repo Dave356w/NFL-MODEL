@@ -114,8 +114,12 @@ def run(data,out):
     for name,frame in [('historical',historical),('archived',archived),('native',native)]:
         frame.to_csv(out/f'version_{name}.csv',index=False)
     lines=['# Production restoration and all competing-model results','',
-           f'Current production: **{m.REVISION}**, exact original Product + 1 SD recipe.',
-           f'Configuration: `{m.config_signature()[0]}`. Owner-directed restoration on 2026-10-12.',
+           *([f'Current production: **{m.REVISION}**, exact original Product + 1 SD recipe.',
+              f'Configuration: `{m.config_signature()[0]}`. Owner-directed restoration on 2026-10-12.']
+             if m.REVISION=='boxscore-composite-v1.16' else
+             [f'Current production: **{m.REVISION}**, the v1.16 recipe with the favorite-confidence penalty '
+              f'(lambda {m.FAVORITE_PENALTY:g}); v1.16 continues as a shadow lock for its pre-registered tests.',
+              f'Configuration: `{m.config_signature()[0]}`. Owner decision 2026-10-13.']),
            'Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.',
            '', '## Native forward results', '',
            'Each experiment contains one original pregame forecast per game. Different revisions can overlap and have different lock quotes; do not pool them. Ties push; binary scores exclude ties. Pending games remain ungraded.', '',

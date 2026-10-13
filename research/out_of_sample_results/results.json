@@ -1,7 +1,7 @@
 {
   "protocol": "research/OUT_OF_SAMPLE_2017_2020.md",
   "revision": "boxscore-composite-v1.16",
-  "model_revision_at_run": "boxscore-composite-v1.16",
+  "model_revision_at_run": "boxscore-composite-v1.18",
   "recipe": {
     "family": "rates_core_avail_cs_peaks_nosacks",
     "half_life": 8.0,

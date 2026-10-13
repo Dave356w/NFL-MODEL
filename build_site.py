@@ -5,8 +5,9 @@ grade the forward ledger, and render static pages into public/.
     python build_site.py               # full build (what build.yml runs)
     python build_site.py --pages-only  # re-render from committed data/ only
 
-Pages (public: W-L, win % and ROI only; standard errors, log loss and model
-internals stay in data/ledger_report.txt and data/latest/)
+Pages (public: the production model only; W-L, win % and ROI. Standard errors, log loss, model
+internals, earlier revisions, the v1.16 shadow lock and every research arm stay in
+data/ledger_report.txt and data/latest/; the published ledger_report.txt carries them as appendices)
   index.html               this week's games: model vs market, pick, biggest factors, injury reports
   grades.html              locked picks graded, beside always-favorite and always-home; rebuilt history
   market-calibration.html  the moneyline graded by price; model confidence vs results
@@ -900,60 +901,9 @@ def render_grades(ledger, latest, built):
                                 table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
-        parts.append(render_regraded_snapshots(latest))
-        parts.append(render_version_comparisons(latest))
-    parts.append("<p class='mut small'>Full statistics, including standard errors: "
+    parts.append("<p class='mut small'>Full statistics, earlier model versions and research comparisons: "
                  "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
     return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
-
-
-def render_version_comparisons(latest):
-    out=[]
-    for name,title,note in [
-        ('version_native','Original competing versions: native forecasts','Original first pregame snapshots. Revision groups overlap and lock quotes differ; do not pool them.'),
-        ('version_archived','Competing models at frozen archived inputs','Retrospective counterfactuals, not native forward evidence. Same archived moneylines; target quote capture times unknown.'),
-        ('version_historical','All historical competing-model tests','Exposed 2023–2025 development. Compare within each study: cohorts and training histories differ. Older production labels describe the pre-v1.16 model.')]:
-        frame=latest.get(name)
-        if frame is None or frame.empty:continue
-        rows=[]
-        for r in frame.to_dict('records'):
-            label=r.get('revision',f"{r.get('study')}: {r.get('arm')}")
-            count=r.get('bets',r.get('games'))
-            rows.append([esc(label),str(int(count)),f"{int(r['wins'])}-{int(r['losses'])}-{int(r['pushes'])}",
-                         f"{r['units']:+.2f}",roi_short(r['roi']),f"{r['favorite_units']:+.2f}"])
-        out.append(f"<h2 class='sec'>{esc(title)}</h2><div class='gr-note flag-note'>{esc(note)}</div>"+
-                   folded('Show every tested arm',table(['Version / arm','Games or bets','W-L-P','Units','ROI','Favorite units'],rows,num_cols=(1,3,4,5))))
-    if out:
-        out.append("<p class='gr-note'>Detailed scores, uncertainty, pending counts and sources: <a href='version_report.md'>full comparison report</a> · <a href='version_historical.csv'>historical CSV</a> · <a href='version_archived.csv'>archived CSV</a> · <a href='version_native.csv'>native CSV</a>.</p>")
-    return ''.join(out)
-
-
-def render_regraded_snapshots(latest):
-    replay=latest.get("regraded_ledger")
-    if replay is None or replay.empty:
-        return ""
-    rows=[]
-    for r in replay.itertuples(index=False):
-        rows.append([esc(r.original_revision),esc(r.game_id),pct(r.original_model_wp,1),
-                     pct(r.model_wp,1),result_badge(r.bet_result if isinstance(r.bet_result,str) else ""),
-                     f"{r.bet_units:+.2f}" if math.isfinite(num(r.bet_units)) else "—"])
-    summary=latest.get('regraded_summary')
-    overview=''
-    if summary is not None and not summary.empty:
-        entries=[]
-        for r in summary.itertuples(index=False):
-            entries.append([esc(r.group),str(int(r.games)),str(int(r.pending)),
-                            f'{int(r.wins)}-{int(r.losses)}-{int(r.pushes)}',
-                            f'{r.units:+.2f}',roi_short(r.roi),f'{r.favorite_units:+.2f}',
-                            f'{r.log_loss:.4f}' if math.isfinite(num(r.log_loss)) else '—'])
-        overview=table(['Original snapshot group','Unique games','Pending','W-L-P','Units','ROI','Favorite units','Log loss'],entries,num_cols=(1,2,4,5,6,7))
-    revision=latest.get('manifest',{}).get('revision','current model')
-    return (f"<h2 class='sec'>Original snapshots replayed with {esc(revision)}</h2>"
-            "<div class='gr-note flag-note'>Retrospective reconstructed features at each original snapshot's moneylines. "
-            "Original pregame forecasts remain unchanged. Summaries use the earliest snapshot per unique game. "
-            "Revision groups overlap; do not add their results together. Pending games stay ungraded.</div>"
-            +overview
-            +table(["Original revision","Game","Original home %","Replayed home %","Result","Units"],rows,num_cols=(2,3,5)))
 
 
 def render_retro(latest):
@@ -1060,13 +1010,25 @@ def render_all(out_dir, data=DATA, now=None):
              "market-calibration.html": render_calibration(latest, ledger, built)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
-    (out / "ledger_report.txt").write_text((Path(data) / "ledger_report.txt").read_text()
-                                           if (Path(data) / "ledger_report.txt").exists() else "No ledger yet.\n")
+    (out / "ledger_report.txt").write_text(published_report(Path(data)))
     (out / ".nojekyll").write_text("")
-    for name in ('version_report.md','version_historical.csv','version_archived.csv','version_native.csv','regraded_summary.csv','regraded_ledger_report.md','regraded_ledger.csv'):
-        source=Path(data)/'latest'/name
-        if source.exists():shutil.copyfile(source,out/name)
     return sorted(p.name for p in out.iterdir())
+
+
+APPENDICES = (("version_report.md", "Appendix A: competing model versions and research arms"),
+              ("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"))
+
+
+def published_report(data):
+    """The only public home of research data: the ledger report, then the version comparison and
+    snapshot-replay reports as appendices. Site pages show the production model only."""
+    path = data / "ledger_report.txt"
+    parts = [path.read_text() if path.exists() else "No ledger yet.\n"]
+    for name, title in APPENDICES:
+        source = data / "latest" / name
+        if source.exists():
+            parts.append(f"\n\n{'=' * 78}\n{title} (from data/latest/{name})\n{'=' * 78}\n\n{source.read_text()}")
+    return "".join(parts)
 
 
 def main(argv=None):
