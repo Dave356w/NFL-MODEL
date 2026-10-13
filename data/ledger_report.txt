@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-13 19:31 UTC
+NFL forward ledger report -- 2026-10-13 20:00 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -70,6 +70,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   Market picks 9-4 (.692)
   Log loss  model 0.7659  market 0.5714  gain -0.1945 +/- 0.1440 (1 SE; positive = model better)
   Brier     model 0.2567  market 0.1933
+  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6194 vs model 0.7659, gain +0.1465 +/- 0.1220 (1 SE; n=13, 5 probabilities changed); bets unchanged; no verdict before 100 games
   Pick records by confidence band (model | market):
        50-55%        3-1 (.750) |       0-1 (.000)
        55-60%       1-0 (1.000) |       3-1 (.750)
