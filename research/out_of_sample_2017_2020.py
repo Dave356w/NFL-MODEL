@@ -47,6 +47,37 @@ def build_features(schedules, boxes, av):
     return f[cols].copy(), refs
 
 
+PEAK_REPAIRS = []
+STRICT_PEAKS = m.aggregate_score_peaks
+
+
+def repaired_score_peaks(pbp, schedule):
+    """Production peaks game by game; where clock order fails only the monotone check
+    (a mis-stamped quarter or clock upstream), re-order that game's scoring plays by play ID
+    and accept it only if that order is monotone and ends at the official final score."""
+    parts = []
+    for gid in schedule.game_id:
+        one = schedule[schedule.game_id == gid]
+        try: parts.append(STRICT_PEAKS(pbp[pbp.game_id == gid], one))
+        except ValueError as error:
+            if 'not monotone' not in str(error): raise
+            g = one.iloc[0]
+            states = pbp[(pbp.game_id == gid) & pbp.season_type.eq('REG')]
+            if 'play_deleted' in states: states = states[m.numeric(states, 'play_deleted') != 1]
+            states = states[states.sp.eq(1)].sort_values('play_id')
+            scores = states[['total_home_score', 'total_away_score']]
+            final = tuple(scores.iloc[-1]) if len(scores) else None
+            if scores.isna().any().any() or (scores.diff() < 0).any().any() or final != (g.home_score, g.away_score):
+                raise
+            margin = (scores.total_home_score-scores.total_away_score).to_numpy(float)
+            lead, deficit = max(0., float(margin.max())), max(0., float(-margin.min()))
+            parts.append(pd.DataFrame([{'game_id': gid, 'team': g.home_team, 'max_lead': lead, 'max_deficit': deficit},
+                                       {'game_id': gid, 'team': g.away_team, 'max_lead': deficit, 'max_deficit': lead}]))
+            PEAK_REPAIRS.append({'game_id': gid, 'rule': 'scoring plays re-ordered by play ID',
+                                 'home_max_lead': lead, 'home_max_deficit': deficit})
+    return pd.concat(parts, ignore_index=True) if parts else STRICT_PEAKS(pbp, schedule)
+
+
 def load_inputs(input_dir):
     """Schedules, team boxes, QB rows and raw availability inputs, as the research packs load them."""
     import concurrent.futures
@@ -61,10 +92,14 @@ def load_inputs(input_dir):
     s['market WP'] = ndtr(s.spread_line/m.MARKET_SIGMA)
     def boxes(y):
         b, qb = m.load_boxes(y, s[s.season == y]); print('boxes ready', y, flush=True); return b, qb
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
-        raw = pool.submit(m.load_availability, YEARS, 2026)
-        parts = list(pool.map(boxes, YEARS))
-        a = raw.result()
+    m.aggregate_score_peaks = repaired_score_peaks
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+            raw = pool.submit(m.load_availability, YEARS, 2026)
+            parts = list(pool.map(boxes, YEARS))
+            a = raw.result()
+    finally:
+        m.aggregate_score_peaks = STRICT_PEAKS
     box = m.validate_boxes(pd.concat([x[0] for x in parts], ignore_index=True))
     qb = pd.concat([x[1] for x in parts], ignore_index=True)
     return s, box, qb, a
@@ -84,6 +119,7 @@ def prepare(input_dir, out):
     out.mkdir(parents=True, exist_ok=True)
     f.to_csv(out/PACK, index=False, compression={'method': 'gzip', 'mtime': 0})
     refs.to_csv(out/'normalization_references.csv', index=False)
+    (out/'score_peak_repairs.json').write_text(json.dumps(sorted(PEAK_REPAIRS, key=lambda r: r['game_id']), indent=2)+'\n')
     # Pipeline check: the committed pack started in 2019, so rebuild 2019-20 from their inputs alone.
     window = [2019, 2020]
     keep = lambda d: d[d.season.isin(window)].copy()
