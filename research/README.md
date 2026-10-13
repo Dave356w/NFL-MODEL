@@ -1110,3 +1110,25 @@ SEs are week-clustered bootstrap.
   subgroups).
 
 No change to production.
+
+### Margin-likelihood v1.16, 2017–20 out of sample (2026-10-13): falsified
+
+Protocol `MARGIN_LIKELIHOOD.md`, committed before the code or any forecast; script
+`margin_likelihood.py`; results `margin_likelihood_results/`. v1.16's features, training rows,
+scaling, decay and penalties, fit to the integer final margin under an integer-normal distribution
+with key-number multipliers (from earlier seasons: w(3) ≈ 2.5, w(7) ≈ 1.75, σ ≈ 13.1), offset so
+that zero coefficients return the no-vig q exactly. Held-out reconstruction; 2017–20 were scored
+once before for v1.16.
+
+| Arm | Units | ROI ± SE | Null | Units vs favorite | Underdog picks (units) | Log loss |
+|---|---:|---:|---:|---:|---:|---:|
+| v1.16 | −0.42 | −0.04% ± 2.23 | −2.55% | +18.76 | 49 (+9.46) | 0.605604 |
+| margin likelihood | −13.81 | −1.36% ± 2.21 | −2.55% | +5.37 | 38 (+1.96) | 0.604709 |
+| market | −19.18 | −1.89% ± 2.20 | −2.55% | 0 | 0 | 0.600368 |
+
+Log-loss gain over v1.16 +0.0009 (97.5% [−0.0056, +0.0077]); units vs favorite −13.39u, lower in all
+four seasons. Falsified by the pre-registered underdog-unit rule. The richer likelihood pulls the
+model closer to the market (lean SD 0.17 vs 0.25 log-odds, correlation 0.57 with v1.16's lean),
+and changes which underdogs it backs: of all scored games it keeps 29 of v1.16's 52 underdog picks
+and adds 12 of its own, losing most of v1.16's underdog-pick units. No change to
+production.
