@@ -17,6 +17,12 @@ moneylines and grades pre-registered H1/H2 on their sample: v1.16 from 2026 week
 (owner addendum 2026-10-13), and H6, v1.16's market-underdog picks, on the same sample.
 research/selection_benchmark.py adjusts the committed 2023-25 arms for selection.
 
+v1.16.2 (reporting only; same REVISION, config signature, recipe, bets and ledger): a
+favorite-confidence penalty (research/FAVORITE_PENALTY.md). Where v1.16 backs the market favorite
+more strongly than the no-vig price, model_wp_fp shrinks its departure to FAVORITE_PENALTY (0.2) of
+itself in log-odds; elsewhere it equals model_wp. It never changes a pick. retro_ledger.csv carries
+model_wp_fp; grade_ledger scores fp_wp beside the model's and the market's log loss.
+
 v1.17 (research/archive, owner adoption 2026-10-10): Passing × predicted total.
 Adopts the exact market-only stage-one forecasts and pass_total stack tested in
 research/market_residual_models.py: margin edge, site × total context, and passing
@@ -477,6 +483,7 @@ MIN_TRAIN_GAMES=150
 SELECTION_RULE='min_log_loss'  # 'one_se' restores v1 behavior
 SELECTION_ONE_SE=1.         # used only when SELECTION_RULE=='one_se'; always reported
 MARKET_SIGMA=12.37          # fixed spread-to-WP comparator only
+FAVORITE_PENALTY=.2         # v1.16.2 reporting only: share of a favorite-bullish departure kept
 FLAG_GAP_PP=10.             # board flags |model - market| at or above this many points
 CACHE_MAX_AGE_HOURS=24.                # current season's play-by-play reconstruction
 COMPLETED_CACHE_MAX_AGE_HOURS=24.*7    # completed seasons: weekly refresh picks up upstream revisions
@@ -486,7 +493,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.16 restored production (2026-10-12); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -2280,6 +2287,18 @@ def implied_spread(p):
     return MARKET_SIGMA*ndtri(np.clip(p,.005,.995))
 
 
+def favorite_penalized_wp(p,q,lam=FAVORITE_PENALTY):
+    """v1.16.2, reporting only: where p backs the no-vig market favorite more strongly than q,
+    keep lam of its log-odds departure from q; elsewhere return p. p' lies between q and p on
+    their shared side of 1/2, so every pick is unchanged. NaN p or q returns p."""
+    p=pd.to_numeric(pd.Series(p),errors='coerce').to_numpy(float)
+    q=pd.to_numeric(pd.Series(q),errors='coerce').to_numpy(float)
+    ok=np.isfinite(p)&np.isfinite(q)&(q>0)&(q<1)&(p>0)&(p<1)
+    lp=logit(np.where(ok,p,.5)); lq=logit(np.where(ok,q,.5))
+    bull=ok&(((lq>0)&(lp>lq))|((lq<0)&(lp<lq)))
+    return np.where(bull,expit(lq+lam*(lp-lq)),p)
+
+
 RETRO_COLS=['game_id','season','week','home','away','home won','market_wp','result','spread_line']
 
 
@@ -2301,6 +2320,7 @@ def retrospective_ledger(oof,gw,recipe,schedules,season,cur):
     r['market_ml_wp']=market_ml_wp(r)
     r['fav_units']=flat_bets(r,'market_ml_wp').units
     r['model_spread']=implied_spread(r.model_wp)
+    r['model_wp_fp']=favorite_penalized_wp(r.model_wp,r.market_ml_wp)  # v1.16.2, reporting only
     return r.sort_values(['season','week','game_id']).reset_index(drop=True)
 
 
@@ -3636,6 +3656,11 @@ def _self_test():
     assert np.isclose(bets.q.iloc[0],q) and np.isclose(bets.null_ev.iloc[0],q*100/150-(1-q)) and bets.null_ev.iloc[0]<0
     sm=roi_summary(bets)
     assert (sm['bets'],sm['wins'],sm['losses'],sm['pushes'])==(3,1,1,1) and np.isclose(sm['units'],100/150-1)
+    # v1.16.2 favorite-confidence penalty: shrinks only favorite-bullish departures; never changes a pick.
+    fq=np.array([.7,.7,.4,.45,.6,.5]); fpw=favorite_penalized_wp([.8,.65,.3,.55,.6,.7],fq)
+    assert np.isclose(fpw[0],expit(logit(.7)+FAVORITE_PENALTY*(logit(.8)-logit(.7)))) and .7<fpw[0]<.8
+    assert np.allclose(fpw[[1,3,4,5]],[.65,.55,.6,.7]) and .3<fpw[2]<.4
+    assert (flat_bets(fb.assign(model_wp=favorite_penalized_wp(fb.model_wp,[.6,.5,.5,.5,.55,.55]))).side==bets.side).all()
     rt=roi_table(fb.assign(season=2020)).set_index(['group','source'])
     # One row set for both sources: c is a market pick'em (no favorite), so it leaves both.
     assert rt.loc[('All games','model'),'bets']==rt.loc[('All games','market favorite'),'bets']==2

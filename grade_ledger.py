@@ -44,13 +44,14 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "kalshi_null", "kalshi_fav_units", "alt_rule", "alt_team", "alt_strike", "alt_ask", "alt_result",
            "alt_units", "alt_fav_units", "ladder_ticker", "ladder_team", "ladder_strike", "ladder_est",
            "ladder_ask", "ladder_edge", "ladder_result", "ladder_units", "ladder_null", "h4_pass_term",
-           "close_home_moneyline", "close_away_moneyline", "close_q", "clv_pp"]
+           "close_home_moneyline", "close_away_moneyline", "close_q", "clv_pp", "fp_wp", "fp_log_loss"]
 ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
 ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
 # research/PREREGISTRATION.md, addendum 2026-10-13: H1/H2 apply to the forward rows of v1.16 under
 # its frozen configuration for games from 2026 week 6 on (cumulative across seasons). Changing
 # REVISION, the config signature or the recipe ends the sample. Earlier samples (to v1.12) ended.
 H12_REVISION = "boxscore-composite-v1.16"
+FP_REVISION = "boxscore-composite-v1.16"  # v1.16.2 favorite-confidence penalty applies to v1.16 only
 H12_EXPERIMENT = ("9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26:"
                   "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1:")  # + season
 H12_FROM = (2026, 6)  # (season, week): the first week after the addendum
@@ -105,6 +106,10 @@ def grade(records, results, kalshi=None, ladder=None, h4=None):
     g["model_log_loss"] = np.where(y.notna(), -(y * np.log(clip(p)) + (1 - y) * np.log(clip(1 - p))), np.nan)
     g["market_log_loss"] = np.where(y.notna() & q.notna(),
                                     -(y * np.log(clip(q)) + (1 - y) * np.log(clip(1 - q))), np.nan)
+    # v1.16.2, reporting only: favorite-confidence penalty on v1.16 rows (research/FAVORITE_PENALTY.md)
+    fp = pd.Series(m.favorite_penalized_wp(p, q), index=g.index).where(g.revision.eq(FP_REVISION) & q.notna())
+    g["fp_wp"] = fp
+    g["fp_log_loss"] = np.where(y.notna() & fp.notna(), -(y * np.log(clip(fp)) + (1 - y) * np.log(clip(1 - fp))), np.nan)
     g["model_brier"] = np.where(y.notna(), (p - y) ** 2, np.nan)
     g["market_brier"] = np.where(y.notna() & q.notna(), (q - y) ** 2, np.nan)
     hw = g["home won"].where(g.status != "pending")
@@ -418,6 +423,13 @@ def summary(g):
                    model_log_loss=float(s.model_log_loss.mean()), market_log_loss=float(s.market_log_loss.mean()),
                    ll_gain=float(d.mean()), ll_gain_se=float(d.std(ddof=1) / np.sqrt(len(d))) if len(d) > 1 else np.nan,
                    model_brier=float(s.model_brier.mean()), market_brier=float(s.market_brier.mean()))
+        f = s[s.fp_log_loss.notna()] if "fp_log_loss" in s else s.iloc[:0]
+        if len(f):
+            e = (f.model_log_loss - f.fp_log_loss).to_numpy(float)
+            out.update(fp_n=int(len(f)), fp_log_loss=float(f.fp_log_loss.mean()),
+                       fp_model_log_loss=float(f.model_log_loss.mean()), fp_gain=float(e.mean()),
+                       fp_gain_se=float(e.std(ddof=1) / np.sqrt(len(e))) if len(e) > 1 else np.nan,
+                       fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()))
     return out
 
 
@@ -590,6 +602,12 @@ def report_text(g, now=None, h5=None):
                       f"  Log loss  model {sm['model_log_loss']:.4f}  market {sm['market_log_loss']:.4f}  "
                       f"gain {sm['ll_gain']:+.4f} +/- {sm['ll_gain_se']:.4f} (1 SE; positive = model better)",
                       f"  Brier     model {sm['model_brier']:.4f}  market {sm['market_brier']:.4f}"]
+            if sm.get("fp_n"):
+                gain = f"{sm['fp_gain']:+.4f}" + (f" +/- {sm['fp_gain_se']:.4f}" if np.isfinite(sm["fp_gain_se"]) else "")
+                lines.append(f"  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty "
+                             f"(lambda {m.FAVORITE_PENALTY:g}) log loss {sm['fp_log_loss']:.4f} vs model "
+                             f"{sm['fp_model_log_loss']:.4f}, gain {gain} (1 SE; n={sm['fp_n']}, "
+                             f"{sm['fp_changed']} probabilities changed); bets unchanged; no verdict before 100 games")
             recs = m.band_records(scored_frame(part))
             lines.append("  Pick records by confidence band (model | market):")
             for i, b in recs.groupby("band_index"):

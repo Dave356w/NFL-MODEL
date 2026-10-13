@@ -1,0 +1,73 @@
+{
+  "protocol": "research/FAVORITE_PENALTY.md",
+  "lambda": 0.2,
+  "revision": "boxscore-composite-v1.16",
+  "implementation_check": "passed",
+  "forward": "no verdict (13 of 100 native games)",
+  "results": {
+    "2017-20 out of sample (exposed)": {
+      "n": 1019,
+      "changed": 616,
+      "ll_model": 0.6056035366600712,
+      "ll_penalized": 0.6016291201566712,
+      "ll_market": 0.6003680536286145,
+      "gain": 0.0039744165033997894,
+      "gain_cluster_se": 0.0027127814849919256,
+      "gain_interval": [
+        -0.0011100092159525704,
+        0.009434853599204738
+      ],
+      "bets_identical": true,
+      "units_model": 3.3418851041964555,
+      "units_penalized": 3.3418851041964555
+    },
+    "2021-25 rebuilt (exposed; lambda chosen here)": {
+      "n": 1355,
+      "changed": 720,
+      "ll_model": 0.6142703585805472,
+      "ll_penalized": 0.611960590523121,
+      "ll_market": 0.610863691835054,
+      "gain": 0.0023097680574262597,
+      "gain_cluster_se": 0.0017127177755077523,
+      "gain_interval": [
+        -0.0009903437405647134,
+        0.00566364737336123
+      ],
+      "bets_identical": true,
+      "units_model": 4.075816399666365,
+      "units_penalized": 4.075816399666365
+    },
+    "2026 weeks 1-5 walk-forward (unseen)": {
+      "n": 78,
+      "changed": 34,
+      "ll_model": 0.6982914927732111,
+      "ll_penalized": 0.6720348130270303,
+      "ll_market": 0.6507537097590552,
+      "gain": 0.02625667974618087,
+      "gain_cluster_se": 0.02537788764639217,
+      "gain_interval": [
+        -0.0012729486412430258,
+        0.08026667562991972
+      ],
+      "bets_identical": true,
+      "units_model": -4.849949843062005,
+      "units_penalized": -4.849949843062005
+    },
+    "native v1.16 ledger (unseen)": {
+      "n": 13,
+      "changed": 5,
+      "ll_model": 0.7658933991102024,
+      "ll_penalized": 0.6193639041553248,
+      "ll_market": 0.5713978920225543,
+      "gain": 0.14652949495487755,
+      "gain_cluster_se": null,
+      "gain_interval": [
+        null,
+        null
+      ],
+      "bets_identical": true,
+      "units_model": 0.37494091078063274,
+      "units_penalized": 0.37494091078063274
+    }
+  }
+}
