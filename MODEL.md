@@ -370,6 +370,28 @@ a −2.4% null (2023–25, exposed: 42 picks, +34.2% ± 17.0); the slice was pro
 both were seen. At 11–16 picks a season it needs several seasons: no verdict before 10
 bets, falsified at n ≥ 50 with ROI at or below the null.
 
+### Favorite-confidence penalty (reporting only, v1.16.2)
+
+Where v1.16 backs the market favorite more strongly than the no-vig price q, `model_wp_fp` keeps
+`FAVORITE_PENALTY` (0.2) of its log-odds departure from q; everywhere else it equals `model_wp`.
+It always lies between q and the model on the same side of 50%, so **no pick and no bet changes**.
+v1.16's forecasts, snapshots, recipe, `REVISION` and `config_signature()` are unchanged: the column
+is added to `retro_ledger.csv`, and `grade_ledger.py` writes `fp_wp`/`fp_log_loss` to
+`forward_ledger.csv` and a v1.16 line to `ledger_report.txt`. Protocol and verdict rules:
+`research/FAVORITE_PENALTY.md`; results: `research/favorite_penalty_results/`.
+
+| Basis | n | LL v1.16 | LL penalized | LL market | Gain vs v1.16 (week-cluster SE) |
+|---|---:|---:|---:|---:|---:|
+| 2017–20 out of sample (exposed) | 1,019 | 0.6056 | 0.6016 | 0.6004 | +0.0040 ± 0.0027 |
+| 2021–25 rebuilt (exposed; λ chosen here) | 1,355 | 0.6143 | 0.6120 | 0.6109 | +0.0023 ± 0.0017 |
+| 2026 weeks 1–5 walk-forward (unseen) | 78 | 0.6983 | 0.6720 | 0.6508 | +0.0263 ± 0.0254 |
+| native v1.16 ledger (unseen, one week) | 13 | 0.7659 | 0.6194 | 0.5714 | +0.1465 |
+
+The penalty improves v1.16's probabilities on every basis but still trails the market. The
+exposed rows confirm the implementation, not the idea. The forward verdict waits for 200 graded
+native v1.16 games: falsified if the penalized log loss is not lower than v1.16's. Making it the
+live forecast would be a new `REVISION`.
+
 ### Model range on the board (reporting only)
 
 Board rows carry `offset_se`, `model_wp_lo` and `model_wp_hi`, and the card shows

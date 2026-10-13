@@ -1132,3 +1132,19 @@ model closer to the market (lean SD 0.17 vs 0.25 log-odds, correlation 0.57 with
 and changes which underdogs it backs: of all scored games it keeps 29 of v1.16's 52 underdog picks
 and adds 12 of its own, losing most of v1.16's underdog-pick units. No change to
 production.
+
+### Favorite-confidence penalty for v1.16 (2026-10-13): implemented, reporting only (v1.16.2)
+
+Protocol `FAVORITE_PENALTY.md`, committed before the implementation and before the unseen numbers;
+script `favorite_penalty.py`; results `favorite_penalty_results/`. Where v1.16 backs the market
+favorite more strongly than the no-vig price, keep 0.2 of its log-odds departure. No pick changes.
+
+| Basis | n | Gain vs v1.16 | Still vs market |
+|---|---:|---:|---:|
+| 2017–20 out of sample (exposed) | 1,019 | +0.0040 ± 0.0027 | −0.0013 |
+| 2021–25 rebuilt (exposed; λ chosen) | 1,355 | +0.0023 ± 0.0017 | −0.0011 |
+| 2026 weeks 1–5 (unseen) | 78 | +0.0263 ± 0.0254 | −0.0213 |
+| native v1.16 ledger (unseen) | 13 | +0.1465 | −0.0480 |
+
+Implementation check passed (positive on both exposed bases, every bet identical). Forward verdict
+at 200 native v1.16 games. v1.16's forecasts and config signature are unchanged.
