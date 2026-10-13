@@ -299,3 +299,50 @@ the newest snapshot was written 2026-10-12 21:59 UTC for a week-5 game; no week-
   give a difference SE near 0.019. The held-out difference (−0.012) is well inside that, so a
   2026 verdict is likely "unresolved". If that difference is the truth, the observed late − mid
   still lands at or above zero (the falsification bar) about a quarter of the time.
+
+**2026-10-13, owner decision, committed before any week-6 snapshot exists. New hypothesis H6:
+v1.16's market-underdog picks. H1–H5 and their rules are unchanged.**
+
+*Source.* v1.16 bets the market favorite in every game except those where it makes the market
+underdog its favorite, so only those games separate its flat-bet results from betting the
+favorite. On v1.16's own predictions:
+- 2023–25 held-out reproduction (`research/restore_v116_results/historical_reproduction.csv`;
+  exposed, since v1.16 was chosen on these seasons): 42 picks (12, 14, 16 by season), 26-16-0,
+  +14.35u, +34.2% ± 17.0 against a −4.2% null; the same-row favorite −34.6%; log-loss gain vs q
+  on those games +0.043 ± 0.044.
+- 2017–20 out of sample (`research/out_of_sample_results/predictions.csv`): 49 picks (11, 12, 11,
+  15), 27-21-1, +9.46u, +19.3% ± 15.2 against a −2.4% null; the same-row favorite −19.0%;
+  log-loss gain +0.023 ± 0.030.
+Returns were positive in each of the seven seasons. The slice was proposed after both results
+were seen, so it is a hypothesis, not evidence.
+
+*Rule (fixed).* Rows: the H1/H2 sample of the addendum above (the first v1.16 snapshot per game
+under configuration `9dad9b9a…62dcd26` and its frozen recipe, for games from 2026 week 6 on,
+cumulative across seasons); H6 ends when that sample ends. A row qualifies when the no-vig
+probability of the side v1.16 backs, from the snapshot moneylines, is below 0.5: v1.16 makes the
+market underdog its favorite. Model pick'ems (no bet) and market pick'ems (q = 0.5) never
+qualify. The bet is the model's ordinary flat 1u at the snapshot price; a tie is a push. There
+is no other filter.
+
+*Report* (`h6_summary` in `grade_ledger.py`, printed in `data/ledger_report.txt`). W-L-P, units,
+ROI ± SE, the market-correct null (mean of `null_ev` on the same rows), the same-row market
+favorite (the other side of the same games), and the paired log-loss gain vs q.
+
+*Decision* (cumulative, at the season checkpoints above):
+- **Supported**: ROI − null ≥ 2 SE. Even then nothing changes the model, the stake policy or the
+  headline without the owner's decision.
+- **Falsified**: n ≥ 50 and ROI at or below the null.
+- Otherwise **unresolved**. No verdict before 10 graded bets.
+
+*Power, stated now.* 11–16 qualifying games a season in 2017–25, all near-even (the mean no-vig
+probability of the picked underdog is 0.45–0.46). A per-bet SD near 1.1u gives an SE of about
+29 points after one season. If the true edge over the null equals the 2017–20 estimate
+(+21.7 points), the expected z after k seasons is about 0.74 √k: support at 2 SE has even odds
+only after about seven seasons. The falsification sample (n ≥ 50) arrives around the end of
+2029; at that point a true edge of that size would still be called falsified about 8% of the
+time, and no edge about half the time. A 2026-only result will read "unresolved"; that is not
+evidence against H6.
+
+*Overlap and multiplicity.* An H6 row can also be an H1 row (an underdog pick more than 0.17
+from q), so H1 and H6 are not independent. With H1–H6 registered, read any single 2 SE result
+with that multiplicity in mind. The 14 excluded week-5 v1.16 rows contain no underdog pick.
