@@ -1,7 +1,7 @@
 {
   "research/availability_weights.py": "81f4a1eb22662f32445155e1dd90544db9bb413dca1c84fe66b5f6a38b5296c8",
   "research/AVAILABILITY_WEIGHTS.md": "8501f58d20d2e0a0e422e7c9618df3752f25697ac2daeb7a841a2f3c6613ec9c",
-  "nfl_model.py": "d49c5629676f707aeb52cd297ebfcadbb4d9d6f4dd7405a04bb75624a8ee32ed",
+  "nfl_model.py": "8feff485b2cc77d3ba42d80a34e12ffc740a72e3283f7f7082ed7a3dab3a82b9",
   "research/availability_audit.py": "6e3a9eef565df47a972c7124aa52126a42bc7789f7699be8de2cf11c450c50ec",
   "research/availability_weights_results/rebuilt_columns.csv.gz": "c4c18a696f979369fced58440fbc13e6439bd971eda19b4d8d53e4240c707a29",
   "research/availability_weights_results/pipeline_check.json": "e9d1315cb0666e834df135e58dec2f477b309e89255dca88c00056f6fc6d7f9f",
