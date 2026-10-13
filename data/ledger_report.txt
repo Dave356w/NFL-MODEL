@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-13 13:49 UTC
+NFL forward ledger report -- 2026-10-13 14:46 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -24,6 +24,9 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     same rows, favorite at its Kalshi game-winner ask: +1.22u, ROI +20.4%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 1-2, +0.69u, ROI +23.0% +/- 128.2
     Kalshi-mid null -7.2% on the same bets; 3 games qualified so far
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=14: the no-vig price moved -0.11 pts +/- 0.33 on average (positive = toward the model's side); on its underdog picks (n=1) -1.21 pts
+    line move vs the model's departure from the lock price: slope +0.003 +/- 0.025 (positive = the market moved toward the model)
   Scored rows (graded, market present): 13
   Model picks  8-5 (.615)
   Market picks 9-4 (.692)
@@ -59,6 +62,9 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     same rows, favorite at its Kalshi game-winner ask: +2.39u, ROI +29.9%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 2-2, +2.93u, ROI +73.2% +/- 107.7
     Kalshi-mid null -6.6% on the same bets; 4 games qualified so far
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=14: the no-vig price moved +0.17 pts +/- 0.33 on average (positive = toward the model's side)
+    line move vs the model's departure from the lock price: slope -0.005 +/- 0.025 (positive = the market moved toward the model)
   Scored rows (graded, market present): 13
   Model picks  9-4 (.692)
   Market picks 9-4 (.692)
@@ -89,6 +95,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median 10.4h, max 10.4h
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.4%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=1: the no-vig price moved +1.68 pts on average (positive = toward the model's side)
   Scored rows (graded, market present): 1
   Model picks  0-1 (.000)
   Market picks 0-1 (.000)
@@ -119,6 +127,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -6.6h, max -6.6h; 1 captured BEFORE lock (no later capture; min -6.6h)
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=1: the no-vig price moved +0.82 pts on average (positive = toward the model's side)
   Scored rows (graded, market present): 1
   Model picks  0-1 (.000)
   Market picks 0-1 (.000)
@@ -149,6 +159,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     Kalshi-correct null -2.0%; same rows, Kalshi favorite -1.01u, ROI -101.4%; capture lag after lock median -7.2h, max -7.2h; 1 captured BEFORE lock (no later capture; min -7.2h)
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 0-1, -1.02u, ROI -102.2%
     same rows, favorite at its Kalshi game-winner ask: -1.01u, ROI -101.4%
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=1: the no-vig price moved +0.00 pts on average (positive = toward the model's side)
   Scored rows (graded, market present): 1
   Model picks  0-1 (.000)
   Market picks 0-1 (.000)
@@ -166,6 +178,12 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
 
 == Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread
   n=14 graded games, partial r -0.140 [-0.664, +0.450] (95%): unresolved
+
+== Pre-registered H1/H2 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addendum 2026-10-13 in research/PREREGISTRATION.md)
+  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 0 priced rows; verdict: no qualifying graded rows
+  H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=0; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no graded rows
+  H2 secondary, flat 1u ROI: weeks 5-13 n=0; weeks 14-18 n=0
+  Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H5 (one row per game, independent of the model): 1u on the moneyline underdog when the total at lock is <= 41
   2 qualifying games recorded, 2 graded
