@@ -25,6 +25,8 @@ BASES = ['2017-20 out of sample (exposed)', '2021-25 rebuilt (exposed; lambda ch
 
 
 def freeze(out=OUT):
+    if m.REVISION != REVISION:  # from v1.18 the rebuilt history holds penalized forecasts
+        raise ValueError('Inputs were frozen under v1.16; refreezing now would read v1.18 forecasts as v1.16')
     out.mkdir(parents=True, exist_ok=True)
     o = pd.read_csv(ROOT/'research/out_of_sample_results/predictions.csv').rename(columns={'production': 'model_wp'})
     o['basis'] = BASES[0]

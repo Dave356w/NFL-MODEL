@@ -1,7 +1,7 @@
 {
   "protocol": "research/CONTEXT_SUPPORT_CAP.md",
   "revision": "boxscore-composite-v1.16",
-  "model_revision_at_run": "boxscore-composite-v1.16",
+  "model_revision_at_run": "boxscore-composite-v1.18",
   "recipe": {
     "family": "rates_core_avail_cs_peaks_nosacks",
     "half_life": 8.0,
