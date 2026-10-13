@@ -1189,3 +1189,28 @@ On held-out games, 9 of 812 sides flip.
 No change to production. A follow-up could split yardage into non-explosive and explosive parts in
 place of the current rates. That would be a new hypothesis, and it would need its own rule fixed
 before any run.
+
+### Test 34: explosive share of offensive yardage, 2017–20 (2026-10-13): unresolved, no change
+
+Protocol [`EXPLOSIVE_SHARE.md`](EXPLOSIVE_SHARE.md), pushed (`c10d090`) before any number existed;
+script `explosive_share.py`; results `explosive_share_results/`. It tests the reading of Test 33's
+offense signs: at equal yards per play, yardage from big plays repeats less. One feature, fixed in
+advance: offense explosive yards (passes ≥ 20 and runs ≥ 10) as a share of net yards, with the main
+profile rule, home minus away, added to v1.16 at ridge 0.1. It was scored once on 2017–20, the only
+seasons where no explosive-play number had been computed. Training is 2013 onward. The v1.16 arm
+reproduces the 2017–20 test's predictions to 2e-16.
+
+| Arm (1,017 bets) | Units | ROI ± SE | Null | Log loss |
+|---|---:|---:|---:|---:|
+| v1.16 | −0.42 | −0.0% ± 2.2 | −2.6% | 0.60560 |
+| + explosive share | −3.66 | −0.4% ± 2.2 | −2.6% | 0.60551 |
+| market favorite (same rows) | −19.18 | −1.9% ± 2.2 | −2.6% | 0.60037 |
+
+Log-loss gain +0.00009 (95% week-clustered [−0.00142, +0.00163]); ROI −0.32 pts [−1.71, +1.05];
+16 sides flipped. The coefficient was negative in **all 68** weekly fits (median −0.070).
+
+**Reading.** The direction replicates on unseen seasons. The fits consistently assign a lower win
+chance to teams whose yardage comes more from big plays. But the forecasts barely move and gain
+nothing measurable. Verdict under the protocol: **unresolved**. No change, and 2017–20 are not reused
+for this question. Explosive plays are now closed on every historical basis the repository holds. A
+forward shadow test would be the only further step, and these results do not justify building one.

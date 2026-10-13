@@ -1,0 +1,125 @@
+{
+  "basis": "One-time 2017-2020 out-of-sample reconstruction (exposure disclosed in EXPLOSIVE_SHARE.md); not forward evidence",
+  "revision_compared": "boxscore-composite-v1.16",
+  "production_revision": "boxscore-composite-v1.18",
+  "reproduction_max_error": 2.220446049250313e-16,
+  "verdict": "unresolved",
+  "coefficient": {
+    "median": -0.06969122344181793,
+    "share_negative": 1.0,
+    "fits": 68
+  },
+  "feature_corr_with_net_pass_ypp": 0.33912888472614183,
+  "league_share_2017_20": 0.42539764880722886,
+  "summary": {
+    "bets": 1017,
+    "binary_games": 1019,
+    "arms": {
+      "production": {
+        "bets": 1017,
+        "wins": 691,
+        "losses": 322,
+        "pushes": 4,
+        "units": -0.4200196577083055,
+        "roi": -0.00041299868014582647,
+        "roi_se": 0.02228766405800074,
+        "win_pct": 0.6821322803553801,
+        "mean_q": 0.665677095510963,
+        "excess_pp": 1.6051134615812868,
+        "null_roi": -0.02553650974717336,
+        "log_loss": 0.6056035366600712,
+        "brier": 0.20849367760183124
+      },
+      "explosive_share": {
+        "bets": 1017,
+        "wins": 689,
+        "losses": 324,
+        "pushes": 4,
+        "units": -3.655167083472092,
+        "roi": -0.003594067928684456,
+        "roi_se": 0.022316726845554264,
+        "win_pct": 0.6801579466929911,
+        "mean_q": 0.6653117022086565,
+        "excess_pp": 1.4443637072323767,
+        "null_roi": -0.02553650974717336,
+        "log_loss": 0.6055136833141224,
+        "brier": 0.2085829417214682
+      },
+      "market": {
+        "bets": 1017,
+        "wins": 685,
+        "losses": 328,
+        "pushes": 4,
+        "units": -19.182987671479488,
+        "roi": -0.018862328093883468,
+        "roi_se": 0.021968076338040605,
+        "win_pct": 0.6762092793682132,
+        "mean_q": 0.6691637848746653,
+        "excess_pp": 0.6787613222559497,
+        "null_roi": -0.02553650974717336,
+        "log_loss": 0.6003680536286145,
+        "brier": 0.20648145197576373
+      },
+      "production_v118": {
+        "log_loss": 0.6016291201566712,
+        "brier": 0.20693674023006392
+      },
+      "explosive_share_v118": {
+        "log_loss": 0.6016066673561238,
+        "brier": 0.20695061450794988
+      }
+    },
+    "pairs": {
+      "explosive_share": {
+        "roi_delta": -0.0031810692485386297,
+        "roi_delta_se": 0.007795262298106994,
+        "roi_delta_ci": [
+          -0.017100632649982836,
+          0.010532254517735243
+        ],
+        "ll_gain": 8.98533459487683e-05,
+        "ll_gain_se": 0.0008553288634650036,
+        "ll_gain_ci": [
+          -0.0014174249945585545,
+          0.0016346645925417855
+        ],
+        "ll_gain_v118": 2.2452800547540664e-05,
+        "ll_gain_v118_ci": [
+          -0.000854478639385031,
+          0.0009221745114191582
+        ],
+        "side_flips": 16
+      }
+    }
+  },
+  "by_season": {
+    "2017": {
+      "bets": 253,
+      "production_units": 22.16517851331426,
+      "explosive_share_units": 18.43721463102057,
+      "favorite_units": 14.048515662876657,
+      "ll_gain": -0.0006785577743641083
+    },
+    "2018": {
+      "bets": 254,
+      "production_units": -5.407550750776611,
+      "explosive_share_units": -9.488934251520796,
+      "favorite_units": -8.107934763483541,
+      "ll_gain": 0.00016290729442409215
+    },
+    "2019": {
+      "bets": 254,
+      "production_units": -18.784529647413112,
+      "explosive_share_units": -14.350329690139025,
+      "favorite_units": -19.778525248941698,
+      "ll_gain": 0.0007757860332082387
+    },
+    "2020": {
+      "bets": 256,
+      "production_units": 1.6068822271671581,
+      "explosive_share_units": 1.7468822271671591,
+      "favorite_units": -5.345043321930912,
+      "ll_gain": 9.956431659930311e-05
+    }
+  }
+}
