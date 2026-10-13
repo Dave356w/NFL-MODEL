@@ -99,6 +99,11 @@ neither production nor the ledger.
   v1.16 beat the same-row favorite by +18.76u on 1,017 bets, unresolved (+1.84 pts per
   bet, 97.5% interval −0.81 to +4.61); the close-game challenger was not supported.
   `python research/out_of_sample_2017_2020.py`
+- [Availability weighting](research/availability_weights_results/REPORT.md)
+  ([protocol](research/AVAILABILITY_WEIGHTS.md)): Questionable weights by final practice
+  participation are unresolved (pooled log-loss gain +0.0003, interval crosses zero; −11.4u
+  on 12 changed picks); separate WR/TE and CB/S units are falsified.
+  `python research/availability_weights.py --prepare`, then `python research/availability_weights.py`
 - [Selection-adjusted benchmark](research/selection_benchmark_results/REPORT.md): if the
   market were exactly right, the best of the 53 committed arms would beat the favorite
   by a median +16.7u on 2023–25 by luck alone; v1.16's +30.6u has p 0.180 against that
