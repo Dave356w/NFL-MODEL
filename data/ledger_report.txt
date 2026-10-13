@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-13 14:46 UTC
+NFL forward ledger report -- 2026-10-13 15:19 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -179,10 +179,11 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
 == Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread
   n=14 graded games, partial r -0.140 [-0.664, +0.450] (95%): unresolved
 
-== Pre-registered H1/H2 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addendum 2026-10-13 in research/PREREGISTRATION.md)
+== Pre-registered H1/H2/H6 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addenda 2026-10-13 in research/PREREGISTRATION.md)
   H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 0 priced rows; verdict: no qualifying graded rows
   H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=0; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no graded rows
   H2 secondary, flat 1u ROI: weeks 5-13 n=0; weeks 14-18 n=0
+  H6, the model backs the market underdog (its side's no-vig q < 0.5): 0 graded bets of 0 priced rows; verdict: no verdict before 10 graded bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H5 (one row per game, independent of the model): 1u on the moneyline underdog when the total at lock is <= 41
