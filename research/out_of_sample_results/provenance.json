@@ -2,7 +2,7 @@
   "research/out_of_sample_2017_2020.py": "edd7867eb4dddd2b8f2b1cc19254c14d627b8fad85071891257fdd2f8f6c64a9",
   "research/OUT_OF_SAMPLE_2017_2020.md": "1c13d2a35cc630b91097a354a95ec3d9901eed27431d1b612b81f858742ec1fd",
   "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
-  "nfl_model.py": "61d00213f600b4e4388c8a4c437918ec64441c43c86d777cb4c7c95846953313",
+  "nfl_model.py": "6a3d1d4cab9e3833e58ec9d92eac31c7716d8a11e96de43e589eb4b80c6a9379",
   "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
   "research/out_of_sample_results/normalization_references.csv": "d572772c906b06885d2fdcb81056750496d4d4a8376f7c21202103a224a553ce",
   "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f"

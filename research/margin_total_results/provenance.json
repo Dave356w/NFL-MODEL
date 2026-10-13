@@ -6,7 +6,7 @@
   "research/shrinkage_results/archived_current_inputs.jsonl": "7931057e2399ec02dd5ad31709b28374dc3e9ba52d25ba73ec9b3adf328f1826",
   "research/margin_total_models.py": "cce82dd1910f74ac005e32c56cbbfca03ee81d1893d38d43d5335829fd6058cd",
   "research/MARGIN_TOTAL_MODELS.md": "7ec457a0811a28f6b4f6e5eaa0a8e6631fa4687fed27fd8528805704b7068d40",
-  "nfl_model.py": "61d00213f600b4e4388c8a4c437918ec64441c43c86d777cb4c7c95846953313",
+  "nfl_model.py": "6a3d1d4cab9e3833e58ec9d92eac31c7716d8a11e96de43e589eb4b80c6a9379",
   "research/context_shrinkage.py": "8c198d3534d92599a087374ef0e5f0119fc770bba8fb0adcd58b9b8912a83fff",
   "research/margin_total_results/frozen_feature_prices.csv.gz": "91788712d42c61195124951b3dda62b32c65e42499700ebeb41dbe9115c6abd2"
 }
