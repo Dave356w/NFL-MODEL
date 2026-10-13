@@ -1,0 +1,30 @@
+name: Frozen v1.16 forward assessment
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 16 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  assess:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install numpy pandas
+      - name: Assess native forward locks under frozen rules
+        run: python research/forward_v116_assessment.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: forward-v116-assessment-${{ github.run_id }}
+          path: research/forward_v116_assessment_results/
+          if-no-files-found: error

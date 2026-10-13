@@ -85,6 +85,12 @@ market-correct simulation. Run `python research/log_loss_diagnostics.py`.
 tests close-matchup annual consistency and calibration fitted on earlier-season
 OOF predictions only. Run `python research/chronological_calibration.py`.
 
+[Frozen prospective comparison](research/FORWARD_V116_COMPARISON.md) starts a
+new cohort after its recorded freeze time. Reviews at 100/250/500 games and
+the 2026 regular-season end are descriptive; the single formal assessment is
+at 1,000 settled eligible games. Run `python research/forward_v116_assessment.py`.
+The separate daily workflow uploads reports without changing production or ledgers.
+
 ## Site build
 
 `.github/workflows/build.yml` polls hourly. `schedule_gate.py` starts the full

@@ -1,0 +1,50 @@
+{
+  "protocol_id": "v116_prospective_20261012",
+  "rules_sha256": "a1b8b14edc532ab352ad1461fdd5d25d4c2f29f77053f4edddb9ccbeaec85632",
+  "start_utc": "2026-10-13T00:05:00.750909+00:00",
+  "asof_utc": "2026-10-13T00:10:43.162119+00:00",
+  "enrollment_stopped_utc": null,
+  "eligible_locks": 0,
+  "settled_prefix": 0,
+  "pending": 0,
+  "exclusion_counts": {
+    "other_experiment": 17,
+    "locked_before_freeze": 14
+  },
+  "descriptive_current": {
+    "unique_games": 0,
+    "settled_games": 0,
+    "ties": 0,
+    "financial": {
+      "games": 0,
+      "roi": null,
+      "gate_intervals": {}
+    },
+    "probability": {
+      "games": 0,
+      "ll_gain": null,
+      "brier_gain": null,
+      "ll_ci": null,
+      "brier_ci": null
+    },
+    "close_probability": {
+      "games": 0,
+      "ll_gain": null,
+      "brier_gain": null,
+      "ll_ci": null,
+      "brier_ci": null
+    },
+    "financial_assessment": "descriptive_only",
+    "overall_probability_assessment": "descriptive_only",
+    "close_probability_assessment": "descriptive_only",
+    "seasons": {},
+    "bands": {}
+  },
+  "ready_checkpoints": [],
+  "source_hashes": {
+    "/workspace/scratch/0b1071555cf8/forward_freeze_inputs/native.jsonl": "1dcd8e21180a0686c79f47f9c0b12ef8b7899fe82770ea966a35c34ecee30d24",
+    "/workspace/scratch/0b1071555cf8/forward_freeze_inputs/grades.csv": "b8c9251ceeea8436c5bad1bce771dfcbedc4ba71f3355a4e3d8ce99fd6a52566"
+  },
+  "assessor_source_sha256": "85b95743678d07c14281a5919098ce09ad15edecd052bc93747f1009338bfd57",
+  "automatic_model_changes": false
+}
