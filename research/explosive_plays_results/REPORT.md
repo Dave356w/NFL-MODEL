@@ -1,4 +1,4 @@
-# Test 31: explosive-play rates added to v1.16
+# Test 33: explosive-play rates added to v1.16
 
 Basis: Walk-forward development (fixed recipe); not forward evidence. v1.16 reproduction error 1e-10.
 

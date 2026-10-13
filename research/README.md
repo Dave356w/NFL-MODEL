@@ -1149,7 +1149,7 @@ favorite more strongly than the no-vig price, keep 0.2 of its log-odds departure
 Implementation check passed (positive on both exposed bases, every bet identical). Forward verdict
 at 200 native v1.16 games. v1.16's forecasts and config signature are unchanged.
 
-### Test 31: explosive-play rates added to v1.16 (2026-10-13): no change
+### Test 33: explosive-play rates added to v1.16 (2026-10-13): no change
 
 `python research/explosive_plays.py` (≈ 25 min cold: downloads 2016–26 play-by-play; the team-game
 counts are then cached in `explosive_plays_results/`). The idea came from a podcast's use of explosive

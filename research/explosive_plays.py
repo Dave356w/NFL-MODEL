@@ -1,4 +1,4 @@
-"""Test 31: explosive-play rates added to v1.16, walk-forward development comparison.
+"""Test 33: explosive-play rates added to v1.16, walk-forward development comparison.
 
     python research/explosive_plays.py [--output-dir DIR]     # ~25 min cold (play-by-play download)
 
@@ -222,7 +222,7 @@ def run(out):
     (out / 'results.json').write_text(json.dumps(info, indent=2, allow_nan=False) + '\n')
     src = [Path(__file__), ROOT / 'nfl_model.py', PACK, REFERENCE, out / 'explosive_team_games.csv.gz']
     (out / 'provenance.json').write_text(json.dumps({str(x.relative_to(ROOT)): hashlib.sha256(x.read_bytes()).hexdigest() for x in src}, indent=2) + '\n')
-    lines = ['# Test 31: explosive-play rates added to v1.16', '', f"Basis: {info['basis']}. v1.16 reproduction error {repro:.2g}.", '']
+    lines = ['# Test 33: explosive-play rates added to v1.16', '', f"Basis: {info['basis']}. v1.16 reproduction error {repro:.2g}.", '']
     for k, b in info['blocks'].items():
         lines += [f'## {k}', '', f"{b['bets']} common priced flat 1u bets; {b['binary_games']} binary games.", '',
                   '| Arm | W-L-P | Units | ROI ± SE | Market-correct null | LL | LL with v1.18 penalty | Brier |', '|---|---|---:|---:|---:|---:|---:|---:|']
