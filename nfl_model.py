@@ -13,7 +13,8 @@ and historical games are retrospectively regraded in separate reports.
 v1.16.1 (reporting only; same REVISION, config signature, recipe and ledger): the board
 carries a 90% model-probability range from coefficient uncertainty alone (offset_band; never
 written to snapshots). grade_ledger adds closing-line value against nflverse's post-game
-moneylines and grades pre-registered H1/H2 on their registered v1.12 sample.
+moneylines and grades pre-registered H1/H2 on their sample: v1.16 from 2026 week 6
+(owner addendum 2026-10-13).
 research/selection_benchmark.py adjusts the committed 2023-25 arms for selection.
 
 v1.17 (research/archive, owner adoption 2026-10-10): Passing × predicted total.

@@ -354,11 +354,14 @@ metric.
 
 `data/ledger_report.txt` grades H1 (|model − q| > 0.17) and H2 (late-season log-loss
 fade, with ROI per week group as secondary) exactly as `research/PREREGISTRATION.md`
-fixes them, on their registered sample: the forward rows of `boxscore-composite-v1.12`,
-with q from the snapshot moneylines. That sample ended when v1.13 was adopted (the
-stopping rule) and the v1.13–v1.15 addenda deliberately do not extend it, so it holds
-one game and both verdicts will stay unresolved. Testing H1/H2 on v1.16 needs an
-owner addendum committed before the rows it would use exist.
+fixes them. The owner's addendum of 2026-10-13, committed before any week-6 snapshot,
+applies them to the first v1.16 snapshot of each game under its frozen configuration,
+for games from 2026 week 6 on (cumulative across seasons), with q from the snapshot
+moneylines. The 14 week-5 v1.16 rows predate it and are excluded. The earlier samples
+(through v1.12) ended under the stopping rule; a change of revision, configuration
+signature or recipe ends this one too. Because v1.16 starts from the market's log-odds,
+only about 1% of its games move more than 0.17 from q (10 of 816 in 2023–25), so H1
+will read unresolved for many seasons; H2 is likely unresolved after 2026.
 
 ### Model range on the board (reporting only)
 

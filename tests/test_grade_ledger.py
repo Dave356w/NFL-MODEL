@@ -127,17 +127,26 @@ def test_closing_line_value_sign_and_missing_closes():
     assert s["n"] == 2 and np.isclose(s["mean"], 0, atol=1e-9) and s["dog_n"] == 1 and np.isclose(s["dog_mean"], -6.31, atol=.01)
 
 
+def h12(gid, wp, week, season=2026, rev=None, exp=None):
+    r = rec(gid, wp, .6, rev=rev or g.H12_REVISION, exp=exp or g.H12_EXPERIMENT + str(season), week=week)
+    return {**r, "season": season}
+
+
 def test_h1_h2_use_only_the_registered_sample():
-    rev = g.H12_REVISIONS[0]
-    res = pd.DataFrame({"game_id": list("pqrst"), "away_score": [10, 30, 10, 30, 10],
-                        "home_score": [20, 20, 20, 20, 20], "result": [10, -10, 10, -10, 10]})
-    # q from the snapshot moneylines is .580: gaps .27 and .22 qualify, .04 and .03 do not.
-    rows = [rec("p", .85, .6, rev=rev), rec("q", .62, .6, rev=rev),
-            rec("r", .80, .6, rev="r1"), rec("s", .80, .6, rev=rev, week=15),   # r: other revision, ignored
-            rec("t", .55, .6, rev=rev, week=18)]
+    games = list("pqstuvwx")
+    res = pd.DataFrame({"game_id": games, "away_score": [10, 10, 30, 10, 10, 10, 10, 10],
+                        "home_score": [20] * 8, "result": [10, 10, -10, 10, 10, 10, 10, 10]})
+    # q from the snapshot moneylines is .580: gaps .27, .22 and .28 qualify, .04 and .03 do not.
+    rows = [h12("p", .85, 6), h12("q", .62, 9), h12("s", .80, 15), h12("t", .55, 18),
+            h12("u", .90, 5),                                          # week 5: before the addendum
+            h12("v", .90, 9, rev="boxscore-composite-v1.17"),          # another revision
+            h12("w", .90, 9, exp="deadbeef:other_recipe:2026"),        # another configuration
+            h12("x", .30, 3, season=2027)]                             # later seasons count
     out = g.grade(rows, res)
+    assert sorted(g.h12_rows(out).game_id) == ["p", "q", "s", "t", "x"]
     s1 = g.h1_summary(out)
-    assert s1["rows"] == 4 and s1["bets"] == 2 and g.h1_verdict(s1) == "unresolved"
+    assert s1["rows"] == 5 and s1["bets"] == 3 and np.isclose(s1["units"], 1 / 1.5 - 2)
+    assert g.h1_verdict(s1) == "unresolved"
     assert g.h1_verdict({**s1, "bets": 0}) == "no qualifying graded rows"
     s2 = g.h2_summary(out)
     assert (s2["mid"]["n"], s2["late"]["n"], s2["late_14_17"]["n"], s2["week_18"]["n"]) == (2, 2, 1, 1)
@@ -147,8 +156,15 @@ def test_h1_h2_use_only_the_registered_sample():
     only_mid = g.h2_summary(g.grade(rows[:2], res))
     assert g.h2_verdict(only_mid) == "no late-season rows"
     text = g.report_text(out)
-    assert "Pre-registered H1/H2" in text and "verdict" in text and "H2 secondary, flat 1u ROI" in text
+    assert "Pre-registered H1/H2" in text and "from 2026 week 6" in text and "H2 secondary, flat 1u ROI" in text
     assert "Pre-registered H1/H2" not in g.report_text(g.grade([rec("a", .7, .6)], RESULTS))
+
+
+def test_h1_h2_wait_for_week_6_rows():
+    out = g.grade([h12("u", .90, 5)], pd.DataFrame({"game_id": ["u"], "away_score": [10], "home_score": [20], "result": [10]}))
+    s1, s2 = g.h1_summary(out), g.h2_summary(out)
+    assert s1["rows"] == 0 and g.h1_verdict(s1) == "no qualifying graded rows" and g.h2_verdict(s2) == "no graded rows"
+    assert "0 qualifying graded bets of 0 priced rows" in g.report_text(out)
 
 
 def test_integer_closing_prices_with_a_pending_game():

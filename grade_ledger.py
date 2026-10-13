@@ -47,9 +47,13 @@ COLUMNS = ["experiment", "revision", "season", "week", "game_id", "away", "home"
            "close_home_moneyline", "close_away_moneyline", "close_q", "clv_pp"]
 ATS_GAP_POINTS = 3.  # diagnostic split; chosen after seeing held-out 2023-25 (v1.12.1)
 ATS_BREAKEVEN = 110 / 210  # win rate needed at -110 on both sides
-# research/PREREGISTRATION.md: H1/H2 apply to the forward rows of the last experiment an addendum
-# moved them to (v1.12). Its sample ended at v1.13; later addenda do not extend them.
-H12_REVISIONS = ("boxscore-composite-v1.12",)
+# research/PREREGISTRATION.md, addendum 2026-10-13: H1/H2 apply to the forward rows of v1.16 under
+# its frozen configuration for games from 2026 week 6 on (cumulative across seasons). Changing
+# REVISION, the config signature or the recipe ends the sample. Earlier samples (to v1.12) ended.
+H12_REVISION = "boxscore-composite-v1.16"
+H12_EXPERIMENT = ("9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dcd26:"
+                  "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1:")  # + season
+H12_FROM = (2026, 6)  # (season, week): the first week after the addendum
 H1_MIN_GAP = .17
 
 
@@ -178,9 +182,12 @@ def clv_summary(part):
 
 
 def h12_rows(g):
-    """Rows of the experiment H1/H2 are registered on, with the no-vig q from the snapshot
-    moneylines (the registered market; v1.12 stored a spread-derived market_wp)."""
-    d = g[g.revision.isin(H12_REVISIONS)].copy()
+    """The registered H1/H2 sample: the first v1.16 snapshot per game under its frozen
+    configuration, from 2026 week 6, with the no-vig q from the snapshot moneylines."""
+    season, week = H12_FROM
+    later = (g.season > season) | ((g.season == season) & (g.week >= week))
+    d = g[g.revision.eq(H12_REVISION) & g.experiment.astype(str).str.startswith(H12_EXPERIMENT) & later]
+    d = d.sort_values("generated_utc").drop_duplicates("game_id").copy()
     d["h_q"] = m.market_ml_wp(d)
     return d[np.isfinite(d.h_q)]
 
@@ -565,10 +572,10 @@ def report_text(g, now=None, h5=None):
         lines += ["== Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread",
                   f"  n={h['n']} graded games" + (f", partial r {h['r']:+.3f} [{h['lo']:+.3f}, {h['hi']:+.3f}] (95%): {verdict}"
                                                  if np.isfinite(h["r"]) else " (needs 10 to report)"), ""]
-    if g.revision.isin(H12_REVISIONS).any():
+    if g.revision.eq(H12_REVISION).any():
         s1, s2 = h1_summary(g), h2_summary(g)
-        lines += [f"== Pre-registered H1/H2 (sample: forward rows of {', '.join(H12_REVISIONS)}; it ended at the next "
-                  "revision under the stopping rule, and later addenda do not extend it; research/PREREGISTRATION.md)",
+        lines += [f"== Pre-registered H1/H2 (sample: first {H12_REVISION} snapshots, config {H12_EXPERIMENT[:8]}, for games "
+                  f"from {H12_FROM[0]} week {H12_FROM[1]} on; addendum 2026-10-13 in research/PREREGISTRATION.md)",
                   f"  H1, |model - q| > {H1_MIN_GAP:g} with q from the snapshot moneylines: {s1['bets']} qualifying graded "
                   f"bets of {s1['rows']} priced rows"
                   + (f"; {s1['wins']}-{s1['losses']}-{s1['pushes']}, {s1['units']:+.2f}u, ROI {100 * s1['roi']:+.1f}%"
