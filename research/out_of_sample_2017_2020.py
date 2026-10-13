@@ -248,7 +248,7 @@ def descriptive(held):
     early = held[held.season <= 2018].reset_index(drop=True)
     out['seasons_2017_2018'] = {k: v for k, v in compare(early).items() if k in ('results', 'statistics', 'underdog_picks')}
     for arm in ('production', 'market'):
-        prob = held.market if arm == 'market' else held[arm]
+        prob = held.q if arm == 'market' else held[arm]
         (a, b), (sa, sb) = logistic(y[proper], logit(np.clip(prob.to_numpy(float)[proper], 1e-6, 1-1e-6)))
         out['calibration'][arm] = {'intercept': a, 'intercept_se': sa, 'slope': b, 'slope_se': sb}
     lq = logit(np.clip(held.q.to_numpy(float), 1e-6, 1-1e-6)); off = logit(np.clip(held.production.to_numpy(float), 1e-6, 1-1e-6))-lq
