@@ -3,9 +3,15 @@ import argparse
 import gzip
 import hashlib
 import json
+import os
 import re
 import sys
 from pathlib import Path
+
+# Pin SIMD/BLAS kernels before numpy loads: AVX-512 and AVX2 paths differ in the last ulp,
+# which moves one L-BFGS-B stop (gtol 1e-8) by ~5e-7 and breaks the 1e-8 replay check.
+os.environ.setdefault('NPY_DISABLE_CPU_FEATURES', 'AVX512F AVX512CD AVX512_SKX AVX512_CLX AVX512_CNL AVX512_ICL AVX512_SPR')
+os.environ.setdefault('OPENBLAS_CORETYPE', 'Haswell')
 
 import numpy as np
 import pandas as pd
