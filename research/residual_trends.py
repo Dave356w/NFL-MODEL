@@ -2,6 +2,7 @@
 
     python research/residual_trends.py             # discovery 2017-22, confirmation 2023-25, 2026 diagnostic
     python research/residual_trends.py --forward   # H8 and H7 on the native ledger (PREREGISTRATION.md)
+    python research/residual_trends.py --replicate # the H8 trends and H7 on never-scored 2015-16 (addendum)
 
 Reads only committed files; no network access. Never writes data/ or the ledger.
 """
@@ -323,6 +324,120 @@ def run_forward():
     print('\nJudged only at the season checkpoints; interim numbers are not acted on.')
 
 
+# --- replication on 2015-16 (protocol addendum) ----------------------------------------------------
+
+REPLICATION = {'2015-16': (2015, 2016), '2014 (sensitivity)': (2014,)}
+REPLICATION_PRIMARY = '2015-16'
+REPLICATION_COMMIT = '816f35c'
+
+
+def replication_basis(seasons):
+    """v1.16 refit before every week from earlier pack rows only (training from 2013), v1.18 by the
+    penalty; the same prepare() as every other basis."""
+    pack = pd.read_csv(OOS_PACK)
+    ev = pack[pack.season.isin(seasons)]
+    d = ev.merge(_refit(pack, ev), on='game_id', validate='one_to_one')
+    return prepare(d.merge(_totals(), on='game_id', how='left', validate='one_to_one'))
+
+
+def replication_gate():
+    """The pack and the weekly refit must reproduce the published 2017-20 forecasts."""
+    pack, pred = pd.read_csv(OOS_PACK), pd.read_csv(OOS_PRED)
+    ev = pack[pack.game_id.isin(pred.game_id)]
+    r = _refit(pack, ev).merge(pred[['game_id', 'production']], on='game_id', validate='one_to_one')
+    err = float(np.nanmax(np.abs(r.p16-r.production)))
+    if len(r) != len(pred) or err > 1e-9: raise ValueError(f'Pack refit does not reproduce 2017-20 ({err:.2e})')
+    return err
+
+
+def replication_verdict(z_dir, k):
+    if not np.isfinite(z_dir): return 'no estimate'
+    if z_dir >= norm.ppf(1-.05/k): return 'replicated'
+    return 'direction holds' if z_dir > 0 else 'reversed'
+
+
+def h7_replication_verdict(s):
+    if not (np.isfinite(s['delta']) and np.isfinite(s['se'])): return 'no estimate'
+    if s['delta'] >= 2*s['se']: return 'supported'
+    return 'contradicted' if s['delta'] <= 0 else 'unresolved'
+
+
+def run_replication(out=OUT):
+    res = json.loads((OUT/'results.json').read_text())
+    trends, k = res['forward_set'], len(res['forward_set'])
+    gate = replication_gate()
+    rep = {'protocol_addendum_commit': REPLICATION_COMMIT, 'reproduction_2017_20_max_error': gate,
+           'bar_one_sided': float(norm.ppf(1-.05/k)), 'bases': {}}
+    for name, seasons in REPLICATION.items():
+        d = replication_basis(seasons)
+        rows = []
+        for t in trends:
+            c = cell(d[context_mask(d.total_line, t['context'])], t['input'])
+            z_dir = float(np.sign(t['z_d'])*c['z'])
+            rows.append({**t, 'n': c['n'], 'z_dir': z_dir, 'effect_per_sd': c['effect_per_sd'],
+                         'verdict': replication_verdict(z_dir, k) if name == REPLICATION_PRIMARY else 'sensitivity only',
+                         'wrong_picks': wrong_pick_view(d, t['context'], t['input'], t['cuts'])})
+        s16 = h7(d); s18 = h7(d.assign(departure16=d.departure))
+        s16['replication_verdict'] = h7_replication_verdict(s16) if name == REPLICATION_PRIMARY else 'sensitivity only'
+        rep['bases'][name] = {'seasons': list(seasons), 'binary_games': int(d.y.notna().sum()), 'trends': rows,
+                              'h7': {'v1.16': s16, 'v1.18': s18},
+                              'roi_by_context': json.loads(roi_by_context(d).to_json(orient='records')),
+                              'll_gain_vs_market': float(np.nanmean(np.where(d.y.notna(),
+                                  -(d.y*np.log(d.q)+(1-d.y)*np.log(1-d.q))+(d.y*np.log(d.p)+(1-d.y)*np.log(1-d.p)), np.nan)))}
+    (out/'replication_2015_16.json').write_text(json.dumps(rep, indent=2, allow_nan=True))
+    write_replication_report(rep, res, out)
+    return rep
+
+
+def write_replication_report(rep, res, out):
+    P = rep['bases'][REPLICATION_PRIMARY]
+    L = ['# Test 37 replication: the H8 trends and H7 on never-scored 2015-16', '',
+         f"Protocol addendum in [RESIDUAL_TRENDS.md](../RESIDUAL_TRENDS.md), pushed (`{REPLICATION_COMMIT}`) before any "
+         "2013-16 forecast was compared with an outcome. Nothing was re-selected: the four trends are Test 37's forward set "
+         "and H7 is as registered. A backward replication; it does not replace the forward test.", '',
+         f"Basis: 2015-16 regular seasons, {P['binary_games']} binary games; v1.16 refit before every week from earlier rows "
+         f"of the frozen 2013-20 pack (training from 2013), v1.18 by the favorite penalty. The same refit reproduces the "
+         f"published 2017-20 forecasts to {rep['reproduction_2017_20_max_error']:.1e}. 2014 is a sensitivity basis "
+         "(trained on 190 games of 2013) and decides nothing.", '',
+         '## Trends (z in the discovery direction; positive = the trend continues)', '',
+         f"Replicated at z >= {rep['bar_one_sided']:.2f} (one-sided, Bonferroni over 4).", '',
+         '| Context x input | z 2017-22 | z 2023-25 | z 2015-16 | Effect/SD 2015-16 | Verdict | z 2014 (sensitivity) |',
+         '|---|---:|---:|---:|---:|---|---:|']
+    sens = {f"{t['context']}|{t['input']}": t for t in rep['bases']['2014 (sensitivity)']['trends']}
+    for t in P['trends']:
+        s = sens[f"{t['context']}|{t['input']}"]
+        L.append(f"| {CONTEXT_LABEL[t['context']]} x `{t['input']}` | {_f(t['z_d'])} | {_f(t['z_c_dir'])} | {_f(t['z_dir'])} | "
+                 f"{_f(t['effect_per_sd'], '+.3f')} | {t['verdict']} | {_f(s['z_dir'])} |")
+    L += ['', '## Wrong picks by third of the input signed toward the model\'s side (2017-22 cut points), 2015-16', '',
+          '| Context x input | Third | Bets | Wins - expected | Units (same-row favorite) |', '|---|---|---:|---:|---:|']
+    for t in P['trends']:
+        for w in t['wrong_picks']:
+            L.append(f"| {CONTEXT_LABEL[t['context']]} x `{t['input']}` | {w['third']} | {w['bets']} | {w['wins_minus_expected']:+.1f} | "
+                     f"{w['units']:+.2f} ({w['fav_units']:+.2f}) |")
+    L += ['', '## H7: departure slope, high-total band minus low-total band', '',
+          '| Basis | Model | b high (n) | b low (n) | Delta ± SE | Verdict |', '|---|---|---:|---:|---:|---|']
+    for name, b in rep['bases'].items():
+        for mdl, s in b['h7'].items():
+            v = s.get('replication_verdict', 'secondary') if mdl == 'v1.16' else 'secondary'
+            L.append(f"| {name} | {mdl} | {_f(s['b_high'])} ± {s['se_high']:.2f} ({s['n_high']}) | {_f(s['b_low'])} ± {s['se_low']:.2f} "
+                     f"({s['n_low']}) | {_f(s['delta'])} ± {s['se']:.2f} | {v} |")
+    L += ['', 'History for comparison (v1.16): 2017-22 delta ' + _f(res['h7_history']['discovery']['v1.16']['delta']) + ' ± '
+          + f"{res['h7_history']['discovery']['v1.16']['se']:.2f}; 2023-25 " + _f(res['h7_history']['confirmation']['v1.16']['delta'])
+          + f" ± {res['h7_history']['confirmation']['v1.16']['se']:.2f}.", '',
+          '## Flat 1u ROI by context (goal metric; v1.18 and v1.16 make the same bets)', '',
+          '| Basis | Context | W-L-P | Units | ROI ± SE | Null | Same-row favorite |', '|---|---|---:|---:|---:|---:|---:|']
+    for name, b in rep['bases'].items():
+        for r in b['roi_by_context']:
+            L.append(f"| {name} | {CONTEXT_LABEL[r['context']]} | {r['w']}-{r['l']}-{r['p']} | {r['units']:+.2f} | "
+                     f"{100*r['roi']:+.2f}% ± {100*r['roi_se']:.2f} | {100*r['null']:+.2f}% | {r['fav_units']:+.2f}u ({100*r['fav_roi']:+.2f}%) |")
+        L.append(f"| {name} | log-loss gain vs market, all games (v1.18) | | | {b['ll_gain_vs_market']:+.5f} | | |")
+    L += ['', 'Limits: older seasons with different rules, play styles and pre-2017 data quality; 2015-16 is a third '
+          'basis, never pooled with 2017-22 or 2023-25. Expected z if a trend were real at its discovery size was 1.0-1.7 '
+          '(protocol), so "direction holds" is the likely best case and "reversed" counts against a trend.', '',
+          'Run: `python research/residual_trends.py --replicate`.']
+    (out/'REPLICATION_2015_16.md').write_text('\n'.join(L)+'\n')
+
+
 # --- history ---------------------------------------------------------------------------------------
 
 def sha(path):
@@ -449,5 +564,6 @@ def write_report(res, grids, roi, out):
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument('--forward', action='store_true', help='grade H8 and H7 on the native ledger')
+    ap.add_argument('--replicate', action='store_true', help='the H8 trends and H7 on never-scored 2015-16')
     a = ap.parse_args()
-    run_forward() if a.forward else run()
+    run_forward() if a.forward else run_replication() if a.replicate else run()

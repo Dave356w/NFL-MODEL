@@ -149,3 +149,25 @@ def test_wrong_pick_view_signs_toward_the_models_side():
     assert v['middle']['bets'] == 2 and v['low']['bets'] == 2 and v['high']['bets'] == 0
     assert np.isclose(v['middle']['wins_minus_expected'], (1-.6)+(0-.6))
     assert np.isclose(v['low']['wins_minus_expected'], (1-.7)+(0-.7))
+
+
+def test_replication_verdict_rules():
+    bar = norm.ppf(1-.05/4)
+    assert t.replication_verdict(bar+.01, 4) == 'replicated'
+    assert t.replication_verdict(.002, 4) == 'direction holds'
+    assert t.replication_verdict(0., 4) == 'reversed' and t.replication_verdict(-1., 4) == 'reversed'
+    assert t.replication_verdict(np.nan, 4) == 'no estimate'
+    s = lambda d, se: {'delta': d, 'se': se}
+    assert t.h7_replication_verdict(s(2.1, 1.)) == 'supported'
+    assert t.h7_replication_verdict(s(1.9, 1.)) == 'unresolved'
+    assert t.h7_replication_verdict(s(0., 1.)) == 'contradicted'
+    assert t.h7_replication_verdict(s(np.nan, 1.)) == 'no estimate'
+
+
+def test_replication_basis_uses_only_earlier_rows_and_reproduces_2017_20():
+    assert t.replication_gate() < 1e-9  # the same pack and refit reproduce the published 2017-20 forecasts
+    d = t.replication_basis((2015,))
+    assert set(d.season) == {2015} and len(d) == 256
+    assert ((d.p > 0) & (d.p < 1)).all() and d.total_line.notna().all()
+    # v1.18 keeps v1.16's side of 50% everywhere, so the bets are v1.16's
+    assert ((d.p > .5) == (d.p16 > .5)).all()

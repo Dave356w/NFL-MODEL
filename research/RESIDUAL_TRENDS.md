@@ -101,3 +101,46 @@ past seasons. It changes nothing by itself. A context interaction would be a new
 owner's decision, and should wait for forward evidence.
 
 Run: `python research/residual_trends.py` (history) and `--forward` (native ledger).
+
+## Addendum 2026-10-14: replication on 2015–16, never scored (owner request)
+
+The owner asked to test the trends on data already available instead of waiting for forward games.
+This addendum is committed and pushed before any 2013–16 forecast has been compared with an outcome.
+It adds a historical replication. It does not replace or change H7, H8 or their forward rules.
+
+*Data.* The 2013–16 regular seasons in `out_of_sample_results/frozen_features_2013_2020.csv.gz`.
+Until now they served only as training history (the 2017–20 out-of-sample test and Test 36's
+confirmation stage). No test has scored a model forecast for them. Before writing this, only
+non-outcome facts were checked:
+* every 2014–16 game is priced and ready (2013: 191 of 256 ready);
+* the first week with `MIN_TRAIN_GAMES` earlier complete rows is 2013 week 16, 2014 week 1 (190
+  rows), 2015 week 1 (445) and 2016 week 1 (701);
+* refitting 2017–20 from this pack reproduces `predictions.csv` to 1.1e-16;
+* 2015–16 has 512 games: 63 with totals ≤ 41, 301 in 41.5–47 and 148 at ≥ 47.5.
+
+*Basis.* **Primary: 2015–16**, with v1.16 refit before every week from earlier pack rows only
+(training from 2013) and v1.18 via the favorite penalty. **Sensitivity: 2014** (256 games, trained
+on 190 rows of 2013). It is reported separately and never used for a verdict, because thin
+training inflates departures and would bias the departure trends toward replicating. 2015–16 is
+a basis of its own, never pooled with 2017–22 or 2023–25. Totals for 2013–16 come from the frozen
+`schedule_totals.csv`, extended from the same download (provenance updated; the 2017–26 rows are
+unchanged).
+
+*Tested; nothing is re-selected.* The four H8 trends (Test 37's forward set) and H7, with the same
+statistics, cut points and code paths as the main test.
+* **Trends**, `z* = sign(z_discovery)·z`: **replicated** if z* ≥ Φ⁻¹(1 − 0.05/4) = 2.24;
+  **direction holds** if 0 < z* < 2.24; **reversed** if z* ≤ 0.
+* **H7** (v1.16 departures, binary rows): **supported** if Δ ≥ 2 SE; **contradicted** if Δ ≤ 0;
+  otherwise **unresolved**.
+* Also reported: the wrong-pick views at the 2017–22 cut points, and flat 1u ROI by context with
+  the null and the same-row favorite.
+
+*Power, stated now.* If a trend's true effect equalled its discovery estimate (which selection
+inflates), its expected z* on 2015–16 would be about |z_D|·√(n/n_D): 1.7 for all games ×
+departure, 1.7 for total 41.5–47 × departure, 1.4 for total ≥ 47.5 × offensive INT % and 1.0
+for total ≤ 41 × departure. H7's expected z is about 0.7 (SE near 1.3 with 148 and 63 band
+games). So "replicated" needs luck even if a trend is real. "Direction holds" is the likely best
+case, and "reversed" counts against a trend. This is a backward replication: rules, play styles
+and pre-2017 data quality differ. It cannot replace the forward test.
+
+Run: `python research/residual_trends.py --replicate`.
