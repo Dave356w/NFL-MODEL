@@ -1413,3 +1413,46 @@ shrinkage toward the market would make the probabilities slightly better and giv
 testing. H6's forward result (registered, on the v1.16 shadow sample) is the evidence that should settle it. A
 total-dependent shrink (shrink outside high totals only) is a post-hoc idea from this table; it would need its own
 pre-registration before any forward rows.
+
+### Test 40: a separate model on dynamic play-efficiency ratings vs production (2026-10-14): not better; the blend is unresolved
+
+Protocol [`KALMAN_RATINGS.md`](KALMAN_RATINGS.md), pushed (`0562c5e`) before any rating, feature or forecast was computed.
+Script `kalman_ratings.py`; frozen inputs `kalman_ratings_inputs/` (team-game observations from 671k nflverse plays,
+2013–2026, with source hashes); results `kalman_ratings_results/`. Development evidence only.
+
+**The model.** It replaces production's 23 decayed box-score averages with two matchup edges, pass and rush, from a
+full-covariance Kalman filter over every team's offense and defense. The ratings are per-play efficiency,
+opponent-adjusted, drift weekly, regress between seasons and are weighted by plays. It keeps the QB availability
+term, site, production's market offset and fit, and the v1.18 penalty. Filter settings were tuned only on how well
+they predicted 2013–14 play efficiency, never on game results. The success-rate arm uses a rule-based definition,
+so no expected-points model is involved.
+
+| Log-loss gain ×1000 per game | 2015–16 | 2017–22 | 2023–25 | Verdict | Units vs production |
+|---|---:|---:|---:|---|---|
+| ratings (EPA) vs production | −0.93 | +2.65 | −2.74 | not better | −10.1 / −43.9 / −32.4 |
+| ratings (success rate) vs production | −1.44 | +2.68 | −2.15 | not better | −12.0 / −34.2 / −35.4 |
+| equal blend of the two vs production | +0.03 | +1.80 | −0.72 | unresolved | −2.2 / −22.5 / −18.9 |
+| production vs market | +0.05 ± 3.42 | −2.64 ± 1.70 | +1.66 ± 3.02 | | |
+| ratings (EPA) vs market | −0.88 ± 1.11 | +0.01 ± 0.76 | −1.08 ± 0.82 | | |
+| ratings (EPA) without the market, vs market | −10.9 | −29.2 | −31.1 | | |
+
+- **The ratings work but add nothing to the market.** Without the market they trail it by about 0.03 log loss,
+  the same gap Test 12 found for the old standalone box-score composite. With the market as the offset they nearly
+  are the market: departures are small, so the SE is about 1, not 3, and log loss sits within ±1.1×10⁻³ of it on
+  every basis.
+- **Production departs more and is not reliably more accurate**, but its larger departures produced the underdog
+  picks that made money on 2017–25. Every ratings arm gives up units against production (10–44u per basis).
+- **The fitted weights are unstable.** The pass edge is positive in 100% of 2015–16 fits but negative in 100% of
+  2023–25 fits. The rush edge is mostly positive (68–80%). The home-field adjustment is negative throughout (the
+  market already prices home field). Production's and the ratings model's departures correlate only +0.28 to +0.48.
+- **2026 weeks 1–5** (diagnostic, 65 games): the ratings beat production by +13.6, because production trailed the
+  market by −16.0 there. One small sample; it decides nothing.
+- **By total band**, the ratings and blend help in low totals and hurt in high totals, the same pattern as the
+  shrinkage arms in Test 39.
+- **Tuning note.** The chosen initial variance was the smallest grid value, 0.5×. It affects only the 2013 start
+  and the between-season reset.
+
+**Reading.** A structurally different, opponent-adjusted ratings model lands where production does: inside the
+market's noise on log loss. It makes fewer and smaller departures and gives up the underdog bets. Nothing here
+suggests replacing or blending production. The evidence across Tests 37–40 is consistent: with the market as the
+anchor, the public play and box-score data used here add little that the closing price lacks.
