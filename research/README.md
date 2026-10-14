@@ -1379,3 +1379,37 @@ Diagnostic only.
 log loss on these bases. The consistent-sign inputs lean toward mild over-fitting, the same direction as Test 37's
 oversized departures and Test 36's fit half-life lead. Removing or shrinking anything would be a new `REVISION`;
 all three bases are now exposed, so only forward data can test such a change cleanly.
+
+### Test 39: candidate model updates from Tests 36–38 (2026-10-14): all unresolved; shrinkage trades log loss for units
+
+Protocol [`MODEL_UPDATES.md`](MODEL_UPDATES.md), pushed (`a35d3e7`) before any candidate was scored. Script
+`model_updates.py`; results `model_updates_results/`. **Development evidence only**: every historical basis informed
+the candidates. Four primary arms (Bonferroni K = 4), each refit weekly with v1.18's penalty applied last, judged on
+the log-loss gain over production. Production reproduces the published forecasts and the native snapshots exactly.
+
+| Arm | 2015–16 | 2017–22 | 2023–25 | Verdict | Units vs production (15–16 / 17–22 / 23–25) |
+|---|---:|---:|---:|---|---|
+| ridge 0.1 → 0.3 | +0.66 | +1.81 [+0.04, +3.59] | −0.19 | unresolved | +3.7 / −16.1 / −14.7 |
+| ridge 0.1 → 1.0 | +0.50 | +2.66 | −1.03 | unresolved | −11.9 / −39.3 / −16.6 |
+| halve the departure | +0.84 | +2.03 [−0.11, +4.18] | +0.15 | unresolved | +3.4 / −16.6 / −16.0 |
+| leave-one-basis-out pruning | +0.75 | +0.98 | −2.15 | unresolved | +2.0 / −9.5 / −21.3 |
+
+Log-loss gain over production ×1000 per game; [98.75% interval] where it is close to the bar.
+
+- **Halving the departure** is closest: it gains on all three bases, and on 2014 (+9.8), 2026 weeks 1–5 (+10.0)
+  and the native replay (+24.8, mostly SF@SEA). But no interval excludes zero.
+- **The cost is units.** Across the three bases, almost every flip in the shrinkage arms turns a model underdog pick
+  back into a favorite bet: halving the departure 81 of 81, ridge 0.3 61 of 63, ridge 1.0 123 of 125. Pruning flips
+  both ways (68 and 34). Those underdog picks made money on 2017–25: halving the departure gives up 16.6u and 16.0u
+  there, while gaining 3.4u on 2015–16. Log loss, the protocol's deciding metric, and flat ROI, the owner's
+  goal, point opposite ways.
+- **By total band**, the shrinkage arms help in low and mid totals and hurt in high totals on all three bases
+  (halving: high −2.31, −1.27, −2.89; low +0.30, +3.41, +3.96). That is H7's direction, seen post hoc.
+- Descriptive arms (chosen on the same bases, so partly by construction): dropping the 8 Test 38 inputs gains
+  +1.90/+1.00/+1.20, dropping the home-field adjustment +0.47/+0.52/+0.54, fit half-life 4 −0.04/+0.65/+0.26.
+
+**Reading.** Nothing is supported for a forward shadow test by the rule. The trade-off is clear, though: more
+shrinkage toward the market would make the probabilities slightly better and give up the underdog picks that H6 is
+testing. H6's forward result (registered, on the v1.16 shadow sample) is the evidence that should settle it. A
+total-dependent shrink (shrink outside high totals only) is a post-hoc idea from this table; it would need its own
+pre-registration before any forward rows.
