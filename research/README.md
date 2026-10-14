@@ -1214,3 +1214,33 @@ chance to teams whose yardage comes more from big plays. But the forecasts barel
 nothing measurable. Verdict under the protocol: **unresolved**. No change, and 2017–20 are not reused
 for this question. Explosive plays are now closed on every historical basis the repository holds. A
 forward shadow test would be the only further step, and these results do not justify building one.
+
+### Test 35: de-vig method for the market anchor, 2006–25 (2026-10-14): unresolved, keep proportional
+
+Protocol [`DEVIG_METHODS.md`](DEVIG_METHODS.md), pushed (`6936fc5`) before any non-proportional q was
+scored; script `devig_methods.py`; results `devig_methods_results/`. Three parameter-free arms:
+P proportional (production), A additive (= Shin for two outcomes), W power. The arm with the lowest
+log loss on 2006–16 was selected, then scored once on held-out 2017–25 against P. Data: nflverse
+schedule moneylines (capture time unknown), decided regular-season games with both prices.
+
+All three arms agree on the favorite, so the model's side, the market-favorite baseline and **flat
+1u ROI are the same under every method**. Only q changes, along with the null, excess, log-loss
+benchmark, ladder `fav_wp` and the `q` input that depend on it.
+
+| Held-out 2017–25 (2,374 games) | Log loss | LL gain vs P [97.5%] | Calibration slope |
+|---|---:|---:|---:|
+| P proportional | 0.60636 | — | 1.080 ± 0.060 |
+| A additive | 0.60612 | +0.00024 [−0.00051, +0.00099] | 1.034 ± 0.058 |
+| W power (selected on 2006–16) | 0.60611 | +0.00025 [−0.00094, +0.00144] | 1.009 ± 0.057 |
+
+**Reading.** W was selected on 2006–16, but by only +0.00011 with an interval that crosses zero.
+Its held-out gain also crosses zero, so the verdict is **unresolved, keep P**. The direction is not
+stable: W beats P in 8 of 11 selection seasons and 4 of 9 held-out seasons. P's calibration slope is
+1.006 on 2006–16 and 1.080 on 2017–25; both are within about 1.3 SE of 1. ROI by side (descriptive,
+same under every method) does not show a clean favorite-longshot pattern either. Favorites priced
+0.60–0.70 lost more than every arm's null in both periods (−5.0% and −5.9%), while long underdogs
+(≥ 0.80 favorites) lost −18.2% and −11.9%, closer to the A/W nulls than to P's −2 to −3%. Since a
+change would alter `config_signature()` and need a new `REVISION`, and nothing here resolves, keep
+proportional de-vig. Calibration SEs were first computed from the optimizer's approximate Hessian
+and were corrected to the exact Fisher information before this entry was written; the primary
+statistic and verdict did not change.
