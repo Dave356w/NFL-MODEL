@@ -1,0 +1,19 @@
+basis,arm,ll_gain_vs_market_x1000,se_x1000
+2021-22,plus_ybc,-5.54314,3.176
+2023-25,plus_ybc,1.70896,2.98183
+2026 wk1-5 (diagnostic),plus_ybc,-20.2263,16.5449
+2021-22,plus_ybc_yac,-5.24422,3.27577
+2023-25,plus_ybc_yac,1.32699,2.94586
+2026 wk1-5 (diagnostic),plus_ybc_yac,-20.3685,17.6672
+2021-22,swap_rush,-5.11495,3.22001
+2023-25,swap_rush,1.26024,2.9331
+2026 wk1-5 (diagnostic),swap_rush,-19.7318,17.4909
+2015-16,plus_tfl,-0.764539,3.84663
+2017-22,plus_tfl,-3.38224,1.70461
+2023-25,plus_tfl,1.43531,3.10402
+2026 wk1-5 (diagnostic),plus_tfl,-15.5085,14.9662
+2015-16,production,0.0483746,3.41647
+2017-22,production,-2.64426,1.69968
+2023-25,production,1.65777,3.01604
+2021-22,production,-5.2544,3.08042
+2026 wk1-5 (diagnostic),production,-16.0397,15.0092
