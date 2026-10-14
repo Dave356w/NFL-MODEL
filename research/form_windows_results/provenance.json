@@ -1,0 +1,13 @@
+{
+  "research/form_windows.py": "8675077fe282352978364b90f4fff33ebf78bb5423852c162c69b33f5333f494",
+  "research/FORM_WINDOWS.md": "fe9dc605f697c908cd498e23f4b7bb39aae6f8801b7355130c4edb55e6fd63d6",
+  "nfl_model.py": "7ff1e7b66090793cdcd65189fc43d9fda2d41f5738d72ec52abe50f8b62a74c4",
+  "research/form_windows_inputs/boxes.csv": "0bdc25496b1ce99448e61ad298fe034c273a2267e39020f1595c0b361a8deba9",
+  "research/form_windows_inputs/schedule.csv": "782fc5ca8ffe128d0a7d8496ce4d2cf39c4d99c078c54cba890dcc59d7d19f84",
+  "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/out_of_sample_results/predictions.csv": "b93f0d18a189d7ef760b78f19d46be0f81ac625fd5e2af1c6c2784617dc8f6d0",
+  "research/restore_v116_results/historical_reproduction.csv": "28852b269f01994c4851ef51919801b5ef26cdcf2a13eef4048f1b8a3014eb85",
+  "data/latest/retro_ledger.csv": "891129c4da05b7c40afa0a0ad9af8e3dd487c2430b7ec0b348c6789cd89c4df8",
+  "research/residual_trends_inputs/schedule_totals.csv": "442267815ec68ab5671bc9214884583c1b107c67b6245baa502e13345d8baaec"
+}

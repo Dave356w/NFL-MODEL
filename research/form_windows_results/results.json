@@ -1,0 +1,140 @@
+{
+  "protocol": "research/FORM_WINDOWS.md",
+  "protocol_commit": "d06f8e5",
+  "level": 0.9833333333333333,
+  "fidelity_vs_packs": {
+    "2013-20 pack": {
+      "games": 2048,
+      "max_abs_diff": 3.552713678800501e-15,
+      "share_games_identical": 1.0,
+      "identical_by_season": {
+        "2013": 1.0,
+        "2014": 1.0,
+        "2015": 1.0,
+        "2016": 1.0,
+        "2017": 1.0,
+        "2018": 1.0,
+        "2019": 1.0,
+        "2020": 1.0
+      }
+    },
+    "2019-26 pack": {
+      "games": 2143,
+      "max_abs_diff": 16.762314219582578,
+      "share_games_identical": 0.5440970601959869,
+      "identical_by_season": {
+        "2019": 0.0,
+        "2020": 0.0,
+        "2021": 0.0,
+        "2022": 1.0,
+        "2023": 1.0,
+        "2024": 1.0,
+        "2025": 1.0,
+        "2026": 0.29044117647058826
+      }
+    }
+  },
+  "rebuilt_vs_published_production": {
+    "2015-16": {
+      "games": 512,
+      "max_abs_diff": 9.833911462919787e-11,
+      "mean_abs_diff": 1.3924322849259707e-12,
+      "same_side": 1.0
+    },
+    "2017-22": {
+      "games": 1566,
+      "max_abs_diff": 0.015537143556855593,
+      "mean_abs_diff": 0.0008671330557701029,
+      "same_side": 0.9961685823754789
+    },
+    "2023-25": {
+      "games": 816,
+      "max_abs_diff": 0.011368569153306085,
+      "mean_abs_diff": 0.001058521524970446,
+      "same_side": 0.9975490196078431
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "games": 65,
+      "max_abs_diff": 0.0021397459891309145,
+      "mean_abs_diff": 0.00046943138423176785,
+      "same_side": 1.0
+    }
+  },
+  "verdicts": {
+    "window_2": "not better than production",
+    "window_3": "not better than production",
+    "window_4": "not better than production",
+    "selected (descriptive)": "not better than production"
+  },
+  "selected_by_season": {
+    "2017": "window_4",
+    "2018": "window_4",
+    "2019": "window_4",
+    "2020": "production",
+    "2021": "production",
+    "2022": "production",
+    "2023": "production",
+    "2024": "production",
+    "2025": "production"
+  },
+  "binary_games": {
+    "2015-16": 510,
+    "2017-22": 1559,
+    "2023-25": 815,
+    "2026 wk1-5 (diagnostic)": 65
+  },
+  "production_roi": {
+    "2015-16": {
+      "bets": 507.0,
+      "wins": 320.0,
+      "losses": 185.0,
+      "pushes": 2.0,
+      "units": -17.523254969185093,
+      "roi": -0.03456263307531576,
+      "roi_se": 0.03382849366086529,
+      "win_pct": 0.6336633663366337,
+      "mean_q": 0.6437023688403657,
+      "excess_pp": -1.0321586389031356,
+      "null_roi": -0.023980224330580245
+    },
+    "2017-22": {
+      "bets": 1559.0,
+      "wins": 1039.0,
+      "losses": 513.0,
+      "pushes": 7.0,
+      "units": -26.921123817681796,
+      "roi": -0.017268200011341755,
+      "roi_se": 0.01822377331362672,
+      "win_pct": 0.6694587628865979,
+      "mean_q": 0.6633273287627867,
+      "excess_pp": 0.5894825263116799,
+      "null_roi": -0.026120300989755114
+    },
+    "2023-25": {
+      "bets": 812.0,
+      "wins": 565.0,
+      "losses": 246.0,
+      "pushes": 1.0,
+      "units": 29.48639456389647,
+      "roi": 0.03631329379790206,
+      "roi_se": 0.025269181212276826,
+      "win_pct": 0.6966707768187423,
+      "mean_q": 0.653507429626237,
+      "excess_pp": 4.3275013759053955,
+      "null_roi": -0.04099496341597624
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "bets": 65.0,
+      "wins": 40.0,
+      "losses": 25.0,
+      "pushes": 0.0,
+      "units": -5.196860558102769,
+      "roi": -0.07995170089388876,
+      "roi_se": 0.09372384518617023,
+      "win_pct": 0.6153846153846154,
+      "mean_q": 0.6464547353542637,
+      "excess_pp": -3.1070119969648258,
+      "null_roi": -0.04104157053956888
+    }
+  }
+}
