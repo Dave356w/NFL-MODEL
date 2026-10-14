@@ -153,6 +153,12 @@ development, with no automatic production adoption. The contribution table now
 allocates v1.18's favorite-confidence shrinkage across the fitted terms so that
 their sum plus the market baseline reconstructs the displayed probability.
 
+`python research/peaks_to_ybc.py` tests replacing both lead/deficit peaks with
+offensive and defensive-allowed rushing yards before contact per carry, against
+production and a peaks-removed control. See the [fixed protocol](research/PEAKS_TO_YBC.md)
+and [executed results](research/peaks_to_ybc_results/REPORT.md). All are exposed
+historical comparisons; the test changes no production forecast or ledger.
+
 Colab: `notebooks/NFL_C_B_MODEL.ipynb` is the same code in one cell, storing
 outputs on Google Drive. It is generated from `nfl_model.py` by
 `python sync_notebook.py`; a test fails if the two drift. A Colab run keeps its

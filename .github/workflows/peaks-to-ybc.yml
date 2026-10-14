@@ -1,0 +1,38 @@
+name: Research peaks to yards before contact
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - nfl_model.py
+      - research/**
+      - tests/**
+      - requirements.txt
+      - .github/workflows/peaks-to-ybc.yml
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_peaks_to_ybc.py tests/test_yards_before_contact.py -q
+      - run: python research/check_replay.py research/peaks_to_ybc_results -- python research/peaks_to_ybc.py
+      - run: git diff --exit-code -- research/peaks_to_ybc_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: peaks-to-ybc
+          path: research/peaks_to_ybc_results/
+          if-no-files-found: error

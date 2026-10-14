@@ -1,0 +1,33 @@
+{
+  "revision": "boxscore-composite-v1.18",
+  "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
+  "protocol_commit": "e5538ef06d0e315adb7bffd51105db55cace41c5",
+  "level": 0.975,
+  "terms": {
+    "production": 29,
+    "no_peaks": 27,
+    "peaks_to_ybc": 29
+  },
+  "reproduction": {
+    "2021-22 independent": 1.1102230246251565e-16,
+    "2021-22 archived": 2.3003821070233244e-13,
+    "2023-25 independent": 2.220446049250313e-16,
+    "2023-25 archived": 9.150702418025958e-11,
+    "2026 wk1-5 (diagnostic) independent": 1.1102230246251565e-16
+  },
+  "coverage": {
+    "2021-22": {
+      "games": 543,
+      "with_finite_ybc": 543
+    },
+    "2023-25": {
+      "games": 816,
+      "with_finite_ybc": 816
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "games": 65,
+      "with_finite_ybc": 65
+    }
+  },
+  "verdict": "No nomination: development support unresolved"
+}
