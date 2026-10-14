@@ -1,0 +1,21 @@
+basis,arm,ll_gain_vs_market_x1000,se_x1000
+2015-16,kalman_epa,-0.881434,1.11405
+2015-16,kalman_sr,-1.39601,1.03784
+2015-16,blend,0.0748998,1.65056
+2015-16,kalman_epa_standalone,-10.8241,9.7485
+2015-16,production,0.0483746,3.41647
+2017-22,kalman_epa,0.00949488,0.75691
+2017-22,kalman_sr,0.0325736,0.790831
+2017-22,blend,-0.848264,0.987637
+2017-22,kalman_epa_standalone,-31.8368,5.31217
+2017-22,production,-2.64426,1.69968
+2023-25,kalman_epa,-1.08117,0.819944
+2023-25,kalman_sr,-0.491478,0.863954
+2023-25,blend,0.9386,1.81555
+2023-25,kalman_epa_standalone,-29.4442,6.00083
+2023-25,production,1.65777,3.01604
+2026 wk1-5 (diagnostic),kalman_epa,-2.45741,0.793887
+2026 wk1-5 (diagnostic),kalman_sr,-2.41372,0.752333
+2026 wk1-5 (diagnostic),blend,-7.05007,6.53272
+2026 wk1-5 (diagnostic),kalman_epa_standalone,2.00631,20.9893
+2026 wk1-5 (diagnostic),production,-16.0397,15.0092

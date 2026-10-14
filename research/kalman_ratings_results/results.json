@@ -1,0 +1,189 @@
+{
+  "protocol": "research/KALMAN_RATINGS.md",
+  "protocol_commit": "0562c5e",
+  "level": 0.9833333333333333,
+  "reproduction_max_error": {
+    "2017-20": 1.1102230246251565e-16,
+    "2021-22": 6.938893903907228e-16,
+    "2023-25": 1.1102230246251565e-16
+  },
+  "tuning": {
+    "epa": {
+      "chosen": {
+        "q_mult": 2.0,
+        "rho": 0.6,
+        "p0_mult": 0.5
+      },
+      "loglik": -32.202496289798546,
+      "sigma2": {
+        "pass": 2.567535458424984,
+        "rush": 0.9461314313780869
+      },
+      "season_mean_var": {
+        "pass": 0.014909309058633628,
+        "rush": 0.004246693632748872
+      }
+    },
+    "sr": {
+      "chosen": {
+        "q_mult": 2.0,
+        "rho": 0.8,
+        "p0_mult": 0.5
+      },
+      "loglik": 1744.3658430224255,
+      "sigma2": {
+        "pass": 0.2481511423885084,
+        "rush": 0.24782138638351267
+      },
+      "season_mean_var": {
+        "pass": 0.0018223132891962766,
+        "rush": 0.0017114057443492648
+      }
+    }
+  },
+  "verdicts": {
+    "kalman_epa": "not better than production",
+    "kalman_sr": "not better than production",
+    "blend": "unresolved"
+  },
+  "departure_corr_prod_vs_kalman_epa": {
+    "2015-16": 0.2752119910085261,
+    "2017-22": 0.4758604120268829,
+    "2023-25": 0.2845703667971516,
+    "2026 wk1-5 (diagnostic)": 0.13550573889690606
+  },
+  "coefficients": {
+    "2015-16": {
+      "site": {
+        "mean_beta_per_sd": -0.03823470504993827,
+        "share_positive": 0.20588235294117646
+      },
+      "pass_edge": {
+        "mean_beta_per_sd": 0.055721576925347245,
+        "share_positive": 1.0
+      },
+      "rush_edge": {
+        "mean_beta_per_sd": 0.007839226823476356,
+        "share_positive": 0.6764705882352942
+      },
+      "d__avail__qb_delta": {
+        "mean_beta_per_sd": -0.029116614195127545,
+        "share_positive": 0.08823529411764706
+      }
+    },
+    "2017-22": {
+      "site": {
+        "mean_beta_per_sd": -0.04628292873777958,
+        "share_positive": 0.23076923076923078
+      },
+      "pass_edge": {
+        "mean_beta_per_sd": 0.004274732214236361,
+        "share_positive": 0.6634615384615384
+      },
+      "rush_edge": {
+        "mean_beta_per_sd": 0.020708523970733604,
+        "share_positive": 0.7980769230769231
+      },
+      "d__avail__qb_delta": {
+        "mean_beta_per_sd": 0.032021663329588494,
+        "share_positive": 0.6634615384615384
+      }
+    },
+    "2023-25": {
+      "site": {
+        "mean_beta_per_sd": -0.035644006549036905,
+        "share_positive": 0.0
+      },
+      "pass_edge": {
+        "mean_beta_per_sd": -0.039896227724706475,
+        "share_positive": 0.0
+      },
+      "rush_edge": {
+        "mean_beta_per_sd": 0.03066362461480905,
+        "share_positive": 0.7222222222222222
+      },
+      "d__avail__qb_delta": {
+        "mean_beta_per_sd": 0.05065579134670171,
+        "share_positive": 1.0
+      }
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "site": {
+        "mean_beta_per_sd": -0.03422707129506654,
+        "share_positive": 0.0
+      },
+      "pass_edge": {
+        "mean_beta_per_sd": -0.021916484036935486,
+        "share_positive": 0.0
+      },
+      "rush_edge": {
+        "mean_beta_per_sd": 0.0010973669193569853,
+        "share_positive": 0.4
+      },
+      "d__avail__qb_delta": {
+        "mean_beta_per_sd": 0.06202287785969388,
+        "share_positive": 1.0
+      }
+    }
+  },
+  "binary_games": {
+    "2015-16": 510,
+    "2017-22": 1559,
+    "2023-25": 815,
+    "2026 wk1-5 (diagnostic)": 65
+  },
+  "production_roi": {
+    "2015-16": {
+      "bets": 507.0,
+      "wins": 320.0,
+      "losses": 185.0,
+      "pushes": 2.0,
+      "units": -17.523254969185093,
+      "roi": -0.03456263307531576,
+      "roi_se": 0.03382849366086529,
+      "win_pct": 0.6336633663366337,
+      "mean_q": 0.6437023688403657,
+      "excess_pp": -1.0321586389031356,
+      "null_roi": -0.023980224330580245
+    },
+    "2017-22": {
+      "bets": 1559.0,
+      "wins": 1041.0,
+      "losses": 511.0,
+      "pushes": 7.0,
+      "units": -24.21834485751153,
+      "roi": -0.015534538074093347,
+      "roi_se": 0.018195887976098824,
+      "win_pct": 0.6707474226804123,
+      "mean_q": 0.6637268340804298,
+      "excess_pp": 0.6782177846747062,
+      "null_roi": -0.026120300989755117
+    },
+    "2023-25": {
+      "bets": 812.0,
+      "wins": 565.0,
+      "losses": 246.0,
+      "pushes": 1.0,
+      "units": 29.055959781287775,
+      "roi": 0.03578320170109332,
+      "roi_se": 0.02524203944611706,
+      "win_pct": 0.6966707768187423,
+      "mean_q": 0.6537385303090767,
+      "excess_pp": 4.304362811852869,
+      "null_roi": -0.04099496341597624
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "bets": 65.0,
+      "wins": 40.0,
+      "losses": 25.0,
+      "pushes": 0.0,
+      "units": -5.196860558102769,
+      "roi": -0.07995170089388876,
+      "roi_se": 0.09372384518617023,
+      "win_pct": 0.6153846153846154,
+      "mean_q": 0.6464547353542637,
+      "excess_pp": -3.1070119969648258,
+      "null_roi": -0.04104157053956888
+    }
+  }
+}
