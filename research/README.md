@@ -1489,3 +1489,40 @@ Production reproduces its published forecasts exactly.
 its accuracy comes from staying near the price. The nested-selection result is the honest estimate of what
 iterating is worth, and it is not better. Tests 37–41 agree: production keeps its departures and the underdog bets
 they produce, and the registered forward tests (H6–H8) are where that will be judged.
+
+### Test 42: a model built only from features production does not use (2026-10-14): independent but not better
+
+Protocol [`DISJOINT_FEATURES.md`](DISJOINT_FEATURES.md), pushed (`69b104c`) before any feature was built or scored.
+Script `disjoint_features.py`; frozen schedule context `disjoint_features_inputs/` (the same nflverse download as
+Test 37, hash-checked); results `disjoint_features_results/`. Development evidence only.
+
+**Features (none is a production input):**
+- the ratings from Tests 40–41: pass and rush efficiency, margin, and margin beyond the spread;
+- the rest-day difference;
+- market structure that production never looks at: moneyline vs spread disagreement, total × market log-odds,
+  division game × market log-odds.
+
+Production's inputs, home field included, are excluded, and so is recorded weather (an actual, not a forecast).
+
+| Log-loss gain over production ×1000 | 2015–16 | 2017–22 | 2023–25 | Verdict | Units vs production |
+|---|---:|---:|---:|---|---|
+| disjoint model (market + 8 features) | +0.82 | +2.39 | −3.25 | unresolved | −6.3 / −38.0 / −32.5 |
+| production + the 8 features, one fit | −0.89 | +0.15 | −1.31 | not better | −0.1 / +1.2 / −10.4 |
+| equal blend of the two | +0.78 | +2.04 [−0.24, +4.32] | −0.56 | unresolved | −7.4 / −18.1 / −22.0 |
+
+- **The information is independent but does not help.** The disjoint model's departures from the market correlate
+  only +0.07 to +0.29 with production's, so it is not production restated. Yet added to production in one fit it
+  changes log loss by −1.3 to +0.2 ×10⁻³ with mixed signs. Blended, it gains on two bases and loses on 2023–25.
+- **On its own it is the market again:** +0.86, −0.25 and −1.59 against the market, and it gives up 32–38u against
+  production on 2017–25 by dropping the underdog bets.
+- **One stable sign.** The moneyline-vs-spread disagreement is negative in every era (−0.061, −0.035, −0.050 per SD;
+  −0.049, −0.036, −0.052 in the joint fit). When the moneyline is more bullish on a side than the spread implies,
+  the outcome leans toward the spread's view, whichever side is the favorite. It is the steadiest coefficient across
+  Tests 40–42, and it bears on Test 35's question of how to read a probability off the moneyline. But the
+  market-structure arm alone does not beat the market (−1.25, −0.27, −0.81), so the sign is not yet a measurable
+  gain. This was seen after the fact; testing it would need its own pre-registration, forward.
+- **Everything else flips by era:** rest, total × market and division × market. The margin rating stays positive but
+  fades (+0.096, +0.055, +0.024), as in Test 41.
+
+**Reading.** Features production does not use add little measurable accuracy over the market, on their own or
+alongside production. The moneyline/spread disagreement is the one lead worth a forward look.

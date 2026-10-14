@@ -1,0 +1,25 @@
+basis,arm,ll_gain_vs_market_x1000,se_x1000
+2015-16,disjoint,0.864921,2.15538
+2015-16,production_plus_disjoint,-0.840892,3.21574
+2015-16,blend,0.831599,1.73528
+2015-16,disjoint_ratings,0.605856,1.11087
+2015-16,disjoint_context,-1.24563,1.30865
+2015-16,production,0.0483746,3.41647
+2017-22,disjoint,-0.252791,0.607799
+2017-22,production_plus_disjoint,-2.48984,1.70034
+2017-22,blend,-0.604233,0.876641
+2017-22,disjoint_ratings,-0.0604598,0.481034
+2017-22,disjoint_context,-0.266695,0.390641
+2017-22,production,-2.64426,1.69968
+2023-25,disjoint,-1.59478,1.27996
+2023-25,production_plus_disjoint,0.343982,3.02614
+2023-25,blend,1.09819,1.72123
+2023-25,disjoint_ratings,-0.843903,0.787096
+2023-25,disjoint_context,-0.810203,0.926489
+2023-25,production,1.65777,3.01604
+2026 wk1-5 (diagnostic),disjoint,-0.75118,3.17788
+2026 wk1-5 (diagnostic),production_plus_disjoint,-16.727,15.8358
+2026 wk1-5 (diagnostic),blend,-7.07131,7.96531
+2026 wk1-5 (diagnostic),disjoint_ratings,-0.686592,0.609824
+2026 wk1-5 (diagnostic),disjoint_context,0.123211,2.78341
+2026 wk1-5 (diagnostic),production,-16.0397,15.0092
