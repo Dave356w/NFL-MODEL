@@ -108,7 +108,7 @@ Departure variance is variance of final model-minus-market log odds. Lower dispe
 - **reliability**: No nomination; improvement unresolved.
 - **chronological_prune**: No nomination; improvement unresolved.
 
-Archived baseline maximum error 2.30e-13, independent fit maximum error 2.22e-16, reconstructed main-input maximum error 4.97e-14.
+Archived baseline maximum error 1.11e-10, independent fit maximum error 2.22e-16, reconstructed main-input maximum error 4.97e-14.
 
 Only main raw h8 box/peak inputs receive reliability shrinkage. The existing four pseudo-games and fit standardization remain; constant per-feature scaling would cancel, so point-in-time factors vary across rows. 128 multiplier-bootstrap draws are a fixed approximation. Selection and source/design uncertainty are not fully reflected in score intervals. Historical quotes have unknown capture times. Return SE is per-game; paired intervals cluster by week. Ties push in returns and are omitted from binary scores. Market pick-ems follow existing paired directional conventions. No current-season or native-forward result is claimed. No production recipe, forecast, signature or native ledger changed.
 

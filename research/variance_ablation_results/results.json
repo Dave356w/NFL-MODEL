@@ -2,7 +2,7 @@
   "protocol_commit": "410bbd2bb30fbc9fb3db19f90e98fead9a5be9a8",
   "revision": "boxscore-composite-v1.18",
   "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
-  "archived_max_error": 2.3003821070233244e-13,
+  "archived_max_error": 1.1149536849330843e-10,
   "independent_max_error": 2.220446049250313e-16,
   "sampling_fidelity_max_error": 4.9737991503207007e-14,
   "shrinkage_features": [
