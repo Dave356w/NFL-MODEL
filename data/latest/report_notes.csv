@@ -16,6 +16,7 @@ BAL,00-0039064,Zay Flowers,WR,WRTE,0.1252408477842004,5.0,Questionable,Foot,not 
 BAL,00-0034798,Durham Smythe,TE,WRTE,0.08092485549132948,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
 BAL,00-0033935,Trey Hendrickson,LB,LB,0.07988165680473373,5.0,Out,Finger,not on a week-6 report yet,0.0,none
 BAL,00-0038629,Jovaughn Gwyn,OL,OL,0.07884761182714177,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
+BAL,00-0032398,Chris Moore,WR,WRTE,0.06936416184971098,,,,CUT (A01) on wk 6 roster,1.0,none
 BUF,00-0040132,Landon Jackson,DE,DL,0.125948406676783,5.0,Questionable,Knee,not on a week-6 report yet,0.0,none
 BUF,00-0034827,DJ Moore,WR,WRTE,0.0835707502374169,5.0,Questionable,Shoulder,not on a week-6 report yet,0.0,none
 BUF,00-0036988,Josh Palmer,WR,WRTE,0.07977207977207977,5.0,Out,Shoulder,not on a week-6 report yet,0.0,none
@@ -29,19 +30,22 @@ CAR,00-0039491,Jalen Coker,WR,WRTE,0.11862917398945519,4.0,Questionable,Quadrice
 CAR,00-0039344,Jonathon Brooks,RB,RB,0.11458333333333333,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 CAR,00-0035277,Mike Jackson,DB,DB,0.10642857142857143,,,,Reserve/Injured (IR) on wk 4 roster,1.0,none
 CAR,00-0039342,Xavier Legette,WR,WRTE,0.06063268892794376,4.0,Out,Knee,Reserve/Injured (IR) on wk 4 roster,1.0,none
-CAR,00-0040174,Cam Jackson,DT,DL,0.05845181674565561,4.0,Questionable,Knee,not on a week-6 report yet,0.0,none
+CAR,00-0040174,Cam Jackson,DT,DL,0.05845181674565561,4.0,Questionable,Knee,Reserve/Injured (IR) on wk 6 roster,1.0,none
 CHI,00-0040236,Kyle Monangai,RB,RB,0.31493506493506496,5.0,Out,Thumb,not on a week-6 report yet,0.0,none
 CHI,00-0039918,Caleb Williams,QB,QB,0.20711974110032363,5.0,Questionable,Hamstring,not on a week-6 report yet,0.0,none
+CHI,00-0035647,Montez Sweat,DL,DL,0.1791237113402062,,,,Reserve/Non-football illness on wk 6 roster,1.0,none
 CHI,00-0037081,Braxton Jones,OL,OL,0.057068741893644616,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
+CLE,00-0040466,Raheim Sanders,RB,RB,0.2785234899328859,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
 CLE,00-0040685,Mason Graham,DT,DL,0.09154929577464789,5.0,Out,Knee,not on a week-6 report yet,0.0,none
 CLE,00-0039895,Mike Hall Jr.,DT,DL,0.08274647887323944,5.0,Out,Ankle,not on a week-6 report yet,0.0,none
 CLE,00-0040704,Dillon Gabriel,QB,QB,0.0,5.0,Out,Back,"IR, designated to return on wk 5 roster",1.0,none
 DAL,00-0035705,Jalen Thompson,DB,DB,0.07961007311129163,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
 DAL,00-0033093,Jonathan Bullard,DL,DL,0.057096247960848286,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
-DEN,00-0038552,Riley Moss,CB,DB,0.13650306748466257,5.0,Out,Ribs,not on a week-6 report yet,0.0,none
-DEN,00-0036874,Pat Surtain II,CB,DB,0.1334355828220859,5.0,Out,Ankle,not on a week-6 report yet,0.0,none
-DEN,00-0040134,Pat Bryant,WR,WRTE,0.11428571428571428,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
-DEN,00-0041496,Jonah Coleman,RB,RB,0.08928571428571429,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
+DEN,00-0036564,Talanoa Hufanga,S,DB,0.19325153374233128,,,,practice: Did Not Participate In Practice,0.0,practice
+DEN,00-0038552,Riley Moss,CB,DB,0.13650306748466257,5.0,Out,Ribs,practice: Limited Participation in Practice,0.0,practice
+DEN,00-0036874,Pat Surtain II,CB,DB,0.1334355828220859,5.0,Out,Ankle,practice: Did Not Participate In Practice,0.0,practice
+DEN,00-0040134,Pat Bryant,WR,WRTE,0.11428571428571428,,,,Reserve/Injured (IR) on wk 5 roster,1.0,practice
+DEN,00-0041496,Jonah Coleman,RB,RB,0.08928571428571429,,,,Reserve/Injured (IR) on wk 5 roster,1.0,practice
 GB,00-0039850,Edgerrin Cooper,LB,LB,0.2924187725631769,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
 GB,00-0038685,Chris Brooks,RB,RB,0.2601626016260163,5.0,Out,Ankle,Reserve/Injured (IR) on wk 5 roster,1.0,none
 GB,00-0039817,Jacob Monk,C,OL,0.0959349593495935,5.0,Doubtful,Quadricep,not on a week-6 report yet,0.0,none
@@ -54,7 +58,9 @@ IND,00-0039377,Jaylon Carlies,LB,LB,0.22896281800391388,5.0,Out,Ribs,not on a we
 IND,00-0034573,Charvarius Ward,CB,DB,0.1750619322873658,5.0,Questionable,Not injury related - resting player,not on a week-6 report yet,0.0,none
 IND,00-0034825,Arden Key,DE,DL,0.11041292639138241,5.0,Out,Hamstring,Reserve/Injured (IR) on wk 5 roster,1.0,none
 IND,00-0030279,Keenan Allen,WR,WRTE,0.10833333333333334,5.0,Questionable,Not injury related - resting player,not on a week-6 report yet,0.0,none
+JAX,00-0038934,Anton Harrison,OL,OL,0.1755485893416928,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
 JAX,00-0033038,Eric Murray,S,DB,0.14711359404096835,5.0,Doubtful,Concussion,not on a week-6 report yet,0.0,none
+KC,00-0038104,Tyquan Thornton,WR,WRTE,0.15615615615615616,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
 KC,WOO547869,,,DL,0.11688311688311688,,,,not on wk 4 roster (left team),1.0,none
 LA,00-0037841,Quentin Lake,S,DB,0.195160031225605,5.0,Questionable,Hip,not on a week-6 report yet,0.0,none
 LA,00-0038359,Xavier Smith,WR,WRTE,0.050955414012738856,,,,not on wk 5 roster (left team),1.0,none
@@ -104,8 +110,12 @@ PIT,00-0040678,Derrick Harmon,DL,DL,0.10854092526690391,,,,Reserve/Injured (IR) 
 PIT,00-0035699,Jamel Dean,CB,DB,0.09450171821305842,5.0,Out,Ankle,not on a week-6 report yet,0.0,none
 PIT,00-0036252,Michael Pittman,WR,WRTE,0.09291187739463602,5.0,Out,Foot,Reserve/Injured (IR) on wk 5 roster,1.0,none
 PIT,00-0036139,Rico Dowdle,RB,RB,0.06521739130434782,5.0,Questionable,Toe,not on a week-6 report yet,0.0,none
-SEA,00-0039299,George Holani,RB,RB,0.2786377708978328,5.0,Questionable,Ribs,not on a week-6 report yet,0.0,none
-SEA,00-0041512,Jadarian Price,RB,RB,0.13312693498452013,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
+SEA,00-0031933,Leonard Williams,DT,DL,0.3247232472324723,,,,practice: Limited Participation in Practice,0.0,practice
+SEA,00-0039299,George Holani,RB,RB,0.2786377708978328,5.0,Questionable,Ribs,practice: Full Participation in Practice,0.0,practice
+SEA,00-0035704,Drew Lock,QB,QB,0.2692307692307692,,,,practice: Limited Participation in Practice,0.0,practice
+SEA,00-0038922,Drake Thomas,LB,LB,0.21845174973488865,,,,practice: Did Not Participate In Practice,0.0,practice
+SEA,00-0038543,Jaxon Smith-Njigba,WR,WRTE,0.21797520661157024,,,,practice: Limited Participation in Practice,0.0,practice
+SEA,00-0041512,Jadarian Price,RB,RB,0.13312693498452013,,,,Reserve/Injured (IR) on wk 5 roster,1.0,practice
 SF,00-0034982,Dre Greenlaw,LB,LB,0.296474358974359,,,,Reserve/Non-football illness on wk 6 roster,1.0,none
 SF,00-0029892,Kyle Juszczyk,FB,RB,0.2572347266881029,5.0,Out,Knee,not on a week-6 report yet,0.0,none
 SF,00-0040185,Marques Sigle,S,DB,0.1376075058639562,5.0,Out,Ankle,not on a week-6 report yet,0.0,none
