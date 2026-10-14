@@ -1,0 +1,5 @@
+context,input,n_d,z_d,effect_per_sd_d,S,basis,model,n_c,z_c,effect_per_sd_c,z_c_dir,verdict,n_2026,z_2026,z_d_v116,z_c_v116
+all,departure,1559,-2.94177,-0.162683,-8.52662,discovery,v1.18,815,-0.685309,-0.0556664,0.685309,direction holds,65,-1.05475,-3.92432,-1.11396
+total_mid,departure,765,-2.78846,-0.247045,-6.74564,discovery,v1.18,425,-0.157219,-0.0179732,0.157219,direction holds,32,0.0610833,-3.63899,-0.314375
+total_high,d__for__rates_core__interception_pct,539,-2.57609,-0.230505,-19.8993,discovery,v1.18,203,-0.156721,-0.0221542,0.156721,direction holds,22,1.04153,-2.00339,0.00803693
+total_low,departure,255,-2.10017,-0.198928,-2.01059,discovery,v1.18,187,-1.25388,-0.236632,1.25388,direction holds,11,0.473259,-2.76695,-1.58438

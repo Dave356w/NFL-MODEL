@@ -346,3 +346,78 @@ evidence against H6.
 *Overlap and multiplicity.* An H6 row can also be an H1 row (an underdog pick more than 0.17
 from q), so H1 and H6 are not independent. With H1–H6 registered, read any single 2 SE result
 with that multiplicity in mind. The 14 excluded week-5 v1.16 rows contain no underdog pick.
+
+**2026-10-14, owner request, committed before any week-6 snapshot exists. New hypotheses H7
+(departure slope by total) and H8 (input trends in wrong picks, Test 37). H1–H6 and their rules
+are unchanged.**
+
+*Total used by both.* The game's `total_line` in `data/h5_totals.jsonl` (the nflverse total at
+the game's first lock); if a game has no row there, the nflverse schedule `total_line` at grading.
+Bands: low ≤ 41, mid 41.5–47, high ≥ 47.5.
+
+**H7: v1.16's departures from the market carry information in high-total games, not in
+low-total ones.**
+
+*Source.* Post-hoc slices of v1.16's own predictions, proposed after both were seen. The
+departure slope `b` fits `logit P(home) = logit(q) + b·d` with `d = logit(p) − logit(q)` (b = 1:
+departures right-sized; b = 0: no information), cluster-robust by week:
+- 2017–20 out of sample: high +0.68 ± 0.49 (366 bets), mid −0.34 ± 0.48, low −0.32 ± 0.70 (162);
+  high − low +1.00 ± 0.86.
+- 2023–25 held-out (exposed): high +1.05 ± 0.49 (202), mid +0.81 ± 0.51, low −0.12 ± 0.56 (186);
+  high − low +1.17 ± 0.74.
+
+*Rule (fixed).* Rows: the H1/H2/H6 sample (the first v1.16 snapshot per game under configuration
+`9dad9b9a…62dcd26` and its frozen recipe, games from 2026 week 6 on, cumulative across seasons);
+H7 ends when that sample ends. Binary results only. `p` is the snapshot `model_wp`, `q` the no-vig
+probability from the snapshot moneylines. Fit `b` separately in the high and low bands (Newton,
+offset `logit(q)`, one coefficient), with cluster-robust SEs by season-week.
+Δ = b_high − b_low, SE = √(se_high² + se_low²).
+
+*Decision* (cumulative, at the season checkpoints):
+- **Supported**: Δ ≥ 2 SE.
+- **Falsified**: each band has at least 60 graded binary games and Δ ≤ 0.
+- Otherwise **unresolved**. No verdict before each band has 30 graded binary games.
+
+*Power, stated now.* High totals were 25–36% of games in 2017–25 and low totals 16–23%: about 55
+high and 40 low graded games in 2026 weeks 6–18, then about 75 and 55 a season. Scaling the
+held-out SEs gives an SE on Δ near 1.5 after 2026 and 1.3/√k after k full seasons. If the true Δ
+is +1.1, support at 2 SE has even odds only after about six seasons. The falsification sample
+arrives during 2027, when a true Δ of +1.1 would still read Δ ≤ 0 about one time in five. A 2026
+result will read "unresolved".
+
+**H8: input trends in the model's wrong picks continue forward (Test 37).**
+
+*Source.* `research/RESIDUAL_TRENDS.md`: a scan of 30 inputs × 4 contexts (all games and the three
+total bands) for residuals `y − p` that correlate with an input, discovered on 2017–22 and tested
+on 2023–25. The forward set is fixed mechanically by that protocol (candidates with |z| ≥ 2 on
+2017–22, then those whose 2023–25 z keeps the discovery sign, at most five) from committed
+historical data only; the results file lists it. Nothing is chosen after this addendum.
+
+*Rule (fixed).* Rows: the first v1.18 snapshot per game under configuration `73636f30…bca58a20`
+and its frozen 2026 recipe, games from 2026 week 6 on, cumulative across seasons. A change to
+`REVISION`, the configuration signature or the frozen recipe ends the sample. Binary results
+only. Inputs are the snapshot's `model_inputs`, `p` its `model_wp`, `q` the no-vig probability
+from its moneylines; the departure is `logit(p) − logit(q)`. For each trend, within its context:
+`x̃ = x − mean(x)` over the forward rows, `z_F = Σ r·x̃ / √(Σ_weeks (Σ r·x̃)²)` with
+`r = y − p`, and `z_F* = sign(z_discovery)·z_F`.
+
+*Decision* (per trend; K_F trends; cumulative, at the season checkpoints):
+- **Supported**: z_F* ≥ Φ⁻¹(1 − 0.05/K_F).
+- **Falsified**: the context has at least 100 graded binary games and z_F* ≤ 0.
+- Otherwise **unresolved**. No verdict before 30 graded binary games in the context.
+
+A supported trend changes nothing by itself; acting on it is a new `REVISION` and the owner's
+decision.
+
+*Report.* `python research/residual_trends.py --forward` prints, per trend: n, z_F*, the effect
+per SD, the wrong-pick view (model-side wins minus expected wins by third of the signed input)
+and flat 1u ROI with the null and the same-row favorite.
+
+*Power, stated now.* About 190 graded games in 2026 weeks 6–18 and 272 a season after that,
+against 1,560 discovery games. If a trend's true effect equalled its discovery estimate (which
+selection inflates), its expected forward z after one season would be about
+|z_D|·√(n_F/n_D): roughly 0.35·|z_D| for an all-games trend, less inside a total band. Expect
+"unresolved" after 2026; the 2023–25 confirmation is the informative step until then.
+
+*Multiplicity.* H1–H8 are now registered, and H8 holds up to five trends. H6 and H7 overlap with
+H8's departure and market cells. Read any single 2 SE result with that in mind.

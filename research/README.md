@@ -1276,3 +1276,43 @@ penalty applied, which is production), the gain is +0.00105 [−0.00006, +0.0022
 ROI is unchanged within noise. The model still trails the market on log loss in every arm. Adopting
 fit half-life 4 would change `config_signature()` and need a new `REVISION`; this result alone is a
 weak basis for one. QB prior 600 repeats Test 3's direction but is unresolved.
+
+### Test 37: input trends in the model's wrong picks, by total context (2026-10-14): no input trend; departures run large in low totals
+
+Protocol [`RESIDUAL_TRENDS.md`](RESIDUAL_TRENDS.md), pushed (`72549f5`) with the forward rules (H7, H8 in
+[`PREREGISTRATION.md`](PREREGISTRATION.md)) before any residual was computed and before any week-6
+snapshot existed. Script `residual_trends.py`; results `residual_trends_results/`. "Wrong" is measured
+against production v1.18's own probability (residual y − p), not raw losses, because 94% of bets are the
+market favorite and raw losses mostly mark priced upsets. 30 inputs (the 28 non-site model inputs, the
+market log-odds and the model's departure from it) × 4 contexts (all games and three total bands), a
+week-clustered score test per cell. Discovery 2017–22 (1,559 binary games), confirmation 2023–25 (815).
+Both reproduce the published forecasts (2021–22 refit to 7e-16; bet totals exact).
+
+| Context × input (selected on 2017–22) | z, 2017–22 | Effect/SD, 2017–22 | z, 2023–25 (same direction) | Effect/SD, 2023–25 | Verdict |
+|---|---:|---:|---:|---:|---|
+| all games × departure | −2.94 | −0.163 | +0.69 | −0.056 | direction holds |
+| total 41.5–47 × departure | −2.79 | −0.247 | +0.16 | −0.018 | direction holds |
+| total ≥ 47.5 × offensive INT % | −2.58 | −0.231 | +0.16 | −0.022 | direction holds |
+| total ≤ 41 × departure | −2.10 | −0.199 | +1.25 | −0.237 | direction holds |
+
+Confirmation bar: one-sided z ≥ 2.24 (Bonferroni over 4). Only 4 of 120 discovery cells reached |z| ≥ 2
+and 2 of 120 on 2023–25, both below the roughly 6 expected by chance.
+
+**Reading.**
+- **No box-score, availability or pass-context input shows a context-specific failure** that carries
+  from 2017–22 into 2023–25. The one input cell (high totals × offensive interception %) shrinks to
+  nothing on 2023–25 (−0.02 log-odds per SD).
+- **The recurring pattern is the departure itself**: negative z means the model's moves away from the
+  market are too large (its departure slope is below 1). It is clear on 2017–22 and faint on 2023–25,
+  except in **low-total games**, where the size is the same on both (−0.20 and −0.24 log-odds per SD;
+  z −2.10 and −1.25 on 187–255 games). That is the low side of H7. As wrong picks, all games 2017–22:
+  in the third of games where the model was less sure of its own side than the market, that side won
+  37.6 more games than the model's probabilities said; in the other two thirds it won 23.1 fewer. On
+  2023–25 the three thirds were +13.0, +11.6 and +11.5: no gradient.
+- Flat 1u ROI by total repeats the earlier slices on the new 2017–22 basis: high totals +2.72% ± 3.12
+  against −1.84% for the same-row favorite; low totals −7.39% ± 4.65 against −5.56% (null −2.6%).
+- H7's source figures were measured on bet rows (pick'ems excluded); on binary rows they are
+  +1.04 ± 0.85 (2017–20) and +1.07 ± 0.73 (2023–25), the same reading. H7's rule is unchanged.
+- **Forward (H8)**: all four candidates carry, since none reversed. Expect "unresolved" for several
+  seasons; z with only a few week-clusters is unstable, so interim numbers mean little before the
+  season checkpoints. `python research/residual_trends.py --forward` grades H8 and H7.
