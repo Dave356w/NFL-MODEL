@@ -1,0 +1,17 @@
+{
+  "research/peaks_to_ybc.py": "89586e4a87a81ecc2407005cd523e6e13b044fd595db40f3ee4e490a300d47d6",
+  "research/PEAKS_TO_YBC.md": "755660903150f51e988863c83e6bfee85fad0e3bae42f1d320ce2ddb817838fb",
+  "nfl_model.py": "6d7b27f61dfbb2d77a2aa7ef7dfdec0f6b751bd361bbb453769166e5f7bf3cbf",
+  "research/yards_before_contact.py": "8265aecb38bf14c8cbb7132b71bd75dfd4d405aba721888ee5b171034d28eb58",
+  "research/form_windows.py": "8675077fe282352978364b90f4fff33ebf78bb5423852c162c69b33f5333f494",
+  "research/feature_importance.py": "9697d0a6810f23913acb2f2563d99b9eec67f3679776364cf3fbccfdbb6d4aa4",
+  "research/residual_trends.py": "f6bca207d6e04ce6fea70a467439e28b74e0ad332c5aaa6740f30fc7814c5853",
+  "research/kalman_ratings.py": "b3d083b862cd62e6ccc6e9fc19593e1c22b2fbdfa635e726155d4a11235150a8",
+  "research/model_updates.py": "74b599bbac84705189bab1a0deaec70c65e29fd199c3589c25582641a3913ccf",
+  "research/simplification.py": "d9c1e2df614d4c2dd7fc2979f54bbbb2225fc81ca061cfde27d1080befd812a4",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/ybc_inputs/team_games.csv": "527a197b7daa0d57269e025a8cff12d4d7b02e93de8649c8e325b8571fbb5fb5",
+  "research/residual_trends_inputs/schedule_totals.csv": "442267815ec68ab5671bc9214884583c1b107c67b6245baa502e13345d8baaec",
+  "research/peaks_to_ybc_inputs/production_reference.csv": "2fc38a1b8a3c0fa0312d1fe006a8d2cbe53c833f202146175cab94659d4ae2ff",
+  "research/peaks_to_ybc_inputs/provenance.json": "6ced69d12bac072ddb9c741d63bdf0ed58c200c5037a605a561926f1ce8425d0"
+}

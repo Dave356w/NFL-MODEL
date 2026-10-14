@@ -1,0 +1,7 @@
+{
+  "source": "data/latest/retro_ledger.csv",
+  "source_sha256": "ba153cb68ae7785ad8f6a0b8af162b563c4413dc2fd45a207f284e9247736b11",
+  "reference_sha256": "2fc38a1b8a3c0fa0312d1fe006a8d2cbe53c833f202146175cab94659d4ae2ff",
+  "protocol_commit": "e5538ef06d0e315adb7bffd51105db55cace41c5",
+  "note": "Snapshot of archived production probabilities before the new replacement was scored."
+}
