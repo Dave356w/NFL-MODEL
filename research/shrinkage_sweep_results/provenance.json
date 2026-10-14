@@ -1,0 +1,9 @@
+{
+ "research/shrinkage_sweep.py": "72e93ce2617247ec8f11c57ca45022a150b36263a98a82fba226e70b07a920bc",
+ "research/SHRINKAGE_SWEEP.md": "15eb674063919f4ae245c414993a2703c283d34b79701cecbf4741f6a22d383d",
+ "nfl_model.py": "7ff1e7b66090793cdcd65189fc43d9fda2d41f5738d72ec52abe50f8b62a74c4",
+ "research/out_of_sample_2017_2020.py": "edd7867eb4dddd2b8f2b1cc19254c14d627b8fad85071891257fdd2f8f6c64a9",
+ "research/shrinkage_sweep_results/select_predictions.csv.gz": "70746d525788e17ee6a67807b7c2d7897ac012169ecdf40cbb9d2d753db64166",
+ "research/shrinkage_sweep_results/select_results.json": "06e473981fc770dab9fa93cea61a7161d95993a9abb3866d0c3ffc2215e950a6",
+ "raw_inputs.pkl (not committed)": "127a44997d1530499936f971bb8a8a54c0de5089106db613a96659542c4a5846"
+}
