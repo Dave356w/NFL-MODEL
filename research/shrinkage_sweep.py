@@ -280,6 +280,87 @@ def confirm(inputs):
     return res
 
 
+def sensitivity(arm, seeds=20):
+    """Post-hoc, not gating: the confirmed arm's 2017-20 interval across bootstrap seeds and a
+    week-clustered normal interval, for v1.16 and the v1.18 favorite-penalized forecasts."""
+    from scipy.special import ndtri
+    t = pd.read_csv(OUT/'confirm_predictions.csv.gz')
+    level = json.loads((OUT/'confirm_results.json').read_text())['level']
+    proper = t['home won'].isin([0., 1.]).to_numpy(); y = t['home won'].to_numpy(float)
+    g = (t.season.astype(str)+'_'+t.week.astype(str)).to_numpy()[proper]
+    out, seed0 = {}, o.p.SEED
+    try:
+        for label, suf in (('v1.16', ''), ('v1.18', '|fp')):
+            d = (log_loss(y, t['production'+suf])-log_loss(y, t[arm+suf]))[proper]
+            lows = []
+            for sd in range(seeds):
+                o.p.SEED = sd; lows.append(o.p.cluster_interval(d, g, level)[0])
+            a = pd.DataFrame({'v': d, 'g': g}).groupby('g').v.agg(['sum', 'count'])
+            mu = float(d.mean()); se = float(np.sqrt(((a['sum']-mu*a['count'])**2).sum())/a['count'].sum())
+            z = float(ndtri(.5+level/2))
+            out[label] = {'mean': mu, 'cluster_se': se, 'normal_ci': [mu-z*se, mu+z*se],
+                          'bootstrap_lower_min': min(lows), 'bootstrap_lower_max': max(lows),
+                          'share_of_seeds_excluding_zero': float(np.mean(np.array(lows) > 0)), 'seeds': seeds}
+    finally:
+        o.p.SEED = seed0
+    return out
+
+
+def write_report():
+    sel = json.loads((OUT/'select_results.json').read_text())
+    con = json.loads((OUT/'confirm_results.json').read_text())
+    cand = [a for k, a in con['chosen'].items() if con['verdicts'][k].startswith('candidate')]
+    sens = {a: sensitivity(a) for a in cand}
+    save('sensitivity.json', sens)
+    pct = lambda x: f'{100*x:+.2f}%'
+    iv = lambda c, s=1, f='+.5f': f'[{s*c[0]:{f}}, {s*c[1]:{f}}]'
+    def arm_rows(block):
+        rows = ['| Arm | W-L-P | Units | ROI ± SE | Null | Log loss | Brier |', '|---|---|---:|---:|---:|---:|---:|']
+        for r in block['results']:
+            rows.append(f"| {r['arm']} | {r['wins']}-{r['losses']}-{r['pushes']} | {r['units']:+.2f} | {pct(r['roi'])} ± {100*r['roi_se']:.2f} | "
+                        f"{pct(r['null_roi'])} | {r['log_loss']:.6f} | {r['brier']:.6f} |")
+        return rows
+    def pair_rows(block):
+        rows = ['| Arm vs production | LL gain [CI] | ROI Δ pts [CI] | Side flips |', '|---|---:|---:|---:|']
+        for q in block['pairs']:
+            rows.append(f"| {q['arm']} | {q['ll_gain']:+.5f} {iv(q['ll_gain_ci'])} | {100*q['roi_delta']:+.2f} "
+                        f"{iv(q['roi_delta_ci'], 100, '+.2f')} | {q['side_flips']} |")
+        return rows
+    L = ['# Test 36: one-at-a-time shrinkage sweep', '',
+         'Protocol: [SHRINKAGE_SWEEP.md](../SHRINKAGE_SWEEP.md), pushed before any arm was built. Stage 1 choices were '
+         'committed before any 2017–20 candidate arm was scored. Basis: held-out walk-forward reconstructions '
+         '(2023–25 heavily exposed; 2017–20 never used for these settings). Not forward evidence.', '',
+         f"Production reproduction: 2023–25 {sel['reproduction']['games']} games, max error {sel['reproduction']['max_error']:.1e}; "
+         f"2017–20 {con['reproduction']['games']} games, max error {con['reproduction']['max_error']:.1e}.", '',
+         '## Verdicts (2017–20 confirmation, v1.16 forecasts)', '']
+    for k, v in con['verdicts'].items():
+        L.append(f"* **{k}** → {con['chosen'][k]}: {v}")
+    L += ['', f"## Stage 2: 2017–20, {con['primary']['bets']} common bets, {con['primary']['proper_games']} binary games, "
+          f"{100*con['level']:.2f}% week-cluster intervals", '', *arm_rows(con['primary']), '', *pair_rows(con['primary']),
+          '', 'Same comparisons after the v1.18 favorite penalty (λ = 0.2):', '', *pair_rows(con['v118'])]
+    if 'combined' in con:
+        c = con['combined']; q = c['pairs'][0]
+        L += ['', f"Combined arm ({', '.join(c['arms'])}), descriptive, 95%: LL gain {q['ll_gain']:+.5f} {iv(q['ll_gain_ci'])}, "
+              f"ROI Δ {100*q['roi_delta']:+.2f} pts, {q['side_flips']} side flips."]
+    L += ['', '| Season | ' + ' | '.join(a for a in con['primary']['seasons'][0] if a != 'season') + ' |',
+          '|---|' + '---:|'*(len(con['primary']['seasons'][0])-1)]
+    for srow in con['primary']['seasons']:
+        L.append(f"| {srow['season']} | " + ' | '.join(f"{v['log_loss']:.5f}" for k, v in srow.items() if k != 'season') + ' |')
+    for a, sv in sens.items():
+        L += ['', f'### Post-hoc sensitivity for {a} (not gating)', '',
+              '| Forecast | LL gain | Cluster SE | Normal interval | Bootstrap lower bound over seeds | Seeds excluding zero |',
+              '|---|---:|---:|---:|---:|---:|']
+        for lab, x in sv.items():
+            L.append(f"| {lab} | {x['mean']:+.5f} | {x['cluster_se']:.5f} | {iv(x['normal_ci'])} | "
+                     f"{x['bootstrap_lower_min']:+.6f} to {x['bootstrap_lower_max']:+.6f} | {100*x['share_of_seeds_excluding_zero']:.0f}% of {x['seeds']} |")
+    L += ['', f"## Stage 1: 2023–25, {sel['fixed_arms']['bets']} common bets, {sel['fixed_arms']['proper_games']} binary games, 95% intervals", '',
+          'Chosen on 2021–25 log loss: ' + ', '.join(f"{k} → {v['chosen']}" for k, v in sel['final_choice'].items()) + '.',
+          'Annual picks: ' + '; '.join(f"{p['season']}: " + ', '.join(f"{k}={p[k]}" for k in KNOBS) for p in sel['annual_picks']) + '.',
+          '', *arm_rows(sel['fixed_arms']), '', *pair_rows(sel['fixed_arms']), '',
+          'Annually selected arms (each season chosen on earlier seasons only):', '', *pair_rows(sel['annual_selected'])]
+    (OUT/'REPORT.md').write_text('\n'.join(L)+'\n')
+
+
 def provenance(inputs):
     files = [ROOT/'research/shrinkage_sweep.py', ROOT/'research/SHRINKAGE_SWEEP.md', ROOT/'nfl_model.py',
              ROOT/'research/out_of_sample_2017_2020.py', *[x for x in OUT.glob('*') if x.name != 'provenance.json']]
@@ -295,10 +376,13 @@ if __name__ == '__main__':
     g.add_argument('--prepare', action='store_true')
     g.add_argument('--select', action='store_true')
     g.add_argument('--confirm', action='store_true')
+    g.add_argument('--report', action='store_true', help='rewrite REPORT.md from saved results')
     args = ap.parse_args()
     check_values()
     inputs = args.inputs.resolve()
+    if args.report: write_report(); provenance(inputs); raise SystemExit
     if args.prepare: prepare(inputs)
     elif args.select: r = select(inputs); print(json.dumps({k: v['chosen'] for k, v in r['final_choice'].items()}))
     else: r = confirm(inputs); print(json.dumps(r['verdicts'], indent=1))
+    if args.confirm: write_report()
     if not args.prepare: provenance(inputs)
