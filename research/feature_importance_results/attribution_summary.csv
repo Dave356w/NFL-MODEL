@@ -1,0 +1,593 @@
+basis,context,kind,name,n,effect_x1000,se_x1000,z,mean_abs_contribution,wrong_way_share
+2015-16,all,group,offense box rates,510,-0.682807,1.92212,-0.355237,0.112502,0.476987
+2015-16,all,group,defense box rates,510,0.757559,1.21611,0.622937,0.0797657,0.454936
+2015-16,all,group,QB projection,510,-0.621291,0.463044,-1.34175,0.0172528,0.569565
+2015-16,all,group,unit absences,510,0.231845,2.54722,0.0910189,0.137812,0.461053
+2015-16,all,group,lead/deficit peaks,510,-0.10075,0.792734,-0.127092,0.0459665,0.387324
+2015-16,all,group,pass matchup product,510,-0.163801,0.127146,-1.28829,0.00727845,0.596639
+2015-16,all,group,pass tail hinges,510,0.25221,0.82406,0.306058,0.0125889,0.565217
+2015-16,all,group,home field,510,-0.466285,0.659213,-0.707335,0.0474665,0.550336
+2015-16,all,feature,site,510,-0.466285,0.659213,-0.707335,0.0474665,0.550336
+2015-16,all,feature,d__for__rates_core__plays_per_game,510,-0.0899196,0.413728,-0.21734,0.0234102,0.467236
+2015-16,all,feature,d__for__rates_core__net_pass_yards_per_pass_play,510,-0.59851,0.764843,-0.782526,0.0489702,0.573394
+2015-16,all,feature,d__for__rates_core__rush_yards_per_attempt,510,-0.374432,0.991514,-0.377637,0.0447318,0.514739
+2015-16,all,feature,d__for__rates_core__first_down_rate,510,-0.450741,0.276122,-1.6324,0.0158536,0.511194
+2015-16,all,feature,d__for__rates_core__fumbles_lost_per_game,510,0.879912,1.08221,0.813072,0.0614571,0.418824
+2015-16,all,feature,d__for__rates_core__interception_pct,510,0.37971,0.324147,1.17141,0.0193022,0.438202
+2015-16,all,feature,d__for__rates_core__penalty_yards_per_game,510,-0.0133709,0.946934,-0.0141202,0.0532254,0.498721
+2015-16,all,feature,d__allowed__rates_core__plays_per_game,510,0.334761,0.465899,0.718527,0.0259259,0.455285
+2015-16,all,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,510,-0.390646,0.740129,-0.527808,0.039315,0.447028
+2015-16,all,feature,d__allowed__rates_core__rush_yards_per_attempt,510,-0.382409,0.233926,-1.63474,0.0202128,0.516729
+2015-16,all,feature,d__allowed__rates_core__first_down_rate,510,1.66652,1.25947,1.32319,0.0666977,0.507726
+2015-16,all,feature,d__allowed__rates_core__fumbles_lost_per_game,510,0.298554,0.345775,0.863436,0.0251995,0.462006
+2015-16,all,feature,d__allowed__rates_core__interception_pct,510,-0.219065,0.184065,-1.19015,0.0129277,0.52193
+2015-16,all,feature,d__allowed__rates_core__penalty_yards_per_game,510,0.0818654,0.292361,0.280015,0.0248843,0.491379
+2015-16,all,feature,d__avail__qb_delta,510,-0.621291,0.463044,-1.34175,0.0172528,0.569565
+2015-16,all,feature,d__avail__OL_out_cs,510,-0.766452,0.550502,-1.39228,0.018073,0.552743
+2015-16,all,feature,d__avail__WRTE_out_cs,510,-0.011835,1.51072,-0.00783397,0.0685091,0.505938
+2015-16,all,feature,d__avail__RB_out_cs,510,0.710885,0.829055,0.857465,0.0501294,0.442529
+2015-16,all,feature,d__avail__DL_out_cs,510,-0.217113,0.370959,-0.585274,0.0256651,0.508287
+2015-16,all,feature,d__avail__LB_out_cs,510,-0.0626906,0.980508,-0.0639369,0.0361308,0.518939
+2015-16,all,feature,d__avail__DB_out_cs,510,-0.475836,0.615498,-0.773091,0.0424138,0.447368
+2015-16,all,feature,d__max_lead,510,0.11983,0.811886,0.147594,0.0503963,0.367299
+2015-16,all,feature,d__max_deficit,510,-0.210371,0.206343,-1.01952,0.018425,0.514599
+2015-16,all,feature,pass_product,510,-0.163801,0.127146,-1.28829,0.00727845,0.596639
+2015-16,all,feature,pass_1sd_pp,510,-0.201348,0.276975,-0.726953,0.00189079,0.636364
+2015-16,all,feature,pass_1sd_pn,510,-0.339005,0.250431,-1.35369,0.00274294,0.684211
+2015-16,all,feature,pass_1sd_np,510,0.800419,0.707849,1.13078,0.00741863,0.333333
+2015-16,all,feature,pass_1sd_nn,510,-0.00785597,0.029188,-0.269151,0.000536562,0.428571
+2015-16,total_low,group,offense box rates,63,4.72505,6.70468,0.704739,0.14019,0.416667
+2015-16,total_low,group,defense box rates,63,-2.96432,3.25857,-0.909699,0.0680478,0.482143
+2015-16,total_low,group,QB projection,63,-1.16879,1.74119,-0.671259,0.0205818,0.486486
+2015-16,total_low,group,unit absences,63,-2.06738,11.1405,-0.185574,0.141369,0.442623
+2015-16,total_low,group,lead/deficit peaks,63,0.681689,1.7172,0.396977,0.044257,0.352941
+2015-16,total_low,group,pass matchup product,63,-0.0082289,0.481654,-0.0170847,0.00744911,0.666667
+2015-16,total_low,group,pass tail hinges,63,4.02562,4.955,0.812437,0.0146779,0.555556
+2015-16,total_low,group,home field,63,-0.814266,1.64379,-0.495359,0.0480223,0.509091
+2015-16,total_low,feature,site,63,-0.814266,1.64379,-0.495359,0.0480223,0.509091
+2015-16,total_low,feature,d__for__rates_core__plays_per_game,63,1.24268,1.52714,0.813734,0.0281072,0.372549
+2015-16,total_low,feature,d__for__rates_core__net_pass_yards_per_pass_play,63,-0.874632,1.55144,-0.563755,0.0352724,0.604167
+2015-16,total_low,feature,d__for__rates_core__rush_yards_per_attempt,63,0.886506,2.89783,0.305921,0.0444689,0.509091
+2015-16,total_low,feature,d__for__rates_core__first_down_rate,63,0.416993,0.632561,0.659214,0.0133043,0.448276
+2015-16,total_low,feature,d__for__rates_core__fumbles_lost_per_game,63,2.10717,4.11361,0.512244,0.0541839,0.37037
+2015-16,total_low,feature,d__for__rates_core__interception_pct,63,1.91,1.53258,1.24626,0.0221489,0.368421
+2015-16,total_low,feature,d__for__rates_core__penalty_yards_per_game,63,0.769959,2.90601,0.264954,0.0627814,0.617021
+2015-16,total_low,feature,d__allowed__rates_core__plays_per_game,63,-2.95673,1.51373,-1.95327,0.0229267,0.581395
+2015-16,total_low,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,63,0.0326499,1.30947,0.0249337,0.0355061,0.408163
+2015-16,total_low,feature,d__allowed__rates_core__rush_yards_per_attempt,63,-0.941063,1.26635,-0.743129,0.0166031,0.538462
+2015-16,total_low,feature,d__allowed__rates_core__first_down_rate,63,3.72378,2.78009,1.33945,0.0551886,0.470588
+2015-16,total_low,feature,d__allowed__rates_core__fumbles_lost_per_game,63,-0.0480483,1.1464,-0.0419122,0.0292824,0.5
+2015-16,total_low,feature,d__allowed__rates_core__interception_pct,63,-1.30908,0.637725,-2.05274,0.013649,0.56
+2015-16,total_low,feature,d__allowed__rates_core__penalty_yards_per_game,63,-0.322946,0.676563,-0.477333,0.0186475,0.472222
+2015-16,total_low,feature,d__avail__qb_delta,63,-1.16879,1.74119,-0.671259,0.0205818,0.486486
+2015-16,total_low,feature,d__avail__OL_out_cs,63,-3.48153,2.56713,-1.35619,0.0240999,0.65625
+2015-16,total_low,feature,d__avail__WRTE_out_cs,63,5.09566,5.29013,0.963238,0.0918727,0.431034
+2015-16,total_low,feature,d__avail__RB_out_cs,63,1.18661,2.41959,0.490415,0.0437007,0.409091
+2015-16,total_low,feature,d__avail__DL_out_cs,63,-2.28243,1.42328,-1.60364,0.0274858,0.565217
+2015-16,total_low,feature,d__avail__LB_out_cs,63,1.47666,2.37782,0.621014,0.0370176,0.5
+2015-16,total_low,feature,d__avail__DB_out_cs,63,-5.11276,4.55185,-1.12323,0.0545446,0.530612
+2015-16,total_low,feature,d__max_lead,63,1.57276,1.78092,0.883114,0.0524686,0.36
+2015-16,total_low,feature,d__max_deficit,63,-1.00398,0.839517,-1.1959,0.0199824,0.475
+2015-16,total_low,feature,pass_product,63,-0.0082289,0.481654,-0.0170847,0.00744911,0.666667
+2015-16,total_low,feature,pass_1sd_pp,63,0,0,,0,
+2015-16,total_low,feature,pass_1sd_pn,63,-0.352303,0.349048,-1.00933,0.00083787,1
+2015-16,total_low,feature,pass_1sd_np,63,4.48964,4.92935,0.910798,0.0100469,0.5
+2015-16,total_low,feature,pass_1sd_nn,63,-0.111713,0.237691,-0.469993,0.00379313,0.5
+2015-16,total_mid,group,offense box rates,300,-4.89302,2.81276,-1.73958,0.115931,0.501767
+2015-16,total_mid,group,defense box rates,300,0.609912,1.40638,0.433676,0.0780331,0.432234
+2015-16,total_mid,group,QB projection,300,-0.682805,0.620584,-1.10026,0.0184228,0.59854
+2015-16,total_mid,group,unit absences,300,3.0351,3.45654,0.878074,0.145924,0.448399
+2015-16,total_mid,group,lead/deficit peaks,300,-0.585835,1.0329,-0.567177,0.0473667,0.383721
+2015-16,total_mid,group,pass matchup product,300,-0.220508,0.182745,-1.20665,0.00668138,0.622951
+2015-16,total_mid,group,pass tail hinges,300,-0.41897,0.59523,-0.703879,0.00788804,0.5
+2015-16,total_mid,group,home field,300,-0.989207,0.979435,-1.00998,0.0469595,0.578544
+2015-16,total_mid,feature,site,300,-0.989207,0.979435,-1.00998,0.0469595,0.578544
+2015-16,total_mid,feature,d__for__rates_core__plays_per_game,300,-0.446521,0.650833,-0.686076,0.0238322,0.492754
+2015-16,total_mid,feature,d__for__rates_core__net_pass_yards_per_pass_play,300,-0.853429,1.02573,-0.832021,0.047808,0.569767
+2015-16,total_mid,feature,d__for__rates_core__rush_yards_per_attempt,300,-1.1635,1.15635,-1.00619,0.0480334,0.546125
+2015-16,total_mid,feature,d__for__rates_core__first_down_rate,300,-1.19382,0.415359,-2.87419,0.0157257,0.604027
+2015-16,total_mid,feature,d__for__rates_core__fumbles_lost_per_game,300,0.607099,1.42396,0.426346,0.0635491,0.418033
+2015-16,total_mid,feature,d__for__rates_core__interception_pct,300,-0.445243,0.346628,-1.2845,0.0190601,0.524138
+2015-16,total_mid,feature,d__for__rates_core__penalty_yards_per_game,300,-1.04355,0.966767,-1.07943,0.0538167,0.483051
+2015-16,total_mid,feature,d__allowed__rates_core__plays_per_game,300,1.0362,0.454876,2.27799,0.0278579,0.417391
+2015-16,total_mid,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,300,0.065691,0.805391,0.0815641,0.0421367,0.428571
+2015-16,total_mid,feature,d__allowed__rates_core__rush_yards_per_attempt,300,-0.328573,0.442262,-0.742937,0.0196664,0.534591
+2015-16,total_mid,feature,d__allowed__rates_core__first_down_rate,300,0.827731,1.24026,0.667386,0.0655981,0.537313
+2015-16,total_mid,feature,d__allowed__rates_core__fumbles_lost_per_game,300,0.07882,0.430321,0.183166,0.0254654,0.485
+2015-16,total_mid,feature,d__allowed__rates_core__interception_pct,300,-0.275628,0.180327,-1.52849,0.0121091,0.534884
+2015-16,total_mid,feature,d__allowed__rates_core__penalty_yards_per_game,300,-0.284009,0.525119,-0.540848,0.0250792,0.485714
+2015-16,total_mid,feature,d__avail__qb_delta,300,-0.682805,0.620584,-1.10026,0.0184228,0.59854
+2015-16,total_mid,feature,d__avail__OL_out_cs,300,-0.347855,0.453848,-0.766456,0.0178801,0.514286
+2015-16,total_mid,feature,d__avail__WRTE_out_cs,300,0.394644,1.56739,0.251784,0.0687166,0.516129
+2015-16,total_mid,feature,d__avail__RB_out_cs,300,0.120299,1.26089,0.0954078,0.05082,0.433333
+2015-16,total_mid,feature,d__avail__DL_out_cs,300,0.707847,0.951921,0.743598,0.0283475,0.468468
+2015-16,total_mid,feature,d__avail__LB_out_cs,300,0.471587,1.12879,0.41778,0.0361116,0.496933
+2015-16,total_mid,feature,d__avail__DB_out_cs,300,0.354994,0.790768,0.448924,0.0410494,0.421525
+2015-16,total_mid,feature,d__max_lead,300,0.209438,1.1572,0.180987,0.0507646,0.366142
+2015-16,total_mid,feature,d__max_deficit,300,-0.70619,0.312317,-2.26113,0.0188446,0.591195
+2015-16,total_mid,feature,pass_product,300,-0.220508,0.182745,-1.20665,0.00668138,0.622951
+2015-16,total_mid,feature,pass_1sd_pp,300,0.108643,0.146889,0.739625,0.000533574,0.333333
+2015-16,total_mid,feature,pass_1sd_pn,300,-0.462206,0.419502,-1.1018,0.00404947,0.642857
+2015-16,total_mid,feature,pass_1sd_np,300,-0.0755114,0.406095,-0.185945,0.0031894,0.25
+2015-16,total_mid,feature,pass_1sd_nn,300,0.0101046,0.00617734,1.63576,0.000115598,0
+2015-16,total_high,group,offense box rates,147,5.59182,2.89422,1.93206,0.0936367,0.451852
+2015-16,total_high,group,defense box rates,147,2.65397,3.06474,0.865967,0.0883237,0.489051
+2015-16,total_high,group,QB projection,147,-0.261111,0.493449,-0.529154,0.0134385,0.553571
+2015-16,total_high,group,unit absences,147,-4.50371,3.95965,-1.1374,0.119731,0.496241
+2015-16,total_high,group,lead/deficit peaks,147,0.553889,0.984037,0.562874,0.0438415,0.410256
+2015-16,total_high,group,pass matchup product,147,-0.114746,0.314139,-0.365271,0.00842384,0.534884
+2015-16,total_high,group,pass tail hinges,147,0.00478817,1.38037,0.00346877,0.0212873,0.666667
+2015-16,total_high,group,home field,147,0.750038,1.48202,0.506091,0.0482629,0.51145
+2015-16,total_high,feature,site,147,0.750038,1.48202,0.506091,0.0482629,0.51145
+2015-16,total_high,feature,d__for__rates_core__plays_per_game,147,0.0667241,0.623174,0.107071,0.0205359,0.462366
+2015-16,total_high,feature,d__for__rates_core__net_pass_yards_per_pass_play,147,0.0400708,1.63133,0.0245634,0.0572125,0.569231
+2015-16,total_high,feature,d__for__rates_core__rush_yards_per_attempt,147,0.695514,1.25108,0.555931,0.0381066,0.443478
+2015-16,total_high,feature,d__for__rates_core__first_down_rate,147,0.693865,0.4424,1.56841,0.017207,0.377778
+2015-16,total_high,feature,d__for__rates_core__fumbles_lost_per_game,147,0.910705,2.07692,0.438488,0.0603048,0.440945
+2015-16,total_high,feature,d__for__rates_core__interception_pct,147,1.40745,0.629884,2.23445,0.0185763,0.321429
+2015-16,total_high,feature,d__for__rates_core__penalty_yards_per_game,147,1.75333,1.63481,1.0725,0.0479233,0.481481
+2015-16,total_high,feature,d__allowed__rates_core__plays_per_game,147,0.313885,1.11022,0.282722,0.0232684,0.489583
+2015-16,total_high,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,147,-1.50336,1.36398,-1.10219,0.0351889,0.504673
+2015-16,total_high,feature,d__allowed__rates_core__rush_yards_per_attempt,147,-0.252856,0.705251,-0.358533,0.0228748,0.47619
+2015-16,total_high,feature,d__allowed__rates_core__first_down_rate,147,2.49665,2.50804,0.99546,0.073874,0.462687
+2015-16,total_high,feature,d__allowed__rates_core__fumbles_lost_per_game,147,0.895535,0.73403,1.22003,0.0229071,0.395604
+2015-16,total_high,feature,d__allowed__rates_core__interception_pct,147,0.363522,0.445664,0.815687,0.0142891,0.486486
+2015-16,total_high,feature,d__allowed__rates_core__penalty_yards_per_game,147,1.00204,1.00713,0.994945,0.0271594,0.509804
+2015-16,total_high,feature,d__avail__qb_delta,147,-0.261111,0.493449,-0.529154,0.0134385,0.553571
+2015-16,total_high,feature,d__avail__OL_out_cs,147,-0.45713,0.667826,-0.684505,0.0158838,0.584615
+2015-16,total_high,feature,d__avail__WRTE_out_cs,147,-3.03031,2.96018,-1.02369,0.0580727,0.521739
+2015-16,total_high,feature,d__avail__RB_out_cs,147,1.71228,1.82911,0.936131,0.0514751,0.478723
+2015-16,total_high,feature,d__avail__DL_out_cs,147,-1.21965,1.72581,-0.706713,0.0194106,0.574468
+2015-16,total_high,feature,d__avail__LB_out_cs,147,-1.81278,1.61946,-1.11937,0.0357898,0.577465
+2015-16,total_high,feature,d__avail__DB_out_cs,147,-0.184155,1.29984,-0.141675,0.0399994,0.462963
+2015-16,total_high,feature,d__max_lead,147,-0.685727,1.1681,-0.587045,0.0487566,0.372881
+2015-16,total_high,feature,d__max_deficit,147,1.14162,0.598408,1.90777,0.0169011,0.373333
+2015-16,total_high,feature,pass_product,147,-0.114746,0.314139,-0.365271,0.00842384,0.534884
+2015-16,total_high,feature,pass_1sd_pp,147,-0.920273,0.904243,-1.01773,0.00547097,0.75
+2015-16,total_high,feature,pass_1sd_pn,147,-0.0818748,0.122806,-0.666703,0.00089302,0.75
+2015-16,total_high,feature,pass_1sd_np,147,1.00694,1.0063,1.00063,0.0149233,0.333333
+2015-16,total_high,feature,pass_1sd_nn,147,0,0,,0,
+2017-22,all,group,offense box rates,1559,-0.73295,0.676392,-1.08362,0.076043,0.467787
+2017-22,all,group,defense box rates,1559,-0.622156,0.696384,-0.893409,0.0726045,0.470922
+2017-22,all,group,QB projection,1559,-0.15227,0.422947,-0.360021,0.0331756,0.454762
+2017-22,all,group,unit absences,1559,-0.254957,0.938682,-0.271611,0.0846012,0.485232
+2017-22,all,group,lead/deficit peaks,1559,-0.332277,0.284354,-1.16853,0.0238807,0.485352
+2017-22,all,group,pass matchup product,1559,-0.19031,0.236929,-0.803238,0.0194327,0.505945
+2017-22,all,group,pass tail hinges,1559,-0.706517,0.917852,-0.76975,0.024446,0.477477
+2017-22,all,group,home field,1559,-0.464068,0.419142,-1.10719,0.0598777,0.524272
+2017-22,all,feature,site,1559,-0.464068,0.419142,-1.10719,0.0598777,0.524272
+2017-22,all,feature,d__for__rates_core__plays_per_game,1559,-0.429817,0.27836,-1.5441,0.020473,0.558992
+2017-22,all,feature,d__for__rates_core__net_pass_yards_per_pass_play,1559,-0.703256,0.409554,-1.71713,0.0292091,0.618182
+2017-22,all,feature,d__for__rates_core__rush_yards_per_attempt,1559,-0.370521,0.219176,-1.69052,0.0204636,0.511351
+2017-22,all,feature,d__for__rates_core__first_down_rate,1559,0.920054,0.356323,2.58208,0.0295146,0.404665
+2017-22,all,feature,d__for__rates_core__fumbles_lost_per_game,1559,-0.0956981,0.347131,-0.275683,0.0371264,0.474244
+2017-22,all,feature,d__for__rates_core__interception_pct,1559,0.21951,0.38509,0.570023,0.0413778,0.435939
+2017-22,all,feature,d__for__rates_core__penalty_yards_per_game,1559,-0.23104,0.166605,-1.38675,0.0149811,0.529661
+2017-22,all,feature,d__allowed__rates_core__plays_per_game,1559,-0.0601102,0.300535,-0.200011,0.0304293,0.449541
+2017-22,all,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,1559,-0.0270972,0.138172,-0.196112,0.0101903,0.544204
+2017-22,all,feature,d__allowed__rates_core__rush_yards_per_attempt,1559,-0.0401326,0.303525,-0.132222,0.0325633,0.46714
+2017-22,all,feature,d__allowed__rates_core__first_down_rate,1559,0.0947478,0.323896,0.292525,0.0305957,0.536489
+2017-22,all,feature,d__allowed__rates_core__fumbles_lost_per_game,1559,-0.299683,0.198381,-1.51064,0.0142822,0.467391
+2017-22,all,feature,d__allowed__rates_core__interception_pct,1559,-0.241696,0.178478,-1.35421,0.0145321,0.558424
+2017-22,all,feature,d__allowed__rates_core__penalty_yards_per_game,1559,0.184263,0.395424,0.465988,0.0352674,0.469167
+2017-22,all,feature,d__avail__qb_delta,1559,-0.15227,0.422947,-0.360021,0.0331756,0.454762
+2017-22,all,feature,d__avail__OL_out_cs,1559,-0.344508,0.301572,-1.14237,0.0247214,0.522436
+2017-22,all,feature,d__avail__WRTE_out_cs,1559,0.228391,0.366644,0.622924,0.0325041,0.454301
+2017-22,all,feature,d__avail__RB_out_cs,1559,-0.309959,0.382033,-0.81134,0.0284689,0.516787
+2017-22,all,feature,d__avail__DL_out_cs,1559,-0.165743,0.201498,-0.822553,0.0169324,0.527701
+2017-22,all,feature,d__avail__LB_out_cs,1559,-0.263802,0.247182,-1.06724,0.0171052,0.490313
+2017-22,all,feature,d__avail__DB_out_cs,1559,0.673189,0.504659,1.33395,0.0472563,0.468213
+2017-22,all,feature,d__max_lead,1559,-0.00714969,0.222062,-0.0321969,0.0201905,0.4
+2017-22,all,feature,d__max_deficit,1559,-0.314699,0.186843,-1.6843,0.0171562,0.578344
+2017-22,all,feature,pass_product,1559,-0.19031,0.236929,-0.803238,0.0194327,0.505945
+2017-22,all,feature,pass_1sd_pp,1559,-0.0336161,0.141044,-0.238338,0.00532717,0.333333
+2017-22,all,feature,pass_1sd_pn,1559,-0.00889126,0.202099,-0.0439946,0.00298915,0.44186
+2017-22,all,feature,pass_1sd_np,1559,-0.473416,0.863029,-0.548552,0.0120969,0.5125
+2017-22,all,feature,pass_1sd_nn,1559,-0.208379,0.110962,-1.87794,0.00412498,0.571429
+2017-22,total_low,group,offense box rates,255,-2.15107,1.44823,-1.48531,0.0717121,0.493724
+2017-22,total_low,group,defense box rates,255,1.79496,1.65626,1.08374,0.0641821,0.471616
+2017-22,total_low,group,QB projection,255,-0.433843,1.04163,-0.416503,0.0317313,0.492958
+2017-22,total_low,group,unit absences,255,-1.19199,2.17567,-0.547871,0.074088,0.473451
+2017-22,total_low,group,lead/deficit peaks,255,0.42348,0.741015,0.571486,0.0224858,0.496855
+2017-22,total_low,group,pass matchup product,255,-0.565626,0.507345,-1.11487,0.0197701,0.503597
+2017-22,total_low,group,pass tail hinges,255,-0.950247,3.85908,-0.246237,0.0358138,0.536585
+2017-22,total_low,group,home field,255,-2.18173,1.18009,-1.84879,0.0562098,0.569444
+2017-22,total_low,feature,site,255,-2.18173,1.18009,-1.84879,0.0562098,0.569444
+2017-22,total_low,feature,d__for__rates_core__plays_per_game,255,-0.680819,0.480547,-1.41676,0.0150675,0.559055
+2017-22,total_low,feature,d__for__rates_core__net_pass_yards_per_pass_play,255,-0.65207,0.758003,-0.860247,0.0220245,0.604839
+2017-22,total_low,feature,d__for__rates_core__rush_yards_per_attempt,255,-0.632802,0.566182,-1.11766,0.0207772,0.533333
+2017-22,total_low,feature,d__for__rates_core__first_down_rate,255,0.366953,0.918651,0.399448,0.0241515,0.468966
+2017-22,total_low,feature,d__for__rates_core__fumbles_lost_per_game,255,-0.344266,0.906,-0.379984,0.0368953,0.509804
+2017-22,total_low,feature,d__for__rates_core__interception_pct,255,-0.596866,0.890826,-0.670014,0.0373136,0.454545
+2017-22,total_low,feature,d__for__rates_core__penalty_yards_per_game,255,-0.262755,0.454752,-0.577798,0.0156732,0.523364
+2017-22,total_low,feature,d__allowed__rates_core__plays_per_game,255,0.506225,0.622837,0.812773,0.0246028,0.411392
+2017-22,total_low,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,255,0.262974,0.394058,0.667349,0.0122208,0.47
+2017-22,total_low,feature,d__allowed__rates_core__rush_yards_per_attempt,255,0.320613,0.738738,0.434002,0.0313888,0.451429
+2017-22,total_low,feature,d__allowed__rates_core__first_down_rate,255,0.556779,0.888598,0.626581,0.0341959,0.532609
+2017-22,total_low,feature,d__allowed__rates_core__fumbles_lost_per_game,255,-0.304799,0.412866,-0.738252,0.0137878,0.46789
+2017-22,total_low,feature,d__allowed__rates_core__interception_pct,255,0.132855,0.449632,0.295475,0.015606,0.541353
+2017-22,total_low,feature,d__allowed__rates_core__penalty_yards_per_game,255,-0.299318,0.951932,-0.314432,0.0351385,0.520408
+2017-22,total_low,feature,d__avail__qb_delta,255,-0.433843,1.04163,-0.416503,0.0317313,0.492958
+2017-22,total_low,feature,d__avail__OL_out_cs,255,-1.08202,0.77483,-1.39647,0.0240922,0.510791
+2017-22,total_low,feature,d__avail__WRTE_out_cs,255,0.608832,0.713221,0.853637,0.0302011,0.465116
+2017-22,total_low,feature,d__avail__RB_out_cs,255,-0.469888,1.07456,-0.437283,0.0257505,0.539683
+2017-22,total_low,feature,d__avail__DL_out_cs,255,-0.870355,0.521796,-1.668,0.0139338,0.547009
+2017-22,total_low,feature,d__avail__LB_out_cs,255,-0.142367,0.537594,-0.264823,0.0176336,0.514286
+2017-22,total_low,feature,d__avail__DB_out_cs,255,1.59293,1.05451,1.51058,0.0372534,0.453488
+2017-22,total_low,feature,d__max_lead,255,-0.0259687,0.537923,-0.0482759,0.0168262,0.442748
+2017-22,total_low,feature,d__max_deficit,255,0.507807,0.542323,0.936354,0.017917,0.536
+2017-22,total_low,feature,pass_product,255,-0.565626,0.507345,-1.11487,0.0197701,0.503597
+2017-22,total_low,feature,pass_1sd_pp,255,-0.0032706,0.00319316,-1.02425,2.38144e-05,
+2017-22,total_low,feature,pass_1sd_pn,255,-0.102446,0.122624,-0.835445,0.000454194,0.5
+2017-22,total_low,feature,pass_1sd_np,255,-0.416532,3.87613,-0.107461,0.0251106,0.65
+2017-22,total_low,feature,pass_1sd_nn,255,-0.427598,0.448626,-0.95313,0.010476,0.4
+2017-22,total_mid,group,offense box rates,765,-1.57328,1.02586,-1.53362,0.0765361,0.490701
+2017-22,total_mid,group,defense box rates,765,-1.11106,1.03105,-1.0776,0.0744971,0.493506
+2017-22,total_mid,group,QB projection,765,-0.481058,0.739417,-0.650591,0.0367788,0.430876
+2017-22,total_mid,group,unit absences,765,-0.85358,1.50829,-0.565926,0.086599,0.492221
+2017-22,total_mid,group,lead/deficit peaks,765,-0.348351,0.380801,-0.914784,0.024478,0.519763
+2017-22,total_mid,group,pass matchup product,765,-0.241046,0.278655,-0.865034,0.0184767,0.495726
+2017-22,total_mid,group,pass tail hinges,765,-1.30504,1.24363,-1.04938,0.0212487,0.491071
+2017-22,total_mid,group,home field,765,-1.20337,0.770917,-1.56096,0.0614996,0.542683
+2017-22,total_mid,feature,site,765,-1.20337,0.770917,-1.56096,0.0614996,0.542683
+2017-22,total_mid,feature,d__for__rates_core__plays_per_game,765,-0.710205,0.394531,-1.80012,0.0211866,0.57243
+2017-22,total_mid,feature,d__for__rates_core__net_pass_yards_per_pass_play,765,-1.12195,0.684162,-1.63988,0.031375,0.628702
+2017-22,total_mid,feature,d__for__rates_core__rush_yards_per_attempt,765,-0.418164,0.354551,-1.17942,0.0210935,0.5
+2017-22,total_mid,feature,d__for__rates_core__first_down_rate,765,1.30973,0.520696,2.51535,0.0319544,0.404
+2017-22,total_mid,feature,d__for__rates_core__fumbles_lost_per_game,765,-0.0439323,0.527312,-0.0833137,0.0382008,0.467769
+2017-22,total_mid,feature,d__for__rates_core__interception_pct,765,-0.294133,0.528388,-0.55666,0.0400437,0.452188
+2017-22,total_mid,feature,d__for__rates_core__penalty_yards_per_game,765,-0.141384,0.274424,-0.5152,0.0150472,0.548387
+2017-22,total_mid,feature,d__allowed__rates_core__plays_per_game,765,-0.325307,0.461793,-0.704444,0.0303273,0.45591
+2017-22,total_mid,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,765,-0.0396123,0.170501,-0.232329,0.010364,0.555556
+2017-22,total_mid,feature,d__allowed__rates_core__rush_yards_per_attempt,765,-0.116808,0.429364,-0.272048,0.0325128,0.465364
+2017-22,total_mid,feature,d__allowed__rates_core__first_down_rate,765,0.0146762,0.478372,0.0306794,0.0311963,0.547809
+2017-22,total_mid,feature,d__allowed__rates_core__fumbles_lost_per_game,765,-0.0339571,0.248597,-0.136595,0.0137808,0.455696
+2017-22,total_mid,feature,d__allowed__rates_core__interception_pct,765,-0.304258,0.250179,-1.21616,0.0149769,0.551429
+2017-22,total_mid,feature,d__allowed__rates_core__penalty_yards_per_game,765,0.262253,0.52965,0.495145,0.0347768,0.475
+2017-22,total_mid,feature,d__avail__qb_delta,765,-0.481058,0.739417,-0.650591,0.0367788,0.430876
+2017-22,total_mid,feature,d__avail__OL_out_cs,765,-0.655643,0.47705,-1.37437,0.0250712,0.552521
+2017-22,total_mid,feature,d__avail__WRTE_out_cs,765,0.0350496,0.547071,0.0640678,0.034251,0.466786
+2017-22,total_mid,feature,d__avail__RB_out_cs,765,-0.317757,0.528993,-0.600682,0.0289904,0.514151
+2017-22,total_mid,feature,d__avail__DL_out_cs,765,0.150585,0.265293,0.56762,0.0161736,0.513043
+2017-22,total_mid,feature,d__avail__LB_out_cs,765,-0.103153,0.451529,-0.228453,0.0179491,0.471591
+2017-22,total_mid,feature,d__avail__DB_out_cs,765,0.0372145,0.78671,0.047304,0.0465293,0.468858
+2017-22,total_mid,feature,d__max_lead,765,0.233974,0.282921,0.826996,0.0204514,0.433551
+2017-22,total_mid,feature,d__max_deficit,765,-0.498616,0.300349,-1.66012,0.0178678,0.585185
+2017-22,total_mid,feature,pass_product,765,-0.241046,0.278655,-0.865034,0.0184767,0.495726
+2017-22,total_mid,feature,pass_1sd_pp,765,0.0210639,0.176592,0.11928,0.00165306,0.0909091
+2017-22,total_mid,feature,pass_1sd_pn,765,-0.327988,0.329383,-0.995765,0.00339781,0.458333
+2017-22,total_mid,feature,pass_1sd_np,765,-0.769541,1.13289,-0.679274,0.0116173,0.5
+2017-22,total_mid,feature,pass_1sd_nn,765,-0.264956,0.136901,-1.93538,0.00468476,0.657895
+2017-22,total_high,group,offense box rates,539,1.13064,1.29991,0.869782,0.077392,0.422449
+2017-22,total_high,group,defense box rates,539,-1.07179,0.928223,-1.15467,0.0739029,0.438525
+2017-22,total_high,group,QB projection,539,0.447589,0.534046,0.83811,0.028745,0.473485
+2017-22,total_high,group,unit absences,539,1.03798,1.35493,0.766074,0.0867395,0.480573
+2017-22,total_high,group,lead/deficit peaks,539,-0.667009,0.470823,-1.41669,0.0236928,0.431755
+2017-22,total_high,group,pass matchup product,539,0.0592595,0.438296,0.135204,0.0206298,0.520599
+2017-22,total_high,group,pass tail hinges,539,0.258276,0.612349,0.421779,0.0236057,0.42029
+2017-22,total_high,group,home field,539,1.39784,0.892781,1.56572,0.0593112,0.477516
+2017-22,total_high,feature,site,539,1.39784,0.892781,1.56572,0.0593112,0.477516
+2017-22,total_high,feature,d__for__rates_core__plays_per_game,539,0.0868858,0.462663,0.187795,0.0220175,0.540881
+2017-22,total_high,feature,d__for__rates_core__net_pass_yards_per_pass_play,539,-0.133225,0.5366,-0.248277,0.0295341,0.608833
+2017-22,total_high,feature,d__for__rates_core__rush_yards_per_attempt,539,-0.178817,0.352961,-0.506619,0.0194211,0.517799
+2017-22,total_high,feature,d__for__rates_core__first_down_rate,539,0.628656,0.522387,1.20343,0.0285891,0.378299
+2017-22,total_high,feature,d__for__rates_core__fumbles_lost_per_game,539,-0.0515723,0.696687,-0.074025,0.0357107,0.466184
+2017-22,total_high,feature,d__for__rates_core__interception_pct,539,1.33475,0.665642,2.0052,0.0451939,0.405034
+2017-22,total_high,feature,d__for__rates_core__penalty_yards_per_game,539,-0.343285,0.246466,-1.39283,0.0145599,0.507692
+2017-22,total_high,feature,d__allowed__rates_core__plays_per_game,539,0.0483504,0.561104,0.0861701,0.0333307,0.45614
+2017-22,total_high,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,539,-0.146567,0.200561,-0.730786,0.00898316,0.574324
+2017-22,total_high,feature,d__allowed__rates_core__rush_yards_per_attempt,539,-0.101976,0.56044,-0.181958,0.0331906,0.476804
+2017-22,total_high,feature,d__allowed__rates_core__first_down_rate,539,-0.010193,0.436167,-0.0233694,0.0280399,0.521341
+2017-22,total_high,feature,d__allowed__rates_core__fumbles_lost_per_game,539,-0.674407,0.388966,-1.73385,0.0152278,0.484018
+2017-22,total_high,feature,d__allowed__rates_core__interception_pct,539,-0.330103,0.300567,-1.09827,0.0133928,0.577075
+2017-22,total_high,feature,d__allowed__rates_core__penalty_yards_per_game,539,0.302354,0.59838,0.505287,0.0360246,0.435644
+2017-22,total_high,feature,d__avail__qb_delta,539,0.447589,0.534046,0.83811,0.028745,0.473485
+2017-22,total_high,feature,d__avail__OL_out_cs,539,0.446002,0.414081,1.07709,0.0245228,0.482866
+2017-22,total_high,feature,d__avail__WRTE_out_cs,539,0.322814,0.542445,0.59511,0.0311143,0.431525
+2017-22,total_high,feature,d__avail__RB_out_cs,539,-0.223229,0.68909,-0.323948,0.0290149,0.510563
+2017-22,total_high,feature,d__avail__DL_out_cs,539,-0.281356,0.428032,-0.657324,0.0194279,0.538462
+2017-22,total_high,feature,d__avail__LB_out_cs,539,-0.549262,0.425548,-1.29072,0.0156575,0.509346
+2017-22,total_high,feature,d__avail__DB_out_cs,539,1.1407,1.03073,1.10669,0.0530204,0.47343
+2017-22,total_high,feature,d__max_lead,539,-0.340472,0.380507,-0.894785,0.0214118,0.337313
+2017-22,total_high,feature,d__max_deficit,539,-0.442793,0.26962,-1.64229,0.0157864,0.588235
+2017-22,total_high,feature,pass_product,539,0.0592595,0.438296,0.135204,0.0206298,0.520599
+2017-22,total_high,feature,pass_1sd_pp,539,-0.125579,0.32049,-0.391836,0.0130508,0.419355
+2017-22,total_high,feature,pass_1sd_pn,539,0.488262,0.343679,1.42069,0.00360841,0.411765
+2017-22,total_high,feature,pass_1sd_np,539,-0.0800386,0.362832,-0.220594,0.0066207,0.375
+2017-22,total_high,feature,pass_1sd_nn,539,-0.0243679,0.0237927,-1.02418,0.000325798,0.6
+2023-25,all,group,offense box rates,815,1.05712,0.964721,1.09578,0.0824809,0.390052
+2023-25,all,group,defense box rates,815,1.34861,1.42057,0.949344,0.104464,0.48631
+2023-25,all,group,QB projection,815,-0.30213,0.426935,-0.707672,0.0402233,0.428058
+2023-25,all,group,unit absences,815,-0.00628422,0.667073,-0.00942059,0.0538051,0.468571
+2023-25,all,group,lead/deficit peaks,815,-0.860869,0.484422,-1.7771,0.0300975,0.659341
+2023-25,all,group,pass matchup product,815,0.933808,0.659928,1.41501,0.038117,0.447972
+2023-25,all,group,pass tail hinges,815,1.02769,1.92677,0.533376,0.0291247,0.465116
+2023-25,all,group,home field,815,-0.506316,0.409831,-1.23543,0.0323029,0.549231
+2023-25,all,feature,site,815,-0.506316,0.409831,-1.23543,0.0323029,0.549231
+2023-25,all,feature,d__for__rates_core__plays_per_game,815,0.0827418,0.197352,0.419259,0.0127424,0.525806
+2023-25,all,feature,d__for__rates_core__net_pass_yards_per_pass_play,815,-0.0854768,0.243286,-0.351342,0.0203901,0.426009
+2023-25,all,feature,d__for__rates_core__rush_yards_per_attempt,815,0.116329,0.120117,0.968461,0.00978901,0.45583
+2023-25,all,feature,d__for__rates_core__first_down_rate,815,0.696306,0.699372,0.995615,0.0550975,0.371349
+2023-25,all,feature,d__for__rates_core__fumbles_lost_per_game,815,0.38978,0.545244,0.714873,0.0324292,0.532051
+2023-25,all,feature,d__for__rates_core__interception_pct,815,0.132961,0.327464,0.406033,0.0204413,0.529787
+2023-25,all,feature,d__for__rates_core__penalty_yards_per_game,815,0.0269886,0.233212,0.115726,0.0173917,0.497768
+2023-25,all,feature,d__allowed__rates_core__plays_per_game,815,-0.0369528,0.131058,-0.281958,0.00947544,0.5
+2023-25,all,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,815,-0.633219,0.737648,-0.85843,0.0553416,0.528011
+2023-25,all,feature,d__allowed__rates_core__rush_yards_per_attempt,815,0.74222,0.610936,1.21489,0.0369736,0.445705
+2023-25,all,feature,d__allowed__rates_core__first_down_rate,815,-0.372441,0.675365,-0.551466,0.05128,0.520896
+2023-25,all,feature,d__allowed__rates_core__fumbles_lost_per_game,815,0.344226,0.338623,1.01655,0.025536,0.463158
+2023-25,all,feature,d__allowed__rates_core__interception_pct,815,0.890886,0.576926,1.5442,0.0400247,0.440878
+2023-25,all,feature,d__allowed__rates_core__penalty_yards_per_game,815,0.99297,0.413724,2.40008,0.0300582,0.47585
+2023-25,all,feature,d__avail__qb_delta,815,-0.30213,0.426935,-0.707672,0.0402233,0.428058
+2023-25,all,feature,d__avail__OL_out_cs,815,-0.0774737,0.13026,-0.594761,0.00794498,0.47619
+2023-25,all,feature,d__avail__WRTE_out_cs,815,0.267748,0.233579,1.14628,0.0167087,0.432361
+2023-25,all,feature,d__avail__RB_out_cs,815,-0.0623676,0.273076,-0.228389,0.0169031,0.474474
+2023-25,all,feature,d__avail__DL_out_cs,815,0.0736187,0.252342,0.291741,0.019073,0.478555
+2023-25,all,feature,d__avail__LB_out_cs,815,0.173994,0.355399,0.489573,0.0210542,0.521739
+2023-25,all,feature,d__avail__DB_out_cs,815,-0.409487,0.259252,-1.57949,0.0172068,0.501211
+2023-25,all,feature,d__max_lead,815,-0.359416,0.196449,-1.82957,0.0137581,0.713483
+2023-25,all,feature,d__max_deficit,815,-0.59003,0.415259,-1.42087,0.0223198,0.577167
+2023-25,all,feature,pass_product,815,0.933808,0.659928,1.41501,0.038117,0.447972
+2023-25,all,feature,pass_1sd_pp,815,-0.486715,0.502478,-0.968628,0.00769737,0.64
+2023-25,all,feature,pass_1sd_pn,815,1.80588,1.93839,0.931643,0.0186922,0.322581
+2023-25,all,feature,pass_1sd_np,815,-0.0604496,0.131453,-0.459857,0.00161302,0.473684
+2023-25,all,feature,pass_1sd_nn,815,-0.229044,0.152912,-1.49788,0.0011542,0.5
+2023-25,total_low,group,offense box rates,187,-1.04948,1.81025,-0.579743,0.082013,0.430233
+2023-25,total_low,group,defense box rates,187,0.61987,2.91774,0.212449,0.109755,0.468208
+2023-25,total_low,group,QB projection,187,-2.56281,1.36528,-1.87713,0.0450484,0.471831
+2023-25,total_low,group,unit absences,187,-1.30136,1.48981,-0.873508,0.0525634,0.468354
+2023-25,total_low,group,lead/deficit peaks,187,0.370253,0.813208,0.455299,0.0319255,0.605839
+2023-25,total_low,group,pass matchup product,187,-0.725194,1.31692,-0.550675,0.0395851,0.526718
+2023-25,total_low,group,pass tail hinges,187,-5.50445,3.71551,-1.48148,0.0228843,0.545455
+2023-25,total_low,group,home field,187,-0.813269,0.971661,-0.836988,0.0320959,0.549669
+2023-25,total_low,feature,site,187,-0.813269,0.971661,-0.836988,0.0320959,0.549669
+2023-25,total_low,feature,d__for__rates_core__plays_per_game,187,0.127536,0.546428,0.2334,0.0122709,0.515152
+2023-25,total_low,feature,d__for__rates_core__net_pass_yards_per_pass_play,187,-0.0640569,0.352673,-0.181632,0.0168946,0.47619
+2023-25,total_low,feature,d__for__rates_core__rush_yards_per_attempt,187,-0.0205701,0.270647,-0.0760033,0.00797122,0.5
+2023-25,total_low,feature,d__for__rates_core__first_down_rate,187,-0.909239,1.8987,-0.478874,0.0572781,0.437126
+2023-25,total_low,feature,d__for__rates_core__fumbles_lost_per_game,187,1.25704,1.14846,1.09454,0.0390677,0.467949
+2023-25,total_low,feature,d__for__rates_core__interception_pct,187,-0.356781,0.683101,-0.522296,0.021845,0.535714
+2023-25,total_low,feature,d__for__rates_core__penalty_yards_per_game,187,-0.42477,0.723269,-0.587292,0.0171094,0.489583
+2023-25,total_low,feature,d__allowed__rates_core__plays_per_game,187,-0.504217,0.295847,-1.70431,0.0099969,0.508197
+2023-25,total_low,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,187,0.109486,1.49011,0.0734749,0.0541021,0.467456
+2023-25,total_low,feature,d__allowed__rates_core__rush_yards_per_attempt,187,0.312259,1.01107,0.308839,0.0311075,0.460317
+2023-25,total_low,feature,d__allowed__rates_core__first_down_rate,187,-0.0385334,1.6426,-0.0234587,0.0495007,0.513699
+2023-25,total_low,feature,d__allowed__rates_core__fumbles_lost_per_game,187,0.784756,0.7398,1.06077,0.0290836,0.438356
+2023-25,total_low,feature,d__allowed__rates_core__interception_pct,187,-0.424048,1.38901,-0.305288,0.0364384,0.465517
+2023-25,total_low,feature,d__allowed__rates_core__penalty_yards_per_game,187,0.379949,0.94988,0.399997,0.024431,0.478632
+2023-25,total_low,feature,d__avail__qb_delta,187,-2.56281,1.36528,-1.87713,0.0450484,0.471831
+2023-25,total_low,feature,d__avail__OL_out_cs,187,-0.183356,0.402227,-0.455851,0.00937378,0.472727
+2023-25,total_low,feature,d__avail__WRTE_out_cs,187,0.470937,0.516191,0.91233,0.0150567,0.386667
+2023-25,total_low,feature,d__avail__RB_out_cs,187,-0.0893287,0.63224,-0.141289,0.0178094,0.494253
+2023-25,total_low,feature,d__avail__DL_out_cs,187,-0.0871282,0.793758,-0.109767,0.0202556,0.462264
+2023-25,total_low,feature,d__avail__LB_out_cs,187,-0.765772,0.792038,-0.966836,0.021137,0.50495
+2023-25,total_low,feature,d__avail__DB_out_cs,187,-0.730862,0.524171,-1.39432,0.0152558,0.538462
+2023-25,total_low,feature,d__max_lead,187,0.0658642,0.292023,0.225544,0.0116631,0.642857
+2023-25,total_low,feature,d__max_deficit,187,0.301991,0.720184,0.419325,0.0269561,0.546154
+2023-25,total_low,feature,pass_product,187,-0.725194,1.31692,-0.550675,0.0395851,0.526718
+2023-25,total_low,feature,pass_1sd_pp,187,0,0,,0,
+2023-25,total_low,feature,pass_1sd_pn,187,-4.12562,3.69612,-1.1162,0.0152283,0.6
+2023-25,total_low,feature,pass_1sd_np,187,-0.475486,0.489138,-0.972088,0.00344382,0.666667
+2023-25,total_low,feature,pass_1sd_nn,187,-0.894695,0.652256,-1.37169,0.00434616,0.444444
+2023-25,total_mid,group,offense box rates,425,2.64022,1.41458,1.86643,0.0832195,0.368421
+2023-25,total_mid,group,defense box rates,425,1.4783,1.98043,0.746455,0.104792,0.495025
+2023-25,total_mid,group,QB projection,425,0.511641,0.74815,0.683874,0.0439773,0.40264
+2023-25,total_mid,group,unit absences,425,0.416168,1.00073,0.415865,0.055765,0.482192
+2023-25,total_mid,group,lead/deficit peaks,425,-1.21849,0.720453,-1.69128,0.0292527,0.659574
+2023-25,total_mid,group,pass matchup product,425,0.847338,0.778771,1.08805,0.032864,0.460714
+2023-25,total_mid,group,pass tail hinges,425,0.71337,1.61516,0.441672,0.0153058,0.482759
+2023-25,total_mid,group,home field,425,-0.941449,0.566104,-1.66303,0.0335464,0.577259
+2023-25,total_mid,feature,site,425,-0.941449,0.566104,-1.66303,0.0335464,0.577259
+2023-25,total_mid,feature,d__for__rates_core__plays_per_game,425,0.22727,0.312443,0.727395,0.0128273,0.475904
+2023-25,total_mid,feature,d__for__rates_core__net_pass_yards_per_pass_play,425,-0.198792,0.397748,-0.499794,0.0212127,0.414938
+2023-25,total_mid,feature,d__for__rates_core__rush_yards_per_attempt,425,0.192708,0.178661,1.07862,0.00986881,0.458904
+2023-25,total_mid,feature,d__for__rates_core__first_down_rate,425,1.69665,0.946095,1.79332,0.0565828,0.350923
+2023-25,total_mid,feature,d__for__rates_core__fumbles_lost_per_game,425,0.543848,0.631857,0.860713,0.0304309,0.549839
+2023-25,total_mid,feature,d__for__rates_core__interception_pct,425,0.177954,0.418858,0.424856,0.0209594,0.528455
+2023-25,total_mid,feature,d__for__rates_core__penalty_yards_per_game,425,0.115675,0.315187,0.367004,0.0164749,0.515152
+2023-25,total_mid,feature,d__allowed__rates_core__plays_per_game,425,0.158135,0.242518,0.652053,0.00946229,0.462185
+2023-25,total_mid,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,425,-0.690608,0.983533,-0.702171,0.0543769,0.53719
+2023-25,total_mid,feature,d__allowed__rates_core__rush_yards_per_attempt,425,1.12231,0.86149,1.30275,0.0371649,0.440367
+2023-25,total_mid,feature,d__allowed__rates_core__first_down_rate,425,-0.882956,0.945443,-0.933907,0.0501602,0.507082
+2023-25,total_mid,feature,d__allowed__rates_core__fumbles_lost_per_game,425,0.118498,0.458563,0.258412,0.025228,0.491582
+2023-25,total_mid,feature,d__allowed__rates_core__interception_pct,425,1.30209,0.86494,1.50541,0.0418968,0.433121
+2023-25,total_mid,feature,d__allowed__rates_core__penalty_yards_per_game,425,0.531666,0.518083,1.02622,0.029277,0.474227
+2023-25,total_mid,feature,d__avail__qb_delta,425,0.511641,0.74815,0.683874,0.0439773,0.40264
+2023-25,total_mid,feature,d__avail__OL_out_cs,425,-0.122913,0.141136,-0.870884,0.00787957,0.491071
+2023-25,total_mid,feature,d__avail__WRTE_out_cs,425,0.466126,0.329904,1.41291,0.0170516,0.427861
+2023-25,total_mid,feature,d__avail__RB_out_cs,425,-0.172684,0.525849,-0.328392,0.0184845,0.480226
+2023-25,total_mid,feature,d__avail__DL_out_cs,425,0.261729,0.33163,0.789222,0.0178286,0.460829
+2023-25,total_mid,feature,d__avail__LB_out_cs,425,0.498293,0.589205,0.845705,0.0212952,0.53913
+2023-25,total_mid,feature,d__avail__DB_out_cs,425,-0.434228,0.350574,-1.23862,0.0188598,0.493392
+2023-25,total_mid,feature,d__max_lead,425,-0.591568,0.306329,-1.93115,0.0139702,0.760417
+2023-25,total_mid,feature,d__max_deficit,425,-0.758278,0.601731,-1.26016,0.0212135,0.54918
+2023-25,total_mid,feature,pass_product,425,0.847338,0.778771,1.08805,0.032864,0.460714
+2023-25,total_mid,feature,pass_1sd_pp,425,0.235363,0.561966,0.418821,0.00263618,0.833333
+2023-25,total_mid,feature,pass_1sd_pn,425,0.553589,1.51016,0.366577,0.011598,0.384615
+2023-25,total_mid,feature,pass_1sd_np,425,-0.0300224,0.0754963,-0.397667,0.000773179,0.285714
+2023-25,total_mid,feature,pass_1sd_nn,425,-0.0455594,0.032489,-1.4023,0.000301041,0.666667
+2023-25,total_high,group,offense box rates,203,-0.316666,1.70585,-0.185635,0.0813655,0.398964
+2023-25,total_high,group,defense box rates,203,1.7484,2.63701,0.663024,0.0989037,0.484375
+2023-25,total_high,group,QB projection,203,0.0766579,0.59466,0.12891,0.0279193,0.441441
+2023-25,total_high,group,unit absences,203,0.302274,1.39405,0.216831,0.0508458,0.440678
+2023-25,total_high,group,lead/deficit peaks,203,-1.24625,0.696778,-1.78858,0.0301822,0.716535
+2023-25,total_high,group,pass matchup product,203,2.64308,1.28643,2.05459,0.0477622,0.358974
+2023-25,total_high,group,pass tail hinges,203,7.70305,6.44014,1.1961,0.0638043,0.4
+2023-25,total_high,group,home field,203,0.687436,0.617493,1.11327,0.0298901,0.487179
+2023-25,total_high,feature,site,203,0.687436,0.617493,1.11327,0.0298901,0.487179
+2023-25,total_high,feature,d__for__rates_core__plays_per_game,203,-0.261105,0.366821,-0.711805,0.0129988,0.641026
+2023-25,total_high,feature,d__for__rates_core__net_pass_yards_per_pass_play,203,0.132028,0.418665,0.315355,0.0218877,0.413223
+2023-25,total_high,feature,d__for__rates_core__rush_yards_per_attempt,203,0.0825312,0.300144,0.274972,0.0112965,0.426966
+2023-25,total_high,feature,d__for__rates_core__first_down_rate,203,0.0809891,1.04445,0.0775424,0.0499792,0.352601
+2023-25,total_high,feature,d__for__rates_core__fumbles_lost_per_game,203,-0.731677,0.999947,-0.731716,0.0304976,0.56051
+2023-25,total_high,feature,d__for__rates_core__interception_pct,203,0.489905,0.520641,0.940964,0.0180635,0.526786
+2023-25,total_high,feature,d__for__rates_core__penalty_yards_per_game,203,0.257467,0.554969,0.463931,0.0195712,0.471074
+2023-25,total_high,feature,d__allowed__rates_core__plays_per_game,203,-0.0149514,0.30079,-0.0497072,0.00902262,0.566667
+2023-25,total_high,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,203,-1.19724,1.50578,-0.795093,0.0585029,0.565934
+2023-25,total_high,feature,d__allowed__rates_core__rush_yards_per_attempt,203,0.342541,1.30283,0.262921,0.0419767,0.445122
+2023-25,total_high,feature,d__allowed__rates_core__first_down_rate,203,0.388781,1.49694,0.259717,0.0552634,0.555556
+2023-25,total_high,feature,d__allowed__rates_core__fumbles_lost_per_game,203,0.411,0.579736,0.708943,0.0229127,0.425197
+2023-25,total_high,feature,d__allowed__rates_core__interception_pct,203,1.24129,0.807106,1.53795,0.0394087,0.438272
+2023-25,total_high,feature,d__allowed__rates_core__penalty_yards_per_game,203,2.52346,0.99857,2.52707,0.0368776,0.476821
+2023-25,total_high,feature,d__avail__qb_delta,203,0.0766579,0.59466,0.12891,0.0279193,0.441441
+2023-25,total_high,feature,d__avail__OL_out_cs,203,0.115194,0.17902,0.643473,0.00676574,0.44186
+2023-25,total_high,feature,d__avail__WRTE_out_cs,203,-0.33475,0.537368,-0.622944,0.0175128,0.475248
+2023-25,total_high,feature,d__avail__RB_out_cs,203,0.193427,0.448628,0.431153,0.0127575,0.434783
+2023-25,total_high,feature,d__avail__DL_out_cs,203,-0.172132,0.586616,-0.293432,0.020589,0.525
+2023-25,total_high,feature,d__avail__LB_out_cs,203,0.360737,0.646202,0.558242,0.0204734,0.5
+2023-25,total_high,feature,d__avail__DB_out_cs,203,-0.0616458,0.470388,-0.131053,0.0155431,0.484211
+2023-25,total_high,feature,d__max_lead,203,-0.265146,0.360987,-0.734501,0.0152439,0.670213
+2023-25,total_high,feature,d__max_deficit,203,-1.0595,0.561985,-1.88528,0.0203649,0.686869
+2023-25,total_high,feature,pass_product,203,2.64308,1.28643,2.05459,0.0477622,0.358974
+2023-25,total_high,feature,pass_1sd_pp,203,-2.44681,1.51001,-1.62039,0.0253841,0.578947
+2023-25,total_high,feature,pass_1sd_pn,203,9.89168,6.1868,1.59884,0.0367353,0.153846
+2023-25,total_high,feature,pass_1sd_np,203,0.258172,0.197489,1.30727,0.00168482,0.333333
+2023-25,total_high,feature,pass_1sd_nn,203,0,0,,0,
+native wk5,all,group,offense box rates,13,-8.42114,3.20257e-15,-2.6295e+15,0.123928,0.583333
+native wk5,all,group,defense box rates,13,-4.29805,1.3344e-16,-3.22095e+16,0.0748429,0.454545
+native wk5,all,group,QB projection,13,-3.6499,0,,0.0329336,0.5
+native wk5,all,group,unit absences,13,-4.74731,8.00642e-16,-5.92938e+15,0.0424361,0.666667
+native wk5,all,group,lead/deficit peaks,13,-0.533859,1.0842e-16,-4.92398e+15,0.00394814,
+native wk5,all,group,pass matchup product,13,2.65579,5.33761e-16,4.97562e+15,0.102746,0.692308
+native wk5,all,group,pass tail hinges,13,-22.8787,2.66881e-16,-8.57263e+16,0.160194,1
+native wk5,all,group,home field,13,0.143193,3.00241e-16,4.76926e+14,0.0180868,0.384615
+native wk5,all,feature,site,13,0.143193,3.00241e-16,4.76926e+14,0.0180868,0.384615
+native wk5,all,feature,d__for__rates_core__plays_per_game,13,6.31539,6.67201e-17,9.46549e+16,0.0310141,0.285714
+native wk5,all,feature,d__for__rates_core__net_pass_yards_per_pass_play,13,1.39218,1.668e-17,8.34639e+16,0.0100852,0
+native wk5,all,feature,d__for__rates_core__rush_yards_per_attempt,13,-0.382831,1.0008e-16,-3.82524e+15,0.0232422,0.5
+native wk5,all,feature,d__for__rates_core__first_down_rate,13,3.22565,8.67362e-16,3.71892e+15,0.0503873,0.272727
+native wk5,all,feature,d__for__rates_core__fumbles_lost_per_game,13,-7.08366,0,,0.0364568,0.727273
+native wk5,all,feature,d__for__rates_core__interception_pct,13,-11.0185,5.33761e-16,-2.0643e+16,0.116947,0.769231
+native wk5,all,feature,d__for__rates_core__penalty_yards_per_game,13,3.54113,4.00321e-16,8.84574e+15,0.0301939,0.3
+native wk5,all,feature,d__allowed__rates_core__plays_per_game,13,-2.02003,1.668e-16,-1.21105e+16,0.0191253,0.5
+native wk5,all,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,13,-0.257132,1.668e-17,-1.54155e+16,0.00245502,
+native wk5,all,feature,d__allowed__rates_core__rush_yards_per_attempt,13,0.959852,2.66881e-16,3.59656e+15,0.01548,0.375
+native wk5,all,feature,d__allowed__rates_core__first_down_rate,13,-1.52698,2.66881e-16,-5.72158e+15,0.0484683,0.4
+native wk5,all,feature,d__allowed__rates_core__fumbles_lost_per_game,13,1.03787,2.3352e-16,4.44443e+15,0.0286593,0.333333
+native wk5,all,feature,d__allowed__rates_core__interception_pct,13,-3.69213,3.33601e-17,-1.10675e+17,0.0662545,0.636364
+native wk5,all,feature,d__allowed__rates_core__penalty_yards_per_game,13,3.13299,0,,0.0602232,0.545455
+native wk5,all,feature,d__avail__qb_delta,13,-3.6499,0,,0.0329336,0.5
+native wk5,all,feature,d__avail__OL_out_cs,13,-0.0481667,1.42302e-16,-3.38483e+14,0.0105537,0.25
+native wk5,all,feature,d__avail__WRTE_out_cs,13,-1.36481,2.50201e-16,-5.45485e+15,0.020409,0.555556
+native wk5,all,feature,d__avail__RB_out_cs,13,-0.130476,3.75301e-17,-3.47656e+15,0.00417991,0.5
+native wk5,all,feature,d__avail__DL_out_cs,13,0.361674,1.3344e-16,2.71038e+15,0.0130116,0.5
+native wk5,all,feature,d__avail__LB_out_cs,13,-0.167385,7.29751e-17,-2.29373e+15,0.0025434,
+native wk5,all,feature,d__avail__DB_out_cs,13,-3.41741,2.66881e-16,-1.2805e+16,0.0165219,0.857143
+native wk5,all,feature,d__max_lead,13,0.570621,1.5012e-16,3.80109e+15,0.00468865,0
+native wk5,all,feature,d__max_deficit,13,-1.09792,1.668e-17,-6.58223e+16,0.00686931,1
+native wk5,all,feature,pass_product,13,2.65579,5.33761e-16,4.97562e+15,0.102746,0.692308
+native wk5,all,feature,pass_1sd_pp,13,-3.414,1.3344e-16,-2.55845e+16,0.0126665,1
+native wk5,all,feature,pass_1sd_pn,13,-19.3894,1.06752e-15,-1.8163e+16,0.147362,1
+native wk5,all,feature,pass_1sd_np,13,0,0,,0,
+native wk5,all,feature,pass_1sd_nn,13,-0.0752231,6.25501e-18,-1.20261e+16,0.000164994,
+native wk5,total_low,group,offense box rates,2,-14.4885,0,,0.118991,1
+native wk5,total_low,group,defense box rates,2,6.54293,0,,0.0439466,0
+native wk5,total_low,group,QB projection,2,3.23414,0,,0.0140854,0
+native wk5,total_low,group,unit absences,2,-2.91333,0,,0.0278363,0.5
+native wk5,total_low,group,lead/deficit peaks,2,0.382184,0,,0.00636216,
+native wk5,total_low,group,pass matchup product,2,34.0956,0,,0.0856059,0.5
+native wk5,total_low,group,pass tail hinges,2,-0.48895,0,,0.00107246,
+native wk5,total_low,group,home field,2,-3.65637,0,,0.0180868,0.5
+native wk5,total_low,feature,site,2,-3.65637,0,,0.0180868,0.5
+native wk5,total_low,feature,d__for__rates_core__plays_per_game,2,0.874351,0,,0.0301108,1
+native wk5,total_low,feature,d__for__rates_core__net_pass_yards_per_pass_play,2,-0.335979,0,,0.010612,0
+native wk5,total_low,feature,d__for__rates_core__rush_yards_per_attempt,2,-0.61396,0,,0.0136845,0
+native wk5,total_low,feature,d__for__rates_core__first_down_rate,2,2.6841,0,,0.0208627,0
+native wk5,total_low,feature,d__for__rates_core__fumbles_lost_per_game,2,-8.47147,0,,0.0440494,1
+native wk5,total_low,feature,d__for__rates_core__interception_pct,2,-14.622,0,,0.126764,1
+native wk5,total_low,feature,d__for__rates_core__penalty_yards_per_game,2,6.72477,0,,0.0359889,0
+native wk5,total_low,feature,d__allowed__rates_core__plays_per_game,2,-2.65146,0,,0.00798373,1
+native wk5,total_low,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,2,0.558107,0,,0.00307026,
+native wk5,total_low,feature,d__allowed__rates_core__rush_yards_per_attempt,2,2.6265,0,,0.0103716,0
+native wk5,total_low,feature,d__allowed__rates_core__first_down_rate,2,16.1406,0,,0.060623,0.5
+native wk5,total_low,feature,d__allowed__rates_core__fumbles_lost_per_game,2,7.76974,0,,0.0322038,0
+native wk5,total_low,feature,d__allowed__rates_core__interception_pct,2,-9.05844,0,,0.0777768,0.5
+native wk5,total_low,feature,d__allowed__rates_core__penalty_yards_per_game,2,3.86068,0,,0.0287978,0
+native wk5,total_low,feature,d__avail__qb_delta,2,3.23414,0,,0.0140854,0
+native wk5,total_low,feature,d__avail__OL_out_cs,2,-1.98314,0,,0.00655974,
+native wk5,total_low,feature,d__avail__WRTE_out_cs,2,-3.13435,0,,0.0132163,0.5
+native wk5,total_low,feature,d__avail__RB_out_cs,2,-2.70325,0,,0.00594505,1
+native wk5,total_low,feature,d__avail__DL_out_cs,2,4.03004,0,,0.0138367,0
+native wk5,total_low,feature,d__avail__LB_out_cs,2,0.102826,0,,0.00120722,
+native wk5,total_low,feature,d__avail__DB_out_cs,2,0.742822,0,,0.014956,0
+native wk5,total_low,feature,d__max_lead,2,-0.381368,0,,0.00371883,
+native wk5,total_low,feature,d__max_deficit,2,0.765233,0,,0.010081,1
+native wk5,total_low,feature,pass_product,2,34.0956,0,,0.0856059,0.5
+native wk5,total_low,feature,pass_1sd_pp,2,0,0,,0,
+native wk5,total_low,feature,pass_1sd_pn,2,0,0,,0,
+native wk5,total_low,feature,pass_1sd_np,2,0,0,,0,
+native wk5,total_low,feature,pass_1sd_nn,2,-0.48895,0,,0.00107246,
+native wk5,total_mid,group,offense box rates,9,-5.20724,1.92747e-15,-2.70159e+15,0.128168,0.5
+native wk5,total_mid,group,defense box rates,9,-4.8634,8.67362e-16,-5.60711e+15,0.0855111,0.5
+native wk5,total_mid,group,QB projection,9,-5.98865,0,,0.0435675,0.625
+native wk5,total_mid,group,unit absences,9,-7.0816,0,,0.0471957,0.75
+native wk5,total_mid,group,lead/deficit peaks,9,-0.64114,4.81868e-17,-1.33053e+16,0.00351022,
+native wk5,total_mid,group,pass matchup product,9,-11.1063,7.70988e-16,-1.44053e+16,0.0915887,0.777778
+native wk5,total_mid,group,pass tail hinges,9,-25.1127,0,,0.18935,1
+native wk5,total_mid,group,home field,9,0.0766239,1.92747e-16,3.97536e+14,0.0180868,0.444444
+native wk5,total_mid,feature,site,9,0.0766239,1.92747e-16,3.97536e+14,0.0180868,0.444444
+native wk5,total_mid,feature,d__for__rates_core__plays_per_game,9,8.65863,3.85494e-16,2.24611e+16,0.0320687,0.2
+native wk5,total_mid,feature,d__for__rates_core__net_pass_yards_per_pass_play,9,1.1068,1.4456e-16,7.65633e+15,0.00926577,0
+native wk5,total_mid,feature,d__for__rates_core__rush_yards_per_attempt,9,0.102686,9.63735e-17,1.0655e+15,0.0279833,0.5
+native wk5,total_mid,feature,d__for__rates_core__first_down_rate,9,0.49636,0,,0.0550316,0.375
+native wk5,total_mid,feature,d__for__rates_core__fumbles_lost_per_game,9,-9.49461,0,,0.0355943,0.75
+native wk5,total_mid,feature,d__for__rates_core__interception_pct,9,-6.7081,7.70988e-16,-8.70065e+15,0.112371,0.666667
+native wk5,total_mid,feature,d__for__rates_core__penalty_yards_per_game,9,5.06544,7.70988e-16,6.57006e+15,0.0305997,0.285714
+native wk5,total_mid,feature,d__allowed__rates_core__plays_per_game,9,-0.954501,2.89121e-16,-3.30139e+15,0.0212447,0.333333
+native wk5,total_mid,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,9,-0.43485,4.81868e-17,-9.02427e+15,0.00224709,
+native wk5,total_mid,feature,d__allowed__rates_core__rush_yards_per_attempt,9,1.2734,3.85494e-16,3.3033e+15,0.017976,0.5
+native wk5,total_mid,feature,d__allowed__rates_core__first_down_rate,9,-7.78702,0,,0.0432257,0.5
+native wk5,total_mid,feature,d__allowed__rates_core__fumbles_lost_per_game,9,0.532417,1.20467e-16,4.41961e+15,0.0277245,0.375
+native wk5,total_mid,feature,d__allowed__rates_core__interception_pct,9,-1.59333,3.85494e-16,-4.13321e+15,0.0716224,0.571429
+native wk5,total_mid,feature,d__allowed__rates_core__penalty_yards_per_game,9,4.10497,0,,0.0718535,0.625
+native wk5,total_mid,feature,d__avail__qb_delta,9,-5.98865,0,,0.0435675,0.625
+native wk5,total_mid,feature,d__avail__OL_out_cs,9,-0.147188,0,,0.0122815,0.333333
+native wk5,total_mid,feature,d__avail__WRTE_out_cs,9,-1.96852,1.92747e-16,-1.0213e+16,0.0243418,0.666667
+native wk5,total_mid,feature,d__avail__RB_out_cs,9,0.402817,4.81868e-17,8.3595e+15,0.00464049,0
+native wk5,total_mid,feature,d__avail__DL_out_cs,9,-0.00149626,1.92747e-16,-7.76279e+12,0.010743,0.5
+native wk5,total_mid,feature,d__avail__LB_out_cs,9,-0.250496,7.22801e-17,-3.46563e+15,0.00329167,
+native wk5,total_mid,feature,d__avail__DB_out_cs,9,-5.12817,1.92747e-16,-2.66057e+16,0.0203259,1
+native wk5,total_mid,feature,d__max_lead,9,0.693633,7.22801e-17,9.59646e+15,0.00514282,0
+native wk5,total_mid,feature,d__max_deficit,9,-1.32733,4.81868e-17,-2.75455e+16,0.00635921,1
+native wk5,total_mid,feature,pass_product,9,-11.1063,7.70988e-16,-1.44053e+16,0.0915887,0.777778
+native wk5,total_mid,feature,pass_1sd_pp,9,0,0,,0,
+native wk5,total_mid,feature,pass_1sd_pn,9,-25.1127,0,,0.18935,1
+native wk5,total_mid,feature,pass_1sd_np,9,0,0,,0,
+native wk5,total_mid,feature,pass_1sd_nn,9,0,0,,0,
+native wk5,total_high,group,offense box rates,2,-16.8162,0,,0.109781,0.5
+native wk5,total_high,group,defense box rates,2,-12.595,0,,0.0577322,0.5
+native wk5,total_high,group,QB projection,2,-0.00959754,0,,0.00392948,
+native wk5,total_high,group,unit absences,2,3.92303,0,,0.0356178,0.5
+native wk5,total_high,group,lead/deficit peaks,2,-0.967135,0,,0.00350475,
+native wk5,total_high,group,pass matchup product,2,33.1454,0,,0.170092,0.5
+native wk5,total_high,group,pass tail hinges,2,-35.2154,0,,0.188112,1
+native wk5,total_high,group,home field,2,4.24231,0,,0.0180868,0
+native wk5,total_high,feature,site,2,4.24231,0,,0.0180868,0
+native wk5,total_high,feature,d__for__rates_core__plays_per_game,2,1.21184,0,,0.0271715,0
+native wk5,total_high,feature,d__for__rates_core__net_pass_yards_per_pass_play,2,4.40455,0,,0.013246,0
+native wk5,total_high,feature,d__for__rates_core__rush_yards_per_attempt,2,-2.33653,0,,0.0114647,1
+native wk5,total_high,feature,d__for__rates_core__first_down_rate,2,16.049,0,,0.0590126,0
+native wk5,total_high,feature,d__for__rates_core__fumbles_lost_per_game,2,5.15342,0,,0.0327456,0
+native wk5,total_high,feature,d__for__rates_core__interception_pct,2,-26.8115,0,,0.127717,1
+native wk5,total_high,feature,d__for__rates_core__penalty_yards_per_game,2,-6.50187,0,,0.0225728,1
+native wk5,total_high,feature,d__allowed__rates_core__plays_per_game,2,-6.18347,0,,0.0207298,1
+native wk5,total_high,feature,d__allowed__rates_core__net_pass_yards_per_pass_play,2,-0.272637,0,,0.00277546,
+native wk5,total_high,feature,d__allowed__rates_core__rush_yards_per_attempt,2,-2.11778,0,,0.0093562,
+native wk5,total_high,feature,d__allowed__rates_core__first_down_rate,2,8.97561,0,,0.0599055,0
+native wk5,total_high,feature,d__allowed__rates_core__fumbles_lost_per_game,2,-3.41949,0,,0.0293216,0.5
+native wk5,total_high,feature,d__allowed__rates_core__interception_pct,2,-7.77043,0,,0.0305769,1
+native wk5,total_high,feature,d__allowed__rates_core__penalty_yards_per_game,2,-1.96861,0,,0.039312,0.5
+native wk5,total_high,feature,d__avail__qb_delta,2,-0.00959754,0,,0.00392948,
+native wk5,total_high,feature,d__avail__OL_out_cs,2,2.3324,0,,0.00677273,0
+native wk5,total_high,feature,d__avail__WRTE_out_cs,2,3.12144,0,,0.00990391,0
+native wk5,total_high,feature,d__avail__RB_out_cs,2,0.0424751,0,,0.000342181,
+native wk5,total_high,feature,d__avail__DL_out_cs,2,-1.67242,0,,0.0223951,1
+native wk5,total_high,feature,d__avail__LB_out_cs,2,-0.0635953,0,,0.000512359,
+native wk5,total_high,feature,d__avail__DB_out_cs,2,0.1208,0,,0.000969517,
+native wk5,total_high,feature,d__max_lead,2,0.969052,0,,0.00361468,
+native wk5,total_high,feature,d__max_deficit,2,-1.92872,0,,0.0059531,1
+native wk5,total_high,feature,pass_product,2,33.1454,0,,0.170092,0.5
+native wk5,total_high,feature,pass_1sd_pp,2,-22.191,0,,0.0823322,1
+native wk5,total_high,feature,pass_1sd_pn,2,-13.0244,0,,0.10578,1
+native wk5,total_high,feature,pass_1sd_np,2,0,0,,0,
+native wk5,total_high,feature,pass_1sd_nn,2,0,0,,0,

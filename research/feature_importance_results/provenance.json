@@ -1,0 +1,15 @@
+{
+  "research/feature_importance.py": "9697d0a6810f23913acb2f2563d99b9eec67f3679776364cf3fbccfdbb6d4aa4",
+  "research/FEATURE_IMPORTANCE.md": "a4fdcf468fe8fea5de02e47cd71891a0220a4abc009eddb350e9535f521c0527",
+  "research/residual_trends.py": "f6bca207d6e04ce6fea70a467439e28b74e0ad332c5aaa6740f30fc7814c5853",
+  "nfl_model.py": "7ff1e7b66090793cdcd65189fc43d9fda2d41f5738d72ec52abe50f8b62a74c4",
+  "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "research/out_of_sample_results/predictions.csv": "b93f0d18a189d7ef760b78f19d46be0f81ac625fd5e2af1c6c2784617dc8f6d0",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/restore_v116_results/historical_reproduction.csv": "28852b269f01994c4851ef51919801b5ef26cdcf2a13eef4048f1b8a3014eb85",
+  "data/latest/retro_ledger.csv": "ba153cb68ae7785ad8f6a0b8af162b563c4413dc2fd45a207f284e9247736b11",
+  "research/residual_trends_inputs/schedule_totals.csv": "442267815ec68ab5671bc9214884583c1b107c67b6245baa502e13345d8baaec",
+  "data/forward_predictions.jsonl": "1dcd8e21180a0686c79f47f9c0b12ef8b7899fe82770ea966a35c34ecee30d24",
+  "data/forward_ledger.csv": "83f09acfa2de2bb9d7386e5864b1788f61d95058d09e8d22200057094c5e98bd",
+  "data/h5_totals.jsonl": "30d1afcdebbf5768464c284399a747149673963688e939925bd3ba0b9bc3f4cd"
+}
