@@ -139,6 +139,20 @@ python validate_data_files.py        # run both before opening a PR
 python -m pytest tests/ -q           # also CI-gated on every PR and push to main
 ```
 
+Optional runtime optimization: `NFL_PROFILE_MODE=production python build_site.py`
+builds only raw h8/h16 profiles for the fixed production recipe, skipping unused
+h4 and opponent-adjusted profiles. Shared inputs and forecasts are unchanged;
+the default `full` mode retains the complete research exports. The compact
+export has its own content-derived walk-forward cache. Configuration identity,
+production revision and the ledger are unchanged.
+
+`python research/simplification.py` reruns the three fixed feature-removal
+challengers from frozen inputs; [protocol](research/SIMPLIFICATION.md) and
+[results](research/simplification_results/REPORT.md). This is exposed historical
+development, with no automatic production adoption. The contribution table now
+allocates v1.18's favorite-confidence shrinkage across the fitted terms so that
+their sum plus the market baseline reconstructs the displayed probability.
+
 Colab: `notebooks/NFL_C_B_MODEL.ipynb` is the same code in one cell, storing
 outputs on Google Drive. It is generated from `nfl_model.py` by
 `python sync_notebook.py`; a test fails if the two drift. A Colab run keeps its

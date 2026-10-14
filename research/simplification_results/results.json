@@ -1,0 +1,34 @@
+{
+  "protocol_commit": "e4a7959ddacb3a0336e0ca282b8d1681dd3430f7",
+  "revision": "boxscore-composite-v1.18",
+  "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
+  "ledger_sha256": "1dcd8e21180a0686c79f47f9c0b12ef8b7899fe82770ea966a35c34ecee30d24",
+  "level": 0.9833333333333333,
+  "removed": {
+    "no_peaks": [
+      "d__max_lead",
+      "d__max_deficit"
+    ],
+    "no_peaks_site": [
+      "d__max_lead",
+      "d__max_deficit",
+      "site"
+    ],
+    "no_pass_tails": [
+      "pass_1sd_pp",
+      "pass_1sd_pn",
+      "pass_1sd_np",
+      "pass_1sd_nn"
+    ]
+  },
+  "reproduction_max_error": {
+    "2017-20": 1.1102230246251565e-16,
+    "2021-22": 6.938893903907228e-16,
+    "2023-25": 1.1102230246251565e-16
+  },
+  "verdicts": {
+    "no_peaks": "unresolved",
+    "no_peaks_site": "unresolved",
+    "no_pass_tails": "unresolved"
+  }
+}
