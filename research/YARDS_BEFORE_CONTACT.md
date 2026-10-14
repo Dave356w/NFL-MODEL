@@ -59,3 +59,33 @@ yards per attempt.
 Development evidence only. Adoption would be a new `REVISION` and the owner's decision.
 
 Run: `python research/yards_before_contact.py --build DIR` (raw files), then `python research/yards_before_contact.py`.
+
+## Addendum, same day: tackles for loss
+
+Owner follow-up ("also tackles for loss?"). Committed and pushed before any yards-before-contact or
+tackles-for-loss profile has been built or scored. The only checks on the play-by-play were
+definitional: in nflverse play-by-play, `tackled_for_loss` is flagged only on run plays, never on
+passes or sacks. Every flagged play loses yards, and almost every run that loses yards is flagged.
+
+**Data.** The Test 40 play-by-play download, 2013–2026 (same files, same SHA-256s as
+`kalman_ratings_inputs/provenance.json`), regular season. Plays are designed runs: `play_type == 'run'`,
+not a QB scramble, not deleted, not a two-point try. Per team game: designed runs and runs tackled
+for a loss. Frozen in `ybc_inputs/tfl_team_games.csv`.
+
+**Inputs.** These use the same weighting and ratio form as above, home minus away:
+
+* `d_tfl_off`: share of the offense's designed runs stopped for a loss (higher is worse);
+* `d_tfl_def`: share of opponents' designed runs the defense stops for a loss.
+
+**Arm 4, `plus_tfl`**: production's 29 inputs + `d_tfl_off`, `d_tfl_def`. Because the play-by-play
+starts in 2013, it is scored on Tests 40–43's three bases: **2015–16**, **2017–22** and
+**2023–25**. 2026 weeks 1–5 is the diagnostic. Its rule is those tests' rule:
+
+* **better**: gain > 0 on all three, with one interval excluding zero;
+* **not better**: gain ≤ 0 on at least two;
+* otherwise **unresolved**.
+
+**Multiplicity.** The primary family is now **K = 4**, so every arm's interval is **98.75%**
+(1 − 0.05/4). This tightens the 98.33% registered above for arms 1–3, and it is set before scoring.
+Also reported: the coefficients and how the two inputs correlate with production's rush yards per
+attempt.
