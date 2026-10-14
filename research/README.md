@@ -1556,3 +1556,41 @@ Everything else is production's.
 
 **Reading.** Production's long decay holds up. Recent-form profiles do not add information the market lacks,
 consistent with Test 8's half-life sweep on the older model. Production keeps half-life 8.
+
+### Test 44: yards before contact and tackles for loss, offense and defense (2026-10-14): not better
+
+Protocol [`YARDS_BEFORE_CONTACT.md`](YARDS_BEFORE_CONTACT.md), pushed (`fac1eee`) before any profile was built or
+scored. The tackles-for-loss addendum (`1c0464d`) was also pushed before any building or scoring. It made the
+primary family K = 4, with 98.75% intervals. Script `yards_before_contact.py`; frozen inputs `ybc_inputs/`;
+results `ybc_results/`.
+
+**Setup.** The four arms add inputs to production's 29, built with production's half-life-8 weighting and four
+league pseudo-games:
+
+* **Yards before contact (YBC) and after contact (YAC) per carry**, offense and defense: PFR charting via
+  nflverse, from 2018. Only 2021–25 can be scored.
+* **Tackles for loss**: the share of designed runs stopped behind the line, offense and defense, from the
+  Test 40 play-by-play. These are scored on Tests 40–43's three bases.
+
+Production reproduces its published forecasts on every basis. All inputs cover every evaluation game.
+
+| Log-loss gain over production ×1000 [98.75%] | 2015–16 | 2017–22 | 2021–22 | 2023–25 | Verdict | Units vs production |
+|---|---:|---:|---:|---:|---|---|
+| + YBC off/def | – | – | −0.29 | +0.05 | not better | −8.6 / −4.6 |
+| + YBC and YAC off/def | – | – | +0.01 | −0.33 | not better | −1.8 / −4.9 |
+| rush yds/att swapped for YBC + YAC | – | – | +0.14 | −0.40 | not better | −4.3 / −5.5 |
+| + tackles for loss off/def | −0.81 | −0.74 [−1.34, −0.13] | – | −0.22 | not better | +2.5 / −6.9 / −1.3 |
+
+- **YBC is mostly the rush average production already has.** It correlates +0.79 (offense) and +0.78 (defense)
+  with production's rush yards per attempt. Every gain is within ±0.4 ×10⁻³ with wide intervals. Swapping the
+  total for the split is a wash too. The split shows no detectable signal beyond the total and the
+  market.
+- **Tackles for loss are less redundant but cost log loss.** They correlate only −0.24 / −0.34 with rush yards
+  per attempt, yet lose on all three bases. On 2017–22 the interval excludes zero (a significant loss). The
+  defensive coefficient changes sign between eras (−0.046 in 2015–16, +0.026 in 2023–25), which looks like
+  fitted noise.
+- **ROI.** Production: 2021–22 −4.39% ± 3.15 (n = 542, favorite −40.0u, null −2.72%); 2023–25 +3.58% ± 2.52
+  (n = 812, favorite +0.2u, null −4.10%). No arm adds units on 2017–25.
+
+**Reading.** Run-game splits do not add information the market lacks. Production keeps its rush yards per
+attempt.

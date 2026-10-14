@@ -1,0 +1,36 @@
+{
+  "source": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_rush_{y}.parquet",
+  "files": {
+    "advstats_week_rush_2018.parquet": "29004bf8022aed47b5f6552cc02b04e462c2994eb502b5938c285829eb504af6",
+    "advstats_week_rush_2019.parquet": "9c06163dd050cbff359f447fc433016046a50992ef389aa7361ecb5091debd89",
+    "advstats_week_rush_2020.parquet": "bfab430f321132453c6c7480408fa85430540a24b568a4b481c3a711847b0c2c",
+    "advstats_week_rush_2021.parquet": "ed0871893b9a50ae2d26d9ec5a31c96a030e5aa940fb0304f9861c31f96fe78e",
+    "advstats_week_rush_2022.parquet": "9b07ab539b512cce7dbdd89755cca8e433538fa4dcc7e3d59f3be072b7419b56",
+    "advstats_week_rush_2023.parquet": "c2832394c58d1c63318d6451b4442d1b4f43d8124f09852635a266ac4b04e161",
+    "advstats_week_rush_2024.parquet": "1ebd2420054b61d6fc73843571fed8770adbb77069ab7f75462715900dd67718",
+    "advstats_week_rush_2025.parquet": "898b688a2ff17e09157d9fcd9c0f84bed3987ccba0da49579fe406f5f5cfc364",
+    "advstats_week_rush_2026.parquet": "87542641c9bb8417161d6c6578e5a2ea2ba031182922807c9a9e2949fbadfbae"
+  },
+  "pbp_source": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{y}.parquet",
+  "pbp_files": {
+    "play_by_play_2013.parquet": "f454605a1983b3946baf0ffadf3a0b9f5e04735c4b84732e0483f2049a780d00",
+    "play_by_play_2014.parquet": "54c01408d8f0ff9e013a4ea51428b91d610101f72545d082e932f5710e2fb4f7",
+    "play_by_play_2015.parquet": "01b5ae7d06633a2e66b418404461a3d4ff055ad2f3a87d453cebcc8d3fda7ed9",
+    "play_by_play_2016.parquet": "95eba04e2145e3c1c8ca502f2a3a76cfb0a5990680c3fb480f02a74a45f54a3b",
+    "play_by_play_2017.parquet": "84eacd963c1fdd45965f6222c62e9329a7f3412f029d92c1ac5e34a1bb4d3710",
+    "play_by_play_2018.parquet": "2e6f2dce7c7ebd46e985cabe0c17eb72b39a77f98cb4478409294f50b5820150",
+    "play_by_play_2019.parquet": "60c3067017db2d28a78f66a79b657268be8578d9a5288e6a827efdcd7fe42540",
+    "play_by_play_2020.parquet": "8889f5d8782b5c5dce3c3644acdc0322b228a7e9cb13fa36cbac250e260e9f60",
+    "play_by_play_2021.parquet": "333ad34378e5339d5172717cc83378e908daf02c8699416ab3e17c2ec10f78d8",
+    "play_by_play_2022.parquet": "931121d8897779d7944e2a293e92ed8799c8e5cceef84096ac42339003fedc09",
+    "play_by_play_2023.parquet": "bd3484731408def6b0ec93225bba2bd7b2c65769ca707a2b9444d891abdc6776",
+    "play_by_play_2024.parquet": "3fd2896bc0b911b615142d2f1fabae54a4bbba5ab7b73b28187b118ef8af6a3b",
+    "play_by_play_2025.parquet": "c6ecedd6d678cc37ed316b23ef84ee1ec6abb69c514bb11868a7ebd5a367df29",
+    "play_by_play_2026.parquet": "89c58e8a9d29331f19ab44caa0e5cafcdfcc574a9d4bf8cacbe448c263e21009"
+  },
+  "team_games_sha256": "527a197b7daa0d57269e025a8cff12d4d7b02e93de8649c8e325b8571fbb5fb5",
+  "rows": 4410,
+  "tfl_team_games_sha256": "993870b87907d1fa4d43f865d5fc2f1be785c02d9c5ed6cdbf7c06a25129c1a4",
+  "tfl_rows": 6972,
+  "note": "team_games.csv: nflverse weekly PFR advanced rushing stats, regular season, summed per team game. tfl_team_games.csv: designed runs and runs tackled for a loss per team game from the Test 40 play-by-play (hashes checked against kalman_ratings_inputs/provenance.json). Raw files not committed."
+}
