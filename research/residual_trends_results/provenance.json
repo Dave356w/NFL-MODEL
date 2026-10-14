@@ -1,0 +1,11 @@
+{
+  "research/residual_trends.py": "03cac25d01df6d199969ac2908a40d237a47d3046f315b8f8935d72adaf71e78",
+  "research/RESIDUAL_TRENDS.md": "84b42b3988d5f0ba3a675623124353caa4df98885c912fef83787b450abc0166",
+  "nfl_model.py": "7ff1e7b66090793cdcd65189fc43d9fda2d41f5738d72ec52abe50f8b62a74c4",
+  "research/out_of_sample_results/predictions.csv": "b93f0d18a189d7ef760b78f19d46be0f81ac625fd5e2af1c6c2784617dc8f6d0",
+  "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/restore_v116_results/historical_reproduction.csv": "28852b269f01994c4851ef51919801b5ef26cdcf2a13eef4048f1b8a3014eb85",
+  "data/latest/retro_ledger.csv": "ecd0e80bb0aba87098d8cd156c4dd89a587492c4cd8ee23809bd4446c5bc57ee",
+  "research/residual_trends_inputs/schedule_totals.csv": "47f8a68c3a16bc3d57739a71dc574c824642bfcbe88a55199ee0452bd1a32eea"
+}
