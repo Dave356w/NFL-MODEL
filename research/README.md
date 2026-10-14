@@ -1316,3 +1316,29 @@ and 2 of 120 on 2023–25, both below the roughly 6 expected by chance.
 - **Forward (H8)**: all four candidates carry, since none reversed. Expect "unresolved" for several
   seasons; z with only a few week-clusters is unstable, so interim numbers mean little before the
   season checkpoints. `python research/residual_trends.py --forward` grades H8 and H7.
+
+**Replication on never-scored 2015–16 (addendum `816f35c`, pushed before any 2013–16 outcome was
+compared).** The owner asked to test on available data rather than wait for forward games. 2013–16 had
+served only as training history. Weekly refits from the frozen 2013–20 pack reproduce the published
+2017–20 forecasts to 1e-16; 2015–16 has 510 binary games. Results in
+`residual_trends_results/REPLICATION_2015_16.md`.
+
+| Trend (z in the discovery direction) | 2017–22 | 2023–25 | 2015–16 | Verdict on 2015–16 |
+|---|---:|---:|---:|---|
+| all games × departure | −2.94 | +0.69 | +0.98 | direction holds |
+| total 41.5–47 × departure | −2.79 | +0.16 | +1.37 | direction holds |
+| total ≥ 47.5 × offensive INT % | −2.58 | +0.16 | +0.30 | direction holds |
+| total ≤ 41 × departure | −2.10 | +1.25 | +0.002 | direction holds (in name; zero) |
+
+- **No trend replicated** (bar 2.24). The oversized-departure pattern continues weakly across all games
+  and mid totals: effects of −0.09 and −0.16 log-odds per SD, the same sign on all three bases. The
+  low-total version, the steadiest on the first two bases, is zero on 2015–16 (63 games).
+- **H7 is contradicted by its replication rule.** v1.16's Δ is −0.19 ± 1.09 (high band +0.36 ± 0.57 on
+  147 games, low band +0.55 ± 0.93 on 63). The interval is wide and includes the historical +1.0, so this
+  is weak evidence against H7, not a disproof. Its forward rule is unchanged.
+- Flat 1u ROI on 2015–16: −3.46% ± 3.38 on 507 bets, against −5.13% for the same-row favorite and a
+  −2.40% null. Log loss ties the market (+0.00005). High totals −5.57% (favorite −10.68%), low totals
+  −3.23% (favorite +2.41%): the model beats the favorite more in high totals, as before, but neither band
+  makes money.
+- 2014 (sensitivity, trained on 190 games) points the same way on all four trends (z +1.07 to +1.72).
+  Thin training inflates departures, which is why it decides nothing.
