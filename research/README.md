@@ -1456,3 +1456,36 @@ so no expected-points model is involved.
 market's noise on log loss. It makes fewer and smaller departures and gives up the underdog bets. Nothing here
 suggests replacing or blending production. The evidence across Tests 37–40 is consistent: with the market as the
 anchor, the public play and box-score data used here add little that the closing price lacks.
+
+### Test 41: iterations of the Test 40 ratings model (2026-10-14): none better; every version converges on the market
+
+Protocol [`KALMAN_ITERATIONS.md`](KALMAN_ITERATIONS.md), pushed (`cc9642a`) before any iteration was built or scored.
+Script `kalman_iterations.py`; results `kalman_iterations_results/`. Five fixed iterations plus a nested-selection
+arm that picks among them, Test 40's model and production each season from earlier seasons only. Bonferroni K = 6.
+Production reproduces its published forecasts exactly.
+
+| Log-loss gain over production ×1000 | 2015–16 | 2017–22 | 2023–25 | Verdict | Units vs production (17–22 / 23–25) |
+|---|---:|---:|---:|---|---|
+| Test 40 model (reference) | −0.93 | +2.65 | −2.74 | not better | −43.9 / −32.4 |
+| + margin rating | −0.07 | +2.64 | −2.78 | not better | −38.0 / −30.5 |
+| + beat-the-spread rating | −0.69 | +2.51 | −2.98 | not better | −39.3 / −36.1 |
+| one combined efficiency rating | −0.50 | +2.54 | −2.86 | not better | −48.7 / −32.4 |
+| ridge 1.0 | −0.19 | +2.89 | −2.11 | not better | −40.4 / −32.6 |
+| compact (efficiency + margin + spread ratings) | −0.00 | +2.55 | −3.10 | not better | −42.5 / −40.0 |
+| nested selection | – | +2.20 | −2.11 | not better | −37.2 / −32.6 |
+
+- **The iterations barely differ from one another.** Every version is about 0 against production on 2015–16,
+  about +2.5 on 2017–22 and about −2.5 on 2023–25. That pattern is production's own departures, not the ratings':
+  on the three historical bases every ratings version stays within ±1.5×10⁻³ of the market (ridge 1.0 within ±0.5).
+- **Nested selection drifts to the most market-like version.** It chose production in 2017, then ridge 1.0 in five of
+  the remaining eight seasons. Ridge 1.0 is the iteration that departs least.
+- **What the new ratings learn.** The margin rating's weight is positive in every era but fading (+0.095, +0.048,
+  +0.010 per SD). The beat-the-spread rating flips from +0.081 on 2015–16 to −0.050 on 2023–25: teams that beat the
+  spread recently tended to fall short later, a small mean reversion the market leaves.
+- **The cost is units.** Every iteration gives up 30–49u per basis on 2017–25 against production's underdog bets.
+- **By total band**, the pattern of Tests 39 and 40 repeats: help in low totals, hurt in high totals.
+
+**Reading.** Iterating on the ratings model does not get past the market. Its content changes little, and all of
+its accuracy comes from staying near the price. The nested-selection result is the honest estimate of what
+iterating is worth, and it is not better. Tests 37–41 agree: production keeps its departures and the underdog bets
+they produce, and the registered forward tests (H6–H8) are where that will be judged.
