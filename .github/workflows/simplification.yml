@@ -1,0 +1,39 @@
+name: Research model simplification
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - research/simplification.py
+      - research/SIMPLIFICATION.md
+      - research/profile_runtime.py
+      - .github/workflows/simplification.yml
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest tests/test_simplification.py tests/test_compact_profiles.py tests/test_final_contributions.py -q
+      - run: python research/simplification.py
+      - run: python research/profile_runtime.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model-simplification
+          path: |
+            research/simplification_results/
+            research/profile_runtime_results/
+          if-no-files-found: error

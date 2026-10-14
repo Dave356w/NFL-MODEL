@@ -818,7 +818,7 @@ def render_index(latest, ledger, built, now=None):
                     trs.append(cells)
             if trs:
                 det.append("<h3>Biggest factors</h3>" + table(["Factor", "Model impact"], trs)
-                           + "<p class='mut small'>Direction shows each term’s contribution to this forecast. "
+                           + "<p class='mut small'>Direction shows each term’s contribution to this forecast, after any favorite-confidence shrinkage. "
                              "Bars share one scale across this week’s games.</p>")
         if has_avail:
             det.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(r, 'away')} · {esc(home)} {_qb(r, 'home')}</p>")

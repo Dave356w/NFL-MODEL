@@ -1585,7 +1585,15 @@ def opponent_adjust(offense,defense,num,den,weights,prior_games):
     return float(beta[0]),dict(zip(teams,beta[1:1+T])),dict(zip(teams,beta[1+T:]))
 
 
-def lagged_features(box,schedules,half_life,avail=None):
+def lagged_features(box,schedules,half_life,avail=None,profile_families=None):
+    """Build all profile families by default; an explicit base-family subset skips unused work.
+    Subsetting changes exported columns only, never the values of retained profiles."""
+    requested=set(FAMILIES) if profile_families is None else set(profile_families)
+    base_families=set(FAMILIES)-set(AVAIL_FAMILIES)
+    if not requested <= set(FAMILIES): raise ValueError('Unknown profile family')
+    requested={profile_family(f) for f in requested}
+    raw_families={f:spec for f,spec in FAMILIES.items() if f in requested and f in base_families and f not in ADJUSTED_FAMILIES}
+    adj_families={f:base for f,base in ADJUSTED_FAMILIES.items() if f in requested}
     box=validate_boxes(box)
     has_peaks=set(PEAK_COLUMNS)<=set(box)
     if any(f in PEAK_FAMILIES for f in FEATURE_FAMILIES) and not has_peaks:
@@ -1619,19 +1627,18 @@ def lagged_features(box,schedules,half_life,avail=None):
                     profiles[team][c]=float(np.dot(weights,h[c].to_numpy(float))/(weights.sum()+PRIOR_EQUIVALENT_GAMES))
             for role,cols in [('for',list(COUNTS)),('allowed',['opp_'+c for c in COUNTS])]:
                 vals=h[cols].to_numpy(float)
-                for family,specs in FAMILIES.items():
-                    if family in ADJUSTED_FAMILIES or family in AVAIL_FAMILIES: continue
+                for family,specs in raw_families.items():
                     for metric,value in metric_profile(vals,weights,league,specs).items():
                         profiles[team][f'{role}__{family}__{metric}']=value
         # Opponent-adjusted ratings from the same prior games. Age is counted in
         # league week-slots (about one game per team), with the same offseason discount.
         ix={c:i for i,c in enumerate(COUNTS)}
-        if len(hist):
+        if len(hist) and adj_families:
             slot=(hist.season.astype(int)*100+hist.week.astype(int)).to_numpy()
             uniq=np.unique(slot); slot_age=(len(uniq)-1-np.searchsorted(uniq,slot)).astype(float)
             decay=np.exp2(-slot_age/half_life)*np.power(OFFSEASON_RETENTION,year-hist.season.to_numpy(float))
             hv=hist[list(COUNTS)].to_numpy(float)
-        for adj_family,base in ADJUSTED_FAMILIES.items():
+        for adj_family,base in adj_families.items():
             for metric,(num,den,mult) in FAMILIES[base].items():
                 if len(hist):
                     a=hv[:,ix[num]]; d=np.ones(len(hv)) if den is None else hv[:,ix[den]]
@@ -2612,7 +2619,14 @@ def coefficient_table(fit):
 
 
 def contribution_table(board,fit):
-    _,_,parts=apply_fit(board,fit,True)
+    """Final-forecast contributions, allocating the favorite penalty across fitted terms.
+    apply_fit still returns raw fitted parts for coefficient/research diagnostics."""
+    _,scores,parts=apply_fit(board,fit,True)
+    if fit.get('market_offset') and fit.get('recipe',{}).get('favorite_penalty') is not None:
+        raw=parts.sum(axis=1)
+        base=logit(np.clip(board.q.to_numpy(float),1e-5,1-1e-5))
+        factor=np.divide(scores-base,raw,out=np.ones(len(board)),where=np.isfinite(scores)&(np.abs(raw)>1e-12))
+        parts=parts*factor[:,None]
     rows=[]
     for i,r in enumerate(board.to_dict('records')):
         for j,name in enumerate(fit['names']):
@@ -3207,7 +3221,7 @@ def cached_grid(features,season):
     # Reporting coverage changed after the original v1.16 cache: include ties
     # as pushes without changing its forecast/configuration identity.
     h.update(b'walk-forward-ties-as-pushes-v1')
-    for half in TEAM_HALF_LIVES:
+    for half in (profile_half_lives('production') if 'pass_product' in features[8.] and 4. not in features else TEAM_HALF_LIVES):
         hist=features[half]; hist=hist[hist.season<season]
         h.update(data_hash(hist).encode())
     path=cache_dir()/f'walk_forward_{h.hexdigest()[:16]}.csv'
@@ -3270,6 +3284,15 @@ def apply_env_config(env=None):
     if env.get('NFL_CACHE_DIR'): CACHE_DIR=env['NFL_CACHE_DIR']
     if env.get('NFL_SEASON'): SEASON=int(env['NFL_SEASON'])
     if env.get('NFL_WEEK'): CURRENT_WEEK=int(env['NFL_WEEK'])
+
+
+def profile_half_lives(mode):
+    """Runtime-only optimization; model config/recipe identity is unchanged."""
+    if mode=='full': return TEAM_HALF_LIVES
+    if (mode=='production' and PRODUCT_RECIPE.get('architecture') in ('market_product_1sd','market_pass_predicted_total')
+            and profile_family(PRODUCT_RECIPE['family'])=='rates_core'):
+        return tuple(sorted({float(PRODUCT_RECIPE['half_life']),float(PRODUCT_RECIPE['pass_half_life'])}))
+    raise ValueError('NFL_PROFILE_MODE must be full, or production with a supported fixed recipe')
 
 
 def resolve_output_root():
@@ -3385,9 +3408,11 @@ def main():
         save(notes,'report_notes.csv')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}
-    for half in TEAM_HALF_LIVES:
+    profile_mode=os.environ.get('NFL_PROFILE_MODE','full')
+    for half in profile_half_lives(profile_mode):
         print(f'  Half-life {half:g} team games')
-        features[half]=lagged_features(box,schedules,half,avail)
+        features[half]=lagged_features(box,schedules,half,avail,
+            profile_families=('rates_core',) if profile_mode=='production' else None)
         save(features[half],f'pregame_features_half_life_{half:g}.csv')
     context_audit=prepare_product_features(features,schedules)
     save(context_audit,'pass_context_reference_audit.csv')
