@@ -3,8 +3,9 @@
   "downloaded_utc": "2026-10-14T16:05:53+00:00",
   "source_sha256": "c9d597a8a84df33eeb1169e167c7f612c499768e9933e63fd7bf790b8742b3c6",
   "frozen_file": "research/residual_trends_inputs/schedule_totals.csv",
-  "frozen_sha256": "47f8a68c3a16bc3d57739a71dc574c824642bfcbe88a55199ee0452bd1a32eea",
-  "rows": 2655,
-  "selection": "game_type == REG, seasons 2017-2026; columns game_id, season, week, total_line",
-  "note": "total_line is the last value nflverse recorded (no quote timestamp); forward H7/H8 use the lock total in data/h5_totals.jsonl"
+  "frozen_sha256": "442267815ec68ab5671bc9214884583c1b107c67b6245baa502e13345d8baaec",
+  "rows": 3679,
+  "selection": "game_type == REG, seasons 2013-2026; columns game_id, season, week, total_line",
+  "note": "total_line is the last value nflverse recorded (no quote timestamp); forward H7/H8 use the lock total in data/h5_totals.jsonl",
+  "extended": "2026-10-14: 2013-16 rows added from the same download for the 2015-16 replication; 2017-26 rows unchanged"
 }
