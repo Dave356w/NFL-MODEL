@@ -164,3 +164,13 @@ workflow's `configure-pages` step cannot enable it on its own.
 ## Additional interaction context battle
 
 [Protocol](research/CONTEXT_BATTLE.md) and [executed results](research/context_results/REPORT.md) compare eight context families and fixed-penalty sensitivities against `fixed_market_product` and production. Run `python research/context_battle.py`; the separate research workflow also executes it. These are historical development results for selecting a forward challenger. No production deployment or ledger change is made.
+
+## Variance and chronological ablation
+
+[Protocol](research/VARIANCE_ABLATION.md) and [results](research/variance_ablation_results/REPORT.md)
+compare production with point-in-time reliability shrinkage and earlier-season
+group pruning, plus eight fixed group-drop diagnostics. The frozen game-block
+bootstrap inputs, variance components, coefficient/cutoff audits and per-game
+forecasts are included. Run `python research/variance_ablation.py`; its standalone
+workflow strictly replays committed results. Lower forecast dispersion did not
+establish lower forecast error; no production change is made.

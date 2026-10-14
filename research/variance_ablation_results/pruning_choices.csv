@@ -1,0 +1,12 @@
+season,selection_max_season,selection_seasons,selected,selection_games
+2015,2014,2014,production,255
+2016,2015,"2014,2015",drop_defense_box_rates,511
+2017,2016,"2014,2015,2016",drop_defense_box_rates,765
+2018,2017,"2015,2016,2017",drop_pass_tail_hinges,765
+2019,2018,"2016,2017,2018",drop_offense_box_rates,763
+2020,2019,"2017,2018,2019",drop_home_field,764
+2021,2020,"2018,2019,2020",drop_defense_box_rates,764
+2022,2021,"2019,2020,2021",drop_defense_box_rates,781
+2023,2022,"2020,2021,2022",drop_defense_box_rates,795
+2024,2023,"2021,2022,2023",drop_defense_box_rates,812
+2025,2024,"2022,2023,2024",drop_home_field,813

@@ -1,0 +1,38 @@
+name: Research variance and chronological ablation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - nfl_model.py
+      - research/**
+      - tests/**
+      - requirements.txt
+      - .github/workflows/variance-ablation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - run: python -m pytest tests/test_variance_ablation.py -q
+      - run: python research/check_replay.py research/variance_ablation_results -- python research/variance_ablation.py
+      - run: git diff --exit-code -- research/variance_ablation_results/
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: variance-ablation
+          path: research/variance_ablation_results/
+          if-no-files-found: error
