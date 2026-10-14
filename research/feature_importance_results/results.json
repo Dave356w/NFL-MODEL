@@ -1,0 +1,728 @@
+{
+  "protocol": "research/FEATURE_IMPORTANCE.md",
+  "protocol_commit": "0d850c6",
+  "reproduction_max_error": {
+    "2017-20": 1.1102230246251565e-16,
+    "2021-22": 2.3003821070233244e-13,
+    "2023-25": 1.1102230246251565e-16
+  },
+  "native_reproduction_max_error": 0.0,
+  "binary_games": {
+    "2015-16": 510,
+    "2017-22": 1559,
+    "2023-25": 815,
+    "native wk5": 13
+  },
+  "interaction_cells_per_basis": 1624,
+  "interaction_bar": 1.6448536269514722,
+  "interaction_candidates": [
+    {
+      "basis": "2017-22",
+      "context": "total_mid",
+      "a": "d__allowed__rates_core__rush_yards_per_attempt",
+      "b": "pass_product",
+      "n": 765,
+      "z": 3.9259269119,
+      "effect_per_sd": 0.2783662696,
+      "z_confirm": -0.1994554751,
+      "verdict_confirm": "reversed",
+      "z_replicate": -0.4779811756,
+      "verdict_replicate": "reversed"
+    }
+  ],
+  "interaction_cells_abs_z_ge_3": {
+    "2015-16": 0,
+    "2017-22": 1,
+    "2023-25": 0
+  },
+  "culprit_helper": [
+    {
+      "basis": "2015-16",
+      "group": "offense box rates",
+      "culprit_share": 0.3400809717,
+      "helper_share": 0.3307984791,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "defense box rates",
+      "culprit_share": 0.1862348178,
+      "helper_share": 0.1711026616,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "QB projection",
+      "culprit_share": 0.020242915,
+      "helper_share": 0.0038022814,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "unit absences",
+      "culprit_share": 0.3481781377,
+      "helper_share": 0.3840304183,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "lead/deficit peaks",
+      "culprit_share": 0.028340081,
+      "helper_share": 0.0646387833,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "pass matchup product",
+      "culprit_share": 0.0,
+      "helper_share": 0.0,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "pass tail hinges",
+      "culprit_share": 0.028340081,
+      "helper_share": 0.0076045627,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2015-16",
+      "group": "home field",
+      "culprit_share": 0.048582996,
+      "helper_share": 0.0380228137,
+      "misses": 247,
+      "hits": 263
+    },
+    {
+      "basis": "2017-22",
+      "group": "offense box rates",
+      "culprit_share": 0.2300531915,
+      "helper_share": 0.2428748451,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "defense box rates",
+      "culprit_share": 0.210106383,
+      "helper_share": 0.2143742255,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "QB projection",
+      "culprit_share": 0.0558510638,
+      "helper_share": 0.0582403965,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "unit absences",
+      "culprit_share": 0.2420212766,
+      "helper_share": 0.2850061958,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "lead/deficit peaks",
+      "culprit_share": 0.0132978723,
+      "helper_share": 0.0086741016,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "pass matchup product",
+      "culprit_share": 0.0292553191,
+      "helper_share": 0.0185873606,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "pass tail hinges",
+      "culprit_share": 0.0412234043,
+      "helper_share": 0.0495662949,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2017-22",
+      "group": "home field",
+      "culprit_share": 0.1781914894,
+      "helper_share": 0.1226765799,
+      "misses": 752,
+      "hits": 807
+    },
+    {
+      "basis": "2023-25",
+      "group": "offense box rates",
+      "culprit_share": 0.2343324251,
+      "helper_share": 0.2901785714,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "defense box rates",
+      "culprit_share": 0.4359673025,
+      "helper_share": 0.3928571429,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "QB projection",
+      "culprit_share": 0.0490463215,
+      "helper_share": 0.0959821429,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "unit absences",
+      "culprit_share": 0.1253405995,
+      "helper_share": 0.1138392857,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "lead/deficit peaks",
+      "culprit_share": 0.068119891,
+      "helper_share": 0.0200892857,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "pass matchup product",
+      "culprit_share": 0.0217983651,
+      "helper_share": 0.0357142857,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "pass tail hinges",
+      "culprit_share": 0.0326975477,
+      "helper_share": 0.0424107143,
+      "misses": 367,
+      "hits": 448
+    },
+    {
+      "basis": "2023-25",
+      "group": "home field",
+      "culprit_share": 0.0326975477,
+      "helper_share": 0.0089285714,
+      "misses": 367,
+      "hits": 448
+    }
+  ],
+  "group_contribution_corr": {
+    "2015-16": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": -0.1333796469,
+        "QB projection": 0.0356642269,
+        "unit absences": 0.1491323493,
+        "lead/deficit peaks": 0.0391311459,
+        "pass matchup product": 0.0954346006,
+        "pass tail hinges": -0.0714725477,
+        "home field": -0.0079188815
+      },
+      "defense box rates": {
+        "offense box rates": -0.1333796469,
+        "defense box rates": 1.0,
+        "QB projection": -0.0174158818,
+        "unit absences": -0.0758645195,
+        "lead/deficit peaks": 0.0754420368,
+        "pass matchup product": -0.069186711,
+        "pass tail hinges": 0.1075438845,
+        "home field": -0.0278632709
+      },
+      "QB projection": {
+        "offense box rates": 0.0356642269,
+        "defense box rates": -0.0174158818,
+        "QB projection": 1.0,
+        "unit absences": -0.0169891203,
+        "lead/deficit peaks": 0.0051701569,
+        "pass matchup product": 0.0498978867,
+        "pass tail hinges": -0.0938759185,
+        "home field": -0.0606047708
+      },
+      "unit absences": {
+        "offense box rates": 0.1491323493,
+        "defense box rates": -0.0758645195,
+        "QB projection": -0.0169891203,
+        "unit absences": 1.0,
+        "lead/deficit peaks": 0.1711944161,
+        "pass matchup product": -0.0285244681,
+        "pass tail hinges": -0.0036098338,
+        "home field": -0.036586772
+      },
+      "lead/deficit peaks": {
+        "offense box rates": 0.0391311459,
+        "defense box rates": 0.0754420368,
+        "QB projection": 0.0051701569,
+        "unit absences": 0.1711944161,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": 0.006790055,
+        "pass tail hinges": -0.0422858664,
+        "home field": -0.0099144156
+      },
+      "pass matchup product": {
+        "offense box rates": 0.0954346006,
+        "defense box rates": -0.069186711,
+        "QB projection": 0.0498978867,
+        "unit absences": -0.0285244681,
+        "lead/deficit peaks": 0.006790055,
+        "pass matchup product": 1.0,
+        "pass tail hinges": -0.3446067492,
+        "home field": 0.0204917359
+      },
+      "pass tail hinges": {
+        "offense box rates": -0.0714725477,
+        "defense box rates": 0.1075438845,
+        "QB projection": -0.0938759185,
+        "unit absences": -0.0036098338,
+        "lead/deficit peaks": -0.0422858664,
+        "pass matchup product": -0.3446067492,
+        "pass tail hinges": 1.0,
+        "home field": 0.0314054138
+      },
+      "home field": {
+        "offense box rates": -0.0079188815,
+        "defense box rates": -0.0278632709,
+        "QB projection": -0.0606047708,
+        "unit absences": -0.036586772,
+        "lead/deficit peaks": -0.0099144156,
+        "pass matchup product": 0.0204917359,
+        "pass tail hinges": 0.0314054138,
+        "home field": 1.0
+      }
+    },
+    "2017-22": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": 0.0761927249,
+        "QB projection": -0.0294534851,
+        "unit absences": 0.077569415,
+        "lead/deficit peaks": 0.0729823915,
+        "pass matchup product": 0.0135463343,
+        "pass tail hinges": 0.0630744376,
+        "home field": -0.0224186377
+      },
+      "defense box rates": {
+        "offense box rates": 0.0761927249,
+        "defense box rates": 1.0,
+        "QB projection": 0.0031781745,
+        "unit absences": 0.0118610819,
+        "lead/deficit peaks": 0.0627597096,
+        "pass matchup product": 0.0262253264,
+        "pass tail hinges": 0.0666921061,
+        "home field": -0.0136188726
+      },
+      "QB projection": {
+        "offense box rates": -0.0294534851,
+        "defense box rates": 0.0031781745,
+        "QB projection": 1.0,
+        "unit absences": -0.0409063952,
+        "lead/deficit peaks": 0.0090181195,
+        "pass matchup product": 0.0254359953,
+        "pass tail hinges": 0.0766561479,
+        "home field": 0.009313633
+      },
+      "unit absences": {
+        "offense box rates": 0.077569415,
+        "defense box rates": 0.0118610819,
+        "QB projection": -0.0409063952,
+        "unit absences": 1.0,
+        "lead/deficit peaks": 0.0404680479,
+        "pass matchup product": 0.0143044688,
+        "pass tail hinges": -0.0150663832,
+        "home field": -0.0051382764
+      },
+      "lead/deficit peaks": {
+        "offense box rates": 0.0729823915,
+        "defense box rates": 0.0627597096,
+        "QB projection": 0.0090181195,
+        "unit absences": 0.0404680479,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": -0.0044677302,
+        "pass tail hinges": 0.0654067841,
+        "home field": -0.0016995765
+      },
+      "pass matchup product": {
+        "offense box rates": 0.0135463343,
+        "defense box rates": 0.0262253264,
+        "QB projection": 0.0254359953,
+        "unit absences": 0.0143044688,
+        "lead/deficit peaks": -0.0044677302,
+        "pass matchup product": 1.0,
+        "pass tail hinges": -0.0934125372,
+        "home field": -0.0004163483
+      },
+      "pass tail hinges": {
+        "offense box rates": 0.0630744376,
+        "defense box rates": 0.0666921061,
+        "QB projection": 0.0766561479,
+        "unit absences": -0.0150663832,
+        "lead/deficit peaks": 0.0654067841,
+        "pass matchup product": -0.0934125372,
+        "pass tail hinges": 1.0,
+        "home field": -0.012238243
+      },
+      "home field": {
+        "offense box rates": -0.0224186377,
+        "defense box rates": -0.0136188726,
+        "QB projection": 0.009313633,
+        "unit absences": -0.0051382764,
+        "lead/deficit peaks": -0.0016995765,
+        "pass matchup product": -0.0004163483,
+        "pass tail hinges": -0.012238243,
+        "home field": 1.0
+      }
+    },
+    "2023-25": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": 0.0304147077,
+        "QB projection": 0.1030983614,
+        "unit absences": 0.0939281454,
+        "lead/deficit peaks": -0.3811175344,
+        "pass matchup product": 0.0678137263,
+        "pass tail hinges": -0.0379581002,
+        "home field": -0.0101379346
+      },
+      "defense box rates": {
+        "offense box rates": 0.0304147077,
+        "defense box rates": 1.0,
+        "QB projection": 0.0569617002,
+        "unit absences": 0.0286123891,
+        "lead/deficit peaks": -0.0127323755,
+        "pass matchup product": 0.079187799,
+        "pass tail hinges": -0.0885249632,
+        "home field": 0.0021670505
+      },
+      "QB projection": {
+        "offense box rates": 0.1030983614,
+        "defense box rates": 0.0569617002,
+        "QB projection": 1.0,
+        "unit absences": 0.0748595591,
+        "lead/deficit peaks": -0.0645423398,
+        "pass matchup product": 0.0347852074,
+        "pass tail hinges": -0.0306825788,
+        "home field": 0.0066433117
+      },
+      "unit absences": {
+        "offense box rates": 0.0939281454,
+        "defense box rates": 0.0286123891,
+        "QB projection": 0.0748595591,
+        "unit absences": 1.0,
+        "lead/deficit peaks": -0.0724959933,
+        "pass matchup product": 0.0929385172,
+        "pass tail hinges": 0.0232561098,
+        "home field": 0.0499044855
+      },
+      "lead/deficit peaks": {
+        "offense box rates": -0.3811175344,
+        "defense box rates": -0.0127323755,
+        "QB projection": -0.0645423398,
+        "unit absences": -0.0724959933,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": -0.0559748729,
+        "pass tail hinges": -0.0080008332,
+        "home field": -0.0033972757
+      },
+      "pass matchup product": {
+        "offense box rates": 0.0678137263,
+        "defense box rates": 0.079187799,
+        "QB projection": 0.0347852074,
+        "unit absences": 0.0929385172,
+        "lead/deficit peaks": -0.0559748729,
+        "pass matchup product": 1.0,
+        "pass tail hinges": 0.1272705809,
+        "home field": -0.0090796903
+      },
+      "pass tail hinges": {
+        "offense box rates": -0.0379581002,
+        "defense box rates": -0.0885249632,
+        "QB projection": -0.0306825788,
+        "unit absences": 0.0232561098,
+        "lead/deficit peaks": -0.0080008332,
+        "pass matchup product": 0.1272705809,
+        "pass tail hinges": 1.0,
+        "home field": -0.0426623302
+      },
+      "home field": {
+        "offense box rates": -0.0101379346,
+        "defense box rates": 0.0021670505,
+        "QB projection": 0.0066433117,
+        "unit absences": 0.0499044855,
+        "lead/deficit peaks": -0.0033972757,
+        "pass matchup product": -0.0090796903,
+        "pass tail hinges": -0.0426623302,
+        "home field": 1.0
+      }
+    }
+  },
+  "group_effect_corr": {
+    "2015-16": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": -0.0535529907,
+        "QB projection": 0.0794576175,
+        "unit absences": 0.0978111668,
+        "lead/deficit peaks": -0.1337832884,
+        "pass matchup product": 0.1063346805,
+        "pass tail hinges": -0.0798692393,
+        "home field": 0.022435279
+      },
+      "defense box rates": {
+        "offense box rates": -0.0535529907,
+        "defense box rates": 1.0,
+        "QB projection": 0.040265059,
+        "unit absences": -0.0904410305,
+        "lead/deficit peaks": 0.0312155048,
+        "pass matchup product": -0.020152821,
+        "pass tail hinges": 0.1263292009,
+        "home field": 0.087290435
+      },
+      "QB projection": {
+        "offense box rates": 0.0794576175,
+        "defense box rates": 0.040265059,
+        "QB projection": 1.0,
+        "unit absences": -0.0636219751,
+        "lead/deficit peaks": 0.0167812102,
+        "pass matchup product": 0.0316089101,
+        "pass tail hinges": -0.1125582996,
+        "home field": -0.0576038684
+      },
+      "unit absences": {
+        "offense box rates": 0.0978111668,
+        "defense box rates": -0.0904410305,
+        "QB projection": -0.0636219751,
+        "unit absences": 1.0,
+        "lead/deficit peaks": -0.0320919834,
+        "pass matchup product": -0.0242501178,
+        "pass tail hinges": -0.0115208783,
+        "home field": 0.0193642903
+      },
+      "lead/deficit peaks": {
+        "offense box rates": -0.1337832884,
+        "defense box rates": 0.0312155048,
+        "QB projection": 0.0167812102,
+        "unit absences": -0.0320919834,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": -0.0477074323,
+        "pass tail hinges": -0.0555262534,
+        "home field": -0.0020411694
+      },
+      "pass matchup product": {
+        "offense box rates": 0.1063346805,
+        "defense box rates": -0.020152821,
+        "QB projection": 0.0316089101,
+        "unit absences": -0.0242501178,
+        "lead/deficit peaks": -0.0477074323,
+        "pass matchup product": 1.0,
+        "pass tail hinges": -0.2231264282,
+        "home field": -0.0433734355
+      },
+      "pass tail hinges": {
+        "offense box rates": -0.0798692393,
+        "defense box rates": 0.1263292009,
+        "QB projection": -0.1125582996,
+        "unit absences": -0.0115208783,
+        "lead/deficit peaks": -0.0555262534,
+        "pass matchup product": -0.2231264282,
+        "pass tail hinges": 1.0,
+        "home field": 0.08496223
+      },
+      "home field": {
+        "offense box rates": 0.022435279,
+        "defense box rates": 0.087290435,
+        "QB projection": -0.0576038684,
+        "unit absences": 0.0193642903,
+        "lead/deficit peaks": -0.0020411694,
+        "pass matchup product": -0.0433734355,
+        "pass tail hinges": 0.08496223,
+        "home field": 1.0
+      }
+    },
+    "2017-22": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": 0.0708348084,
+        "QB projection": 0.0335148248,
+        "unit absences": 0.0575086321,
+        "lead/deficit peaks": 0.0232305626,
+        "pass matchup product": 0.0543891891,
+        "pass tail hinges": 0.0544769267,
+        "home field": 0.0678656139
+      },
+      "defense box rates": {
+        "offense box rates": 0.0708348084,
+        "defense box rates": 1.0,
+        "QB projection": -0.0002767403,
+        "unit absences": 0.08137988,
+        "lead/deficit peaks": 0.0209815321,
+        "pass matchup product": -0.0230759465,
+        "pass tail hinges": -0.0156521962,
+        "home field": 0.0427854957
+      },
+      "QB projection": {
+        "offense box rates": 0.0335148248,
+        "defense box rates": -0.0002767403,
+        "QB projection": 1.0,
+        "unit absences": -0.0607926262,
+        "lead/deficit peaks": -0.0806397892,
+        "pass matchup product": 0.047236146,
+        "pass tail hinges": 0.0587848782,
+        "home field": 0.0857697037
+      },
+      "unit absences": {
+        "offense box rates": 0.0575086321,
+        "defense box rates": 0.08137988,
+        "QB projection": -0.0607926262,
+        "unit absences": 1.0,
+        "lead/deficit peaks": 0.0115552671,
+        "pass matchup product": 0.0394084375,
+        "pass tail hinges": -0.0485766632,
+        "home field": 0.0531526302
+      },
+      "lead/deficit peaks": {
+        "offense box rates": 0.0232305626,
+        "defense box rates": 0.0209815321,
+        "QB projection": -0.0806397892,
+        "unit absences": 0.0115552671,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": -0.0499398824,
+        "pass tail hinges": -0.0128788989,
+        "home field": -0.0309571805
+      },
+      "pass matchup product": {
+        "offense box rates": 0.0543891891,
+        "defense box rates": -0.0230759465,
+        "QB projection": 0.047236146,
+        "unit absences": 0.0394084375,
+        "lead/deficit peaks": -0.0499398824,
+        "pass matchup product": 1.0,
+        "pass tail hinges": 0.0169520756,
+        "home field": 0.0254742977
+      },
+      "pass tail hinges": {
+        "offense box rates": 0.0544769267,
+        "defense box rates": -0.0156521962,
+        "QB projection": 0.0587848782,
+        "unit absences": -0.0485766632,
+        "lead/deficit peaks": -0.0128788989,
+        "pass matchup product": 0.0169520756,
+        "pass tail hinges": 1.0,
+        "home field": 0.035571149
+      },
+      "home field": {
+        "offense box rates": 0.0678656139,
+        "defense box rates": 0.0427854957,
+        "QB projection": 0.0857697037,
+        "unit absences": 0.0531526302,
+        "lead/deficit peaks": -0.0309571805,
+        "pass matchup product": 0.0254742977,
+        "pass tail hinges": 0.035571149,
+        "home field": 1.0
+      }
+    },
+    "2023-25": {
+      "offense box rates": {
+        "offense box rates": 1.0,
+        "defense box rates": -0.0544033396,
+        "QB projection": 0.0263292476,
+        "unit absences": -0.0802554196,
+        "lead/deficit peaks": -0.1924175399,
+        "pass matchup product": -0.0606347343,
+        "pass tail hinges": -0.1001184958,
+        "home field": -0.0365545301
+      },
+      "defense box rates": {
+        "offense box rates": -0.0544033396,
+        "defense box rates": 1.0,
+        "QB projection": 0.1049158653,
+        "unit absences": 0.0078544343,
+        "lead/deficit peaks": 0.1642055942,
+        "pass matchup product": 0.0856768447,
+        "pass tail hinges": -0.0839347223,
+        "home field": 0.0688684618
+      },
+      "QB projection": {
+        "offense box rates": 0.0263292476,
+        "defense box rates": 0.1049158653,
+        "QB projection": 1.0,
+        "unit absences": 0.0482723835,
+        "lead/deficit peaks": 0.0294859717,
+        "pass matchup product": -0.1176226375,
+        "pass tail hinges": -0.0364310016,
+        "home field": 0.0578471065
+      },
+      "unit absences": {
+        "offense box rates": -0.0802554196,
+        "defense box rates": 0.0078544343,
+        "QB projection": 0.0482723835,
+        "unit absences": 1.0,
+        "lead/deficit peaks": 0.0800089394,
+        "pass matchup product": 0.1085010311,
+        "pass tail hinges": 0.0073033513,
+        "home field": 0.1406126679
+      },
+      "lead/deficit peaks": {
+        "offense box rates": -0.1924175399,
+        "defense box rates": 0.1642055942,
+        "QB projection": 0.0294859717,
+        "unit absences": 0.0800089394,
+        "lead/deficit peaks": 1.0,
+        "pass matchup product": 0.0546581494,
+        "pass tail hinges": 0.1170225453,
+        "home field": 0.0052108977
+      },
+      "pass matchup product": {
+        "offense box rates": -0.0606347343,
+        "defense box rates": 0.0856768447,
+        "QB projection": -0.1176226375,
+        "unit absences": 0.1085010311,
+        "lead/deficit peaks": 0.0546581494,
+        "pass matchup product": 1.0,
+        "pass tail hinges": 0.1696490451,
+        "home field": 0.0323881619
+      },
+      "pass tail hinges": {
+        "offense box rates": -0.1001184958,
+        "defense box rates": -0.0839347223,
+        "QB projection": -0.0364310016,
+        "unit absences": 0.0073033513,
+        "lead/deficit peaks": 0.1170225453,
+        "pass matchup product": 0.1696490451,
+        "pass tail hinges": 1.0,
+        "home field": 0.0362077016
+      },
+      "home field": {
+        "offense box rates": -0.0365545301,
+        "defense box rates": 0.0688684618,
+        "QB projection": 0.0578471065,
+        "unit absences": 0.1406126679,
+        "lead/deficit peaks": 0.0052108977,
+        "pass matchup product": 0.0323881619,
+        "pass tail hinges": 0.0362077016,
+        "home field": 1.0
+      }
+    }
+  }
+}

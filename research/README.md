@@ -1342,3 +1342,40 @@ served only as training history. Weekly refits from the frozen 2013–20 pack re
   makes money.
 - 2014 (sensitivity, trained on 190 games) points the same way on all four trends (z +1.07 to +1.72).
   Thin training inflates departures, which is why it decides nothing.
+
+### Test 38: feature importance, interactions and correlation structure (2026-10-14): no input or interaction earns its place reliably
+
+Protocol [`FEATURE_IMPORTANCE.md`](FEATURE_IMPORTANCE.md), pushed (`0d850c6`) before parts B–D were computed;
+part A (per-game attribution) was computed first and is post hoc. Script `feature_importance.py`; results
+`feature_importance_results/`. Bases never pooled: 2015–16 (510 games), 2017–22 (1,559), 2023–25 (815), plus the 13
+native week-5 games in part A. Production reproduces the published forecasts on every basis (max error 2e-13).
+Diagnostic only.
+
+- **B, drop-column importance (refit without each input, 28 inputs plus 5 groups).** 14 of 408 cells reached
+  |z| ≥ 2, below the 19 expected by chance. No input or group has positive importance on all three bases. The 8
+  inputs with a consistent sign are all ones the model scores slightly better without: DL and OL absences, the QB
+  projection, offensive pass yards per play, offensive penalty yards, largest deficit, and two pass hinges. Each is
+  at most 1.5 SE on any single basis. Even dropping a whole group (all seven offensive or defensive box-score rates)
+  moves log loss by under 0.002 per game with mixed signs. The home-field adjustment, added as a supplementary arm,
+  is slightly negative on all three bases (z −0.7 to −1.3).
+- **Units.** Removing an input cost production units in 25 and 26 of 28 arms on 2017–22 and 2023–25, but in only 5
+  of 28 on 2015–16. A post-hoc split shows the same on 2017–20 (22 of 28), scored only after v1.16 was fixed, so
+  design tuning cannot be the whole explanation. Each arm flips about 10 bets per basis, so this is noisy.
+- **C, interaction scan (406 pairwise products, including each input × market log-odds, × 4 contexts).** Only one
+  cell reached |z| ≥ 3 on 2017–22: defensive rush yards per attempt × pass product, in mid totals, z +3.93. It
+  reversed on both 2023–25 (−0.20) and 2015–16 (−0.48). The other bases had none at |z| ≥ 3; about 4 per basis are
+  expected by chance.
+- **D, correlation.** Largest lead and largest deficit correlate −0.82. Offensive pass yards per play correlates
+  +0.8 with offensive first-down rate, and the defensive pair +0.7 to +0.8. Variance inflation factors reach 5–7,
+  which helps explain why dropping a single input changes so little. Averaged over the three bases, group
+  contributions and group accuracy effects correlate within ±0.10 across games. Single bases reach |r| 0.38
+  (contributions) and 0.22 (accuracy effects), but no pair of groups stands out once the bases are averaged.
+- **A, per game.** The worst single-game misses trace to one pass tail hinge (NYJ@MIA 2023, NYJ@SF 2024, DET@CHI
+  2021, native SF@SEA) or to clustered unit absences (ATL@PHI 2018, DEN@NYG 2021, KC@HOU 2015). Each group's share
+  of biggest-culprit and biggest-helper roles roughly match. The largest gaps are 6 points: offensive box rates 23%
+  vs 29% on 2023–25, home field 18% vs 12% on 2017–22.
+
+**Reading.** Once the market is the offset, no single input, group or interaction measurably earns its place in
+log loss on these bases. The consistent-sign inputs lean toward mild over-fitting, the same direction as Test 37's
+oversized departures and Test 36's fit half-life lead. Removing or shrinking anything would be a new `REVISION`;
+all three bases are now exposed, so only forward data can test such a change cleanly.
