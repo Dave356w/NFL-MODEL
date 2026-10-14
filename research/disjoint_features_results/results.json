@@ -1,0 +1,261 @@
+{
+  "protocol": "research/DISJOINT_FEATURES.md",
+  "protocol_commit": "69b104c",
+  "level": 0.9833333333333333,
+  "reproduction_max_error": {
+    "2017-20": 1.1102230246251565e-16,
+    "2021-22": 2.3003821070233244e-13,
+    "2023-25": 1.1102230246251565e-16
+  },
+  "verdicts": {
+    "disjoint": "unresolved",
+    "production_plus_disjoint": "not better than production",
+    "blend": "unresolved"
+  },
+  "departure_corr_prod_vs_disjoint": {
+    "2015-16": 0.14874224300281114,
+    "2017-22": 0.2907852279062649,
+    "2023-25": 0.06689348381984116,
+    "2026 wk1-5 (diagnostic)": 0.08658406138807315
+  },
+  "feature_coverage": {
+    "2015-16": {
+      "pass_edge": 1.0,
+      "rush_edge": 1.0,
+      "margin_edge": 1.0,
+      "ats_edge": 1.0,
+      "rest_diff": 1.0,
+      "ml_spread_gap": 1.0,
+      "total_x_market": 1.0,
+      "div_x_market": 1.0
+    },
+    "2017-22": {
+      "pass_edge": 1.0,
+      "rush_edge": 1.0,
+      "margin_edge": 1.0,
+      "ats_edge": 1.0,
+      "rest_diff": 1.0,
+      "ml_spread_gap": 1.0,
+      "total_x_market": 1.0,
+      "div_x_market": 1.0
+    },
+    "2023-25": {
+      "pass_edge": 1.0,
+      "rush_edge": 1.0,
+      "margin_edge": 1.0,
+      "ats_edge": 1.0,
+      "rest_diff": 1.0,
+      "ml_spread_gap": 1.0,
+      "total_x_market": 1.0,
+      "div_x_market": 1.0
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "pass_edge": 1.0,
+      "rush_edge": 1.0,
+      "margin_edge": 1.0,
+      "ats_edge": 1.0,
+      "rest_diff": 1.0,
+      "ml_spread_gap": 1.0,
+      "total_x_market": 1.0,
+      "div_x_market": 1.0
+    }
+  },
+  "coefficients_mean_per_sd": {
+    "2015-16|disjoint": {
+      "pass_edge": 0.009947952725036648,
+      "rush_edge": -0.008252852159988956,
+      "margin_edge": 0.09626954872821465,
+      "ats_edge": 0.06997132142232505,
+      "rest_diff": -0.020137609184228095,
+      "ml_spread_gap": -0.061422865085872566,
+      "total_x_market": -0.05390727320880889,
+      "div_x_market": -0.06106107773560104
+    },
+    "2015-16|production_plus_disjoint": {
+      "site": -0.013228277024543015,
+      "d__avail__qb_delta": -0.013960518970225837,
+      "pass_edge": 0.017679906372047444,
+      "rush_edge": 0.01768776076283936,
+      "margin_edge": 0.10776254301675017,
+      "ats_edge": 0.05506425767105456,
+      "rest_diff": -0.030852656927846535,
+      "ml_spread_gap": -0.049357505372044364,
+      "total_x_market": -0.03669756401584452,
+      "div_x_market": -0.05240893447991858
+    },
+    "2015-16|disjoint_ratings": {
+      "pass_edge": -0.011056575142743637,
+      "rush_edge": -0.01576709648069149,
+      "margin_edge": 0.0765653850918005,
+      "ats_edge": 0.05979797646847763
+    },
+    "2015-16|disjoint_context": {
+      "rest_diff": -0.021018647077066757,
+      "ml_spread_gap": -0.028494588268396064,
+      "total_x_market": -0.042950224197168985,
+      "div_x_market": -0.018613970162820154
+    },
+    "2017-22|disjoint": {
+      "pass_edge": -0.015716966721614375,
+      "rush_edge": 0.012594103950568536,
+      "margin_edge": 0.054901959807419784,
+      "ats_edge": -0.022704369874581833,
+      "rest_diff": -0.01593751426054225,
+      "ml_spread_gap": -0.03478039789818543,
+      "total_x_market": -0.001326567831984933,
+      "div_x_market": 0.03104681801314331
+    },
+    "2017-22|production_plus_disjoint": {
+      "site": -0.04158637708585818,
+      "d__avail__qb_delta": 0.03478381739175071,
+      "pass_edge": -0.028258973867385226,
+      "rush_edge": 0.007438503290079194,
+      "margin_edge": 0.04262658480794354,
+      "ats_edge": -0.028551764351592932,
+      "rest_diff": -0.021477476637476907,
+      "ml_spread_gap": -0.03588563020114471,
+      "total_x_market": -0.003644332326079746,
+      "div_x_market": 0.028144794662208813
+    },
+    "2017-22|disjoint_ratings": {
+      "pass_edge": -0.013897256348890793,
+      "rush_edge": 0.014328890862066691,
+      "margin_edge": 0.05576253108599517,
+      "ats_edge": -0.022587360626559826
+    },
+    "2017-22|disjoint_context": {
+      "rest_diff": -0.015945424085913044,
+      "ml_spread_gap": -0.02857687434127604,
+      "total_x_market": -0.002619633232624679,
+      "div_x_market": 0.03960346266329619
+    },
+    "2023-25|disjoint": {
+      "pass_edge": -0.0318498972038447,
+      "rush_edge": 0.03619491057895601,
+      "margin_edge": 0.024016307145454927,
+      "ats_edge": -0.05792655688464247,
+      "rest_diff": 0.01794667864361316,
+      "ml_spread_gap": -0.049594648483160184,
+      "total_x_market": 0.03608395818933568,
+      "div_x_market": 0.04632963282973156
+    },
+    "2023-25|production_plus_disjoint": {
+      "site": -0.02974292267770449,
+      "d__avail__qb_delta": 0.056540588911015356,
+      "pass_edge": -0.028579851043189768,
+      "rush_edge": 0.036370168599348066,
+      "margin_edge": 0.020139754236418686,
+      "ats_edge": -0.055296209864460856,
+      "rest_diff": 0.017593503942970948,
+      "ml_spread_gap": -0.05249246231539081,
+      "total_x_market": 0.03087091391093436,
+      "div_x_market": 0.03348548771104958
+    },
+    "2023-25|disjoint_ratings": {
+      "pass_edge": -0.028661833683046343,
+      "rush_edge": 0.03852996357269812,
+      "margin_edge": 0.026785253433997066,
+      "ats_edge": -0.05697131348306835
+    },
+    "2023-25|disjoint_context": {
+      "rest_diff": 0.018951727906578376,
+      "ml_spread_gap": -0.05230427451134639,
+      "total_x_market": 0.032966912029981754,
+      "div_x_market": 0.037715044703223705
+    },
+    "2026 wk1-5 (diagnostic)|disjoint": {
+      "pass_edge": -0.007417283851650069,
+      "rush_edge": 0.006268166115297097,
+      "margin_edge": 0.01872989423002075,
+      "ats_edge": -0.020030706414120008,
+      "rest_diff": -0.006531988333308293,
+      "ml_spread_gap": -0.039838538252732716,
+      "total_x_market": 0.0190312763804514,
+      "div_x_market": -0.009194389435563754
+    },
+    "2026 wk1-5 (diagnostic)|production_plus_disjoint": {
+      "site": -0.01856998453490285,
+      "d__avail__qb_delta": 0.06701516918201164,
+      "pass_edge": -0.018131389245993595,
+      "rush_edge": -0.0020842014178226002,
+      "margin_edge": 0.009620074541144889,
+      "ats_edge": -0.028681407612651366,
+      "rest_diff": -0.010177899724032857,
+      "ml_spread_gap": -0.04160970390203335,
+      "total_x_market": 0.010323309345661651,
+      "div_x_market": -0.024640171070338356
+    },
+    "2026 wk1-5 (diagnostic)|disjoint_ratings": {
+      "pass_edge": -0.015434537946400543,
+      "rush_edge": 0.00310351535894314,
+      "margin_edge": 0.012953386656288025,
+      "ats_edge": -0.023973339623153934
+    },
+    "2026 wk1-5 (diagnostic)|disjoint_context": {
+      "rest_diff": -0.006504913413539174,
+      "ml_spread_gap": -0.04046386492612229,
+      "total_x_market": 0.019119608057014893,
+      "div_x_market": -0.009336348383255528
+    }
+  },
+  "binary_games": {
+    "2015-16": 510,
+    "2017-22": 1559,
+    "2023-25": 815,
+    "2026 wk1-5 (diagnostic)": 65
+  },
+  "production_roi": {
+    "2015-16": {
+      "bets": 507.0,
+      "wins": 320.0,
+      "losses": 185.0,
+      "pushes": 2.0,
+      "units": -17.523254969185093,
+      "roi": -0.03456263307531576,
+      "roi_se": 0.03382849366086529,
+      "win_pct": 0.6336633663366337,
+      "mean_q": 0.6437023688403657,
+      "excess_pp": -1.0321586389031356,
+      "null_roi": -0.023980224330580245
+    },
+    "2017-22": {
+      "bets": 1559.0,
+      "wins": 1041.0,
+      "losses": 511.0,
+      "pushes": 7.0,
+      "units": -24.21834485751153,
+      "roi": -0.015534538074093347,
+      "roi_se": 0.018195887976098824,
+      "win_pct": 0.6707474226804123,
+      "mean_q": 0.6637268340804298,
+      "excess_pp": 0.6782177846747062,
+      "null_roi": -0.026120300989755117
+    },
+    "2023-25": {
+      "bets": 812.0,
+      "wins": 565.0,
+      "losses": 246.0,
+      "pushes": 1.0,
+      "units": 29.055959781287775,
+      "roi": 0.03578320170109332,
+      "roi_se": 0.02524203944611706,
+      "win_pct": 0.6966707768187423,
+      "mean_q": 0.6537385303090767,
+      "excess_pp": 4.304362811852869,
+      "null_roi": -0.04099496341597624
+    },
+    "2026 wk1-5 (diagnostic)": {
+      "bets": 65.0,
+      "wins": 40.0,
+      "losses": 25.0,
+      "pushes": 0.0,
+      "units": -5.196860558102769,
+      "roi": -0.07995170089388876,
+      "roi_se": 0.09372384518617023,
+      "win_pct": 0.6153846153846154,
+      "mean_q": 0.6464547353542637,
+      "excess_pp": -3.1070119969648258,
+      "null_roi": -0.04104157053956888
+    }
+  }
+}

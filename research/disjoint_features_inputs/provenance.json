@@ -1,0 +1,10 @@
+{
+  "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "downloaded_utc": "2026-10-14T16:05:53+00:00",
+  "source_sha256": "c9d597a8a84df33eeb1169e167c7f612c499768e9933e63fd7bf790b8742b3c6",
+  "frozen_file": "research/disjoint_features_inputs/schedule_context.csv",
+  "frozen_sha256": "b0d5a062894112efa5e4d3bd3a0db3cf2d8f9e2695adfe4495fac862eb677cb8",
+  "rows": 3679,
+  "selection": "game_type == REG, seasons 2013-2026; columns game_id, season, week, div_game, home_rest, away_rest",
+  "note": "Same nflverse games.csv download as research/residual_trends_inputs (hash checked)."
+}
