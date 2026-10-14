@@ -1489,3 +1489,33 @@ Production reproduces its published forecasts exactly.
 its accuracy comes from staying near the price. The nested-selection result is the honest estimate of what
 iterating is worth, and it is not better. Tests 37–41 agree: production keeps its departures and the underdog bets
 they produce, and the registered forward tests (H6–H8) are where that will be judged.
+
+### Test 43: team profiles from the last 2, 3 or 4 games instead of long decay (2026-10-14): not better
+
+Protocol [`FORM_WINDOWS.md`](FORM_WINDOWS.md), pushed (`d06f8e5`) before any windowed profile was built or scored.
+Script `form_windows.py`; frozen inputs `form_windows_inputs/`; results `form_windows_results/`.
+
+**Setup.** Team-game box scores for 2013–26 were rebuilt with production's own code from the Test 40
+play-by-play download, with the one score-peak repair the 2013–20 pack also needed (2014 GB@CHI). Production's
+half-life-8 profiles recomputed from them reproduce the 2013–20 pack exactly and 2022–25 of the 2019–26 pack.
+2019–21 differ because that pack's history starts in 2019, and the rebuild carries 2016–18 games into the
+three-season window. So every arm, the comparator included, is scored on the rebuilt data. Each window arm
+replaces only the main box-score rates and score peaks with an equal-weight average of the team's last N games.
+Everything else is production's.
+
+| Log-loss gain over rebuilt production ×1000 | 2015–16 | 2017–22 | 2023–25 | Verdict | Units vs production |
+|---|---:|---:|---:|---|---|
+| last 2 games | −0.75 | −1.48 | −0.57 | not better | +9.1 / −18.1 / −20.6 |
+| last 3 games | −1.12 | −1.47 | +0.20 | not better | +5.6 / −19.2 / −8.9 |
+| last 4 games | +4.36 | −2.27 | −1.34 | not better | +19.2 / −40.4 / −22.3 |
+| nested selection (descriptive) | – | −1.82 [−3.45, −0.19] | +0.00 | not better | −20.6 / +0.0 |
+
+- **Short windows are noisier, not sharper.** Each loses log loss on at least two of three bases, and each falls
+  further behind the market than production on 2017–22 (−4.1 to −4.9 against −2.6 ×10⁻³).
+- **Selection was misled.** Picking each season's best by earlier seasons chose the 4-game window in 2017–19,
+  after its good 2015–16. That cost a significant −1.82 on 2017–22 (interval excludes zero), and selection went
+  back to production from 2020 on.
+- **Units** move with the 2015–16 window gains (+5.6 to +19.2u) and reverse on 2017–25 (−9 to −40u).
+
+**Reading.** Production's long decay holds up. Recent-form profiles do not add information the market lacks,
+consistent with Test 8's half-life sweep on the older model. Production keeps half-life 8.
