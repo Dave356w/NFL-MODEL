@@ -1,0 +1,28 @@
+{
+ "fit_half_life=4": {
+  "v1.16": {
+   "mean": 0.0019218564353569883,
+   "cluster_se": 0.0007902467134722513,
+   "normal_ci": [
+    -5.1947107019040435e-05,
+    0.003895659977733017
+   ],
+   "bootstrap_lower_min": -0.0001215347716954438,
+   "bootstrap_lower_max": 5.751929516748082e-05,
+   "share_of_seeds_excluding_zero": 0.3,
+   "seeds": 20
+  },
+  "v1.18": {
+   "mean": 0.0010510995987544525,
+   "cluster_se": 0.0004700734311449843,
+   "normal_ci": [
+    -0.000123005383592183,
+    0.002225204581101088
+   ],
+   "bootstrap_lower_min": -0.00012824020281701162,
+   "bootstrap_lower_max": -5.198208307237519e-05,
+   "share_of_seeds_excluding_zero": 0.0,
+   "seeds": 20
+  }
+ }
+}

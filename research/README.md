@@ -1244,3 +1244,35 @@ change would alter `config_signature()` and need a new `REVISION`, and nothing h
 proportional de-vig. Calibration SEs were first computed from the optimizer's approximate Hessian
 and were corrected to the exact Fisher information before this entry was written; the primary
 statistic and verdict did not change.
+
+### Test 36: one-at-a-time shrinkage sweep, select 2023–25, confirm 2017–20 (2026-10-14): one borderline candidate, no change yet
+
+Protocol [`SHRINKAGE_SWEEP.md`](SHRINKAGE_SWEEP.md), pushed (`0dd7dc2`) before any arm was built; stage 1
+choices committed (`305fcc6`) before any 2017–20 candidate arm was scored. Script `shrinkage_sweep.py`;
+results `shrinkage_sweep_results/`. Ten arms each change one setting and rebuild every feature it
+touches from raw inputs, then refit the fixed v1.16 recipe weekly on earlier games. Production
+reproduces the committed forecasts on both windows (max error 1e-10 and 3e-16).
+
+**Stage 1 (2023–25, 811 bets).** No arm beat production on log loss with a 95% interval excluding
+zero. Chosen on 2021–25: QB prior 600, pseudo-games 8, retention 0.25, fit half-life 4. Fit half-life
+1 had the best ROI (+4.56% vs +3.50%) and the worst log loss (−0.0028), so it was not chosen.
+
+**Stage 2 (2017–20, 1,016 bets, 98.75% intervals).**
+
+| Chosen value | LL gain vs production | ROI Δ pts | Verdict |
+|---|---:|---:|---|
+| QB prior 600 | +0.00011 [−0.00016, +0.00037] | +0.21 | unresolved, keep |
+| pseudo-games 8 | +0.00009 [−0.00064, +0.00088] | +0.09 | unresolved, keep |
+| retention 0.25 | +0.00023 [−0.00194, +0.00250] | −0.64 | unresolved, keep |
+| fit half-life 4 | +0.00192 [+0.000004, +0.00392] | +0.14 | candidate (owner decides) |
+
+Production made +0.58u (+0.06%) on 2017–20; the same-row market favorite −18.18u; null −2.55%.
+
+**Reading.** Fit half-life 4 (slower decay of old labeled training games) is the only lead, and both
+windows point the same way (+0.0008 on 2023–25, +0.0019 on 2017–20). It wins in 3 of 4 confirmation
+seasons. But the pass is on a knife edge. Post-hoc: the bootstrap lower bound excludes zero for only
+6 of 20 seeds, and the week-clustered normal interval is [−0.00005, +0.00390]. Under v1.18 (favorite
+penalty applied, which is production), the gain is +0.00105 [−0.00006, +0.00224] and does not pass.
+ROI is unchanged within noise. The model still trails the market on log loss in every arm. Adopting
+fit half-life 4 would change `config_signature()` and need a new `REVISION`; this result alone is a
+weak basis for one. QB prior 600 repeats Test 3's direction but is unresolved.
