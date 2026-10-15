@@ -1,76 +1,226 @@
-rule,true_gain,look,n,supported,falsified
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2027,206,0.0105,0.6370
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2028,478,0.0147,0.7923
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2029,750,0.0170,0.8581
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2030,1022,0.0182,0.8969
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2031,1294,0.0189,0.9191
-current (FAVORITE_PENALTY.md),0.0000,Jan 2027,206,0.0248,0.5063
-current (FAVORITE_PENALTY.md),0.0000,Jan 2028,478,0.0425,0.6393
-current (FAVORITE_PENALTY.md),0.0000,Jan 2029,750,0.0530,0.7028
-current (FAVORITE_PENALTY.md),0.0000,Jan 2030,1022,0.0618,0.7408
-current (FAVORITE_PENALTY.md),0.0000,Jan 2031,1294,0.0673,0.7660
-current (FAVORITE_PENALTY.md),0.0010,Jan 2027,206,0.0374,0.4380
-current (FAVORITE_PENALTY.md),0.0010,Jan 2028,478,0.0683,0.5484
-current (FAVORITE_PENALTY.md),0.0010,Jan 2029,750,0.0910,0.6007
-current (FAVORITE_PENALTY.md),0.0010,Jan 2030,1022,0.1086,0.6332
-current (FAVORITE_PENALTY.md),0.0010,Jan 2031,1294,0.1208,0.6533
-current (FAVORITE_PENALTY.md),0.0023,Jan 2027,206,0.0604,0.3500
-current (FAVORITE_PENALTY.md),0.0023,Jan 2028,478,0.1179,0.4349
-current (FAVORITE_PENALTY.md),0.0023,Jan 2029,750,0.1641,0.4708
-current (FAVORITE_PENALTY.md),0.0023,Jan 2030,1022,0.1994,0.4909
-current (FAVORITE_PENALTY.md),0.0023,Jan 2031,1294,0.2288,0.5029
-current (FAVORITE_PENALTY.md),0.0040,Jan 2027,206,0.1013,0.2490
-current (FAVORITE_PENALTY.md),0.0040,Jan 2028,478,0.2140,0.2969
-current (FAVORITE_PENALTY.md),0.0040,Jan 2029,750,0.3099,0.3151
-current (FAVORITE_PENALTY.md),0.0040,Jan 2030,1022,0.3835,0.3228
-current (FAVORITE_PENALTY.md),0.0040,Jan 2031,1294,0.4400,0.3269
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2027,206,0.0105,0.1039
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2028,478,0.0150,0.2213
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2029,750,0.0176,0.3253
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2030,1022,0.0194,0.4218
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2031,1294,0.0205,0.5042
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2027,206,0.0248,0.0542
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2028,478,0.0432,0.1037
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2029,750,0.0558,0.1499
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2030,1022,0.0667,0.1893
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2031,1294,0.0752,0.2275
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2027,206,0.0374,0.0385
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2028,478,0.0692,0.0690
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2029,750,0.0954,0.0938
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2030,1022,0.1178,0.1150
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2031,1294,0.1366,0.1338
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2027,206,0.0604,0.0233
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2028,478,0.1199,0.0391
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2029,750,0.1731,0.0491
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2030,1022,0.2205,0.0561
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2031,1294,0.2620,0.0610
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2027,206,0.1013,0.0105
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2028,478,0.2180,0.0155
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2029,750,0.3276,0.0181
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2030,1022,0.4224,0.0192
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2031,1294,0.5028,0.0200
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2027,206,0.0047,0.0618
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2028,478,0.0069,0.1422
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2029,750,0.0083,0.2248
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2030,1022,0.0090,0.3077
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2031,1294,0.0093,0.3837
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2027,206,0.0129,0.0308
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2028,478,0.0219,0.0628
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2029,750,0.0290,0.0916
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2030,1022,0.0356,0.1196
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2031,1294,0.0411,0.1466
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2027,206,0.0192,0.0203
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2028,478,0.0375,0.0391
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2029,750,0.0527,0.0542
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2030,1022,0.0672,0.0673
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2031,1294,0.0800,0.0779
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2027,206,0.0321,0.0107
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2028,478,0.0709,0.0192
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2029,750,0.1084,0.0254
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2030,1022,0.1425,0.0293
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2031,1294,0.1751,0.0317
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2027,206,0.0616,0.0050
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2028,478,0.1453,0.0075
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2029,750,0.2302,0.0086
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2030,1022,0.3105,0.0091
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2031,1294,0.3842,0.0095
+method,rule,true_gain,look,n,weeks,supported,falsified
+"week-block bootstrap, estimated SE",as written,-0.00200,Jan 2027,206,14,0.00795,0.66577
+"week-block bootstrap, estimated SE",as written,-0.00200,Jan 2028,478,32,0.01043,0.81808
+"week-block bootstrap, estimated SE",as written,-0.00200,Jan 2029,750,50,0.01156,0.87952
+"week-block bootstrap, estimated SE",as written,-0.00200,Jan 2030,1022,68,0.01208,0.91300
+"week-block bootstrap, estimated SE",as written,-0.00200,Jan 2031,1294,86,0.01235,0.93327
+"week-block bootstrap, estimated SE",as written,0.00000,Jan 2027,206,14,0.02198,0.51437
+"week-block bootstrap, estimated SE",as written,0.00000,Jan 2028,478,32,0.03492,0.64721
+"week-block bootstrap, estimated SE",as written,0.00000,Jan 2029,750,50,0.04374,0.70909
+"week-block bootstrap, estimated SE",as written,0.00000,Jan 2030,1022,68,0.05015,0.74486
+"week-block bootstrap, estimated SE",as written,0.00000,Jan 2031,1294,86,0.05504,0.76936
+"week-block bootstrap, estimated SE",as written,0.00100,Jan 2027,206,14,0.03506,0.43385
+"week-block bootstrap, estimated SE",as written,0.00100,Jan 2028,478,32,0.06111,0.54487
+"week-block bootstrap, estimated SE",as written,0.00100,Jan 2029,750,50,0.08154,0.59511
+"week-block bootstrap, estimated SE",as written,0.00100,Jan 2030,1022,68,0.09782,0.62452
+"week-block bootstrap, estimated SE",as written,0.00100,Jan 2031,1294,86,0.11080,0.64366
+"week-block bootstrap, estimated SE",as written,0.00230,Jan 2027,206,14,0.06062,0.33242
+"week-block bootstrap, estimated SE",as written,0.00230,Jan 2028,478,32,0.11910,0.40925
+"week-block bootstrap, estimated SE",as written,0.00230,Jan 2029,750,50,0.16887,0.44123
+"week-block bootstrap, estimated SE",as written,0.00230,Jan 2030,1022,68,0.21061,0.45787
+"week-block bootstrap, estimated SE",as written,0.00230,Jan 2031,1294,86,0.24532,0.46757
+"week-block bootstrap, estimated SE",as written,0.00400,Jan 2027,206,14,0.11475,0.21563
+"week-block bootstrap, estimated SE",as written,0.00400,Jan 2028,478,32,0.24748,0.25338
+"week-block bootstrap, estimated SE",as written,0.00400,Jan 2029,750,50,0.36014,0.26559
+"week-block bootstrap, estimated SE",as written,0.00400,Jan 2030,1022,68,0.44836,0.27004
+"week-block bootstrap, estimated SE",as written,0.00400,Jan 2031,1294,86,0.51726,0.27210
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2027,206,14,0.00409,0.13820
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2028,478,32,0.00513,0.26826
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2029,750,50,0.00554,0.37563
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2030,1022,68,0.00585,0.46736
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2031,1294,86,0.00600,0.54573
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2027,206,14,0.01179,0.07349
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2028,478,32,0.01834,0.12876
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2029,750,50,0.02344,0.17450
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2030,1022,68,0.02731,0.21368
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2031,1294,86,0.03074,0.24893
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2027,206,14,0.01931,0.05078
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2028,478,32,0.03375,0.08295
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2029,750,50,0.04704,0.10748
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2030,1022,68,0.05917,0.12711
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2031,1294,86,0.07053,0.14398
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2027,206,14,0.03556,0.03029
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2028,478,32,0.07172,0.04453
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2029,750,50,0.10851,0.05316
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2030,1022,68,0.14604,0.05924
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2031,1294,86,0.18330,0.06392
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2027,206,14,0.07111,0.01414
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2028,478,32,0.16522,0.01798
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2029,750,50,0.26781,0.01954
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2030,1022,68,0.36843,0.02032
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2031,1294,86,0.46187,0.02077
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2027,206,14,0.00193,0.09720
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2028,478,32,0.00273,0.22560
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2029,750,50,0.00312,0.33705
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2030,1022,68,0.00337,0.43447
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2031,1294,86,0.00351,0.51745
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2027,206,14,0.00611,0.04863
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2028,478,32,0.01133,0.10035
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2029,750,50,0.01567,0.14573
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2030,1022,68,0.01919,0.18610
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2031,1294,86,0.02250,0.22212
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2027,206,14,0.01029,0.03316
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2028,478,32,0.02216,0.06207
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2029,750,50,0.03424,0.08605
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2030,1022,68,0.04581,0.10583
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2031,1294,86,0.05697,0.12269
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2027,206,14,0.01970,0.01919
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2028,478,32,0.05013,0.03184
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2029,750,50,0.08528,0.03989
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2030,1022,68,0.12205,0.04596
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2031,1294,86,0.15990,0.05065
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2027,206,14,0.04229,0.00867
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2028,478,32,0.12817,0.01194
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2029,750,50,0.23033,0.01338
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2030,1022,68,0.33502,0.01413
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2031,1294,86,0.43253,0.01452
+week-block bootstrap given the 13 week-5 rows,as written,-0.00200,Jan 2027,206,14,0.00654,0.06281
+week-block bootstrap given the 13 week-5 rows,as written,-0.00200,Jan 2028,478,32,0.01192,0.29133
+week-block bootstrap given the 13 week-5 rows,as written,-0.00200,Jan 2029,750,50,0.01497,0.47226
+week-block bootstrap given the 13 week-5 rows,as written,-0.00200,Jan 2030,1022,68,0.01665,0.59790
+week-block bootstrap given the 13 week-5 rows,as written,-0.00200,Jan 2031,1294,86,0.01760,0.68839
+week-block bootstrap given the 13 week-5 rows,as written,0.00000,Jan 2027,206,14,0.01741,0.02477
+week-block bootstrap given the 13 week-5 rows,as written,0.00000,Jan 2028,478,32,0.04105,0.12195
+week-block bootstrap given the 13 week-5 rows,as written,0.00000,Jan 2029,750,50,0.06058,0.21010
+week-block bootstrap given the 13 week-5 rows,as written,0.00000,Jan 2030,1022,68,0.07599,0.28007
+week-block bootstrap given the 13 week-5 rows,as written,0.00000,Jan 2031,1294,86,0.08856,0.33507
+week-block bootstrap given the 13 week-5 rows,as written,0.00100,Jan 2027,206,14,0.02709,0.01446
+week-block bootstrap given the 13 week-5 rows,as written,0.00100,Jan 2028,478,32,0.07164,0.07022
+week-block bootstrap given the 13 week-5 rows,as written,0.00100,Jan 2029,750,50,0.11211,0.12011
+week-block bootstrap given the 13 week-5 rows,as written,0.00100,Jan 2030,1022,68,0.14785,0.15895
+week-block bootstrap given the 13 week-5 rows,as written,0.00100,Jan 2031,1294,86,0.17741,0.18901
+week-block bootstrap given the 13 week-5 rows,as written,0.00230,Jan 2027,206,14,0.04702,0.00671
+week-block bootstrap given the 13 week-5 rows,as written,0.00230,Jan 2028,478,32,0.13750,0.02969
+week-block bootstrap given the 13 week-5 rows,as written,0.00230,Jan 2029,750,50,0.22571,0.04896
+week-block bootstrap given the 13 week-5 rows,as written,0.00230,Jan 2030,1022,68,0.30247,0.06266
+week-block bootstrap given the 13 week-5 rows,as written,0.00230,Jan 2031,1294,86,0.36944,0.07198
+week-block bootstrap given the 13 week-5 rows,as written,0.00400,Jan 2027,206,14,0.08965,0.00205
+week-block bootstrap given the 13 week-5 rows,as written,0.00400,Jan 2028,478,32,0.27938,0.00777
+week-block bootstrap given the 13 week-5 rows,as written,0.00400,Jan 2029,750,50,0.45105,0.01124
+week-block bootstrap given the 13 week-5 rows,as written,0.00400,Jan 2030,1022,68,0.58452,0.01324
+week-block bootstrap given the 13 week-5 rows,as written,0.00400,Jan 2031,1294,86,0.68544,0.01424
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",-0.00200,Jan 2027,206,14,0.00161,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",-0.00200,Jan 2028,478,32,0.00326,0.00012
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",-0.00200,Jan 2029,750,50,0.00437,0.00530
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",-0.00200,Jan 2030,1022,68,0.00490,0.03138
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",-0.00200,Jan 2031,1294,86,0.00519,0.08067
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00000,Jan 2027,206,14,0.00466,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00000,Jan 2028,478,32,0.01363,0.00002
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00000,Jan 2029,750,50,0.02269,0.00047
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00000,Jan 2030,1022,68,0.03059,0.00309
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00000,Jan 2031,1294,86,0.03744,0.00933
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00100,Jan 2027,206,14,0.00805,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00100,Jan 2028,478,32,0.02726,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00100,Jan 2029,750,50,0.04884,0.00012
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00100,Jan 2030,1022,68,0.06989,0.00073
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00100,Jan 2031,1294,86,0.08958,0.00218
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00230,Jan 2027,206,14,0.01516,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00230,Jan 2028,478,32,0.06086,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00230,Jan 2029,750,50,0.11732,0.00003
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00230,Jan 2030,1022,68,0.17475,0.00008
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00230,Jan 2031,1294,86,0.22831,0.00027
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00400,Jan 2027,206,14,0.03254,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00400,Jan 2028,478,32,0.14826,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00400,Jan 2029,750,50,0.28933,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00400,Jan 2030,1022,68,0.42101,0.00001
+week-block bootstrap given the 13 week-5 rows,"three-way, z 2.24 (first addendum)",0.00400,Jan 2031,1294,86,0.53414,0.00001
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2027,206,14,0.00028,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2028,478,32,0.00133,0.00006
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2029,750,50,0.00220,0.00390
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2030,1022,68,0.00268,0.02668
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2031,1294,86,0.00292,0.07292
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2027,206,14,0.00111,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2028,478,32,0.00737,0.00001
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2029,750,50,0.01525,0.00036
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2030,1022,68,0.02222,0.00245
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2031,1294,86,0.02870,0.00796
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2027,206,14,0.00186,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2028,478,32,0.01552,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2029,750,50,0.03463,0.00009
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2030,1022,68,0.05448,0.00059
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2031,1294,86,0.07375,0.00191
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2027,206,14,0.00390,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2028,478,32,0.03859,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2029,750,50,0.09086,0.00001
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2030,1022,68,0.14714,0.00006
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2031,1294,86,0.20179,0.00023
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2027,206,14,0.00970,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2028,478,32,0.10485,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2029,750,50,0.24526,0.00000
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2030,1022,68,0.38249,0.00001
+week-block bootstrap given the 13 week-5 rows,"three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2031,1294,86,0.50288,0.00001
+"Gaussian, known SE",as written,-0.00200,Jan 2027,206,14,0.01064,0.63482
+"Gaussian, known SE",as written,-0.00200,Jan 2028,478,32,0.01511,0.79232
+"Gaussian, known SE",as written,-0.00200,Jan 2029,750,50,0.01726,0.85797
+"Gaussian, known SE",as written,-0.00200,Jan 2030,1022,68,0.01837,0.89404
+"Gaussian, known SE",as written,-0.00200,Jan 2031,1294,86,0.01896,0.91678
+"Gaussian, known SE",as written,0.00000,Jan 2027,206,14,0.02491,0.50084
+"Gaussian, known SE",as written,0.00000,Jan 2028,478,32,0.04206,0.63726
+"Gaussian, known SE",as written,0.00000,Jan 2029,750,50,0.05308,0.69929
+"Gaussian, known SE",as written,0.00000,Jan 2030,1022,68,0.06073,0.73683
+"Gaussian, known SE",as written,0.00000,Jan 2031,1294,86,0.06662,0.76123
+"Gaussian, known SE",as written,0.00100,Jan 2027,206,14,0.03662,0.43295
+"Gaussian, known SE",as written,0.00100,Jan 2028,478,32,0.06684,0.54883
+"Gaussian, known SE",as written,0.00100,Jan 2029,750,50,0.08861,0.60130
+"Gaussian, known SE",as written,0.00100,Jan 2030,1022,68,0.10528,0.63223
+"Gaussian, known SE",as written,0.00100,Jan 2031,1294,86,0.11836,0.65229
+"Gaussian, known SE",as written,0.00230,Jan 2027,206,14,0.05883,0.34697
+"Gaussian, known SE",as written,0.00230,Jan 2028,478,32,0.11647,0.43405
+"Gaussian, known SE",as written,0.00230,Jan 2029,750,50,0.16275,0.47002
+"Gaussian, known SE",as written,0.00230,Jan 2030,1022,68,0.19923,0.48928
+"Gaussian, known SE",as written,0.00230,Jan 2031,1294,86,0.22972,0.50104
+"Gaussian, known SE",as written,0.00400,Jan 2027,206,14,0.10138,0.24682
+"Gaussian, known SE",as written,0.00400,Jan 2028,478,32,0.21547,0.29735
+"Gaussian, known SE",as written,0.00400,Jan 2029,750,50,0.30852,0.31501
+"Gaussian, known SE",as written,0.00400,Jan 2030,1022,68,0.38223,0.32267
+"Gaussian, known SE",as written,0.00400,Jan 2031,1294,86,0.44077,0.32632
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2027,206,14,0.00485,0.06014
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2028,478,32,0.00709,0.14352
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2029,750,50,0.00822,0.22829
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2030,1022,68,0.00894,0.31066
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",-0.00200,Jan 2031,1294,86,0.00938,0.38720
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2027,206,14,0.01260,0.02884
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2028,478,32,0.02245,0.06071
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2029,750,50,0.02974,0.09152
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2030,1022,68,0.03537,0.11978
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00000,Jan 2031,1294,86,0.04011,0.14680
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2027,206,14,0.01925,0.01926
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2028,478,32,0.03719,0.03741
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2029,750,50,0.05242,0.05314
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2030,1022,68,0.06641,0.06689
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00100,Jan 2031,1294,86,0.07895,0.07891
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2027,206,14,0.03207,0.01079
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2028,478,32,0.06956,0.01859
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2029,750,50,0.10577,0.02415
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2030,1022,68,0.14075,0.02836
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00230,Jan 2031,1294,86,0.17352,0.03183
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2027,206,14,0.06014,0.00489
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2028,478,32,0.14300,0.00720
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2029,750,50,0.22892,0.00839
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2030,1022,68,0.31022,0.00910
+"Gaussian, known SE","three-way, z 2.24 (first addendum)",0.00400,Jan 2031,1294,86,0.38818,0.00957
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2027,206,14,0.00217,0.03242
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2028,478,32,0.00389,0.10884
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2029,750,50,0.00487,0.19446
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2030,1022,68,0.00551,0.27875
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.00200,Jan 2031,1294,86,0.00592,0.35809
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2027,206,14,0.00559,0.01435
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2028,478,32,0.01340,0.04197
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2029,750,50,0.01997,0.07144
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2030,1022,68,0.02547,0.09925
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00000,Jan 2031,1294,86,0.03002,0.12609
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2027,206,14,0.00897,0.00898
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2028,478,32,0.02436,0.02405
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2029,750,50,0.03855,0.03857
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2030,1022,68,0.05187,0.05192
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00100,Jan 2031,1294,86,0.06441,0.06378
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2027,206,14,0.01621,0.00487
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2028,478,32,0.04874,0.01110
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2029,750,50,0.08340,0.01604
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2030,1022,68,0.11812,0.02004
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00230,Jan 2031,1294,86,0.15133,0.02336
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2027,206,14,0.03195,0.00202
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2028,478,32,0.10841,0.00378
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2029,750,50,0.19481,0.00484
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2030,1022,68,0.27860,0.00541
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.00400,Jan 2031,1294,86,0.35959,0.00585

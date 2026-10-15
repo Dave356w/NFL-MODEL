@@ -1634,8 +1634,11 @@ registration before any 2006–2012 disagreement was compared with an outcome. S
 no model.
 
 * **Primary, 2006–2012** (n = 1,657, free slopes, season-week clusters): b = −1.12 ± 0.64 per
-  log-odds unit of disagreement (−0.11 per SD), z −1.76. It has the same sign as all five earlier
-  era estimates but misses the registered −2 SE bar. Verdict: consistent sign, unresolved.
+  log-odds unit of disagreement (−0.11 per SD), z −1.76. It has the same sign as the 2013–2026
+  discovery block (−0.88 ± 0.45, z −1.95, where the lead was found; `ml_spread_discovery_eras.py`)
+  but misses the registered −2 SE bar. That makes two independent blocks, not more: Test 42's and
+  the 2013–2026 era estimates all come from the discovery seasons. Verdict: consistent sign,
+  unresolved.
 * **Pooled 2006–2026**: −0.98 [−1.71, −0.26]. It includes the discovery seasons, so it is not
   confirmation.
 * **The rule** (1u on the side the spread favors more when |dis| ≥ 0.111): +36.1u on 584 bets,

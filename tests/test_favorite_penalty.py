@@ -1,3 +1,4 @@
+import datetime as dt
 import sys
 from pathlib import Path
 import numpy as np
@@ -53,6 +54,23 @@ def test_ledger_scores_penalty_for_v116_rows_only():
     assert sm["fp_gain"] == pytest.approx((v.model_log_loss-v.fp_log_loss).mean())
     text = g.report_text(out)
     assert text.count("favorite-confidence penalty") == 1 and "no verdict before 200 graded games" in text  # FAVORITE_PENALTY.md addendum 2026-10-15
+
+
+def _v116_season(week18_graded):
+    """2027 v1.16 rows for weeks 17 and 18; week 18 has no result yet unless week18_graded."""
+    recs = [{**rec(gid, .8, .7, rev=V116, week=wk), "season": 2027} for gid, wk in (("a", 17), ("b", 18))]
+    res = pd.DataFrame({"game_id": ["a", "b"], "away_score": [10, 10], "home_score": [20, 20], "result": [10, 10]})
+    return g.grade(recs, res if week18_graded else res.iloc[:1])
+
+
+def test_penalty_line_is_a_checkpoint_only_once_week_18_is_graded():
+    jan = dt.datetime(2028, 1, 4, tzinfo=dt.timezone.utc)
+    pending = g.report_text(_v116_season(False), now=jan)                    # week 18 not yet played
+    assert "interim reading, not a verdict" in pending and "January checkpoint verdict" not in pending
+    done = g.report_text(_v116_season(True), now=jan + dt.timedelta(days=7))
+    assert "January checkpoint verdict" in done and "interim reading" not in done
+    october = g.report_text(_v116_season(True), now=dt.datetime(2028, 10, 15, tzinfo=dt.timezone.utc))
+    assert "interim reading, not a verdict" in october and "week-cluster SE" in october
 
 
 def test_research_scoring_checks_bets_and_gain():

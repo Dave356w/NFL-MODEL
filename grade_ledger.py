@@ -20,6 +20,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.special import expit
+from scipy.stats import t as t_dist
 
 import kalshi as k
 import matchup
@@ -58,10 +60,12 @@ H12_FROM = (2026, 6)  # (season, week): the first week after the addendum
 H1_MIN_GAP = .17
 # research/PREREGISTRATION.md, addendum 2026-10-15: H9 (moneyline vs spread disagreement), one row per
 # game from the first production snapshot (v1.18 on; prices only, so a model change does not end it).
+# Append-only: add every new production REVISION here, never remove one (a test checks m.REVISION).
 H9_PRODUCTION = ("boxscore-composite-v1.18",)
 H9_FROM = (2026, 6)
 H9_T = 0.11133        # 75th percentile of |dis| on 2013-2026, outcome-free (research/ML_SPREAD_2006_12.md)
 H9_CLIP = 1e-4
+H9_MIN_GAMES, H9_MIN_WEEKS = 30, 10  # below these the interim b and its cluster SE are not printed
 
 
 def load_records(path=LEDGER):
@@ -436,7 +440,8 @@ def summary(g):
                        fp_model_log_loss=float(f.model_log_loss.mean()), fp_gain=float(e.mean()),
                        fp_gain_se=float(e.std(ddof=1) / np.sqrt(len(e))) if len(e) > 1 else np.nan,
                        fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()),
-                       fp_gain_cluster_se=_cluster_se(e, f.season.astype(str) + "_" + f.week.astype(str)))
+                       fp_gain_cluster_se=_cluster_se(e, f.season.astype(str) + "_" + f.week.astype(str)),
+                       fp_clusters=int((f.season.astype(str) + "_" + f.week.astype(str)).nunique()))
     return out
 
 
@@ -447,19 +452,34 @@ def _cluster_se(v, groups):
     return float(np.sqrt(len(c)) * c.std(ddof=1) / len(v)) if len(c) > 1 else np.nan
 
 
-# research/FAVORITE_PENALTY.md, addendum 2026-10-15: three-way verdict at the January checkpoints.
+# research/FAVORITE_PENALTY.md, addenda 2026-10-15: three-way verdict at the January checkpoints.
+# 97.5% two-sided bounds with t(G - 1) critical values, G = season-week clusters. Simulated over the
+# five looks with resampled historical weeks: false falsification at +0.0023 about 5% and false
+# support at 0 about 2%. Given the 13 week-5 rows already in the sample, a true 0 is falsified < 1% of
+# the time through 2031 and falsely supported about 3% (research/forward_monitoring_results/).
 FP_MIN_GAMES = 200
-FP_Z = 2.24          # 97.5% two-sided bounds; both error rates <= about 5% over five looks
+FP_ALPHA = .025
 FP_DELTA = .002      # the smallest gain the penalty was adopted for
 
 
-def fp_verdict(gain, se, n):
+def fp_critical(clusters):
+    return float(t_dist.ppf(1 - FP_ALPHA / 2, clusters - 1))
+
+
+def fp_checkpoint(part, now):
+    """A January checkpoint: the regular season just ended is in the ledger through week 18, fully graded."""
+    s = part[part.season == now.year - 1]
+    return now.month == 1 and len(s) > 0 and s.week.max() >= 18 and not s.status.eq("pending").any()
+
+
+def fp_verdict(gain, se, n, clusters):
     """Penalty forward verdict (FAVORITE_PENALTY.md addendum 2026-10-15), with the week-cluster SE."""
-    if n < FP_MIN_GAMES or not np.isfinite(se):
+    if n < FP_MIN_GAMES or clusters < 2 or not np.isfinite(se):
         return f"no verdict before {FP_MIN_GAMES} graded games"
-    if gain - FP_Z * se > 0:
+    c = fp_critical(clusters)
+    if gain - c * se > 0:
         return "supported (lower bound above 0)"
-    if gain + FP_Z * se < FP_DELTA:
+    if gain + c * se < FP_DELTA:
         return f"falsified (upper bound below +{FP_DELTA:g})"
     return "unresolved"
 
@@ -564,12 +584,14 @@ def _h9_fit(d):
     y = d["home won"].to_numpy(float)
     b = np.zeros(3)
     for _ in range(100):
-        p = 1 / (1 + np.exp(-X @ b))
+        p = expit(X @ b)
         step = np.linalg.solve(X.T @ (X * (p * (1 - p))[:, None]), X.T @ (y - p))
         b += step
-        if np.max(np.abs(step)) < 1e-12:
+        if np.max(np.abs(step)) < 1e-10:
             break
-    p = 1 / (1 + np.exp(-X @ b))
+    else:
+        return np.nan, np.nan      # no convergence (e.g. separation): no finite estimate
+    p = expit(X @ b)
     S = pd.DataFrame(X * (y - p)[:, None]).groupby((d.season.astype(str) + "_" + d.week.astype(str)).to_numpy()).sum().to_numpy()
     Hi = np.linalg.inv(X.T @ (X * (p * (1 - p))[:, None]))
     return float(b[2]), float(np.sqrt((Hi @ (S.T @ S) @ Hi)[2, 2]))
@@ -579,10 +601,13 @@ def h9_summary(g):
     d = h9_rows(g)
     graded = d[d.status != "pending"]
     binary = graded[graded.status == "graded"]
-    out = {"rows": len(d), "n": len(binary), "b": np.nan, "se": np.nan}
-    if len(binary) >= 30 and binary["home won"].nunique() == 2:
+    weeks = (binary.season.astype(str) + "_" + binary.week.astype(str)).nunique()
+    out = {"rows": len(d), "n": len(binary), "weeks": weeks, "b": np.nan, "se": np.nan}
+    if len(binary) >= H9_MIN_GAMES and weeks >= H9_MIN_WEEKS and binary["home won"].nunique() == 2:
         try:
-            out["b"], out["se"] = _h9_fit(binary)
+            b, se = _h9_fit(binary)
+            if np.isfinite(b) and np.isfinite(se):
+                out["b"], out["se"] = b, se
         except np.linalg.LinAlgError:
             pass
     x = graded[graded.h9_dis.abs() >= H9_T].copy()
@@ -712,11 +737,15 @@ def report_text(g, now=None, h5=None):
                       f"  Brier     model {sm['model_brier']:.4f}  market {sm['market_brier']:.4f}"]
             if sm.get("fp_n"):
                 gain = f"{sm['fp_gain']:+.4f}" + (f" +/- {sm['fp_gain_se']:.4f}" if np.isfinite(sm["fp_gain_se"]) else "")
+                cse = sm["fp_gain_cluster_se"]
                 lines.append(f"  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty "
                              f"(lambda {m.FAVORITE_PENALTY:g}) log loss {sm['fp_log_loss']:.4f} vs model "
                              f"{sm['fp_model_log_loss']:.4f}, gain {gain} (1 SE; n={sm['fp_n']}, "
-                             f"{sm['fp_changed']} probabilities changed); bets unchanged; verdict at the January checkpoints: "
-                             f"{fp_verdict(sm['fp_gain'], sm['fp_gain_cluster_se'], sm['fp_n'])}")
+                             f"{sm['fp_changed']} probabilities changed); bets unchanged; week-cluster SE "
+                             + (f"{cse:.4f} over {sm['fp_clusters']} weeks" if np.isfinite(cse) else "n/a")
+                             + ("; January checkpoint verdict: " if fp_checkpoint(part, now) else
+                                "; interim reading, not a verdict (judged only at the January checkpoints): ")
+                             + fp_verdict(sm["fp_gain"], cse, sm["fp_n"], sm["fp_clusters"]))
             recs = m.band_records(scored_frame(part))
             lines.append("  Pick records by confidence band (model | market):")
             for i, b in recs.groupby("band_index"):
@@ -759,7 +788,9 @@ def report_text(g, now=None, h5=None):
                   "prices only): moneyline vs spread disagreement",
                   f"  {s9['rows']} games with lock prices, {s9['n']} graded binary"
                   + (f"; b on dis {s9['b']:+.3f} +/- {s9['se']:.3f} (negative = outcome leans to the spread's view)"
-                     if np.isfinite(s9["b"]) else "; b needs 30 graded games")
+                     if np.isfinite(s9["b"]) else
+                     f"; b needs {H9_MIN_GAMES} graded games over {H9_MIN_WEEKS} weeks"
+                     if s9["n"] < H9_MIN_GAMES or s9["weeks"] < H9_MIN_WEEKS else "; b not estimable")
                   + f"; verdict: {h9_verdict(s9)}",
                   f"  Rule, |dis| >= {H9_T:g}, 1u on the side the spread favors more: {r9['bets']} graded bets"
                   + (f", {r9['wins']}-{r9['losses']}-{r9['pushes']}, {r9['units']:+.2f}u, ROI {100 * r9['roi']:+.1f}%"

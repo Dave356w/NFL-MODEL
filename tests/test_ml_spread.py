@@ -54,3 +54,10 @@ def test_rule_backs_the_side_the_spread_likes_more_and_grades_at_its_moneyline()
     assert x.loc['away_side', 'side'] == 'away' and np.isclose(x.loc['away_side', 'units'], 2.5)
     assert x.loc['home_side', 'side'] == 'home' and np.isclose(x.loc['home_side', 'units'], 100/130)
     assert (x.null_ev < 0).all()                                     # negative by the hold
+
+
+def test_discovery_eras_reproduce_the_numbers_the_protocol_cites(tmp_path):
+    import ml_spread_discovery_eras as de
+    r = de.run(tmp_path/'eras.json')
+    assert [round(r[e]['b'], 2) for e in de.ERAS] == [-0.86, -0.67, -0.94, -0.97]   # ML_SPREAD_2006_12.md
+    assert r['2013-2026 (one block)']['n'] == 3472 and r['2013-2026 (one block)']['b'] < 0
