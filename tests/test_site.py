@@ -118,7 +118,7 @@ def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     for name in PUBLIC:
         html = (out / name).read_text()
         assert "2026-10-07 08:00 PDT" in html  # build timestamp
-        assert not re.search(r"\\b(?:EST|EDT|ET)\\b", visible_text(html))
+        assert not re.search(r"\b(?:EST|EDT|ET)\b", visible_text(html))
 
 
 
