@@ -117,7 +117,7 @@ def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
     assert len(snap) == 1
     r = snap[0]
     assert r["game_id"] == base["game_id"] and r["training_max_season"] == 2025
-    assert r["research_only"] and r["quote_basis"] == "unverified_proxy_only"
+    assert r["research_only"] and r["quote_basis"] == "no_matching_kalshi_quote"
     assert r["raw_spread"] < float(shadow.cp.SIGMA * shadow.ndtri(.9))
     assert r["fixed_band_side"] in ("home", "away", "")
     assert np.isclose(r["p_home_cover"]+r["p_away_cover"]+r["p_push"],1.)
