@@ -994,24 +994,22 @@ def render_fixed_bands(latest, details=False):
            "Win probabilities and moneyline picks are unchanged.</div>"]
     if eligible.empty:
         return ''.join(out) + "<p class='mut'>Insufficient prior-season history for fixed-band evaluation.</p>"
-    results = fixed_bands.summary(d)
+    results = fixed_bands.summary(d).query("method == 'Fixed bands'")
     def result_rows(frame):
         return [[esc('All seasons' if r.season == 'All' else r.season),
-                 esc('Model spread' if r.method == 'Fixed bands' else 'Previous spread'),
                  f'{r.wins}–{r.losses}–{r.pushes}', str(r.skips), f'{r.units:+.2f}', roi_short(r.roi)]
                 for r in frame.itertuples(index=False)]
-    headers = ['Season', 'Spread method', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
+    headers = ['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
     current = results[results.season == str(current_season)]
     if len(current):
         out.append(f"<h3>{current_season} graded results</h3>"
                    "<p class='mut small'>Completed games this season, graded retrospectively against the market spread. "
                    "Reconstructed results, not locked pregame picks.</p>")
-        out.append(table(headers, result_rows(current), num_cols=(2, 3, 4, 5)))
+        out.append(table(headers, result_rows(current), num_cols=(1, 2, 3, 4)))
     out.append("<h3>Per-season results</h3>")
-    out.append(table(headers, result_rows(results), num_cols=(2, 3, 4, 5)))
+    out.append(table(headers, result_rows(results), num_cols=(1, 2, 3, 4)))
     out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
                "<a href='fixed_band_summary.csv'>Season results</a> · <a href='fixed_band_rules.json'>Season mappings</a>. "
-               "Previous spread = probability-implied spread; Model spread = calibrated spread. "
                "ATS side follows forecast minus market, independently of the outright winner. "
                "The calibration maximizes earlier-season W−L, not ROI.</p>")
     if details:
@@ -1023,29 +1021,28 @@ def render_fixed_bands(latest, details=False):
                              favorite_spread_text(r.spread_line, r.home, r.away),
                              (f'{esc(r.fixed_band_ats_team)} {spread_text(r.spread_line, r.fixed_band_ats_side == "home")}'
                               if r.fixed_band_ats_team else 'Skip'),
-                             result_badge(r.original_ats_result),
                              'Skip' if r.fixed_band_ats_result == 'S' else result_badge(r.fixed_band_ats_result),
                              f'{r.fixed_band_ats_units:+.2f}'])
             label = 'graded results' if int(year) == current_season else 'retrospective results'
             out.append(folded(f'{int(year)} · model spread · {label}',
-                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'Previous ATS', 'Model ATS', 'Model units'], rows),
+                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'ATS result', 'Units'], rows),
                              int(year) == current_season))
     else:
-        out.append("<h3>Spread magnitude calibration</h3><p class='mut small'>Bands use the original model's "
+        out.append("<h3>Spread magnitude calibration</h3><p class='mut small'>Bands use the Model spread's "
                    "absolute spread. Realized margin is signed toward the forecast favorite; losses are negative. "
                    "These point-error diagnostics are separate from ATS profitability.</p>")
         rows = []
+        model_bands = np.asarray(fixed_bands.BANDS)[np.digitize(eligible.fixed_band_spread.abs(), fixed_bands.CUTS)]
         for band in fixed_bands.BANDS:
-            g = eligible[eligible.spread_band == band]
+            g = eligible[model_bands == band]
             if g.empty:
                 continue
-            realized = np.sign(g.model_spread) * g.result
-            rows.append([esc(band), str(len(g)), f'{g.model_spread.abs().mean():.2f}',
+            realized = np.sign(g.fixed_band_spread) * g.result
+            rows.append([esc(band), str(len(g)),
                          f'{g.fixed_band_spread.abs().mean():.2f}', f'{realized.mean():+.2f}',
-                         f'{(g.model_spread-g.result).abs().mean():.2f}',
                          f'{(g.fixed_band_spread-g.result).abs().mean():.2f}'])
-        out.append(table(['Original magnitude', 'Games', 'Avg previous', 'Avg model spread',
-                          'Avg realized margin', 'Original MAE', 'Fixed MAE'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
+        out.append(table(['Model spread magnitude', 'Games', 'Avg model spread',
+                          'Avg realized margin', 'MAE'], rows, num_cols=(1, 2, 3, 4)))
     return ''.join(out)
 
 
@@ -1131,7 +1128,13 @@ def render_all(out_dir, data=DATA, now=None):
                    'fixed_band_board.csv': latest['board']}
         for name, frame in exports.items():
             frame.to_csv(Path(data) / 'latest' / name, index=False)
-            frame.to_csv(out / name, index=False)
+            if name == 'fixed_band_summary.csv':
+                public = frame[frame.method == 'Fixed bands'].assign(method='Model spread')
+            else:
+                public = frame.drop(columns=[c for c in frame if c.startswith('original_ats_')
+                                               or c in ('model_spread', 'spread_band')])
+                public = public.rename(columns={'fixed_band_spread': 'model_spread'})
+            public.to_csv(out / name, index=False)
         rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
         (out / 'fixed_band_rules.json').write_text(rules)

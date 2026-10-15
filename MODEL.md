@@ -523,8 +523,10 @@ The site's existing **Model spread** now displays the fixed-band calibrated
 spread, replacing the probability-implied value. This is a reporting layer in
 `fixed_bands.py`; v1.18 win probabilities, moneyline bets, config identity, and
 append-only original snapshots are unchanged. `model_spread` in original model
-exports remains the probability-implied calibration input; the site exports the
-replacement explicitly as `fixed_band_spread` in `fixed_band_board.csv`.
+exports remains the probability-implied calibration input; internal derived data exports the
+replacement explicitly as `fixed_band_spread` in `fixed_band_board.csv`. Public
+downloads expose the calibrated value as `model_spread` and omit the previous
+spread forecasts and ATS comparisons; internal derived data retains both.
 
 For absolute input bands [0,3), [3,7), [7,10), [10,infinity), choose monotone
 integer magnitudes 0–21 maximizing earlier-season ATS W−L, with a deterministic

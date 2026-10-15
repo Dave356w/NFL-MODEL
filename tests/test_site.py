@@ -503,3 +503,23 @@ def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypat
     for year in [2024, 2026]:
         assert b.spread_record_text(b.spread_record(latest, year)) in html
     assert 'ROI' in html and 'skips' in html
+
+
+def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
+                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    out, _ = render(tmp_path)
+    for page in PUBLIC:
+        text = (out / page).read_text()
+        for label in ['Previous spread', 'Previous ATS', 'Avg previous', 'Original MAE', 'Original magnitude']:
+            assert label not in text
+    summary = pd.read_csv(out / 'fixed_band_summary.csv')
+    assert set(summary.method) == {'Model spread'}
+    for name in ['fixed_band_ledger.csv', 'fixed_band_board.csv']:
+        frame = pd.read_csv(out / name)
+        assert 'model_spread' in frame
+        assert not any(c.startswith('original_ats_') for c in frame)
+        assert 'fixed_band_spread' not in frame
+    # Internal history remains reproducible; only the public export is simplified.
+    internal = pd.read_csv(tmp_path / 'data' / 'latest' / 'fixed_band_ledger.csv')
+    assert 'original_ats_result' in internal and 'fixed_band_spread' in internal
