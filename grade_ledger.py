@@ -451,7 +451,7 @@ def _cluster_se(v, groups):
     return float(np.sqrt(len(c)) * c.std(ddof=1) / len(v)) if len(c) > 1 else np.nan
 
 
-# research/FAVORITE_PENALTY.md, addendum 2026-10-15: three-way verdict at the January checkpoints.
+# research/FAVORITE_PENALTY.md, addenda 2026-10-15: three-way verdict at the January checkpoints.
 # 97.5% two-sided bounds with t(G - 1) critical values, G = season-week clusters. Simulated over the
 # five looks with resampled historical weeks: false falsification at +0.0023 <= 4.8%, false support
 # at 0 <= 2.3% (research/forward_monitoring_results/).

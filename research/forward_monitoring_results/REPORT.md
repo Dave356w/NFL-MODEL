@@ -30,4 +30,4 @@ Each cell runs from the first look to all five looks.
   2.28 at 86, so it costs little power later.
 
 Full table: `operating_characteristics.csv`, with both methods and true gains −0.002 to +0.004.
-The adopted rule is recorded in the `FAVORITE_PENALTY.md` addendum of 2026-10-15.
+The adopted rule is recorded in the second `FAVORITE_PENALTY.md` addendum of 2026-10-15.
