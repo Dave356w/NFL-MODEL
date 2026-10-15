@@ -16,11 +16,17 @@ team than the spread.
 | **2006–2012 (unseen for this question)** | 1,657 | **−1.12 ± 0.64** | −0.111 | −1.76 |
 | 2006–2009 | 890 | −1.51 ± 0.85 | −0.150 | −1.79 |
 | 2010–2012 | 767 | −0.50 ± 0.97 | −0.049 | −0.51 |
+| 2013–2026 (discovery: the lead was found here) | 3,472 | −0.88 ± 0.45 | −0.088 | −1.95 |
 | Pooled 2006–2026 | 5,129 | −0.98 ± 0.37, 95% [−1.71, −0.26] | −0.098 | −2.68 |
 
-* **The sign replicates on the one block that was never used for this question.** That makes six
-  negative estimates in six eras: Test 42's three, and the 2013–2026 re-estimates of −0.86, −0.67,
-  −0.94 and −0.97. Each era is about 1–1.8 SE on its own.
+* **The sign replicates on the one block that was never used for this question.** There are two
+  independent blocks, not six or eight eras:
+  * 2013–2026 is the discovery data. Its four era fits (−0.86, −0.67, −0.94, −0.97; model-based
+    SEs about 0.8–1.4) and Test 42's three era estimates all come from those same seasons.
+  * 2006–2012 is the one held-out estimate.
+
+  `ml_spread_discovery_eras.py` reproduces the 2013–2026 numbers the protocol cites
+  (`discovery_eras.json`).
 * **The pooled interval excludes zero, but it is not independent confirmation.** It includes
   2013–2026, where the lead was found. The registered decision uses 2006–2012 alone: b = −1.12
   against a −2 SE bar of −1.27. `lead_closed` is false.
