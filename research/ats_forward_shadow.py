@@ -219,11 +219,31 @@ def graded_view(data: Path | str = "data") -> pd.DataFrame:
     g = g.merge(outcomes[keep], how="left", on="game_id", validate="one_to_one")
     for arm, col in [("raw", "raw_side"), ("fixed_band", "fixed_band_side"),
                      ("cover_probability", "probability_side")]:
-        graded = [cp.grade(float(r["result"]), float(r["market_spread"]), r[col])
-                  if pd.notna(r["result"]) else ("", np.nan)
-                  for _, r in g.iterrows()]
-        g[arm+"_result"] = [v[0] for v in graded]
-        g[arm+"_units_proxy_minus110"] = [v[1] for v in graded]
+        grades, units, asks = [], [], []
+        for _, r in g.iterrows():
+            side = r[col]
+            if pd.notna(r["result"]):
+                grade, _ = cp.grade(float(r["result"]), float(r["market_spread"]), side)
+            else:
+                grade = ""
+            quote = r.get("kalshi_quote")
+            ask = (quote or {}).get(side + "_ask") if side in ("home","away") else None
+            if not grade or ask is None:
+                value = np.nan
+            elif grade == "S":
+                value = 0.
+            elif grade == "P":
+                value = 0.
+            else:
+                a = float(ask)
+                fee_unit = .07*(1-a)
+                value = (1/a-1-fee_unit) if grade == "W" else (-1-fee_unit)
+            grades.append(grade)
+            units.append(value)
+            asks.append(ask if ask is not None else np.nan)
+        g[arm+"_result"] = grades
+        g[arm+"_kalshi_ask"] = asks
+        g[arm+"_units_kalshi"] = units
     return g
 
 
