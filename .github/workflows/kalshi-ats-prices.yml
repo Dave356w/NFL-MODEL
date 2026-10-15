@@ -61,12 +61,17 @@ jobs:
           import pandas as pd
           a=pd.read_csv('/tmp/kalshi_historical_audit.csv')
           print('Historical quote coverage by reason:',a.status.value_counts(dropna=False).to_dict())
+          print('Alt quote coverage:',a.alternate_status.value_counts(dropna=False).to_dict())
           p='/tmp/kalshi_historical_audit_graded.csv'
           try:
               g=pd.read_csv(p)
               for arm in ('original','fixed_band','cover_probability'):
                   s=g[arm+'_kalshi_units'].dropna()
                   print(arm, 'n',len(s),'units',float(s.sum()),'ROI',float(s.mean()) if len(s) else None)
+              if 'original_model_alt_kalshi_units' in g:
+                  s=g.original_model_alt_kalshi_units.dropna()
+                  print('original_model_alt', 'n',len(s),'units',float(s.sum()),
+                        'ROI',float(s.mean()) if len(s) else None)
           except (FileNotFoundError,pd.errors.EmptyDataError):pass
           PY
           fi
