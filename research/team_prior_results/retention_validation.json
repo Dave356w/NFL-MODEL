@@ -1,0 +1,97 @@
+{
+ "production_checks_league_scheme": {
+  "rates_max_abs": 0.0,
+  "peaks_margin_max_abs": 0.0,
+  "retention_weight_max_abs": 0.0,
+  "team_weeks": 7358,
+  "unknown_flags": 0
+ },
+ "qb_id_remap": {
+  "00-0031076": "00-0024226",
+  "00-0035752": "00-0035228",
+  "00-0032792": "00-0029567",
+  "00-0029623": "00-0031266"
+ },
+ "schemes": {
+  "league": [
+   0.5,
+   0.5
+  ],
+  "retention_cont_75_25": [
+   0.75,
+   0.25
+  ],
+  "retention_cont_50_25": [
+   0.5,
+   0.25
+  ],
+  "retention_flat_75": [
+   0.75,
+   0.75
+  ],
+  "retention_flat_25": [
+   0.25,
+   0.25
+  ]
+ },
+ "league_vs_lagged_features": {
+  "games": 3679,
+  "max_abs_any_column": 0.0
+ },
+ "vs_existing_profiles_league_rows": {
+  "rows_existing": 5948,
+  "rows_new": 5948,
+  "unmatched": 0,
+  "columns_compared": 73,
+  "max_abs_diff_numeric": 0.0,
+  "mismatched_cells_any": 0,
+  "by_column_mismatches": {}
+ },
+ "independent_recompute": {
+  "rows_checked": 60,
+  "max_rel_diff": 0.0,
+  "boundary_flag_mismatches": 0
+ },
+ "lookahead_test": {
+  "season": 2024,
+  "cut_week": 10,
+  "weeks_le_cut_max_abs_change": 0.0,
+  "values_compared": 34960,
+  "week_after_cut_max_abs_change": Infinity,
+  "older_boundary_control_share_wk1_team_weeks_changed_by_scheme": {
+   "league": 0.0,
+   "retention_cont_75_25": 0.65625,
+   "retention_cont_50_25": 0.65625,
+   "retention_flat_75": 0.0,
+   "retention_flat_25": 0.0
+  },
+  "older_boundary_control_share_wk1_m1_flag_changed": 0.53125
+ },
+ "output": {
+  "/home/user/NFL-MODEL/research/team_prior_work/retention_profiles.csv.gz": {
+   "rows": 17844,
+   "sha256": "b0b38cf427c02938a14a8a288060f000d6ca62c6a7888046d4aba83b0b3cac51",
+   "variants": [
+    "league",
+    "retention_cont_75_25",
+    "retention_cont_50_25"
+   ]
+  },
+  "/home/user/NFL-MODEL/research/team_prior_work/retention_controls_profiles.csv.gz": {
+   "rows": 17844,
+   "sha256": "0560be4315d18a0d6464b3719face32f15019898c3c489dc923edd30351bbdaa",
+   "variants": [
+    "league",
+    "retention_flat_75",
+    "retention_flat_25"
+   ]
+  }
+ },
+ "inputs": {
+  "/home/user/NFL-MODEL/research/form_windows_inputs/boxes.csv": "0bdc25496b1ce99448e61ad298fe034c273a2267e39020f1595c0b361a8deba9",
+  "/home/user/NFL-MODEL/research/form_windows_inputs/schedule.csv": "782fc5ca8ffe128d0a7d8496ce4d2cf39c4d99c078c54cba890dcc59d7d19f84",
+  "/home/user/NFL-MODEL/research/team_prior_inputs/games_coaches_qbs.csv": "f0a47acee5c804be8b5b26d1d904174992a0907effb23829b1585f426715b434",
+  "/home/user/NFL-MODEL/research/team_prior_work/profiles.csv.gz": "e12aae63cf3c02f37d60b833f5d36df284752a8c46a77db2cdaf3dd7470a51cd"
+ },
+ "runtime_s": 145.58129858970642
+}

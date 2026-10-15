@@ -1,0 +1,27 @@
+{
+ "n_eval_rows": 5278,
+ "n_team_seasons": 320,
+ "n_mislabel_rows": 43,
+ "B": 2000,
+ "seed": 20261014,
+ "subset_rows": {
+  "all": 5278,
+  "wk1": 318,
+  "wk1-4": 1270,
+  "wk5-9": 1426,
+  "wk10-18": 2582,
+  "both_unchanged": 2464,
+  "coach_changed": 1226,
+  "qb_changed": 2170,
+  "both_changed": 582,
+  "all_excl_coach_mislabel": 5235,
+  "wk2-18": 4960
+ },
+ "persistence_pair_counts_(coach_change,qb_change)": {
+  "(False, False)": 163,
+  "(False, True)": 89,
+  "(True, False)": 36,
+  "(True, True)": 32
+ },
+ "rows_2026_diag": 158
+}
