@@ -271,6 +271,21 @@ def joined_ats_results(frame, kalshi_quotes):
         units=np.where(won,1/a-1-fee/a,np.where(lost,-1-fee/a,0.))
         d[arm+"_kalshi_ask"]=a
         d[arm+"_kalshi_units"]=np.where(s.isin(["home","away"]),units,0.)
+    # Original model spread as a separately priced alternate binary rung.
+    if {"alt_ask","alt_target_strike","alt_selection_side","alt_contract"}.issubset(d.columns):
+        eligible = (d.alt_ask.notna() & d.alt_target_strike.notna() &
+                    d.alt_selection_side.eq(d.original_side) &
+                    d.alt_contract.isin(["YES","NO"]))
+        fav_margin = np.where(d.model_spread>0,d.margin,-d.margin)
+        yes_hit = fav_margin>d.alt_target_strike
+        side_hit = np.where(d.alt_contract.eq("YES"),yes_hit,~yes_hit)
+        prices=pd.to_numeric(d.alt_ask,errors="coerce")
+        eligible &= prices.gt(0)&prices.lt(1)
+        fee=FEE_RATE*(1-prices)
+        d["original_model_alt_kalshi_units"] = np.where(
+            eligible, np.where(side_hit,1/prices-1-fee,-1-fee),np.nan)
+        d["original_model_alt_kalshi_grade"] = np.where(
+            eligible,np.where(side_hit,"W","L"),"")
     return d
 
 
