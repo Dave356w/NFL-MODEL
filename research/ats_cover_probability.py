@@ -201,6 +201,22 @@ def paired_ci(frame: pd.DataFrame, arm: str, comparator: str) -> dict:
             "CI95_normal": [float(mean-1.96*se), float(mean+1.96*se)]}
 
 
+def paired_metric_ci(frame: pd.DataFrame, baseline_col: str, challenger_col: str) -> dict:
+    """Descriptive 95% season-week clustered paired gain (positive = better)."""
+    d = frame.dropna(subset=[baseline_col, challenger_col])
+    if len(d) < 2:
+        return {"n": len(d), "gain": None, "CI95_normal": None}
+    delta = d[baseline_col] - d[challenger_col]
+    gain = float(delta.mean())
+    clusters = (delta - gain).groupby([d.season, d.week]).sum()
+    k, n = len(clusters), len(d)
+    if k < 2:
+        return {"n": n, "gain": gain, "clusters": k, "CI95_normal": None}
+    se = float(np.sqrt(k/(k-1) * np.dot(clusters, clusters)/n**2))
+    return {"n": n, "gain": gain, "clusters": k, "se": se,
+            "CI95_normal": [gain - 1.96*se, gain + 1.96*se]}
+
+
 def report(observations: pd.DataFrame, fits: list[dict]) -> dict:
     d = observations
     if d.empty:
@@ -219,6 +235,11 @@ def report(observations: pd.DataFrame, fits: list[dict]) -> dict:
              "market_cover_brier", "corrected_cover_brier")},
         "margin_nll": {key: float(d[key].mean()) for key in
                        ("nll_market_margin", "nll_corrected_margin")},
+        "paired_score_gains": {
+            "cover_log_loss": paired_metric_ci(binary, "market_cover_ll", "corrected_cover_ll"),
+            "cover_brier": paired_metric_ci(binary, "market_cover_brier", "corrected_cover_brier"),
+            "margin_nll": paired_metric_ci(d, "nll_market_margin", "nll_corrected_margin"),
+        },
         "paired_fixed_vs_original_matched": paired_ci(matched_fixed, "fixed_band", "original"),
         "paired_probability_vs_original_per_game": paired_ci(d, "cover_probability", "original"),
         "sha256_input": hashlib.sha256(d[["game_id", "season", "week", "margin",
