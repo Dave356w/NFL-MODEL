@@ -478,8 +478,11 @@ does not use their values. H1–H9 are unchanged and stay judged only at the sea
 now uses t(G − 1) critical values, where G is the number of season-weeks, in place of z = 2.24.
 * Its first error rates came from Gaussian paths with a known SE.
 * Resampling historical weeks with an estimated SE shows that z = 2.24 falsifies a true +0.0023
-  gain 2.9% → 6.1% of the time over five looks.
-* With t(G − 1), the rate is 1.8% → 4.8%, and false support at 0 is 0.7% → 2.3%.
+  gain 3.0% → 6.4% of the time over five looks.
+* With t(G − 1), the rate is 1.9% → 5.1%, and false support at 0 is 0.6% → 2.2%.
+* The 13 graded week-5 rows are already in the registered sample. Given them, falsification is out
+  of reach through 2031: a true 0 is falsified 0.8% of the time by January 2031.
+* A checkpoint is the first report after week 18 is fully graded.
 
 It was chosen from the simulation alone, before any verdict point. See the second 2026-10-15
 addendum in `research/FAVORITE_PENALTY.md`.

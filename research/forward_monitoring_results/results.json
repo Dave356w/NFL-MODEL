@@ -20,7 +20,16 @@
     "skew": 2.7776718753133145,
     "excess_kurtosis": 16.38168196572405,
     "week_blocks": 158,
-    "games_per_week": 15.025316455696203
+    "games_per_week": 15.025316455696203,
+    "max_game_gain": {
+      "game_id": "2024_05_ARI_SF",
+      "gain": 0.7300079446353989
+    },
+    "max_week_sum": 1.4928686509412616
+  },
+  "week5_block": {
+    "gain_sum": 1.9048834344134082,
+    "games": 13.0
   },
   "looks": {
     "Jan 2027": [
@@ -53,6 +62,7 @@
   },
   "delta": 0.002,
   "alpha": 0.025,
-  "reps": 20000,
+  "reps": 200000,
+  "chunk": 20000,
   "seed": 20261015
 }

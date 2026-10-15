@@ -38,11 +38,22 @@ def test_week_block_bootstrap_keeps_both_error_rates_near_five_percent():
     assert cur['Jan 2031']['falsified'] > .4 and new['Jan 2031']['falsified'] < .06
     null = fm.simulate(ADOPTED, 0., blocks, reps=4000)
     assert null['Jan 2031']['supported'] < .05                              # false support stays below 5%
-    first_draft = fm.simulate(fm.RULES['three-way, z 2.24 (first draft)'], .0023, blocks, reps=4000)
+    first_draft = fm.simulate(fm.RULES['three-way, z 2.24 (first addendum)'], .0023, blocks, reps=4000)
     assert first_draft['Jan 2031']['falsified'] > new['Jan 2031']['falsified']
 
 
 def test_gaussian_known_se_reproduces_the_first_draft_table():
     sd = fm.per_game_sd()['sd_effective']
-    r = fm.simulate_gaussian(fm.RULES['three-way, z 2.24 (first draft)'], .0023, sd, reps=4000)
+    r = fm.simulate_gaussian(fm.RULES['three-way, z 2.24 (first addendum)'], .0023, sd, reps=4000)
     assert r['Jan 2031']['falsified'] < .05
+
+
+def test_given_the_week5_rows_falsification_is_out_of_reach():
+    w5 = fm.week5_block()
+    assert w5[1] == 13 and abs(w5[0] - 1.9049) < 1e-3                       # the ledger's 13 graded rows
+    blocks = fm.week_blocks()
+    assert w5[0] > blocks[0].max()                                          # beyond every historical week
+    null = fm.simulate(ADOPTED, 0., blocks, reps=4000, fixed=w5)
+    assert null['Jan 2031']['falsified'] < .02 and null['Jan 2031']['supported'] < .05
+    free = fm.simulate(ADOPTED, 0., blocks, reps=4000)
+    assert free['Jan 2031']['falsified'] > .15                              # unconditional power to falsify a 0

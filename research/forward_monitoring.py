@@ -2,12 +2,16 @@
 
     python research/forward_monitoring.py      # writes research/forward_monitoring_results/
 
-Outcome-free with respect to the forward ledger. Each simulated path resamples whole historical week
-blocks of the penalty's per-game log-loss gain (2017-20 and 2021-25 in
-research/favorite_penalty_results/inputs.csv, recentred to the true gain), so the gain keeps its skew
-and its week clustering. At each January checkpoint the verdict uses the week-cluster SE estimated
-from the sampled weeks, as grade_ledger.fp_verdict does. Gaussian paths with a known SE, the method
-of the addendum's first draft, are kept for comparison.
+Each simulated path resamples whole historical week blocks of the penalty's per-game log-loss gain
+(2017-20 and 2021-25 in research/favorite_penalty_results/inputs.csv, recentred to the true gain),
+so the gain keeps its skew and its week clustering. At each January checkpoint the verdict uses the
+week-cluster SE estimated from the sampled weeks, as grade_ledger.fp_verdict does.
+
+Three methods:
+* unconditional: every week is resampled. Outcome-free with respect to the forward ledger.
+* given week 5: the first week is fixed to the 13 graded native v1.16 week-5 rows, which are in the
+  registered verdict sample and were seen before the addenda. It uses no later forward outcome.
+* Gaussian, known SE: the method of the first 2026-10-15 addendum, kept for comparison.
 """
 import json
 import sys
@@ -32,18 +36,36 @@ DELTA = 0.002          # the smallest gain the penalty was adopted for (2021-25 
 ALPHA = 0.025          # two-sided 97.5% bounds
 MIN_N = 200
 SEED = 20261015
-REPS = 20000
+REPS = 200000
+CHUNK = 20000
+METHODS = ('week-block bootstrap, estimated SE', 'week-block bootstrap given the 13 week-5 rows', 'Gaussian, known SE')
+
+
+def _gains(d):
+    y = d['home won'].to_numpy(float); p = d.model_wp.to_numpy(float)
+    fp = m.favorite_penalized_wp(p, d.q.to_numpy(float), m.FAVORITE_PENALTY)
+    return -(y*np.log(p)+(1-y)*np.log(1-p))+(y*np.log(fp)+(1-y)*np.log(1-fp))
+
+
+def _graded(path):
+    d = pd.read_csv(path)
+    d = d[d['home won'].isin([0., 1.]) & d.q.notna() & d.model_wp.notna()].reset_index(drop=True)
+    d['gain'] = _gains(d)
+    d['week_key'] = d.season.astype(str)+'_'+d.week.astype(str)
+    return d
 
 
 def historical_gains(path=INPUTS):
     """Per-game v1.16 minus penalized log loss on the 2017-20 and 2021-25 bases."""
-    d = pd.read_csv(path)
-    d = d[d['home won'].isin([0., 1.]) & d.q.notna() & d.model_wp.notna()].reset_index(drop=True)
-    y = d['home won'].to_numpy(float); p = d.model_wp.to_numpy(float)
-    fp = m.favorite_penalized_wp(p, d.q.to_numpy(float), m.FAVORITE_PENALTY)
-    d['gain'] = -(y*np.log(p)+(1-y)*np.log(1-p))+(y*np.log(fp)+(1-y)*np.log(1-fp))
-    d['week_key'] = d.season.astype(str)+'_'+d.week.astype(str)
+    d = _graded(path)
     return d[d.basis.str.startswith(('2017-20', '2021-25'))].reset_index(drop=True)
+
+
+def week5_block(path=INPUTS):
+    """(gain sum, games) of the graded native v1.16 week-5 rows: the first block of the verdict sample."""
+    d = _graded(path)
+    d = d[d.basis.str.startswith('native')]
+    return float(d.gain.sum()), float(len(d))
 
 
 def per_game_sd(path=INPUTS):
@@ -56,10 +78,13 @@ def per_game_sd(path=INPUTS):
         cse = np.sqrt(len(c))*c.std(ddof=1)/n
         rows[b] = {'n': n, 'mean': float(g.gain.mean()), 'sd': float(sd), 'deff': float((cse/(sd/np.sqrt(n)))**2)}
     sd = float(hist.gain.std(ddof=1)); deff = max(1., max(r['deff'] for r in rows.values()))
-    weeks = hist.groupby('week_key').size()
+    weeks = hist.groupby('week_key').gain.agg(['sum', 'size'])
+    top = hist.loc[hist.gain.idxmax()]
     return {'bases': rows, 'sd': sd, 'deff': deff, 'sd_effective': sd*np.sqrt(deff),
             'skew': float(hist.gain.skew()), 'excess_kurtosis': float(hist.gain.kurt()),
-            'week_blocks': int(len(weeks)), 'games_per_week': float(weeks.mean())}
+            'week_blocks': int(len(weeks)), 'games_per_week': float(weeks['size'].mean()),
+            'max_game_gain': {'game_id': str(top.game_id), 'gain': float(top.gain)},
+            'max_week_sum': float(weeks['sum'].max())}
 
 
 def week_blocks(path=INPUTS):
@@ -94,7 +119,7 @@ def three_way(critical):
 
 
 RULES = {'as written': as_written,
-         'three-way, z 2.24 (first draft)': three_way(lambda g: np.full(np.shape(g), 2.24)),
+         'three-way, z 2.24 (first addendum)': three_way(lambda g: np.full(np.shape(g), 2.24)),
          'three-way, t(G-1) 97.5% (adopted)': three_way(t_critical)}
 
 
@@ -106,63 +131,96 @@ def verdict(rule, est, se, n, clusters):
     return 'supported' if sup else 'falsified' if fal else 'unresolved'
 
 
-def _first_verdicts(rule, est, se, n, looks):
-    """Probability of each verdict by each look; the first decisive verdict stands."""
+def _first_counts(rule, est, se, n, looks):
+    """Paths with a supported / falsified verdict by each look; the first decisive verdict stands."""
     first = np.zeros(est.shape[0], int)
-    out = {}
-    for j, (name, (_, g)) in enumerate(looks.items()):
+    out = []
+    for j, (_, g) in enumerate(looks.values()):
         sup, fal = rule(est[:, j], se[:, j], n[:, j], np.full(est.shape[0], g))
         new = first == 0
         first[new & sup] = 1; first[new & fal] = 2
-        out[name] = {'supported': float((first == 1).mean()), 'falsified': float((first == 2).mean())}
-    return out
+        out.append(((first == 1).sum(), (first == 2).sum()))
+    return np.array(out, float)
 
 
-def simulate(rule, gain, blocks, looks=LOOKS, reps=REPS, seed=SEED):
-    """Resample whole historical weeks; the SE is the week-cluster SE of the sampled weeks."""
+def _chunked(draw, rule, looks, reps, seed):
+    counts = np.zeros((len(looks), 2))
+    sizes = [CHUNK]*(reps//CHUNK)+([reps % CHUNK] if reps % CHUNK else [])
+    for k, ss in zip(sizes, np.random.SeedSequence(seed).spawn(len(sizes))):
+        counts += _first_counts(rule, *draw(np.random.default_rng(ss), k), looks)
+    return {name: {'supported': c[0]/reps, 'falsified': c[1]/reps} for name, c in zip(looks, counts)}
+
+
+def simulate(rule, gain, blocks, looks=LOOKS, reps=REPS, seed=SEED, fixed=None):
+    """Resample whole historical weeks; the SE is the week-cluster SE of the sampled weeks. `fixed`,
+    a (gain sum, games) pair, is an observed first week that every path shares (not recentred)."""
     s0, n0 = blocks
-    rng = np.random.default_rng(seed)
     weeks = np.array([g for _, g in looks.values()])
-    idx = rng.integers(0, len(s0), size=(reps, weeks.max()))
-    s, n = s0[idx]+n0[idx]*gain, n0[idx]
-    cs, cs2, cn = np.cumsum(s, 1)[:, weeks-1], np.cumsum(s*s, 1)[:, weeks-1], np.cumsum(n, 1)[:, weeks-1]
-    var = np.maximum(cs2-cs*cs/weeks, 0)/(weeks-1)
-    return _first_verdicts(rule, cs/cn, np.sqrt(weeks)*np.sqrt(var)/cn, cn, looks)
+
+    def draw(rng, k):
+        idx = rng.integers(0, len(s0), size=(k, weeks.max()-(fixed is not None)))
+        s, n = s0[idx]+n0[idx]*gain, n0[idx]
+        if fixed is not None:
+            s = np.hstack([np.full((k, 1), fixed[0]), s]); n = np.hstack([np.full((k, 1), fixed[1]), n])
+        cs, cs2, cn = np.cumsum(s, 1)[:, weeks-1], np.cumsum(s*s, 1)[:, weeks-1], np.cumsum(n, 1)[:, weeks-1]
+        var = np.maximum(cs2-cs*cs/weeks, 0)/(weeks-1)
+        return cs/cn, np.sqrt(weeks)*np.sqrt(var)/cn, cn
+    return _chunked(draw, rule, looks, reps, seed)
 
 
 def simulate_gaussian(rule, gain, sd, looks=LOOKS, reps=REPS, seed=SEED):
-    """The first draft's method: Brownian cumulative sums with the SE known (sd/sqrt(n))."""
-    rng = np.random.default_rng(seed)
+    """The first addendum's method: Brownian cumulative sums with the SE known (sd/sqrt(n))."""
     ns = np.array([n for n, _ in looks.values()])
     inc = np.diff(np.concatenate([[0], ns]))
-    est = np.cumsum(rng.normal(gain*inc, sd*np.sqrt(inc), size=(reps, len(ns))), axis=1)/ns
-    return _first_verdicts(rule, est, np.broadcast_to(sd/np.sqrt(ns), est.shape), np.broadcast_to(ns, est.shape), looks)
+
+    def draw(rng, k):
+        est = np.cumsum(rng.normal(gain*inc, sd*np.sqrt(inc), size=(k, len(ns))), axis=1)/ns
+        return est, np.broadcast_to(sd/np.sqrt(ns), est.shape), np.broadcast_to(ns, est.shape)
+    return _chunked(draw, rule, looks, reps, seed)
+
+
+def table(t, method):
+    """Markdown rows (first look -> all five) for the documents, rounded from the CSV values."""
+    first, last = list(LOOKS)[0], list(LOOKS)[-1]
+    x = t[t.method == method].set_index(['rule', 'true_gain', 'look'])
+
+    def cell(rule, gain, col):
+        a, b = x.loc[(rule, gain, first), col], x.loc[(rule, gain, last), col]
+        return f'{100*a:.1f}% → {100*b:.1f}%'
+    rows = ['| Rule | False falsification (+0.0023) | False support (0) | Falsifies a true 0 | Supports a true +0.004 |',
+            '|---|---:|---:|---:|---:|']
+    for rule in RULES:
+        rows.append(f'| {rule} | {cell(rule, .0023, "falsified")} | {cell(rule, 0., "supported")} | '
+                    f'{cell(rule, 0., "falsified")} | {cell(rule, .004, "supported")} |')
+    return '\n'.join(rows)
 
 
 def run(out=OUT, reps=REPS):
     s = per_game_sd()
-    blocks = week_blocks()
+    blocks, w5 = week_blocks(), week5_block()
     rows = []
-    for method in ('week-block bootstrap, estimated SE', 'Gaussian, known SE'):
+    for method in METHODS:
         for name, rule in RULES.items():
             for gtrue in TRUE_GAINS:
-                res = (simulate(rule, gtrue, blocks, reps=reps) if method.startswith('week')
-                       else simulate_gaussian(rule, gtrue, s['sd_effective'], reps=reps))
+                if method == METHODS[2]:
+                    res = simulate_gaussian(rule, gtrue, s['sd_effective'], reps=reps)
+                else:
+                    res = simulate(rule, gtrue, blocks, reps=reps, fixed=w5 if method == METHODS[1] else None)
                 for look, r in res.items():
                     rows.append({'method': method, 'rule': name, 'true_gain': gtrue, 'look': look,
                                  'n': LOOKS[look][0], 'weeks': LOOKS[look][1], **r})
     t = pd.DataFrame(rows)
     out.mkdir(parents=True, exist_ok=True)
-    t.to_csv(out/'operating_characteristics.csv', index=False, float_format='%.4f')
+    t.to_csv(out/'operating_characteristics.csv', index=False, float_format='%.5f')
+    (out/'tables.md').write_text('\n\n'.join(f'### {mth}\n\n{table(t, mth)}' for mth in METHODS)+'\n')
     crit = {k: round(float(t_critical(g)), 4) for k, (_, g) in LOOKS.items()}
-    (out/'results.json').write_text(json.dumps({'sd': s, 'looks': LOOKS, 't_critical': crit, 'delta': DELTA,
-                                                'alpha': ALPHA, 'reps': reps, 'seed': SEED}, indent=2)+'\n')
+    (out/'results.json').write_text(json.dumps({'sd': s, 'week5_block': {'gain_sum': w5[0], 'games': w5[1]},
+                                                'looks': LOOKS, 't_critical': crit, 'delta': DELTA, 'alpha': ALPHA,
+                                                'reps': reps, 'chunk': CHUNK, 'seed': SEED}, indent=2)+'\n')
     return s, t
 
 
 if __name__ == '__main__':
     s, t = run()
     print(json.dumps(s, indent=1))
-    pd.set_option('display.width', 220)
-    print(t.pivot_table(index=['method', 'rule', 'true_gain'], columns='look',
-                        values=['supported', 'falsified']).round(3).to_string())
+    print((OUT/'tables.md').read_text())

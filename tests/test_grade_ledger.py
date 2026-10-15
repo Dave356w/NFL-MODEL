@@ -237,28 +237,56 @@ def test_h9_sample_keeps_every_listed_production_revision(monkeypatch):
     assert sorted(g.h9_rows(graded).game_id) == ["a", "c"]
 
 
-def _h9_games(n, weeks, win):
+def _h9_games(n, weeks, win, pending=(), ties=(), prices=(-300, -150, 130, 200)):
+    """n H9 games over `weeks` weeks from week 6; win(d, rng) gives home wins for the H9 rows d. Games
+    listed in `pending` get no result; games in `ties` end level."""
     rng = np.random.default_rng(0)
-    hm = rng.choice([-300, -150, 130, 200], n)
+    hm = rng.choice(list(prices), n)
     am = np.where(hm < 0, np.abs(hm) - 20, -(hm + 20))
     sp = rng.normal(0, 5, n).round(1)
     recs = [rec(f"g{i}", .6, .6, rev=H9_REV, week=6 + i % weeks, hm=float(hm[i]), am=float(am[i]), sp=float(sp[i]))
             for i in range(n)]
-    w = win(hm, rng)
-    res = pd.DataFrame({"game_id": [f"g{i}" for i in range(n)], "away_score": np.where(w, 10, 20),
-                        "home_score": np.where(w, 20, 10), "result": np.where(w, 10, -10)})
-    return g.grade(recs, res)
+    d = g.h9_rows(g.grade(recs, pd.DataFrame({"game_id": [], "away_score": [], "home_score": [], "result": []})))
+    w = win(d, rng)
+    res = pd.DataFrame({"game_id": d.game_id, "away_score": np.where(w, 10, 20), "home_score": np.where(w, 20, 10),
+                        "result": np.where(w, 10, -10)})
+    res.loc[res.game_id.isin([f"g{i}" for i in ties]), ["away_score", "home_score", "result"]] = [17, 17, 0]
+    return g.grade(recs, res[~res.game_id.isin([f"g{i}" for i in pending])])
+
+
+def _coin(d, rng):
+    return rng.random(len(d)) < .5
 
 
 def test_h9_interim_b_waits_for_ten_weeks_and_says_when_not_estimable():
-    two_weeks = _h9_games(40, 2, lambda hm, rng: rng.random(len(hm)) < .5)
+    two_weeks = _h9_games(40, 2, _coin)
     s = g.h9_summary(two_weeks)
     assert s["n"] == 40 and s["weeks"] == 2 and np.isnan(s["b"]) and np.isnan(s["se"])
     assert "b needs 30 graded games over 10 weeks" in g.report_text(two_weeks)
-    separated = _h9_games(40, 12, lambda hm, rng: hm < 0)              # the favorite always wins: no finite MLE
+    separated = _h9_games(40, 12, lambda d, rng: d.h_q.to_numpy() > .5)   # the favorite always wins: singular
     s = g.h9_summary(separated)
     assert s["weeks"] == 12 and np.isnan(s["b"])
     assert "b not estimable" in g.report_text(separated)
+
+
+def test_h9_fit_that_never_converges_is_not_reported_as_an_estimate():
+    sep = _h9_games(60, 12, lambda d, rng: d.h9_dis.to_numpy() < 0,       # separation on dis: b runs off
+                    prices=(-300, -200, -150, -120, 110, 130, 170, 200, 250))
+    binary = g.h9_rows(sep)[lambda x: x.status == "graded"]
+    b, se = g._h9_fit(binary)                                             # Newton never settles; no exception
+    assert np.isnan(b) and np.isnan(se)
+    assert np.isnan(g.h9_summary(sep)["b"]) and "b not estimable" in g.report_text(sep)
+
+
+def test_h9_week_gate_counts_only_weeks_with_binary_results():
+    # 45 games over weeks 6-14 graded; week 15 holds three pending games and a tie: still 9 weeks.
+    nine = _h9_games(49, 10, _coin, pending=(9, 19, 29), ties=(39,))
+    s = g.h9_summary(nine)
+    assert s["n"] == 45 and s["weeks"] == 9 and np.isnan(s["b"])
+    assert "b needs 30 graded games over 10 weeks" in g.report_text(nine)
+    ten = _h9_games(49, 10, _coin, pending=(9, 19, 29))                    # the week-15 game is decided
+    s = g.h9_summary(ten)
+    assert s["n"] == 46 and s["weeks"] == 10 and np.isfinite(s["b"]) and np.isfinite(s["se"])
 
 
 def test_h9_rule_backs_the_spread_side_and_skips_small_disagreements():

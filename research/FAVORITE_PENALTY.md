@@ -108,13 +108,14 @@ Gaussian paths with a known SE. The per-game gain is right-skewed (skew 2.8, exc
 The ledger estimates a week-cluster SE from only about 14 weeks at the first look. Together these
 make false falsification more likely than the Gaussian paths show.
 
-**Corrected simulation** (`research/forward_monitoring.py`):
+**Corrected simulation** (`research/forward_monitoring.py`, 200,000 paths; Monte Carlo SE about
+0.05 points):
 * Each path resamples whole historical weeks of the per-game gain: 158 weeks of 2017–20 and
   2021–25, recentred to the true gain.
 * At each look the SE is the week-cluster SE of the sampled weeks, as the ledger computes it.
 * The looks are about 206, 478, 750, 1,022 and 1,294 graded games over 14, 32, 50, 68 and 86 weeks.
 
-On that basis, z = 2.24 falsifies a true +0.0023 2.9% → 6.1% of the time over the five looks, not
+On that basis, z = 2.24 falsifies a true +0.0023 3.0% → 6.4% of the time over the five looks, not
 the 1.1% → 3.2% reported above.
 
 **Change.** The bounds use t, the two-sided 97.5% t critical value with G − 1 degrees of freedom,
@@ -124,18 +125,46 @@ in place of 2.24. G is the number of season-weeks, so t is 2.53 at 14 weeks and 
 - Everything else in the addendum above is unchanged: no verdict below 200 graded games, January
   checkpoints only, first native v1.16 snapshot per game.
 
-Simulated over the five looks (first look → all five):
+**A January checkpoint** is the first report after the regular season's week 18 is fully graded,
+with no pending v1.16 row left for that season. Before that, including early-January builds while
+weeks 17–18 are still pending, `grade_ledger.py` labels the line an interim reading, not a verdict.
+The line also prints the week-cluster SE and the number of weeks.
 
-| Rule (resampled weeks, estimated SE) | False falsification (+0.0023) | False support (0) | Falsifies a true 0 | Supports a true +0.004 |
+Simulated over the five looks (first look → all five), every week resampled:
+
+| Rule | False falsification (+0.0023) | False support (0) | Falsifies a true 0 | Supports a true +0.004 |
 |---|---:|---:|---:|---:|
-| As first written | 33% → 47% | 2.3% → 5.6% | 52% → 76% | 12% → 51% |
-| Three-way, z 2.24 (addendum above) | 2.9% → 6.1% | 1.2% → 3.1% | 7% → 25% | 7% → 46% |
-| **Three-way, t(G − 1)** | **1.8% → 4.8%** | **0.7% → 2.3%** | 5% → 22% | 5% → 43% |
+| As first written | 33.2% → 46.8% | 2.2% → 5.5% | 51.4% → 76.9% | 11.5% → 51.7% |
+| Three-way, z 2.24 (addendum above) | 3.0% → 6.4% | 1.2% → 3.1% | 7.3% → 24.9% | 7.1% → 46.2% |
+| **Three-way, t(G − 1) (adopted)** | 1.9% → 5.1% | 0.6% → 2.2% | 4.9% → 22.2% | 4.2% → 43.3% |
 
+With t(G − 1), false falsification is about 5% and false support about 2%.
+
+**Given the 13 week-5 rows already in the sample.** The registered sample includes the 13 graded
+native week-5 rows. The protocol above registered them before they were scored. Their gain sums to
++1.90 (mean +0.147):
+* That week lies beyond all 158 historical weeks; the largest of those sums to +1.49.
+* SF@SEA alone (+1.59) is more than twice the largest historical game (+0.73, 2024 ARI@SF).
+
+With that week fixed as the first week of every path:
+
+| Rule | False falsification (+0.0023) | False support (0) | Falsifies a true 0 | Supports a true +0.004 |
+|---|---:|---:|---:|---:|
+| As first written | 0.7% → 7.2% | 1.7% → 8.9% | 2.5% → 33.5% | 9.0% → 68.5% |
+| Three-way, z 2.24 (addendum above) | 0.0% → 0.0% | 0.5% → 3.7% | 0.0% → 0.9% | 3.3% → 53.4% |
+| **Three-way, t(G − 1) (adopted)** | 0.0% → 0.0% | 0.1% → 2.9% | 0.0% → 0.8% | 1.0% → 50.3% |
+
+* **Falsification is out of reach through 2031.** By January 2031, a penalty with no gain is
+  falsified 0.8% of the time, and one that costs 0.002 a game is falsified 7.3%.
+* False support at 0 is 2.9%. Support at +0.004 is 50%.
+* Until about 2031, then, the forward verdict can only support the penalty or stay unresolved.
+  "Unresolved" is not evidence for it.
+* The week-5 rows stay in the sample. They were registered before they were scored, and removing
+  them now would be a change informed by their outcome.
+
+**Disclosure.**
 * The change was chosen from the simulation alone, before any verdict point.
 * It uses no forward outcome beyond the 13 week-5 rows disclosed above.
 * It makes both an early support and an early falsification harder.
-* Both simulation methods are kept in `research/forward_monitoring_results/`.
-
-`grade_ledger.py` now prints the week-cluster SE and the number of weeks on the penalty line.
-Outside January it labels the line an interim reading, not a verdict.
+* All three methods (every week resampled, given week 5, and Gaussian) are kept in
+  `research/forward_monitoring_results/`.
