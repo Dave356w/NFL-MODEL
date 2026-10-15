@@ -133,8 +133,8 @@ def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
     assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
-    assert "TB QB: J.Daniels" in html and "Pick DAL −485" in html
-    assert "Final 20–27" in html and "Pick BUF · W" in html
+    assert "TB QB: J.Daniels" in html and "DAL −485" in html
+    assert "Final 20–27" in html and "Moneyline result BUF · W" in html
     assert "pts off market" not in html and "Largest drivers" not in html
     assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
     # record box: forward ledger, KC@BUF picked BUF -135 and won
@@ -523,3 +523,41 @@ def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monke
     # Internal history remains reproducible; only the public export is simplified.
     internal = pd.read_csv(tmp_path / 'data' / 'latest' / 'fixed_band_ledger.csv')
     assert 'original_ats_result' in internal and 'fixed_band_spread' in internal
+
+
+def test_ats_card_pick_disagrees_with_moneyline_and_handles_skips():
+    pick, edge = b.ats_card_pick(-5., -5.5, 'LV', 'BUF')
+    assert pick == 'LV +5.5' and edge == .5
+    assert b.ats_card_pick(-5., -5., 'LV', 'BUF')[0] == 'No bet · zero projected edge'
+    assert b.ats_card_pick(float('nan'), -5.5, 'LV', 'BUF')[0] == 'Unavailable'
+    assert b.ats_card_pick(7., 3., 'LV', 'BUF') == ('LV −3.0', 4.)
+
+
+def test_historical_pick_reference_excludes_game_and_future_dates():
+    d = pd.DataFrame({'game_id':['past','current','future'], 'season':[2026]*3,
+        'gameday':['2026-10-01','2026-10-15','2026-10-20'], 'model_wp':[.7]*3,
+        'bet_result':['W','L','L'], 'units':[1.,-1.,-1.], 'fixed_band_spread':[5.]*3,
+        'spread_line':[5.5]*3, 'fixed_band_ats_result':['W','L','L'],
+        'fixed_band_ats_units':[1/1.1,-1.,-1.]})
+    game = dict(game_id='current', season=2026, gameday='2026-10-15', model_wp=.7)
+    html = b.historical_pick_reference({'fixed_band_ledger':d},game,.5)
+    assert '65–75% model probability' in html and '>0–1-point edge' in html
+    assert html.count('1–0–0') == 2 and html.count('1 bets · 0 skips') == 2
+    assert '100.0% win' in html and '100.0% cover' in html
+    assert 'small sample' in html and 'not locked forward evidence' in html
+    assert 'ROI' in html and 'assumed −110' in html
+    # Without dates, only earlier seasons qualify.
+    html = b.historical_pick_reference({'fixed_band_ledger':d.drop(columns='gameday')},game,.5)
+    assert '0–0–0' in html
+
+
+def test_cards_show_separate_picks_and_historical_reference(tmp_path,monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
+                        dict(cuts=[3,7,10], magnitudes=[4,5,7,13]))
+    out,_=render(tmp_path)
+    text=(out/'index.html').read_text()
+    assert "<span class='kind'>Moneyline</span>" in text
+    assert "<span class='kind'>Spread</span>" in text
+    assert 'projected edge' in text
+    assert 'Historical reference · reconstructed' in text
+    assert 'model probability' in text and 'recorded moneylines' in text

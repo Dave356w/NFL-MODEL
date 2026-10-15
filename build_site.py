@@ -317,6 +317,8 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--faint);font:800 18px/1 var(--sans)}
 .card[open] .chev{transform:translateY(-50%) rotate(180deg);color:var(--ink)}
 .flags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:9px}
+.pick-lines{display:grid;grid-template-columns:85px 1fr;gap:5px 10px;margin-top:12px;font-size:13px;text-align:left}
+.pick-lines .kind{color:var(--muted);font-weight:600}
 .probbar{display:flex;height:8px;border-radius:var(--r-s);overflow:hidden;margin:10px 0 2px;background:var(--line-2)}
 .probbar i{display:block;height:100%}
 .probbar .a{background:rgb(var(--warm))}.probbar .h{background:rgb(var(--cool))}
@@ -736,6 +738,64 @@ def price_band_html(team, price, q_pick, mkt, mdl, years, n_forward):
 
 # ---------------------------------------------------------------- pages
 
+def ats_card_pick(spread, market, home, away):
+    if not math.isfinite(spread) or not math.isfinite(market):
+        return 'Unavailable', math.nan
+    gap = spread - market
+    if abs(gap) <= fixed_bands.EPS:
+        return 'No bet · zero projected edge', 0.
+    team = home if gap > 0 else away
+    return f'{esc(team)} {spread_text(market, gap > 0)}', abs(gap)
+
+
+def historical_pick_reference(latest, game, edge):
+    d = latest.get('fixed_band_ledger', pd.DataFrame()).copy()
+    if d.empty:
+        return ''
+    # Completed earlier dates only; never use this game's outcome or later games.
+    day = pd.to_datetime(game.get('gameday'), errors='coerce', utc=True)
+    if pd.notna(day) and 'gameday' in d:
+        d = d[pd.to_datetime(d.gameday, errors='coerce', utc=True) < day]
+    else:
+        d = d[d.season < int(game['season'])]
+    d = d[d.game_id != game['game_id']]
+    rows = []
+    def record(label, results, units, accuracy, price_note):
+        w, l, p, s = [int((results == x).sum()) for x in ('W', 'L', 'P', 'S')]
+        n = w + l + p
+        rate = f'{100*w/(w+l):.1f}% {accuracy}' if w+l else '—'
+        roi = roi_short(float(units.sum()) / n) if n else '—'
+        sample = f'{n} bets · {s} skips' + (' · small sample' if w+l < 100 else '')
+        return [label, f'{w}–{l}–{p}', rate, f'{roi} · {price_note}', sample]
+    p = num(game.get('model_wp'))
+    if math.isfinite(p) and not math.isclose(p, .5):
+        confidence = max(p, 1-p)
+        cuts = np.array([.50, .55, .65, .75, .85, 1.000001])
+        i = min(int(np.searchsorted(cuts, confidence, side='right')-1), len(cuts)-2)
+        c = np.maximum(d.model_wp, 1-d.model_wp)
+        g = d[(c >= cuts[i]) & (c < cuts[i+1]) & d.bet_result.isin(['W','L','P'])]
+        rows.append(record(f'Moneyline · {cuts[i]*100:.0f}–{min(cuts[i+1],1)*100:.0f}% model probability',
+                           g.bet_result, g.units, 'win', 'recorded moneylines'))
+    if math.isfinite(edge):
+        e = (d.fixed_band_spread-d.spread_line).abs()
+        if edge <= fixed_bands.EPS:
+            g = d[(e <= fixed_bands.EPS) & d.fixed_band_spread.notna()]
+            label = 'Spread · zero edge (no bet)'
+        else:
+            cuts = [0.,1.,3.,7.,math.inf]
+            i = next(i for i in range(4) if edge <= cuts[i+1]+fixed_bands.EPS)
+            g = d[(e > cuts[i]+fixed_bands.EPS) & (e <= cuts[i+1]+fixed_bands.EPS)]
+            label = f'Spread · >{cuts[i]:g}–{cuts[i+1]:g}-point edge' if math.isfinite(cuts[i+1]) else 'Spread · >7-point edge'
+        rows.append(record(label, g.fixed_band_ats_result, g.fixed_band_ats_units, 'cover', 'assumed −110'))
+    if not rows:
+        return ''
+    return ("<h3>Historical reference · reconstructed</h3>" +
+            table(['Similar picks', 'W–L–P', 'Accuracy', 'ROI', 'Sample'], rows, num_cols=(1,2,3,4)) +
+            "<p class='mut small'>Earlier completed games only, excluding this game and later dates. "
+            "Win and cover rates exclude pushes and skips; ROI includes pushed stakes. "
+            "Records are reconstructed, not locked forward evidence or this game's cover probability. "
+            "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
+
 def render_index(latest, ledger, built, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
@@ -780,10 +840,8 @@ def render_index(latest, ledger, built, now=None):
             flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
             if team and bet.result in ("W", "L", "P"):
                 flags.append(f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
-                             f"Pick {esc(team)} · {bet.result}</span>")
+                             f"Moneyline result {esc(team)} · {bet.result}</span>")
         else:
-            if team and math.isfinite(num(bet.price)):
-                flags.append(f"<span class='badge lean'>Pick {esc(team)} {ml_text(bet.price)}</span>")
             if r["game_id"] in recorded:
                 flags.append("<span class='badge'>Locked</span>")
             elif pending(r):
@@ -797,6 +855,13 @@ def render_index(latest, ledger, built, now=None):
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
         ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
+        spread_pick, edge = ats_card_pick(ms, ks, home, away)
+        edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
+        moneyline_pick = pick_text(team, bet.price)
+        if team:
+            moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
+        picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
+                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
         band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
@@ -815,6 +880,7 @@ def render_index(latest, ledger, built, now=None):
                    f"{side_html(home, p, fav_home, 'home')}</div>"
                    f"<div class='probbar' aria-hidden='true'><i class='a' style='width:{100 * (1 - p):.1f}%'></i>"
                    f"<i class='h' style='width:{100 * p:.1f}%'></i></div>"
+                   f"{picks}"
                    f"{f'<div class=flags>{chr(10).join(flags)}</div>' if flags else ''}<span class='chev'>⌄</span></summary>")
         det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
             ["Model", pct(1 - p), pct(p)],
@@ -827,6 +893,7 @@ def render_index(latest, ledger, built, now=None):
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
+        det.append(historical_pick_reference(latest, r, edge))
         if team and math.isfinite(num(bet.price)) and math.isfinite(q):
             det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
                                        mkt_bands, mdl_bands, band_years, n_fwd))

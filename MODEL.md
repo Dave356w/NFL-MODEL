@@ -550,3 +550,15 @@ Each site build regenerates `data/latest/fixed_band_ledger.csv`,
 `fixed_band_summary.csv`, `fixed_band_board.csv`, and `fixed_band_rules.json`,
 and publishes downloadable copies. The deployment workflow commits these derived
 data files; original snapshots are never rewritten.
+
+
+Game cards distinguish the v1.18 moneyline pick from the fixed-band ATS pick.
+ATS edge is the absolute fixed-band minus market spread; zero edge is no bet.
+Expanded historical references use fixed confidence bands 50–55%, 55–65%,
+65–75%, 75–85%, 85–100% for moneyline picks, and edge bands (0,1], (1,3],
+(3,7], (7,infinity) for ATS picks. Each reference excludes the game itself,
+same-date and later games; absent historical dates, only earlier seasons qualify.
+Records show W–L–P, sample size, skips, win/cover rates excluding pushes,
+and flat 1u ROI including pushed stakes (recorded moneylines or assumed −110).
+Fewer than 100 decisive bets is labeled small sample. These exposed historical
+rates are descriptive references, not per-game cover probabilities.
