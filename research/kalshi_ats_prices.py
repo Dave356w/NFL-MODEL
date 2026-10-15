@@ -237,15 +237,33 @@ def joined_ats_results(frame, kalshi_quotes):
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--games-csv",type=Path,required=True,
+    p.add_argument("--games-csv",type=Path,
                    help="Game rows with exact kickoff_utc, away, home, game_id, spread_line")
+    p.add_argument("--auto-season",type=int,choices=[2025,2026],
+                   help="Resolve kickoff from nflverse schedules; select games in retro ledger")
+    p.add_argument("--week",type=int,
+                   help="Optional NFL week within auto-season")
     p.add_argument("--out",type=Path,required=True)
     p.add_argument("--limit",type=int,default=10)
     p.add_argument("--hours-before-kickoff",type=float,default=2.)
     p.add_argument("--research-predictions",type=Path,
                    help="Optional Test 48 game-level predictions CSV to grade on matched Kalshi quotes")
     args=p.parse_args(argv)
-    games=pd.read_csv(args.games_csv)
+    if bool(args.games_csv) == bool(args.auto_season):
+        raise ValueError("provide exactly one of --games-csv or --auto-season")
+    if args.auto_season:
+        import nfl_model as model
+        schedules = model.load_schedule(args.auto_season)
+        quotes = pd.read_csv(Path("data/latest/retro_ledger.csv"))
+        quotes = quotes.loc[quotes.season.eq(args.auto_season)]
+        if args.week is not None: quotes = quotes.loc[quotes.week.eq(args.week)]
+        sched = schedules[["game_id", "away_team", "home_team", "gameday", "gametime"]].copy()
+        sched["kickoff_utc"] = [model.kickoff_utc(r).isoformat() for r in sched.to_dict("records")]
+        games = quotes[["game_id", "home", "away", "spread_line"]].merge(
+            sched[["game_id","kickoff_utc"]],on="game_id",validate="one_to_one")
+        games = games.sort_values("game_id")
+    else:
+        games=pd.read_csv(args.games_csv)
     required={"game_id","kickoff_utc","home","away","spread_line"}
     if not required.issubset(games.columns): raise ValueError(f"missing {sorted(required-set(games.columns))}")
     if args.limit < 1: raise ValueError("--limit must be positive")
