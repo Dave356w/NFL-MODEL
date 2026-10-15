@@ -1,0 +1,386 @@
+{
+ "league_vs_metric_profile_max_abs": 0.0,
+ "qb_id_remap": {
+  "00-0031076": "00-0024226",
+  "00-0035752": "00-0035228",
+  "00-0032792": "00-0029567",
+  "00-0029623": "00-0031266"
+ },
+ "league_vs_lagged_features": {
+  "games": 3679,
+  "max_abs_any_column": 0.0,
+  "by_column": {
+   "home__for__rates_core__plays_per_game": 0.0,
+   "home__for__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "home__for__rates_core__rush_yards_per_attempt": 0.0,
+   "home__for__rates_core__first_down_rate": 0.0,
+   "home__for__rates_core__fumbles_lost_per_game": 0.0,
+   "home__for__rates_core__interception_pct": 0.0,
+   "home__for__rates_core__penalty_yards_per_game": 0.0,
+   "home__allowed__rates_core__plays_per_game": 0.0,
+   "home__allowed__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "home__allowed__rates_core__rush_yards_per_attempt": 0.0,
+   "home__allowed__rates_core__first_down_rate": 0.0,
+   "home__allowed__rates_core__fumbles_lost_per_game": 0.0,
+   "home__allowed__rates_core__interception_pct": 0.0,
+   "home__allowed__rates_core__penalty_yards_per_game": 0.0,
+   "home__max_lead": 0.0,
+   "home__max_deficit": 0.0,
+   "home__margin": 0.0,
+   "home__h16__for__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "home__h16__allowed__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "away__for__rates_core__plays_per_game": 0.0,
+   "away__for__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "away__for__rates_core__rush_yards_per_attempt": 0.0,
+   "away__for__rates_core__first_down_rate": 0.0,
+   "away__for__rates_core__fumbles_lost_per_game": 0.0,
+   "away__for__rates_core__interception_pct": 0.0,
+   "away__for__rates_core__penalty_yards_per_game": 0.0,
+   "away__allowed__rates_core__plays_per_game": 0.0,
+   "away__allowed__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "away__allowed__rates_core__rush_yards_per_attempt": 0.0,
+   "away__allowed__rates_core__first_down_rate": 0.0,
+   "away__allowed__rates_core__fumbles_lost_per_game": 0.0,
+   "away__allowed__rates_core__interception_pct": 0.0,
+   "away__allowed__rates_core__penalty_yards_per_game": 0.0,
+   "away__max_lead": 0.0,
+   "away__max_deficit": 0.0,
+   "away__margin": 0.0,
+   "away__h16__for__rates_core__net_pass_yards_per_pass_play": 0.0,
+   "away__h16__allowed__rates_core__net_pass_yards_per_pass_play": 0.0
+  }
+ },
+ "vs_frozen_packs": {
+  "2013-20 pack (out_of_sample_results/frozen_features_2013_2020)": {
+   "games": 2048,
+   "by_season": {
+    "2013": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 4.440892098500626e-16
+     }
+    },
+    "2014": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 8.881784197001252e-16
+     }
+    },
+    "2015": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 4.440892098500626e-16
+     }
+    },
+    "2016": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 4.440892098500626e-16
+     }
+    },
+    "2017": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 8.881784197001252e-16
+     }
+    },
+    "2018": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 1.7763568394002505e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 8.881784197001252e-16
+     }
+    },
+    "2019": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 1.7763568394002505e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 8.881784197001252e-16
+     }
+    },
+    "2020": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 1.0,
+      "max_abs": 4.440892098500626e-16
+     }
+    }
+   },
+   "profiles_d": {
+    "max_abs_diff": 3.552713678800501e-15,
+    "nan_pattern_mismatches": 0,
+    "share_games_identical_1e-9": 1.0,
+    "max_abs_by_column": {
+     "d__for__rates_core__plays_per_game": 8.881784197001252e-16,
+     "d__for__rates_core__net_pass_yards_per_pass_play": 2.220446049250313e-16,
+     "d__for__rates_core__rush_yards_per_attempt": 2.220446049250313e-16,
+     "d__for__rates_core__first_down_rate": 1.7763568394002505e-15,
+     "d__for__rates_core__fumbles_lost_per_game": 9.8879238130678e-17,
+     "d__for__rates_core__interception_pct": 4.440892098500626e-16,
+     "d__for__rates_core__penalty_yards_per_game": 3.552713678800501e-15,
+     "d__allowed__rates_core__plays_per_game": 8.881784197001252e-16,
+     "d__allowed__rates_core__net_pass_yards_per_pass_play": 2.220446049250313e-16,
+     "d__allowed__rates_core__rush_yards_per_attempt": 2.220446049250313e-16,
+     "d__allowed__rates_core__first_down_rate": 8.881784197001252e-16,
+     "d__allowed__rates_core__fumbles_lost_per_game": 9.8879238130678e-17,
+     "d__allowed__rates_core__interception_pct": 4.440892098500626e-16,
+     "d__allowed__rates_core__penalty_yards_per_game": 3.552713678800501e-15,
+     "d__max_lead": 1.7763568394002505e-15,
+     "d__max_deficit": 1.7763568394002505e-15
+    }
+   },
+   "pass_contexts": {
+    "max_abs_diff": 8.881784197001252e-16,
+    "nan_pattern_mismatches": 0,
+    "share_games_identical_1e-9": 1.0,
+    "max_abs_by_column": {
+     "pass_product": 8.881784197001252e-16,
+     "pass_1sd_pp": 1.1102230246251565e-16,
+     "pass_1sd_pn": 2.220446049250313e-16,
+     "pass_1sd_np": 2.220446049250313e-16,
+     "pass_1sd_nn": 2.220446049250313e-16
+    }
+   }
+  },
+  "2019-26 pack (shrinkage_results/frozen_training_features)": {
+   "games": 2143,
+   "by_season": {
+    "2019": {
+     "profiles_d": {
+      "share_identical": 0.0,
+      "max_abs": 16.762314219582578
+     },
+     "pass_contexts": {
+      "share_identical": 0.125,
+      "max_abs": 5.866079418409777
+     }
+    },
+    "2020": {
+     "profiles_d": {
+      "share_identical": 0.0,
+      "max_abs": 1.3165805420153163
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 1.4807842891163538
+     }
+    },
+    "2021": {
+     "profiles_d": {
+      "share_identical": 0.0,
+      "max_abs": 0.14918363912386212
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 1.2067616556926684
+     }
+    },
+    "2022": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 1.7763568394002505e-15
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 0.47397953774669643
+     }
+    },
+    "2023": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 0.8413658346758206
+     }
+    },
+    "2024": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 0.14363531556782316
+     }
+    },
+    "2025": {
+     "profiles_d": {
+      "share_identical": 1.0,
+      "max_abs": 3.552713678800501e-15
+     },
+     "pass_contexts": {
+      "share_identical": 0.0,
+      "max_abs": 0.015567258409129536
+     }
+    },
+    "2026": {
+     "profiles_d": {
+      "share_identical": 0.29044117647058826,
+      "max_abs": 9.189577719067522
+     },
+     "pass_contexts": {
+      "share_identical": 0.29044117647058826,
+      "max_abs": 1.9188659498967806
+     }
+    }
+   },
+   "profiles_d": {
+    "max_abs_diff": 16.762314219582578,
+    "nan_pattern_mismatches": 224,
+    "share_games_identical_1e-9": 0.5440970601959869,
+    "max_abs_by_column": {
+     "d__for__rates_core__plays_per_game": 6.20633040378172,
+     "d__for__rates_core__net_pass_yards_per_pass_play": 0.9535751376502626,
+     "d__for__rates_core__rush_yards_per_attempt": 0.5379377066051765,
+     "d__for__rates_core__first_down_rate": 3.3683460328001935,
+     "d__for__rates_core__fumbles_lost_per_game": 0.3951731570475733,
+     "d__for__rates_core__interception_pct": 1.2642008169537686,
+     "d__for__rates_core__penalty_yards_per_game": 16.173607491959643,
+     "d__allowed__rates_core__plays_per_game": 4.379861855348459,
+     "d__allowed__rates_core__net_pass_yards_per_pass_play": 0.8733722974947362,
+     "d__allowed__rates_core__rush_yards_per_attempt": 0.8434209341690826,
+     "d__allowed__rates_core__first_down_rate": 3.546821398196286,
+     "d__allowed__rates_core__fumbles_lost_per_game": 0.32011201698508407,
+     "d__allowed__rates_core__interception_pct": 1.412548595800895,
+     "d__allowed__rates_core__penalty_yards_per_game": 16.762314219582578,
+     "d__max_lead": 4.923752747815228,
+     "d__max_deficit": 5.26370480965579
+    }
+   },
+   "pass_contexts": {
+    "max_abs_diff": 5.866079418409777,
+    "nan_pattern_mismatches": 160,
+    "share_games_identical_1e-9": 0.05179654689687354,
+    "max_abs_by_column": {
+     "pass_product": 5.866079418409777,
+     "pass_1sd_pp": 0.9304174232411886,
+     "pass_1sd_pn": 1.278131421130947,
+     "pass_1sd_np": 0.9743833278125373,
+     "pass_1sd_nn": 2.236193028410912
+    }
+   }
+  }
+ },
+ "output": {
+  "path": "/home/user/NFL-MODEL/research/team_prior_work/profiles.csv.gz",
+  "rows": 47584,
+  "columns": [
+   "game_id",
+   "season",
+   "week",
+   "team",
+   "opponent",
+   "is_home",
+   "neutral_site",
+   "variant",
+   "for__rates_core__plays_per_game",
+   "for__rates_core__net_pass_yards_per_pass_play",
+   "for__rates_core__rush_yards_per_attempt",
+   "for__rates_core__first_down_rate",
+   "for__rates_core__fumbles_lost_per_game",
+   "for__rates_core__interception_pct",
+   "for__rates_core__penalty_yards_per_game",
+   "allowed__rates_core__plays_per_game",
+   "allowed__rates_core__net_pass_yards_per_pass_play",
+   "allowed__rates_core__rush_yards_per_attempt",
+   "allowed__rates_core__first_down_rate",
+   "allowed__rates_core__fumbles_lost_per_game",
+   "allowed__rates_core__interception_pct",
+   "allowed__rates_core__penalty_yards_per_game",
+   "max_lead",
+   "max_deficit",
+   "margin",
+   "h16__for__rates_core__net_pass_yards_per_pass_play",
+   "h16__allowed__rates_core__net_pass_yards_per_pass_play",
+   "history_games",
+   "coach_change",
+   "qb_change",
+   "target_source",
+   "target_games",
+   "weight_sum_h8",
+   "prior_season_window_games",
+   "head_coach",
+   "prior_season_last_coach",
+   "coach_window_games",
+   "recent_starter_qb_id",
+   "recent_starter_qb_name",
+   "prior_season_primary_qb_id",
+   "prior_season_primary_qb_name",
+   "prior_primary_qb_starts",
+   "qb_window_games",
+   "actual__for__rates_core__plays_per_game",
+   "den__for__rates_core__plays_per_game",
+   "actual__for__rates_core__net_pass_yards_per_pass_play",
+   "den__for__rates_core__net_pass_yards_per_pass_play",
+   "actual__for__rates_core__rush_yards_per_attempt",
+   "den__for__rates_core__rush_yards_per_attempt",
+   "actual__for__rates_core__first_down_rate",
+   "den__for__rates_core__first_down_rate",
+   "actual__for__rates_core__fumbles_lost_per_game",
+   "den__for__rates_core__fumbles_lost_per_game",
+   "actual__for__rates_core__interception_pct",
+   "den__for__rates_core__interception_pct",
+   "actual__for__rates_core__penalty_yards_per_game",
+   "den__for__rates_core__penalty_yards_per_game",
+   "actual__allowed__rates_core__plays_per_game",
+   "den__allowed__rates_core__plays_per_game",
+   "actual__allowed__rates_core__net_pass_yards_per_pass_play",
+   "den__allowed__rates_core__net_pass_yards_per_pass_play",
+   "actual__allowed__rates_core__rush_yards_per_attempt",
+   "den__allowed__rates_core__rush_yards_per_attempt",
+   "actual__allowed__rates_core__first_down_rate",
+   "den__allowed__rates_core__first_down_rate",
+   "actual__allowed__rates_core__fumbles_lost_per_game",
+   "den__allowed__rates_core__fumbles_lost_per_game",
+   "actual__allowed__rates_core__interception_pct",
+   "den__allowed__rates_core__interception_pct",
+   "actual__allowed__rates_core__penalty_yards_per_game",
+   "den__allowed__rates_core__penalty_yards_per_game",
+   "actual__max_lead",
+   "den__max_lead",
+   "actual__max_deficit",
+   "den__max_deficit",
+   "actual__margin",
+   "den__margin"
+  ],
+  "sha256": "e12aae63cf3c02f37d60b833f5d36df284752a8c46a77db2cdaf3dd7470a51cd"
+ },
+ "inputs": {
+  "/home/user/NFL-MODEL/research/form_windows_inputs/boxes.csv": "0bdc25496b1ce99448e61ad298fe034c273a2267e39020f1595c0b361a8deba9",
+  "/home/user/NFL-MODEL/research/form_windows_inputs/schedule.csv": "782fc5ca8ffe128d0a7d8496ce4d2cf39c4d99c078c54cba890dcc59d7d19f84",
+  "/home/user/NFL-MODEL/research/team_prior_inputs/games_coaches_qbs.csv": "f0a47acee5c804be8b5b26d1d904174992a0907effb23829b1585f426715b434",
+  "/home/user/NFL-MODEL/research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "/home/user/NFL-MODEL/research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f"
+ }
+}

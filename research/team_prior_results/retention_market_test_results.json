@@ -1,0 +1,116 @@
+{
+ "validation_vs_fit_composite": [
+  {
+   "season": 2017,
+   "week": 1,
+   "games": 15,
+   "max_abs_prob_diff": 0.0,
+   "training_games_fit_composite": 510
+  },
+  {
+   "season": 2019,
+   "week": 9,
+   "games": 14,
+   "max_abs_prob_diff": 1.1102230246251565e-16,
+   "training_games_fit_composite": 1139
+  },
+  {
+   "season": 2021,
+   "week": 14,
+   "games": 14,
+   "max_abs_prob_diff": 1.1102230246251565e-16,
+   "training_games_fit_composite": 1722
+  },
+  {
+   "season": 2023,
+   "week": 1,
+   "games": 16,
+   "max_abs_prob_diff": 0.0,
+   "training_games_fit_composite": 2069
+  },
+  {
+   "season": 2025,
+   "week": 18,
+   "games": 16,
+   "max_abs_prob_diff": 1.1102230246251565e-16,
+   "training_games_fit_composite": 2868
+  }
+ ],
+ "validation_vs_earlier_p_league": {
+  "rows_unmatched": 0,
+  "max_abs_diff_p_league": 1.1102230246251565e-16
+ },
+ "bonferroni_k": 9,
+ "bonferroni_level": 0.9944444444444445,
+ "bootstrap_reps": 2000,
+ "seed": 20261005,
+ "features": [
+  "site",
+  "d__for__rates_core__plays_per_game",
+  "d__for__rates_core__net_pass_yards_per_pass_play",
+  "d__for__rates_core__rush_yards_per_attempt",
+  "d__for__rates_core__first_down_rate",
+  "d__for__rates_core__fumbles_lost_per_game",
+  "d__for__rates_core__interception_pct",
+  "d__for__rates_core__penalty_yards_per_game",
+  "d__allowed__rates_core__plays_per_game",
+  "d__allowed__rates_core__net_pass_yards_per_pass_play",
+  "d__allowed__rates_core__rush_yards_per_attempt",
+  "d__allowed__rates_core__first_down_rate",
+  "d__allowed__rates_core__fumbles_lost_per_game",
+  "d__allowed__rates_core__interception_pct",
+  "d__allowed__rates_core__penalty_yards_per_game",
+  "d__max_lead",
+  "d__max_deficit"
+ ],
+ "delta_reference": {
+  "retention_cont_75_25": "league",
+  "retention_cont_50_25": "league",
+  "retention_flat_75": "league",
+  "retention_flat_25": "league"
+ },
+ "coach_sensitivity": [
+  {
+   "model": "retention_cont_75_25",
+   "excluded_games": 43,
+   "n": 2331,
+   "ll_gain_vs_league": -8.913852000190173e-05,
+   "ci95": [
+    -0.0007186932582907389,
+    0.000531620732668289
+   ]
+  },
+  {
+   "model": "retention_cont_50_25",
+   "excluded_games": 43,
+   "n": 2331,
+   "ll_gain_vs_league": 0.00013244428302115993,
+   "ci95": [
+    -0.00040863267275202816,
+    0.0006579638964779741
+   ]
+  },
+  {
+   "model": "league+delta_retention_cont_75_25",
+   "excluded_games": 43,
+   "n": 2331,
+   "ll_gain_vs_league": -0.004000051779469437,
+   "ci95": [
+    -0.006751374114593023,
+    -0.001341782168293574
+   ]
+  },
+  {
+   "model": "league+delta_retention_cont_50_25",
+   "excluded_games": 43,
+   "n": 2331,
+   "ll_gain_vs_league": -0.00340375949352807,
+   "ci95": [
+    -0.006291067746634031,
+    -0.00041038488149329076
+   ]
+  }
+ ],
+ "runtime_s": 20.43954610824585,
+ "post_hoc_note": "arms added after the 7 earlier team-prior variants were scored on the same games"
+}

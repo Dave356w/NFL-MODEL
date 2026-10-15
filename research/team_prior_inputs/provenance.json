@@ -1,0 +1,28 @@
+{
+ "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+ "downloaded_utc": "2026-10-14T22:17Z",
+ "source_sha256": "98f2e04191f98fa608de1853e6bd9f660380742b0deb9c4255b31eb65cbf3598",
+ "frozen_file": "research/team_prior_inputs/games_coaches_qbs.csv",
+ "frozen_sha256": "f0a47acee5c804be8b5b26d1d904174992a0907effb23829b1585f426715b434",
+ "rows": 7548,
+ "seasons": [
+  1999,
+  2026
+ ],
+ "columns": [
+  "game_id",
+  "season",
+  "game_type",
+  "week",
+  "home_team",
+  "away_team",
+  "result",
+  "home_coach",
+  "away_coach",
+  "home_qb_id",
+  "away_qb_id",
+  "home_qb_name",
+  "away_qb_name"
+ ],
+ "note": "Only head coaches and starting-QB identities are read. A game's own starter is never a feature: priors use the starter of the team's most recent EARLIER game. The head coach of a game is public pregame. 2024-25 interim coaching spans (43 team-games) carry the season-opening coach in this source."
+}

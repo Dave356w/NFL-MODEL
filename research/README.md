@@ -1594,3 +1594,34 @@ Production reproduces its published forecasts on every basis. All inputs cover e
 
 **Reading.** Run-game splits do not add information the market lacks. Production keeps its rush yards per
 attempt.
+
+### Test 45: per-team, coach and QB shrinkage targets instead of the league prior (2026-10-15): no
+
+Owner question: would a per-team average instead of the league average isolate personnel and coaching
+tendencies? Design note [`TEAM_PRIOR.md`](TEAM_PRIOR.md). **Not pre-registered**: it was written after
+the run, and two retention arms were added after the first seven. Scripts `team_prior_study/`; frozen
+coach/QB columns `team_prior_inputs/`; results `team_prior_results/` (REPORT.md). Exposed 2015–2025
+history, closing moneylines.
+
+* **The league prior is four pseudo-games.** They hold 43% of a team's h8 profile at week 1, 36% at
+  week 5 and 28% at week 17. The team's own seasons hold the rest; last season alone holds about half
+  at week 1.
+* **Identity is real and mostly coach and QB.** Offensive pass yards per dropback carries over with
+  r = 0.46 when both stayed and −0.06 when both changed (first-down rate 0.51 vs −0.10).
+* **Stat level, 5,278 team-games.** Team, coach, QB-keyed and continuity targets all predict the
+  team's next-game stats worse than the league target raw (+0.2% to +1.4% MSE). After walk-forward
+  recalibration they are within ±0.6% with no consistent sign. Continuity is worse even on its own
+  rows.
+* **Market level, simplified market-offset model, 2,371 bets 2017–25** (null −3.12%, favorite
+  −59.0u). No arm resolves.
+  * Team_window +18.9u (+0.80 pts [−0.04, +1.73]), all from 2017–20, where it went 11-2 on flipped
+    picks (Bonferroni p ≈ 0.46). It carries no identity information.
+  * Continuity +0.9u; coach +5.4u; QB −1.9u.
+  * Log-loss gains: −0.3 to +0.3 ×10⁻³, all crossing zero.
+* **Continuity-conditioned retention** (0.75/0.25 or 0.5/0.25 by whether coach and QB stayed): no
+  better than flat retention controls that ignore continuity. At the stat level it is worse on the
+  games after a change.
+
+**Reading.** Production already carries team identity through the team's own history. A team-keyed
+prior double-counts it across frequent, public coaching and QB changes, and the market prices them.
+Keep the league prior; no `REVISION`.
