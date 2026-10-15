@@ -966,62 +966,92 @@ def _qb(r, side):
     return esc(e) + (f" (usual {esc(u)})" if isinstance(u, str) and u != e else "")
 
 
-def previous_2026_v118_picks(latest):
-    """Display earlier 2026 games replayed with v1.18, never as native pregame locks."""
+def pooled_2026_v118_rows(latest, ledger):
+    """One 2026 row per game: native v1.18 lock wins over any historical replay."""
     if latest is None:
-        return ""
+        return None
     man = latest.get("manifest", {})
     if man.get("revision") != "boxscore-composite-v1.18" or int(man.get("season", 0)) != 2026:
+        return None
+
+    replay = latest.get("retro_ledger", pd.DataFrame())
+    required = {"game_id", "season", "week", "basis", "bet_result", "units"}
+    if replay is None or not required.issubset(replay.columns):
+        replay = pd.DataFrame(columns=list(required))
+    replay = replay.loc[(pd.to_numeric(replay["season"], errors="coerce") == 2026)
+                        & replay["basis"].eq("current season walk-forward")].copy()
+    replay = replay.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="last")
+
+    native = ledger.loc[(ledger["revision"].eq("boxscore-composite-v1.18"))
+                        & (pd.to_numeric(ledger["season"], errors="coerce") == 2026)].copy()
+    native = native.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="first")
+    # Block every native game from replay, including games still pending.
+    replay = replay.loc[~replay["game_id"].isin(native["game_id"])]
+    pending = int(native["status"].eq("pending").sum())
+    native = native.loc[native["status"].isin(["graded", "tie"])]
+
+    def valid(df):
+        if df.empty:
+            return df
+        units = pd.to_numeric(df["units"], errors="coerce")
+        return df.loc[df["bet_result"].isin(["W", "L", "P"]) & np.isfinite(units)].copy()
+
+    replay, native = valid(replay), valid(native)
+    replay["_basis"] = "replayed"
+    native["_basis"] = "native"
+    rows = pd.concat([replay, native], ignore_index=True, sort=False)
+    return rows, len(replay), len(native), pending
+
+
+def pooled_2026_v118_header(latest, ledger):
+    """One pooled moneyline scorecard, with a transparent mixed-price basis."""
+    data = pooled_2026_v118_rows(latest, ledger)
+    if data is None:
         return ""
-    d = latest.get("retro_ledger", pd.DataFrame())
-    needed = {"season", "week", "basis", "bet_result", "units"}
-    if d is None or d.empty or not needed.issubset(d.columns):
-        return ""
-    season = pd.to_numeric(d["season"], errors="coerce")
-    weeks = pd.to_numeric(d["week"], errors="coerce")
-    units = pd.to_numeric(d["units"], errors="coerce")
-    mask = (season.eq(2026) & weeks.lt(int(man["week"]))
-            & d["basis"].eq("current season walk-forward")
-            & d["bet_result"].isin(["W", "L", "P"]) & units.notna() & np.isfinite(units))
-    prior = d.loc[mask].copy()
-    if prior.empty:
-        return ""
-    prior["week"] = weeks.loc[mask].astype(int)
-    prior["units"] = units.loc[mask]
-    wins = int(prior["bet_result"].eq("W").sum())
-    losses = int(prior["bet_result"].eq("L").sum())
-    pushes = int(prior["bet_result"].eq("P").sum())
-    total = float(prior["units"].sum())
-    week_text = []
-    for week, games in prior.groupby("week", sort=True):
-        w = int(games["bet_result"].eq("W").sum())
-        l = int(games["bet_result"].eq("L").sum())
-        p = int(games["bet_result"].eq("P").sum())
-        week_text.append(f"W{week} {w}–{l}–{p}")
-    return ("<div class='record'><div class='l'>2026 v1.18 · previous weeks (reconstructed)</div>"
-            f"<div class='mono'>Moneyline {wins}–{losses}–{pushes} · {total:+.2f}u · "
-            f"ROI {roi_short(total / len(prior))} · {len(prior)} picks</div>"
-            f"<div class='mut small'>By week: {esc(' · '.join(week_text))}</div>"
-            "<div class='mut small'>Current v1.18 replay on earlier completed 2026 games "
-            "using historical prices, not previously locked v1.18 picks. "
-            "Separate from the native forward record below.</div></div>")
+    rows, replay_count, native_count, pending = data
+    ctrl = control_records(rows)
+    model = (ctrl or {}).get("model")
+    eligible = int(model["bets"]) if model else 0
+    sub = f"{replay_count} replayed · {native_count} native · {pending} pending"
+    parts = ["<h2 class='sec'>2026 v1.18 · season-to-date picks</h2>",
+             control_tiles(ctrl, "Graded", str(eligible), sub)]
+    if model and eligible:
+        parts.append(f"<p class='mut small'>Pooled moneyline: {wl_text(model)} · "
+                     f"{model['units']:+.2f}u · ROI {roi_short(model['roi'])}. "
+                     "Earlier games use reconstructed 2026 walk-forward picks and historical prices; "
+                     "native v1.18 picks use their locked prices. Native games always take precedence "
+                     "and are counted only once. This is not a purely forward record.</p>")
+        weekly = []
+        for week, group in rows.groupby("week", sort=True):
+            summary = control_records(group)
+            r = (summary or {}).get("model")
+            if r and r["bets"]:
+                weekly.append(f"W{int(week)} {wl_text(r)}")
+        if weekly:
+            parts.append(f"<p class='mut small'>By week: {esc(' · '.join(weekly))}</p>")
+    else:
+        parts.append("<p class='mut small'>No graded 2026 v1.18 picks yet.</p>")
+    return "".join(parts)
 
 
 def render_grades(ledger, latest, built):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Ledger", "Native picks lock before kickoff once both teams' injury reports are final, "
-                            "and are graded at the moneyline saved at lock. One unit per game.")]
-    parts.append(previous_2026_v118_picks(latest))
+    parts = [head("Ledger", "2026 picks combine earlier reconstructed games and native forward locks, "
+                            "with one pick per game. Native locks use their recorded pregame moneylines.")]
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     graded = cur[cur.status == "graded"] if len(cur) else cur
-    n_pend = len(cur) - len(graded)
-    parts.append("<h2 class='sec'>Native forward picks · " + esc(rev) + "</h2>")
-    parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{n_pend} pending"))
+    pooled_header = pooled_2026_v118_header(latest, ledger)
+    if pooled_header:
+        parts.append(pooled_header)
+        parts.append("<h2 class='sec'>Native forward pick details · " + esc(rev) + "</h2>")
+    else:
+        pending = int(cur.status.eq("pending").sum()) if len(cur) else 0
+        parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{pending} pending"))
     if latest is not None:
         parts.append(spread_headline(latest, int(latest['manifest']['season'])))
-    parts.append(disagreement_note(graded, "Locked picks"))
+    parts.append(disagreement_note(graded, "Native locked picks"))
     if cur.empty:
-        parts.append("<div class='gr-note'>No picks locked yet. The first one locks once a week's final injury "
+        parts.append("<div class='gr-note'>No native picks locked yet. The first one locks once a week's final injury "
                      "reports are out.</div>")
     else:
         weeks = sorted({(int(s), int(w)) for s, w in zip(cur.season, cur.week)}, reverse=True)
