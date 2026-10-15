@@ -27,11 +27,12 @@ The model's existing `kalshi.py` identifies `KXNFLGAME` winner and `KXNFLSPREAD`
 |---|---:|
 | Both Kalshi winner asks | 5/5 |
 | Exact Kalshi main-line ATS ask/NO complement | 4/5 |
+| Kalshi alternate-contract quote at rounded original model spread | 5/5 |
 | Nonmatching integer sportsbook spread | 1/5 |
 | Original signal across matched 4 (fee-adjusted, descriptive) | −1.0408u |
 | Fixed-band signal across matched 4 (fee-adjusted, descriptive) | +0.8125u |
 
-**These four results are smoke-test coverage, not model validation or an ROI claim.** They are conditioned on available Kalshi lines. The original 2021–26 895-game assumed −110 result is not directly comparable to this sample.
+In this tiny cohort, the four matched original-model alternate bets summed to **−1.0408u**, the same as the original-spread main-line result; a same-rung quote or same-side outcome can produce identical results. This is not evidence of general equivalence between the two handicaps. The quote sample verifies *retrieval* but not a model signal.\n\n**These results are smoke-test coverage, not model validation or an ROI claim.** They are conditioned on available Kalshi lines. The original 2021–26 895-game assumed −110 result is not directly comparable to this sample.
 
 The workflow `.github/workflows/kalshi-ats-prices.yml` can be dispatched with NFL season (2025/2026), week and maximum games. It builds a refreshed historical Test 48 prediction table, fetches Kalshi markets/candlesticks, then exports raw audit rows, matched main-spread ATS grading, original-model alternate-spread results and Kalshi winner price grading. No API key is needed for these public-market-data endpoints. Each row preserves market ticker, contract side, ask and price timestamp.
 
