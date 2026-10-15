@@ -355,7 +355,10 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
     assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
     for page in ['grades.html', 'market-calibration.html']:
         text = (out / page).read_text()
-        assert 'Fixed-band spread · retrospective ATS' in text
+        assert "<h2 class='sec'>Model spread</h2>" in text
+        assert 'Fixed-band spread · retrospective ATS' not in text
+        assert '2026 graded results' not in text  # this fixture has only 2024 history
+        assert 'Per-season results' in text
         assert '−110' in text and 'not locked forward results' in text
 
 
@@ -453,3 +456,25 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     assert report.startswith((data / "ledger_report.txt").read_text())
     assert "Appendix A" in report and "ARM-MARKER" in report and "Appendix B" in report and "REPLAY-MARKER" in report
     assert f"== {m.SHADOW_REVISION}" in report and f"== {m.REVISION}" in report
+
+
+def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
+                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    data = make_data(tmp_path / 'data')
+    path = data / 'latest' / 'retro_ledger.csv'
+    retro = pd.read_csv(path)
+    retro.loc[retro.index[:3], 'season'] = 2026
+    retro.to_csv(path, index=False)
+    out = tmp_path / 'public'
+    b.render_all(out, data, now=NOW)
+    for page in ['grades.html', 'market-calibration.html']:
+        html = (out / page).read_text()
+        assert '<h3>2026 graded results</h3>' in html
+        assert 'Completed games this season, graded retrospectively' in html
+        assert 'not locked pregame picks' in html
+        assert 'Per-season results' in html
+        assert '<td>2024</td>' in html and '<td>2026</td>' in html
+        assert 'Fixed-band spread · retrospective ATS' not in html
+    html = (out / 'grades.html').read_text()
+    assert 'model spread · graded results' in html

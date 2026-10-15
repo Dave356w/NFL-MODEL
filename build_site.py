@@ -939,7 +939,8 @@ def render_fixed_bands(latest, details=False):
     if d.empty:
         return ''
     eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
-    out = ["<h2 class='sec'>Fixed-band spread · retrospective ATS</h2>",
+    current_season = int(latest['manifest']['season'])
+    out = ["<h2 class='sec'>Model spread</h2>",
            "<div class='gr-note flag-note'>Reconstructed history, not locked forward results. "
            "Each season's mapping uses earlier seasons only; the model and calibration design were developed on exposed history. "
            "At least two prior seasons are required. Tied finals are included. "
@@ -949,18 +950,28 @@ def render_fixed_bands(latest, details=False):
            "Win probabilities and moneyline picks are unchanged.</div>"]
     if eligible.empty:
         return ''.join(out) + "<p class='mut'>Insufficient prior-season history for fixed-band evaluation.</p>"
-    rows = []
-    for r in fixed_bands.summary(d).itertuples(index=False):
-        rows.append([esc(r.season), esc(r.method), f'{r.wins}–{r.losses}–{r.pushes}', str(r.skips),
-                     f'{r.units:+.2f}', roi_short(r.roi)])
-    out.append(table(['Season', 'Spread method', 'ATS W–L–P', 'Skips', 'Units', 'ROI'], rows, num_cols=(2, 3, 4, 5)))
+    results = fixed_bands.summary(d)
+    def result_rows(frame):
+        return [[esc('All seasons' if r.season == 'All' else r.season),
+                 esc('Model spread' if r.method == 'Fixed bands' else 'Previous spread'),
+                 f'{r.wins}–{r.losses}–{r.pushes}', str(r.skips), f'{r.units:+.2f}', roi_short(r.roi)]
+                for r in frame.itertuples(index=False)]
+    headers = ['Season', 'Spread method', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
+    current = results[results.season == str(current_season)]
+    if len(current):
+        out.append(f"<h3>{current_season} graded results</h3>"
+                   "<p class='mut small'>Completed games this season, graded retrospectively against the market spread. "
+                   "Reconstructed results, not locked pregame picks.</p>")
+        out.append(table(headers, result_rows(current), num_cols=(2, 3, 4, 5)))
+    out.append("<h3>Per-season results</h3>")
+    out.append(table(headers, result_rows(results), num_cols=(2, 3, 4, 5)))
     out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
                "<a href='fixed_band_summary.csv'>Season results</a> · <a href='fixed_band_rules.json'>Season mappings</a>. "
-               "Original spread = probability-implied spread; fixed bands = calibrated spread. "
+               "Previous spread = probability-implied spread; Model spread = calibrated spread. "
                "ATS side follows forecast minus market, independently of the outright winner. "
                "The calibration maximizes earlier-season W−L, not ROI.</p>")
     if details:
-        for year, g in eligible.groupby('season', sort=True):
+        for year, g in eligible.groupby('season', sort=False):
             rows = []
             for r in g.sort_values(['week', 'game_id'], ascending=False).itertuples(index=False):
                 rows.append([f'W{int(r.week)} · {esc(r.away)} @ {esc(r.home)}',
@@ -971,8 +982,10 @@ def render_fixed_bands(latest, details=False):
                              result_badge(r.original_ats_result),
                              'Skip' if r.fixed_band_ats_result == 'S' else result_badge(r.fixed_band_ats_result),
                              f'{r.fixed_band_ats_units:+.2f}'])
-            out.append(folded(f'{int(year)} · retrospective spread results',
-                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'Previous ATS', 'Model ATS', 'Model units'], rows)))
+            label = 'graded results' if int(year) == current_season else 'retrospective results'
+            out.append(folded(f'{int(year)} · model spread · {label}',
+                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'Previous ATS', 'Model ATS', 'Model units'], rows),
+                             int(year) == current_season))
     else:
         out.append("<h3>Spread magnitude calibration</h3><p class='mut small'>Bands use the original model's "
                    "absolute spread. Realized margin is signed toward the forecast favorite; losses are negative. "
@@ -987,7 +1000,7 @@ def render_fixed_bands(latest, details=False):
                          f'{g.fixed_band_spread.abs().mean():.2f}', f'{realized.mean():+.2f}',
                          f'{(g.model_spread-g.result).abs().mean():.2f}',
                          f'{(g.fixed_band_spread-g.result).abs().mean():.2f}'])
-        out.append(table(['Original magnitude', 'Games', 'Avg original', 'Avg fixed band',
+        out.append(table(['Original magnitude', 'Games', 'Avg previous', 'Avg model spread',
                           'Avg realized margin', 'Original MAE', 'Fixed MAE'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
     return ''.join(out)
 
