@@ -1,76 +1,151 @@
-rule,true_gain,look,n,supported,falsified
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2027,206,0.0105,0.6370
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2028,478,0.0147,0.7923
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2029,750,0.0170,0.8581
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2030,1022,0.0182,0.8969
-current (FAVORITE_PENALTY.md),-0.0020,Jan 2031,1294,0.0189,0.9191
-current (FAVORITE_PENALTY.md),0.0000,Jan 2027,206,0.0248,0.5063
-current (FAVORITE_PENALTY.md),0.0000,Jan 2028,478,0.0425,0.6393
-current (FAVORITE_PENALTY.md),0.0000,Jan 2029,750,0.0530,0.7028
-current (FAVORITE_PENALTY.md),0.0000,Jan 2030,1022,0.0618,0.7408
-current (FAVORITE_PENALTY.md),0.0000,Jan 2031,1294,0.0673,0.7660
-current (FAVORITE_PENALTY.md),0.0010,Jan 2027,206,0.0374,0.4380
-current (FAVORITE_PENALTY.md),0.0010,Jan 2028,478,0.0683,0.5484
-current (FAVORITE_PENALTY.md),0.0010,Jan 2029,750,0.0910,0.6007
-current (FAVORITE_PENALTY.md),0.0010,Jan 2030,1022,0.1086,0.6332
-current (FAVORITE_PENALTY.md),0.0010,Jan 2031,1294,0.1208,0.6533
-current (FAVORITE_PENALTY.md),0.0023,Jan 2027,206,0.0604,0.3500
-current (FAVORITE_PENALTY.md),0.0023,Jan 2028,478,0.1179,0.4349
-current (FAVORITE_PENALTY.md),0.0023,Jan 2029,750,0.1641,0.4708
-current (FAVORITE_PENALTY.md),0.0023,Jan 2030,1022,0.1994,0.4909
-current (FAVORITE_PENALTY.md),0.0023,Jan 2031,1294,0.2288,0.5029
-current (FAVORITE_PENALTY.md),0.0040,Jan 2027,206,0.1013,0.2490
-current (FAVORITE_PENALTY.md),0.0040,Jan 2028,478,0.2140,0.2969
-current (FAVORITE_PENALTY.md),0.0040,Jan 2029,750,0.3099,0.3151
-current (FAVORITE_PENALTY.md),0.0040,Jan 2030,1022,0.3835,0.3228
-current (FAVORITE_PENALTY.md),0.0040,Jan 2031,1294,0.4400,0.3269
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2027,206,0.0105,0.1039
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2028,478,0.0150,0.2213
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2029,750,0.0176,0.3253
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2030,1022,0.0194,0.4218
-"proposed z=1.96, delta=+0.002",-0.0020,Jan 2031,1294,0.0205,0.5042
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2027,206,0.0248,0.0542
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2028,478,0.0432,0.1037
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2029,750,0.0558,0.1499
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2030,1022,0.0667,0.1893
-"proposed z=1.96, delta=+0.002",0.0000,Jan 2031,1294,0.0752,0.2275
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2027,206,0.0374,0.0385
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2028,478,0.0692,0.0690
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2029,750,0.0954,0.0938
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2030,1022,0.1178,0.1150
-"proposed z=1.96, delta=+0.002",0.0010,Jan 2031,1294,0.1366,0.1338
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2027,206,0.0604,0.0233
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2028,478,0.1199,0.0391
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2029,750,0.1731,0.0491
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2030,1022,0.2205,0.0561
-"proposed z=1.96, delta=+0.002",0.0023,Jan 2031,1294,0.2620,0.0610
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2027,206,0.1013,0.0105
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2028,478,0.2180,0.0155
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2029,750,0.3276,0.0181
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2030,1022,0.4224,0.0192
-"proposed z=1.96, delta=+0.002",0.0040,Jan 2031,1294,0.5028,0.0200
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2027,206,0.0047,0.0618
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2028,478,0.0069,0.1422
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2029,750,0.0083,0.2248
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2030,1022,0.0090,0.3077
-"proposed z=2.24, delta=+0.002",-0.0020,Jan 2031,1294,0.0093,0.3837
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2027,206,0.0129,0.0308
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2028,478,0.0219,0.0628
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2029,750,0.0290,0.0916
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2030,1022,0.0356,0.1196
-"proposed z=2.24, delta=+0.002",0.0000,Jan 2031,1294,0.0411,0.1466
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2027,206,0.0192,0.0203
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2028,478,0.0375,0.0391
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2029,750,0.0527,0.0542
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2030,1022,0.0672,0.0673
-"proposed z=2.24, delta=+0.002",0.0010,Jan 2031,1294,0.0800,0.0779
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2027,206,0.0321,0.0107
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2028,478,0.0709,0.0192
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2029,750,0.1084,0.0254
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2030,1022,0.1425,0.0293
-"proposed z=2.24, delta=+0.002",0.0023,Jan 2031,1294,0.1751,0.0317
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2027,206,0.0616,0.0050
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2028,478,0.1453,0.0075
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2029,750,0.2302,0.0086
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2030,1022,0.3105,0.0091
-"proposed z=2.24, delta=+0.002",0.0040,Jan 2031,1294,0.3842,0.0095
+method,rule,true_gain,look,n,weeks,supported,falsified
+"week-block bootstrap, estimated SE",as written,-0.0020,Jan 2027,206,14,0.0089,0.6695
+"week-block bootstrap, estimated SE",as written,-0.0020,Jan 2028,478,32,0.0119,0.8189
+"week-block bootstrap, estimated SE",as written,-0.0020,Jan 2029,750,50,0.0130,0.8773
+"week-block bootstrap, estimated SE",as written,-0.0020,Jan 2030,1022,68,0.0138,0.9106
+"week-block bootstrap, estimated SE",as written,-0.0020,Jan 2031,1294,86,0.0140,0.9322
+"week-block bootstrap, estimated SE",as written,0.0000,Jan 2027,206,14,0.0234,0.5186
+"week-block bootstrap, estimated SE",as written,0.0000,Jan 2028,478,32,0.0373,0.6494
+"week-block bootstrap, estimated SE",as written,0.0000,Jan 2029,750,50,0.0459,0.7091
+"week-block bootstrap, estimated SE",as written,0.0000,Jan 2030,1022,68,0.0522,0.7429
+"week-block bootstrap, estimated SE",as written,0.0000,Jan 2031,1294,86,0.0563,0.7641
+"week-block bootstrap, estimated SE",as written,0.0010,Jan 2027,206,14,0.0381,0.4373
+"week-block bootstrap, estimated SE",as written,0.0010,Jan 2028,478,32,0.0653,0.5495
+"week-block bootstrap, estimated SE",as written,0.0010,Jan 2029,750,50,0.0843,0.6014
+"week-block bootstrap, estimated SE",as written,0.0010,Jan 2030,1022,68,0.0993,0.6289
+"week-block bootstrap, estimated SE",as written,0.0010,Jan 2031,1294,86,0.1119,0.6462
+"week-block bootstrap, estimated SE",as written,0.0023,Jan 2027,206,14,0.0651,0.3335
+"week-block bootstrap, estimated SE",as written,0.0023,Jan 2028,478,32,0.1235,0.4094
+"week-block bootstrap, estimated SE",as written,0.0023,Jan 2029,750,50,0.1714,0.4425
+"week-block bootstrap, estimated SE",as written,0.0023,Jan 2030,1022,68,0.2124,0.4602
+"week-block bootstrap, estimated SE",as written,0.0023,Jan 2031,1294,86,0.2473,0.4697
+"week-block bootstrap, estimated SE",as written,0.0040,Jan 2027,206,14,0.1186,0.2129
+"week-block bootstrap, estimated SE",as written,0.0040,Jan 2028,478,32,0.2487,0.2519
+"week-block bootstrap, estimated SE",as written,0.0040,Jan 2029,750,50,0.3595,0.2642
+"week-block bootstrap, estimated SE",as written,0.0040,Jan 2030,1022,68,0.4451,0.2688
+"week-block bootstrap, estimated SE",as written,0.0040,Jan 2031,1294,86,0.5122,0.2711
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2027,206,14,0.0045,0.1386
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2028,478,32,0.0062,0.2676
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2029,750,50,0.0067,0.3795
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2030,1022,68,0.0069,0.4703
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2031,1294,86,0.0072,0.5460
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0000,Jan 2027,206,14,0.0123,0.0727
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0000,Jan 2028,478,32,0.0194,0.1305
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0000,Jan 2029,750,50,0.0242,0.1747
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0000,Jan 2030,1022,68,0.0282,0.2163
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0000,Jan 2031,1294,86,0.0312,0.2516
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0010,Jan 2027,206,14,0.0202,0.0498
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0010,Jan 2028,478,32,0.0360,0.0811
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0010,Jan 2029,750,50,0.0485,0.1053
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0010,Jan 2030,1022,68,0.0609,0.1249
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0010,Jan 2031,1294,86,0.0719,0.1417
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0023,Jan 2027,206,14,0.0392,0.0292
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0023,Jan 2028,478,32,0.0754,0.0426
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0023,Jan 2029,750,50,0.1109,0.0511
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0023,Jan 2030,1022,68,0.1477,0.0562
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0023,Jan 2031,1294,86,0.1862,0.0609
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0040,Jan 2027,206,14,0.0752,0.0149
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0040,Jan 2028,478,32,0.1676,0.0187
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0040,Jan 2029,750,50,0.2703,0.0205
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0040,Jan 2030,1022,68,0.3700,0.0212
+"week-block bootstrap, estimated SE","three-way, z 2.24 (first draft)",0.0040,Jan 2031,1294,86,0.4619,0.0215
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2027,206,14,0.0022,0.0953
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2028,478,32,0.0036,0.2228
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2029,750,50,0.0042,0.3387
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2030,1022,68,0.0043,0.4368
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2031,1294,86,0.0045,0.5183
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2027,206,14,0.0069,0.0483
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2028,478,32,0.0121,0.1005
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2029,750,50,0.0164,0.1447
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2030,1022,68,0.0203,0.1867
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2031,1294,86,0.0232,0.2240
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2027,206,14,0.0109,0.0314
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2028,478,32,0.0226,0.0617
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2029,750,50,0.0343,0.0847
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2030,1022,68,0.0464,0.1039
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2031,1294,86,0.0566,0.1208
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2027,206,14,0.0205,0.0184
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2028,478,32,0.0518,0.0299
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2029,750,50,0.0863,0.0379
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2030,1022,68,0.1230,0.0432
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2031,1294,86,0.1610,0.0482
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2027,206,14,0.0458,0.0089
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2028,478,32,0.1316,0.0124
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2029,750,50,0.2342,0.0141
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2030,1022,68,0.3356,0.0149
+"week-block bootstrap, estimated SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2031,1294,86,0.4343,0.0152
+"Gaussian, known SE",as written,-0.0020,Jan 2027,206,14,0.0105,0.6370
+"Gaussian, known SE",as written,-0.0020,Jan 2028,478,32,0.0147,0.7923
+"Gaussian, known SE",as written,-0.0020,Jan 2029,750,50,0.0170,0.8581
+"Gaussian, known SE",as written,-0.0020,Jan 2030,1022,68,0.0182,0.8969
+"Gaussian, known SE",as written,-0.0020,Jan 2031,1294,86,0.0189,0.9191
+"Gaussian, known SE",as written,0.0000,Jan 2027,206,14,0.0248,0.5063
+"Gaussian, known SE",as written,0.0000,Jan 2028,478,32,0.0425,0.6393
+"Gaussian, known SE",as written,0.0000,Jan 2029,750,50,0.0530,0.7028
+"Gaussian, known SE",as written,0.0000,Jan 2030,1022,68,0.0618,0.7408
+"Gaussian, known SE",as written,0.0000,Jan 2031,1294,86,0.0673,0.7660
+"Gaussian, known SE",as written,0.0010,Jan 2027,206,14,0.0374,0.4380
+"Gaussian, known SE",as written,0.0010,Jan 2028,478,32,0.0683,0.5484
+"Gaussian, known SE",as written,0.0010,Jan 2029,750,50,0.0910,0.6007
+"Gaussian, known SE",as written,0.0010,Jan 2030,1022,68,0.1086,0.6332
+"Gaussian, known SE",as written,0.0010,Jan 2031,1294,86,0.1208,0.6533
+"Gaussian, known SE",as written,0.0023,Jan 2027,206,14,0.0604,0.3500
+"Gaussian, known SE",as written,0.0023,Jan 2028,478,32,0.1179,0.4349
+"Gaussian, known SE",as written,0.0023,Jan 2029,750,50,0.1641,0.4708
+"Gaussian, known SE",as written,0.0023,Jan 2030,1022,68,0.1994,0.4909
+"Gaussian, known SE",as written,0.0023,Jan 2031,1294,86,0.2288,0.5029
+"Gaussian, known SE",as written,0.0040,Jan 2027,206,14,0.1013,0.2490
+"Gaussian, known SE",as written,0.0040,Jan 2028,478,32,0.2140,0.2969
+"Gaussian, known SE",as written,0.0040,Jan 2029,750,50,0.3099,0.3151
+"Gaussian, known SE",as written,0.0040,Jan 2030,1022,68,0.3835,0.3228
+"Gaussian, known SE",as written,0.0040,Jan 2031,1294,86,0.4400,0.3269
+"Gaussian, known SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2027,206,14,0.0047,0.0618
+"Gaussian, known SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2028,478,32,0.0069,0.1422
+"Gaussian, known SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2029,750,50,0.0083,0.2248
+"Gaussian, known SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2030,1022,68,0.0090,0.3077
+"Gaussian, known SE","three-way, z 2.24 (first draft)",-0.0020,Jan 2031,1294,86,0.0093,0.3837
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0000,Jan 2027,206,14,0.0129,0.0308
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0000,Jan 2028,478,32,0.0219,0.0628
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0000,Jan 2029,750,50,0.0290,0.0916
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0000,Jan 2030,1022,68,0.0356,0.1196
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0000,Jan 2031,1294,86,0.0411,0.1466
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0010,Jan 2027,206,14,0.0192,0.0203
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0010,Jan 2028,478,32,0.0375,0.0391
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0010,Jan 2029,750,50,0.0527,0.0542
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0010,Jan 2030,1022,68,0.0672,0.0673
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0010,Jan 2031,1294,86,0.0800,0.0779
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0023,Jan 2027,206,14,0.0321,0.0107
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0023,Jan 2028,478,32,0.0709,0.0192
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0023,Jan 2029,750,50,0.1084,0.0254
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0023,Jan 2030,1022,68,0.1425,0.0293
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0023,Jan 2031,1294,86,0.1751,0.0317
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0040,Jan 2027,206,14,0.0616,0.0050
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0040,Jan 2028,478,32,0.1453,0.0075
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0040,Jan 2029,750,50,0.2302,0.0086
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0040,Jan 2030,1022,68,0.3105,0.0091
+"Gaussian, known SE","three-way, z 2.24 (first draft)",0.0040,Jan 2031,1294,86,0.3842,0.0095
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2027,206,14,0.0019,0.0340
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2028,478,32,0.0034,0.1083
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2029,750,50,0.0046,0.1900
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2030,1022,68,0.0054,0.2767
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",-0.0020,Jan 2031,1294,86,0.0057,0.3562
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2027,206,14,0.0053,0.0140
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2028,478,32,0.0129,0.0421
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2029,750,50,0.0194,0.0707
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2030,1022,68,0.0260,0.0992
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0000,Jan 2031,1294,86,0.0309,0.1254
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2027,206,14,0.0088,0.0091
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2028,478,32,0.0246,0.0254
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2029,750,50,0.0388,0.0399
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2030,1022,68,0.0532,0.0524
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0010,Jan 2031,1294,86,0.0663,0.0627
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2027,206,14,0.0163,0.0050
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2028,478,32,0.0503,0.0120
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2029,750,50,0.0863,0.0169
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2030,1022,68,0.1203,0.0204
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0023,Jan 2031,1294,86,0.1535,0.0230
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2027,206,14,0.0321,0.0025
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2028,478,32,0.1103,0.0043
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2029,750,50,0.1970,0.0054
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2030,1022,68,0.2787,0.0060
+"Gaussian, known SE","three-way, t(G-1) 97.5% (adopted)",0.0040,Jan 2031,1294,86,0.3567,0.0063

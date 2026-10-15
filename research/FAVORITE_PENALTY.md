@@ -72,31 +72,46 @@ v1.18 that file holds penalized forecasts, so the frozen `inputs.csv` must not b
 
 Written after the 13 week-5 native v1.16 rows (gain +0.147, about 84% from SF@SEA) and the 78 graded
 2026 weeks 1–5 rows had been seen. **It does not use their values.** The rule is chosen from
-simulated operating characteristics alone (`research/forward_monitoring.py`), built from the
-historical per-game spread of the gain:
-* SD 0.070, inflated to 0.084 by the 2017–20 week-cluster design effect of 1.42;
-* the January checkpoints: about 206, 478, 750, 1,022 and 1,294 graded native v1.16 games from
-  2027 to 2031.
+simulated operating characteristics alone (`research/forward_monitoring.py`):
+* Each simulated path resamples whole historical weeks of the per-game gain: 158 weeks of 2017–20
+  and 2021–25, recentred to the true gain. The paths keep the gain's skew (2.8) and its week
+  clustering.
+* At each look the SE is the week-cluster SE estimated from the sampled weeks, as the ledger
+  computes it.
+* The looks are the January checkpoints, 2027 to 2031: about 206, 478, 750, 1,022 and 1,294
+  graded native v1.16 games, over 14, 32, 50, 68 and 86 weeks.
 
-**Why the rule changes.** The rule above ("falsified if, at 200 or more games, the penalized log
-loss is not lower") falsifies a penalty whose true gain is the adopted +0.0023 35% of the time at
-the first January look, and 50% across five looks. At +0.004 the rate is still 25–33%.
+**Why the rule changes.** The rule above says "falsified if, at 200 or more games, the penalized
+log loss is not lower". It falsifies a penalty whose true gain is the adopted +0.0023 33% of the
+time at the first January look, and 47% across five looks. At +0.004 the rate is still 21–27%.
 
 **Replacement rule.** It is judged only at the January checkpoints, on the first native v1.16
-snapshot per game, using the week-cluster SE of the per-game gain:
+snapshot per game. It uses the week-cluster SE of the per-game gain and t, the two-sided 97.5%
+t critical value with G − 1 degrees of freedom. G is the number of season-weeks, so t is 2.53 at 14
+weeks and 2.28 at 86.
 - **No verdict** below 200 graded games.
-- **Supported**: gain − 2.24·SE > 0.
-- **Falsified**: gain + 2.24·SE < +0.002, so the data exclude the gain the penalty was adopted for.
+- **Supported**: gain − t·SE > 0.
+- **Falsified**: gain + t·SE < +0.002, so the data exclude the gain the penalty was adopted for.
 - Otherwise **unresolved**.
 
-Simulated over the five looks (`research/forward_monitoring_results/`):
+Simulated over the five looks (`research/forward_monitoring_results/`; first look → all five):
 
 | Rule | False falsification (true gain +0.0023) | False support (true gain 0) | Falsifies a true 0 | Supports a true +0.004 |
 |---|---:|---:|---:|---:|
-| As written | 35% → 50% | 2.5% → 6.7% | 51% → 77% | 10% → 44% |
-| Replacement | 1.1% → 3.2% | 1.3% → 4.1% | 3% → 15% | 6% → 38% |
+| As written | 33% → 47% | 2.3% → 5.6% | 52% → 76% | 12% → 51% |
+| Replacement | 1.8% → 4.8% | 0.7% → 2.3% | 5% → 22% | 5% → 43% |
+
+**Correction before merge (same day).** The first draft of this addendum (commit `450f954`) used a
+fixed z of 2.24 and simulated Gaussian paths with a known SE. Review showed that this understates
+false falsification. With resampled weeks and an estimated SE, z = 2.24 falsifies a true +0.0023
+2.9% → 6.1% of the time, not the 1.1% → 3.2% first reported. The t critical value brings both error
+rates to 5% or less.
+* The change was chosen from the simulation alone, before any verdict point. It uses no forward
+  outcome beyond the 13 rows disclosed above.
+* Both simulation methods are kept in `operating_characteristics.csv`.
 
 The cost is power: the replacement is slower to reach a verdict either way, and "unresolved" is
 the likely reading through 2028. That is the honest state of evidence at these effect sizes. The
 penalty cannot change ROI either way, because it never changes a pick.
-`grade_ledger.py` prints this verdict on the v1.16 penalty line.
+`grade_ledger.py` prints this verdict on the v1.16 penalty line with the cluster SE and the number
+of weeks. Outside January it labels the line an interim reading, not a verdict.

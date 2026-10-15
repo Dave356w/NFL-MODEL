@@ -2,22 +2,47 @@
 import sys
 from pathlib import Path
 
+import numpy as np
+
+import grade_ledger as g
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'research'))
 import forward_monitoring as fm  # noqa: E402
 
+ADOPTED = fm.RULES['three-way, t(G-1) 97.5% (adopted)']
+
 
 def test_rules_match_the_written_text():
-    assert fm.verdict_current(.0, .01, 199) == 'none' and fm.verdict_current(-.0001, .01, 200) == 'falsified'
-    assert fm.verdict_current(.03, .01, 200) == 'supported' and fm.verdict_current(.001, .01, 200) == 'unresolved'
-    assert fm.verdict_proposed(-.0001, .01, 200, z=2.24) == 'unresolved'     # a small loss does not falsify
-    assert fm.verdict_proposed(-.03, .01, 200, z=2.24) == 'falsified'
-    assert fm.verdict_proposed(.03, .01, 200, z=2.24) == 'supported'
+    old = fm.RULES['as written']
+    assert fm.verdict(old, .0, .01, 199, 14) == 'none' and fm.verdict(old, -.0001, .01, 200, 14) == 'falsified'
+    assert fm.verdict(old, .03, .01, 200, 14) == 'supported' and fm.verdict(old, .001, .01, 200, 14) == 'unresolved'
+    assert fm.verdict(ADOPTED, -.0001, .01, 200, 14) == 'unresolved'      # a small loss does not falsify
+    assert fm.verdict(ADOPTED, -.03, .01, 200, 14) == 'falsified'
+    assert fm.verdict(ADOPTED, .03, .01, 200, 14) == 'supported'
 
 
-def test_proposed_rule_cuts_false_falsification_at_the_adopted_gain():
-    sd = .084
-    cur = fm.simulate(fm.verdict_current, .0023, sd, reps=4000)
-    new = fm.simulate(fm.verdict_proposed, .0023, sd, reps=4000, z=2.24)
+def test_adopted_rule_is_the_one_the_ledger_applies():
+    words = {'supported': 'supported', 'falsified': 'falsified', 'unresolved': 'unresolved', 'none': 'no verdict'}
+    for est in (-.006, -.002, 0., .001, .003, .0048, .008):
+        for se in (.001, .002, .004):
+            for n, weeks in ((199, 14), (206, 14), (478, 32), (1294, 86)):
+                want = words[fm.verdict(ADOPTED, est, se, n, weeks)]
+                assert g.fp_verdict(est, se, n, weeks).startswith(want), (est, se, n, weeks)
+
+
+def test_week_block_bootstrap_keeps_both_error_rates_near_five_percent():
+    blocks = fm.week_blocks()
+    assert len(blocks[0]) == 158 and np.isclose(blocks[0].sum(), 0.)        # recentred historical weeks
+    cur = fm.simulate(fm.RULES['as written'], .0023, blocks, reps=4000)
+    new = fm.simulate(ADOPTED, .0023, blocks, reps=4000)
     assert cur['Jan 2031']['falsified'] > .4 and new['Jan 2031']['falsified'] < .06
-    null = fm.simulate(fm.verdict_proposed, 0., sd, reps=4000, z=2.24)
-    assert null['Jan 2031']['supported'] < .06                              # false support stays near 5%
+    null = fm.simulate(ADOPTED, 0., blocks, reps=4000)
+    assert null['Jan 2031']['supported'] < .05                              # false support stays below 5%
+    first_draft = fm.simulate(fm.RULES['three-way, z 2.24 (first draft)'], .0023, blocks, reps=4000)
+    assert first_draft['Jan 2031']['falsified'] > new['Jan 2031']['falsified']
+
+
+def test_gaussian_known_se_reproduces_the_first_draft_table():
+    sd = fm.per_game_sd()['sd_effective']
+    r = fm.simulate_gaussian(fm.RULES['three-way, z 2.24 (first draft)'], .0023, sd, reps=4000)
+    assert r['Jan 2031']['falsified'] < .05

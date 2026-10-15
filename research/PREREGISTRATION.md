@@ -469,7 +469,12 @@ model-side tests, but read any single 2 SE result with nine hypotheses in mind.
 
 **2026-10-15 (same day, separate change): favorite-penalty verdict.** The forward verdict in
 `research/FAVORITE_PENALTY.md` is replaced by a three-way rule judged at the January checkpoints. It
-uses 97.5% week-cluster bounds; falsification means the data exclude the adopted +0.002 gain. The
-addendum there gives the reason (the rule as written falsified a true +0.0023 gain 35–50% of the
-time) and the simulated error rates. It was written after the 13 week-5 native rows were seen and
-does not use their values. H1–H9 are unchanged and stay judged only at the season checkpoints.
+uses 97.5% week-cluster bounds with t(G − 1) critical values, where G is the number of season-weeks.
+Falsification means the data exclude the adopted +0.002 gain.
+* The addendum there gives the reason: the rule as written falsified a true +0.0023 gain 33–47% of
+  the time.
+* It also gives the error rates simulated with resampled historical weeks, and a same-day
+  correction of its first draft.
+* It was written after the 13 week-5 native rows were seen and does not use their values.
+
+H1–H9 are unchanged and stay judged only at the season checkpoints.

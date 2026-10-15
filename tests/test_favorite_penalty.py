@@ -1,3 +1,4 @@
+import datetime as dt
 import sys
 from pathlib import Path
 import numpy as np
@@ -53,6 +54,15 @@ def test_ledger_scores_penalty_for_v116_rows_only():
     assert sm["fp_gain"] == pytest.approx((v.model_log_loss-v.fp_log_loss).mean())
     text = g.report_text(out)
     assert text.count("favorite-confidence penalty") == 1 and "no verdict before 200 graded games" in text  # FAVORITE_PENALTY.md addendum 2026-10-15
+
+
+def test_penalty_line_is_interim_outside_january():
+    out = g.grade([rec("a", .8, .7, rev=V116), rec("b", .6, .4, rev=V116)], RESULTS)
+    oct_ = g.report_text(out, now=dt.datetime(2027, 10, 15, tzinfo=dt.timezone.utc))
+    jan = g.report_text(out, now=dt.datetime(2028, 1, 10, tzinfo=dt.timezone.utc))
+    assert "interim reading, not a verdict" in oct_ and "January checkpoint verdict" not in oct_
+    assert "January checkpoint verdict" in jan and "interim reading" not in jan
+    assert "week-cluster SE" in oct_
 
 
 def test_research_scoring_checks_bets_and_gain():

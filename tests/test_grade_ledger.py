@@ -219,6 +219,48 @@ def test_h9_sample_is_first_production_snapshot_per_game_from_week_6():
     assert d.h9_dis.iloc[0] > 0          # moneyline ~73% home vs spread +3 ~60%: moneyline more bullish on home
 
 
+def test_h9_production_list_names_the_current_revision():
+    # Append-only: a production REVISION missing here would drop its games once production moves on.
+    assert g.m.REVISION in g.H9_PRODUCTION and g.H9_PRODUCTION[0] == H9_REV
+
+
+def test_h9_sample_keeps_every_listed_production_revision(monkeypatch):
+    recs = [rec("a", .6, .6, rev=H9_REV, week=6, hm=-300, am=250, sp=3.),
+            rec("b", .6, .6, rev="boxscore-composite-v1.19", week=7, hm=-300, am=250, sp=3.),
+            rec("c", .6, .6, rev="boxscore-composite-v1.20", week=8, hm=-300, am=250, sp=3.),
+            rec("d", .6, .6, rev="boxscore-composite-v1.16", week=8, hm=-300, am=250, sp=3.)]    # shadow
+    graded = g.grade(recs, RESULTS)
+    monkeypatch.setattr(g.m, "REVISION", "boxscore-composite-v1.20")
+    monkeypatch.setattr(g, "H9_PRODUCTION", (H9_REV, "boxscore-composite-v1.19", "boxscore-composite-v1.20"))
+    assert sorted(g.h9_rows(graded).game_id) == ["a", "b", "c"]
+    monkeypatch.setattr(g, "H9_PRODUCTION", (H9_REV,))                    # v1.19 not listed: its games drop
+    assert sorted(g.h9_rows(graded).game_id) == ["a", "c"]
+
+
+def _h9_games(n, weeks, win):
+    rng = np.random.default_rng(0)
+    hm = rng.choice([-300, -150, 130, 200], n)
+    am = np.where(hm < 0, np.abs(hm) - 20, -(hm + 20))
+    sp = rng.normal(0, 5, n).round(1)
+    recs = [rec(f"g{i}", .6, .6, rev=H9_REV, week=6 + i % weeks, hm=float(hm[i]), am=float(am[i]), sp=float(sp[i]))
+            for i in range(n)]
+    w = win(hm, rng)
+    res = pd.DataFrame({"game_id": [f"g{i}" for i in range(n)], "away_score": np.where(w, 10, 20),
+                        "home_score": np.where(w, 20, 10), "result": np.where(w, 10, -10)})
+    return g.grade(recs, res)
+
+
+def test_h9_interim_b_waits_for_ten_weeks_and_says_when_not_estimable():
+    two_weeks = _h9_games(40, 2, lambda hm, rng: rng.random(len(hm)) < .5)
+    s = g.h9_summary(two_weeks)
+    assert s["n"] == 40 and s["weeks"] == 2 and np.isnan(s["b"]) and np.isnan(s["se"])
+    assert "b needs 30 graded games over 10 weeks" in g.report_text(two_weeks)
+    separated = _h9_games(40, 12, lambda hm, rng: hm < 0)              # the favorite always wins: no finite MLE
+    s = g.h9_summary(separated)
+    assert s["weeks"] == 12 and np.isnan(s["b"])
+    assert "b not estimable" in g.report_text(separated)
+
+
 def test_h9_rule_backs_the_spread_side_and_skips_small_disagreements():
     res = pd.DataFrame({"game_id": ["a", "b", "s"], "away_score": [20, 10, 10], "home_score": [10, 20, 20],
                         "result": [-10, 10, 10]})
@@ -262,10 +304,14 @@ def test_h9_fit_recovers_a_negative_slope_and_appears_in_the_report(tmp_path):
 
 
 def test_penalty_verdict_is_three_way_with_cluster_se():
-    assert g.fp_verdict(.01, .001, 199).startswith("no verdict")
-    assert g.fp_verdict(.006, .002, 200).startswith("supported")           # lower bound .006 - 2.24*.002 > 0
-    assert g.fp_verdict(-.004, .002, 200).startswith("falsified")          # upper bound .0005 < .002
-    assert g.fp_verdict(-.001, .002, 200) == "unresolved"                  # upper bound .0035 >= .002: not excluded
-    assert g.fp_verdict(.0, float("nan"), 500).startswith("no verdict")
+    assert np.isclose(g.fp_critical(14), 2.5326, atol=1e-4) and np.isclose(g.fp_critical(86), 2.2818, atol=1e-4)
+    assert g.fp_verdict(.01, .001, 199, 14).startswith("no verdict")
+    assert g.fp_verdict(.006, .002, 200, 14).startswith("supported")       # lower bound .006 - 2.53*.002 > 0
+    assert g.fp_verdict(-.004, .002, 200, 14).startswith("falsified")      # upper bound .0011 < .002
+    assert g.fp_verdict(-.001, .002, 200, 14) == "unresolved"              # upper bound .0041 >= .002: not excluded
+    assert g.fp_verdict(.0048, .002, 1300, 86).startswith("supported")     # t(85) 2.28: lower bound > 0
+    assert g.fp_verdict(.0048, .002, 210, 14) == "unresolved"              # t(13) 2.53: few weeks, wider bounds
+    assert g.fp_verdict(.0, float("nan"), 500, 30).startswith("no verdict")
+    assert g.fp_verdict(.01, .001, 500, 1).startswith("no verdict")
     se = g._cluster_se([1., 1., -1., -1.], ["w1", "w1", "w2", "w2"])
     assert np.isclose(se, np.sqrt(2) * np.std([2., -2.], ddof=1) / 4)
