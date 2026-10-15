@@ -435,8 +435,33 @@ def summary(g):
             out.update(fp_n=int(len(f)), fp_log_loss=float(f.fp_log_loss.mean()),
                        fp_model_log_loss=float(f.model_log_loss.mean()), fp_gain=float(e.mean()),
                        fp_gain_se=float(e.std(ddof=1) / np.sqrt(len(e))) if len(e) > 1 else np.nan,
-                       fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()))
+                       fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()),
+                       fp_gain_cluster_se=_cluster_se(e, f.season.astype(str) + "_" + f.week.astype(str)))
     return out
+
+
+def _cluster_se(v, groups):
+    """SE of the mean of v with season-week clusters; NaN below two clusters."""
+    v = np.asarray(v, float)
+    c = pd.Series(v).groupby(np.asarray(groups)).sum()
+    return float(np.sqrt(len(c)) * c.std(ddof=1) / len(v)) if len(c) > 1 else np.nan
+
+
+# research/FAVORITE_PENALTY.md, addendum 2026-10-15: three-way verdict at the January checkpoints.
+FP_MIN_GAMES = 200
+FP_Z = 2.24          # 97.5% two-sided bounds; both error rates <= about 5% over five looks
+FP_DELTA = .002      # the smallest gain the penalty was adopted for
+
+
+def fp_verdict(gain, se, n):
+    """Penalty forward verdict (FAVORITE_PENALTY.md addendum 2026-10-15), with the week-cluster SE."""
+    if n < FP_MIN_GAMES or not np.isfinite(se):
+        return f"no verdict before {FP_MIN_GAMES} graded games"
+    if gain - FP_Z * se > 0:
+        return "supported (lower bound above 0)"
+    if gain + FP_Z * se < FP_DELTA:
+        return f"falsified (upper bound below +{FP_DELTA:g})"
+    return "unresolved"
 
 
 def roi_bands(g):
@@ -690,7 +715,8 @@ def report_text(g, now=None, h5=None):
                 lines.append(f"  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty "
                              f"(lambda {m.FAVORITE_PENALTY:g}) log loss {sm['fp_log_loss']:.4f} vs model "
                              f"{sm['fp_model_log_loss']:.4f}, gain {gain} (1 SE; n={sm['fp_n']}, "
-                             f"{sm['fp_changed']} probabilities changed); bets unchanged; no verdict before 100 games")
+                             f"{sm['fp_changed']} probabilities changed); bets unchanged; verdict at the January checkpoints: "
+                             f"{fp_verdict(sm['fp_gain'], sm['fp_gain_cluster_se'], sm['fp_n'])}")
             recs = m.band_records(scored_frame(part))
             lines.append("  Pick records by confidence band (model | market):")
             for i, b in recs.groupby("band_index"):

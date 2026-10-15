@@ -259,3 +259,13 @@ def test_h9_fit_recovers_a_negative_slope_and_appears_in_the_report(tmp_path):
     assert s["n"] == len(d) and s["b"] < 0 and abs(s["b"] + 1.5) < 3 * s["se"]
     g.write_outputs(out, tmp_path, now=dt.datetime(2027, 1, 12, tzinfo=dt.timezone.utc))
     assert "== Pre-registered H9" in (tmp_path / "ledger_report.txt").read_text()
+
+
+def test_penalty_verdict_is_three_way_with_cluster_se():
+    assert g.fp_verdict(.01, .001, 199).startswith("no verdict")
+    assert g.fp_verdict(.006, .002, 200).startswith("supported")           # lower bound .006 - 2.24*.002 > 0
+    assert g.fp_verdict(-.004, .002, 200).startswith("falsified")          # upper bound .0005 < .002
+    assert g.fp_verdict(-.001, .002, 200) == "unresolved"                  # upper bound .0035 >= .002: not excluded
+    assert g.fp_verdict(.0, float("nan"), 500).startswith("no verdict")
+    se = g._cluster_se([1., 1., -1., -1.], ["w1", "w1", "w2", "w2"])
+    assert np.isclose(se, np.sqrt(2) * np.std([2., -2.], ddof=1) / 4)

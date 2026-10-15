@@ -1,0 +1,76 @@
+rule,true_gain,look,n,supported,falsified
+current (FAVORITE_PENALTY.md),-0.0020,Jan 2027,206,0.0105,0.6370
+current (FAVORITE_PENALTY.md),-0.0020,Jan 2028,478,0.0147,0.7923
+current (FAVORITE_PENALTY.md),-0.0020,Jan 2029,750,0.0170,0.8581
+current (FAVORITE_PENALTY.md),-0.0020,Jan 2030,1022,0.0182,0.8969
+current (FAVORITE_PENALTY.md),-0.0020,Jan 2031,1294,0.0189,0.9191
+current (FAVORITE_PENALTY.md),0.0000,Jan 2027,206,0.0248,0.5063
+current (FAVORITE_PENALTY.md),0.0000,Jan 2028,478,0.0425,0.6393
+current (FAVORITE_PENALTY.md),0.0000,Jan 2029,750,0.0530,0.7028
+current (FAVORITE_PENALTY.md),0.0000,Jan 2030,1022,0.0618,0.7408
+current (FAVORITE_PENALTY.md),0.0000,Jan 2031,1294,0.0673,0.7660
+current (FAVORITE_PENALTY.md),0.0010,Jan 2027,206,0.0374,0.4380
+current (FAVORITE_PENALTY.md),0.0010,Jan 2028,478,0.0683,0.5484
+current (FAVORITE_PENALTY.md),0.0010,Jan 2029,750,0.0910,0.6007
+current (FAVORITE_PENALTY.md),0.0010,Jan 2030,1022,0.1086,0.6332
+current (FAVORITE_PENALTY.md),0.0010,Jan 2031,1294,0.1208,0.6533
+current (FAVORITE_PENALTY.md),0.0023,Jan 2027,206,0.0604,0.3500
+current (FAVORITE_PENALTY.md),0.0023,Jan 2028,478,0.1179,0.4349
+current (FAVORITE_PENALTY.md),0.0023,Jan 2029,750,0.1641,0.4708
+current (FAVORITE_PENALTY.md),0.0023,Jan 2030,1022,0.1994,0.4909
+current (FAVORITE_PENALTY.md),0.0023,Jan 2031,1294,0.2288,0.5029
+current (FAVORITE_PENALTY.md),0.0040,Jan 2027,206,0.1013,0.2490
+current (FAVORITE_PENALTY.md),0.0040,Jan 2028,478,0.2140,0.2969
+current (FAVORITE_PENALTY.md),0.0040,Jan 2029,750,0.3099,0.3151
+current (FAVORITE_PENALTY.md),0.0040,Jan 2030,1022,0.3835,0.3228
+current (FAVORITE_PENALTY.md),0.0040,Jan 2031,1294,0.4400,0.3269
+"proposed z=1.96, delta=+0.002",-0.0020,Jan 2027,206,0.0105,0.1039
+"proposed z=1.96, delta=+0.002",-0.0020,Jan 2028,478,0.0150,0.2213
+"proposed z=1.96, delta=+0.002",-0.0020,Jan 2029,750,0.0176,0.3253
+"proposed z=1.96, delta=+0.002",-0.0020,Jan 2030,1022,0.0194,0.4218
+"proposed z=1.96, delta=+0.002",-0.0020,Jan 2031,1294,0.0205,0.5042
+"proposed z=1.96, delta=+0.002",0.0000,Jan 2027,206,0.0248,0.0542
+"proposed z=1.96, delta=+0.002",0.0000,Jan 2028,478,0.0432,0.1037
+"proposed z=1.96, delta=+0.002",0.0000,Jan 2029,750,0.0558,0.1499
+"proposed z=1.96, delta=+0.002",0.0000,Jan 2030,1022,0.0667,0.1893
+"proposed z=1.96, delta=+0.002",0.0000,Jan 2031,1294,0.0752,0.2275
+"proposed z=1.96, delta=+0.002",0.0010,Jan 2027,206,0.0374,0.0385
+"proposed z=1.96, delta=+0.002",0.0010,Jan 2028,478,0.0692,0.0690
+"proposed z=1.96, delta=+0.002",0.0010,Jan 2029,750,0.0954,0.0938
+"proposed z=1.96, delta=+0.002",0.0010,Jan 2030,1022,0.1178,0.1150
+"proposed z=1.96, delta=+0.002",0.0010,Jan 2031,1294,0.1366,0.1338
+"proposed z=1.96, delta=+0.002",0.0023,Jan 2027,206,0.0604,0.0233
+"proposed z=1.96, delta=+0.002",0.0023,Jan 2028,478,0.1199,0.0391
+"proposed z=1.96, delta=+0.002",0.0023,Jan 2029,750,0.1731,0.0491
+"proposed z=1.96, delta=+0.002",0.0023,Jan 2030,1022,0.2205,0.0561
+"proposed z=1.96, delta=+0.002",0.0023,Jan 2031,1294,0.2620,0.0610
+"proposed z=1.96, delta=+0.002",0.0040,Jan 2027,206,0.1013,0.0105
+"proposed z=1.96, delta=+0.002",0.0040,Jan 2028,478,0.2180,0.0155
+"proposed z=1.96, delta=+0.002",0.0040,Jan 2029,750,0.3276,0.0181
+"proposed z=1.96, delta=+0.002",0.0040,Jan 2030,1022,0.4224,0.0192
+"proposed z=1.96, delta=+0.002",0.0040,Jan 2031,1294,0.5028,0.0200
+"proposed z=2.24, delta=+0.002",-0.0020,Jan 2027,206,0.0047,0.0618
+"proposed z=2.24, delta=+0.002",-0.0020,Jan 2028,478,0.0069,0.1422
+"proposed z=2.24, delta=+0.002",-0.0020,Jan 2029,750,0.0083,0.2248
+"proposed z=2.24, delta=+0.002",-0.0020,Jan 2030,1022,0.0090,0.3077
+"proposed z=2.24, delta=+0.002",-0.0020,Jan 2031,1294,0.0093,0.3837
+"proposed z=2.24, delta=+0.002",0.0000,Jan 2027,206,0.0129,0.0308
+"proposed z=2.24, delta=+0.002",0.0000,Jan 2028,478,0.0219,0.0628
+"proposed z=2.24, delta=+0.002",0.0000,Jan 2029,750,0.0290,0.0916
+"proposed z=2.24, delta=+0.002",0.0000,Jan 2030,1022,0.0356,0.1196
+"proposed z=2.24, delta=+0.002",0.0000,Jan 2031,1294,0.0411,0.1466
+"proposed z=2.24, delta=+0.002",0.0010,Jan 2027,206,0.0192,0.0203
+"proposed z=2.24, delta=+0.002",0.0010,Jan 2028,478,0.0375,0.0391
+"proposed z=2.24, delta=+0.002",0.0010,Jan 2029,750,0.0527,0.0542
+"proposed z=2.24, delta=+0.002",0.0010,Jan 2030,1022,0.0672,0.0673
+"proposed z=2.24, delta=+0.002",0.0010,Jan 2031,1294,0.0800,0.0779
+"proposed z=2.24, delta=+0.002",0.0023,Jan 2027,206,0.0321,0.0107
+"proposed z=2.24, delta=+0.002",0.0023,Jan 2028,478,0.0709,0.0192
+"proposed z=2.24, delta=+0.002",0.0023,Jan 2029,750,0.1084,0.0254
+"proposed z=2.24, delta=+0.002",0.0023,Jan 2030,1022,0.1425,0.0293
+"proposed z=2.24, delta=+0.002",0.0023,Jan 2031,1294,0.1751,0.0317
+"proposed z=2.24, delta=+0.002",0.0040,Jan 2027,206,0.0616,0.0050
+"proposed z=2.24, delta=+0.002",0.0040,Jan 2028,478,0.1453,0.0075
+"proposed z=2.24, delta=+0.002",0.0040,Jan 2029,750,0.2302,0.0086
+"proposed z=2.24, delta=+0.002",0.0040,Jan 2030,1022,0.3105,0.0091
+"proposed z=2.24, delta=+0.002",0.0040,Jan 2031,1294,0.3842,0.0095
