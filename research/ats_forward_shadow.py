@@ -1,0 +1,196 @@
+"""Append-only ATS research shadow captured only from NEW native v1.18 locks.
+
+This never edits the original forward predictions. It starts after the explicit
+launch cutoff and additionally requires the *first* v1.18 game snapshot to
+have been created very recently and before kickoff; it does not backfill old
+locks or create model outputs after an outcome. Price is PROXY -110, not a
+historically verified ATS offer. For research only, not production bets.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+import os
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from scipy.special import ndtri
+
+import fixed_bands
+from research import ats_cover_probability as cp
+
+REVISION = "boxscore-composite-v1.18"
+START_UTC = dt.datetime.fromisoformat("2026-10-16T00:00:00+00:00")
+MAX_CAPTURE_AGE_HOURS = 3.
+STATE = "ats_forward_shadow.jsonl"
+
+
+def utc(value: str) -> dt.datetime:
+    t = dt.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    if t.tzinfo is None:
+        raise ValueError("timestamps must have UTC offset")
+    return t.astimezone(dt.timezone.utc)
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    result = []
+    for n, line in enumerate(path.read_text().splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"{path}:{n}: malformed JSON") from e
+        if not isinstance(item, dict):
+            raise ValueError(f"{path}:{n}: expected object")
+        result.append(item)
+    return result
+
+
+def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
+    original = read_jsonl(data / "forward_predictions.jsonl")
+    earliest = {}
+    for r in original:
+        if r.get("revision") != REVISION:
+            continue
+        key = str(r["game_id"])
+        if key not in earliest or utc(r["generated_utc"]) < utc(earliest[key]["generated_utc"]):
+            earliest[key] = r
+    rows = []
+    for key, r in sorted(earliest.items()):
+        generated, kickoff = utc(r["generated_utc"]), utc(r["kickoff_utc"])
+        # Both guards matter: no retroactive declaration of a historical quote.
+        age = (now - generated).total_seconds() / 3600.
+        if generated < START_UTC or not 0 <= age <= MAX_CAPTURE_AGE_HOURS:
+            continue
+        if now >= kickoff or generated >= kickoff:
+            continue
+        if not np.isfinite(float(r.get("spread_line", np.nan))):
+            continue
+        if not np.isfinite(float(r.get("model_wp", np.nan))):
+            continue
+        rows.append(r)
+    return rows
+
+
+def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
+    year = int(raw["season"])
+    if mapping is None or mapping["training_max_season"] >= year:
+        raise ValueError("no chronological fixed-band rule")
+    fit = cp.fit_prior(historical[historical.season < year], year)
+    spread = float(cp.SIGMA * ndtri(np.clip(float(raw["model_wp"]), .005, .995)))
+    line = float(raw["spread_line"])
+    fixed = float(fixed_bands.apply([spread], mapping)[0])
+    _, adjusted = cp.distribution(line, spread - line, fit)
+    h, a, p = cp.event(adjusted, line)
+    ev_h, ev_a = cp.WIN_PROFIT*h-a, cp.WIN_PROFIT*a-h
+    probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
+    def side(gap):
+        return "home" if gap > cp.EPS else "away" if gap < -cp.EPS else ""
+    fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
+    original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
+    return {
+        "revision": REVISION, "game_id": raw["game_id"], "season": year,
+        "week": int(raw["week"]), "away": raw["away"], "home": raw["home"],
+        "generated_utc": raw["generated_utc"], "kickoff_utc": raw["kickoff_utc"],
+        "market_spread": line, "raw_spread": spread,
+        "fixed_band_spread": fixed,
+        "raw_side": side(spread-line), "fixed_band_side": side(fixed-line),
+        "probability_side": probability_side,
+        "p_home_cover": h, "p_away_cover": a, "p_push": p,
+        "home_ev_proxy_minus110": ev_h, "away_ev_proxy_minus110": ev_a,
+        "assumed_price": -110, "quote_basis": "unverified_proxy_only",
+        "source_snapshot_sha256": hashlib.sha256(original_json.encode()).hexdigest(),
+        "calibration_sha256": hashlib.sha256(fit_json.encode()).hexdigest(),
+        "fixed_rule": mapping, "beta": fit["beta"],
+        "training_max_season": fit["training_max_season"],
+        "trained_games": fit["n_training"],
+        "research_only": True,
+    }
+
+
+def record(data: Path | str = "data", now: dt.datetime | None = None) -> int:
+    """Append only truly new first native locks; never revise stored predictions."""
+    data = Path(data)
+    now = now or dt.datetime.now(dt.timezone.utc)
+    if now.tzinfo is None:
+        raise ValueError("now must be timezone-aware")
+    now = now.astimezone(dt.timezone.utc)
+    possible = possible_locks(data, now)
+    if not possible:
+        return 0
+    target = data / STATE
+    stored = read_jsonl(target)
+    keys = [(r["revision"], r["game_id"]) for r in stored]
+    if len(keys) != len(set(keys)):
+        raise ValueError("duplicate existing ATS shadow keys")
+    existing = set(keys)
+    latest = data / "latest"
+    source = latest / "fixed_band_ledger.csv"
+    rule_file = latest / "fixed_band_rules.json"
+    if not source.exists() or not rule_file.exists():
+        raise FileNotFoundError("required prior-season ATS research inputs missing")
+    prior = pd.read_csv(source)
+    rules = {int(r["season"]): r for r in json.loads(rule_file.read_text())}
+    new = []
+    for r in possible:
+        key = (REVISION, r["game_id"])
+        if key in existing:
+            continue
+        row = freeze(r, prior, rules.get(int(r["season"])))
+        new.append(row)
+        existing.add(key)
+    if new:
+        # Append + flush rather than overwrite; git workflow commits under data/.
+        with target.open("a", encoding="utf-8") as f:
+            for row in new:
+                f.write(json.dumps(row, sort_keys=True, allow_nan=False)+"\n")
+            f.flush()
+            os.fsync(f.fileno())
+    return len(new)
+
+
+def graded_view(data: Path | str = "data") -> pd.DataFrame:
+    """Join immutable pregame snapshots to current results without modifying them."""
+    path = Path(data)
+    rows = read_jsonl(path / STATE)
+    if not rows:
+        return pd.DataFrame()
+    ledger = pd.read_csv(path / "forward_ledger.csv")
+    g = pd.DataFrame(rows)
+    if g.game_id.duplicated().any():
+        raise ValueError("duplicated shadow game ID")
+    outcomes = ledger[(ledger.revision == REVISION)].copy()
+    outcomes = outcomes.sort_values("generated_utc").drop_duplicates("game_id")
+    keep = ["game_id", "status", "result"]
+    g = g.merge(outcomes[keep], how="left", on="game_id", validate="one_to_one")
+    for arm, col in [("raw", "raw_side"), ("fixed_band", "fixed_band_side"),
+                     ("cover_probability", "probability_side")]:
+        graded = [cp.grade(float(r["result"]), float(r["market_spread"]), r[col])
+                  if pd.notna(r["result"]) else ("", np.nan)
+                  for _, r in g.iterrows()]
+        g[arm+"_result"] = [v[0] for v in graded]
+        g[arm+"_units_proxy_minus110"] = [v[1] for v in graded]
+    return g
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data", type=Path, default=Path("data"))
+    parser.add_argument("--grade-only", action="store_true")
+    args = parser.parse_args()
+    if not args.grade_only:
+        print("new ATS research locks:", record(args.data))
+    view = graded_view(args.data)
+    if len(view):
+        print(view[["game_id", "status", "raw_result", "fixed_band_result",
+                    "cover_probability_result"]].to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()
