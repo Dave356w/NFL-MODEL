@@ -46,6 +46,7 @@ import kalshi
 import matchup
 import nfl_model as m
 import totals
+import fixed_bands
 from research import version_report
 
 DATA = Path("data")
@@ -198,6 +199,7 @@ def load_latest(latest=LATEST):
         p = latest / name
         out[name[:-4]] = read_csv_or_empty(p)
     out["board_html"] = (latest / "board.html").exists()
+    fixed_bands.prepare(out)
     return out
 
 
@@ -769,7 +771,7 @@ def render_index(latest, ledger, built, now=None):
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
-        ms, ks = model_spread(r), num(r.get("spread_line"))
+        ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
         band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
@@ -901,6 +903,7 @@ def render_grades(ledger, latest, built):
                                 table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
+        parts.append(render_fixed_bands(latest, details=True))
     parts.append("<p class='mut small'>Full statistics, earlier model versions and research comparisons: "
                  "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
     return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
@@ -929,6 +932,64 @@ def render_retro(latest):
         summ = (f"{yr} · {w}-{l} <span class='rt'>ROI {roi_short(units.mean())}</span>" if len(units) else f"{yr} · no priced picks")
         out.append(folded(summ, table(["Week", "Game", "Pick", "Final", "Result"], rows, num_cols=(3,))))
     return "".join(out)
+
+
+def render_fixed_bands(latest, details=False):
+    d = latest.get('fixed_band_ledger', pd.DataFrame())
+    if d.empty:
+        return ''
+    eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
+    out = ["<h2 class='sec'>Fixed-band spread · retrospective ATS</h2>",
+           "<div class='gr-note flag-note'>Reconstructed history, not locked forward results. "
+           "Each season's mapping uses earlier seasons only; the model and calibration design were developed on exposed history. "
+           "At least two prior seasons are required. Tied finals are included. "
+           "Risk 1 unit per bet at assumed −110: wins +0.9091u, losses −1u, pushes 0u. "
+           "A forecast equal to the market line skips. ROI includes pushed stakes and excludes skips. "
+           "Historical quote capture times are unknown; no executable-price claim. "
+           "Win probabilities and moneyline picks are unchanged.</div>"]
+    if eligible.empty:
+        return ''.join(out) + "<p class='mut'>Insufficient prior-season history for fixed-band evaluation.</p>"
+    rows = []
+    for r in fixed_bands.summary(d).itertuples(index=False):
+        rows.append([esc(r.season), esc(r.method), f'{r.wins}–{r.losses}–{r.pushes}', str(r.skips),
+                     f'{r.units:+.2f}', roi_short(r.roi)])
+    out.append(table(['Season', 'Spread method', 'ATS W–L–P', 'Skips', 'Units', 'ROI'], rows, num_cols=(2, 3, 4, 5)))
+    out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
+               "<a href='fixed_band_summary.csv'>Season results</a> · <a href='fixed_band_rules.json'>Season mappings</a>. "
+               "Original spread = probability-implied spread; fixed bands = calibrated spread. "
+               "ATS side follows forecast minus market, independently of the outright winner. "
+               "The calibration maximizes earlier-season W−L, not ROI.</p>")
+    if details:
+        for year, g in eligible.groupby('season', sort=True):
+            rows = []
+            for r in g.sort_values(['week', 'game_id'], ascending=False).itertuples(index=False):
+                rows.append([f'W{int(r.week)} · {esc(r.away)} @ {esc(r.home)}',
+                             favorite_spread_text(r.fixed_band_spread, r.home, r.away),
+                             favorite_spread_text(r.spread_line, r.home, r.away),
+                             (f'{esc(r.fixed_band_ats_team)} {spread_text(r.spread_line, r.fixed_band_ats_side == "home")}'
+                              if r.fixed_band_ats_team else 'Skip'),
+                             result_badge(r.original_ats_result),
+                             'Skip' if r.fixed_band_ats_result == 'S' else result_badge(r.fixed_band_ats_result),
+                             f'{r.fixed_band_ats_units:+.2f}'])
+            out.append(folded(f'{int(year)} · retrospective spread results',
+                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'Previous ATS', 'Model ATS', 'Model units'], rows)))
+    else:
+        out.append("<h3>Spread magnitude calibration</h3><p class='mut small'>Bands use the original model's "
+                   "absolute spread. Realized margin is signed toward the forecast favorite; losses are negative. "
+                   "These point-error diagnostics are separate from ATS profitability.</p>")
+        rows = []
+        for band in fixed_bands.BANDS:
+            g = eligible[eligible.spread_band == band]
+            if g.empty:
+                continue
+            realized = np.sign(g.model_spread) * g.result
+            rows.append([esc(band), str(len(g)), f'{g.model_spread.abs().mean():.2f}',
+                         f'{g.fixed_band_spread.abs().mean():.2f}', f'{realized.mean():+.2f}',
+                         f'{(g.model_spread-g.result).abs().mean():.2f}',
+                         f'{(g.fixed_band_spread-g.result).abs().mean():.2f}'])
+        out.append(table(['Original magnitude', 'Games', 'Avg original', 'Avg fixed band',
+                          'Avg realized margin', 'Original MAE', 'Fixed MAE'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
+    return ''.join(out)
 
 
 def market_sides(df):
@@ -993,6 +1054,8 @@ def render_calibration(latest, ledger, built):
                      + records_table(latest["band_records"]))
     elif not len(s):
         parts.append("<div class='gr-note'>No graded picks yet.</div>")
+    if latest is not None:
+        parts.append(render_fixed_bands(latest))
     return html_document("".join(parts), f"{SITE_NAME} market calibration", "market-calibration.html", built)
 
 
@@ -1005,6 +1068,16 @@ def render_all(out_dir, data=DATA, now=None):
     ledger = load_ledger(data)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    if latest is not None and 'fixed_band_ledger' in latest:
+        exports = {'fixed_band_ledger.csv': latest['fixed_band_ledger'],
+                   'fixed_band_summary.csv': fixed_bands.summary(latest['fixed_band_ledger']),
+                   'fixed_band_board.csv': latest['board']}
+        for name, frame in exports.items():
+            frame.to_csv(Path(data) / 'latest' / name, index=False)
+            frame.to_csv(out / name, index=False)
+        rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
+        (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
+        (out / 'fixed_band_rules.json').write_text(rules)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built)}

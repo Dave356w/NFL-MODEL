@@ -100,6 +100,7 @@ def render(tmp_path, **kw):
 
 
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
+SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json"}
 
 
 def visible_text(html):
@@ -109,7 +110,7 @@ def visible_text(html):
 
 def test_three_public_pages_with_nav_and_no_nan(tmp_path):
     out, files = render(tmp_path)
-    assert set(PUBLIC) | {"ledger_report.txt", ".nojekyll"} == set(files)
+    assert set(PUBLIC) | SPREAD_EXPORTS | {"ledger_report.txt", ".nojekyll"} == set(files)
     assert "model.html" not in files and "board.html" not in files
     for name in PUBLIC:
         html = (out / name).read_text()
@@ -343,14 +344,26 @@ def test_price_band_flags_small_samples_only():
     assert "won 66.0%" in html and "This game" in html and "2023–2025" in html
 
 
-def test_card_shows_model_and_market_spread(tmp_path):
+def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
+                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    # TB@DAL: board has no model_spread column (published before v1.12.1), so it is derived from
-    # model_wp .60 -> DAL by 12.37 * Phi^-1(.6) = 3.13; the market line 9.5 favors DAL too.
-    assert "<span>Model DAL −3.1</span> · <span>Market DAL −9.5</span>" in idx
-    assert "<td>Model spread</td><td class=n>+3.1</td><td class=n>−3.1</td>" in idx
+    assert "<span>Model DAL −5.0</span> · <span>Market DAL −9.5</span>" in idx
+    assert "<td>Model spread</td><td class=n>+5.0</td><td class=n>−5.0</td>" in idx
+    assert "Model DAL −3.1" not in idx
     assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
+    for page in ['grades.html', 'market-calibration.html']:
+        text = (out / page).read_text()
+        assert 'Fixed-band spread · retrospective ATS' in text
+        assert '−110' in text and 'not locked forward results' in text
+
+
+def test_missing_training_never_falls_back_to_old_spread(tmp_path):
+    out, _ = render(tmp_path)
+    idx = (out / 'index.html').read_text()
+    assert '<span>Model —</span>' in idx
+    assert 'Model DAL −3.1' not in idx
 
 
 def test_spread_text_sides_pickem_and_missing():
@@ -430,7 +443,7 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     g.write_outputs(g.grade(recs, res), data)
     out = tmp_path / "public"
     files = b.render_all(out, data, now=NOW)
-    assert set(files) == {*PUBLIC, "ledger_report.txt", ".nojekyll"}
+    assert set(files) == {*PUBLIC, *SPREAD_EXPORTS, "ledger_report.txt", ".nojekyll"}
     pages = "".join((out / p).read_text() for p in PUBLIC)
     for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
         assert marker not in pages

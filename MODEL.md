@@ -516,3 +516,35 @@ validate_data_files.py ─► commit_data.py (signed commit of data/) ─► Pag
 Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
 walk-forward grid.
+
+### Fixed-band displayed spread (2026-10-15)
+
+The site's existing **Model spread** now displays the fixed-band calibrated
+spread, replacing the probability-implied value. This is a reporting layer in
+`fixed_bands.py`; v1.18 win probabilities, moneyline bets, config identity, and
+append-only original snapshots are unchanged. `model_spread` in original model
+exports remains the probability-implied calibration input; the site exports the
+replacement explicitly as `fixed_band_spread` in `fixed_band_board.csv`.
+
+For absolute input bands [0,3), [3,7), [7,10), [10,infinity), choose monotone
+integer magnitudes 0–21 maximizing earlier-season ATS W−L, with a deterministic
+squared-distance tie-break and at least 90% training coverage. Preserve the
+input sign. Fit once per target season using strictly earlier seasons, excluding
+tied finals from training, with two prior seasons and 30 observations per band.
+No current-season outcomes enter that season's mapping. The adopted 2026 map is
+4/5/7/13 points, fitted through 2025. Historical 2023–2025 maps are independently
+fitted at their season boundaries, never backfilled with the current map.
+
+Ledger and calibration pages compare original and fixed-band ATS results on
+identical eligible retrospective games. Evaluation includes tied finals;
+zero edge (tolerance 1e-10) skips before checking pushes. At assumed −110,
+risk 1u, win +0.9091u, loss −1u; pushes retain their stake in ROI's denominator,
+skips do not. This is exposed development history with unknown quote-capture
+times, not native forward or executable-price evidence. ATS accuracy and point
+error diagnostics are separate from probability calibration. Missing training
+history displays an unavailable spread rather than the superseded value.
+
+Each site build regenerates `data/latest/fixed_band_ledger.csv`,
+`fixed_band_summary.csv`, `fixed_band_board.csv`, and `fixed_band_rules.json`,
+and publishes downloadable copies. The deployment workflow commits these derived
+data files; original snapshots are never rewritten.

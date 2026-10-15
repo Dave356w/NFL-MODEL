@@ -25,6 +25,14 @@ remain unchanged; retrospective replay at their original quotes is separately la
 Adoption follows exposed historical development, with reliable profit superiority
 still unresolved.
 
+The displayed **Model spread** uses the fixed-band mapping (2026: 4/5/7/13
+points for original spread magnitudes below 3, 3–7, 7–10, and 10+). Ledger and
+calibration pages show season-by-season retrospective ATS results at assumed
+−110, including pushes and skips, with downloadable per-game data. Each mapping
+uses earlier seasons only; these are exposed historical comparisons. Win
+probabilities and moneyline picks retain the v1.18 recipe. See `fixed_bands.py`
+and the fixed-band section in `MODEL.md` for the full rule and grading basis.
+
 | Page | For |
 |---|---|
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
