@@ -357,7 +357,8 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
         text = (out / page).read_text()
         assert "<h2 class='sec'>Model spread</h2>" in text
         assert 'Fixed-band spread · retrospective ATS' not in text
-        assert '2026 graded results' not in text  # this fixture has only 2024 history
+        if page == 'market-calibration.html':
+            assert '<h3>2026 graded results</h3>' not in text  # history is only 2024
         assert 'Per-season results' in text
         assert '−110' in text and 'not locked forward results' in text
 
@@ -478,3 +479,27 @@ def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
         assert 'Fixed-band spread · retrospective ATS' not in html
     html = (out / 'grades.html').read_text()
     assert 'model spread · graded results' in html
+
+
+def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
+                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    data = make_data(tmp_path / 'data')
+    path = data / 'latest' / 'retro_ledger.csv'
+    retro = pd.read_csv(path)
+    retro.loc[retro.index[:3], 'season'] = 2026
+    retro.to_csv(path, index=False)
+    out = tmp_path / 'public'
+    b.render_all(out, data, now=NOW)
+    for page in ['index.html', 'grades.html']:
+        html = (out / page).read_text()
+        assert 'Model spread · 2026 graded results' in html
+        assert 'assumed −110 · 1u per bet · not locked pregame picks' in html
+        assert html.index('Model spread · 2026 graded results') < html.index("class='grid'" if page == 'index.html' else 'Rebuilt history')
+    html = (out / 'grades.html').read_text()
+    assert 'Model spread · rebuilt history' in html
+    assert '<th>Spread pick</th>' in html and '<th>ATS result</th>' in html
+    latest = b.load_latest(data / 'latest')
+    for year in [2024, 2026]:
+        assert b.spread_record_text(b.spread_record(latest, year)) in html
+    assert 'ROI' in html and 'skips' in html

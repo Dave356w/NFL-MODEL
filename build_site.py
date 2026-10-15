@@ -510,6 +510,30 @@ def control_tiles(ctrl, first_label, first_value, first_sub):
     return f"<div class='gr-summary'>{''.join(tiles)}</div>"
 
 
+def spread_record(latest, season=None):
+    d = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
+    if d.empty:
+        return None
+    s = fixed_bands.summary(d)
+    r = s[(s.method == 'Fixed bands') & (s.season == ('All' if season is None else str(season)))]
+    return r.iloc[0] if len(r) and r.iloc[0].games else None
+
+
+def spread_record_text(r):
+    return (f"ATS {int(r.wins)}–{int(r.losses)}–{int(r.pushes)} · {int(r.skips)} skips · "
+            f"{r.units:+.2f}u · ROI {roi_short(r.roi)}")
+
+
+def spread_headline(latest, season=None):
+    r = spread_record(latest, season)
+    label = f'Model spread · {season} graded results' if season is not None else 'Model spread · rebuilt history'
+    text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
+    basis = ('Completed games, graded retrospectively' if season is not None else 'Eligible seasons, reconstructed')
+    return (f"<div class='record'><div class='l'>{esc(label)}</div><div class='mono'>{text}"
+            f"<div class='mut small'>{basis} · assumed −110 · 1u per bet · not locked pregame picks</div>"
+            "</div></div>")
+
+
 UNIT_NAMES = {"OL": "Offensive line", "WRTE": "Receivers", "RB": "Running backs",
               "DL": "Defensive line", "LB": "Linebackers", "DB": "Secondary"}
 
@@ -723,6 +747,7 @@ def render_index(latest, ledger, built, now=None):
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     recorded = {r.game_id: r for r in cur.itertuples(index=False)}
     parts = [head(f"Week {week}", f"Model win probabilities for every {season} week-{week} game. Tap a game for details.")]
+    parts.append(spread_headline(latest, season))
 
     def pending(r):
         ko = m.kickoff_utc(r)
@@ -882,6 +907,8 @@ def render_grades(ledger, latest, built):
     graded = cur[cur.status == "graded"] if len(cur) else cur
     n_pend = len(cur) - len(graded)
     parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{n_pend} pending"))
+    if latest is not None:
+        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
     parts.append(disagreement_note(graded, "Locked picks"))
     if cur.empty:
         parts.append("<div class='gr-note'>No picks locked yet. The first one locks once a week's final injury "
@@ -921,6 +948,7 @@ def render_retro(latest):
            "these games were played.</div>"]
     played = retro[pd.to_numeric(retro["home won"], errors="coerce").isin([0., .5, 1.])]
     out.append(control_tiles(control_records(played), "Games", f"{len(played)}", f"{seasons[0]}–{seasons[-1]}"))
+    out.append(spread_headline(latest))
     out.append(disagreement_note(played, "Rebuilt history"))
     for yr in reversed(seasons):
         g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
@@ -930,7 +958,23 @@ def render_retro(latest):
                  result_badge(x.bet_result if isinstance(x.bet_result, str) else "")] for x in g.itertuples(index=False)]
         w, l = int((g.bet_result == "W").sum()), int((g.bet_result == "L").sum())
         summ = (f"{yr} · {w}-{l} <span class='rt'>ROI {roi_short(units.mean())}</span>" if len(units) else f"{yr} · no priced picks")
-        out.append(folded(summ, table(["Week", "Game", "Pick", "Final", "Result"], rows, num_cols=(3,))))
+        spread = spread_record(latest, yr)
+        if spread is not None:
+            summ += f"<br><span class='mut'>Model spread · {spread_record_text(spread)}</span>"
+        spread_data = latest.get('fixed_band_ledger', pd.DataFrame())
+        lookup = ({r.game_id: r for r in spread_data[spread_data.season == yr].itertuples(index=False)}
+                  if len(spread_data) else {})
+        for cells, game in zip(rows, g.itertuples(index=False)):
+            sr = lookup.get(game.game_id)
+            if sr is not None and math.isfinite(num(sr.fixed_band_spread)):
+                pick = (f'{esc(sr.fixed_band_ats_team)} {spread_text(sr.spread_line, sr.fixed_band_ats_side == "home")}'
+                        if sr.fixed_band_ats_team else 'Skip')
+                result = 'Skip' if sr.fixed_band_ats_result == 'S' else result_badge(sr.fixed_band_ats_result)
+                cells.extend([pick, result, f'{sr.fixed_band_ats_units:+.2f}'])
+            else:
+                cells.extend(['—', '—', '—'])
+        out.append(folded(summ, table(["Week", "Game", "Moneyline pick", "Final", "ML result",
+                                       "Spread pick", "ATS result", "ATS units"], rows, num_cols=(3, 7))))
     return "".join(out)
 
 
