@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-15 14:09 UTC
+NFL forward ledger report -- 2026-10-15 14:53 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -35,7 +35,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   Market picks 9-4 (.692)
   Log loss  model 0.7659  market 0.5714  gain -0.1945 +/- 0.1440 (1 SE; positive = model better)
   Brier     model 0.2567  market 0.1933
-  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6194 vs model 0.7659, gain +0.1465 +/- 0.1220 (1 SE; n=13, 5 probabilities changed); bets unchanged; verdict at the January checkpoints: no verdict before 200 graded games
+  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6194 vs model 0.7659, gain +0.1465 +/- 0.1220 (1 SE; n=13, 5 probabilities changed); bets unchanged; week-cluster SE n/a; interim reading, not a verdict (judged only at the January checkpoints): no verdict before 200 graded games
   Pick records by confidence band (model | market):
        50-55%        3-1 (.750) |       0-1 (.000)
        55-60%       1-0 (1.000) |       3-1 (.750)
@@ -191,7 +191,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H9 (one row per game, first production snapshot from 2026 week 6; prices only): moneyline vs spread disagreement
-  1 games with lock prices, 0 graded binary; b needs 30 graded games; verdict: no verdict before 300 graded binary games
+  1 games with lock prices, 0 graded binary; b needs 30 graded games over 10 weeks; verdict: no verdict before 300 graded binary games
   Rule, |dis| >= 0.11133, 1u on the side the spread favors more: 0 graded bets; verdict: no verdict before 100 bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
