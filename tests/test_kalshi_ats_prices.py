@@ -97,3 +97,40 @@ def test_historical_moneyline_only_observed_quotes_and_tie_half_settlement():
     assert m.loc["g1","kalshi_ml_side"]=="home"
     assert np.isclose(m.loc["g1","kalshi_ml_units"], 1/.60-1-.07*(1-.60))
     assert np.isclose(m.loc["g2","kalshi_ml_units"], .5/.47-1-.07*(1-.47))
+
+
+def test_original_model_spread_uses_quote_nearest_binary_half_integer():
+    ev="KXNFLSPREAD-26OCT18BALCLE"
+    row={"game_id":"g1","away":"BAL","home":"CLE","spread_line":-3.5,
+         "model_spread":-5.2,"kickoff_utc":"2026-10-18T17:00:00+00:00"}
+    m={"ticker":ev+"-BAL6","event_ticker":ev,"floor_strike":5.5}
+    t=int(pd.Timestamp("2026-10-18T15:00:00+00:00").timestamp())-60
+    def query(path):
+        return {"candlesticks":[snapshot(t,bid=".20",ask=".24")]}
+    q,status=p.alternate_line_quote(row,[(m,"historical")],"2026-10-18T15:00:00+00:00",query)
+    # Market away favored -3.5; model away by 5.2 -> away covers, YES away >5.5.
+    assert status=="quoted" and q["selection_side"]=="away"
+    assert q["selection_contract"]=="YES" and q["selection_ask"]==.24
+    # Opposite market discrepancy: model away by 2.2, market away by 3.5
+    # means home +3.5 side, thus NO against away winning by >2.5.
+    other={**row,"model_spread":-2.2}
+    m2={"ticker":ev+"-BAL3","event_ticker":ev,"floor_strike":2.5}
+    o,status=p.alternate_line_quote(other,[(m2,"historical")],"2026-10-18T15:00:00+00:00",query)
+    assert status=="quoted" and o["selection_side"]=="home"
+    assert o["selection_contract"]=="NO" and o["selection_ask"]==.80
+
+
+def test_alt_grading_remains_missing_without_actual_contract_quote():
+    base=pd.DataFrame([{"game_id":"g","model_spread":-5.2,"margin":-7,
+                         "original_side":"away","original_grade":"W",
+                         "fixed_band_side":"away","fixed_band_grade":"W",
+                         "cover_probability_side":"","cover_probability_grade":"S"}])
+    quote={"game_id":"g","status":"quoted","home_ask":.52,"away_ask":.49,
+           "alt_ask":.24,"alt_target_strike":5.5,
+           "alt_selection_side":"away","alt_contract":"YES"}
+    d=p.joined_ats_results(base,[quote])
+    assert len(d)==1
+    assert np.isclose(d.iloc[0].original_model_alt_kalshi_units, 1/.24-1-.07*.76)
+    assert d.iloc[0].original_model_alt_kalshi_grade=="W"
+    no=p.joined_ats_results(base,[{**quote,"alt_ask":None}])
+    assert np.isnan(no.iloc[0].original_model_alt_kalshi_units)
