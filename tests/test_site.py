@@ -102,6 +102,25 @@ def render(tmp_path, **kw):
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
 SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json"}
 
+def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
+    # NFL schedule input is Eastern clock time. Presentation must be Pacific.
+    october_game = {"gameday": "2026-10-18", "gametime": "20:15"}
+    january_game = {"gameday": "2027-01-10", "gametime": "20:15"}
+    assert b.kickoff_text(october_game) == "Sun 5:15 PM PDT"
+    assert b.kickoff_text(january_game) == "Sun 5:15 PM PST"
+
+    out, _ = render(tmp_path)
+    index = (out / "index.html").read_text()
+    grades = (out / "grades.html").read_text()
+    assert "Thu 5:15 PM PDT" in index  # upcoming game
+    assert "Pick locked Sat 5:00 AM PDT" in index
+    assert "Sun 1:25 PM PDT" in grades  # graded ledger kickoff
+    for name in PUBLIC:
+        html = (out / name).read_text()
+        assert "2026-10-07 08:00 PDT" in html  # build timestamp
+        assert not re.search(r"\\b(?:EST|EDT|ET)\\b", visible_text(html))
+
+
 
 def visible_text(html):
     html = re.sub(r"<style>.*?</style>|<script>.*?</script>", "", html, flags=re.S)
