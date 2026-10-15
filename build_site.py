@@ -966,13 +966,56 @@ def _qb(r, side):
     return esc(e) + (f" (usual {esc(u)})" if isinstance(u, str) and u != e else "")
 
 
+def previous_2026_v118_picks(latest):
+    """Display earlier 2026 games replayed with v1.18, never as native pregame locks."""
+    if latest is None:
+        return ""
+    man = latest.get("manifest", {})
+    if man.get("revision") != "boxscore-composite-v1.18" or int(man.get("season", 0)) != 2026:
+        return ""
+    d = latest.get("retro_ledger", pd.DataFrame())
+    needed = {"season", "week", "basis", "bet_result", "units"}
+    if d is None or d.empty or not needed.issubset(d.columns):
+        return ""
+    season = pd.to_numeric(d["season"], errors="coerce")
+    weeks = pd.to_numeric(d["week"], errors="coerce")
+    units = pd.to_numeric(d["units"], errors="coerce")
+    mask = (season.eq(2026) & weeks.lt(int(man["week"]))
+            & d["basis"].eq("current season walk-forward")
+            & d["bet_result"].isin(["W", "L", "P"]) & units.notna() & np.isfinite(units))
+    prior = d.loc[mask].copy()
+    if prior.empty:
+        return ""
+    prior["week"] = weeks.loc[mask].astype(int)
+    prior["units"] = units.loc[mask]
+    wins = int(prior["bet_result"].eq("W").sum())
+    losses = int(prior["bet_result"].eq("L").sum())
+    pushes = int(prior["bet_result"].eq("P").sum())
+    total = float(prior["units"].sum())
+    week_text = []
+    for week, games in prior.groupby("week", sort=True):
+        w = int(games["bet_result"].eq("W").sum())
+        l = int(games["bet_result"].eq("L").sum())
+        p = int(games["bet_result"].eq("P").sum())
+        week_text.append(f"W{week} {w}–{l}–{p}")
+    return ("<div class='record'><div class='l'>2026 v1.18 · previous weeks (reconstructed)</div>"
+            f"<div class='mono'>Moneyline {wins}–{losses}–{pushes} · {total:+.2f}u · "
+            f"ROI {roi_short(total / len(prior))} · {len(prior)} picks</div>"
+            f"<div class='mut small'>By week: {esc(' · '.join(week_text))}</div>"
+            "<div class='mut small'>Current v1.18 replay on earlier completed 2026 games "
+            "using historical prices, not previously locked v1.18 picks. "
+            "Separate from the native forward record below.</div></div>")
+
+
 def render_grades(ledger, latest, built):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Ledger", "Every pick is locked before kickoff, once both teams' injury reports are final, "
-                            "and graded at the moneyline it was locked at. One unit per game.")]
+    parts = [head("Ledger", "Native picks lock before kickoff once both teams' injury reports are final, "
+                            "and are graded at the moneyline saved at lock. One unit per game.")]
+    parts.append(previous_2026_v118_picks(latest))
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     graded = cur[cur.status == "graded"] if len(cur) else cur
     n_pend = len(cur) - len(graded)
+    parts.append("<h2 class='sec'>Native forward picks · " + esc(rev) + "</h2>")
     parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{n_pend} pending"))
     if latest is not None:
         parts.append(spread_headline(latest, int(latest['manifest']['season'])))
