@@ -150,6 +150,37 @@ def line_quote(row, markets, asof, get=kalshi.fetch):
     return q, "quoted"
 
 
+def alternate_line_quote(row, markets, asof, get=kalshi.fetch):
+    """Quoted Kalshi binary rung nearest ORIGINAL model-implied margin.
+
+    Returns the model's ATS-selected side at the target half-integer handicap.
+    The 'NO' quote uses 1-YES bid. A missing rung does not trigger interpolation.
+    """
+    model = float(row["model_spread"])
+    market = float(row["spread_line"])
+    if not math.isfinite(model) or not math.isfinite(market):
+        return None, "missing_model_or_market_spread"
+    if abs(model) < .5 or math.isclose(model, market, abs_tol=1e-9):
+        return None, "no_distinct_alternate_target"
+    picked = "home" if model > market else "away"
+    favorite = row["home"] if model > 0 else row["away"]
+    target = math.floor(abs(model))+.5
+    candidates=[(m,part) for m,part,team,strike in spread_contracts(markets,row["away"],row["home"])
+                if team==favorite and math.isclose(strike,target,abs_tol=1e-9)]
+    if len(candidates)!=1:
+        return None, "missing_or_ambiguous_alternate"
+    m,part=candidates[0]
+    q=quote_market(m,part,asof,get)
+    if q is None: return None, "missing_or_stale_alternate_candle"
+    is_yes = favorite == (row["home"] if picked=="home" else row["away"])
+    q.update({"ticker":m["ticker"],"event_ticker":m["event_ticker"],
+              "team":favorite,"target_strike":target,"selection_side":picked,
+              "selection_contract":"YES" if is_yes else "NO",
+              "selection_ask":q["yes_ask"] if is_yes else q["no_ask"],
+              "source_partition":part})
+    return q, "quoted"
+
+
 def winner_quote(row, markets, asof, get=kalshi.fetch):
     d = {}
     for m, part in markets:
@@ -185,11 +216,14 @@ def historical_quotes(games, *, get=kalshi.fetch, cutoff_hours=2., max_games=10)
         spreads = markets_for_event(events[kalshi.SPREAD_SERIES],get)
         winners = markets_for_event(events[kalshi.GAME_SERIES],get)
         q,why = line_quote(r, spreads, cutoff, get=get)
+        alt,alt_why = (alternate_line_quote(r, spreads, cutoff, get=get)
+                       if r.get("model_spread") is not None else (None,"model_spread_unavailable"))
         w = winner_quote(r,winners,cutoff,get=get)
         result = {"game_id":r["game_id"],"away":r["away"],"home":r["home"],
                   "cutoff_utc":cutoff.isoformat(),"kickoff_utc":kick.isoformat(),
                   "spread_line":float(r["spread_line"]),
-                  "status":why,"price_basis":"kalshi_completed_minute_2h_pregame",
+                  "status":why,"alternate_status":alt_why,
+                  "price_basis":"kalshi_completed_minute_2h_pregame",
                   "winner_home_ask":w.get("home",{}).get("yes_ask"),
                   "winner_away_ask":w.get("away",{}).get("yes_ask"),
                   "winner_home_ticker":w.get("home",{}).get("ticker"),
@@ -199,6 +233,11 @@ def historical_quotes(games, *, get=kalshi.fetch, cutoff_hours=2., max_games=10)
         if q: result.update({k:q[k] for k in ("ticker","event_ticker","strike","favorite",
                         "home_ask","away_ask","yes_bid","yes_ask","no_ask",
                         "age_seconds","source_ts","market_source")})
+        if alt:
+            result.update(alt_ticker=alt["ticker"],alt_selection_side=alt["selection_side"],
+                          alt_contract=alt["selection_contract"],alt_ask=alt["selection_ask"],
+                          alt_target_strike=alt["target_strike"],
+                          alt_quote_ts=alt["source_ts"],alt_age_seconds=alt["age_seconds"])
         rows.append(result)
     return rows
 
@@ -291,7 +330,7 @@ def main(argv=None):
         if args.week is not None: quotes = quotes.loc[quotes.week.eq(args.week)]
         sched = schedules[["game_id", "away_team", "home_team", "gameday", "gametime"]].copy()
         sched["kickoff_utc"] = [model.kickoff_utc(r).isoformat() for r in sched.to_dict("records")]
-        games = quotes[["game_id", "home", "away", "spread_line"]].merge(
+        games = quotes[["game_id", "home", "away", "spread_line", "model_spread"]].merge(
             sched[["game_id","kickoff_utc"]],on="game_id",validate="one_to_one")
         games = games.sort_values("game_id")
     else:
@@ -317,6 +356,7 @@ def main(argv=None):
         print(f"Matched Kalshi ML asks: {len(ml)} / {len(records)}")
     print(json.dumps({"games_requested":len(records),
                       "spread_quotes":sum(r.get("status")=="quoted" for r in records),
+                      "alt_spread_quotes":sum(r.get("alternate_status")=="quoted" for r in records),
                       "with_both_winners":sum(r.get("winner_home_ask") is not None and r.get("winner_away_ask") is not None for r in records)},indent=2))
 
 
