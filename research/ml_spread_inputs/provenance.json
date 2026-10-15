@@ -1,0 +1,9 @@
+{
+  "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "downloaded_utc": "2026-10-14T22:17Z",
+  "source_sha256": "98f2e04191f98fa608de1853e6bd9f660380742b0deb9c4255b31eb65cbf3598",
+  "frozen": "research/ml_spread_inputs/games_2006_2012.csv",
+  "frozen_sha256": "4e76b7e3b297d8b624c66a76478a52bd6d775d5246cc1961599567d890fb24bf",
+  "rows": 1792,
+  "note": "All 2006-2012 regular-season games, priced or not; the script filters to priced, decided games."
+}
