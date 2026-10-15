@@ -160,6 +160,36 @@ def test_index_cards_flags_and_record(tmp_path):
     assert "Model 1-0 (100.0%) · ROI +74.1%" in html and "always favorite 1-0" in html
 
 
+def test_previous_2026_v118_replay_is_separate_from_native_header(tmp_path):
+    data = make_data(tmp_path / "data")
+    path = data / "latest" / "retro_ledger.csv"
+    retro = pd.read_csv(path)
+    prior = retro.iloc[:7].copy()
+    prior["season"] = 2026
+    prior["week"] = [1, 2, 3, 4, 5, 3, 4]
+    prior["game_id"] = [f"prior_{i}" for i in range(7)]
+    prior["basis"] = ["current season walk-forward"] * 5 + ["backtest"] * 2
+    prior["bet_result"] = ["W", "L", "P", "W", "W", "W", "W"]
+    prior["units"] = [0.5, -1.0, 0.0, 0.7, 0.8, 1.0, float("nan")]
+    pd.concat([retro, prior], ignore_index=True).to_csv(path, index=False)
+
+    out = tmp_path / "public"
+    b.render_all(out, data, now=NOW)
+    page = (out / "grades.html").read_text()
+    assert "2026 v1.18 · previous weeks (reconstructed)" in page
+    assert "Moneyline 2–1–1 · +0.20u · ROI +5.0% · 4 picks" in page
+    assert "By week: W1 1–0–0 · W2 0–1–0 · W3 0–0–1 · W4 1–0–0" in page
+    assert "not previously locked v1.18 picks" in page
+    assert "Native forward picks · boxscore-composite-v1.18" in page
+    assert "Model 1-0 (100.0%) · ROI +74.1%" in page
+    assert page.index("previous weeks (reconstructed)") < page.index("Native forward picks")
+
+    # Do not silently relabel a later version's replay as v1.18.
+    latest = b.load_latest(data / "latest")
+    latest["manifest"]["revision"] = "boxscore-composite-v1.19"
+    assert b.previous_2026_v118_picks(latest) == ""
+
+
 def test_index_before_any_graded_pick(tmp_path):
     data = make_data(tmp_path / "data", with_ledger=False)
     b.render_all(tmp_path / "public", data, now=NOW)
