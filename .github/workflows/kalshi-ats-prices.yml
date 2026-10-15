@@ -20,6 +20,7 @@ on:
     branches: [main]
     paths:
       - 'research/kalshi_ats_prices.py'
+      - 'research/ats_forward_shadow.py'
       - 'tests/test_kalshi_ats_prices.py'
       - '.github/workflows/kalshi-ats-prices.yml'
 permissions:
