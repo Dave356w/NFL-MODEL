@@ -24,7 +24,7 @@ from research import ats_cover_probability as ats
 MAX_STALENESS_SECONDS = 1800
 FEE_RATE = kalshi.FEE_RATE
 SERIES = (kalshi.GAME_SERIES, kalshi.SPREAD_SERIES)
-TEAM_RE = kalshi.re.compile(r"^([A-Z]+)(?:\\d+)?$")
+TEAM_RE = kalshi.re.compile(r"^([A-Z]+)(?:\d+)?$")
 
 
 def as_utc(x):
@@ -114,7 +114,7 @@ def spread_contracts(markets, away, home):
     out = []
     for m, partition in markets:
         suffix = m["ticker"].rsplit("-", 1)[-1]
-        match = kalshi.re.fullmatch(r"([A-Z]+)\\d+", suffix)
+        match = kalshi.re.fullmatch(r"([A-Z]+)\d+", suffix)
         if not match or m.get("floor_strike") is None: continue
         team = kalshi.team(match.group(1))
         if team not in (away, home): continue
