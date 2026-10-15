@@ -53,7 +53,7 @@ DATA = Path("data")
 LATEST = DATA / "latest"
 PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
-ET = ZoneInfo("America/New_York")
+PT = ZoneInfo("America/Los_Angeles")
 SITE_NAME = "NFL Box-Score Composite"
 
 # run-folder file -> data/latest file
@@ -419,7 +419,7 @@ def table(heads, rows, num_cols=()):
 
 def kickoff_text(r):
     ko = m.kickoff_utc(r)
-    return ko.astimezone(ET).strftime("%a %-I:%M %p ET") if ko else "TBD"
+    return ko.astimezone(PT).strftime("%a %-I:%M %p %Z") if ko else "TBD"
 
 
 def ml_text(ml):
@@ -899,7 +899,7 @@ def render_index(latest, ledger, built, now=None):
                                        mkt_bands, mdl_bands, band_years, n_fwd))
         rec = recorded.get(r["game_id"])
         if rec is not None:
-            det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(ET).strftime('%a %-I:%M %p ET'))} "
+            det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
                        f"at {pct(rec.model_wp)} {esc(home)}.</p>")
         t = contrib[contrib.game_id == r["game_id"]] if len(contrib) else contrib
         if len(t):
@@ -986,7 +986,7 @@ def render_grades(ledger, latest, built):
             g = cur[(cur.season == s) & (cur.week == w)].sort_values("kickoff_utc")
             rows, wins, losses = [], 0, 0
             for r in g.itertuples(index=False):
-                ko = pd.to_datetime(r.kickoff_utc, utc=True).tz_convert(ET).strftime("%a %-I:%M %p")
+                ko = pd.to_datetime(r.kickoff_utc, utc=True).tz_convert(PT).strftime("%a %-I:%M %p %Z")
                 res = getattr(r, "bet_result", "")
                 wins += res == "W"; losses += res == "L"
                 final = (score_text(r.away_score, r.home_score) if r.status == "graded"
@@ -1184,7 +1184,7 @@ def render_calibration(latest, ledger, built):
 
 def render_all(out_dir, data=DATA, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
-    built = now.astimezone(ET).strftime("%Y-%m-%d %H:%M ET")
+    built = now.astimezone(PT).strftime("%Y-%m-%d %H:%M %Z")
     latest = load_latest(Path(data) / "latest")
     ledger = load_ledger(data)
     out = Path(out_dir)
