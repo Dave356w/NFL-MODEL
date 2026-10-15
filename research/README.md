@@ -1644,3 +1644,11 @@ no model.
 
 **Reading.** The lead survived its last unseen historical block with the same sign. H9 decides it
 forward from lock-time prices; no model change.
+
+### Diagnostic: lock vs close basis on native rows (2026-10-15)
+
+`lock_close_basis.py` → `lock_close_results/`. Outcome-free. On the 14 graded v1.16 week-5 rows, the
+no-vig probability moved 0.92 points on average (max 2.5) between lock (~28 h before kickoff) and
+nflverse's close. Departures under the two anchors correlate 0.996, and a close-anchored v1.16 picks
+the same side in all 14 games (v1.17: 2 of 14 change). Historical close-based tests look comparable
+to forward locks so far; rerun as rows accrue.
