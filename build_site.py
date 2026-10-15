@@ -48,6 +48,7 @@ import nfl_model as m
 import totals
 import fixed_bands
 from research import version_report
+from research import ats_forward_shadow
 
 DATA = Path("data")
 LATEST = DATA / "latest"
@@ -1319,6 +1320,9 @@ def main(argv=None):
         grade_ledger.main([])
         version_report.run(DATA,LATEST)
     files = render_all(args.out)
+    if not args.pages_only:
+        count = ats_forward_shadow.record(DATA)
+        print(f"ATS research: {count} new immutable shadow locks")
     print(f"site: {len(files)} files -> {args.out}")
     return 0
 
