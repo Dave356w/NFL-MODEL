@@ -203,3 +203,59 @@ def test_integer_closing_prices_with_a_pending_game():
                         "result": [10, np.nan], "close_home_moneyline": [-200, -300], "close_away_moneyline": [170, 250]})
     out = g.grade([rec("a", .7, .6), rec("d", .7, .6)], res).set_index("game_id")
     assert np.isclose(out.loc["a", "clv_pp"], 6.31, atol=.01) and np.isnan(out.loc["d", "close_home_moneyline"])
+
+
+H9_REV = "boxscore-composite-v1.18"
+
+
+def test_h9_sample_is_first_production_snapshot_per_game_from_week_6():
+    recs = [rec("a", .6, .6, rev=H9_REV, week=6, hm=-300, am=250, sp=3.),
+            rec("a", .6, .6, rev="boxscore-composite-v1.16", week=6, hm=-300, am=250, sp=3.),   # shadow, same game
+            rec("b", .6, .6, rev=H9_REV, week=5, hm=-300, am=250, sp=3.),                      # before week 6
+            rec("c", .6, .6, rev=H9_REV, week=6, hm=-300, am=250, sp=None),                    # no spread: excluded
+            rec("d", .6, .6, rev="r1", week=6, hm=-300, am=250, sp=3.)]                        # not production
+    d = g.h9_rows(g.grade(recs, RESULTS))
+    assert list(d.game_id) == ["a"] and d.revision.iloc[0] == H9_REV
+    assert d.h9_dis.iloc[0] > 0          # moneyline ~73% home vs spread +3 ~60%: moneyline more bullish on home
+
+
+def test_h9_rule_backs_the_spread_side_and_skips_small_disagreements():
+    res = pd.DataFrame({"game_id": ["a", "b", "s"], "away_score": [20, 10, 10], "home_score": [10, 20, 20],
+                        "result": [-10, 10, 10]})
+    recs = [rec("a", .6, .6, rev=H9_REV, week=6, hm=-300, am=250, sp=3.),    # dis > 0 -> away +250, away won
+            rec("b", .6, .6, rev=H9_REV, week=6, hm=-130, am=110, sp=7.),    # dis < 0 -> home -130, home won
+            rec("s", .6, .6, rev=H9_REV, week=6, hm=-150, am=130, sp=2.5)]   # |dis| < T: no bet
+    r = g.h9_summary(g.grade(recs, res))["rule"]
+    assert r["bets"] == 2 and r["wins"] == 2 and np.isclose(r["units"], 2.5 + 100 / 130)
+    assert r["null_roi"] < 0
+
+
+def test_h9_decision_rules():
+    assert g.h9_verdict({"n": 299, "b": -5., "se": 1.}).startswith("no verdict")
+    assert g.h9_verdict({"n": 300, "b": -2.1, "se": 1.}).startswith("supported")
+    assert g.h9_verdict({"n": 599, "b": .3, "se": 1.}) == "unresolved"
+    assert g.h9_verdict({"n": 600, "b": 0., "se": 1.}).startswith("falsified")
+    assert g.h9_rule_verdict({"bets": 99, "roi": .5, "null_roi": -.04, "roi_se": .1}).startswith("no verdict")
+    assert g.h9_rule_verdict({"bets": 100, "roi": -.05, "null_roi": -.04, "roi_se": .1}).startswith("falsified")
+    assert g.h9_rule_verdict({"bets": 100, "roi": .17, "null_roi": -.04, "roi_se": .1}).startswith("supported")
+
+
+def test_h9_fit_recovers_a_negative_slope_and_appears_in_the_report(tmp_path):
+    rng = np.random.default_rng(3)
+    n = 4000
+    hm = rng.choice([-300, -200, -150, -120, 110, 130, 180], n)
+    am = np.where(hm < 0, np.abs(hm) - 20, -(hm + 20))
+    sp = rng.normal(0, 6, n).round(1)
+    recs = [rec(f"g{i}", .6, .6, rev=H9_REV, week=6 + i % 12, hm=float(hm[i]), am=float(am[i]), sp=float(sp[i]))
+            for i in range(n)]
+    graded = g.grade(recs, pd.DataFrame({"game_id": [], "away_score": [], "home_score": [], "result": []}))
+    d = g.h9_rows(graded)
+    z = np.log(d.h_q / (1 - d.h_q)) - 1.5 * d.h9_dis
+    win = rng.random(len(d)) < 1 / (1 + np.exp(-z))
+    res = pd.DataFrame({"game_id": d.game_id, "away_score": np.where(win, 10, 20), "home_score": np.where(win, 20, 10),
+                        "result": np.where(win, 10, -10)})
+    out = g.grade(recs, res)
+    s = g.h9_summary(out)
+    assert s["n"] == len(d) and s["b"] < 0 and abs(s["b"] + 1.5) < 3 * s["se"]
+    g.write_outputs(out, tmp_path, now=dt.datetime(2027, 1, 12, tzinfo=dt.timezone.utc))
+    assert "== Pre-registered H9" in (tmp_path / "ledger_report.txt").read_text()
