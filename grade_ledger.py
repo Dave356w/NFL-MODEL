@@ -56,6 +56,12 @@ H12_EXPERIMENT = ("9dad9b9ad0eda3c043c4227d211e8c1cb460beaac6c649f09787c296a62dc
                   "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_product_1sd_i0.1:")  # + season
 H12_FROM = (2026, 6)  # (season, week): the first week after the addendum
 H1_MIN_GAP = .17
+# research/PREREGISTRATION.md, addendum 2026-10-15: H9 (moneyline vs spread disagreement), one row per
+# game from the first production snapshot (v1.18 on; prices only, so a model change does not end it).
+H9_PRODUCTION = ("boxscore-composite-v1.18",)
+H9_FROM = (2026, 6)
+H9_T = 0.11133        # 75th percentile of |dis| on 2013-2026, outcome-free (research/ML_SPREAD_2006_12.md)
+H9_CLIP = 1e-4
 
 
 def load_records(path=LEDGER):
@@ -429,8 +435,33 @@ def summary(g):
             out.update(fp_n=int(len(f)), fp_log_loss=float(f.fp_log_loss.mean()),
                        fp_model_log_loss=float(f.model_log_loss.mean()), fp_gain=float(e.mean()),
                        fp_gain_se=float(e.std(ddof=1) / np.sqrt(len(e))) if len(e) > 1 else np.nan,
-                       fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()))
+                       fp_changed=int((~np.isclose(f.fp_wp.astype(float), f.model_wp.astype(float))).sum()),
+                       fp_gain_cluster_se=_cluster_se(e, f.season.astype(str) + "_" + f.week.astype(str)))
     return out
+
+
+def _cluster_se(v, groups):
+    """SE of the mean of v with season-week clusters; NaN below two clusters."""
+    v = np.asarray(v, float)
+    c = pd.Series(v).groupby(np.asarray(groups)).sum()
+    return float(np.sqrt(len(c)) * c.std(ddof=1) / len(v)) if len(c) > 1 else np.nan
+
+
+# research/FAVORITE_PENALTY.md, addendum 2026-10-15: three-way verdict at the January checkpoints.
+FP_MIN_GAMES = 200
+FP_Z = 2.24          # 97.5% two-sided bounds; both error rates <= about 5% over five looks
+FP_DELTA = .002      # the smallest gain the penalty was adopted for
+
+
+def fp_verdict(gain, se, n):
+    """Penalty forward verdict (FAVORITE_PENALTY.md addendum 2026-10-15), with the week-cluster SE."""
+    if n < FP_MIN_GAMES or not np.isfinite(se):
+        return f"no verdict before {FP_MIN_GAMES} graded games"
+    if gain - FP_Z * se > 0:
+        return "supported (lower bound above 0)"
+    if gain + FP_Z * se < FP_DELTA:
+        return f"falsified (upper bound below +{FP_DELTA:g})"
+    return "unresolved"
 
 
 def roi_bands(g):
@@ -509,6 +540,83 @@ def h5_verdict(s):
         return "supported (95% CI of ROI minus null above zero)"
     if s["bets"] >= 300 and edge <= 0:
         return "falsified (n >= 300, ROI at or below the null)"
+    return "unresolved"
+
+
+def h9_rows(g):
+    """The registered H9 sample: the first production snapshot per game (v1.18 on) from 2026 week 6,
+    with q from its moneylines, q_s = Phi(spread_line/12.37) and dis = logit(q) - logit(q_s)."""
+    season, week = H9_FROM
+    later = (g.season > season) | ((g.season == season) & (g.week >= week))
+    prod = g.revision.isin(set(H9_PRODUCTION) | {m.REVISION})
+    d = g[prod & later].sort_values("generated_utc").drop_duplicates("game_id").copy()
+    d["h_q"] = m.market_ml_wp(d)
+    sp = pd.to_numeric(d.spread_line, errors="coerce").astype(float)
+    d = d[np.isfinite(d.h_q) & np.isfinite(sp)].copy()
+    qs = m.ndtr(sp.loc[d.index] / m.MARKET_SIGMA)
+    d["h9_dis"] = _logit(np.clip(d.h_q, H9_CLIP, 1 - H9_CLIP)) - _logit(np.clip(qs, H9_CLIP, 1 - H9_CLIP))
+    return d
+
+
+def _h9_fit(d):
+    """Home win ~ 1 + logit(q) + dis (free slopes), Newton, season-week cluster-robust SE of b."""
+    X = np.column_stack([np.ones(len(d)), _logit(np.clip(d.h_q, H9_CLIP, 1 - H9_CLIP)), d.h9_dis])
+    y = d["home won"].to_numpy(float)
+    b = np.zeros(3)
+    for _ in range(100):
+        p = 1 / (1 + np.exp(-X @ b))
+        step = np.linalg.solve(X.T @ (X * (p * (1 - p))[:, None]), X.T @ (y - p))
+        b += step
+        if np.max(np.abs(step)) < 1e-12:
+            break
+    p = 1 / (1 + np.exp(-X @ b))
+    S = pd.DataFrame(X * (y - p)[:, None]).groupby((d.season.astype(str) + "_" + d.week.astype(str)).to_numpy()).sum().to_numpy()
+    Hi = np.linalg.inv(X.T @ (X * (p * (1 - p))[:, None]))
+    return float(b[2]), float(np.sqrt((Hi @ (S.T @ S) @ Hi)[2, 2]))
+
+
+def h9_summary(g):
+    d = h9_rows(g)
+    graded = d[d.status != "pending"]
+    binary = graded[graded.status == "graded"]
+    out = {"rows": len(d), "n": len(binary), "b": np.nan, "se": np.nan}
+    if len(binary) >= 30 and binary["home won"].nunique() == 2:
+        try:
+            out["b"], out["se"] = _h9_fit(binary)
+        except np.linalg.LinAlgError:
+            pass
+    x = graded[graded.h9_dis.abs() >= H9_T].copy()
+    if x.empty:
+        out["rule"] = {**m.roi_summary(pd.DataFrame(columns=["units", "result", "q", "null_ev"])), "fav_units": 0.}
+        return out
+    x["h9_wp"] = np.where(x.h9_dis < 0, 1., 0.)   # the side the spread favors more: home if dis < 0
+    bets = m.flat_bets(x, "h9_wp")
+    fav = m.flat_bets(x.assign(fwp=x.h_q), "fwp")
+    r = m.roi_summary(bets[bets.units.notna()])
+    r["fav_units"] = float(fav.units.where(bets.units.notna()).sum())
+    out["rule"] = r
+    return out
+
+
+def h9_verdict(s):
+    """Decision rule fixed in research/PREREGISTRATION.md (H9, 2026-10-15)."""
+    if s["n"] < 300 or not np.isfinite(s["se"]):
+        return "no verdict before 300 graded binary games"
+    if s["b"] <= -2 * s["se"]:
+        return "supported (b <= -2 SE)"
+    if s["n"] >= 600 and s["b"] >= 0:
+        return "falsified (n >= 600, b >= 0)"
+    return "unresolved"
+
+
+def h9_rule_verdict(r):
+    if r["bets"] < 100 or not np.isfinite(r["roi_se"]):
+        return "no verdict before 100 bets"
+    edge = r["roi"] - r["null_roi"]
+    if edge >= 2 * r["roi_se"]:
+        return "supported (ROI - null >= 2 SE)"
+    if edge <= 0:
+        return "falsified (ROI at or below the null)"
     return "unresolved"
 
 
@@ -607,7 +715,8 @@ def report_text(g, now=None, h5=None):
                 lines.append(f"  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty "
                              f"(lambda {m.FAVORITE_PENALTY:g}) log loss {sm['fp_log_loss']:.4f} vs model "
                              f"{sm['fp_model_log_loss']:.4f}, gain {gain} (1 SE; n={sm['fp_n']}, "
-                             f"{sm['fp_changed']} probabilities changed); bets unchanged; no verdict before 100 games")
+                             f"{sm['fp_changed']} probabilities changed); bets unchanged; verdict at the January checkpoints: "
+                             f"{fp_verdict(sm['fp_gain'], sm['fp_gain_cluster_se'], sm['fp_n'])}")
             recs = m.band_records(scored_frame(part))
             lines.append("  Pick records by confidence band (model | market):")
             for i, b in recs.groupby("band_index"):
@@ -642,6 +751,21 @@ def report_text(g, now=None, h5=None):
                               for key, label in (("mid", "weeks 5-13"), ("late", "weeks 14-18"))),
                   f"  H6, the model backs the market underdog (its side's no-vig q < 0.5): {s6['bets']} graded bets of "
                   f"{s6['rows']} priced rows" + _subset_text(s6) + f"; verdict: {h6_verdict(s6)}",
+                  "  Judged only at the season checkpoints; interim numbers are not acted on.", ""]
+    if len(h9_rows(g)):
+        s9 = h9_summary(g)
+        r9 = s9["rule"]
+        lines += [f"== Pre-registered H9 (one row per game, first production snapshot from {H9_FROM[0]} week {H9_FROM[1]}; "
+                  "prices only): moneyline vs spread disagreement",
+                  f"  {s9['rows']} games with lock prices, {s9['n']} graded binary"
+                  + (f"; b on dis {s9['b']:+.3f} +/- {s9['se']:.3f} (negative = outcome leans to the spread's view)"
+                     if np.isfinite(s9["b"]) else "; b needs 30 graded games")
+                  + f"; verdict: {h9_verdict(s9)}",
+                  f"  Rule, |dis| >= {H9_T:g}, 1u on the side the spread favors more: {r9['bets']} graded bets"
+                  + (f", {r9['wins']}-{r9['losses']}-{r9['pushes']}, {r9['units']:+.2f}u, ROI {100 * r9['roi']:+.1f}%"
+                     + (f" +/- {100 * r9['roi_se']:.1f}" if np.isfinite(r9["roi_se"]) else "")
+                     + f"; null {100 * r9['null_roi']:+.1f}%; same rows, favorite {r9['fav_units']:+.2f}u" if r9["bets"] else "")
+                  + f"; verdict: {h9_rule_verdict(r9)}",
                   "  Judged only at the season checkpoints; interim numbers are not acted on.", ""]
     if h5 is not None and len(h5):
         s = h5_summary(h5)

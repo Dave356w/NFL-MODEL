@@ -1625,3 +1625,30 @@ history, closing moneylines.
 **Reading.** Production already carries team identity through the team's own history. A team-keyed
 prior double-counts it across frequent, public coaching and QB changes, and the market prices them.
 Keep the league prior; no `REVISION`.
+
+### Test 46: moneyline vs spread disagreement on 2006–2012 (2026-10-15): consistent sign, unresolved
+
+Protocol [`ML_SPREAD_2006_12.md`](ML_SPREAD_2006_12.md), pushed (`f6d90a8`) with the H9 forward
+registration before any 2006–2012 disagreement was compared with an outcome. Script
+`ml_spread_2006_12.py`; frozen inputs `ml_spread_inputs/`; results `ml_spread_results/`. Market only;
+no model.
+
+* **Primary, 2006–2012** (n = 1,657, free slopes, season-week clusters): b = −1.12 ± 0.64 per
+  log-odds unit of disagreement (−0.11 per SD), z −1.76. It has the same sign as all five earlier
+  era estimates but misses the registered −2 SE bar. Verdict: consistent sign, unresolved.
+* **Pooled 2006–2026**: −0.98 [−1.71, −0.26]. It includes the discovery seasons, so it is not
+  confirmation.
+* **The rule** (1u on the side the spread favors more when |dis| ≥ 0.111): +36.1u on 584 bets,
+  +6.2% ± 7.2 against a −2.1% null and −42.9u for the same-row favorite. It is unstable by era:
+  +18.7% in 2006–09 and −11.1% in 2010–12. 91% of its bets are underdogs.
+
+**Reading.** The lead survived its last unseen historical block with the same sign. H9 decides it
+forward from lock-time prices; no model change.
+
+### Diagnostic: lock vs close basis on native rows (2026-10-15)
+
+`lock_close_basis.py` → `lock_close_results/`. Outcome-free. On the 14 graded v1.16 week-5 rows, the
+no-vig probability moved 0.92 points on average (max 2.5) between lock (~28 h before kickoff) and
+nflverse's close. Departures under the two anchors correlate 0.996, and a close-anchored v1.16 picks
+the same side in all 14 games (v1.17: 2 of 14 change). Historical close-based tests look comparable
+to forward locks so far; rerun as rows accrue.

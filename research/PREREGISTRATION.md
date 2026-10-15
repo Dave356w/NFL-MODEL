@@ -421,3 +421,55 @@ selection inflates), its expected forward z after one season would be about
 
 *Multiplicity.* H1–H8 are now registered, and H8 holds up to five trends. H6 and H7 overlap with
 H8's departure and market cells. Read any single 2 SE result with that in mind.
+
+**2026-10-15, owner request ("build and test items"), committed and pushed before any 2006–2012
+disagreement was compared with an outcome and before H9 has any graded row. New: the 2006–2012
+allocation and H9. H1–H8 and their rules are unchanged.**
+
+*2006–2012 allocation.* Test 46 (`research/ML_SPREAD_2006_12.md`, market only) is this block's
+first and only named consumer and runs once. A later reduced-model test on 2008–2012 may still be
+proposed. It must disclose that Test 46 looked at these seasons' market residuals, and it must name
+its own multiplicity.
+
+**H9: when the moneyline and the spread disagree, the outcome leans toward the spread's view
+(model-independent).**
+
+*Source.* Test 42's disagreement coefficient (negative in every era; "the one lead worth a forward
+look") and the 2013–2026 re-estimates, each about 1 SE. Test 46 replicates it once on 2006–2012. H9's
+definition and threshold are frozen here, before Test 46 runs, so the replication cannot tune them.
+
+*Rule (fixed).* Rows: one per game, from 2026 week 6 on, cumulative across seasons. Each row is the
+first production snapshot for the game: `boxscore-composite-v1.18` under configuration
+`73636f30…bca58a20`, or a later production revision's first snapshot if production changes. H9 uses
+only the snapshot's prices, so a model change does not end the sample. From those prices:
+* `q` is the no-vig home probability from the snapshot moneylines;
+* `q_s = Φ(spread_line/12.37)` uses the snapshot `spread_line`;
+* `dis = logit(q) − logit(q_s)`, both clipped to [1e-4, 1 − 1e-4].
+
+A row without both moneylines or a spread is excluded before grading.
+* **Primary**: `b` in the logistic regression of the home win on an intercept, logit(q) and dis
+  (free slopes), with cluster-robust SEs by season-week. Binary results only.
+* **Secondary rule**: 1u at the snapshot moneyline on the side the spread favors more when
+  |dis| ≥ T = 0.11133 (away if dis > 0, home if dis < 0). Ties push. Reported with the market-correct
+  null and the same-row favorite.
+
+*Decision* (cumulative, at the season checkpoints):
+- **Supported**: b ≤ −2 SE.
+- **Falsified**: at least 600 graded binary games and b ≥ 0.
+- Otherwise **unresolved**. No verdict before 300 graded binary games.
+- **The rule**: falsified at 100 or more bets if ROI ≤ its null; supported if ROI − null ≥ 2 SE.
+
+*Power, stated now.* About 193 games in 2026 weeks 6–18, then 272 a season. At b = −0.85 per unit
+the SE reaches about 0.67 only after about 1,650 games (roughly 2032). A 2026 or 2027 result will
+read "unresolved"; that is not evidence against H9. With T at the 75th percentile, the rule sees
+about a quarter of games: about 48 bets in 2026 and 68 a season after that.
+
+*Multiplicity.* H1–H9 are now registered. H9 is model-independent and does not overlap the
+model-side tests, but read any single 2 SE result with nine hypotheses in mind.
+
+**2026-10-15 (same day, separate change): favorite-penalty verdict.** The forward verdict in
+`research/FAVORITE_PENALTY.md` is replaced by a three-way rule judged at the January checkpoints. It
+uses 97.5% week-cluster bounds; falsification means the data exclude the adopted +0.002 gain. The
+addendum there gives the reason (the rule as written falsified a true +0.0023 gain 35–50% of the
+time) and the simulated error rates. It was written after the 13 week-5 native rows were seen and
+does not use their values. H1–H9 are unchanged and stay judged only at the season checkpoints.

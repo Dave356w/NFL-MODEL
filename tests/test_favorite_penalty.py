@@ -52,7 +52,7 @@ def test_ledger_scores_penalty_for_v116_rows_only():
     assert sm["fp_n"] == 2 and sm["fp_changed"] == 1
     assert sm["fp_gain"] == pytest.approx((v.model_log_loss-v.fp_log_loss).mean())
     text = g.report_text(out)
-    assert text.count("favorite-confidence penalty") == 1 and "no verdict before 100 games" in text
+    assert text.count("favorite-confidence penalty") == 1 and "no verdict before 200 graded games" in text  # FAVORITE_PENALTY.md addendum 2026-10-15
 
 
 def test_research_scoring_checks_bets_and_gain():
