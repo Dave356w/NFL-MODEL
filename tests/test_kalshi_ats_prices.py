@@ -75,3 +75,25 @@ def test_live_shadow_uses_lock_time_quote_and_rejects_stale():
     assert sh.kalshi_lock_quote(raw,[{**snap,"captured_utc":"2026-10-17T12:00:00+00:00"}]) is None
     assert sh.kalshi_lock_quote({**raw,"spread_line":-3},[snap]) is None
     assert sh.kalshi_lock_quote(raw,[{**snap,"captured_utc":"2026-10-17T10:00:00+00:00"}]) is None
+
+
+def test_historical_moneyline_only_observed_quotes_and_tie_half_settlement():
+    games=pd.DataFrame([
+        {"game_id":"g1","model_wp":.7,"home won":1.},
+        {"game_id":"g2","model_wp":.3,"home won":.5},
+        {"game_id":"g3","model_wp":.7,"home won":0.},
+    ])
+    quotes=[
+        {"game_id":"g1","winner_home_ask":.60,"winner_away_ask":.42,
+         "cutoff_utc":"2025-09-01T11:00:00+00:00","price_basis":"kalshi_candle"},
+        {"game_id":"g2","winner_home_ask":.53,"winner_away_ask":.47,
+         "cutoff_utc":"2025-09-01T11:00:00+00:00","price_basis":"kalshi_candle"},
+        {"game_id":"g3","winner_home_ask":None,"winner_away_ask":None,
+         "cutoff_utc":"2025-09-01T11:00:00+00:00","price_basis":"no_data"},
+    ]
+    graded=p.joined_kalshi_moneyline(games,quotes)
+    assert len(graded)==2
+    m=graded.set_index("game_id")
+    assert m.loc["g1","kalshi_ml_side"]=="home"
+    assert np.isclose(m.loc["g1","kalshi_ml_units"], 1/.60-1-.07*(1-.60))
+    assert np.isclose(m.loc["g2","kalshi_ml_units"], .5/.47-1-.07*(1-.47))
