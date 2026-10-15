@@ -1051,7 +1051,7 @@ def render_grades(ledger, latest, built):
         parts.append(spread_headline(latest, int(latest['manifest']['season'])))
     parts.append(disagreement_note(graded, "Native locked picks"))
     if cur.empty:
-        parts.append("<div class='gr-note'>No native picks locked yet. The first one locks once a week's final injury "
+        parts.append("<div class='gr-note'>No picks locked yet. The first native pick locks once a week's final injury "
                      "reports are out.</div>")
     else:
         weeks = sorted({(int(s), int(w)) for s, w in zip(cur.season, cur.week)}, reverse=True)
