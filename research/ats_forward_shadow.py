@@ -78,7 +78,43 @@ def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
     return rows
 
 
-def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
+def kalshi_lock_quote(raw: dict, snapshots: list[dict]) -> dict | None:
+    """Same-game, post-lock/pregame market order-book capture, <=30m after lock.
+
+    A quoted main spread must match the exact half-point Kalshi threshold.
+    The complementary side is the NO contract at 1 - the YES bid.
+    """
+    cutoff, kickoff = utc(raw["generated_utc"]), utc(raw["kickoff_utc"])
+    eligible = sorted((r for r in snapshots
+                       if r.get("game_id") == raw["game_id"] and
+                       cutoff <= utc(r["captured_utc"]) < kickoff and
+                       (utc(r["captured_utc"])-cutoff).total_seconds() <= 1800),
+                      key=lambda r: utc(r["captured_utc"]))
+    line = float(raw["spread_line"])
+    if not np.isfinite(line) or abs(line) < 1e-9 or not np.isclose(abs(line) % 1, .5):
+        return None
+    fav = raw["home"] if line > 0 else raw["away"]
+    for snap in eligible:
+        options = [v for v in snap.get("spread_ladder", [])
+                   if v["team"] == fav and np.isclose(float(v["strike"]), abs(line))]
+        if len(options) != 1:
+            continue
+        rung = options[0]
+        bid, ask = float(rung["bid"]), float(rung["ask"])
+        if not 0 < bid < ask < 1:
+            continue
+        return {"spread_ticker": rung["ticker"], "captured_utc": snap["captured_utc"],
+                "market_spread": line, "home_ask": ask if line > 0 else 1-bid,
+                "away_ask": 1-bid if line > 0 else ask,
+                "spread_yes_bid": bid, "spread_yes_ask": ask,
+                "winner_home_ask": (snap.get("winner", {}).get("home") or {}).get("ask"),
+                "winner_away_ask": (snap.get("winner", {}).get("away") or {}).get("ask"),
+                "price_basis": "Kalshi live order-book top, after model lock",
+                "fee_rate_proxy": .07}
+    return None
+
+
+def freeze(raw: dict, historical: pd.DataFrame, mapping: dict, kalshi_quote: dict | None = None) -> dict:
     year = int(raw["season"])
     if mapping is None or mapping["training_max_season"] >= year:
         raise ValueError("no chronological fixed-band rule")
@@ -88,10 +124,21 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
     fixed = float(fixed_bands.apply([spread], mapping)[0])
     _, adjusted = cp.distribution(line, spread - line, fit)
     h, a, p = cp.event(adjusted, line)
-    ev_h, ev_a = cp.WIN_PROFIT*h-a, cp.WIN_PROFIT*a-h
-    probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
+    ev_h, ev_a = None, None
+    probability_side = ""  # abstain when no real Kalshi quote exists
     def side(gap):
         return "home" if gap > cp.EPS else "away" if gap < -cp.EPS else ""
+    # Only an actually observed Kalshi main spread quote can supply ATS EV.
+    if kalshi_quote:
+        p_home, p_away = float(kalshi_quote["home_ask"]), float(kalshi_quote["away_ask"])
+        fee_h = .07 * (1-p_home)
+        fee_a = .07 * (1-p_away)
+        # Probabilities include push, but at an exact half-point push is zero.
+        ev_h = h*(1/p_home-1-fee_h) - a*(1+fee_h)
+        ev_a = a*(1/p_away-1-fee_a) - h*(1+fee_a)
+        probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
+    else:
+        ev_h, ev_a, probability_side = None, None, ""
     fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
     original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
     return {
@@ -103,8 +150,8 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
         "raw_side": side(spread-line), "fixed_band_side": side(fixed-line),
         "probability_side": probability_side,
         "p_home_cover": h, "p_away_cover": a, "p_push": p,
-        "home_ev_proxy_minus110": ev_h, "away_ev_proxy_minus110": ev_a,
-        "assumed_price": -110, "quote_basis": "unverified_proxy_only",
+        "home_ev_kalshi": ev_h, "away_ev_kalshi": ev_a,
+        "kalshi_quote": kalshi_quote,\n        "quote_basis": "kalshi_main_spread_verified" if kalshi_quote else "no_matching_kalshi_quote",
         "source_snapshot_sha256": hashlib.sha256(original_json.encode()).hexdigest(),
         "calibration_sha256": hashlib.sha256(fit_json.encode()).hexdigest(),
         "fixed_rule": mapping, "beta": fit["beta"],
@@ -137,12 +184,13 @@ def record(data: Path | str = "data", now: dt.datetime | None = None) -> int:
         raise FileNotFoundError("required prior-season ATS research inputs missing")
     prior = pd.read_csv(source)
     rules = {int(r["season"]): r for r in json.loads(rule_file.read_text())}
+    quotes = read_jsonl(data / "kalshi_snapshots.jsonl")
     new = []
     for r in possible:
         key = (REVISION, r["game_id"])
         if key in existing:
             continue
-        row = freeze(r, prior, rules.get(int(r["season"])))
+        row = freeze(r, prior, rules.get(int(r["season"])), kalshi_lock_quote(r, quotes))
         new.append(row)
         existing.add(key)
     if new:
