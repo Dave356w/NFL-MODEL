@@ -235,6 +235,38 @@ def joined_ats_results(frame, kalshi_quotes):
     return d
 
 
+def joined_kalshi_moneyline(frame, kalshi_quotes):
+    """Price original model outright side at historical Kalshi YES ask, not sportsbook ML.
+
+    Kalshi winner tie resolution is $0.50 for a $1 YES contract; the
+    approximate fee is charged on the entry contract, no sportsbook fallback.
+    """
+    d = frame.copy()
+    q = pd.DataFrame(kalshi_quotes)
+    if q.empty: return d.iloc[:0]
+    need = ["game_id", "winner_home_ask", "winner_away_ask"]
+    if not set(need).issubset(q.columns): return d.iloc[:0]
+    if q.game_id.duplicated().any(): raise ValueError("duplicate Kalshi game quotes")
+    q = q.dropna(subset=["winner_home_ask", "winner_away_ask"])
+    d = d.merge(q[need+["cutoff_utc","price_basis"]],on="game_id",how="inner",
+                validate="one_to_one")
+    if d.empty: return d
+    p = pd.to_numeric(d.model_wp,errors="coerce")
+    outcomes=pd.to_numeric(d["home won"],errors="coerce")
+    side=np.where(p>.5,"home",np.where(p<.5,"away",""))
+    ask=np.where(side=="home",d.winner_home_ask,
+                 np.where(side=="away",d.winner_away_ask,np.nan))
+    valid=np.isfinite(ask)&(ask>0)&(ask<1)&outcomes.isin([0,.5,1])&(side!="")
+    value=np.where(outcomes.eq(.5), .5,
+                   np.where((outcomes.eq(1)&(side=="home"))|
+                            (outcomes.eq(0)&(side=="away")),1.,0.))
+    pnl=value/ask-1.-FEE_RATE*(1.-ask)
+    d["kalshi_ml_side"]=side
+    d["kalshi_ml_ask"]=np.where(valid,ask,np.nan)
+    d["kalshi_ml_units"]=np.where(valid,pnl,np.nan)
+    return d[d.kalshi_ml_units.notna()].copy()
+
+
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--games-csv",type=Path,
@@ -274,9 +306,15 @@ def main(argv=None):
     args.out.parent.mkdir(parents=True,exist_ok=True)
     pd.DataFrame(records).to_csv(args.out,index=False)
     if args.research_predictions:
-        d=joined_ats_results(pd.read_csv(args.research_predictions),records)
+        source = pd.read_csv(args.research_predictions)
+        d=joined_ats_results(source,records)
         d.to_csv(args.out.with_name(args.out.stem+"_graded.csv"),index=False)
         print(f"Matched Kalshi ATS offers: {len(d)} / {len(records)}")
+        # Graded Test 48 predictions have model_wp absent: join via retro_ledger.
+        retro = pd.read_csv(Path("data/latest/retro_ledger.csv"))
+        ml = joined_kalshi_moneyline(retro,records)
+        ml.to_csv(args.out.with_name(args.out.stem+"_moneyline.csv"),index=False)
+        print(f"Matched Kalshi ML asks: {len(ml)} / {len(records)}")
     print(json.dumps({"games_requested":len(records),
                       "spread_quotes":sum(r.get("status")=="quoted" for r in records),
                       "with_both_winners":sum(r.get("winner_home_ask") is not None and r.get("winner_away_ask") is not None for r in records)},indent=2))
