@@ -81,6 +81,11 @@ def test_grade_side_push_and_ev_accounting():
     assert result["arms"]["fixed_band"]["games"] == 192
     assert result["nonpush_games"] <= 192
     assert "paired_fixed_vs_original_matched" in result
+    assert "cover_log_loss" in result["paired_score_gains"]
+    ll = result["paired_score_gains"]["cover_log_loss"]
+    assert ll["n"] <= 192 and ll["clusters"] == 16
+    assert np.isfinite(ll["gain"])
+    assert ll["CI95_normal"][0] <= ll["gain"] <= ll["CI95_normal"][1]
 
 
 def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
