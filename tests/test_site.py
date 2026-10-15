@@ -160,34 +160,56 @@ def test_index_cards_flags_and_record(tmp_path):
     assert "Model 1-0 (100.0%) · ROI +74.1%" in html and "always favorite 1-0" in html
 
 
-def test_previous_2026_v118_replay_is_separate_from_native_header(tmp_path):
+def test_pooled_2026_v118_picks_no_double_count(tmp_path):
     data = make_data(tmp_path / "data")
     path = data / "latest" / "retro_ledger.csv"
     retro = pd.read_csv(path)
-    prior = retro.iloc[:7].copy()
+    prior = retro.iloc[:8].copy()
     prior["season"] = 2026
-    prior["week"] = [1, 2, 3, 4, 5, 3, 4]
-    prior["game_id"] = [f"prior_{i}" for i in range(7)]
-    prior["basis"] = ["current season walk-forward"] * 5 + ["backtest"] * 2
-    prior["bet_result"] = ["W", "L", "P", "W", "W", "W", "W"]
-    prior["units"] = [0.5, -1.0, 0.0, 0.7, 0.8, 1.0, float("nan")]
+    prior["week"] = [1, 2, 3, 4, 5, 5, 3, 2]
+    prior["game_id"] = ["prior_1", "prior_2", "prior_3", "prior_4",
+                        "2026_05_KC_BUF", "2026_05_PENDING", "ignored_backtest", "unpriced"]
+    prior["basis"] = ["current season walk-forward"] * 6 + ["backtest", "current season walk-forward"]
+    prior["model_wp"] = .7
+    prior["home won"] = [1., 0., .5, 1., 0., 1., 1., 1.]
+    prior["home_moneyline"], prior["away_moneyline"] = -150., 130.
+    prior["bet_result"] = ["W", "L", "P", "W", "L", "W", "W", "W"]
+    prior["units"] = [2/3, -1., 0., 2/3, -1., 2/3, 2/3, float("nan")]
     pd.concat([retro, prior], ignore_index=True).to_csv(path, index=False)
+
+    ledger_path = data / "forward_ledger.csv"
+    ledger = pd.read_csv(ledger_path)
+    pending = ledger.iloc[0].copy()
+    pending["game_id"] = "2026_05_PENDING"
+    pending["status"] = "pending"
+    pending["bet_result"], pending["units"], pending["home won"] = "", float("nan"), float("nan")
+    pd.concat([ledger, pending.to_frame().T], ignore_index=True).to_csv(ledger_path, index=False)
+
+    latest = b.load_latest(data / "latest")
+    saved = b.load_ledger(data)
+    rows, n_replay, n_native, n_pending = b.pooled_2026_v118_rows(latest, saved)
+    assert (n_replay, n_native, n_pending) == (4, 1, 1)
+    assert len(rows) == len(set(rows.game_id)) == 5
+    assert rows.loc[rows.game_id == "2026_05_KC_BUF", "_basis"].item() == "native"
+    assert "2026_05_PENDING" not in set(rows.game_id)
 
     out = tmp_path / "public"
     b.render_all(out, data, now=NOW)
     page = (out / "grades.html").read_text()
-    assert "2026 v1.18 · previous weeks (reconstructed)" in page
-    assert "Moneyline 2–1–1 · +0.20u · ROI +5.0% · 4 picks" in page
-    assert "By week: W1 1–0–0 · W2 0–1–0 · W3 0–0–1 · W4 1–0–0" in page
-    assert "not previously locked v1.18 picks" in page
-    assert "Native forward picks · boxscore-composite-v1.18" in page
-    assert "Model 1-0 (100.0%) · ROI +74.1%" in page
-    assert page.index("previous weeks (reconstructed)") < page.index("Native forward picks")
+    assert "2026 v1.18 · season-to-date picks" in page
+    assert "Pooled moneyline: 3-1-1 · +1.07u · ROI +21.5%" in page
+    assert "4 replayed · 1 native · 1 pending" in page
+    assert "By week: W1 1-0 · W2 0-1 · W3 0-0-1 · W4 1-0 · W5 1-0" in page
+    assert "Native forward pick details" in page
+    assert "Native games always take precedence" in page
+    assert page.index("season-to-date picks") < page.index("Native forward pick details")
+    assert page.count("Pooled moneyline:") == 1
+    assert "not a purely forward record" in page
 
-    # Do not silently relabel a later version's replay as v1.18.
-    latest = b.load_latest(data / "latest")
+    # A later revision cannot silently inherit v1.18's pooled headline.
     latest["manifest"]["revision"] = "boxscore-composite-v1.19"
-    assert b.previous_2026_v118_picks(latest) == ""
+    assert b.pooled_2026_v118_rows(latest, saved) is None
+    assert b.pooled_2026_v118_header(latest, saved) == ""
 
 
 def test_index_before_any_graded_pick(tmp_path):
