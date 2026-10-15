@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.18",
   "diagnostics": "v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-15T00:49:35.596080+00:00",
+  "generated_utc": "2026-10-15T03:41:38.402017+00:00",
   "season": 2026,
   "week": 6,
   "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
