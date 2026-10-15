@@ -53,7 +53,7 @@ On the 856 same games actually selected by fixed bands, the fixed-band **units-p
 | Binary cover Brier, 870 nonpush | 0.250000 | 0.249698 | +0.000302 |
 | Discrete margin negative log likelihood, 895 | 3.839425 | 3.838538 | +0.000887 |
 
-There is a tiny improvement in proper scores but **no demonstrated financial edge and no independent evidence**. The no-push market cover baseline is necessarily 50/50 by construction and is **not a reconstruction from actual two-sided spread odds**. The slight fit gains are not paired confidence-interval tested and should not be called significant.
+There is a tiny improvement in proper scores but **no demonstrated financial edge and no independent evidence**. The no-push market cover baseline is necessarily 50/50 by construction and is **not a reconstruction from actual two-sided spread odds**. The descriptive paired 95% season-week-clustered score-gain intervals (59 clusters; positive favors corrected model) all include zero:\n\n| Score gain vs market-centered baseline | Observed gain | 95% clustered interval |\n|---|---:|---:|\n| Cover log loss | +0.000591 | [−0.001420, +0.002602] |\n| Cover Brier | +0.000302 | [−0.000697, +0.001300] |\n| Full-margin NLL | +0.000887 | [−0.001813, +0.003587] |\n\n**No resolved predictive improvement.** These are exploratory intervals without model-selection uncertainty or multiplicity adjustments.
 
 ### Conclusion
 
