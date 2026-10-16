@@ -893,7 +893,6 @@ def render_index(latest, ledger, built, now=None, data=DATA):
     impacts = impacts[np.isfinite(impacts)]
     cmax = float(impacts.abs().max()) if len(impacts) else 1.
     graded = cur[cur.status == "graded"] if len(cur) else cur
-    mkt_bands, mdl_bands, band_years, n_fwd = band_windows(latest, graded)
     cards = []
     for r in rows:
         p = num(r["model_wp"])
@@ -954,7 +953,7 @@ def render_index(latest, ledger, built, now=None, data=DATA):
                    f"{f'<div class=flags>{chr(10).join(flags)}</div>' if flags else ''}<span class='chev'>⌄</span></summary>")
         det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
             ["Model", pct(1 - p), pct(p)],
-            ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
+            ["Kalshi normalized asks", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
             ["Kalshi YES ask", f"${am:.3f}" if math.isfinite(am) else "—", f"${hm:.3f}" if math.isfinite(hm) else "—"],
             ["Model spread", spread_text(ms, False), spread_text(ms, True)],
             ["Kalshi spread", spread_text(ks, False), spread_text(ks, True)]]
@@ -963,7 +962,6 @@ def render_index(latest, ledger, built, now=None, data=DATA):
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
-        det.append(historical_pick_reference(latest, r, edge))
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
