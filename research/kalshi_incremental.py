@@ -49,11 +49,13 @@ def sync(data=Path("data"), *, get=quotes.kalshi.fetch) -> dict:
     current=int(retro.season.max())
     if current < 2025:
         raise ValueError("cannot backfill Kalshi NFL spreads before 2025")
+    missing=retro[(retro.season>=2025)&retro["home won"].notna()&
+                  ~retro.game_id.isin(old.game_id)]
+    if missing.empty:
+        return {"new_games":0,"action":"no_change"}
     import nfl_model as m
     schedules=m.load_schedule(current)
     todo=new_games(retro,old,schedules)
-    if todo.empty:
-        return {"new_games":0,"action":"no_change"}
     records=quotes.historical_quotes(todo.to_dict("records"),get=get,max_games=0)
     if len(records)!=len(todo):
         raise ValueError("not all new games received a coverage status")
