@@ -863,6 +863,53 @@ def kalshi_live_quotes(data, now):
         return {}
 
 
+def kalshi_historical_quotes(data):
+    """Recorded pregame quotes for completed 2025+ NFL games."""
+    file=Path(data)/"kalshi_historical"/"kalshi_quotes.csv"
+    if not file.exists(): return {}
+    out={}
+    for q in pd.read_csv(file).to_dict("records"):
+        h,a,line=(num(q.get(k)) for k in ("winner_home_ask","winner_away_ask","kalshi_spread_line"))
+        if q.get("kalshi_main_status")!="quoted" or not all(math.isfinite(v) for v in (h,a,line)):
+            continue
+        out[q["game_id"]]={"home_ask":h,"away_ask":a,"kalshi_line":line,
+            "spread_ticker":q.get("kalshi_ticker"),
+            "yes_ask":num(q.get("kalshi_yes_ask")),
+            "no_ask":1-num(q.get("kalshi_yes_bid")),
+            "quote_origin":"historical, two hours pregame",
+            "captured_utc":q.get("kalshi_source_ts"),
+            "alt_ask":num(q.get("alt_ask")),
+            "alt_contract":q.get("alt_contract"),
+            "alt_side":q.get("alt_selection_side"),
+            "alt_ticker":q.get("alt_ticker"),
+            "alt_target_strike":num(q.get("alt_target_strike"))}
+    return out
+
+
+def kalshi_display_alt(quote, game, line):
+    """Original-model alternate: use only the exact listed contract ask."""
+    original=num(game.get("model_spread"))
+    if not(math.isfinite(original) and math.isfinite(line) and abs(original)>=.5 and abs(original-line)>1e-9):
+        return None
+    side="home" if original > line else "away"
+    if quote.get("quote_origin"):
+        ask=num(quote.get("alt_ask"))
+        if quote.get("alt_side")!=side or not(math.isfinite(ask) and 0<ask<1):
+            return None
+        return {"side":side,"ask":ask,"contract":quote.get("alt_contract"),
+                "ticker":quote.get("alt_ticker")}
+    favorite=game["home"] if original>0 else game["away"]
+    target=math.floor(abs(original))+.5
+    matches=[r for r in quote.get("spread_ladder",[])
+             if r.get("team")==favorite and math.isclose(num(r.get("strike")),target,abs_tol=1e-9)]
+    if len(matches)!=1:return None
+    rung=matches[0]
+    is_yes=game[side]==favorite
+    ask=num(rung.get("ask")) if is_yes else 1-num(rung.get("bid"))
+    if not(math.isfinite(ask) and 0<ask<1):return None
+    return {"side":side,"ask":ask,"contract":"YES" if is_yes else "NO","ticker":rung.get("ticker")}
+
+
 def render_index(latest, ledger, built, now=None, data=DATA):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
@@ -882,6 +929,7 @@ def render_index(latest, ledger, built, now=None, data=DATA):
                 and not m.injury_reports_ready(r, ko, now))
 
     live_kalshi = kalshi_live_quotes(data, now)
+    historical_kalshi = kalshi_historical_quotes(data)
     rows = board.to_dict("records")
     n_pend = sum(1 for r in rows if pending(r))
     if n_pend:
@@ -899,7 +947,8 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         p = num(r["model_wp"])
         home, away = r["home"], r["away"]
         fav_home = p > .5
-        current_quote = live_kalshi.get(r["game_id"])
+        current_quote = (historical_kalshi.get(r["game_id"]) if pd.notna(r.get("result"))
+                         else live_kalshi.get(r["game_id"]))
         hq = num(current_quote.get("home_ask")) if current_quote else math.nan
         aq = num(current_quote.get("away_ask")) if current_quote else math.nan
         q = hq/(hq+aq) if math.isfinite(hq) and math.isfinite(aq) else math.nan
@@ -930,6 +979,21 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         mk = (f"Kalshi YES ask · {esc(away)} ${am:.3f} · {esc(home)} ${hm:.3f}" if math.isfinite(hm) and math.isfinite(am) else "Kalshi quote unavailable")
         ms, ks = num(r.get("fixed_band_spread")), num(current_quote.get("kalshi_line")) if current_quote else math.nan
         spread_pick, edge = ats_card_pick(ms, ks, home, away)
+        if current_quote and math.isfinite(ms) and math.isfinite(ks) and abs(ms-ks)>1e-9:
+            side="home" if ms>ks else "away"
+            favorite_side="home" if ks>0 else "away"
+            is_yes=side==favorite_side
+            if current_quote.get("quote_origin"):
+                quoted=num(current_quote.get("yes_ask" if is_yes else "no_ask"))
+            else:
+                rung=next((x for x in current_quote.get("spread_ladder",[])
+                           if x.get("ticker")==current_quote.get("spread_ticker")),None)
+                quoted=(num(rung.get("ask")) if is_yes else 1-num(rung.get("bid"))) if rung else math.nan
+            if math.isfinite(quoted) and 0<quoted<1:
+                spread_pick+=f" · Kalshi {'YES' if is_yes else 'NO'} ${quoted:.3f}"
+            else:
+                spread_pick+=" · spread contract quote unavailable"
+        alt_quote=kalshi_display_alt(current_quote,r,ks) if current_quote else None
         edge_text = f' · {edge:g}-point Kalshi handicap signal' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
         moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
         if team:
@@ -984,6 +1048,16 @@ def render_index(latest, ledger, built, now=None, data=DATA):
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
+        if current_quote:
+            label=current_quote.get("quote_origin","live order book")
+            det.append(f"<p class='mut small'>Kalshi {esc(label)} · "
+                       f"quote time {esc(current_quote.get('captured_utc'))}. "
+                       "Quoted asks are not guaranteed executions.</p>")
+        if alt_quote:
+            team_alt=home if alt_quote["side"]=="home" else away
+            det.append(f"<p class='mut small'>Original model alternate: "
+                       f"{esc(team_alt)} Kalshi {esc(alt_quote['contract'])} "
+                       f"at ${alt_quote['ask']:.3f} · {esc(alt_quote['ticker'])}</p>")
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
