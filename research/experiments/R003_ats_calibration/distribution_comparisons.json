@@ -1,0 +1,266 @@
+[
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "primary_crps",
+    "gain": 0.03136557621482255,
+    "ci95": [
+      0.010194267803606098,
+      0.052992563657995304
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "margin_crps",
+    "gain": 0.057010102348122316,
+    "ci95": [
+      0.015427122444707975,
+      0.09944247572237364
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "total_crps",
+    "gain": 0.005721050081522778,
+    "ci95": [
+      -0.0021544997849974336,
+      0.014987707720881848
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "win_ll",
+    "gain": 0.004155568931927417,
+    "ci95": [
+      -0.0007795654735144819,
+      0.009024019813710414
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "cover_ll",
+    "gain": 0.006695062219257927,
+    "ci95": [
+      8.014235184948646e-06,
+      0.013235450836514789
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "raw",
+    "metric": "over_ll",
+    "gain": 0.00044931725535199174,
+    "ci95": [
+      -0.0005565813322479189,
+      0.001486428663567164
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "primary_crps",
+    "gain": -0.0016127300457120404,
+    "ci95": [
+      -0.003749306043919844,
+      0.0005315633324564009
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "margin_crps",
+    "gain": -0.003118148584753885,
+    "ci95": [
+      -0.007599186484685239,
+      0.001260089265977222
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "total_crps",
+    "gain": -0.00010731150667011536,
+    "ci95": [
+      -0.0007295862152905132,
+      0.00042932273751598887
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "win_ll",
+    "gain": 5.343332819309908e-05,
+    "ci95": [
+      -0.0004928732638981072,
+      0.0005686045622999648
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "cover_ll",
+    "gain": -0.00019753299396018563,
+    "ci95": [
+      -0.0010173749087158395,
+      0.0006202437939733272
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "selected",
+    "comparator": "fair",
+    "metric": "over_ll",
+    "gain": -3.2721135221860335e-05,
+    "ci95": [
+      -9.316061225828512e-05,
+      2.1877699400339355e-05
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "primary_crps",
+    "gain": 0.032978306260534586,
+    "ci95": [
+      0.011591132403479691,
+      0.05479077548876316
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "margin_crps",
+    "gain": 0.0601282509328762,
+    "ci95": [
+      0.018410073197756185,
+      0.10309503088305959
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "total_crps",
+    "gain": 0.005828361588192894,
+    "ci95": [
+      -0.002164494307158008,
+      0.015449145772982838
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "win_ll",
+    "gain": 0.0041021356037343176,
+    "ci95": [
+      -0.0008802713677356775,
+      0.009000779988145788
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "cover_ll",
+    "gain": 0.006892595213218113,
+    "ci95": [
+      0.00013679314684271807,
+      0.01348978167966159
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "raw",
+    "metric": "over_ll",
+    "gain": 0.0004820383905738521,
+    "ci95": [
+      -0.0005257998694292927,
+      0.0015239382817412576
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "primary_crps",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "margin_crps",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "total_crps",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "win_ll",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "cover_ll",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  },
+  {
+    "configuration": "fair",
+    "comparator": "fair",
+    "metric": "over_ll",
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "descriptive": true
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "market_fit_windows_prior_week": 129,
+  "unique_forecast_games": 1950,
+  "main_games": 816,
+  "winner_decisive_games": 815,
+  "ATS_decisive_games": 797,
+  "raw_ATS_reproduced": true,
+  "all_price_decompositions_exact": true,
+  "input_hashes_preserved": true,
+  "original_protected_files_unchanged": 192,
+  "repeat_data_files_identical": 9
+}

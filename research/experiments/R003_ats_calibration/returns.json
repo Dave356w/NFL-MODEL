@@ -1,0 +1,5951 @@
+[
+  {
+    "basis": "2023-25",
+    "policy": "context_r100_EV",
+    "games": 816,
+    "bets": 99,
+    "passes": 717,
+    "wins": 41,
+    "losses": 55,
+    "pushes": 3,
+    "units": -17.727272727272723,
+    "roi": -0.17906336088154265,
+    "roi_se": 0.09399074530360128,
+    "roi_ci95": [
+      -0.3474347434743474,
+      -0.0038684719535783427
+    ],
+    "sensitivity_roi_ci": [
+      -0.4181246209824136,
+      0.08745723806720748
+    ],
+    "favorite_units": 5.181818181818183,
+    "paired_favorite_ci95": [
+      -0.5575221238938053,
+      0.1037834448160531
+    ],
+    "null_roi": -0.0440771349862259,
+    "expected_units": 1.3480774214349405,
+    "predicted_cover": 0.5311294996006951,
+    "realized_cover": 0.4270833333333333,
+    "calendar_gain_vs_raw": 0.01815953654188948,
+    "calendar_gain_ci95": [
+      -0.027781345394981727,
+      0.06435283678953506
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "context_r100_Stable",
+    "games": 816,
+    "bets": 62,
+    "passes": 754,
+    "wins": 27,
+    "losses": 32,
+    "pushes": 3,
+    "units": -7.454545454545453,
+    "roi": -0.12023460410557182,
+    "roi_se": 0.11884531190204915,
+    "roi_ci95": [
+      -0.35130970724191063,
+      0.12463702489793567
+    ],
+    "sensitivity_roi_ci": [
+      -0.450721205024484,
+      0.2498498189022082
+    ],
+    "favorite_units": 2.090909090909091,
+    "paired_favorite_ci95": [
+      -0.6074380165289256,
+      0.3181818181818181
+    ],
+    "null_roi": -0.04325513196480939,
+    "expected_units": 0.9535554266686237,
+    "predicted_cover": 0.5320751036696462,
+    "realized_cover": 0.4576271186440678,
+    "calendar_gain_vs_raw": 0.030748663101604273,
+    "calendar_gain_ci95": [
+      -0.018229089700014765,
+      0.07946358777642365
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "context_r10_EV",
+    "games": 816,
+    "bets": 235,
+    "passes": 581,
+    "wins": 115,
+    "losses": 113,
+    "pushes": 7,
+    "units": -8.454545454545453,
+    "roi": -0.035976789168278525,
+    "roi_se": 0.06146320882892069,
+    "roi_ci95": [
+      -0.1550390926209553,
+      0.09307902795894053
+    ],
+    "sensitivity_roi_ci": [
+      -0.20496349989839197,
+      0.1541089676495297
+    ],
+    "favorite_units": -25.636363636363633,
+    "paired_favorite_ci95": [
+      -0.16735245641383187,
+      0.3297687539732993
+    ],
+    "null_roi": -0.044100580270793034,
+    "expected_units": 5.129201842044392,
+    "predicted_cover": 0.5355480198849721,
+    "realized_cover": 0.5043859649122807,
+    "calendar_gain_vs_raw": 0.02952317290552585,
+    "calendar_gain_ci95": [
+      -0.02082655949281105,
+      0.07994783716052994
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "context_r10_Stable",
+    "games": 816,
+    "bets": 164,
+    "passes": 652,
+    "wins": 81,
+    "losses": 80,
+    "pushes": 3,
+    "units": -6.363636363636362,
+    "roi": -0.03880266075388026,
+    "roi_se": 0.074078513541632,
+    "roi_ci95": [
+      -0.18127705627705626,
+      0.10717778024902484
+    ],
+    "sensitivity_roi_ci": [
+      -0.24829128388892222,
+      0.17808219178082188
+    ],
+    "favorite_units": -2.545454545454546,
+    "paired_favorite_ci95": [
+      -0.31299911853440415,
+      0.27272727272727276
+    ],
+    "null_roi": -0.04462305986696231,
+    "expected_units": 3.728894378523891,
+    "predicted_cover": 0.5360283373473067,
+    "realized_cover": 0.5031055900621118,
+    "calendar_gain_vs_raw": 0.0320855614973262,
+    "calendar_gain_ci95": [
+      -0.017182299665640013,
+      0.07982261640798226
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "fair_EV",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "fair_Stable",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "platt_r100_EV",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "platt_r100_Stable",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "platt_r10_EV",
+    "games": 816,
+    "bets": 18,
+    "passes": 798,
+    "wins": 7,
+    "losses": 9,
+    "pushes": 2,
+    "units": -2.6363636363636362,
+    "roi": -0.14646464646464646,
+    "roi_se": 0.21692284929374922,
+    "roi_ci95": [
+      -0.5984848484848484,
+      0.09523809523809523
+    ],
+    "sensitivity_roi_ci": [
+      -0.8116012396694227,
+      0.16996047430830039
+    ],
+    "favorite_units": 1.1818181818181817,
+    "paired_favorite_ci95": [
+      -1.1136363636363635,
+      0.27272727272727276
+    ],
+    "null_roi": -0.0404040404040404,
+    "expected_units": 0.09850767238145669,
+    "predicted_cover": 0.5267413468289015,
+    "realized_cover": 0.4375,
+    "calendar_gain_vs_raw": 0.03665329768270945,
+    "calendar_gain_ci95": [
+      -0.009744716757506034,
+      0.08261471098747715
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "platt_r10_Stable",
+    "games": 816,
+    "bets": 1,
+    "passes": 815,
+    "wins": 0,
+    "losses": 1,
+    "pushes": 0,
+    "units": -1.0,
+    "roi": -1.0,
+    "roi_se": null,
+    "roi_ci95": [
+      -1.0,
+      -1.0
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      -1.0
+    ],
+    "favorite_units": 0.9090909090909091,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      -1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.013991923910851578,
+    "predicted_cover": 0.5314005570893614,
+    "realized_cover": 0.0,
+    "calendar_gain_vs_raw": 0.038658645276292335,
+    "calendar_gain_ci95": [
+      -0.007172984485056146,
+      0.08493175202723031
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "raw_EV",
+    "games": 816,
+    "bets": 560,
+    "passes": 256,
+    "wins": 270,
+    "losses": 278,
+    "pushes": 12,
+    "units": -32.54545454545455,
+    "roi": -0.05811688311688312,
+    "roi_se": 0.03993546158692338,
+    "roi_ci95": [
+      -0.1278006364428317,
+      0.008864161072145816
+    ],
+    "sensitivity_roi_ci": [
+      -0.15830960532743177,
+      0.03879013781524369
+    ],
+    "favorite_units": -0.09090909090909305,
+    "paired_favorite_ci95": [
+      -0.17670984474244467,
+      0.05654163587090416
+    ],
+    "null_roi": -0.04448051948051948,
+    "expected_units": 40.544963620938134,
+    "predicted_cover": 0.5624732941620246,
+    "realized_cover": 0.4927007299270073,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "raw_Stable",
+    "games": 816,
+    "bets": 531,
+    "passes": 285,
+    "wins": 255,
+    "losses": 266,
+    "pushes": 10,
+    "units": -34.18181818181818,
+    "roi": -0.06437253894881013,
+    "roi_se": 0.04106319975336986,
+    "roi_ci95": [
+      -0.13860278925619832,
+      0.00729342085240747
+    ],
+    "sensitivity_roi_ci": [
+      -0.1719885781115664,
+      0.03636064672874486
+    ],
+    "favorite_units": 0.18181818181818077,
+    "paired_favorite_ci95": [
+      -0.19016335227272727,
+      0.05604928126379824
+    ],
+    "null_roi": -0.04459852764937511,
+    "expected_units": 35.9805398192121,
+    "predicted_cover": 0.5600287526939853,
+    "realized_cover": 0.4894433781190019,
+    "calendar_gain_vs_raw": -0.002005347593582887,
+    "calendar_gain_ci95": [
+      -0.011848198013593466,
+      0.007808473100572601
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "selected_EV",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "selected_Stable",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "temperature_r100_EV",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "temperature_r100_Stable",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "temperature_r10_EV",
+    "games": 816,
+    "bets": 4,
+    "passes": 812,
+    "wins": 1,
+    "losses": 3,
+    "pushes": 0,
+    "units": -2.090909090909091,
+    "roi": -0.5227272727272727,
+    "roi_se": 0.47727272727272724,
+    "roi_ci95": [
+      -0.5227272727272727,
+      -0.5227272727272727
+    ],
+    "sensitivity_roi_ci": [
+      -0.5227272727272727,
+      -0.5227272727272727
+    ],
+    "favorite_units": 1.727272727272727,
+    "paired_favorite_ci95": [
+      -0.9545454545454546,
+      -0.9545454545454546
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.029641043803730338,
+    "predicted_cover": 0.527706544297871,
+    "realized_cover": 0.25,
+    "calendar_gain_vs_raw": 0.03732174688057041,
+    "calendar_gain_ci95": [
+      -0.008901964403504261,
+      0.08377126454178475
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "policy": "temperature_r10_Stable",
+    "games": 816,
+    "bets": 0,
+    "passes": 816,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03988413547237077,
+    "calendar_gain_ci95": [
+      -0.006131391529675811,
+      0.08641489408991374
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "context_r100_EV",
+    "games": 1055,
+    "bets": 360,
+    "passes": 695,
+    "wins": 188,
+    "losses": 166,
+    "pushes": 6,
+    "units": 4.909090909090909,
+    "roi": 0.013636363636363637,
+    "roi_se": 0.04986091446592157,
+    "roi_ci95": [
+      -0.06406210727391544,
+      0.09117336152219872
+    ],
+    "sensitivity_roi_ci": [
+      -0.09853766245058307,
+      0.1245003657312033
+    ],
+    "favorite_units": -40.90909090909091,
+    "paired_favorite_ci95": [
+      -0.015866123142785182,
+      0.2688125660298931
+    ],
+    "null_roi": -0.04469696969696969,
+    "expected_units": 7.953225651040303,
+    "predicted_cover": 0.5356795363454968,
+    "realized_cover": 0.5310734463276836,
+    "calendar_gain_vs_raw": 0.006376561826798792,
+    "calendar_gain_ci95": [
+      -0.033612634557311644,
+      0.04588427502561364
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "context_r100_Stable",
+    "games": 1055,
+    "bets": 204,
+    "passes": 851,
+    "wins": 109,
+    "losses": 93,
+    "pushes": 2,
+    "units": 6.090909090909092,
+    "roi": 0.02985739750445633,
+    "roi_se": 0.06645760454841522,
+    "roi_ci95": [
+      -0.07438546302182661,
+      0.13136363636363632
+    ],
+    "sensitivity_roi_ci": [
+      -0.13012629753389604,
+      0.17331796190557344
+    ],
+    "favorite_units": -26.363636363636363,
+    "paired_favorite_ci95": [
+      -0.051064844246662244,
+      0.3674775928297055
+    ],
+    "null_roi": -0.045008912655971484,
+    "expected_units": 5.470252016858225,
+    "predicted_cover": 0.5382633947901831,
+    "realized_cover": 0.5396039603960396,
+    "calendar_gain_vs_raw": 0.007496768634209392,
+    "calendar_gain_ci95": [
+      -0.03274878979705827,
+      0.04803445609211201
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "context_r10_EV",
+    "games": 1055,
+    "bets": 462,
+    "passes": 593,
+    "wins": 241,
+    "losses": 210,
+    "pushes": 11,
+    "units": 9.09090909090909,
+    "roi": 0.01967729240456513,
+    "roi_se": 0.04382151352232277,
+    "roi_ci95": [
+      -0.05498225626518812,
+      0.09415731995277446
+    ],
+    "sensitivity_roi_ci": [
+      -0.091997582247531,
+      0.13056308299056935
+    ],
+    "favorite_units": -40.54545454545455,
+    "paired_favorite_ci95": [
+      -0.024797439637011816,
+      0.24071238063590897
+    ],
+    "null_roi": -0.04437229437229437,
+    "expected_units": 17.095913290404035,
+    "predicted_cover": 0.543691072037612,
+    "realized_cover": 0.5343680709534369,
+    "calendar_gain_vs_raw": 0.010340370529943991,
+    "calendar_gain_ci95": [
+      -0.029335738828157598,
+      0.0490705916318386
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "context_r10_Stable",
+    "games": 1055,
+    "bets": 278,
+    "passes": 777,
+    "wins": 150,
+    "losses": 125,
+    "pushes": 3,
+    "units": 11.363636363636365,
+    "roi": 0.04087638979725311,
+    "roi_se": 0.05680715559940117,
+    "roi_ci95": [
+      -0.06431344650214986,
+      0.14196616130904666
+    ],
+    "sensitivity_roi_ci": [
+      -0.11227122982553221,
+      0.1951155002704281
+    ],
+    "favorite_units": -30.636363636363633,
+    "paired_favorite_ci95": [
+      -0.035093582887700536,
+      0.33893614464266636
+    ],
+    "null_roi": -0.044964028776978415,
+    "expected_units": 11.425668896101776,
+    "predicted_cover": 0.5459738323880604,
+    "realized_cover": 0.5454545454545454,
+    "calendar_gain_vs_raw": 0.012494614390348989,
+    "calendar_gain_ci95": [
+      -0.026844201876625486,
+      0.05205992509363294
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "fair_EV",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "fair_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "platt_r100_EV",
+    "games": 1055,
+    "bets": 27,
+    "passes": 1028,
+    "wins": 11,
+    "losses": 15,
+    "pushes": 1,
+    "units": -5.0,
+    "roi": -0.18518518518518517,
+    "roi_se": 0.181655034384049,
+    "roi_ci95": [
+      -0.18518518518518517,
+      -0.18518518518518517
+    ],
+    "sensitivity_roi_ci": [
+      -0.18518518518518517,
+      -0.18518518518518517
+    ],
+    "favorite_units": -5.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.043771043771043766,
+    "expected_units": 0.032097857881179304,
+    "predicted_cover": 0.524453133811051,
+    "realized_cover": 0.4230769230769231,
+    "calendar_gain_vs_raw": -0.003015941404566995,
+    "calendar_gain_ci95": [
+      -0.04317607006679853,
+      0.03826422062615798
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "platt_r100_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "platt_r10_EV",
+    "games": 1055,
+    "bets": 45,
+    "passes": 1010,
+    "wins": 17,
+    "losses": 27,
+    "pushes": 1,
+    "units": -11.545454545454547,
+    "roi": -0.2565656565656566,
+    "roi_se": 0.13869416184842234,
+    "roi_ci95": [
+      -0.41348973607038125,
+      -0.11308203991130822
+    ],
+    "sensitivity_roi_ci": [
+      -0.5047021943573667,
+      -0.04545454545454544
+    ],
+    "favorite_units": -2.0,
+    "paired_favorite_ci95": [
+      -0.49285190615835617,
+      0.041501976284584984
+    ],
+    "null_roi": -0.044444444444444446,
+    "expected_units": 0.18694609081675884,
+    "predicted_cover": 0.5260478552920081,
+    "realized_cover": 0.38636363636363635,
+    "calendar_gain_vs_raw": -0.00922016372253339,
+    "calendar_gain_ci95": [
+      -0.04807289912636938,
+      0.030849382078555504
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "platt_r10_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "raw_EV",
+    "games": 1055,
+    "bets": 686,
+    "passes": 369,
+    "wins": 350,
+    "losses": 320,
+    "pushes": 16,
+    "units": -1.8181818181818166,
+    "roi": -0.0026504108136761175,
+    "roi_se": 0.03600732983655658,
+    "roi_ci95": [
+      -0.06740159509190449,
+      0.06003399587154984
+    ],
+    "sensitivity_roi_ci": [
+      -0.10072064158751476,
+      0.09455329784534931
+    ],
+    "favorite_units": -99.18181818181817,
+    "paired_favorite_ci95": [
+      0.026545025931438062,
+      0.251813227563456
+    ],
+    "null_roi": -0.044394381129075004,
+    "expected_units": 49.49897035617958,
+    "predicted_cover": 0.5623994523016363,
+    "realized_cover": 0.5223880597014925,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "raw_Stable",
+    "games": 1055,
+    "bets": 632,
+    "passes": 423,
+    "wins": 323,
+    "losses": 295,
+    "pushes": 14,
+    "units": -1.3636363636363598,
+    "roi": -0.002157652474108164,
+    "roi_se": 0.03753802750364172,
+    "roi_ci95": [
+      -0.06756389988729283,
+      0.06204462933313589
+    ],
+    "sensitivity_roi_ci": [
+      -0.10244638553079648,
+      0.09242209019212277
+    ],
+    "favorite_units": -83.45454545454545,
+    "paired_favorite_ci95": [
+      0.01187614873462463,
+      0.2425139935675735
+    ],
+    "null_roi": -0.04444764096662831,
+    "expected_units": 41.00881192328967,
+    "predicted_cover": 0.5585851139361183,
+    "realized_cover": 0.5226537216828478,
+    "calendar_gain_vs_raw": 0.00043084877208100043,
+    "calendar_gain_ci95": [
+      -0.011481472123947775,
+      0.012666074773636803
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "selected_EV",
+    "games": 1055,
+    "bets": 27,
+    "passes": 1028,
+    "wins": 11,
+    "losses": 15,
+    "pushes": 1,
+    "units": -5.0,
+    "roi": -0.18518518518518517,
+    "roi_se": 0.181655034384049,
+    "roi_ci95": [
+      -0.18518518518518517,
+      -0.18518518518518517
+    ],
+    "sensitivity_roi_ci": [
+      -0.18518518518518517,
+      -0.18518518518518517
+    ],
+    "favorite_units": -5.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.043771043771043766,
+    "expected_units": 0.032097857881179304,
+    "predicted_cover": 0.524453133811051,
+    "realized_cover": 0.4230769230769231,
+    "calendar_gain_vs_raw": -0.003015941404566995,
+    "calendar_gain_ci95": [
+      -0.04317607006679853,
+      0.03826422062615798
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "selected_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "temperature_r100_EV",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "temperature_r100_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "temperature_r10_EV",
+    "games": 1055,
+    "bets": 2,
+    "passes": 1053,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006438320141927634,
+    "predicted_cover": 0.525495750513362,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": 0.0016372253339078011,
+    "calendar_gain_ci95": [
+      -0.03870161967310256,
+      0.04338057379882474
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "policy": "temperature_r10_Stable",
+    "games": 1055,
+    "bets": 0,
+    "passes": 1055,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0017233950883240002,
+    "calendar_gain_ci95": [
+      -0.03899917601338055,
+      0.04385478947084477
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "context_r100_EV",
+    "games": 79,
+    "bets": 7,
+    "passes": 72,
+    "wins": 2,
+    "losses": 3,
+    "pushes": 2,
+    "units": -1.1818181818181817,
+    "roi": -0.1688311688311688,
+    "roi_se": 0.3256263128847011,
+    "roi_ci95": [
+      -0.75,
+      0.20454545454545453
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.2727272727272727
+    ],
+    "favorite_units": 0.7272727272727273,
+    "paired_favorite_ci95": [
+      -1.1454545454545455,
+      0.0
+    ],
+    "null_roi": -0.03246753246753247,
+    "expected_units": 0.10359877001160694,
+    "predicted_cover": 0.5316746938397326,
+    "realized_cover": 0.4,
+    "calendar_gain_vs_raw": -0.055235903337169136,
+    "calendar_gain_ci95": [
+      -0.275,
+      0.1806674338319908
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "context_r100_Stable",
+    "games": 79,
+    "bets": 5,
+    "passes": 74,
+    "wins": 1,
+    "losses": 3,
+    "pushes": 1,
+    "units": -2.090909090909091,
+    "roi": -0.41818181818181815,
+    "roi_se": 0.38419175652937154,
+    "roi_ci95": [
+      -1.0,
+      -0.030303030303030314
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.0
+    ],
+    "favorite_units": -0.18181818181818177,
+    "paired_favorite_ci95": [
+      -1.4318181818181819,
+      0.0
+    ],
+    "null_roi": -0.03636363636363637,
+    "expected_units": 0.07449553859673014,
+    "predicted_cover": 0.5317443222193841,
+    "realized_cover": 0.25,
+    "calendar_gain_vs_raw": -0.06674338319907938,
+    "calendar_gain_ci95": [
+      -0.275,
+      0.16915995397008055
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "context_r10_EV",
+    "games": 79,
+    "bets": 23,
+    "passes": 56,
+    "wins": 10,
+    "losses": 10,
+    "pushes": 3,
+    "units": -0.9090909090909085,
+    "roi": -0.039525691699604716,
+    "roi_se": 0.1898019061102351,
+    "roi_ci95": [
+      -0.30165289256198347,
+      0.21900826446280988
+    ],
+    "sensitivity_roi_ci": [
+      -0.4069264069264069,
+      0.36796536796536794
+    ],
+    "favorite_units": 0.9999999999999997,
+    "paired_favorite_ci95": [
+      -0.5727272727272728,
+      0.39772727272727276
+    ],
+    "null_roi": -0.039525691699604744,
+    "expected_units": 0.7420789175967496,
+    "predicted_cover": 0.5411134585770584,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.05178365937859607,
+    "calendar_gain_ci95": [
+      -0.3215909090909091,
+      0.22494172494172496
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "context_r10_Stable",
+    "games": 79,
+    "bets": 16,
+    "passes": 63,
+    "wins": 7,
+    "losses": 7,
+    "pushes": 2,
+    "units": -0.6363636363636367,
+    "roi": -0.03977272727272729,
+    "roi_se": 0.23057730129671966,
+    "roi_ci95": [
+      -0.3636363636363636,
+      0.23376623376623376
+    ],
+    "sensitivity_roi_ci": [
+      -0.5227272727272727,
+      0.2727272727272727
+    ],
+    "favorite_units": -0.6363636363636365,
+    "paired_favorite_ci95": [
+      -0.7159090909090909,
+      0.6028708133971292
+    ],
+    "null_roi": -0.03977272727272727,
+    "expected_units": 0.5930910392685422,
+    "predicted_cover": 0.5437508740158175,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.048331415420023005,
+    "calendar_gain_ci95": [
+      -0.2920454545454545,
+      0.21173762945914845
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "fair_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "fair_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "platt_r100_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "platt_r100_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "platt_r10_EV",
+    "games": 79,
+    "bets": 2,
+    "passes": 77,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "sensitivity_roi_ci": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.011374649419976013,
+    "predicted_cover": 0.5268087656525916,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.04142692750287686,
+    "calendar_gain_ci95": [
+      -0.2511363636363636,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "platt_r10_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "raw_EV",
+    "games": 79,
+    "bets": 61,
+    "passes": 18,
+    "wins": 31,
+    "losses": 25,
+    "pushes": 5,
+    "units": 3.1818181818181817,
+    "roi": 0.05216095380029806,
+    "roi_se": 0.11741043329651159,
+    "roi_ci95": [
+      -0.3047138047138047,
+      0.30303030303030304
+    ],
+    "sensitivity_roi_ci": [
+      -0.5240641711229946,
+      0.32167832167832167
+    ],
+    "favorite_units": -6.363636363636362,
+    "paired_favorite_ci95": [
+      -0.13636363636363638,
+      0.3419267299864315
+    ],
+    "null_roi": -0.041728763040238454,
+    "expected_units": 3.7507924570441915,
+    "predicted_cover": 0.5567630466871808,
+    "realized_cover": 0.5535714285714286,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "raw_Stable",
+    "games": 79,
+    "bets": 60,
+    "passes": 19,
+    "wins": 31,
+    "losses": 24,
+    "pushes": 5,
+    "units": 4.181818181818182,
+    "roi": 0.06969696969696969,
+    "roi_se": 0.11804477587663417,
+    "roi_ci95": [
+      -0.2915951972555746,
+      0.30303030303030304
+    ],
+    "sensitivity_roi_ci": [
+      -0.5145454545454545,
+      0.32167832167832167
+    ],
+    "favorite_units": -7.272727272727272,
+    "paired_favorite_ci95": [
+      -0.036020583190394515,
+      0.3419267299864315
+    ],
+    "null_roi": -0.041666666666666664,
+    "expected_units": 3.686953227917644,
+    "predicted_cover": 0.5567549454649894,
+    "realized_cover": 0.5636363636363636,
+    "calendar_gain_vs_raw": 0.012658227848101266,
+    "calendar_gain_ci95": [
+      0.0,
+      0.03896103896103896
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "selected_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "selected_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "temperature_r100_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "temperature_r100_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "temperature_r10_EV",
+    "games": 79,
+    "bets": 2,
+    "passes": 77,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "sensitivity_roi_ci": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006511009937296086,
+    "predicted_cover": 0.5255235982099786,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.04142692750287686,
+    "calendar_gain_ci95": [
+      -0.2511363636363636,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "policy": "temperature_r10_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "context_r100_EV",
+    "games": 256,
+    "bets": 66,
+    "passes": 190,
+    "wins": 35,
+    "losses": 29,
+    "pushes": 2,
+    "units": 2.818181818181819,
+    "roi": 0.042699724517906344,
+    "roi_se": 0.11607939193716457,
+    "roi_ci95": [
+      -0.12890094979647218,
+      0.21700879765395892
+    ],
+    "sensitivity_roi_ci": [
+      -0.20233488733488747,
+      0.3065209961663064
+    ],
+    "favorite_units": -2.9090909090909083,
+    "paired_favorite_ci95": [
+      -0.16600790513833993,
+      0.3442622950819672
+    ],
+    "null_roi": -0.0440771349862259,
+    "expected_units": 0.6067818045105049,
+    "predicted_cover": 0.5287628123232941,
+    "realized_cover": 0.546875,
+    "calendar_gain_vs_raw": -0.0014204545454545425,
+    "calendar_gain_ci95": [
+      -0.1098054012759895,
+      0.09936740221987311
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "context_r100_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "context_r10_EV",
+    "games": 256,
+    "bets": 116,
+    "passes": 140,
+    "wins": 60,
+    "losses": 50,
+    "pushes": 6,
+    "units": 4.545454545454545,
+    "roi": 0.03918495297805642,
+    "roi_se": 0.0863245260390569,
+    "roi_ci95": [
+      -0.11308556742592217,
+      0.16298116298116297
+    ],
+    "sensitivity_roi_ci": [
+      -0.1875295623890498,
+      0.20961682945154017
+    ],
+    "favorite_units": -4.999999999999999,
+    "paired_favorite_ci95": [
+      -0.12416851441241686,
+      0.2660208643815201
+    ],
+    "null_roi": -0.04310344827586207,
+    "expected_units": 2.8879454792839625,
+    "predicted_cover": 0.5371476609743983,
+    "realized_cover": 0.5454545454545454,
+    "calendar_gain_vs_raw": 0.005326704545454544,
+    "calendar_gain_ci95": [
+      -0.08697285198192554,
+      0.0968309420464593
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "context_r10_Stable",
+    "games": 256,
+    "bets": 14,
+    "passes": 242,
+    "wins": 9,
+    "losses": 5,
+    "pushes": 0,
+    "units": 3.1818181818181817,
+    "roi": 0.22727272727272727,
+    "roi_se": 0.2537074116597446,
+    "roi_ci95": [
+      -0.41258741258741255,
+      0.7727272727272726
+    ],
+    "sensitivity_roi_ci": [
+      -0.6818181818181818,
+      0.9090909090909091
+    ],
+    "favorite_units": -0.6363636363636362,
+    "paired_favorite_ci95": [
+      -0.5727272727272728,
+      1.041322314049587
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.6149484473224136,
+    "predicted_cover": 0.5474270096050045,
+    "realized_cover": 0.6428571428571429,
+    "calendar_gain_vs_raw": -6.938893903907228e-18,
+    "calendar_gain_ci95": [
+      -0.0973533924431123,
+      0.09650568181818177
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "fair_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "fair_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "platt_r100_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "platt_r100_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "platt_r10_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "platt_r10_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "raw_EV",
+    "games": 256,
+    "bets": 167,
+    "passes": 89,
+    "wins": 86,
+    "losses": 75,
+    "pushes": 6,
+    "units": 3.1818181818181808,
+    "roi": 0.019052803483941203,
+    "roi_se": 0.07257459303085755,
+    "roi_ci95": [
+      -0.12847827073126467,
+      0.1626214746352046
+    ],
+    "sensitivity_roi_ci": [
+      -0.1957151129125651,
+      0.23139269930825815
+    ],
+    "favorite_units": -25.454545454545453,
+    "paired_favorite_ci95": [
+      -0.0856781524926685,
+      0.42297223734349476
+    ],
+    "null_roi": -0.043821448013064784,
+    "expected_units": 11.850538018836213,
+    "predicted_cover": 0.561487144907496,
+    "realized_cover": 0.5341614906832298,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "raw_Stable",
+    "games": 256,
+    "bets": 151,
+    "passes": 105,
+    "wins": 78,
+    "losses": 67,
+    "pushes": 6,
+    "units": 3.9090909090909065,
+    "roi": 0.02588801926550269,
+    "roi_se": 0.07615529947297531,
+    "roi_ci95": [
+      -0.12748823503540485,
+      0.1686602870813397
+    ],
+    "sensitivity_roi_ci": [
+      -0.2048747709509742,
+      0.23284829599930437
+    ],
+    "favorite_units": -22.81818181818182,
+    "paired_favorite_ci95": [
+      -0.09489149078976782,
+      0.43873517786561267
+    ],
+    "null_roi": -0.043648404575556896,
+    "expected_units": 8.366703222529315,
+    "predicted_cover": 0.5533762900587206,
+    "realized_cover": 0.5379310344827586,
+    "calendar_gain_vs_raw": 0.002840909090909091,
+    "calendar_gain_ci95": [
+      -0.02424302788844621,
+      0.03066812705366922
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "selected_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "selected_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "temperature_r100_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "temperature_r100_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "temperature_r10_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2019",
+    "policy": "temperature_r10_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.012428977272727279,
+    "calendar_gain_ci95": [
+      -0.10642602879048658,
+      0.08189810668258933
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "context_r100_EV",
+    "games": 256,
+    "bets": 145,
+    "passes": 111,
+    "wins": 71,
+    "losses": 74,
+    "pushes": 0,
+    "units": -9.454545454545453,
+    "roi": -0.06520376175548588,
+    "roi_se": 0.07952842753664004,
+    "roi_ci95": [
+      -0.15999999999999998,
+      0.02695924764890283
+    ],
+    "sensitivity_roi_ci": [
+      -0.19650507688374316,
+      0.06909090909090909
+    ],
+    "favorite_units": -13.27272727272727,
+    "paired_favorite_ci95": [
+      -0.17355371900826447,
+      0.2190812925444072
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 3.9930350975479763,
+    "predicted_cover": 0.5386692945704652,
+    "realized_cover": 0.4896551724137931,
+    "calendar_gain_vs_raw": 0.01988636363636364,
+    "calendar_gain_ci95": [
+      -0.03382873586361957,
+      0.07106862819411457
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "context_r100_Stable",
+    "games": 256,
+    "bets": 115,
+    "passes": 141,
+    "wins": 60,
+    "losses": 55,
+    "pushes": 0,
+    "units": -0.4545454545454537,
+    "roi": -0.003952569169960467,
+    "roi_se": 0.08931683259943383,
+    "roi_ci95": [
+      -0.11487603305785123,
+      0.09565217391304348
+    ],
+    "sensitivity_roi_ci": [
+      -0.17911671622769756,
+      0.14193026599568673
+    ],
+    "favorite_units": -10.0,
+    "paired_favorite_ci95": [
+      -0.13636363636363638,
+      0.3100233100233101
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 2.944142491168378,
+    "predicted_cover": 0.5376959442506634,
+    "realized_cover": 0.5217391304347826,
+    "calendar_gain_vs_raw": 0.05504261363636363,
+    "calendar_gain_ci95": [
+      -0.002531517464723521,
+      0.11070497602755666
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "context_r10_EV",
+    "games": 256,
+    "bets": 163,
+    "passes": 93,
+    "wins": 80,
+    "losses": 83,
+    "pushes": 0,
+    "units": -10.272727272727273,
+    "roi": -0.06302286670384831,
+    "roi_se": 0.07498347056048749,
+    "roi_ci95": [
+      -0.17045454545454544,
+      0.04654983570646221
+    ],
+    "sensitivity_roi_ci": [
+      -0.21637614765201696,
+      0.0977272727272727
+    ],
+    "favorite_units": -19.818181818181817,
+    "paired_favorite_ci95": [
+      -0.1428652597402597,
+      0.24955436720142607
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 7.951144757335299,
+    "predicted_cover": 0.5501489362089999,
+    "realized_cover": 0.49079754601226994,
+    "calendar_gain_vs_raw": 0.016690340909090915,
+    "calendar_gain_ci95": [
+      -0.04903566499543851,
+      0.0805704099821747
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "context_r10_Stable",
+    "games": 256,
+    "bets": 131,
+    "passes": 125,
+    "wins": 65,
+    "losses": 66,
+    "pushes": 0,
+    "units": -6.909090909090908,
+    "roi": -0.052741151977793194,
+    "roi_se": 0.08371673530693866,
+    "roi_ci95": [
+      -0.18628912071535023,
+      0.06909090909090908
+    ],
+    "sensitivity_roi_ci": [
+      -0.261984338363731,
+      0.11490367015534886
+    ],
+    "favorite_units": -14.545454545454547,
+    "paired_favorite_ci95": [
+      -0.16666666666666666,
+      0.27902097902097905
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 5.841281770567212,
+    "predicted_cover": 0.5480056397170558,
+    "realized_cover": 0.4961832061068702,
+    "calendar_gain_vs_raw": 0.029829545454545456,
+    "calendar_gain_ci95": [
+      -0.0213508750607681,
+      0.0835784486921292
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "fair_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "fair_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "platt_r100_EV",
+    "games": 256,
+    "bets": 14,
+    "passes": 242,
+    "wins": 6,
+    "losses": 8,
+    "pushes": 0,
+    "units": -2.545454545454546,
+    "roi": -0.18181818181818185,
+    "roi_se": 0.262027888044688,
+    "roi_ci95": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "sensitivity_roi_ci": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "favorite_units": -6.363636363636363,
+    "paired_favorite_ci95": [
+      0.27272727272727276,
+      0.27272727272727276
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006694968048649441,
+    "predicted_cover": 0.5240657870530525,
+    "realized_cover": 0.42857142857142855,
+    "calendar_gain_vs_raw": 0.04687500000000001,
+    "calendar_gain_ci95": [
+      -0.017112299465240642,
+      0.10824535120026073
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "platt_r100_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "platt_r10_EV",
+    "games": 256,
+    "bets": 14,
+    "passes": 242,
+    "wins": 6,
+    "losses": 8,
+    "pushes": 0,
+    "units": -2.545454545454546,
+    "roi": -0.18181818181818185,
+    "roi_se": 0.262027888044688,
+    "roi_ci95": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "sensitivity_roi_ci": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "favorite_units": -6.363636363636363,
+    "paired_favorite_ci95": [
+      0.27272727272727276,
+      0.27272727272727276
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006694968048649441,
+    "predicted_cover": 0.5240657870530525,
+    "realized_cover": 0.42857142857142855,
+    "calendar_gain_vs_raw": 0.04687500000000001,
+    "calendar_gain_ci95": [
+      -0.017112299465240642,
+      0.10824535120026073
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "platt_r10_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "raw_EV",
+    "games": 256,
+    "bets": 173,
+    "passes": 83,
+    "wins": 83,
+    "losses": 90,
+    "pushes": 0,
+    "units": -14.545454545454545,
+    "roi": -0.08407777193904362,
+    "roi_se": 0.07272380336977562,
+    "roi_ci95": [
+      -0.1753630984400215,
+      0.011377608047689816
+    ],
+    "sensitivity_roi_ci": [
+      -0.2230443974630021,
+      0.0593223712879536
+    ],
+    "favorite_units": -26.0,
+    "paired_favorite_ci95": [
+      -0.09819592476489017,
+      0.21943573667711602
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 13.036627499127555,
+    "predicted_cover": 0.5642083886598863,
+    "realized_cover": 0.4797687861271676,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "raw_Stable",
+    "games": 256,
+    "bets": 153,
+    "passes": 103,
+    "wins": 74,
+    "losses": 79,
+    "pushes": 0,
+    "units": -11.727272727272727,
+    "roi": -0.0766488413547237,
+    "roi_se": 0.07738250604255158,
+    "roi_ci95": [
+      -0.17444717444717445,
+      0.0173444976076555
+    ],
+    "sensitivity_roi_ci": [
+      -0.22363636363636363,
+      0.05916537781705706
+    ],
+    "favorite_units": -19.36363636363636,
+    "paired_favorite_ci95": [
+      -0.12729212860310404,
+      0.21493076459963875
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 10.400140075107535,
+    "predicted_cover": 0.5603102707488617,
+    "realized_cover": 0.48366013071895425,
+    "calendar_gain_vs_raw": 0.011008522727272728,
+    "calendar_gain_ci95": [
+      -0.022727272727272724,
+      0.045815295815295816
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "selected_EV",
+    "games": 256,
+    "bets": 14,
+    "passes": 242,
+    "wins": 6,
+    "losses": 8,
+    "pushes": 0,
+    "units": -2.545454545454546,
+    "roi": -0.18181818181818185,
+    "roi_se": 0.262027888044688,
+    "roi_ci95": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "sensitivity_roi_ci": [
+      -0.18181818181818182,
+      -0.18181818181818182
+    ],
+    "favorite_units": -6.363636363636363,
+    "paired_favorite_ci95": [
+      0.27272727272727276,
+      0.27272727272727276
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006694968048649441,
+    "predicted_cover": 0.5240657870530525,
+    "realized_cover": 0.42857142857142855,
+    "calendar_gain_vs_raw": 0.04687500000000001,
+    "calendar_gain_ci95": [
+      -0.017112299465240642,
+      0.10824535120026073
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "selected_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "temperature_r100_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "temperature_r100_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "temperature_r10_EV",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2020",
+    "policy": "temperature_r10_Stable",
+    "games": 256,
+    "bets": 0,
+    "passes": 256,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.05681818181818183,
+    "calendar_gain_ci95": [
+      -0.007669154418944261,
+      0.11800449778219953
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "context_r100_EV",
+    "games": 272,
+    "bets": 101,
+    "passes": 171,
+    "wins": 56,
+    "losses": 43,
+    "pushes": 2,
+    "units": 7.909090909090908,
+    "roi": 0.0783078307830783,
+    "roi_se": 0.09369301461909457,
+    "roi_ci95": [
+      -0.12512810618922668,
+      0.2764378478664193
+    ],
+    "sensitivity_roi_ci": [
+      -0.2190657354009627,
+      0.3655187881368804
+    ],
+    "favorite_units": -16.90909090909091,
+    "paired_favorite_ci95": [
+      -0.12610205831903926,
+      0.6083916083916084
+    ],
+    "null_roi": -0.04455445544554455,
+    "expected_units": 2.4035587119127535,
+    "predicted_cover": 0.5365338264066818,
+    "realized_cover": 0.5656565656565656,
+    "calendar_gain_vs_raw": 0.011697860962566845,
+    "calendar_gain_ci95": [
+      -0.07605225046109279,
+      0.09261817665561622
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "context_r100_Stable",
+    "games": 272,
+    "bets": 63,
+    "passes": 209,
+    "wins": 37,
+    "losses": 25,
+    "pushes": 1,
+    "units": 8.636363636363637,
+    "roi": 0.1370851370851371,
+    "roi_se": 0.11800808301058721,
+    "roi_ci95": [
+      -0.12696708463949832,
+      0.3785394932935916
+    ],
+    "sensitivity_roi_ci": [
+      -0.2583831738437005,
+      0.5071996246394116
+    ],
+    "favorite_units": -16.18181818181818,
+    "paired_favorite_ci95": [
+      -0.13261064593301394,
+      0.8677685950413224
+    ],
+    "null_roi": -0.04473304473304473,
+    "expected_units": 1.8351767902027705,
+    "predicted_cover": 0.5394231983226766,
+    "realized_cover": 0.5967741935483871,
+    "calendar_gain_vs_raw": 0.014371657754010702,
+    "calendar_gain_ci95": [
+      -0.07997570811110233,
+      0.10290318772136946
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "context_r10_EV",
+    "games": 272,
+    "bets": 115,
+    "passes": 157,
+    "wins": 66,
+    "losses": 47,
+    "pushes": 2,
+    "units": 13.0,
+    "roi": 0.11304347826086956,
+    "roi_se": 0.08737021073850028,
+    "roi_ci95": [
+      -0.0628099173553719,
+      0.29241315082734115
+    ],
+    "sensitivity_roi_ci": [
+      -0.14012295137295142,
+      0.37987313612313706
+    ],
+    "favorite_units": -9.909090909090908,
+    "paired_favorite_ci95": [
+      -0.13639434889434868,
+      0.532363329238329
+    ],
+    "null_roi": -0.04466403162055336,
+    "expected_units": 4.187629743040782,
+    "predicted_cover": 0.5433100658855741,
+    "realized_cover": 0.584070796460177,
+    "calendar_gain_vs_raw": 0.030414438502673793,
+    "calendar_gain_ci95": [
+      -0.06152782578638093,
+      0.11827966073978786
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "context_r10_Stable",
+    "games": 272,
+    "bets": 88,
+    "passes": 184,
+    "wins": 52,
+    "losses": 35,
+    "pushes": 1,
+    "units": 12.272727272727272,
+    "roi": 0.13946280991735535,
+    "roi_se": 0.09980625011889797,
+    "roi_ci95": [
+      -0.0892102489065106,
+      0.371799895506792
+    ],
+    "sensitivity_roi_ci": [
+      -0.19404438123133133,
+      0.4753367378963305
+    ],
+    "favorite_units": -14.454545454545453,
+    "paired_favorite_ci95": [
+      -0.12587907375643226,
+      0.7424521531100473
+    ],
+    "null_roi": -0.04493801652892562,
+    "expected_units": 3.372240994562495,
+    "predicted_cover": 0.5443837493708383,
+    "realized_cover": 0.5977011494252874,
+    "calendar_gain_vs_raw": 0.027740641711229953,
+    "calendar_gain_ci95": [
+      -0.06317098954966599,
+      0.11537190082644627
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "fair_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "fair_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "platt_r100_EV",
+    "games": 272,
+    "bets": 13,
+    "passes": 259,
+    "wins": 5,
+    "losses": 7,
+    "pushes": 1,
+    "units": -2.4545454545454546,
+    "roi": -0.1888111888111888,
+    "roi_se": 0.26151415316524695,
+    "roi_ci95": [
+      -0.1888111888111888,
+      -0.1888111888111888
+    ],
+    "sensitivity_roi_ci": [
+      -0.1888111888111888,
+      -0.1888111888111888
+    ],
+    "favorite_units": 1.3636363636363633,
+    "paired_favorite_ci95": [
+      -0.2937062937062937,
+      -0.2937062937062937
+    ],
+    "null_roi": -0.04195804195804196,
+    "expected_units": 0.025402889832529862,
+    "predicted_cover": 0.5248702764735106,
+    "realized_cover": 0.4166666666666667,
+    "calendar_gain_vs_raw": -0.026403743315508016,
+    "calendar_gain_ci95": [
+      -0.1140639541482238,
+      0.060494652406417104
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "platt_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "platt_r10_EV",
+    "games": 272,
+    "bets": 28,
+    "passes": 244,
+    "wins": 11,
+    "losses": 17,
+    "pushes": 0,
+    "units": -7.0,
+    "roi": -0.25,
+    "roi_se": 0.17943514064131835,
+    "roi_ci95": [
+      -0.5454545454545454,
+      -0.012539184952978046
+    ],
+    "sensitivity_roi_ci": [
+      -0.8409090909090908,
+      0.05329153605015675
+    ],
+    "favorite_units": 2.545454545454545,
+    "paired_favorite_ci95": [
+      -0.9545454545454546,
+      0.06583072100313479
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.16034909503099176,
+    "predicted_cover": 0.5268979159053427,
+    "realized_cover": 0.39285714285714285,
+    "calendar_gain_vs_raw": -0.043114973262032084,
+    "calendar_gain_ci95": [
+      -0.12222513236453754,
+      0.033633033633033625
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "platt_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "raw_EV",
+    "games": 272,
+    "bets": 171,
+    "passes": 101,
+    "wins": 91,
+    "losses": 78,
+    "pushes": 2,
+    "units": 4.727272727272725,
+    "roi": 0.027644869750132892,
+    "roi_se": 0.07256562377188756,
+    "roi_ci95": [
+      -0.11838924963924957,
+      0.17464151080179788
+    ],
+    "sensitivity_roi_ci": [
+      -0.19257161106281193,
+      0.2457759718307395
+    ],
+    "favorite_units": -20.090909090909086,
+    "paired_favorite_ci95": [
+      -0.12139255483296567,
+      0.4001262417405268
+    ],
+    "null_roi": -0.044922913343965976,
+    "expected_units": 12.114311912139614,
+    "predicted_cover": 0.5618014706756851,
+    "realized_cover": 0.5384615384615384,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "raw_Stable",
+    "games": 272,
+    "bets": 160,
+    "passes": 112,
+    "wins": 87,
+    "losses": 72,
+    "pushes": 1,
+    "units": 7.09090909090909,
+    "roi": 0.04431818181818181,
+    "roi_se": 0.07512739972201295,
+    "roi_ci95": [
+      -0.10167606516290725,
+      0.1946458449525934
+    ],
+    "sensitivity_roi_ci": [
+      -0.16821273964131106,
+      0.26462072958888244
+    ],
+    "favorite_units": -19.636363636363637,
+    "paired_favorite_ci95": [
+      -0.10350492880613357,
+      0.43022155529075656
+    ],
+    "null_roi": -0.04517045454545455,
+    "expected_units": 10.833518039257083,
+    "predicted_cover": 0.560206983168426,
+    "realized_cover": 0.5471698113207547,
+    "calendar_gain_vs_raw": 0.008689839572192512,
+    "calendar_gain_ci95": [
+      -0.01212121212121212,
+      0.026350461133069828
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "selected_EV",
+    "games": 272,
+    "bets": 13,
+    "passes": 259,
+    "wins": 5,
+    "losses": 7,
+    "pushes": 1,
+    "units": -2.4545454545454546,
+    "roi": -0.1888111888111888,
+    "roi_se": 0.26151415316524695,
+    "roi_ci95": [
+      -0.1888111888111888,
+      -0.1888111888111888
+    ],
+    "sensitivity_roi_ci": [
+      -0.1888111888111888,
+      -0.1888111888111888
+    ],
+    "favorite_units": 1.3636363636363633,
+    "paired_favorite_ci95": [
+      -0.2937062937062937,
+      -0.2937062937062937
+    ],
+    "null_roi": -0.04195804195804196,
+    "expected_units": 0.025402889832529862,
+    "predicted_cover": 0.5248702764735106,
+    "realized_cover": 0.4166666666666667,
+    "calendar_gain_vs_raw": -0.026403743315508016,
+    "calendar_gain_ci95": [
+      -0.1140639541482238,
+      0.060494652406417104
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "selected_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "temperature_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "temperature_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "temperature_r10_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2021",
+    "policy": "temperature_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.017379679144385023,
+    "calendar_gain_ci95": [
+      -0.10929866825987238,
+      0.07441194785734957
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "context_r100_EV",
+    "games": 271,
+    "bets": 48,
+    "passes": 223,
+    "wins": 26,
+    "losses": 20,
+    "pushes": 2,
+    "units": 3.6363636363636362,
+    "roi": 0.07575757575757576,
+    "roi_se": 0.13515836720392502,
+    "roi_ci95": [
+      -0.08874458874458874,
+      0.2494172494172494
+    ],
+    "sensitivity_roi_ci": [
+      -0.17478281853281868,
+      0.3396130952380962
+    ],
+    "favorite_units": -7.818181818181818,
+    "paired_favorite_ci95": [
+      -0.09090909090909091,
+      0.5874125874125874
+    ],
+    "null_roi": -0.043560606060606064,
+    "expected_units": 0.9498500370690695,
+    "predicted_cover": 0.5343609019010235,
+    "realized_cover": 0.5652173913043478,
+    "calendar_gain_vs_raw": -0.0043609527004360975,
+    "calendar_gain_ci95": [
+      -0.07608850619138602,
+      0.06985678353956042
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "context_r100_Stable",
+    "games": 271,
+    "bets": 26,
+    "passes": 245,
+    "wins": 12,
+    "losses": 13,
+    "pushes": 1,
+    "units": -2.09090909090909,
+    "roi": -0.08041958041958039,
+    "roi_se": 0.18707960189804207,
+    "roi_ci95": [
+      -0.3755385375494068,
+      0.17355371900826447
+    ],
+    "sensitivity_roi_ci": [
+      -0.5454545454545455,
+      0.3062200956937799
+    ],
+    "favorite_units": -0.1818181818181821,
+    "paired_favorite_ci95": [
+      -0.6681818181818182,
+      0.4338842975206612
+    ],
+    "null_roi": -0.043706293706293704,
+    "expected_units": 0.6909327354870771,
+    "predicted_cover": 0.537962979001632,
+    "realized_cover": 0.48,
+    "calendar_gain_vs_raw": -0.02549480040254948,
+    "calendar_gain_ci95": [
+      -0.10726030806370945,
+      0.06095990367768944
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "context_r10_EV",
+    "games": 271,
+    "bets": 68,
+    "passes": 203,
+    "wins": 35,
+    "losses": 30,
+    "pushes": 3,
+    "units": 1.8181818181818175,
+    "roi": 0.02673796791443849,
+    "roi_se": 0.1136791973470986,
+    "roi_ci95": [
+      -0.1721261872455902,
+      0.22096008158508157
+    ],
+    "sensitivity_roi_ci": [
+      -0.27626074695086533,
+      0.3292865450114957
+    ],
+    "favorite_units": -5.8181818181818175,
+    "paired_favorite_ci95": [
+      -0.2863636363636363,
+      0.47742376294591277
+    ],
+    "null_roi": -0.04344919786096257,
+    "expected_units": 2.06919331074399,
+    "predicted_cover": 0.5400178298446842,
+    "realized_cover": 0.5384615384615384,
+    "calendar_gain_vs_raw": -0.01107011070110701,
+    "calendar_gain_ci95": [
+      -0.0758714969241285,
+      0.049312311304931224
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "context_r10_Stable",
+    "games": 271,
+    "bets": 45,
+    "passes": 226,
+    "wins": 24,
+    "losses": 19,
+    "pushes": 2,
+    "units": 2.8181818181818183,
+    "roi": 0.06262626262626263,
+    "roi_se": 0.13972957025121677,
+    "roi_ci95": [
+      -0.17470774779256293,
+      0.27277462121212054
+    ],
+    "sensitivity_roi_ci": [
+      -0.3192579015966113,
+      0.39262683744826776
+    ],
+    "favorite_units": -1.0,
+    "paired_favorite_ci95": [
+      -0.3249764117563804,
+      0.4375
+    ],
+    "null_roi": -0.043434343434343436,
+    "expected_units": 1.5971976836496564,
+    "predicted_cover": 0.5427164115965039,
+    "realized_cover": 0.5581395348837209,
+    "calendar_gain_vs_raw": -0.007380073800738004,
+    "calendar_gain_ci95": [
+      -0.08355682307888192,
+      0.06766209516772426
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "fair_EV",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "fair_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "platt_r100_EV",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "platt_r100_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "platt_r10_EV",
+    "games": 271,
+    "bets": 3,
+    "passes": 268,
+    "wins": 0,
+    "losses": 2,
+    "pushes": 1,
+    "units": -2.0,
+    "roi": -0.6666666666666666,
+    "roi_se": 0.33333333333333337,
+    "roi_ci95": [
+      -1.0,
+      0.0
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.0
+    ],
+    "favorite_units": 1.8181818181818181,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      0.0
+    ],
+    "null_roi": -0.0303030303030303,
+    "expected_units": 0.019902027737117634,
+    "predicted_cover": 0.5273636080160128,
+    "realized_cover": 0.0,
+    "calendar_gain_vs_raw": -0.02515934250251593,
+    "calendar_gain_ci95": [
+      -0.10594674771822603,
+      0.06060882548108821
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "platt_r10_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "raw_EV",
+    "games": 271,
+    "bets": 175,
+    "passes": 96,
+    "wins": 90,
+    "losses": 77,
+    "pushes": 8,
+    "units": 4.818181818181818,
+    "roi": 0.027532467532467533,
+    "roi_se": 0.07047749617073022,
+    "roi_ci95": [
+      -0.10535123966942143,
+      0.1515193370165745
+    ],
+    "sensitivity_roi_ci": [
+      -0.16696805143124194,
+      0.1964006112205064
+    ],
+    "favorite_units": -27.636363636363637,
+    "paired_favorite_ci95": [
+      -0.05932953494239305,
+      0.4145573122529644
+    ],
+    "null_roi": -0.043376623376623374,
+    "expected_units": 12.497492926076207,
+    "predicted_cover": 0.5620661048895323,
+    "realized_cover": 0.5389221556886228,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "raw_Stable",
+    "games": 271,
+    "bets": 168,
+    "passes": 103,
+    "wins": 84,
+    "losses": 77,
+    "pushes": 7,
+    "units": -0.6363636363636349,
+    "roi": -0.0037878787878787793,
+    "roi_se": 0.07224136712834131,
+    "roi_ci95": [
+      -0.13344591425086774,
+      0.11839483631238386
+    ],
+    "sensitivity_roi_ci": [
+      -0.19598602995745762,
+      0.16460016081097595
+    ],
+    "favorite_units": -21.636363636363637,
+    "paired_favorite_ci95": [
+      -0.1122994652406417,
+      0.35312664214398315
+    ],
+    "null_roi": -0.043560606060606064,
+    "expected_units": 11.408450586395745,
+    "predicted_cover": 0.5601510921264043,
+    "realized_cover": 0.5217391304347826,
+    "calendar_gain_vs_raw": -0.020127474002012747,
+    "calendar_gain_ci95": [
+      -0.034176349965823645,
+      -0.0066844919786096255
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "selected_EV",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "selected_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "temperature_r100_EV",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "temperature_r100_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "temperature_r10_EV",
+    "games": 271,
+    "bets": 2,
+    "passes": 269,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006438320141927634,
+    "predicted_cover": 0.525495750513362,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.018114726601811466,
+    "calendar_gain_ci95": [
+      -0.09469732976149327,
+      0.06503341759687242
+    ]
+  },
+  {
+    "basis": "2022",
+    "policy": "temperature_r10_Stable",
+    "games": 271,
+    "bets": 0,
+    "passes": 271,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.01777926870177792,
+    "calendar_gain_ci95": [
+      -0.09808720397975575,
+      0.06793206793206792
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "context_r100_EV",
+    "games": 272,
+    "bets": 56,
+    "passes": 216,
+    "wins": 23,
+    "losses": 31,
+    "pushes": 2,
+    "units": -10.09090909090909,
+    "roi": -0.18019480519480519,
+    "roi_se": 0.125084302825297,
+    "roi_ci95": [
+      -0.41604893816573973,
+      0.046334443858028436
+    ],
+    "sensitivity_roi_ci": [
+      -0.5433042741890144,
+      0.15343743002686977
+    ],
+    "favorite_units": 3.272727272727273,
+    "paired_favorite_ci95": [
+      -0.6818181818181818,
+      0.1974921630094044
+    ],
+    "null_roi": -0.04383116883116883,
+    "expected_units": 0.8869694416969693,
+    "predicted_cover": 0.5322922989066788,
+    "realized_cover": 0.42592592592592593,
+    "calendar_gain_vs_raw": -0.0036764705882353006,
+    "calendar_gain_ci95": [
+      -0.07305983968184925,
+      0.06710847107438014
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "context_r100_Stable",
+    "games": 272,
+    "bets": 42,
+    "passes": 230,
+    "wins": 19,
+    "losses": 21,
+    "pushes": 2,
+    "units": -3.7272727272727266,
+    "roi": -0.08874458874458872,
+    "roi_se": 0.14533333876797205,
+    "roi_ci95": [
+      -0.36983471074380164,
+      0.21763085399449036
+    ],
+    "sensitivity_roi_ci": [
+      -0.5105110315216698,
+      0.3721327658827707
+    ],
+    "favorite_units": 0.09090909090909038,
+    "paired_favorite_ci95": [
+      -0.6508264462809917,
+      0.5206611570247934
+    ],
+    "null_roi": -0.04329004329004329,
+    "expected_units": 0.7003949041289848,
+    "predicted_cover": 0.5327264724384245,
+    "realized_cover": 0.475,
+    "calendar_gain_vs_raw": 0.019719251336898395,
+    "calendar_gain_ci95": [
+      -0.05151515151515153,
+      0.09256816784189047
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "context_r10_EV",
+    "games": 272,
+    "bets": 90,
+    "passes": 182,
+    "wins": 39,
+    "losses": 45,
+    "pushes": 6,
+    "units": -9.545454545454545,
+    "roi": -0.10606060606060605,
+    "roi_se": 0.09754733046555736,
+    "roi_ci95": [
+      -0.3080851619644723,
+      0.11111742424242413
+    ],
+    "sensitivity_roi_ci": [
+      -0.39650786613065914,
+      0.24705882352941172
+    ],
+    "favorite_units": -1.9090909090909087,
+    "paired_favorite_ci95": [
+      -0.49433396464646445,
+      0.3527667984189723
+    ],
+    "null_roi": -0.04242424242424243,
+    "expected_units": 2.286609086431321,
+    "predicted_cover": 0.5374400801674966,
+    "realized_cover": 0.4642857142857143,
+    "calendar_gain_vs_raw": -0.0016711229946524016,
+    "calendar_gain_ci95": [
+      -0.0761106998114806,
+      0.07782629314193731
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "context_r10_Stable",
+    "games": 272,
+    "bets": 54,
+    "passes": 218,
+    "wins": 23,
+    "losses": 29,
+    "pushes": 2,
+    "units": -8.09090909090909,
+    "roi": -0.14983164983164982,
+    "roi_se": 0.1278702475614205,
+    "roi_ci95": [
+      -0.3741379310344826,
+      0.08566433566433565
+    ],
+    "sensitivity_roi_ci": [
+      -0.47852164997473934,
+      0.22282869122492022
+    ],
+    "favorite_units": 3.3636363636363633,
+    "paired_favorite_ci95": [
+      -0.6608391608391609,
+      0.2620320855614973
+    ],
+    "null_roi": -0.043771043771043766,
+    "expected_units": 1.4197394881197238,
+    "predicted_cover": 0.537862566172536,
+    "realized_cover": 0.4423076923076923,
+    "calendar_gain_vs_raw": 0.0036764705882352876,
+    "calendar_gain_ci95": [
+      -0.06397400976052661,
+      0.07361040269785774
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "fair_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "fair_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "platt_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "platt_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "platt_r10_EV",
+    "games": 272,
+    "bets": 17,
+    "passes": 255,
+    "wins": 6,
+    "losses": 9,
+    "pushes": 2,
+    "units": -3.5454545454545454,
+    "roi": -0.20855614973262032,
+    "roi_se": 0.22045450491790147,
+    "roi_ci95": [
+      -0.7355371900826445,
+      0.05454545454545454
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.13636363636363635
+    ],
+    "favorite_units": 2.1818181818181817,
+    "paired_favorite_ci95": [
+      -1.3884297520661157,
+      0.19090909090909092
+    ],
+    "null_roi": -0.040106951871657755,
+    "expected_units": 0.09609476288832308,
+    "predicted_cover": 0.526839459655183,
+    "realized_cover": 0.4,
+    "calendar_gain_vs_raw": 0.020387700534759363,
+    "calendar_gain_ci95": [
+      -0.03948386464158585,
+      0.07954855371900822
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "platt_r10_Stable",
+    "games": 272,
+    "bets": 1,
+    "passes": 271,
+    "wins": 0,
+    "losses": 1,
+    "pushes": 0,
+    "units": -1.0,
+    "roi": -1.0,
+    "roi_se": null,
+    "roi_ci95": [
+      -1.0,
+      -1.0
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      -1.0
+    ],
+    "favorite_units": 0.9090909090909091,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      -1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.013991923910851578,
+    "predicted_cover": 0.5314005570893614,
+    "realized_cover": 0.0,
+    "calendar_gain_vs_raw": 0.02974598930481284,
+    "calendar_gain_ci95": [
+      -0.03166574696989264,
+      0.08992473322567356
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "raw_EV",
+    "games": 272,
+    "bets": 188,
+    "passes": 84,
+    "wins": 89,
+    "losses": 90,
+    "pushes": 9,
+    "units": -9.09090909090909,
+    "roi": -0.048355899419729204,
+    "roi_se": 0.06811551596980793,
+    "roi_ci95": [
+      -0.1361179361179361,
+      0.04030512647440156
+    ],
+    "sensitivity_roi_ci": [
+      -0.17888322331421608,
+      0.08424921196840901
+    ],
+    "favorite_units": 4.272727272727273,
+    "paired_favorite_ci95": [
+      -0.25718323127649556,
+      0.10319410319410319
+    ],
+    "null_roi": -0.04327852998065764,
+    "expected_units": 14.117028120184726,
+    "predicted_cover": 0.5640095809074185,
+    "realized_cover": 0.4972067039106145,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "raw_Stable",
+    "games": 272,
+    "bets": 171,
+    "passes": 101,
+    "wins": 80,
+    "losses": 84,
+    "pushes": 7,
+    "units": -11.272727272727272,
+    "roi": -0.0659223817118554,
+    "roi_se": 0.07168246338711931,
+    "roi_ci95": [
+      -0.1713526519510409,
+      0.03743315508021391
+    ],
+    "sensitivity_roi_ci": [
+      -0.22811919714057874,
+      0.08149085530093363
+    ],
+    "favorite_units": 7.818181818181818,
+    "paired_favorite_ci95": [
+      -0.3222042871900822,
+      0.08345752608047691
+    ],
+    "null_roi": -0.043593833067517275,
+    "expected_units": 11.940440153056556,
+    "predicted_cover": 0.561172570745833,
+    "realized_cover": 0.4878048780487805,
+    "calendar_gain_vs_raw": -0.008021390374331548,
+    "calendar_gain_ci95": [
+      -0.03129144406318319,
+      0.013753773901375378
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "selected_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "selected_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "temperature_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "temperature_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "temperature_r10_EV",
+    "games": 272,
+    "bets": 3,
+    "passes": 269,
+    "wins": 0,
+    "losses": 3,
+    "pushes": 0,
+    "units": -3.0,
+    "roi": -1.0,
+    "roi_se": 0.0,
+    "roi_ci95": [
+      -1.0,
+      -1.0
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      -1.0
+    ],
+    "favorite_units": 2.727272727272727,
+    "paired_favorite_ci95": [
+      -1.9090909090909092,
+      -1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.027566259201470822,
+    "predicted_cover": 0.5286432871491478,
+    "realized_cover": 0.0,
+    "calendar_gain_vs_raw": 0.02239304812834225,
+    "calendar_gain_ci95": [
+      -0.038017294153657795,
+      0.08001524800595905
+    ]
+  },
+  {
+    "basis": "2023",
+    "policy": "temperature_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.03342245989304813,
+    "calendar_gain_ci95": [
+      -0.028106501021186843,
+      0.09289998322845038
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "context_r100_EV",
+    "games": 272,
+    "bets": 29,
+    "passes": 243,
+    "wins": 11,
+    "losses": 17,
+    "pushes": 1,
+    "units": -7.0,
+    "roi": -0.2413793103448276,
+    "roi_se": 0.17335168103697168,
+    "roi_ci95": [
+      -0.5689149560117303,
+      0.1553030303030303
+    ],
+    "sensitivity_roi_ci": [
+      -0.7153036153036154,
+      0.3989841959511131
+    ],
+    "favorite_units": 4.454545454545455,
+    "paired_favorite_ci95": [
+      -1.0469208211143695,
+      0.39772727272727276
+    ],
+    "null_roi": -0.0438871473354232,
+    "expected_units": 0.3163420929972713,
+    "predicted_cover": 0.5297593197463305,
+    "realized_cover": 0.39285714285714285,
+    "calendar_gain_vs_raw": 0.06717914438502674,
+    "calendar_gain_ci95": [
+      -0.02704605396632176,
+      0.16236956867176316
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "context_r100_Stable",
+    "games": 272,
+    "bets": 17,
+    "passes": 255,
+    "wins": 7,
+    "losses": 9,
+    "pushes": 1,
+    "units": -2.6363636363636367,
+    "roi": -0.15508021390374332,
+    "roi_se": 0.22989988334348632,
+    "roi_ci95": [
+      -0.5757575757575757,
+      0.2987012987012987
+    ],
+    "sensitivity_roi_ci": [
+      -0.7613636363636362,
+      0.5714285714285713
+    ],
+    "favorite_units": 1.1818181818181817,
+    "paired_favorite_ci95": [
+      -1.0606060606060608,
+      0.6818181818181819
+    ],
+    "null_roi": -0.0427807486631016,
+    "expected_units": 0.23585115243759125,
+    "predicted_cover": 0.5313911294567679,
+    "realized_cover": 0.4375,
+    "calendar_gain_vs_raw": 0.08322192513368984,
+    "calendar_gain_ci95": [
+      -0.02057144596200942,
+      0.19033234283591788
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "context_r10_EV",
+    "games": 272,
+    "bets": 101,
+    "passes": 171,
+    "wins": 54,
+    "losses": 46,
+    "pushes": 1,
+    "units": 3.090909090909091,
+    "roi": 0.0306030603060306,
+    "roi_se": 0.09467689080812426,
+    "roi_ci95": [
+      -0.12952534191472242,
+      0.20779220779220778
+    ],
+    "sensitivity_roi_ci": [
+      -0.20146331025381106,
+      0.2894034090909124
+    ],
+    "favorite_units": -12.181818181818183,
+    "paired_favorite_ci95": [
+      -0.18901890189018905,
+      0.5230559627062232
+    ],
+    "null_roi": -0.045004500450045004,
+    "expected_units": 1.6920029745617446,
+    "predicted_cover": 0.5328901928881327,
+    "realized_cover": 0.54,
+    "calendar_gain_vs_raw": 0.10427807486631015,
+    "calendar_gain_ci95": [
+      -0.002694105231418661,
+      0.21027330309665304
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "context_r10_Stable",
+    "games": 272,
+    "bets": 80,
+    "passes": 192,
+    "wins": 42,
+    "losses": 37,
+    "pushes": 1,
+    "units": 1.1818181818181808,
+    "roi": 0.01477272727272726,
+    "roi_se": 0.10650762521282585,
+    "roi_ci95": [
+      -0.18546694214876022,
+      0.2277744982290437
+    ],
+    "sensitivity_roi_ci": [
+      -0.2715311004784689,
+      0.33724065328610897
+    ],
+    "favorite_units": -0.7272727272727266,
+    "paired_favorite_ci95": [
+      -0.403030303030303,
+      0.4772727272727273
+    ],
+    "null_roi": -0.04488636363636364,
+    "expected_units": 1.4503867058418884,
+    "predicted_cover": 0.533623246394614,
+    "realized_cover": 0.5316455696202531,
+    "calendar_gain_vs_raw": 0.09725935828877005,
+    "calendar_gain_ci95": [
+      -0.00987600933471513,
+      0.19935064935064933
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "fair_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "fair_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "platt_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "platt_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "platt_r10_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "platt_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "raw_EV",
+    "games": 272,
+    "bets": 201,
+    "passes": 71,
+    "wins": 91,
+    "losses": 108,
+    "pushes": 2,
+    "units": -25.27272727272727,
+    "roi": -0.12573496155585706,
+    "roi_se": 0.06692034066322872,
+    "roi_ci95": [
+      -0.2722772277227723,
+      0.006684491978609619
+    ],
+    "sensitivity_roi_ci": [
+      -0.3513048215332482,
+      0.0685088308288584
+    ],
+    "favorite_units": 9.090909090909093,
+    "paired_favorite_ci95": [
+      -0.43140774108488184,
+      0.06818181818181816
+    ],
+    "null_roi": -0.04500226142017187,
+    "expected_units": 13.462641507729604,
+    "predicted_cover": 0.5596635370706782,
+    "realized_cover": 0.457286432160804,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "raw_Stable",
+    "games": 272,
+    "bets": 199,
+    "passes": 73,
+    "wins": 91,
+    "losses": 106,
+    "pushes": 2,
+    "units": -23.272727272727266,
+    "roi": -0.11694837825491089,
+    "roi_se": 0.06730411399517444,
+    "roi_ci95": [
+      -0.2628621516422221,
+      0.016651665166516647
+    ],
+    "sensitivity_roi_ci": [
+      -0.3459800495067403,
+      0.07580371383002982
+    ],
+    "favorite_units": 7.272727272727272,
+    "paired_favorite_ci95": [
+      -0.4137931034482759,
+      0.08438620343268838
+    ],
+    "null_roi": -0.044997715851987204,
+    "expected_units": 12.836281890267621,
+    "predicted_cover": 0.5583751697016632,
+    "realized_cover": 0.4619289340101523,
+    "calendar_gain_vs_raw": 0.007352941176470588,
+    "calendar_gain_ci95": [
+      0.0,
+      0.018315018315018316
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "selected_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "selected_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "temperature_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "temperature_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "temperature_r10_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2024",
+    "policy": "temperature_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": 0.0929144385026738,
+    "calendar_gain_ci95": [
+      -0.005072418288031644,
+      0.19610870610870604
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "context_r100_EV",
+    "games": 272,
+    "bets": 14,
+    "passes": 258,
+    "wins": 7,
+    "losses": 7,
+    "pushes": 0,
+    "units": -0.6363636363636359,
+    "roi": -0.04545454545454542,
+    "roi_se": 0.2647432754711321,
+    "roi_ci95": [
+      -0.30578512396694213,
+      0.3363636363636363
+    ],
+    "sensitivity_roi_ci": [
+      -0.45454545454545453,
+      0.5272727272727272
+    ],
+    "favorite_units": -2.545454545454546,
+    "paired_favorite_ci95": [
+      -0.2937062937062937,
+      0.7954545454545455
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.14476588674069973,
+    "predicted_cover": 0.5293165320750881,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.009024064171122986,
+    "calendar_gain_ci95": [
+      -0.0757038567493113,
+      0.06003446532346842
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "context_r100_Stable",
+    "games": 272,
+    "bets": 3,
+    "passes": 269,
+    "wins": 1,
+    "losses": 2,
+    "pushes": 0,
+    "units": -1.0909090909090908,
+    "roi": -0.3636363636363636,
+    "roi_se": 0.6363636363636365,
+    "roi_ci95": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.9090909090909091
+    ],
+    "favorite_units": 0.8181818181818181,
+    "paired_favorite_ci95": [
+      -0.9545454545454546,
+      0.0
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.017309370102047694,
+    "predicted_cover": 0.5268317947797226,
+    "realized_cover": 0.3333333333333333,
+    "calendar_gain_vs_raw": -0.010695187165775395,
+    "calendar_gain_ci95": [
+      -0.07954649517149515,
+      0.05945480724263433
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "context_r10_EV",
+    "games": 272,
+    "bets": 44,
+    "passes": 228,
+    "wins": 22,
+    "losses": 22,
+    "pushes": 0,
+    "units": -1.9999999999999991,
+    "roi": -0.045454545454545435,
+    "roi_se": 0.1455668171356681,
+    "roi_ci95": [
+      -0.3146853146853147,
+      0.3363636363636363
+    ],
+    "sensitivity_roi_ci": [
+      -0.40188581241519683,
+      0.49744527585437165
+    ],
+    "favorite_units": -11.545454545454545,
+    "paired_favorite_ci95": [
+      -0.35167464114832536,
+      0.9545454545454546
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 1.1505897810513264,
+    "predicted_cover": 0.5377788176407353,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.014037433155080213,
+    "calendar_gain_ci95": [
+      -0.0830794263169686,
+      0.06026567169825598
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "context_r10_Stable",
+    "games": 272,
+    "bets": 30,
+    "passes": 242,
+    "wins": 16,
+    "losses": 14,
+    "pushes": 0,
+    "units": 0.5454545454545452,
+    "roi": 0.018181818181818174,
+    "roi_se": 0.17686030314391119,
+    "roi_ci95": [
+      -0.3262032085561497,
+      0.4321797520661104
+    ],
+    "sensitivity_roi_ci": [
+      -0.4555569430569435,
+      0.6478380128117848
+    ],
+    "favorite_units": -5.181818181818182,
+    "paired_favorite_ci95": [
+      -0.47727272727272735,
+      0.9927272727272728
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.8587681845622794,
+    "predicted_cover": 0.5391403013357409,
+    "realized_cover": 0.5333333333333333,
+    "calendar_gain_vs_raw": -0.00467914438502674,
+    "calendar_gain_ci95": [
+      -0.07056207931659193,
+      0.0685228068714517
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "fair_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "fair_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "platt_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "platt_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "platt_r10_EV",
+    "games": 272,
+    "bets": 1,
+    "passes": 271,
+    "wins": 1,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.9090909090909091,
+    "roi": 0.9090909090909091,
+    "roi_se": null,
+    "roi_ci95": [
+      0.9090909090909091,
+      0.9090909090909091
+    ],
+    "sensitivity_roi_ci": [
+      0.9090909090909091,
+      0.9090909090909091
+    ],
+    "favorite_units": -1.0,
+    "paired_favorite_ci95": [
+      1.9090909090909092,
+      1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.002412909493133608,
+    "predicted_cover": 0.5250734287821176,
+    "realized_cover": 1.0,
+    "calendar_gain_vs_raw": -0.003342245989304805,
+    "calendar_gain_ci95": [
+      -0.07641764529615729,
+      0.07014078741813375
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "platt_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "raw_EV",
+    "games": 272,
+    "bets": 171,
+    "passes": 101,
+    "wins": 90,
+    "losses": 80,
+    "pushes": 1,
+    "units": 1.8181818181818183,
+    "roi": 0.01063264221158958,
+    "roi_se": 0.07286954221585867,
+    "roi_ci95": [
+      -0.10825358851674641,
+      0.12231404958677684
+    ],
+    "sensitivity_roi_ci": [
+      -0.17045454545454544,
+      0.16889762577798315
+    ],
+    "favorite_units": -13.454545454545451,
+    "paired_favorite_ci95": [
+      -0.06041426927502878,
+      0.2480739599383667
+    ],
+    "null_roi": -0.045188729399255716,
+    "expected_units": 12.965293993023803,
+    "predicted_cover": 0.5640869740873261,
+    "realized_cover": 0.5294117647058824,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "raw_Stable",
+    "games": 272,
+    "bets": 161,
+    "passes": 111,
+    "wins": 84,
+    "losses": 76,
+    "pushes": 1,
+    "units": 0.3636363636363651,
+    "roi": 0.002258610954263137,
+    "roi_se": 0.07513462717487686,
+    "roi_ci95": [
+      -0.12551319648093842,
+      0.12426316015273069
+    ],
+    "sensitivity_roi_ci": [
+      -0.18964759321894079,
+      0.17678677807335633
+    ],
+    "favorite_units": -14.90909090909091,
+    "paired_favorite_ci95": [
+      -0.05023923444976077,
+      0.25056818181818186
+    ],
+    "null_roi": -0.04517221908526256,
+    "expected_units": 11.203817775887927,
+    "predicted_cover": 0.5608577597039613,
+    "realized_cover": 0.525,
+    "calendar_gain_vs_raw": -0.005347593582887701,
+    "calendar_gain_ci95": [
+      -0.022397891963109352,
+      0.012187702790395837
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "selected_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "selected_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "temperature_r100_EV",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "temperature_r100_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "temperature_r10_EV",
+    "games": 272,
+    "bets": 1,
+    "passes": 271,
+    "wins": 1,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.9090909090909091,
+    "roi": 0.9090909090909091,
+    "roi_se": null,
+    "roi_ci95": [
+      0.9090909090909091,
+      0.9090909090909091
+    ],
+    "sensitivity_roi_ci": [
+      0.9090909090909091,
+      0.9090909090909091
+    ],
+    "favorite_units": -1.0,
+    "paired_favorite_ci95": [
+      1.9090909090909092,
+      1.9090909090909092
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.0020747846022595162,
+    "predicted_cover": 0.5248963157440407,
+    "realized_cover": 1.0,
+    "calendar_gain_vs_raw": -0.003342245989304805,
+    "calendar_gain_ci95": [
+      -0.07641764529615729,
+      0.07014078741813375
+    ]
+  },
+  {
+    "basis": "2025",
+    "policy": "temperature_r10_Stable",
+    "games": 272,
+    "bets": 0,
+    "passes": 272,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.006684491978609618,
+    "calendar_gain_ci95": [
+      -0.07825737898465168,
+      0.06575206084614318
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "context_r100_EV",
+    "games": 79,
+    "bets": 7,
+    "passes": 72,
+    "wins": 2,
+    "losses": 3,
+    "pushes": 2,
+    "units": -1.1818181818181817,
+    "roi": -0.1688311688311688,
+    "roi_se": 0.3256263128847011,
+    "roi_ci95": [
+      -0.75,
+      0.20454545454545453
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.2727272727272727
+    ],
+    "favorite_units": 0.7272727272727273,
+    "paired_favorite_ci95": [
+      -1.1454545454545455,
+      0.0
+    ],
+    "null_roi": -0.03246753246753247,
+    "expected_units": 0.10359877001160694,
+    "predicted_cover": 0.5316746938397326,
+    "realized_cover": 0.4,
+    "calendar_gain_vs_raw": -0.055235903337169136,
+    "calendar_gain_ci95": [
+      -0.275,
+      0.1806674338319908
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "context_r100_Stable",
+    "games": 79,
+    "bets": 5,
+    "passes": 74,
+    "wins": 1,
+    "losses": 3,
+    "pushes": 1,
+    "units": -2.090909090909091,
+    "roi": -0.41818181818181815,
+    "roi_se": 0.38419175652937154,
+    "roi_ci95": [
+      -1.0,
+      -0.030303030303030314
+    ],
+    "sensitivity_roi_ci": [
+      -1.0,
+      0.0
+    ],
+    "favorite_units": -0.18181818181818177,
+    "paired_favorite_ci95": [
+      -1.4318181818181819,
+      0.0
+    ],
+    "null_roi": -0.03636363636363637,
+    "expected_units": 0.07449553859673014,
+    "predicted_cover": 0.5317443222193841,
+    "realized_cover": 0.25,
+    "calendar_gain_vs_raw": -0.06674338319907938,
+    "calendar_gain_ci95": [
+      -0.275,
+      0.16915995397008055
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "context_r10_EV",
+    "games": 79,
+    "bets": 23,
+    "passes": 56,
+    "wins": 10,
+    "losses": 10,
+    "pushes": 3,
+    "units": -0.9090909090909085,
+    "roi": -0.039525691699604716,
+    "roi_se": 0.1898019061102351,
+    "roi_ci95": [
+      -0.30165289256198347,
+      0.21900826446280988
+    ],
+    "sensitivity_roi_ci": [
+      -0.4069264069264069,
+      0.36796536796536794
+    ],
+    "favorite_units": 0.9999999999999997,
+    "paired_favorite_ci95": [
+      -0.5727272727272728,
+      0.39772727272727276
+    ],
+    "null_roi": -0.039525691699604744,
+    "expected_units": 0.7420789175967496,
+    "predicted_cover": 0.5411134585770584,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.05178365937859607,
+    "calendar_gain_ci95": [
+      -0.3215909090909091,
+      0.22494172494172496
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "context_r10_Stable",
+    "games": 79,
+    "bets": 16,
+    "passes": 63,
+    "wins": 7,
+    "losses": 7,
+    "pushes": 2,
+    "units": -0.6363636363636367,
+    "roi": -0.03977272727272729,
+    "roi_se": 0.23057730129671966,
+    "roi_ci95": [
+      -0.3636363636363636,
+      0.23376623376623376
+    ],
+    "sensitivity_roi_ci": [
+      -0.5227272727272727,
+      0.2727272727272727
+    ],
+    "favorite_units": -0.6363636363636365,
+    "paired_favorite_ci95": [
+      -0.7159090909090909,
+      0.6028708133971292
+    ],
+    "null_roi": -0.03977272727272727,
+    "expected_units": 0.5930910392685422,
+    "predicted_cover": 0.5437508740158175,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.048331415420023005,
+    "calendar_gain_ci95": [
+      -0.2920454545454545,
+      0.21173762945914845
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "fair_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "fair_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "platt_r100_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "platt_r100_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "platt_r10_EV",
+    "games": 79,
+    "bets": 2,
+    "passes": 77,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "sensitivity_roi_ci": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.011374649419976013,
+    "predicted_cover": 0.5268087656525916,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.04142692750287686,
+    "calendar_gain_ci95": [
+      -0.2511363636363636,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "platt_r10_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "raw_EV",
+    "games": 79,
+    "bets": 61,
+    "passes": 18,
+    "wins": 31,
+    "losses": 25,
+    "pushes": 5,
+    "units": 3.1818181818181817,
+    "roi": 0.05216095380029806,
+    "roi_se": 0.11741043329651159,
+    "roi_ci95": [
+      -0.3047138047138047,
+      0.30303030303030304
+    ],
+    "sensitivity_roi_ci": [
+      -0.5240641711229946,
+      0.32167832167832167
+    ],
+    "favorite_units": -6.363636363636362,
+    "paired_favorite_ci95": [
+      -0.13636363636363638,
+      0.3419267299864315
+    ],
+    "null_roi": -0.041728763040238454,
+    "expected_units": 3.7507924570441915,
+    "predicted_cover": 0.5567630466871808,
+    "realized_cover": 0.5535714285714286,
+    "calendar_gain_vs_raw": 0.0,
+    "calendar_gain_ci95": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "raw_Stable",
+    "games": 79,
+    "bets": 60,
+    "passes": 19,
+    "wins": 31,
+    "losses": 24,
+    "pushes": 5,
+    "units": 4.181818181818182,
+    "roi": 0.06969696969696969,
+    "roi_se": 0.11804477587663417,
+    "roi_ci95": [
+      -0.2915951972555746,
+      0.30303030303030304
+    ],
+    "sensitivity_roi_ci": [
+      -0.5145454545454545,
+      0.32167832167832167
+    ],
+    "favorite_units": -7.272727272727272,
+    "paired_favorite_ci95": [
+      -0.036020583190394515,
+      0.3419267299864315
+    ],
+    "null_roi": -0.041666666666666664,
+    "expected_units": 3.686953227917644,
+    "predicted_cover": 0.5567549454649894,
+    "realized_cover": 0.5636363636363636,
+    "calendar_gain_vs_raw": 0.012658227848101266,
+    "calendar_gain_ci95": [
+      0.0,
+      0.03896103896103896
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "selected_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "selected_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "temperature_r100_EV",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "temperature_r100_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "temperature_r10_EV",
+    "games": 79,
+    "bets": 2,
+    "passes": 77,
+    "wins": 1,
+    "losses": 1,
+    "pushes": 0,
+    "units": -0.09090909090909094,
+    "roi": -0.04545454545454547,
+    "roi_se": 0.9545454545454546,
+    "roi_ci95": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "sensitivity_roi_ci": [
+      -0.04545454545454547,
+      -0.04545454545454547
+    ],
+    "favorite_units": -0.09090909090909094,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "null_roi": -0.045454545454545456,
+    "expected_units": 0.006511009937296086,
+    "predicted_cover": 0.5255235982099786,
+    "realized_cover": 0.5,
+    "calendar_gain_vs_raw": -0.04142692750287686,
+    "calendar_gain_ci95": [
+      -0.2511363636363636,
+      0.20828538550057535
+    ]
+  },
+  {
+    "basis": "2026",
+    "policy": "temperature_r10_Stable",
+    "games": 79,
+    "bets": 0,
+    "passes": 79,
+    "wins": 0,
+    "losses": 0,
+    "pushes": 0,
+    "units": 0.0,
+    "roi": null,
+    "roi_se": null,
+    "roi_ci95": null,
+    "sensitivity_roi_ci": null,
+    "favorite_units": 0.0,
+    "paired_favorite_ci95": null,
+    "null_roi": null,
+    "expected_units": 0.0,
+    "predicted_cover": null,
+    "realized_cover": null,
+    "calendar_gain_vs_raw": -0.04027617951668585,
+    "calendar_gain_ci95": [
+      -0.25,
+      0.20828538550057535
+    ]
+  }
+]

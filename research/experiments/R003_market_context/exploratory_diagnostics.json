@@ -1,0 +1,81 @@
+{
+  "method": "Exploratory diagnostics after both batches; not additional confirmatory comparisons. Fixed paths, 10000 season-stratified week draws, seed 20261016.",
+  "comparisons": [
+    {
+      "comparison": "MC2 direct vs MC1 selected direct",
+      "n": 816,
+      "gain": 0.049928392911376386,
+      "ci95": [
+        0.019475166405485585,
+        0.08285460583547402
+      ]
+    },
+    {
+      "comparison": "MC1 local residual vs global residual",
+      "n": 816,
+      "gain": 0.004695932736163756,
+      "ci95": [
+        -0.011570148603654233,
+        0.020238397462648414
+      ]
+    },
+    {
+      "comparison": "MC1 local residual win vs no-vig market",
+      "n": 815,
+      "gain": 0.0006380589973957203,
+      "ci95": [
+        -0.0031889338492218323,
+        0.00475508738877907
+      ]
+    },
+    {
+      "comparison": "MC2 direct win vs no-vig market",
+      "n": 815,
+      "gain": -0.004260031720784274,
+      "ci95": [
+        -0.010100761449917844,
+        0.0016752681919226893
+      ]
+    },
+    {
+      "comparison": "MC1 translated unsupported football pair mass; diagnostic, not masked",
+      "mean": 0.00026680491665123017,
+      "max": 0.0064399886063742084
+    },
+    {
+      "comparison": "MC1 local residual pooled event calibration",
+      "tie_predicted": 0.0306283863974424,
+      "tie_observed": 0.0012254901960784314,
+      "margin3_predicted": 0.0669067568087175,
+      "margin3_observed": 0.14215686274509803,
+      "margin7_predicted": 0.056862727904562496,
+      "margin7_observed": 0.08333333333333333
+    },
+    {
+      "comparison": "MC2 direct pooled event calibration",
+      "tie_predicted": 0.0037570052333367994,
+      "tie_observed": 0.0012254901960784314,
+      "margin3_predicted": 0.14637793916994593,
+      "margin3_observed": 0.14215686274509803,
+      "margin7_predicted": 0.07830908580690833,
+      "margin7_observed": 0.08333333333333333
+    }
+  ],
+  "infinite_binary_losses": {
+    "MC1": {
+      "win_ll": 0,
+      "cover_ll": 0,
+      "over_ll": 0
+    },
+    "MC2": {
+      "win_ll": 0,
+      "cover_ll": 0,
+      "over_ll": 0
+    }
+  },
+  "source_hashes": {
+    "research/experiments/R003_market_context/predictions.csv.gz": "fbc8652ce9d4d52925fa7e1137ed7318255b6bbdc756e340f23c939c14c7119f",
+    "research/experiments/R003_market_context_refinement/predictions.csv.gz": "e594d4ff6e4e3d4fc1191394dce66f7d0c824b652bfd0fada643bea463243d64",
+    "research/review_market_context.py": "e20d29d07da8e1a51d4546599324fb78f0f3317224e404aaa9a31e2fe39c5d38"
+  }
+}

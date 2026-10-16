@@ -1,0 +1,29 @@
+[
+  {
+    "basis": "2023-25",
+    "win_n": 815,
+    "market_win_ll": 0.6080720320254634,
+    "model_win_ll": 0.6123320637462477,
+    "neutral_nonpush_cover_ll": 0.6931471805599453,
+    "neutral_nonpush_total_ll": 0.6931471805599453,
+    "note": "Cover/total 0.5 is a neutral proxy; actual spread/total prices absent."
+  },
+  {
+    "basis": "2017-22",
+    "win_n": 1559,
+    "market_win_ll": 0.605462888379284,
+    "model_win_ll": 0.6092520439624416,
+    "neutral_nonpush_cover_ll": 0.6931471805599453,
+    "neutral_nonpush_total_ll": 0.6931471805599453,
+    "note": "Cover/total 0.5 is a neutral proxy; actual spread/total prices absent."
+  },
+  {
+    "basis": "2026 diagnostic",
+    "win_n": 78,
+    "market_win_ll": 0.6507537097590552,
+    "model_win_ll": 0.6536387701501533,
+    "neutral_nonpush_cover_ll": 0.6931471805599453,
+    "neutral_nonpush_total_ll": 0.6931471805599453,
+    "note": "Cover/total 0.5 is a neutral proxy; actual spread/total prices absent."
+  }
+]

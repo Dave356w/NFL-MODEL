@@ -1,0 +1,116 @@
+{
+  "experiment": "R003-SC1",
+  "registration": {
+    "experiment": "R003-SC1",
+    "protocol_sha256": "a28d9950c628a8543172fed166c5eefb915eee8ccae27166c936985bb038191a",
+    "recorded_utc": "2026-10-16T20:04:33.372283+00:00",
+    "status": "local specification before candidate execution; all historical years exposed"
+  },
+  "input_hashes": {
+    "research/experiments/R000_reproduction/frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "research/disjoint_features_inputs/schedule_context.csv": "b0d5a062894112efa5e4d3bd3a0db3cf2d8f9e2695adfe4495fac862eb677cb8",
+    "research/experiments/R003_market_context_refinement/predictions.csv.gz": "e594d4ff6e4e3d4fc1191394dce66f7d0c824b652bfd0fada643bea463243d64"
+  },
+  "source_hashes": {
+    "research/schedule_context_empirical.py": "7de2610eacb1eaa7217b251db0c1d8e0630a02bd5b662dee3fae5b3476156a2b",
+    "research/market_context_empirical.py": "2a38d1e1cf426e6646e487dec7975771a0dc9e83511c4d8aaa7982ac3d0aad0c"
+  },
+  "baseline_reproduction_max_error": 3.552713678800501e-15,
+  "variants": [
+    {
+      "name": "plain",
+      "family": "plain",
+      "pseudo_games": 0
+    },
+    {
+      "name": "slot_k30",
+      "family": "slot",
+      "pseudo_games": 30
+    },
+    {
+      "name": "slot_k100",
+      "family": "slot",
+      "pseudo_games": 100
+    },
+    {
+      "name": "rest_k30",
+      "family": "rest",
+      "pseudo_games": 30
+    },
+    {
+      "name": "rest_k100",
+      "family": "rest",
+      "pseudo_games": 100
+    },
+    {
+      "name": "travel_k30",
+      "family": "travel",
+      "pseudo_games": 30
+    },
+    {
+      "name": "travel_k100",
+      "family": "travel",
+      "pseudo_games": 100
+    },
+    {
+      "name": "body_clock_k30",
+      "family": "body_clock",
+      "pseudo_games": 30
+    },
+    {
+      "name": "body_clock_k100",
+      "family": "body_clock",
+      "pseudo_games": 100
+    },
+    {
+      "name": "venue_k30",
+      "family": "venue",
+      "pseudo_games": 30
+    },
+    {
+      "name": "venue_k100",
+      "family": "venue",
+      "pseudo_games": 100
+    },
+    {
+      "name": "phase_k30",
+      "family": "phase",
+      "pseudo_games": 30
+    },
+    {
+      "name": "phase_k100",
+      "family": "phase",
+      "pseudo_games": 100
+    },
+    {
+      "name": "joint_k30",
+      "family": "joint",
+      "pseudo_games": 30
+    },
+    {
+      "name": "joint_k100",
+      "family": "joint",
+      "pseudo_games": 100
+    },
+    {
+      "name": "additive_k30",
+      "family": "additive",
+      "pseudo_games": 30
+    },
+    {
+      "name": "additive_k100",
+      "family": "additive",
+      "pseudo_games": 100
+    }
+  ],
+  "feature_availability": {
+    "slot": 3426,
+    "rest": 3486,
+    "travel": 3426,
+    "body_clock": 3426,
+    "venue": 3426,
+    "phase": 3486
+  },
+  "independent_validation": false,
+  "production_changed": false
+}

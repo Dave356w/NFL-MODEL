@@ -1,0 +1,562 @@
+[
+  {
+    "target_season": 2017,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "direct_h2_t3_p20": 7.227310740653352,
+      "direct_h2_t3_p80": 7.30150431979469,
+      "direct_h4_t6_p20": 7.2459769021219085,
+      "direct_h4_t6_p80": 7.28501488549613,
+      "direct_h8_t10_p20": 7.368303873825879,
+      "direct_h8_t10_p80": 7.384226009044567,
+      "neighbors_100": 7.2773423971114735,
+      "neighbors_250": 7.272414093539042,
+      "residual_p20": 7.100287563932665,
+      "residual_p80": 7.098882272938724
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "direct_h2_t3_p20": 7.227310740653352,
+      "direct_h2_t3_p80": 7.30150431979469,
+      "direct_h4_t6_p20": 7.2459769021219085,
+      "direct_h4_t6_p80": 7.28501488549613,
+      "direct_h8_t10_p20": 7.368303873825879,
+      "direct_h8_t10_p80": 7.384226009044567
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "neighbors_100": 7.2773423971114735,
+      "neighbors_250": 7.272414093539042
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "residual_p20": 7.100287563932665,
+      "residual_p80": 7.098882272938724
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "direct_h2_t3_p20": 7.381413411227989,
+      "direct_h2_t3_p80": 7.457029043549757,
+      "direct_h4_t6_p20": 7.3970557153770224,
+      "direct_h4_t6_p80": 7.435967473248698,
+      "direct_h8_t10_p20": 7.531386204437109,
+      "direct_h8_t10_p80": 7.547124998186018,
+      "neighbors_100": 7.441921241605829,
+      "neighbors_250": 7.421516455413325,
+      "residual_p20": 7.283495555160401,
+      "residual_p80": 7.282165266685187
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "direct_h2_t3_p20": 7.381413411227989,
+      "direct_h2_t3_p80": 7.457029043549757,
+      "direct_h4_t6_p20": 7.3970557153770224,
+      "direct_h4_t6_p80": 7.435967473248698,
+      "direct_h8_t10_p20": 7.531386204437109,
+      "direct_h8_t10_p80": 7.547124998186018
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "neighbors_100": 7.441921241605829,
+      "neighbors_250": 7.421516455413325
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "residual_p20": 7.283495555160401,
+      "residual_p80": 7.282165266685187
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "direct_h2_t3_p20": 7.423860401655866,
+      "direct_h2_t3_p80": 7.510657451444634,
+      "direct_h4_t6_p20": 7.444459148152255,
+      "direct_h4_t6_p80": 7.48544244626985,
+      "direct_h8_t10_p20": 7.592294160219024,
+      "direct_h8_t10_p80": 7.608238084471096,
+      "neighbors_100": 7.4928717310471376,
+      "neighbors_250": 7.469494032680905,
+      "residual_p20": 7.311380557201628,
+      "residual_p80": 7.310017687152666
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "direct_h2_t3_p20": 7.423860401655866,
+      "direct_h2_t3_p80": 7.510657451444634,
+      "direct_h4_t6_p20": 7.444459148152255,
+      "direct_h4_t6_p80": 7.48544244626985,
+      "direct_h8_t10_p20": 7.592294160219024,
+      "direct_h8_t10_p80": 7.608238084471096
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "neighbors_100": 7.4928717310471376,
+      "neighbors_250": 7.469494032680905
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "residual_p20": 7.311380557201628,
+      "residual_p80": 7.310017687152666
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "direct_h2_t3_p20": 7.4634886368094,
+      "direct_h2_t3_p80": 7.5535434947135585,
+      "direct_h4_t6_p20": 7.478710594082848,
+      "direct_h4_t6_p80": 7.5248448190529516,
+      "direct_h8_t10_p20": 7.6290818218729415,
+      "direct_h8_t10_p80": 7.645945625427504,
+      "neighbors_100": 7.534953445209391,
+      "neighbors_250": 7.511240404997531,
+      "residual_p20": 7.34215799492536,
+      "residual_p80": 7.340698086390601
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "direct_h2_t3_p20": 7.4634886368094,
+      "direct_h2_t3_p80": 7.5535434947135585,
+      "direct_h4_t6_p20": 7.478710594082848,
+      "direct_h4_t6_p80": 7.5248448190529516,
+      "direct_h8_t10_p20": 7.6290818218729415,
+      "direct_h8_t10_p80": 7.645945625427504
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "neighbors_100": 7.534953445209391,
+      "neighbors_250": 7.511240404997531
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "residual_p20": 7.34215799492536,
+      "residual_p80": 7.340698086390601
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "direct_h2_t3_p20": 7.4380409017513225,
+      "direct_h2_t3_p80": 7.538211558437429,
+      "direct_h4_t6_p20": 7.463784524437723,
+      "direct_h4_t6_p80": 7.51295326693739,
+      "direct_h8_t10_p20": 7.624703735647558,
+      "direct_h8_t10_p80": 7.642468325114877,
+      "neighbors_100": 7.519091458531544,
+      "neighbors_250": 7.496898820503035,
+      "residual_p20": 7.307004260219405,
+      "residual_p80": 7.306166815044205
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "direct_h2_t3_p20": 7.4380409017513225,
+      "direct_h2_t3_p80": 7.538211558437429,
+      "direct_h4_t6_p20": 7.463784524437723,
+      "direct_h4_t6_p80": 7.51295326693739,
+      "direct_h8_t10_p20": 7.624703735647558,
+      "direct_h8_t10_p80": 7.642468325114877
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "neighbors_100": 7.519091458531544,
+      "neighbors_250": 7.496898820503035
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "residual_p20": 7.307004260219405,
+      "residual_p80": 7.306166815044205
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "direct_h2_t3_p20": 7.470443121836294,
+      "direct_h2_t3_p80": 7.573755256267228,
+      "direct_h4_t6_p20": 7.502528753832962,
+      "direct_h4_t6_p80": 7.5520240771534395,
+      "direct_h8_t10_p20": 7.667072227756149,
+      "direct_h8_t10_p80": 7.685128431139894,
+      "neighbors_100": 7.557915137007347,
+      "neighbors_250": 7.532399440431215,
+      "residual_p20": 7.353460094525794,
+      "residual_p80": 7.352781283370199
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "direct_h2_t3_p20": 7.470443121836294,
+      "direct_h2_t3_p80": 7.573755256267228,
+      "direct_h4_t6_p20": 7.502528753832962,
+      "direct_h4_t6_p80": 7.5520240771534395,
+      "direct_h8_t10_p20": 7.667072227756149,
+      "direct_h8_t10_p80": 7.685128431139894
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "neighbors_100": 7.557915137007347,
+      "neighbors_250": 7.532399440431215
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "residual_p20": 7.353460094525794,
+      "residual_p80": 7.352781283370199
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "direct_h2_t3_p20": 7.399749496167532,
+      "direct_h2_t3_p80": 7.499077134172664,
+      "direct_h4_t6_p20": 7.4346744027748555,
+      "direct_h4_t6_p80": 7.481469060422567,
+      "direct_h8_t10_p20": 7.596920094247612,
+      "direct_h8_t10_p80": 7.614454057603654,
+      "neighbors_100": 7.490293865804253,
+      "neighbors_250": 7.460965575597838,
+      "residual_p20": 7.2914670687439935,
+      "residual_p80": 7.290765000966927
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "direct_h2_t3_p20": 7.399749496167532,
+      "direct_h2_t3_p80": 7.499077134172664,
+      "direct_h4_t6_p20": 7.4346744027748555,
+      "direct_h4_t6_p80": 7.481469060422567,
+      "direct_h8_t10_p20": 7.596920094247612,
+      "direct_h8_t10_p80": 7.614454057603654
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "neighbors_100": 7.490293865804253,
+      "neighbors_250": 7.460965575597838
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "residual_p20": 7.2914670687439935,
+      "residual_p80": 7.290765000966927
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "direct_h2_t3_p20": 7.395597206112472,
+      "direct_h2_t3_p80": 7.496357405362067,
+      "direct_h4_t6_p20": 7.428865719056436,
+      "direct_h4_t6_p80": 7.47549152140296,
+      "direct_h8_t10_p20": 7.5934661893237845,
+      "direct_h8_t10_p80": 7.610935170778754,
+      "neighbors_100": 7.488797130557375,
+      "neighbors_250": 7.458198092210247,
+      "residual_p20": 7.289386984336266,
+      "residual_p80": 7.288722948723923
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "direct_h2_t3_p20": 7.395597206112472,
+      "direct_h2_t3_p80": 7.496357405362067,
+      "direct_h4_t6_p20": 7.428865719056436,
+      "direct_h4_t6_p80": 7.47549152140296,
+      "direct_h8_t10_p20": 7.5934661893237845,
+      "direct_h8_t10_p80": 7.610935170778754
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "neighbors_100": 7.488797130557375,
+      "neighbors_250": 7.458198092210247
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "residual_p20": 7.289386984336266,
+      "residual_p80": 7.288722948723923
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "direct_h2_t3_p20": 7.3669621188800125,
+      "direct_h2_t3_p80": 7.467102383690402,
+      "direct_h4_t6_p20": 7.401308785232644,
+      "direct_h4_t6_p80": 7.447807985768319,
+      "direct_h8_t10_p20": 7.569937712992254,
+      "direct_h8_t10_p80": 7.587337079926582,
+      "neighbors_100": 7.46688913709748,
+      "neighbors_250": 7.4308411705270165,
+      "residual_p20": 7.259990569549814,
+      "residual_p80": 7.259256866107082
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "direct_h2_t3_p20": 7.3669621188800125,
+      "direct_h2_t3_p80": 7.467102383690402,
+      "direct_h4_t6_p20": 7.401308785232644,
+      "direct_h4_t6_p80": 7.447807985768319,
+      "direct_h8_t10_p20": 7.569937712992254,
+      "direct_h8_t10_p80": 7.587337079926582
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "neighbors_100": 7.46688913709748,
+      "neighbors_250": 7.4308411705270165
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "residual_p20": 7.259990569549814,
+      "residual_p80": 7.259256866107082
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "all",
+    "chosen": "residual_p80",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "direct_h2_t3_p20": 7.361503758794452,
+      "direct_h2_t3_p80": 7.463525583019493,
+      "direct_h4_t6_p20": 7.396385830517085,
+      "direct_h4_t6_p80": 7.443091470546426,
+      "direct_h8_t10_p20": 7.567642255474663,
+      "direct_h8_t10_p80": 7.5852079561116135,
+      "neighbors_100": 7.466247896245908,
+      "neighbors_250": 7.425393292628364,
+      "residual_p20": 7.252790543466582,
+      "residual_p80": 7.2520245035810715
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "direct_kernel",
+    "chosen": "direct_h2_t3_p20",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "direct_h2_t3_p20": 7.361503758794452,
+      "direct_h2_t3_p80": 7.463525583019493,
+      "direct_h4_t6_p20": 7.396385830517085,
+      "direct_h4_t6_p80": 7.443091470546426,
+      "direct_h8_t10_p20": 7.567642255474663,
+      "direct_h8_t10_p80": 7.5852079561116135
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "direct_neighbor",
+    "chosen": "neighbors_250",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "neighbors_100": 7.466247896245908,
+      "neighbors_250": 7.425393292628364
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "residual",
+    "chosen": "residual_p80",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "residual_p20": 7.252790543466582,
+      "residual_p80": 7.2520245035810715
+    }
+  }
+]

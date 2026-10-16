@@ -1,0 +1,434 @@
+[
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "primary_crps",
+    "gain": -0.0027234610957714914,
+    "ci95": [
+      -0.008766419667001856,
+      0.003290823016417176
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "win_ll",
+    "gain": 0.00018066952302096413,
+    "ci95": [
+      -0.0010604593622399294,
+      0.0013932444641716214
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "cover_ll",
+    "gain": -0.0011607134944859418,
+    "ci95": [
+      -0.0024044135990452793,
+      7.2879219632577e-06
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "over_ll",
+    "gain": 0.00029340312388518257,
+    "ci95": [
+      -0.0006505022751913958,
+      0.0012048576414874336
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "primary_crps",
+    "gain": -0.009790972652529498,
+    "ci95": [
+      -0.019861373500157955,
+      0.0002933272566362366
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "win_ll",
+    "gain": -0.00014465798945572077,
+    "ci95": [
+      -0.00149677096161718,
+      0.001187220974701073
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "cover_ll",
+    "gain": -0.00232576991064089,
+    "ci95": [
+      -0.004340731289988873,
+      -0.00031417315564242517
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "over_ll",
+    "gain": -0.0010365579286708369,
+    "ci95": [
+      -0.0031179716394158998,
+      0.0010220477887790014
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "primary_crps",
+    "gain": -0.003798334290639569,
+    "ci95": [
+      -0.009856800764218621,
+      0.002181904533297526
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "win_ll",
+    "gain": 0.00011166150897662892,
+    "ci95": [
+      -0.001144538797635252,
+      0.0013362346644757274
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "cover_ll",
+    "gain": -0.001175220911886247,
+    "ci95": [
+      -0.002416950407289855,
+      -9.208417463210562e-06
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2023-25",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "over_ll",
+    "gain": -0.00014009162131339143,
+    "ci95": [
+      -0.0011753113978628723,
+      0.0008558073532649426
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "primary_crps",
+    "gain": 0.0012365798720359543,
+    "ci95": [
+      -0.005893238802603749,
+      0.00844742466984184
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "win_ll",
+    "gain": 0.00029835699450147276,
+    "ci95": [
+      -0.0005315603568743487,
+      0.0011623355892301215
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "cover_ll",
+    "gain": -0.0004260729078111774,
+    "ci95": [
+      -0.0012923854020975446,
+      0.0004267884197661444
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "over_ll",
+    "gain": -0.00010808376862889405,
+    "ci95": [
+      -0.0013721820034074414,
+      0.001105155288886338
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "primary_crps",
+    "gain": 0.006548411328135848,
+    "ci95": [
+      -0.0012556704510457894,
+      0.014701269646584494
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "win_ll",
+    "gain": 0.0010580382649262522,
+    "ci95": [
+      -2.0401471109965617e-05,
+      0.002147848666309632
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "cover_ll",
+    "gain": 0.0007375835229745266,
+    "ci95": [
+      -0.00045856766586901883,
+      0.0019734852241585442
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "over_ll",
+    "gain": 0.0005894578333469925,
+    "ci95": [
+      -0.0008547089820369724,
+      0.0020543141666095367
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "primary_crps",
+    "gain": 0.0032281277700812842,
+    "ci95": [
+      -0.004512591542767583,
+      0.01119000052956602
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "win_ll",
+    "gain": 0.0005947084401456377,
+    "ci95": [
+      -0.0004569108871896574,
+      0.0016538169231336457
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "cover_ll",
+    "gain": 0.00013624392471366925,
+    "ci95": [
+      -0.0010406534001586437,
+      0.0013263936176860732
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2017-22",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "over_ll",
+    "gain": 0.00011534799335954827,
+    "ci95": [
+      -0.0012373123289852771,
+      0.001467221120715858
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "primary_crps",
+    "gain": -0.024109100321230096,
+    "ci95": [
+      -0.03573379104287201,
+      -0.016512062174335644
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "win_ll",
+    "gain": -0.001794996962424073,
+    "ci95": [
+      -0.00410449738466859,
+      0.00016340050845360457
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "cover_ll",
+    "gain": -0.002541301380124024,
+    "ci95": [
+      -0.004203551721527041,
+      -0.0008827606157666267
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "plain",
+    "metric": "over_ll",
+    "gain": -0.001593199049005423,
+    "ci95": [
+      -0.0021554883658982333,
+      -0.0009009670384289657
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "primary_crps",
+    "gain": -0.024476974327704275,
+    "ci95": [
+      -0.04210174782160266,
+      -0.003937985492891644
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "win_ll",
+    "gain": -0.0024013893568665817,
+    "ci95": [
+      -0.004216280131463076,
+      -0.0007102815173442394
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "cover_ll",
+    "gain": -0.010433953619028321,
+    "ci95": [
+      -0.014452866800189606,
+      -0.006188622793857953
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_travel_k100",
+    "metric": "over_ll",
+    "gain": 0.0007625360526959334,
+    "ci95": [
+      -0.004732046916587648,
+      0.00849183945726084
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "primary_crps",
+    "gain": -0.028231444964983605,
+    "ci95": [
+      -0.03963521996555769,
+      -0.01807203110398059
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "win_ll",
+    "gain": -0.001794996962424073,
+    "ci95": [
+      -0.00410449738466859,
+      0.00016340050845360457
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "cover_ll",
+    "gain": -0.0032058710289750176,
+    "ci95": [
+      -0.005494670544229987,
+      -0.0008827606157666267
+    ],
+    "descriptive": true
+  },
+  {
+    "basis": "2026 diagnostic",
+    "arm": "selected",
+    "comparator": "SC1_selected",
+    "metric": "over_ll",
+    "gain": -0.0023848828592126577,
+    "ci95": [
+      -0.003512489520140922,
+      -0.00158023826125697
+    ],
+    "descriptive": true
+  }
+]

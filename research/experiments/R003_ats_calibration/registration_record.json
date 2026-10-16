@@ -1,0 +1,12 @@
+{
+  "experiment": "R003-AC1",
+  "registered_at": "2026-10-16T20:41:29.036080+00:00",
+  "protocol_sha256": "e9b8cf3b955964d21dca6888954fe2c27a07d3a5bb54d00b38b2f9ecedd73911",
+  "independent_preregistration": false,
+  "original_protocol_sha256": "80ae54c2bdef28971eaf520c6e29abfac613db1e1231e939fa60ef4a35e5b5a2",
+  "clarification_before_fitting": "Fourteen counts the fixed non-fair policies; the two derived selected paths use the same sensitivity; no method/threshold change.",
+  "clarification_at": "2026-10-16T20:44:42.506938+00:00",
+  "pre_numerical_amendment_sha256": "e7005a5cde3e8ac5f32402764a3e4d5a94431c70f776aa4f318b8a0fa974c652",
+  "numerical_amendment_at": "2026-10-16T20:45:53.776382+00:00",
+  "numerical_amendment": "maxls100 after aborted run; no statistical or performance-selection change"
+}

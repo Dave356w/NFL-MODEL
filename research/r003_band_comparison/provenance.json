@@ -1,0 +1,69 @@
+{
+  "basis": "Exposed historical development; no new fits or model/threshold selection",
+  "all_models": 69,
+  "main_games_per_model": 816,
+  "odds_assumption": "Both sides -110, not verified historical quotes",
+  "rule": "At most one 1u risk bet at positive EV; otherwise pass. Home tie-break for forecast bands only.",
+  "axes": {
+    "probability_band": [
+      "50\u201352.38%",
+      "52.38\u201355%",
+      "55\u201360%",
+      "60\u201365%",
+      "65\u2013100%"
+    ],
+    "spread_size_band": [
+      "0\u20133",
+      ">3\u20137",
+      ">7\u201310",
+      ">10"
+    ],
+    "projected_value_band": [
+      "\u22640",
+      ">0\u20131",
+      ">1\u20133",
+      ">3\u20137",
+      ">7",
+      "Unavailable"
+    ],
+    "handicap_band": [
+      "\u2264\u22127",
+      ">\u22127 to \u22123",
+      ">\u22123 to 0",
+      "0",
+      ">0\u20133",
+      ">3\u20137",
+      ">7"
+    ],
+    "common_plain_probability_band": [
+      "50\u201352.38%",
+      "52.38\u201355%",
+      "55\u201360%",
+      "60\u201365%",
+      "65\u2013100%"
+    ]
+  },
+  "bin_endpoints": "Upper endpoint included; first lower endpoint included",
+  "uncertainty": "Overall paired whole-week bootstrap 10000 draws within season seed20261016; band cover intervals Wilson iid descriptive; ROI SE per-bet sample SE",
+  "caveats": [
+    "Post-hoc multi-model/multi-band slices; no multiplicity-corrected edge claim",
+    "Own probability bands change membership; common-plain bands hold games and calibration side fixed",
+    "ROI uses model-selected subsets; paired calendar comparisons count passes as zero",
+    "No-bet ROI and empty-band calibration undefined; projected means unavailable for older AC1 records",
+    "Legacy R003/RF1 differ from owner-intent direct empirical model; translated MC1 paths are labeled separately"
+  ],
+  "hashes": {
+    "research/experiments/R003_score_support/predictions.csv.gz": "00b06928ae667b84873137a162a3678fe660966de467e6dd7038f21ea86f5045",
+    "research/experiments/R003_rare_frequency/predictions.csv.gz": "fb9cd6917dcef7fafab4a901358344575d145812baa194a752ea2d60a5f09377",
+    "research/experiments/R003_market_context/predictions.csv.gz": "fbc8652ce9d4d52925fa7e1137ed7318255b6bbdc756e340f23c939c14c7119f",
+    "research/experiments/R003_market_context_refinement/predictions.csv.gz": "e594d4ff6e4e3d4fc1191394dce66f7d0c824b652bfd0fada643bea463243d64",
+    "research/experiments/R003_schedule_context/predictions.csv.gz": "5af66f418c97d4beed3fb587a72b2dae224c7929485c7583b696e9fb82a51c52",
+    "research/experiments/R003_pooled_travel/predictions.csv.gz": "ab7ce2b2119e8d498d2cd69b21d02ad3cc6d398086f5d7eff1d271cc7fe47573",
+    "research/experiments/R003_ats_calibration/predictions.csv.gz": "d60825313421262fa2cbdfe838436a65f39add0f26e7d2be113445ae02090e89",
+    "research/experiments/R003_ats_calibration/distribution_metrics.csv": "f93a8b354418fe585359c1a182b4c688e22576dbf1f782ac84dfec8e2fd1bb96",
+    "research/compare_r003_bands.py": "a55b68e88fb0c0ee8839db30cd795653492afd6073975b6015ac6e7554efe16f",
+    "research/plain_ats_110.py": "bbed1a12f8947571fe46e6fe05dbb750f78d4222dd4dd8670c4f8efbce27eaac",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1"
+  },
+  "production_changed": false
+}

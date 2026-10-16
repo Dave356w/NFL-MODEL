@@ -1,0 +1,623 @@
+[
+  {
+    "model": "R003:empirical__R003_score_support",
+    "iteration": "R003",
+    "arm": "empirical__R003_score_support",
+    "label": "Original support mask (legacy)",
+    "path_type": "fixed",
+    "headline": true,
+    "support": "legacy score-mask/frequency model"
+  },
+  {
+    "model": "RF1:empirical__R003_rare_frequency",
+    "iteration": "RF1",
+    "arm": "empirical__R003_rare_frequency",
+    "label": "RF1 rare-score penalty (legacy)",
+    "path_type": "fixed",
+    "headline": true,
+    "support": "legacy score-mask/frequency model"
+  },
+  {
+    "model": "MC1:direct_h2_t3_p20",
+    "iteration": "MC1",
+    "arm": "direct_h2_t3_p20",
+    "label": "MC1:direct_h2_t3_p20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:direct_h2_t3_p80",
+    "iteration": "MC1",
+    "arm": "direct_h2_t3_p80",
+    "label": "MC1:direct_h2_t3_p80",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:direct_h4_t6_p20",
+    "iteration": "MC1",
+    "arm": "direct_h4_t6_p20",
+    "label": "MC1:direct_h4_t6_p20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:direct_h4_t6_p80",
+    "iteration": "MC1",
+    "arm": "direct_h4_t6_p80",
+    "label": "MC1:direct_h4_t6_p80",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:direct_h8_t10_p20",
+    "iteration": "MC1",
+    "arm": "direct_h8_t10_p20",
+    "label": "MC1:direct_h8_t10_p20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:direct_h8_t10_p80",
+    "iteration": "MC1",
+    "arm": "direct_h8_t10_p80",
+    "label": "MC1:direct_h8_t10_p80",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:neighbors_100",
+    "iteration": "MC1",
+    "arm": "neighbors_100",
+    "label": "MC1:neighbors_100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:neighbors_250",
+    "iteration": "MC1",
+    "arm": "neighbors_250",
+    "label": "MC1:neighbors_250",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:residual_p20",
+    "iteration": "MC1",
+    "arm": "residual_p20",
+    "label": "MC1:residual_p20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:residual_p80",
+    "iteration": "MC1",
+    "arm": "residual_p80",
+    "label": "MC1:residual_p80",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:global_direct",
+    "iteration": "MC1",
+    "arm": "global_direct",
+    "label": "MC1:global_direct",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:global_residual",
+    "iteration": "MC1",
+    "arm": "global_residual",
+    "label": "MC1:global_residual",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:selected_all",
+    "iteration": "MC1",
+    "arm": "selected_all",
+    "label": "MC1 selected, includes translated scores",
+    "path_type": "earlier-season selected",
+    "headline": true,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:selected_direct_kernel",
+    "iteration": "MC1",
+    "arm": "selected_direct_kernel",
+    "label": "MC1 selected direct",
+    "path_type": "earlier-season selected",
+    "headline": true,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:selected_direct_neighbor",
+    "iteration": "MC1",
+    "arm": "selected_direct_neighbor",
+    "label": "MC1:selected_direct_neighbor",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC1:selected_residual",
+    "iteration": "MC1",
+    "arm": "selected_residual",
+    "label": "MC1:selected_residual",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h1_t2_p0",
+    "iteration": "MC2",
+    "arm": "direct_ref_h1_t2_p0",
+    "label": "MC2:direct_ref_h1_t2_p0",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h1_t2_p5",
+    "iteration": "MC2",
+    "arm": "direct_ref_h1_t2_p5",
+    "label": "MC2:direct_ref_h1_t2_p5",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h2_t3_p0",
+    "iteration": "MC2",
+    "arm": "direct_ref_h2_t3_p0",
+    "label": "Plain observed-score model",
+    "path_type": "fixed",
+    "headline": true,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h2_t3_p5",
+    "iteration": "MC2",
+    "arm": "direct_ref_h2_t3_p5",
+    "label": "MC2:direct_ref_h2_t3_p5",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h4_t6_p0",
+    "iteration": "MC2",
+    "arm": "direct_ref_h4_t6_p0",
+    "label": "MC2:direct_ref_h4_t6_p0",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:direct_ref_h4_t6_p5",
+    "iteration": "MC2",
+    "arm": "direct_ref_h4_t6_p5",
+    "label": "MC2:direct_ref_h4_t6_p5",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:neighbors_ref_100_p0",
+    "iteration": "MC2",
+    "arm": "neighbors_ref_100_p0",
+    "label": "MC2:neighbors_ref_100_p0",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:neighbors_ref_100_p5",
+    "iteration": "MC2",
+    "arm": "neighbors_ref_100_p5",
+    "label": "MC2:neighbors_ref_100_p5",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:neighbors_ref_250_p0",
+    "iteration": "MC2",
+    "arm": "neighbors_ref_250_p0",
+    "label": "MC2:neighbors_ref_250_p0",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:neighbors_ref_250_p5",
+    "iteration": "MC2",
+    "arm": "neighbors_ref_250_p5",
+    "label": "MC2:neighbors_ref_250_p5",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:selected_all",
+    "iteration": "MC2",
+    "arm": "selected_all",
+    "label": "MC2:selected_all",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:selected_direct_kernel",
+    "iteration": "MC2",
+    "arm": "selected_direct_kernel",
+    "label": "MC2:selected_direct_kernel",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "MC2:selected_direct_neighbor",
+    "iteration": "MC2",
+    "arm": "selected_direct_neighbor",
+    "label": "MC2:selected_direct_neighbor",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:slot_k30",
+    "iteration": "SC1",
+    "arm": "slot_k30",
+    "label": "SC1:slot_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:slot_k100",
+    "iteration": "SC1",
+    "arm": "slot_k100",
+    "label": "SC1:slot_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:rest_k30",
+    "iteration": "SC1",
+    "arm": "rest_k30",
+    "label": "SC1:rest_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:rest_k100",
+    "iteration": "SC1",
+    "arm": "rest_k100",
+    "label": "SC1:rest_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:travel_k30",
+    "iteration": "SC1",
+    "arm": "travel_k30",
+    "label": "SC1:travel_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:travel_k100",
+    "iteration": "SC1",
+    "arm": "travel_k100",
+    "label": "SC1:travel_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:body_clock_k30",
+    "iteration": "SC1",
+    "arm": "body_clock_k30",
+    "label": "SC1:body_clock_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:body_clock_k100",
+    "iteration": "SC1",
+    "arm": "body_clock_k100",
+    "label": "SC1:body_clock_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:venue_k30",
+    "iteration": "SC1",
+    "arm": "venue_k30",
+    "label": "SC1:venue_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:venue_k100",
+    "iteration": "SC1",
+    "arm": "venue_k100",
+    "label": "SC1:venue_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:phase_k30",
+    "iteration": "SC1",
+    "arm": "phase_k30",
+    "label": "SC1:phase_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:phase_k100",
+    "iteration": "SC1",
+    "arm": "phase_k100",
+    "label": "SC1:phase_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:joint_k30",
+    "iteration": "SC1",
+    "arm": "joint_k30",
+    "label": "SC1:joint_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:joint_k100",
+    "iteration": "SC1",
+    "arm": "joint_k100",
+    "label": "SC1:joint_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:additive_k30",
+    "iteration": "SC1",
+    "arm": "additive_k30",
+    "label": "SC1:additive_k30",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:additive_k100",
+    "iteration": "SC1",
+    "arm": "additive_k100",
+    "label": "SC1:additive_k100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_all",
+    "iteration": "SC1",
+    "arm": "selected_all",
+    "label": "SC1 selected schedule context",
+    "path_type": "earlier-season selected",
+    "headline": true,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_slot",
+    "iteration": "SC1",
+    "arm": "selected_slot",
+    "label": "SC1:selected_slot",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_rest",
+    "iteration": "SC1",
+    "arm": "selected_rest",
+    "label": "SC1:selected_rest",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_travel",
+    "iteration": "SC1",
+    "arm": "selected_travel",
+    "label": "SC1:selected_travel",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_body_clock",
+    "iteration": "SC1",
+    "arm": "selected_body_clock",
+    "label": "SC1:selected_body_clock",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_venue",
+    "iteration": "SC1",
+    "arm": "selected_venue",
+    "label": "SC1:selected_venue",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_phase",
+    "iteration": "SC1",
+    "arm": "selected_phase",
+    "label": "SC1:selected_phase",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_joint",
+    "iteration": "SC1",
+    "arm": "selected_joint",
+    "label": "SC1:selected_joint",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "SC1:selected_additive",
+    "iteration": "SC1",
+    "arm": "selected_additive",
+    "label": "SC1:selected_additive",
+    "path_type": "earlier-season selected",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "PT1:linear_r20",
+    "iteration": "PT1",
+    "arm": "linear_r20",
+    "label": "PT1:linear_r20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "PT1:linear_r100",
+    "iteration": "PT1",
+    "arm": "linear_r100",
+    "label": "PT1:linear_r100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "PT1:quadratic_r20",
+    "iteration": "PT1",
+    "arm": "quadratic_r20",
+    "label": "PT1:quadratic_r20",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "PT1:quadratic_r100",
+    "iteration": "PT1",
+    "arm": "quadratic_r100",
+    "label": "PT1:quadratic_r100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "PT1:selected",
+    "iteration": "PT1",
+    "arm": "selected",
+    "label": "PT1 selected pooled travel",
+    "path_type": "earlier-season selected",
+    "headline": true,
+    "support": "see original iteration protocol"
+  },
+  {
+    "model": "AC1:fair",
+    "iteration": "AC1",
+    "arm": "fair",
+    "label": "Fair 50/50 reference",
+    "path_type": "fixed",
+    "headline": true,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:temperature_r10",
+    "iteration": "AC1",
+    "arm": "temperature_r10",
+    "label": "AC1:temperature_r10",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:temperature_r100",
+    "iteration": "AC1",
+    "arm": "temperature_r100",
+    "label": "AC1:temperature_r100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:platt_r10",
+    "iteration": "AC1",
+    "arm": "platt_r10",
+    "label": "AC1:platt_r10",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:platt_r100",
+    "iteration": "AC1",
+    "arm": "platt_r100",
+    "label": "AC1:platt_r100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:context_r10",
+    "iteration": "AC1",
+    "arm": "context_r10",
+    "label": "AC1:context_r10",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:context_r100",
+    "iteration": "AC1",
+    "arm": "context_r100",
+    "label": "AC1:context_r100",
+    "path_type": "fixed",
+    "headline": false,
+    "support": "line-calibrated observed pairs"
+  },
+  {
+    "model": "AC1:selected",
+    "iteration": "AC1",
+    "arm": "selected",
+    "label": "AC1 selected calibration",
+    "path_type": "earlier-season selected",
+    "headline": true,
+    "support": "line-calibrated observed pairs"
+  }
+]

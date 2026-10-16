@@ -6,6 +6,73 @@ standalone. They never write `data/`, the frozen recipe or the forward ledger.
 
 ## Joint-score distribution research - October 16, 2026
 
+[Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a
+runnable offline evaluation gate with separate margin, winner, ATS-information
+and actual-price tests. Development never qualifies as forward evidence;
+declared-forward inputs require pregame timestamps, prior-week training and
+external retention metadata. No collection job or production promotion is enabled.
+
+[Market-signal separation](spread_signal_separation/REPORT.md) distinguishes
+spread prediction skill, information added by the historical distribution, and
+the −110 price hurdle. Fixed prior-trained market-only benchmarks outperform
+plain in main point/winner estimates; plain's selected ATS bets lose 8u even
+at even money, plus 24.55u from −110 payouts. No new edge or policy is promoted.
+
+[Iteration/band comparison](r003_band_comparison/REPORT.md) covers 69 saved
+models by cover probability, offered spread magnitude, signed handicap and
+projected point value, including fixed plain-defined cohorts. The
+[interactive table](r003_band_comparison/comparison.html) exposes all models,
+periods and band metrics. Recent profitable/losing pockets reverse in earlier
+development; no band filter or historical model winner is adopted.
+
+[ATS calibration and stable selection](ATS_CALIBRATION.md) tests six fixed
+earlier-OOF calibration settings and two price-aware rules. Selected cover log
+loss improves .700040 → .693345, but does not beat fair 50/50; selected ATS
+policies pass every main game. No ATS edge is established. Observed score pairs
+and push mass are preserved, with no production/default or ledger changes.
+
+[Plain ATS at user-assumed −110](plain_ats_110_results/REPORT.md) chooses one
+side only when its conditional cover probability exceeds 52.38095%, otherwise
+passes. The 2023–25 retrospective price scenario returns −32.55u on 560 bets;
+it does not verify historical spread quotes or establish an ATS edge. Run
+`python research/plain_ats_110.py`; original R003/RF1 PMF evaluator defaults remain unchanged.
+
+[Plain-model loss audit](plain_loss_audit_results/REPORT.md) decomposes the
+direct empirical arm's backtest returns, pricing, conditional value calibration,
+market comparisons and source-game leverage. Most bets match favorites; claimed
+positive-value probabilities are optimistic in both exposed periods, and six
+of seven recent disagreements can flip after removing one historical source.
+No forecast or betting rule is changed; this is not the native forward ledger.
+
+[Pooled travel follow-up](POOLED_TRAVEL_EMPIRICAL.md) shares travel evidence
+across market contexts using regularized density-ratio tilts of observed score
+pairs. All four fixed variants slightly worsen distribution CRPS; the selected
+path changes one moneyline pick and returns −6.06u versus plain −4.21u on 812
+bets. No qualified improvement; keep plain. Full tests and independent repeat pass.
+
+[Schedule/location context with sparse-sample backoff](SCHEDULE_CONTEXT_EMPIRICAL.md)
+tests kickoff slots, both teams' rest, time-zone travel, body clock, venue and
+season phase on top of the direct empirical model. Sixteen shrunk challengers
+produce no qualified improvement; the earlier-season-selected gain is just
+.001075 CRPS, 95% [−.000235,.002714], with unchanged main moneyline bets.
+TNF/MNF frequently lack enough matching support and fall back to plain exactly.
+
+The owner's original market-context hypothesis is implemented separately as
+[observed-outcome empirical distributions](MARKET_CONTEXT_EMPIRICAL.md), with
+20 fixed settings across MC1 and the exploratory MC2 refinement. Direct matching
+preserves observed key-number concentrations and improves with reduced global
+backoff, but still trails R003 on the designated distribution score. A translated
+residual variant improves the point estimate without resolving superiority and
+distorts key-number/tie frequencies. Both fail advancement; neither is promoted.
+
+The separately versioned [R003-RF1 rare-score extension](experiments/R003_rare_frequency/REPORT.md)
+learns one penalty on legal rare final team scores from prior-week OOF forecasts.
+Its 2023–25 joint-NLL gain is +0.028119 versus original R003, but margin CRPS
+worsens by 0.013551, failing the locked advancement gate. Winner/cover proper
+scores also worsen slightly; moneyline picks and returns are unchanged. It is
+available for explicit research comparison, not promoted or made the default.
+Run `python research/r003_rare_frequency.py`. Original R003 outputs are preserved.
+
 Start with [integration and reproduction notes](JOINT_SCORE_INTEGRATION.md),
 [results](RESULTS_SUMMARY.md), and the [experiment registry](EXPERIMENT_REGISTRY.md).
 R000 reproduces the eight fixed market/residual distributions. R001 changes tie

@@ -1,5 +1,68 @@
 # NFL research iteration 2 - October 16, 2026
 
+**Market-only benchmark separation:** [analysis](spread_signal_separation/REPORT.md)
+shows substantial spread signal: main margin MAE 9.744 versus spread-free
+11.098; spread-only winner LL .607050 versus home-rate .690352. Plain adds
+no demonstrated information (MAE9.835, winner LL .612332); AC1 returns closer
+to market baselines without surpassing them. Plain's existing 560 ATS bets
+lose 8u at even money plus 24.545u in −110 payout reduction. Moneyline market-
+only benchmarks and matched favorite/null controls are reported separately.
+
+**ATS improvement experiment:** [R003-AC1](ATS_CALIBRATION.md) calibrates raw
+cover probabilities using strictly earlier OOF outcomes, with six fixed settings,
+fair/raw controls and an earlier-cover-log-loss selector. Main selected loss
+improves .700040 → .693345 but remains slightly worse than fair .693147.
+Both selected ATS policies make zero bets at assumed −110, so no edge is
+established. All active fixed calibrated variants lose in 2023–25. The coherent
+selected score distribution also improves margin/total CRPS to 7.182768;
+probability repair and profitable betting remain separate conclusions.
+
+**Plain loss audit:** [descriptive findings](plain_loss_audit_results/REPORT.md)
+analyze MC2 direct_ref_h2_t3_p0, not the original R003 support mask or native
+forward ledger. Of 812 main bets, 805 match favorites; seven disagreements
+explain the full −4.390u relative shortfall, and six can flip after deleting one
+historical source. About 70% of bets have nonpositive EV under plain's own
+probabilities. Its positive-EV subset is about four points optimistic on win
+frequency in both exposed periods, with uncertainty spanning zero. No model
+or betting rule changes follow; price-aware calibration and source stability
+are stronger next hypotheses than adopting a favorable raw context slice.
+
+**Pooled travel follow-up:** [R003-PT1](POOLED_TRAVEL_EMPIRICAL.md) increases
+usable travel support by sharing a regularized score-shape relationship across
+market contexts. All four fixed variants slightly worsen distribution CRPS.
+Earlier-season winner-log-loss selection yields CRPS gain −0.002723,
+95% [−0.008766,+0.003291]; winner-score gain remains unresolved. Main moneyline
+returns worsen to −6.057u from plain −4.210u on 812 bets, versus +0.180u for
+same-row favorites. No qualified improvement; no production/default change.
+
+**Schedule/location follow-up:** [R003-SC1](SCHEDULE_CONTEXT_EMPIRICAL.md)
+tests kickoff slot, rest, travel direction, body clock, venue region and season
+phase, with sparse contexts shrinking to the plain MC2 empirical distribution.
+The earlier-season-selected rule gains only 0.001075 CRPS on 2023–25
+(95% interval [−0.000235,+0.002714]); no qualified improvement. Moneyline bets
+remain −4.21u on 812 bets (−0.52% ROI), versus +0.18u for same-row favorites.
+Travel has the strongest positive descriptive estimate, but remains unresolved.
+TNF/MNF fall back to plain on 98.0%/93.4% of games, limiting conclusions about
+their effects. These remain exposed historical development results.
+
+**Owner-intent market-context follow-up:** [MC1/MC2](MARKET_CONTEXT_EMPIRICAL.md)
+use observed historical score pairs qualified by spread/total, without a Gaussian
+or possible-score enumeration. Across 20 fixed settings in two declared batches,
+the refined direct model improves its earlier direct version but still trails
+original R003 (CRPS 7.21413 vs 7.17691). The separate relative-score variant
+scores 7.15332, with unresolved improvement and distorted key-number/tie shape.
+Both fail advancement; moneyline returns remain negative, with no ATS price claim.
+All preceding R003/RF1 findings below are preserved.
+
+**Subsequent R003-RF1 extension:** [executed results](experiments/R003_rare_frequency/REPORT.md)
+improve joint NLL 7.125085 → 7.096967 (+0.028119, 95% [0.024775, 0.030384])
+using one prior-week learned rare-score penalty. **Do not advance:** margin CRPS
+worsens 7.112870 → 7.126421, exceeding the locked 0.01 tolerance; winner/cover
+proper scores also worsen slightly. The 812 2023–25 moneyline bets remain
+−0.9055u, −0.11% ±2.47 pp versus +0.1801u for favorites and a −4.10% null.
+These are exposed development results. Original R000–R003 results below remain
+unchanged; RF1 is a distinct research arm, not a replacement or production update.
+
 **Retain R002 for research; reject advancement of R003.** Both protocols were
 committed in efbbeef before either new candidate was executed. They were run
 sequentially, with R002 reported/tested before R003 execution. These are exposed

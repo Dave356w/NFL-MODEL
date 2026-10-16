@@ -1,0 +1,15 @@
+{
+  "exact_data_files": {
+    "moneyline_returns.json": true,
+    "margin_metrics.csv": true,
+    "per_game.csv.gz": true,
+    "signed_spread_bands.csv": true,
+    "paired_comparisons.json": true,
+    "descriptive_spread_signal.json": true,
+    "probability_metrics.csv": true,
+    "ATS_price_decomposition.json": true,
+    "fitted_windows.json": true
+  },
+  "all_passed": true,
+  "provenance_equivalent_after_normalizing_copied_plan_path": true
+}

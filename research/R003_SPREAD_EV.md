@@ -77,6 +77,18 @@ python research/r003_spread_ev.py /path/to/request.json
 python research/r003_spread_ev.py /path/to/request.json --pmfs /path/to/marginal_probabilities.npz
 ```
 
+The separately versioned RF1 extension can be evaluated explicitly after
+`python research/r003_rare_frequency.py` generates its own marginal pack:
+
+```bash
+python research/r003_spread_ev.py /path/to/request.json --arm empirical__R003_rare_frequency
+```
+
+This selects the RF1 pack and reports policy `R003-RF1-SPREAD-EV-v1`. The default
+continues to use original R003. RF1 improves joint likelihood but fails its
+margin-CRPS advancement gate; explicit availability is for research comparison,
+not a recommendation to use its prices. See its [results](experiments/R003_rare_frequency/REPORT.md).
+
 The CLI prints JSON to stdout. It records every offer's cover/loss/push
 probabilities, payout, fees and EV; the chosen offer or pass; policy identity,
 game ID, arm and source PMF hash. It makes no file writes or network requests.

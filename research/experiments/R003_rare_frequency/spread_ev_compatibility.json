@@ -1,0 +1,8 @@
+{
+  "games": 2462,
+  "max_event_probability_error": 6.84065665224054e-09,
+  "policy": "R003-RF1-SPREAD-EV-v1",
+  "default_arm_unchanged": true,
+  "price_basis": "Synthetic -110 only for functional verification, no historical ROI computed",
+  "passed": true
+}

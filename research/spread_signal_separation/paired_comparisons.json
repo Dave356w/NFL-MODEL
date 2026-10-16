@@ -1,0 +1,2586 @@
+[
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 1.3534512775019485,
+    "ci95": [
+      1.0546815301988708,
+      1.6587903289156327
+    ],
+    "sensitivity_ci": [
+      0.9541204939319616,
+      1.7569342729257504
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 45.85157164568445,
+    "ci95": [
+      35.43816537015021,
+      56.441972947715854
+    ],
+    "sensitivity_ci": [
+      31.994854829175075,
+      59.618835558827996
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -1.460171568627451,
+    "ci95": [
+      -1.7942665407509157,
+      -1.1142498184715004
+    ],
+    "sensitivity_ci": [
+      -1.912567005187882,
+      -0.9962823886498754
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": -50.14368872549019,
+    "ci95": [
+      -61.328625618969326,
+      -38.93738773653513
+    ],
+    "sensitivity_ci": [
+      -64.84766783319749,
+      -35.43357490788787
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -0.10672029112550267,
+    "ci95": [
+      -0.23744355041003026,
+      0.024406175625812352
+    ],
+    "sensitivity_ci": [
+      -0.2801313732607325,
+      0.06364814087458698
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": -4.292117079805741,
+    "ci95": [
+      -8.111729686333788,
+      -0.4875653639964458
+    ],
+    "sensitivity_ci": [
+      -9.33848602461728,
+      0.6112823205964366
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -1.3534512775019485,
+    "ci95": [
+      -1.6587903289156327,
+      -1.054681530198871
+    ],
+    "sensitivity_ci": [
+      -1.7569342729257504,
+      -0.9541204939319621
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": -45.85157164568445,
+    "ci95": [
+      -56.441972947715854,
+      -35.438165370150216
+    ],
+    "sensitivity_ci": [
+      -59.618835558827996,
+      -31.994854829175118
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -0.025751460576793506,
+    "ci95": [
+      -0.060315889857143805,
+      0.010026994843355543
+    ],
+    "sensitivity_ci": [
+      -0.07087569759393379,
+      0.023816171204582234
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 0.12577564488536988,
+    "ci95": [
+      -0.726265240858236,
+      0.9811026442539413
+    ],
+    "sensitivity_ci": [
+      -0.9920275907617577,
+      1.256939112736617
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 1.3276998169251548,
+    "ci95": [
+      1.0145159612567034,
+      1.6456044074277212
+    ],
+    "sensitivity_ci": [
+      0.9126703880694151,
+      1.7458982968947412
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 45.977347290569824,
+    "ci95": [
+      35.457306034337556,
+      56.72519360605452
+    ],
+    "sensitivity_ci": [
+      31.582260413141597,
+      60.028076144191886
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -0.09100931144228243,
+    "ci95": [
+      -0.16416424604287577,
+      -0.020189051943693543
+    ],
+    "sensitivity_ci": [
+      -0.18684681894091648,
+      0.003816008632454086
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": -2.5663504979308738,
+    "ci95": [
+      -4.550755316546804,
+      -0.7096725729797503
+    ],
+    "sensitivity_ci": [
+      -5.22493047296882,
+      -0.17735843660126352
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 1.2624419660596657,
+    "ci95": [
+      0.9864649708914102,
+      1.5477606642924548
+    ],
+    "sensitivity_ci": [
+      0.8942073926453424,
+      1.6319588840727677
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 43.28522114775358,
+    "ci95": [
+      33.4920656391196,
+      53.36393629196387
+    ],
+    "sensitivity_ci": [
+      30.172580354166048,
+      56.2504097477463
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_AC1",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": -0.03196585235778935,
+    "ci95": [
+      -0.07910310941496322,
+      0.015361615569584243
+    ],
+    "sensitivity_ci": [
+      -0.09380113910655795,
+      0.02940939656099252
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_AC1",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": -0.07056068512992504,
+    "ci95": [
+      -1.2243283109060157,
+      1.0917088327558575
+    ],
+    "sensitivity_ci": [
+      -1.5913404578031145,
+      1.4984624340971187
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_AC1",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 816,
+    "gain": 1.3214854251441588,
+    "ci95": [
+      1.0176387838994736,
+      1.6314984953380924
+    ],
+    "sensitivity_ci": [
+      0.9094174003110378,
+      1.7278540531321853
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "margin",
+    "model": "margin_AC1",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 816,
+    "gain": 45.78101096055454,
+    "ci95": [
+      35.51528271791729,
+      56.23991354050328
+    ],
+    "sensitivity_ci": [
+      31.845642377193663,
+      59.22082871744746
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.0833026010558167,
+    "ci95": [
+      -0.10518746280532165,
+      -0.06111521566217868
+    ],
+    "sensitivity_ci": [
+      -0.11097690541019022,
+      -0.05313004112089601
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.08312022758351126,
+    "ci95": [
+      -0.10469899986341555,
+      -0.06110891573689208
+    ],
+    "sensitivity_ci": [
+      -0.1105536968867201,
+      -0.05328760542388594
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.08228028260107331,
+    "ci95": [
+      -0.10317644675566441,
+      -0.06086127945795978
+    ],
+    "sensitivity_ci": [
+      -0.10914815427044257,
+      -0.05323926105584869
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.0027948659334085632,
+    "ci95": [
+      -0.0085532387785854,
+      0.0028838694692710143
+    ],
+    "sensitivity_ci": [
+      -0.010335303935092214,
+      0.004635745566805244
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.08609746698922527,
+    "ci95": [
+      -0.10950431177567864,
+      -0.061841277181127655
+    ],
+    "sensitivity_ci": [
+      -0.11594868207418633,
+      -0.05369118477103964
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.08591509351691981,
+    "ci95": [
+      -0.10893931570451343,
+      -0.06195374381926442
+    ],
+    "sensitivity_ci": [
+      -0.11538556674976994,
+      -0.05329793056602367
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.08507514853448186,
+    "ci95": [
+      -0.10763738683171858,
+      -0.06182847977665875
+    ],
+    "sensitivity_ci": [
+      -0.11374681697484032,
+      -0.05369659510191053
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.0833026010558167,
+    "ci95": [
+      0.061115215662178674,
+      0.10518746280532165
+    ],
+    "sensitivity_ci": [
+      0.05313004112089587,
+      0.1109769054101902
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.00018237347230546015,
+    "ci95": [
+      -0.002523181018102416,
+      0.0029693991970851452
+    ],
+    "sensitivity_ci": [
+      -0.0032646779009545958,
+      0.0038817752978848002
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.001022318454743403,
+    "ci95": [
+      -0.0017044106225962796,
+      0.0040077460450088165
+    ],
+    "sensitivity_ci": [
+      -0.0024922766763152628,
+      0.0050292128175096085
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.08312022758351126,
+    "ci95": [
+      0.061108915736892075,
+      0.10469899986341555
+    ],
+    "sensitivity_ci": [
+      0.05328760542388591,
+      0.11055369688672008
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.00018237347230546015,
+    "ci95": [
+      -0.0029693991970851452,
+      0.0025231810181024156
+    ],
+    "sensitivity_ci": [
+      -0.0038817752978848024,
+      0.003264677900954576
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.000839944982437943,
+    "ci95": [
+      -0.0024007100913137204,
+      0.0040624981204628605
+    ],
+    "sensitivity_ci": [
+      -0.0034822381722592155,
+      0.005128054388322736
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.08228028260107331,
+    "ci95": [
+      0.06086127945795977,
+      0.10317644675566441
+    ],
+    "sensitivity_ci": [
+      0.05323926105584854,
+      0.10914815427044254
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.001022318454743403,
+    "ci95": [
+      -0.0040077460450088165,
+      0.0017044106225962796
+    ],
+    "sensitivity_ci": [
+      -0.0050292128175096085,
+      0.0024922766763152402
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.000839944982437943,
+    "ci95": [
+      -0.0040624981204628605,
+      0.0024007100913137204
+    ],
+    "sensitivity_ci": [
+      -0.005128054388322737,
+      0.0034822381722592033
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.07802025088028904,
+    "ci95": [
+      0.05750357608560344,
+      0.097828609198788
+    ],
+    "sensitivity_ci": [
+      0.05060691143523279,
+      0.10320818897657077
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.005282350175527675,
+    "ci95": [
+      -0.010140819598009642,
+      -0.0003877122844699949
+    ],
+    "sensitivity_ci": [
+      -0.011583770846459418,
+      0.0011286712959545947
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.005099976703222215,
+    "ci95": [
+      -0.010238481270328488,
+      0.00018387606551960396
+    ],
+    "sensitivity_ci": [
+      -0.011896931901388814,
+      0.00171603180347763
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.004260031720784272,
+    "ci95": [
+      -0.010100761449917844,
+      0.0016752681919226975
+    ],
+    "sensitivity_ci": [
+      -0.01185247051750086,
+      0.0034198429342786477
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_AC1",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": 0.08217581981221646,
+    "ci95": [
+      0.0606291619520662,
+      0.10335918373003637
+    ],
+    "sensitivity_ci": [
+      0.052213451675263554,
+      0.10888707616792011
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_AC1",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.0011267812436002546,
+    "ci95": [
+      -0.0041053069382208296,
+      0.001868844866199087
+    ],
+    "sensitivity_ci": [
+      -0.005003847657862755,
+      0.002924948036472552
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_AC1",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.0009444077712947946,
+    "ci95": [
+      -0.004491631855247727,
+      0.002572638379821037
+    ],
+    "sensitivity_ci": [
+      -0.005795576666727215,
+      0.0036206327343094396
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "winner",
+    "model": "win_AC1",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 815,
+    "gain": -0.00010446278885685194,
+    "ci95": [
+      -0.0034840344816114734,
+      0.003180414186076262
+    ],
+    "sensitivity_ci": [
+      -0.004705311626642516,
+      0.004325880356995011
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "ATS",
+    "model": "ats_market_fair",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 797,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "ATS",
+    "model": "ats_plain",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 797,
+    "gain": -0.006892595213218117,
+    "ci95": [
+      -0.013489781679661597,
+      -0.00013679314684272569
+    ],
+    "sensitivity_ci": [
+      -0.015422079704987796,
+      0.001826905240549838
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "ATS",
+    "model": "ats_AC1",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 797,
+    "gain": -0.00019753299396018523,
+    "ci95": [
+      -0.0010173749087158436,
+      0.0006202437939733308
+    ],
+    "sensitivity_ci": [
+      -0.0012373846768353575,
+      0.0008831525336799298
+    ]
+  },
+  {
+    "basis": "2023-25",
+    "task": "ATS",
+    "model": "ats_legacy",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 797,
+    "gain": -0.0007404387072666731,
+    "ci95": [
+      -0.005885341029425512,
+      0.0038597377463337134
+    ],
+    "sensitivity_ci": [
+      -0.0075585990921149876,
+      0.005121687666022677
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": 1.2259537463490169,
+    "ci95": [
+      0.9020910664816656,
+      1.5426619102640593
+    ],
+    "sensitivity_ci": [
+      0.7991162055970956,
+      1.6434491399806403
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 41.085579267188024,
+    "ci95": [
+      31.18802535558534,
+      50.9353666350034
+    ],
+    "sensitivity_ci": [
+      28.301370021507704,
+      54.078317929389684
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": -1.2549763033175356,
+    "ci95": [
+      -1.5786257627657225,
+      -0.929168415764358
+    ],
+    "sensitivity_ci": [
+      -1.6924542795155868,
+      -0.8229355701232641
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": -41.0303317535545,
+    "ci95": [
+      -51.294838564941536,
+      -30.651097222487312
+    ],
+    "sensitivity_ci": [
+      -54.75297907994215,
+      -27.629707194248184
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": -0.02902255696851872,
+    "ci95": [
+      -0.10475160956836307,
+      0.04431038684879348
+    ],
+    "sensitivity_ci": [
+      -0.12857174236253308,
+      0.0671371487558476
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 0.05524751363352919,
+    "ci95": [
+      -2.1418461908828315,
+      2.216800873615778
+    ],
+    "sensitivity_ci": [
+      -2.7966826623189576,
+      2.8949509673639526
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": -1.2259537463490169,
+    "ci95": [
+      -1.5426619102640593,
+      -0.9020910664816656
+    ],
+    "sensitivity_ci": [
+      -1.6434491399806406,
+      -0.7991162055970958
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": -41.085579267188024,
+    "ci95": [
+      -50.9353666350034,
+      -31.188025355585342
+    ],
+    "sensitivity_ci": [
+      -54.078317929389726,
+      -28.301370021507708
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": -0.005829612489919509,
+    "ci95": [
+      -0.03963983129990261,
+      0.02651984765816042
+    ],
+    "sensitivity_ci": [
+      -0.051961739726041054,
+      0.03685945650217263
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": -0.1398264254803569,
+    "ci95": [
+      -1.0517383019815136,
+      0.7852840598884806
+    ],
+    "sensitivity_ci": [
+      -1.381490373268193,
+      1.0640161754201336
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": 1.2201241338590971,
+    "ci95": [
+      0.8987380444389496,
+      1.5361488728242385
+    ],
+    "sensitivity_ci": [
+      0.7952858627061237,
+      1.6394199881971707
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 40.94575284170767,
+    "ci95": [
+      31.06174359390598,
+      50.81366303475636
+    ],
+    "sensitivity_ci": [
+      28.201848036136536,
+      53.84479816146359
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": -0.03688100679871371,
+    "ci95": [
+      -0.10232810480379849,
+      0.02998064403850058
+    ],
+    "sensitivity_ci": [
+      -0.12454881157667305,
+      0.05009706531395714
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": -0.5010300396582479,
+    "ci95": [
+      -2.5539813295642513,
+      1.5272135382666885
+    ],
+    "sensitivity_ci": [
+      -3.2151551001770233,
+      2.1610892562870814
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 1055,
+    "gain": 1.189072739550303,
+    "ci95": [
+      0.8820171309620595,
+      1.4886818270986157
+    ],
+    "sensitivity_ci": [
+      0.785538025315988,
+      1.5811869087416255
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 1055,
+    "gain": 40.584549227529784,
+    "ci95": [
+      31.481002589563488,
+      49.75907474699755
+    ],
+    "sensitivity_ci": [
+      28.544485077488623,
+      52.6096072405745
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.08431637733111787,
+    "ci95": [
+      -0.10772090165487609,
+      -0.06041628212598849
+    ],
+    "sensitivity_ci": [
+      -0.11464955551363978,
+      -0.05293868041138312
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.08333068689920792,
+    "ci95": [
+      -0.1067376378134974,
+      -0.059037860212781686
+    ],
+    "sensitivity_ci": [
+      -0.11427571016425461,
+      -0.051392949841247364
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.08586407869328574,
+    "ci95": [
+      -0.10794548068605492,
+      -0.06351381587560279
+    ],
+    "sensitivity_ci": [
+      -0.11437173762342157,
+      -0.05619054889565708
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0013597997930532477,
+    "ci95": [
+      -0.00398286040027959,
+      0.0065112564682810875
+    ],
+    "sensitivity_ci": [
+      -0.005673944494222529,
+      0.00823768158668333
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.08295657753806461,
+    "ci95": [
+      -0.10665852466082579,
+      -0.0589544487409735
+    ],
+    "sensitivity_ci": [
+      -0.1131761775860159,
+      -0.05214083578088997
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.08197088710615467,
+    "ci95": [
+      -0.10587713998974674,
+      -0.057669920134833276
+    ],
+    "sensitivity_ci": [
+      -0.11246229082052175,
+      -0.0504441023370358
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0845042789002325,
+    "ci95": [
+      -0.1071365450020604,
+      -0.06171696573852119
+    ],
+    "sensitivity_ci": [
+      -0.11313385844392201,
+      -0.05501869901279573
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.08431637733111787,
+    "ci95": [
+      0.06041628212598849,
+      0.10772090165487609
+    ],
+    "sensitivity_ci": [
+      0.052938680411383054,
+      0.11464955551363977
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0009856904319099314,
+    "ci95": [
+      -0.001225318244800338,
+      0.0030934447729548094
+    ],
+    "sensitivity_ci": [
+      -0.001910585439968523,
+      0.003816714379023302
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0015477013621678947,
+    "ci95": [
+      -0.004417455439627169,
+      0.0012924791521185584
+    ],
+    "sensitivity_ci": [
+      -0.005363077292551577,
+      0.0021611331057216792
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.08333068689920792,
+    "ci95": [
+      0.05903786021278168,
+      0.1067376378134974
+    ],
+    "sensitivity_ci": [
+      0.051392949841247114,
+      0.1142757101642546
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0009856904319099314,
+    "ci95": [
+      -0.00309344477295481,
+      0.001225318244800337
+    ],
+    "sensitivity_ci": [
+      -0.0038167143790233025,
+      0.0019105854399685226
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0025333917940778264,
+    "ci95": [
+      -0.006408539661901242,
+      0.001214251382602789
+    ],
+    "sensitivity_ci": [
+      -0.0075839202955187614,
+      0.002320978095660436
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.08586407869328574,
+    "ci95": [
+      0.06351381587560279,
+      0.10794548068605492
+    ],
+    "sensitivity_ci": [
+      0.056190548895657035,
+      0.11437173762342157
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0015477013621678947,
+    "ci95": [
+      -0.0012924791521185589,
+      0.004417455439627169
+    ],
+    "sensitivity_ci": [
+      -0.002161133105721683,
+      0.0053630772925515385
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0025333917940778264,
+    "ci95": [
+      -0.001214251382602789,
+      0.006408539661901241
+    ],
+    "sensitivity_ci": [
+      -0.0023209780956604917,
+      0.007583920295518754
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0840439099100026,
+    "ci95": [
+      0.06076140125666398,
+      0.10644108896127165
+    ],
+    "sensitivity_ci": [
+      0.05391313973295743,
+      0.11386469850378876
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0002724674211152496,
+    "ci95": [
+      -0.005501277712748093,
+      0.0048740648069314505
+    ],
+    "sensitivity_ci": [
+      -0.007311178267090241,
+      0.006485444250380795
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": 0.0007132230107946816,
+    "ci95": [
+      -0.004891959096186943,
+      0.006203808424616456
+    ],
+    "sensitivity_ci": [
+      -0.006747125434103646,
+      0.007877671677005902
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 1050,
+    "gain": -0.0018201687832831441,
+    "ci95": [
+      -0.007293140999612103,
+      0.0032507038247118225
+    ],
+    "sensitivity_ci": [
+      -0.009159528171290598,
+      0.004722457295155291
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "ATS",
+    "model": "ats_market_fair",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 1031,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "ATS",
+    "model": "ats_plain",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 1031,
+    "gain": -0.002975041838960793,
+    "ci95": [
+      -0.00934823932387369,
+      0.0034087646820139574
+    ],
+    "sensitivity_ci": [
+      -0.011456837514439579,
+      0.005259852755731762
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "ATS",
+    "model": "ats_AC1",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 1031,
+    "gain": -0.00017383948814952404,
+    "ci95": [
+      -0.0018370983185094277,
+      0.001382619992130559
+    ],
+    "sensitivity_ci": [
+      -0.002352325495777893,
+      0.0018597667225284133
+    ]
+  },
+  {
+    "basis": "2019-22",
+    "task": "ATS",
+    "model": "ats_legacy",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 1031,
+    "gain": 0.0001006923286759088,
+    "ci95": [
+      -0.003698656683118053,
+      0.0037631283335022125
+    ],
+    "sensitivity_ci": [
+      -0.004870803260047899,
+      0.004838267138698939
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": 0.5505240809134768,
+    "ci95": [
+      0.16790738253370252,
+      0.9429514638670917
+    ],
+    "sensitivity_ci": [
+      0.10456476506740504,
+      1.0768640088409205
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_spread",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 18.424648748933187,
+    "ci95": [
+      1.1909549002317803,
+      36.10023218349873
+    ],
+    "sensitivity_ci": [
+      -2.6239059821018738,
+      39.3873901818728
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": -0.6012658227848101,
+    "ci95": [
+      -0.80625,
+      -0.34810126582278483
+    ],
+    "sensitivity_ci": [
+      -0.81875,
+      -0.2692307692307692
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": -15.420886075949367,
+    "ci95": [
+      -29.849358974358974,
+      -1.353125
+    ],
+    "sensitivity_ci": [
+      -33.72115384615385,
+      3.075
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": -0.05074174187133323,
+    "ci95": [
+      -0.4743040188032107,
+      0.36054202713054595
+    ],
+    "sensitivity_ci": [
+      -0.6012639261994462,
+      0.49244842442533615
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_zero",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 3.0037626729838207,
+    "ci95": [
+      -1.3886983351009108,
+      6.87986204777191
+    ],
+    "sensitivity_ci": [
+      -2.778848154094363,
+      7.9033321735340785
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": -0.5505240809134768,
+    "ci95": [
+      -0.9429514638670917,
+      -0.16790738253370252
+    ],
+    "sensitivity_ci": [
+      -1.0768640088409205,
+      -0.10456476506740504
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": -18.424648748933187,
+    "ci95": [
+      -36.10023218349873,
+      -1.1909549002317803
+    ],
+    "sensitivity_ci": [
+      -39.3873901818728,
+      2.6239059821018738
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_prior_home",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": -0.1431491878210806,
+    "ci95": [
+      -0.23498266572864446,
+      -0.07446924341338891
+    ],
+    "sensitivity_ci": [
+      -0.2696406544319215,
+      -0.06476183131840314
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": -2.8014866969494214,
+    "ci95": [
+      -3.733486220276883,
+      -1.8425933883698415
+    ],
+    "sensitivity_ci": [
+      -3.8652499766104826,
+      -1.6032780379904636
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": 0.40737489309239633,
+    "ci95": [
+      -0.018272994176151414,
+      0.8439368287524451
+    ],
+    "sensitivity_ci": [
+      -0.08897953613746223,
+      0.9723434384333769
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_market_linear",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 15.623162051983766,
+    "ci95": [
+      -2.245109086501403,
+      33.94959398889164
+    ],
+    "sensitivity_ci": [
+      -6.455969470785307,
+      37.50028529121407
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": -0.11023901403315477,
+    "ci95": [
+      -0.24452546195251437,
+      0.03626678469678302
+    ],
+    "sensitivity_ci": [
+      -0.2636479997589272,
+      0.0852211934494793
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_market_spread",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": -1.7688663129587983,
+    "ci95": [
+      -4.542578654314365,
+      1.9029115535088583
+    ],
+    "sensitivity_ci": [
+      -4.983841814962047,
+      3.409021741065976
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "absolute_error",
+    "n": 79,
+    "gain": 0.440285066880322,
+    "ci95": [
+      -0.01208715865755341,
+      0.9042565802525021
+    ],
+    "sensitivity_ci": [
+      -0.1394906172252247,
+      1.015262586504102
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "margin",
+    "model": "margin_plain",
+    "comparator": "margin_prior_home",
+    "metric": "squared_error",
+    "n": 79,
+    "gain": 16.65578243597439,
+    "ci95": [
+      -1.352389898421046,
+      34.31130050451646
+    ],
+    "sensitivity_ci": [
+      -6.415627815752633,
+      37.687405686094856
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04203560160865727,
+    "ci95": [
+      -0.07149173393770585,
+      -3.24142554068216e-05
+    ],
+    "sensitivity_ci": [
+      -0.0755717359739809,
+      0.016855232752930802
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04147579636269661,
+    "ci95": [
+      -0.06847961399926558,
+      -0.007637575345825507
+    ],
+    "sensitivity_ci": [
+      -0.07430494886013914,
+      0.00584323130388211
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_prior_home",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04222075358612694,
+    "ci95": [
+      -0.06848901639234276,
+      -0.001975084746468131
+    ],
+    "sensitivity_ci": [
+      -0.07219362219749137,
+      0.015442511285778192
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.0001727172147631278,
+    "ci95": [
+      -0.01724534441299503,
+      0.017798469309691506
+    ],
+    "sensitivity_ci": [
+      -0.023586916184621852,
+      0.022883519072897863
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04220831882342041,
+    "ci95": [
+      -0.07152920189493224,
+      -0.010619263812918417
+    ],
+    "sensitivity_ci": [
+      -0.0797117941369879,
+      -0.0006387139576706167
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04164851357745973,
+    "ci95": [
+      -0.06963349971687384,
+      -0.01757531766884638
+    ],
+    "sensitivity_ci": [
+      -0.07751246740310765,
+      -0.011650715406719315
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_fair",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.04239347080089009,
+    "ci95": [
+      -0.06536009980022434,
+      -0.016606785121949887
+    ],
+    "sensitivity_ci": [
+      -0.06986222227930884,
+      -0.0020514354248232294
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.04203560160865727,
+    "ci95": [
+      3.24142554068216e-05,
+      0.07149173393770585
+    ],
+    "sensitivity_ci": [
+      -0.016855232752930802,
+      0.0755717359739809
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0005598052459606593,
+    "ci95": [
+      -0.0076051610904186925,
+      0.007166558228804187
+    ],
+    "sensitivity_ci": [
+      -0.010359988887788557,
+      0.009015185233898371
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.00018515197746966986,
+    "ci95": [
+      -0.010683896488908452,
+      0.011573996995182072
+    ],
+    "sensitivity_ci": [
+      -0.013067689464282127,
+      0.014842511208768037
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.04147579636269661,
+    "ci95": [
+      0.007637575345825507,
+      0.06847961399926558
+    ],
+    "sensitivity_ci": [
+      -0.00584323130388211,
+      0.07430494886013914
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.0005598052459606593,
+    "ci95": [
+      -0.007166558228804187,
+      0.0076051610904186925
+    ],
+    "sensitivity_ci": [
+      -0.009015185233898371,
+      0.010359988887788557
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_spread_total",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.0007449572234303292,
+    "ci95": [
+      -0.016379659531802655,
+      0.012625461676358966
+    ],
+    "sensitivity_ci": [
+      -0.020309600994414263,
+      0.015006290546812368
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.04222075358612694,
+    "ci95": [
+      0.001975084746468131,
+      0.06848901639234276
+    ],
+    "sensitivity_ci": [
+      -0.015442511285778192,
+      0.07219362219749137
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.00018515197746966986,
+    "ci95": [
+      -0.011573996995182145,
+      0.010683896488908452
+    ],
+    "sensitivity_ci": [
+      -0.014842511208768037,
+      0.013067689464282127
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0007449572234303292,
+    "ci95": [
+      -0.012625461676358966,
+      0.016379659531802655
+    ],
+    "sensitivity_ci": [
+      -0.015006290546812368,
+      0.020309600994414263
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_market_moneyline",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_prior_home",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": 0.039335693195028935,
+    "ci95": [
+      -0.0005808918805621882,
+      0.06678468482826734
+    ],
+    "sensitivity_ci": [
+      -0.01906247346331474,
+      0.07094805597391131
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.00269990841362833,
+    "ci95": [
+      -0.009889059226742231,
+      0.004116369461832156
+    ],
+    "sensitivity_ci": [
+      -0.012377822560529205,
+      0.006188003755665003
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_spread_total",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.0021401031676676705,
+    "ci95": [
+      -0.010690549541261668,
+      0.006354995393482284
+    ],
+    "sensitivity_ci": [
+      -0.013326219214812193,
+      0.00887223834087073
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "winner",
+    "model": "win_plain",
+    "comparator": "win_market_moneyline",
+    "metric": "log_loss",
+    "n": 78,
+    "gain": -0.0028850603910979965,
+    "ci95": [
+      -0.018340952637484715,
+      0.010888156367706717
+    ],
+    "sensitivity_ci": [
+      -0.022360701503791092,
+      0.015125560899343974
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "ATS",
+    "model": "ats_market_fair",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 73,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "ATS",
+    "model": "ats_plain",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 73,
+    "gain": 0.0014655626311321248,
+    "ci95": [
+      -0.023569547519769276,
+      0.02386778705485963
+    ],
+    "sensitivity_ci": [
+      -0.03238308429317548,
+      0.029665881203491964
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "ATS",
+    "model": "ats_AC1",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 73,
+    "gain": 0.0,
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "sensitivity_ci": [
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "basis": "2026 diagnostic",
+    "task": "ATS",
+    "model": "ats_legacy",
+    "comparator": "ats_market_fair",
+    "metric": "log_loss",
+    "n": 73,
+    "gain": -0.0006472218695342855,
+    "ci95": [
+      -0.005379990918030007,
+      0.003945850810618149
+    ],
+    "sensitivity_ci": [
+      -0.006149771758108769,
+      0.005419130583863239
+    ]
+  }
+]

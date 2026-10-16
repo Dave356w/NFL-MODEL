@@ -1,0 +1,15 @@
+{
+  "experiment": "R003-AC1",
+  "gates": {
+    "sample_size": false,
+    "positive_ROI_interval": false,
+    "positive_adjusted_ROI_interval": false,
+    "annual_positive": false,
+    "proper_score_vs_fair": false,
+    "proper_score_vs_raw": true,
+    "integrity": true
+  },
+  "recommendation": "no established ATS edge",
+  "independent_confirmation": false,
+  "production_promotion": false
+}

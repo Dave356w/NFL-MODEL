@@ -1,0 +1,13 @@
+{
+  "experiment": "R003-SC1",
+  "gates": {
+    "practical_gain": false,
+    "positive_interval": false,
+    "annual_consistency": false,
+    "secondary_scores": true,
+    "integrity": true
+  },
+  "recommendation": "no qualified improvement",
+  "independent_validation": false,
+  "production_promotion": false
+}

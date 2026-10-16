@@ -1,0 +1,10 @@
+{
+  "models": 69,
+  "main_games_per_model": 816,
+  "all_axes_partition_games_bets_and_units": true,
+  "common_plain_cohorts_and_labels_identical": true,
+  "raw_ATS_reproduced": true,
+  "independent_repeat_files": 8,
+  "original_protected_files_unchanged": 192,
+  "input_source_hashes_preserved": true
+}

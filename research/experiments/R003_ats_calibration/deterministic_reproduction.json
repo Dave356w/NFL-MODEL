@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "REPORT.md": true,
+    "annual_selections.json": true,
+    "base_OOF.csv.gz": true,
+    "comparisons.json": true,
+    "decision.json": true,
+    "decisions.csv.gz": true,
+    "distribution_comparisons.json": true,
+    "distribution_metrics.csv": true,
+    "fitted_windows.json": true,
+    "metrics.csv": true,
+    "original_bet_cohort_calibration.json": true,
+    "predictions.csv.gz": true,
+    "provenance.json": true,
+    "returns.json": true,
+    "review_provenance.json": true
+  },
+  "all_passed": true,
+  "method": "Independent process and output directory, exact byte equality"
+}

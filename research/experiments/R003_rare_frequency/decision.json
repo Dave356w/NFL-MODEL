@@ -1,0 +1,14 @@
+{
+  "experiment": "R003-RF1",
+  "gates": {
+    "practical_gain": true,
+    "positive_interval": true,
+    "all_primary_seasons_positive": true,
+    "secondary_scores": false,
+    "winner_scores": true,
+    "integrity": true
+  },
+  "recommendation": "fails advancement gate",
+  "independent_validation": false,
+  "production_promotion": false
+}

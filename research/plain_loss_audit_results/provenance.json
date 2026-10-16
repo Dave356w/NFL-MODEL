@@ -1,0 +1,26 @@
+{
+  "basis": "Exposed retrospective plain MC2 walk-forward records; not native forward ledger",
+  "configuration": "direct_ref_h2_t3_p0",
+  "selection": "None; frozen plain arm only",
+  "all_slices_posthoc": true,
+  "models_fitted": false,
+  "rules_adopted": false,
+  "production_changed": false,
+  "bootstrap": "10000 paired whole-week draws within season, seed 20261016; conditional on existing forecasts",
+  "hashes": {
+    "research/experiments/R003_pooled_travel/predictions.csv.gz": "ab7ce2b2119e8d498d2cd69b21d02ad3cc6d398086f5d7eff1d271cc7fe47573",
+    "research/experiments/R003_schedule_context/feature_table.csv.gz": "921b3f432495cbd2750ff0871195a27fc9ea6c9bf48f3232192ab826ebc1c290",
+    "research/experiments/R000_reproduction/frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "research/plain_loss_audit.py": "65d31ea8d6f82a9d1b5399a5d741e963c4f16596689cad5336a27818654a79b8",
+    "research/market_context_empirical.py": "2a38d1e1cf426e6646e487dec7975771a0dc9e83511c4d8aaa7982ac3d0aad0c",
+    "research/schedule_context_empirical.py": "7de2610eacb1eaa7217b251db0c1d8e0630a02bd5b662dee3fae5b3476156a2b",
+    "data/forward_predictions.jsonl": "5a00fef05c6c5e5c43d76ebb873e26eddbe40f67b0602ac14b6f2ee41f49336a",
+    "data/ledger_report.txt": "f5cc7bc579854427669fb17c1e9ae63aaa4fbc06c715299711bea9543d6a00cf"
+  },
+  "caveats": [
+    "Conditional decisive-game probabilities and quote-null convention; ties push in returns",
+    "Historical quote and schedule availability timestamps are unaudited",
+    "Many descriptive slices; no subgroup is an independently validated rule",
+    "Removing one source game is an influence diagnostic, not a confidence interval"
+  ]
+}

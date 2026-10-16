@@ -1,0 +1,10 @@
+{
+  "repeat_checks": {
+    "decisions.csv": true,
+    "summary.json": true,
+    "provenance.json": true,
+    "REPORT.md": true
+  },
+  "original_protected_files_unchanged": 192,
+  "source_hashes_preserved": true
+}

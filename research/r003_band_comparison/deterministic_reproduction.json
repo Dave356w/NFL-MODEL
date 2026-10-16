@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "overall.json": true,
+    "per_game.csv.gz": true,
+    "paired_comparisons.json": true,
+    "band_metrics.csv": true,
+    "comparison.html": true,
+    "probability_spread_cross.csv": true,
+    "model_catalog.json": true,
+    "provenance.json": true
+  },
+  "all_passed": true
+}

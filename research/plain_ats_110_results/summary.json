@@ -1,0 +1,366 @@
+[
+  {
+    "basis": "2023-25",
+    "games": 816,
+    "bets": 560,
+    "passes": 256,
+    "wins": 270,
+    "losses": 278,
+    "pushes": 12,
+    "units": -32.54545454545455,
+    "roi": -0.05811688311688312,
+    "roi_se": 0.03993546158692338,
+    "roi_ci95": [
+      -0.1278006364428317,
+      0.008864161072145816
+    ],
+    "favorite_control_units": -0.09090909090909305,
+    "home_control_units": -13.454545454545453,
+    "paired_favorite_gain_ci95": [
+      -0.17670984474244467,
+      0.05654163587090416
+    ],
+    "fair_ats_null_roi": -0.04448051948051948,
+    "model_expected_units": 40.54496362093813,
+    "mean_conditional_cover_probability": 0.5624732941620246,
+    "realized_decisive_cover_rate": 0.4927007299270073,
+    "cover_ll": 0.7029983685214513,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2017-22",
+    "games": 1567,
+    "bets": 993,
+    "passes": 574,
+    "wins": 498,
+    "losses": 472,
+    "pushes": 23,
+    "units": -19.27272727272727,
+    "roi": -0.019408587384418197,
+    "roi_se": 0.029943194649113027,
+    "roi_ci95": [
+      -0.0723048077139489,
+      0.032689079450320034
+    ],
+    "favorite_control_units": -110.90909090909089,
+    "home_control_units": -66.99999999999999,
+    "paired_favorite_gain_ci95": [
+      0.0,
+      0.1835673342849496
+    ],
+    "fair_ats_null_roi": -0.044401721138881266,
+    "model_expected_units": 66.57400490635608,
+    "mean_conditional_cover_probability": 0.5597539765618607,
+    "realized_decisive_cover_rate": 0.51340206185567,
+    "cover_ll": 0.6994559006928214,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2026 diagnostic",
+    "games": 79,
+    "bets": 61,
+    "passes": 18,
+    "wins": 31,
+    "losses": 25,
+    "pushes": 5,
+    "units": 3.1818181818181817,
+    "roi": 0.05216095380029806,
+    "roi_se": 0.11741043329651159,
+    "roi_ci95": [
+      -0.3047138047138047,
+      0.30303030303030304
+    ],
+    "favorite_control_units": -6.363636363636362,
+    "home_control_units": -10.18181818181818,
+    "paired_favorite_gain_ci95": [
+      -0.13636363636363638,
+      0.3419267299864315
+    ],
+    "fair_ats_null_roi": -0.04172876304023845,
+    "model_expected_units": 3.7507924570441906,
+    "mean_conditional_cover_probability": 0.5567630466871808,
+    "realized_decisive_cover_rate": 0.5535714285714286,
+    "cover_ll": 0.6900573061783384,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2017",
+    "games": 256,
+    "bets": 154,
+    "passes": 102,
+    "wins": 72,
+    "losses": 81,
+    "pushes": 1,
+    "units": -15.545454545454545,
+    "roi": -0.10094451003541913,
+    "roi_se": 0.07678910516842562,
+    "roi_ci95": [
+      -0.22946340219813421,
+      0.02273465171192435
+    ],
+    "favorite_control_units": 5.454545454545453,
+    "home_control_units": -2.181818181818181,
+    "paired_favorite_gain_ci95": [
+      -0.3695346948247851,
+      0.07535885167464115
+    ],
+    "fair_ats_null_roi": -0.045159386068476984,
+    "model_expected_units": 8.127114149627857,
+    "mean_conditional_cover_probability": 0.5519480046179268,
+    "realized_decisive_cover_rate": 0.47058823529411764,
+    "cover_ll": 0.7059757907696531,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2018",
+    "games": 256,
+    "bets": 153,
+    "passes": 103,
+    "wins": 76,
+    "losses": 71,
+    "pushes": 6,
+    "units": -1.90909090909091,
+    "roi": -0.012477718360071308,
+    "roi_se": 0.07584692556055583,
+    "roi_ci95": [
+      -0.1630108738244514,
+      0.13236119281415423
+    ],
+    "favorite_control_units": -17.18181818181818,
+    "home_control_units": -11.454545454545455,
+    "paired_favorite_gain_ci95": [
+      -0.133983085113552,
+      0.3201581027667984
+    ],
+    "fair_ats_null_roi": -0.04367201426024955,
+    "model_expected_units": 8.94792040054865,
+    "mean_conditional_cover_probability": 0.5557495538290479,
+    "realized_decisive_cover_rate": 0.5170068027210885,
+    "cover_ll": 0.7027075299208922,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2019",
+    "games": 256,
+    "bets": 167,
+    "passes": 89,
+    "wins": 86,
+    "losses": 75,
+    "pushes": 6,
+    "units": 3.1818181818181808,
+    "roi": 0.019052803483941203,
+    "roi_se": 0.07257459303085755,
+    "roi_ci95": [
+      -0.12847827073126467,
+      0.1626214746352046
+    ],
+    "favorite_control_units": -25.454545454545453,
+    "home_control_units": -15.909090909090905,
+    "paired_favorite_gain_ci95": [
+      -0.0856781524926685,
+      0.42297223734349476
+    ],
+    "fair_ats_null_roi": -0.04382144801306478,
+    "model_expected_units": 11.85053801883621,
+    "mean_conditional_cover_probability": 0.5614871449074957,
+    "realized_decisive_cover_rate": 0.5341614906832298,
+    "cover_ll": 0.6947178976129247,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2020",
+    "games": 256,
+    "bets": 173,
+    "passes": 83,
+    "wins": 83,
+    "losses": 90,
+    "pushes": 0,
+    "units": -14.545454545454545,
+    "roi": -0.08407777193904362,
+    "roi_se": 0.07272380336977562,
+    "roi_ci95": [
+      -0.1753630984400215,
+      0.011377608047689816
+    ],
+    "favorite_control_units": -26.0,
+    "home_control_units": -10.727272727272727,
+    "paired_favorite_gain_ci95": [
+      -0.09819592476489017,
+      0.21943573667711602
+    ],
+    "fair_ats_null_roi": -0.045454545454545456,
+    "model_expected_units": 13.036627499127551,
+    "mean_conditional_cover_probability": 0.5642083886598863,
+    "realized_decisive_cover_rate": 0.4797687861271676,
+    "cover_ll": 0.7104398932354501,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2021",
+    "games": 272,
+    "bets": 171,
+    "passes": 101,
+    "wins": 91,
+    "losses": 78,
+    "pushes": 2,
+    "units": 4.727272727272725,
+    "roi": 0.027644869750132892,
+    "roi_se": 0.07256562377188756,
+    "roi_ci95": [
+      -0.11838924963924957,
+      0.17464151080179788
+    ],
+    "favorite_control_units": -20.090909090909086,
+    "home_control_units": -14.36363636363636,
+    "paired_favorite_gain_ci95": [
+      -0.12139255483296567,
+      0.4001262417405268
+    ],
+    "fair_ats_null_roi": -0.044922913343965976,
+    "model_expected_units": 12.114311912139613,
+    "mean_conditional_cover_probability": 0.5618014706756851,
+    "realized_decisive_cover_rate": 0.5384615384615384,
+    "cover_ll": 0.6932133035215485,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2022",
+    "games": 271,
+    "bets": 175,
+    "passes": 96,
+    "wins": 90,
+    "losses": 77,
+    "pushes": 8,
+    "units": 4.818181818181818,
+    "roi": 0.027532467532467533,
+    "roi_se": 0.07047749617073022,
+    "roi_ci95": [
+      -0.10535123966942143,
+      0.1515193370165745
+    ],
+    "favorite_control_units": -27.636363636363637,
+    "home_control_units": -12.363636363636367,
+    "paired_favorite_gain_ci95": [
+      -0.05932953494239305,
+      0.4145573122529644
+    ],
+    "fair_ats_null_roi": -0.043376623376623374,
+    "model_expected_units": 12.497492926076205,
+    "mean_conditional_cover_probability": 0.5620661048895323,
+    "realized_decisive_cover_rate": 0.5389221556886228,
+    "cover_ll": 0.6901268829063072,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2023",
+    "games": 272,
+    "bets": 188,
+    "passes": 84,
+    "wins": 89,
+    "losses": 90,
+    "pushes": 9,
+    "units": -9.09090909090909,
+    "roi": -0.048355899419729204,
+    "roi_se": 0.06811551596980793,
+    "roi_ci95": [
+      -0.1361179361179361,
+      0.04030512647440156
+    ],
+    "favorite_control_units": 4.272727272727273,
+    "home_control_units": -9.09090909090909,
+    "paired_favorite_gain_ci95": [
+      -0.25718323127649556,
+      0.10319410319410319
+    ],
+    "fair_ats_null_roi": -0.04327852998065764,
+    "model_expected_units": 14.117028120184726,
+    "mean_conditional_cover_probability": 0.5640095809074185,
+    "realized_decisive_cover_rate": 0.4972067039106145,
+    "cover_ll": 0.7074498127463213,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2024",
+    "games": 272,
+    "bets": 201,
+    "passes": 71,
+    "wins": 91,
+    "losses": 108,
+    "pushes": 2,
+    "units": -25.27272727272727,
+    "roi": -0.12573496155585706,
+    "roi_se": 0.06692034066322872,
+    "roi_ci95": [
+      -0.2722772277227723,
+      0.006684491978609619
+    ],
+    "favorite_control_units": 9.090909090909093,
+    "home_control_units": -2.3636363636363633,
+    "paired_favorite_gain_ci95": [
+      -0.43140774108488184,
+      0.06818181818181816
+    ],
+    "fair_ats_null_roi": -0.045002261420171864,
+    "model_expected_units": 13.462641507729602,
+    "mean_conditional_cover_probability": 0.5596635370706782,
+    "realized_decisive_cover_rate": 0.457286432160804,
+    "cover_ll": 0.7103911731037402,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2025",
+    "games": 272,
+    "bets": 171,
+    "passes": 101,
+    "wins": 90,
+    "losses": 80,
+    "pushes": 1,
+    "units": 1.8181818181818183,
+    "roi": 0.01063264221158958,
+    "roi_se": 0.07286954221585867,
+    "roi_ci95": [
+      -0.10825358851674641,
+      0.12231404958677684
+    ],
+    "favorite_control_units": -13.454545454545451,
+    "home_control_units": -1.9999999999999991,
+    "paired_favorite_gain_ci95": [
+      -0.06041426927502878,
+      0.2480739599383667
+    ],
+    "fair_ats_null_roi": -0.045188729399255716,
+    "model_expected_units": 12.965293993023801,
+    "mean_conditional_cover_probability": 0.5640869740873261,
+    "realized_decisive_cover_rate": 0.5294117647058824,
+    "cover_ll": 0.6896573295324677,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  },
+  {
+    "basis": "2026",
+    "games": 79,
+    "bets": 61,
+    "passes": 18,
+    "wins": 31,
+    "losses": 25,
+    "pushes": 5,
+    "units": 3.1818181818181817,
+    "roi": 0.05216095380029806,
+    "roi_se": 0.11741043329651159,
+    "roi_ci95": [
+      -0.3047138047138047,
+      0.30303030303030304
+    ],
+    "favorite_control_units": -6.363636363636362,
+    "home_control_units": -10.18181818181818,
+    "paired_favorite_gain_ci95": [
+      -0.13636363636363638,
+      0.3419267299864315
+    ],
+    "fair_ats_null_roi": -0.04172876304023845,
+    "model_expected_units": 3.7507924570441906,
+    "mean_conditional_cover_probability": 0.5567630466871808,
+    "realized_decisive_cover_rate": 0.5535714285714286,
+    "cover_ll": 0.6900573061783384,
+    "fair_50pct_cover_ll": 0.6931471805599453
+  }
+]

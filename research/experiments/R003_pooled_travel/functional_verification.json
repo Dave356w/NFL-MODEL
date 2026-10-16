@@ -1,0 +1,14 @@
+{
+  "original_files_unchanged": 192,
+  "input_and_source_hashes_preserved": true,
+  "fallback_rows_exact": 184,
+  "fallback_fields": [
+    "p_home_non_tie",
+    "cover_win",
+    "over_win",
+    "primary_crps"
+  ],
+  "converged_prior_week_fits": 788,
+  "repeat_files_identical": 15,
+  "baseline_max_error": 3.552713678800501e-15
+}

@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "predictions.csv.gz": true,
+    "calibration_archive.csv.gz": true,
+    "fit_audit.csv": true,
+    "metrics.csv": true,
+    "contrasts.json": true,
+    "moneyline.json": true,
+    "provenance.json": true,
+    "decision.json": true,
+    "REPORT.md": true,
+    "reliability.json": true,
+    "pit.json": true,
+    "stability.json": true,
+    "marginal_probabilities.npz_arrays": true,
+    "example_joint_probabilities.npz_arrays": true,
+    "original_experiments_and_data_unchanged": true
+  },
+  "all_passed": true,
+  "preserved_original_files": 192,
+  "method": "Separate process and output directory; compare bytes and every NPZ array; no forecast refit specification changes"
+}
