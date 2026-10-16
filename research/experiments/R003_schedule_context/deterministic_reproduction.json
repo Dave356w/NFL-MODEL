@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "predictions.csv.gz": true,
+    "feature_table.csv.gz": true,
+    "annual_selections.json": true,
+    "provenance.json": true,
+    "metrics.csv": true,
+    "support.csv": true,
+    "comparisons.json": true,
+    "moneyline.json": true,
+    "feature_slices.json": true,
+    "decision.json": true,
+    "stability.json": true,
+    "REPORT.md": true
+  },
+  "all_passed": true,
+  "method": "Separate process/output directory, exact byte comparison of features, forecasts, selections, support and reports"
+}

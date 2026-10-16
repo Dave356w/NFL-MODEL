@@ -1,0 +1,808 @@
+[
+  {
+    "basis": "2023-25",
+    "games": 816,
+    "bets": 812,
+    "wins": 552,
+    "losses": 259,
+    "pushes": 1,
+    "units": -4.209582478638476,
+    "roi": -0.005184214875170536,
+    "roi_se": 0.02475607076664481,
+    "favorite_units": 0.18011893377256882,
+    "units_vs_favorite": -4.389701412411044,
+    "null_units": -33.28791029377268,
+    "null_roi": -0.04099496341597621,
+    "own_expected_units": -28.69221541100027,
+    "negative_own_ev_bets": 567,
+    "mean_picked_probability": 0.6592150501894167,
+    "mean_picked_market_probability": 0.6584780109564593,
+    "mean_price_breakeven": 0.6865781400532626,
+    "observed_win_rate": 0.6806411837237978,
+    "win_ll": 0.6123320637462477,
+    "market_win_ll": 0.6080720320254634,
+    "ll_gain_vs_market": -0.004260031720784274,
+    "win_brier": 0.21226179945324394,
+    "market_win_brier": 0.210334489216926,
+    "median_ess": 216.21137498517584,
+    "mean_largest_atom": 0.01930670156879032,
+    "intervals95": {
+      "roi": [
+        -0.05378458532991274,
+        0.0449155456244484
+      ],
+      "paired_favorite_gain": [
+        -0.015608205310983714,
+        0.005001666518083558
+      ],
+      "excess_over_null": [
+        -0.012831251258594396,
+        0.08595884723126075
+      ],
+      "return_minus_own_expectation": [
+        -0.01713987733865702,
+        0.07909297688877508
+      ],
+      "ll_gain_vs_market": [
+        -0.010100761449917844,
+        0.0016752681919226901
+      ],
+      "brier_gain_vs_market": [
+        -0.004384818182297902,
+        0.0005783077701575168
+      ],
+      "picked_calibration_residual": [
+        -0.009676586363424475,
+        0.05291022306621738
+      ],
+      "picked_market_calibration_residual": [
+        -0.009239845372130325,
+        0.054125176485180546
+      ]
+    }
+  },
+  {
+    "basis": "2017-22",
+    "games": 1567,
+    "bets": 1559,
+    "wins": 1026,
+    "losses": 526,
+    "pushes": 7,
+    "units": -64.54283000570159,
+    "roi": -0.04140014753412546,
+    "roi_se": 0.0179321887414164,
+    "favorite_units": -59.21370717584024,
+    "units_vs_favorite": -5.329122829861349,
+    "null_units": -40.72154924302814,
+    "null_roi": -0.02612030098975506,
+    "own_expected_units": -55.50226000075202,
+    "negative_own_ev_bets": 1118,
+    "mean_picked_probability": 0.6605486596957963,
+    "mean_picked_market_probability": 0.6675085241881078,
+    "mean_price_breakeven": 0.6856179731195194,
+    "observed_win_rate": 0.6610824742268041,
+    "win_ll": 0.6092520439624416,
+    "market_win_ll": 0.605462888379284,
+    "ll_gain_vs_market": -0.003985751347529899,
+    "win_brier": 0.2099999213712111,
+    "market_win_brier": 0.20903891523185006,
+    "median_ess": 204.2748334619619,
+    "mean_largest_atom": 0.02491582796098673,
+    "intervals95": {
+      "roi": [
+        -0.07328294922467889,
+        -0.008800991635155606
+      ],
+      "paired_favorite_gain": [
+        -0.015190436888217747,
+        0.008319647504976121
+      ],
+      "excess_over_null": [
+        -0.047240840432735846,
+        0.017352398842248318
+      ],
+      "return_minus_own_expectation": [
+        -0.038304123128768616,
+        0.02710049795908384
+      ],
+      "ll_gain_vs_market": [
+        -0.009293663558023793,
+        0.0009646126904092664
+      ],
+      "brier_gain_vs_market": [
+        -0.002830099417141303,
+        0.0006742598590515293
+      ],
+      "picked_calibration_residual": [
+        -0.020878629641220125,
+        0.022543294992671218
+      ],
+      "picked_market_calibration_residual": [
+        -0.027544370709907746,
+        0.015162072006315336
+      ]
+    }
+  },
+  {
+    "basis": "2026 diagnostic",
+    "games": 79,
+    "bets": 79,
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "favorite_units": -3.703379463288224,
+    "units_vs_favorite": 0.0,
+    "null_units": -3.237825176668428,
+    "null_roi": -0.04098512881858769,
+    "own_expected_units": -2.5805940338398177,
+    "negative_own_ev_bets": 58,
+    "mean_picked_probability": 0.6509934102337213,
+    "mean_picked_market_probability": 0.6502164082118639,
+    "mean_price_breakeven": 0.6779664967055615,
+    "observed_win_rate": 0.6410256410256411,
+    "win_ll": 0.6536387701501533,
+    "market_win_ll": 0.6507537097590552,
+    "ll_gain_vs_market": -0.0028850603910979965,
+    "win_brier": 0.23063212153355112,
+    "market_win_brier": 0.22890252155360627,
+    "median_ess": 239.76167006620773,
+    "mean_largest_atom": 0.015703037196036652,
+    "intervals95": {
+      "roi": [
+        -0.15207259911403756,
+        0.06805129581754937
+      ],
+      "paired_favorite_gain": [
+        0.0,
+        0.0
+      ],
+      "excess_over_null": [
+        -0.11105374008721554,
+        0.10908827631194809
+      ],
+      "return_minus_own_expectation": [
+        -0.11743450879654778,
+        0.0921721580806455
+      ],
+      "ll_gain_vs_market": [
+        -0.018340952637484708,
+        0.010888156367706731
+      ],
+      "brier_gain_vs_market": [
+        -0.008978108600416902,
+        0.00490639930978415
+      ],
+      "picked_calibration_residual": [
+        -0.06908782331248271,
+        0.05085543523744511
+      ],
+      "picked_market_calibration_residual": [
+        -0.06765404981489385,
+        0.056661533810764886
+      ]
+    }
+  },
+  {
+    "basis": "2017",
+    "games": 256,
+    "bets": 253,
+    "wins": 180,
+    "losses": 73,
+    "pushes": 0,
+    "units": 12.123261671584931,
+    "roi": 0.047918030322470086,
+    "roi_se": 0.043597670803339,
+    "favorite_units": 14.048515662876657,
+    "units_vs_favorite": -1.925253991291727,
+    "null_units": -6.100308420390299,
+    "null_roi": -0.024111890989684973,
+    "own_expected_units": -6.7116849158673,
+    "negative_own_ev_bets": 178,
+    "mean_picked_probability": 0.6613740558853076,
+    "mean_picked_market_probability": 0.6646920243163448,
+    "mean_price_breakeven": 0.6811342205376913,
+    "observed_win_rate": 0.7114624505928854,
+    "win_ll": 0.5939465130284959,
+    "market_win_ll": 0.5867040570094519,
+    "ll_gain_vs_market": -0.008384366865013594,
+    "win_brier": 0.20187939843110442,
+    "market_win_brier": 0.19997836341256078,
+    "median_ess": 203.36235251030348,
+    "mean_largest_atom": 0.021762696577461722,
+    "intervals95": {
+      "roi": [
+        -0.06044619733434744,
+        0.15648595242590715
+      ],
+      "paired_favorite_gain": [
+        -0.031599938640895844,
+        0.015947467166979364
+      ],
+      "excess_over_null": [
+        -0.03650647970983704,
+        0.18048513650703063
+      ],
+      "return_minus_own_expectation": [
+        -0.0355653692090006,
+        0.18466582088768987
+      ],
+      "ll_gain_vs_market": [
+        -0.02713751666999929,
+        0.006497611095661735
+      ],
+      "brier_gain_vs_market": [
+        -0.0077185058744562,
+        0.002620195482455488
+      ],
+      "picked_calibration_residual": [
+        -0.020915176040630926,
+        0.121354476348754
+      ],
+      "picked_market_calibration_residual": [
+        -0.02262694127208328,
+        0.11680755391555431
+      ]
+    }
+  },
+  {
+    "basis": "2018",
+    "games": 256,
+    "bets": 254,
+    "wins": 167,
+    "losses": 85,
+    "pushes": 2,
+    "units": -9.998883437451086,
+    "roi": -0.03936568282461057,
+    "roi_se": 0.04421321972289833,
+    "favorite_units": -8.107934763483543,
+    "units_vs_favorite": -1.8909486739675418,
+    "null_units": -6.213870770828133,
+    "null_roi": -0.024464058152866664,
+    "own_expected_units": -4.978744101363237,
+    "negative_own_ev_bets": 157,
+    "mean_picked_probability": 0.672658775172974,
+    "mean_picked_market_probability": 0.670308635746947,
+    "mean_price_breakeven": 0.6872330111197217,
+    "observed_win_rate": 0.6626984126984127,
+    "win_ll": 0.6196718790589303,
+    "market_win_ll": 0.6111498492251769,
+    "ll_gain_vs_market": -0.008522029833753334,
+    "win_brier": 0.21359071402797292,
+    "market_win_brier": 0.2112171881997208,
+    "median_ess": 229.16391147273288,
+    "mean_largest_atom": 0.030161273342546004,
+    "intervals95": {
+      "roi": [
+        -0.11069492584116176,
+        0.032013579582503955
+      ],
+      "paired_favorite_gain": [
+        -0.031589172337972544,
+        0.015764876632801163
+      ],
+      "excess_over_null": [
+        -0.08631638365552494,
+        0.056368033490412875
+      ],
+      "return_minus_own_expectation": [
+        -0.09555364282608736,
+        0.0557225531948773
+      ],
+      "ll_gain_vs_market": [
+        -0.024350883849907443,
+        0.005500466715833158
+      ],
+      "brier_gain_vs_market": [
+        -0.00795358854093202,
+        0.0030677539006557617
+      ],
+      "picked_calibration_residual": [
+        -0.05895548881919507,
+        0.039822876776018486
+      ],
+      "picked_market_calibration_residual": [
+        -0.053817666876005046,
+        0.03979633849805725
+      ]
+    }
+  },
+  {
+    "basis": "2019",
+    "games": 256,
+    "bets": 254,
+    "wins": 164,
+    "losses": 89,
+    "pushes": 1,
+    "units": -16.60408486315997,
+    "roi": -0.06537041284708649,
+    "roi_se": 0.04478186301273675,
+    "favorite_units": -19.778525248941698,
+    "units_vs_favorite": 3.174440385781728,
+    "null_units": -6.802993266336621,
+    "null_roi": -0.02678343805644339,
+    "own_expected_units": -8.603881197911335,
+    "negative_own_ev_bets": 193,
+    "mean_picked_probability": 0.6653199922228533,
+    "mean_picked_market_probability": 0.6708113696179311,
+    "mean_price_breakeven": 0.6895163438379958,
+    "observed_win_rate": 0.6482213438735178,
+    "win_ll": 0.6154278202845305,
+    "market_win_ll": 0.6136040671008756,
+    "ll_gain_vs_market": -0.0018237531836550198,
+    "win_brier": 0.21342772371320806,
+    "market_win_brier": 0.21299218063324168,
+    "median_ess": 228.11062836663328,
+    "mean_largest_atom": 0.026804873866408632,
+    "intervals95": {
+      "roi": [
+        -0.14997111639267063,
+        0.016616210277479997
+      ],
+      "paired_favorite_gain": [
+        -0.013831412803963784,
+        0.040987066661512764
+      ],
+      "excess_over_null": [
+        -0.12315349407606063,
+        0.043192232942912134
+      ],
+      "return_minus_own_expectation": [
+        -0.11617257693233597,
+        0.05128138149911325
+      ],
+      "ll_gain_vs_market": [
+        -0.009232545090995175,
+        0.00469311999116205
+      ],
+      "brier_gain_vs_market": [
+        -0.002615794739617711,
+        0.0018461933560376272
+      ],
+      "picked_calibration_residual": [
+        -0.07562419074122895,
+        0.03977246976401338
+      ],
+      "picked_market_calibration_residual": [
+        -0.0804735486407864,
+        0.03332929467633927
+      ]
+    }
+  },
+  {
+    "basis": "2020",
+    "games": 256,
+    "bets": 256,
+    "wins": 169,
+    "losses": 86,
+    "pushes": 1,
+    "units": -12.880247984622681,
+    "roi": -0.05031346868993235,
+    "roi_se": 0.04366627174032298,
+    "favorite_units": -5.345043321930915,
+    "units_vs_favorite": -7.535204662691767,
+    "null_units": -6.853457955320204,
+    "null_roi": -0.026771320137969547,
+    "own_expected_units": -8.872073034580852,
+    "negative_own_ev_bets": 189,
+    "mean_picked_probability": 0.6634959906992359,
+    "mean_picked_market_probability": 0.6689701163626592,
+    "mean_price_breakeven": 0.6876464356641778,
+    "observed_win_rate": 0.6627450980392157,
+    "win_ll": 0.5952282045080199,
+    "market_win_ll": 0.5900565227303127,
+    "ll_gain_vs_market": -0.005171681777707209,
+    "win_brier": 0.20244397613438034,
+    "market_win_brier": 0.20175664717213526,
+    "median_ess": 178.3136348779985,
+    "mean_largest_atom": 0.027108371669760586,
+    "intervals95": {
+      "roi": [
+        -0.12901306718684327,
+        0.025541015162494792
+      ],
+      "paired_favorite_gain": [
+        -0.05908966946224909,
+        -0.007163085124104614
+      ],
+      "excess_over_null": [
+        -0.10203862693171707,
+        0.05208247089277205
+      ],
+      "return_minus_own_expectation": [
+        -0.09366802623112432,
+        0.05882488603712423
+      ],
+      "ll_gain_vs_market": [
+        -0.018809234607442837,
+        0.006339276313082847
+      ],
+      "brier_gain_vs_market": [
+        -0.0037686070408175626,
+        0.0025408040484916545
+      ],
+      "picked_calibration_residual": [
+        -0.05077171076022478,
+        0.04873974010974939
+      ],
+      "picked_market_calibration_residual": [
+        -0.05768837636454847,
+        0.0438680793175434
+      ]
+    }
+  },
+  {
+    "basis": "2021",
+    "games": 272,
+    "bets": 272,
+    "wins": 168,
+    "losses": 103,
+    "pushes": 1,
+    "units": -33.96494980488074,
+    "roi": -0.12487113898853212,
+    "roi_se": 0.0428716002178212,
+    "favorite_units": -32.48770498195879,
+    "units_vs_favorite": -1.4772448229219415,
+    "null_units": -7.614920857629006,
+    "null_roi": -0.02799603256481252,
+    "own_expected_units": -10.437197780766855,
+    "negative_own_ev_bets": 191,
+    "mean_picked_probability": 0.6707779572836924,
+    "mean_picked_market_probability": 0.6778809877460699,
+    "mean_price_breakeven": 0.6977272776149167,
+    "observed_win_rate": 0.6199261992619927,
+    "win_ll": 0.6178768098967821,
+    "market_win_ll": 0.6215598343513408,
+    "ll_gain_vs_market": 0.0036830244545586247,
+    "win_brier": 0.21471466617101392,
+    "market_win_brier": 0.21688632095736635,
+    "median_ess": 200.03998902150317,
+    "mean_largest_atom": 0.024131119661166982,
+    "intervals95": {
+      "roi": [
+        -0.19185807084223525,
+        -0.05481298203532442
+      ],
+      "paired_favorite_gain": [
+        -0.03593688068724377,
+        0.025346645297900025
+      ],
+      "excess_over_null": [
+        -0.16367834201875606,
+        -0.02709572364713073
+      ],
+      "return_minus_own_expectation": [
+        -0.1516988107805038,
+        -0.01721544065806678
+      ],
+      "ll_gain_vs_market": [
+        -0.006942984872885527,
+        0.014899571922836193
+      ],
+      "brier_gain_vs_market": [
+        -0.0013765945107129007,
+        0.006010345482133937
+      ],
+      "picked_calibration_residual": [
+        -0.09517754051365583,
+        -0.0036153218073609744
+      ],
+      "picked_market_calibration_residual": [
+        -0.10322944036565283,
+        -0.009968790987130155
+      ]
+    }
+  },
+  {
+    "basis": "2022",
+    "games": 271,
+    "bets": 270,
+    "wins": 178,
+    "losses": 90,
+    "pushes": 2,
+    "units": -3.217925587172047,
+    "roi": -0.011918242915452026,
+    "roi_se": 0.044077485954801356,
+    "favorite_units": -7.543014522401945,
+    "units_vs_favorite": 4.325088935229899,
+    "null_units": -7.135997972523878,
+    "null_roi": -0.026429622120458806,
+    "own_expected_units": -15.898678970262432,
+    "negative_own_ev_bets": 210,
+    "mean_picked_probability": 0.6307298891072239,
+    "mean_picked_market_probability": 0.6525371914726787,
+    "mean_price_breakeven": 0.670477049866671,
+    "observed_win_rate": 0.664179104477612,
+    "win_ll": 0.6127298221599161,
+    "market_win_ll": 0.6085460268644317,
+    "ll_gain_vs_market": -0.004183795295484456,
+    "win_brier": 0.21350093674402112,
+    "market_win_brier": 0.21082110150076125,
+    "median_ess": 202.2618940390886,
+    "mean_largest_atom": 0.019871257233385554,
+    "intervals95": {
+      "roi": [
+        -0.07089658491131103,
+        0.05041550672330985
+      ],
+      "paired_favorite_gain": [
+        -0.019748051634656004,
+        0.05130981370068769
+      ],
+      "excess_over_null": [
+        -0.044407064875139846,
+        0.07693627331828005
+      ],
+      "return_minus_own_expectation": [
+        -0.012842060591111983,
+        0.11049324779418133
+      ],
+      "ll_gain_vs_market": [
+        -0.01551004309363449,
+        0.0058394590647545845
+      ],
+      "brier_gain_vs_market": [
+        -0.007946454521983197,
+        0.0018830764387477393
+      ],
+      "picked_calibration_residual": [
+        -0.007670873990915932,
+        0.07755893506029685
+      ],
+      "picked_market_calibration_residual": [
+        -0.028464998922133472,
+        0.054703150389328374
+      ]
+    }
+  },
+  {
+    "basis": "2023",
+    "games": 272,
+    "bets": 270,
+    "wins": 182,
+    "losses": 88,
+    "pushes": 0,
+    "units": 1.6219086921980281,
+    "roi": 0.0060070692303630675,
+    "roi_se": 0.0442039710733036,
+    "favorite_units": 4.11875296175193,
+    "units_vs_favorite": -2.496844269553901,
+    "null_units": -11.071880027043722,
+    "null_roi": -0.041006963063124895,
+    "own_expected_units": -15.588814906509214,
+    "negative_own_ev_bets": 223,
+    "mean_picked_probability": 0.6367041320843285,
+    "mean_picked_market_probability": 0.6495450155396333,
+    "mean_price_breakeven": 0.6772784569228044,
+    "observed_win_rate": 0.674074074074074,
+    "win_ll": 0.6280845122861851,
+    "market_win_ll": 0.627348797217123,
+    "ll_gain_vs_market": -0.0007357150690620995,
+    "win_brier": 0.21844442524893137,
+    "market_win_brier": 0.21870951462559263,
+    "median_ess": 196.33732346945072,
+    "mean_largest_atom": 0.02193556310469927,
+    "intervals95": {
+      "roi": [
+        -0.07056904832488728,
+        0.079656715859616
+      ],
+      "paired_favorite_gain": [
+        -0.03815235807813993,
+        0.020316625350209304
+      ],
+      "excess_over_null": [
+        -0.02963961428201768,
+        0.12076984708369547
+      ],
+      "return_minus_own_expectation": [
+        -0.011439026935964044,
+        0.13754250098826717
+      ],
+      "ll_gain_vs_market": [
+        -0.00990307088387852,
+        0.00794245218174871
+      ],
+      "brier_gain_vs_market": [
+        -0.0033369252246239233,
+        0.0036196104720288736
+      ],
+      "picked_calibration_residual": [
+        -0.011263321135319318,
+        0.0844846751283384
+      ],
+      "picked_market_calibration_residual": [
+        -0.024223612085275632,
+        0.07155179522028152
+      ]
+    }
+  },
+  {
+    "basis": "2024",
+    "games": 272,
+    "bets": 271,
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "favorite_units": 14.10850930616005,
+    "units_vs_favorite": -1.8928571428571428,
+    "null_units": -11.096873223873782,
+    "null_roi": -0.040947871674811,
+    "own_expected_units": -9.433398742728073,
+    "negative_own_ev_bets": 187,
+    "mean_picked_probability": 0.65419194671294,
+    "mean_picked_market_probability": 0.6537814348694577,
+    "mean_price_breakeven": 0.6816532308632882,
+    "observed_win_rate": 0.7121771217712177,
+    "win_ll": 0.5916332387507898,
+    "market_win_ll": 0.587488899505652,
+    "ll_gain_vs_market": -0.004144339245137727,
+    "win_brier": 0.20227475751318613,
+    "market_win_brier": 0.20016161878885613,
+    "median_ess": 226.24434572519306,
+    "mean_largest_atom": 0.016199219263944593,
+    "intervals95": {
+      "roi": [
+        -0.04764095060062977,
+        0.134105957835927
+      ],
+      "paired_favorite_gain": [
+        -0.02110993096123208,
+        0.0
+      ],
+      "excess_over_null": [
+        -0.006761547437150867,
+        0.17513029091263715
+      ],
+      "return_minus_own_expectation": [
+        -0.011881176236093647,
+        0.16929653231326244
+      ],
+      "ll_gain_vs_market": [
+        -0.012988591083503098,
+        0.0056405709676214735
+      ],
+      "brier_gain_vs_market": [
+        -0.006060484088802478,
+        0.0022727556042463457
+      ],
+      "picked_calibration_residual": [
+        -0.002574995251550959,
+        0.1153204416763517
+      ],
+      "picked_market_calibration_residual": [
+        -0.0031390883130624136,
+        0.11563130452349905
+      ]
+    }
+  },
+  {
+    "basis": "2025",
+    "games": 272,
+    "bets": 271,
+    "wins": 177,
+    "losses": 93,
+    "pushes": 1,
+    "units": -18.047143334139413,
+    "roi": -0.06659462484922293,
+    "roi_se": 0.04262389482560202,
+    "favorite_units": -18.047143334139413,
+    "units_vs_favorite": 0.0,
+    "null_units": -11.119157042855175,
+    "null_roi": -0.04103009978913349,
+    "own_expected_units": -3.670001761762982,
+    "negative_own_ev_bets": 157,
+    "mean_picked_probability": 0.6867676758579316,
+    "mean_picked_market_probability": 0.6721249771865351,
+    "mean_price_breakeven": 0.7008209727781023,
+    "observed_win_rate": 0.6555555555555556,
+    "win_ll": 0.617296692513412,
+    "market_win_ll": 0.6093832198972613,
+    "ll_gain_vs_market": -0.007913472616150665,
+    "win_brier": 0.21608025403357142,
+    "market_win_brier": 0.212138968350792,
+    "median_ess": 216.4951020209453,
+    "mean_largest_atom": 0.019785322337727104,
+    "intervals95": {
+      "roi": [
+        -0.15414022163500052,
+        0.02107502987383153
+      ],
+      "paired_favorite_gain": [
+        0.0,
+        0.0
+      ],
+      "excess_over_null": [
+        -0.11314638636028831,
+        0.06212169207253104
+      ],
+      "return_minus_own_expectation": [
+        -0.13851090781131595,
+        0.029872781148103853
+      ],
+      "ll_gain_vs_market": [
+        -0.019710268695777276,
+        0.003376582288669654
+      ],
+      "brier_gain_vs_market": [
+        -0.008857504095986412,
+        0.0007914828167568661
+      ],
+      "picked_calibration_residual": [
+        -0.08755184378666979,
+        0.023027788668501845
+      ],
+      "picked_market_calibration_residual": [
+        -0.07394850007584776,
+        0.04013944357933971
+      ]
+    }
+  },
+  {
+    "basis": "2026",
+    "games": 79,
+    "bets": 79,
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "favorite_units": -3.703379463288224,
+    "units_vs_favorite": 0.0,
+    "null_units": -3.237825176668428,
+    "null_roi": -0.04098512881858769,
+    "own_expected_units": -2.5805940338398177,
+    "negative_own_ev_bets": 58,
+    "mean_picked_probability": 0.6509934102337213,
+    "mean_picked_market_probability": 0.6502164082118639,
+    "mean_price_breakeven": 0.6779664967055615,
+    "observed_win_rate": 0.6410256410256411,
+    "win_ll": 0.6536387701501533,
+    "market_win_ll": 0.6507537097590552,
+    "ll_gain_vs_market": -0.0028850603910979965,
+    "win_brier": 0.23063212153355112,
+    "market_win_brier": 0.22890252155360627,
+    "median_ess": 239.76167006620773,
+    "mean_largest_atom": 0.015703037196036652,
+    "intervals95": {
+      "roi": [
+        -0.15207259911403756,
+        0.06805129581754937
+      ],
+      "paired_favorite_gain": [
+        0.0,
+        0.0
+      ],
+      "excess_over_null": [
+        -0.11105374008721554,
+        0.10908827631194809
+      ],
+      "return_minus_own_expectation": [
+        -0.11743450879654778,
+        0.0921721580806455
+      ],
+      "ll_gain_vs_market": [
+        -0.018340952637484708,
+        0.010888156367706731
+      ],
+      "brier_gain_vs_market": [
+        -0.008978108600416902,
+        0.00490639930978415
+      ],
+      "picked_calibration_residual": [
+        -0.06908782331248271,
+        0.05085543523744511
+      ],
+      "picked_market_calibration_residual": [
+        -0.06765404981489385,
+        0.056661533810764886
+      ]
+    }
+  }
+]

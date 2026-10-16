@@ -1,0 +1,110 @@
+[
+  {
+    "configuration": "context_r10",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5113784214786228,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.018677691551615458,
+    "calibration_residual_ci95": [
+      -0.056004405528991275,
+      0.0171368137243601
+    ]
+  },
+  {
+    "configuration": "context_r100",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5080286381848989,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.015327908257891602,
+    "calibration_residual_ci95": [
+      -0.0526214988758145,
+      0.02034657518816056
+    ]
+  },
+  {
+    "configuration": "fair",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.0072992700729927005,
+    "calibration_residual_ci95": [
+      -0.044626593806921674,
+      0.028573409030895138
+    ]
+  },
+  {
+    "configuration": "platt_r10",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5057841755054722,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.013083445578464966,
+    "calibration_residual_ci95": [
+      -0.050303891358290956,
+      0.02275727171467252
+    ]
+  },
+  {
+    "configuration": "platt_r100",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5030110078001037,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.01031027787309635,
+    "calibration_residual_ci95": [
+      -0.047496084288404586,
+      0.02539658283716717
+    ]
+  },
+  {
+    "configuration": "raw",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5624765055180764,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.06977577559106904,
+    "calibration_residual_ci95": [
+      -0.10730561232836226,
+      -0.03366221681502127
+    ]
+  },
+  {
+    "configuration": "selected",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5017351888159998,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.009034458888992413,
+    "calibration_residual_ci95": [
+      -0.04631407876078704,
+      0.026773959644246646
+    ]
+  },
+  {
+    "configuration": "temperature_r10",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5050638298064949,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.012363099879487662,
+    "calibration_residual_ci95": [
+      -0.04983103453241368,
+      0.02367595273557704
+    ]
+  },
+  {
+    "configuration": "temperature_r100",
+    "original_raw_bets": 560,
+    "decisive": 548,
+    "predicted_cover": 0.5010985630505159,
+    "actual_cover": 0.4927007299270073,
+    "calibration_residual": -0.008397833123508615,
+    "calibration_residual_ci95": [
+      -0.045784881845393116,
+      0.02754334232688388
+    ]
+  }
+]

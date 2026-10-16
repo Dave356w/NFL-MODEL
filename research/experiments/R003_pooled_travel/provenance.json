@@ -1,0 +1,63 @@
+{
+  "experiment": "R003-PT1",
+  "registration": {
+    "experiment": "R003-PT1",
+    "registered_at": "2026-10-16T20:18:26.863759+00:00",
+    "protocol_sha256": "af1e78f5e37ac0f567178bad182b6ab9e47d845661445662f79f384fd56213a2",
+    "independent_preregistration": false
+  },
+  "hashes": {
+    "research/experiments/R000_reproduction/frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "research/disjoint_features_inputs/schedule_context.csv": "b0d5a062894112efa5e4d3bd3a0db3cf2d8f9e2695adfe4495fac862eb677cb8",
+    "research/experiments/R003_schedule_context/predictions.csv.gz": "5af66f418c97d4beed3fb587a72b2dae224c7929485c7583b696e9fb82a51c52",
+    "research/pooled_travel_empirical.py": "71f7090f7e3ce4a0f808189e4a0fd3a765c65dd20fac00fd578e30ebf6091ec1",
+    "research/schedule_context_empirical.py": "7de2610eacb1eaa7217b251db0c1d8e0630a02bd5b662dee3fae5b3476156a2b",
+    "research/market_context_empirical.py": "2a38d1e1cf426e6646e487dec7975771a0dc9e83511c4d8aaa7982ac3d0aad0c",
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1"
+  },
+  "configurations": [
+    {
+      "name": "plain",
+      "quadratic": false,
+      "ridge": 20.0
+    },
+    {
+      "name": "linear_r20",
+      "quadratic": false,
+      "ridge": 20
+    },
+    {
+      "name": "linear_r100",
+      "quadratic": false,
+      "ridge": 100
+    },
+    {
+      "name": "quadratic_r20",
+      "quadratic": true,
+      "ridge": 20
+    },
+    {
+      "name": "quadratic_r100",
+      "quadratic": true,
+      "ridge": 100
+    }
+  ],
+  "verification": {
+    "no_duplicate_predictions": true,
+    "identical_populations": true,
+    "main_n_816": true,
+    "prior_week_inputs": true,
+    "prior_season_selection": true,
+    "normalized_events": true,
+    "finite_primary": true,
+    "coherent_means": true,
+    "direct_no_dropped_atoms": true,
+    "unchanged_score_atoms": true
+  },
+  "baseline_reproduction_max_error": 3.552713678800501e-15,
+  "numpy": "2.5.4",
+  "pandas": "3.0.6",
+  "independent_validation": false,
+  "production_changed": false
+}

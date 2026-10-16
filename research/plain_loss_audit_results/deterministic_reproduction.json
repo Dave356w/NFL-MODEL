@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "slices.csv": true,
+    "concentration.json": true,
+    "proper_score_contributions.csv": true,
+    "loss_cases.csv": true,
+    "summary.json": true,
+    "distribution_shape.json": true,
+    "value_claim_audit.json": true,
+    "bet_ledger.csv": true,
+    "source_influence.csv": true,
+    "disagreements.csv": true,
+    "provenance.json": true
+  },
+  "all_passed": true,
+  "method": "Separate process/output directory; exact numerical-artifact bytes"
+}

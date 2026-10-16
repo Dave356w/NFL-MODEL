@@ -1,0 +1,12 @@
+{
+  "forecast_vs_saved_games": [
+    "2023_01_ARI_WAS",
+    "2023_18_TB_CAR",
+    "2025_01_HOU_LA",
+    "2025_18_WAS_PHI"
+  ],
+  "all_probabilities_match": true,
+  "spread_prices": "synthetic -110, functional verification only; no ATS ROI",
+  "original_experiments_and_data_unchanged": 192,
+  "RF1_predictions_unchanged": true
+}

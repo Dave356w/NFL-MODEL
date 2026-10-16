@@ -1,0 +1,154 @@
+{
+  "experiment": "R003-MC2",
+  "registration": {
+    "experiment": "R003-MC2",
+    "protocol_sha256": "3121912e29367d05703b60319b61a6547016f0cd9960b9df82306023fd2b1ce6",
+    "recorded_utc": "2026-10-16T19:55:45.415071+00:00",
+    "status": "exploratory iteration frozen after MC1 results, before MC2 scoring; all history exposed"
+  },
+  "input_sha256": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+  "source_hashes": {
+    "research/market_context_empirical.py": "2a38d1e1cf426e6646e487dec7975771a0dc9e83511c4d8aaa7982ac3d0aad0c",
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1",
+    "research/r003_spread_ev.py": "256fa9a474a2c00ac4955324fcd58d51d217fffc83d016ba1e5345a97eedd349"
+  },
+  "configurations": [
+    {
+      "name": "direct_ref_h1_t2_p0",
+      "family": "direct_kernel",
+      "spread_bandwidth": 1.0,
+      "total_bandwidth": 2.0,
+      "pseudo_games": 0,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "direct_ref_h1_t2_p5",
+      "family": "direct_kernel",
+      "spread_bandwidth": 1.0,
+      "total_bandwidth": 2.0,
+      "pseudo_games": 5,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "direct_ref_h2_t3_p0",
+      "family": "direct_kernel",
+      "spread_bandwidth": 2.0,
+      "total_bandwidth": 3.0,
+      "pseudo_games": 0,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "direct_ref_h2_t3_p5",
+      "family": "direct_kernel",
+      "spread_bandwidth": 2.0,
+      "total_bandwidth": 3.0,
+      "pseudo_games": 5,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "direct_ref_h4_t6_p0",
+      "family": "direct_kernel",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 0,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "direct_ref_h4_t6_p5",
+      "family": "direct_kernel",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 5,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "neighbors_ref_100_p0",
+      "family": "direct_neighbor",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 0,
+      "neighbors": 100,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "neighbors_ref_100_p5",
+      "family": "direct_neighbor",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 5,
+      "neighbors": 100,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "neighbors_ref_250_p0",
+      "family": "direct_neighbor",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 0,
+      "neighbors": 250,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "neighbors_ref_250_p5",
+      "family": "direct_neighbor",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 5,
+      "neighbors": 250,
+      "translated": false,
+      "global_only": false
+    },
+    {
+      "name": "global_direct",
+      "family": "direct_kernel",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 80.0,
+      "neighbors": 0,
+      "translated": false,
+      "global_only": true
+    },
+    {
+      "name": "global_residual",
+      "family": "residual",
+      "spread_bandwidth": 4.0,
+      "total_bandwidth": 6.0,
+      "pseudo_games": 80.0,
+      "neighbors": 0,
+      "translated": true,
+      "global_only": true
+    }
+  ],
+  "verification": {
+    "no_duplicate_predictions": true,
+    "identical_populations": true,
+    "main_n_816": true,
+    "prior_week_inputs": true,
+    "prior_season_selection": true,
+    "normalized_events": true,
+    "finite_primary": true,
+    "coherent_means": true,
+    "direct_no_dropped_atoms": true
+  },
+  "numpy": "2.5.4",
+  "pandas": "3.0.6",
+  "fresh_validation": false,
+  "historical_quote_timestamps": "unknown",
+  "production_changed": false
+}

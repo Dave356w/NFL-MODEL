@@ -11,8 +11,25 @@ or prospective result is claimed. No production promotion is authorized.
 | R001-F1 | Planned, not activated | Fixed empirical A versus R001, first 512 eligible future games | No real quotes, forecasts or outcomes collected | Activate only after provider validation and external timestamped registration |
 | R002 | Completed | Fixed +2/+3/+6 terminal transport vs empirical R001 | Joint-NLL gain +0.007088; two-contrast interval [0.003099, 0.011391]; mechanism unidentifiable | Retain for research; fresh validation required |
 | R003 | Completed | Independent additive joint score-support mask vs raw empirical A | Gain +0.000286; two-contrast interval [0.000253, 0.000325]; below fixed 0.005 practical threshold | Reject advancement; preserve the small positive result |
+| R003-RF1 | Completed; separate extension | Prior-week single-parameter penalty on legal rare team scores {1,2,4,5}, versus unchanged empirical R003 | Joint-NLL gain +0.028119, 95% [0.024775, 0.030384]; margin CRPS worsens 0.013551 and fails the 0.01 tolerance; moneyline bets unchanged | Reject advancement under the locked gate; retain reproducible results, original R003 and its default unchanged |
+| R003-MC1 | Completed; original-intent empirical model | Ten direct/neighbor/market-relative context settings; earlier-season selection | Selected relative CRPS gain .023585 vs R003, 95% [−.000992,.050191]; 812 moneyline bets −1.71u; no independent confirmation | Fails positive-bound gate; retain all fixed-arm results and direct/relative distinction |
+| R003-MC2 | Completed; exploratory refinement after MC1 | Ten direct-only localization settings with 0/5 pseudo-games | Selected direct improves MC1 direct by .049928 CRPS, but loses .037226 vs R003, 95% loss interval [.004292,.069043]; 812 bets −4.21u | Fails advancement; retains observed key-number shape and original-intent research interface |
+| R003-SC1 | Completed; schedule/location context | Six groups plus joint/additive, K=30/100, hard sparse fallback, explicit plain in earlier-season selectors | Selected CRPS gain .001075, 95% [−.000235,.002714]; main bets unchanged; travel's positive fixed-arm point estimate unresolved | No qualified improvement; retain plain, disclose low power for TNF/MNF and fine intersections |
+| R003-PT1 | Completed; pooled travel follow-up | Four regularized multinomial density-ratio tilts, observed score atoms, capped/shrunk adjustment; earlier-season winner-log-loss selector includes plain | All fixed arms slightly worsen CRPS; selected gain −.002723, 95% [−.008766,+.003291]; 812 bets −6.057u vs plain −4.210u | No qualified improvement; keep plain; greater pooled support does not establish incremental information |
+| R003-AC1 | Completed; ATS calibration/selection | Six chronological OOF calibrators, fair/raw controls, fixed EV/Stable rules; selection on earlier cover log loss | Main selected cover LL .693345 vs raw .700040 and fair .693147; both selected policies pass all 816 games at assumed −110; all active fixed calibrated arms lose | Probability repair retained as separate research; no established ATS edge or promotion |
 
 ## Original negative findings preserved
+
+R003-RF1's [protocol](experiments/R003_rare_frequency/PROTOCOL.md) was hashed
+locally before candidate execution, after the exposed-history R003 frequency
+diagnostic. This is not independent preregistration. One new primary contrast
+uses a 95% season-stratified whole-week interval; its ten-contrast 99.5%
+sensitivity interval is [0.022854, 0.030928], without full adaptive-search coverage.
+2017–22 is separate development context; 2026 is diagnostic. No R001/R002
+combination, key-number correction, parameter search, or ROI selection was used.
+The narrow RF1 extension does not redefine the queued general R004 experiment.
+Full [results](experiments/R003_rare_frequency/REPORT.md) include unfavorable
+metrics, cutoffs, source hashes, per-game data, and repeat validation.
 
 These six contrasts were fixed in the original research, then reproduced here.
 Gains are baseline-minus-candidate joint NLL on 816 2023-25 games. Each comparison

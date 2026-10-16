@@ -1,0 +1,132 @@
+[
+  {
+    "target_season": 2017,
+    "selection_max_season": 2016,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6466790689089837,
+      "linear_r20": 0.6463825508783315,
+      "plain": 0.6469185770266539,
+      "quadratic_r100": 0.6466718334791278,
+      "quadratic_r20": 0.6463674526349973
+    }
+  },
+  {
+    "target_season": 2018,
+    "selection_max_season": 2017,
+    "chosen": "linear_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.629041691631867,
+      "linear_r20": 0.6288439181453395,
+      "plain": 0.6292151196069039,
+      "quadratic_r100": 0.6290802835732405,
+      "quadratic_r20": 0.6289312748484119
+    }
+  },
+  {
+    "target_season": 2019,
+    "selection_max_season": 2018,
+    "chosen": "linear_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6267311103130302,
+      "linear_r20": 0.6265972194318459,
+      "plain": 0.6268386655880948,
+      "quadratic_r100": 0.6266870159008001,
+      "quadratic_r20": 0.6266082406210013
+    }
+  },
+  {
+    "target_season": 2020,
+    "selection_max_season": 2019,
+    "chosen": "quadratic_r100",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.62456384255272,
+      "linear_r20": 0.6245256501860397,
+      "plain": 0.624556496527382,
+      "quadratic_r100": 0.6244544440307089,
+      "quadratic_r20": 0.6244873766897232
+    }
+  },
+  {
+    "target_season": 2021,
+    "selection_max_season": 2020,
+    "chosen": "quadratic_r100",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6197015196767052,
+      "linear_r20": 0.6196916493214657,
+      "plain": 0.6196684478574883,
+      "quadratic_r100": 0.6195112435474155,
+      "quadratic_r20": 0.6195678308661609
+    }
+  },
+  {
+    "target_season": 2022,
+    "selection_max_season": 2021,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6193237342054263,
+      "linear_r20": 0.6192590622431307,
+      "plain": 0.6193988565818905,
+      "quadratic_r100": 0.6191370963028874,
+      "quadratic_r20": 0.6191158492899915
+    }
+  },
+  {
+    "target_season": 2023,
+    "selection_max_season": 2022,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6183111476714008,
+      "linear_r20": 0.6181791889203037,
+      "plain": 0.6185322042826099,
+      "quadratic_r100": 0.6181608517653553,
+      "quadratic_r20": 0.6180769002710191
+    }
+  },
+  {
+    "target_season": 2024,
+    "selection_max_season": 2023,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.619427712937822,
+      "linear_r20": 0.6193081799636706,
+      "plain": 0.6196416098235887,
+      "quadratic_r100": 0.6192619586055692,
+      "quadratic_r20": 0.619173330077468
+    }
+  },
+  {
+    "target_season": 2025,
+    "selection_max_season": 2024,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6165295513553811,
+      "linear_r20": 0.6164222293330508,
+      "plain": 0.6167271963072148,
+      "quadratic_r100": 0.6163758689910765,
+      "quadratic_r20": 0.6162942474434719
+    }
+  },
+  {
+    "target_season": 2026,
+    "selection_max_season": 2025,
+    "chosen": "quadratic_r20",
+    "criterion": "winner_log_loss",
+    "losses": {
+      "linear_r100": 0.6165914569317043,
+      "linear_r20": 0.6164886517499691,
+      "plain": 0.6167806914447814,
+      "quadratic_r100": 0.6164730153019118,
+      "quadratic_r20": 0.6164029704862874
+    }
+  }
+]

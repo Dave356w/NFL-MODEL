@@ -172,3 +172,22 @@ def test_arbitrary_offer_handicap_is_evaluated_from_pmf_without_mean_or_labels()
     assert row["expected_units"] == pytest.approx(.75 * .5 - .25)
     assert row["quote"] == offers[0]
     assert offers == [quote(handicap=-2.5, american_odds=-200, book="fixture", quote_id="q1")]
+
+
+def test_rf1_requires_explicit_selection_and_reports_distinct_policy(tmp_path, capsys):
+    path = tmp_path / 'both.npz'
+    np.savez(path, game_ids=['fixture'], margin_support=[-7, 3, 7],
+             **{ev.ARM+'__margin': [[.25, .35, .40]],
+                ev.RF1_ARM+'__margin': [[.60, .20, .20]]})
+    request = dict(game_id='fixture', offers=[quote(), quote('away', 3)])
+    old = ev.evaluate_request(path, request)
+    new = ev.evaluate_request(path, request, arm=ev.RF1_ARM)
+    assert old['arm'] == ev.ARM and old['policy'] == ev.POLICY
+    assert old['selected_offer']['side'] == 'home'
+    assert new['arm'] == ev.RF1_ARM and new['policy'] == 'R003-RF1-SPREAD-EV-v1'
+    assert new['selected_offer']['side'] == 'away'
+    file = tmp_path / 'request.json'; file.write_text(json.dumps(request))
+    ev.main([str(file), '--pmfs', str(path), '--arm', ev.RF1_ARM])
+    assert json.loads(capsys.readouterr().out)['arm'] == ev.RF1_ARM
+    with pytest.raises(ValueError, match='Unknown'):
+        ev.load_margin(path, 'fixture', arm='unregistered')

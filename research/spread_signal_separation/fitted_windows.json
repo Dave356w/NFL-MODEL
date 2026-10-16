@@ -1,0 +1,3872 @@
+[
+  {
+    "target_season": 2019,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        0.04147806005567788,
+        1.0235369646163435
+      ],
+      "spread_total": [
+        0.04219380967003265,
+        0.9866885559739148,
+        -0.0034796714161083797,
+        0.18988926855952132
+      ]
+    },
+    "line_coefficients": [
+      0.03886046284508662,
+      7.15270028343929
+    ],
+    "prior_home_mean": 2.281464400306466,
+    "prior_home_win": 0.5783322840665461,
+    "training_games": 1280,
+    "training_decisive": 1275,
+    "training_max_season": 2018,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        0.028525662665026295,
+        1.039734412908217
+      ],
+      "spread_total": [
+        0.03091631080857217,
+        1.0002185270106025,
+        -0.014384201850350208,
+        0.20813129161896643
+      ]
+    },
+    "line_coefficients": [
+      -0.11865854254375408,
+      7.250020491598524
+    ],
+    "prior_home_mean": 2.1687470412171743,
+    "prior_home_win": 0.5772150650721565,
+    "training_games": 1296,
+    "training_decisive": 1290,
+    "training_max_season": 2019,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        0.009034487089313838,
+        1.0529843283175586
+      ],
+      "spread_total": [
+        0.008938182541705574,
+        1.014322312587581,
+        0.0013759945529953912,
+        0.19614321656169748
+      ]
+    },
+    "line_coefficients": [
+      -0.33856483714489255,
+      7.443189978814821
+    ],
+    "prior_home_mean": 1.9423942070066924,
+    "prior_home_win": 0.5719095318500158,
+    "training_games": 1312,
+    "training_decisive": 1306,
+    "training_max_season": 2019,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.003197731603418403,
+        1.0582057148721857
+      ],
+      "spread_total": [
+        -0.00036997436835049715,
+        1.021003604649159,
+        -0.0146849155535277,
+        0.19139911332613063
+      ]
+    },
+    "line_coefficients": [
+      -0.4022516408696953,
+      7.435231571084494
+    ],
+    "prior_home_mean": 1.9616948377231198,
+    "prior_home_win": 0.5716634180720993,
+    "training_games": 1328,
+    "training_decisive": 1322,
+    "training_max_season": 2019,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.02604635646739739,
+        1.0323298782987396
+      ],
+      "spread_total": [
+        -0.020543649635150527,
+        0.9962054906604297,
+        -0.026625495428924482,
+        0.1801856661350128
+      ]
+    },
+    "line_coefficients": [
+      -0.4577399894340509,
+      7.327817377288142
+    ],
+    "prior_home_mean": 1.824248693473277,
+    "prior_home_win": 0.5642697613230454,
+    "training_games": 1343,
+    "training_decisive": 1337,
+    "training_max_season": 2019,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.031918771612888974,
+        1.0170198034448645
+      ],
+      "spread_total": [
+        -0.025032691195256414,
+        0.9890320531370229,
+        -0.036456549745329435,
+        0.13954357551851296
+      ]
+    },
+    "line_coefficients": [
+      -0.48728264634502744,
+      7.390949091499133
+    ],
+    "prior_home_mean": 1.7996779311357678,
+    "prior_home_win": 0.5619175397219562,
+    "training_games": 1358,
+    "training_decisive": 1352,
+    "training_max_season": 2019,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.035211022103536514,
+        1.0041119771873965
+      ],
+      "spread_total": [
+        -0.026807559640471726,
+        0.9786424865574915,
+        -0.043415287793286204,
+        0.12765720139153128
+      ]
+    },
+    "line_coefficients": [
+      -0.49017212095076246,
+      7.333390250747754
+    ],
+    "prior_home_mean": 1.7834426281167366,
+    "prior_home_win": 0.5605306271393224,
+    "training_games": 1372,
+    "training_decisive": 1366,
+    "training_max_season": 2019,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.05680451337716029,
+        1.0275966708227153
+      ],
+      "spread_total": [
+        -0.049005777301824066,
+        1.0028596249275565,
+        -0.042138883287339786,
+        0.12927272679950755
+      ]
+    },
+    "line_coefficients": [
+      -0.6633134672602571,
+      7.469289724366268
+    ],
+    "prior_home_mean": 1.6154076519024783,
+    "prior_home_win": 0.555996667619673,
+    "training_games": 1386,
+    "training_decisive": 1380,
+    "training_max_season": 2019,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.05796747409354897,
+        1.061815213942567
+      ],
+      "spread_total": [
+        -0.05113867483079484,
+        1.0361314704437297,
+        -0.03630201661336239,
+        0.13398905462307362
+      ]
+    },
+    "line_coefficients": [
+      -0.6401777815927038,
+      7.508562753982574
+    ],
+    "prior_home_mean": 1.744333298755623,
+    "prior_home_win": 0.5602059936051026,
+    "training_games": 1401,
+    "training_decisive": 1395,
+    "training_max_season": 2019,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.018985653513090454,
+        1.0413202695600845
+      ],
+      "spread_total": [
+        -0.008402125105926356,
+        1.0159669984699302,
+        -0.05456802452583287,
+        0.13569099509030919
+      ]
+    },
+    "line_coefficients": [
+      -0.4958229723741461,
+      7.397737443670532
+    ],
+    "prior_home_mean": 1.7860742409646089,
+    "prior_home_win": 0.5651816655983118,
+    "training_games": 1415,
+    "training_decisive": 1409,
+    "training_max_season": 2019,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.0008398222322570243,
+        0.9844653418229036
+      ],
+      "spread_total": [
+        0.010922092781001178,
+        0.9703530418484475,
+        -0.057088889754567745,
+        0.07221884682247615
+      ]
+    },
+    "line_coefficients": [
+      -0.5375528126618672,
+      7.267570787578016
+    ],
+    "prior_home_mean": 1.70895984132824,
+    "prior_home_win": 0.5662070241760123,
+    "training_games": 1428,
+    "training_decisive": 1422,
+    "training_max_season": 2019,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.013880689050773207,
+        1.0187183919193676
+      ],
+      "spread_total": [
+        0.0006638207567183144,
+        1.004213830010424,
+        -0.06961467499287177,
+        0.07312784045852654
+      ]
+    },
+    "line_coefficients": [
+      -0.575082346311681,
+      7.309266536097314
+    ],
+    "prior_home_mean": 1.6716184885448653,
+    "prior_home_win": 0.5647542506612062,
+    "training_games": 1442,
+    "training_decisive": 1436,
+    "training_max_season": 2019,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.0018625030255921067,
+        1.0298555111735976
+      ],
+      "spread_total": [
+        0.01785160747994135,
+        1.0178303561755302,
+        -0.09715811232761583,
+        0.06503575421628871
+      ]
+    },
+    "line_coefficients": [
+      -0.5124625246219603,
+      7.315928931538103
+    ],
+    "prior_home_mean": 1.7409615091343063,
+    "prior_home_win": 0.5680195917895514,
+    "training_games": 1456,
+    "training_decisive": 1450,
+    "training_max_season": 2019,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        0.008940770588999536,
+        0.9973800153912715
+      ],
+      "spread_total": [
+        0.028055628283923457,
+        0.977133852664245,
+        -0.10203747442276054,
+        0.11543876995343495
+      ]
+    },
+    "line_coefficients": [
+      -0.5068896516368799,
+      7.2541879060756225
+    ],
+    "prior_home_mean": 1.6547005013657263,
+    "prior_home_win": 0.5663320566406455,
+    "training_games": 1472,
+    "training_decisive": 1466,
+    "training_max_season": 2019,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        0.0023441898722360932,
+        1.0118053662955062
+      ],
+      "spread_total": [
+        0.02021394416638032,
+        0.991963640170898,
+        -0.09687112176329728,
+        0.11630410470339393
+      ]
+    },
+    "line_coefficients": [
+      -0.5880246022125208,
+      7.2505598373926
+    ],
+    "prior_home_mean": 1.5941382346704853,
+    "prior_home_win": 0.566236592795344,
+    "training_games": 1488,
+    "training_decisive": 1482,
+    "training_max_season": 2019,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.011013651992838836,
+        1.0120225247949983
+      ],
+      "spread_total": [
+        0.00354437569959975,
+        1.0033953512768554,
+        -0.07627309846850802,
+        0.05282611923695144
+      ]
+    },
+    "line_coefficients": [
+      -0.6109548694101101,
+      7.323574668138094
+    ],
+    "prior_home_mean": 1.587269325611887,
+    "prior_home_win": 0.5630858072774212,
+    "training_games": 1504,
+    "training_decisive": 1498,
+    "training_max_season": 2019,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2019,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.016981021079088963,
+        1.0111986020604287
+      ],
+      "spread_total": [
+        0.004643466009467953,
+        1.0033111949031264,
+        -0.11133788323535317,
+        0.05151600818181459
+      ]
+    },
+    "line_coefficients": [
+      -0.660435643575207,
+      7.334452697496832
+    ],
+    "prior_home_mean": 1.5321377880237506,
+    "prior_home_win": 0.5615511454549804,
+    "training_games": 1520,
+    "training_decisive": 1514,
+    "training_max_season": 2019,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.01779301689190213,
+        0.9974620999947617
+      ],
+      "spread_total": [
+        0.0019269103252098263,
+        0.9925131744298615,
+        -0.11235155176787906,
+        0.04585938330915659
+      ]
+    },
+    "line_coefficients": [
+      -0.6585916271284891,
+      7.286782379478444
+    ],
+    "prior_home_mean": 1.4382349160594068,
+    "prior_home_win": 0.5580484838626915,
+    "training_games": 1280,
+    "training_decisive": 1275,
+    "training_max_season": 2019,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.021861160264101846,
+        0.9957476665837955
+      ],
+      "spread_total": [
+        -0.0027098672836267284,
+        0.9902068155301608,
+        -0.11134188131233759,
+        0.05224814997509924
+      ]
+    },
+    "line_coefficients": [
+      -0.5907041182382232,
+      7.266370327817516
+    ],
+    "prior_home_mean": 1.4793579420056422,
+    "prior_home_win": 0.5565146387415315,
+    "training_games": 1296,
+    "training_decisive": 1291,
+    "training_max_season": 2020,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.012023411387096755,
+        1.0286273588835182
+      ],
+      "spread_total": [
+        0.004552245125533419,
+        1.0226922928709161,
+        -0.0954018905976079,
+        0.050758416223671714
+      ]
+    },
+    "line_coefficients": [
+      -0.5639846497553234,
+      7.310206456071476
+    ],
+    "prior_home_mean": 1.507644757784138,
+    "prior_home_win": 0.5599436151295746,
+    "training_games": 1312,
+    "training_decisive": 1307,
+    "training_max_season": 2020,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.037526629252261204,
+        1.0353065783623583
+      ],
+      "spread_total": [
+        -0.013441367783273456,
+        1.0335243037553954,
+        -0.12911712203955963,
+        0.039904295493273366
+      ]
+    },
+    "line_coefficients": [
+      -0.7037727418928847,
+      7.408036611239218
+    ],
+    "prior_home_mean": 1.4345826478204957,
+    "prior_home_win": 0.5560413726723034,
+    "training_games": 1328,
+    "training_decisive": 1322,
+    "training_max_season": 2020,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.054975114863743436,
+        1.0432537051778752
+      ],
+      "spread_total": [
+        -0.027240619394367636,
+        1.0382676410343694,
+        -0.13890785961263213,
+        0.05517086763616412
+      ]
+    },
+    "line_coefficients": [
+      -0.726747307903254,
+      7.3614912099377925
+    ],
+    "prior_home_mean": 1.379034960655448,
+    "prior_home_win": 0.552258339668752,
+    "training_games": 1343,
+    "training_decisive": 1337,
+    "training_max_season": 2020,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.04756803407588871,
+        1.0300079333918013
+      ],
+      "spread_total": [
+        -0.017937924790837133,
+        1.035661354863785,
+        -0.13279304518255217,
+        0.00598388944021524
+      ]
+    },
+    "line_coefficients": [
+      -0.7546087610033472,
+      7.284345328332962
+    ],
+    "prior_home_mean": 1.365727391423949,
+    "prior_home_win": 0.5542977412487193,
+    "training_games": 1357,
+    "training_decisive": 1351,
+    "training_max_season": 2020,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.05092634411263267,
+        1.031396713708445
+      ],
+      "spread_total": [
+        -0.019532012343768442,
+        1.0352559352792192,
+        -0.13147115704451973,
+        0.007742114528103234
+      ]
+    },
+    "line_coefficients": [
+      -0.7248110678501543,
+      7.233157581047676
+    ],
+    "prior_home_mean": 1.3591551859938136,
+    "prior_home_win": 0.5530795934604923,
+    "training_games": 1371,
+    "training_decisive": 1365,
+    "training_max_season": 2020,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.061948489384727114,
+        1.051323080252867
+      ],
+      "spread_total": [
+        -0.024230848410480434,
+        1.0518692601600177,
+        -0.15099221992144382,
+        0.020143698006261927
+      ]
+    },
+    "line_coefficients": [
+      -0.8127434585877111,
+      7.286765608407229
+    ],
+    "prior_home_mean": 1.2399831547107836,
+    "prior_home_win": 0.5502995229189783,
+    "training_games": 1385,
+    "training_decisive": 1379,
+    "training_max_season": 2020,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.05859846289274961,
+        1.0358227866021887
+      ],
+      "spread_total": [
+        -0.022249980022206253,
+        1.041935631204658,
+        -0.139778205196883,
+        -0.007644305687334759
+      ]
+    },
+    "line_coefficients": [
+      -0.7496678177091625,
+      7.1903144761422375
+    ],
+    "prior_home_mean": 1.2489047715955104,
+    "prior_home_win": 0.5491807427078144,
+    "training_games": 1399,
+    "training_decisive": 1393,
+    "training_max_season": 2020,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.07503792156857332,
+        1.0479736357229679
+      ],
+      "spread_total": [
+        -0.0401770179294194,
+        1.0555052947246497,
+        -0.12825220049331842,
+        -0.014964469188807564
+      ]
+    },
+    "line_coefficients": [
+      -0.7712622272958776,
+      7.078704677145865
+    ],
+    "prior_home_mean": 1.1473175785234377,
+    "prior_home_win": 0.5449292532577049,
+    "training_games": 1413,
+    "training_decisive": 1407,
+    "training_max_season": 2020,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.04997066249186058,
+        1.051950746453131
+      ],
+      "spread_total": [
+        -0.01933570665538365,
+        1.0515849999732803,
+        -0.1129430581689178,
+        0.016249787568558643
+      ]
+    },
+    "line_coefficients": [
+      -0.6983807513152437,
+      7.084903675379721
+    ],
+    "prior_home_mean": 1.2193993389318225,
+    "prior_home_win": 0.5502367129257617,
+    "training_games": 1427,
+    "training_decisive": 1421,
+    "training_max_season": 2020,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.03312528391604093,
+        1.033377363016572
+      ],
+      "spread_total": [
+        -0.004227909154216375,
+        1.0351212437960726,
+        -0.10091272551035194,
+        0.004508183506559241
+      ]
+    },
+    "line_coefficients": [
+      -0.6198997804157027,
+      7.020163778723155
+    ],
+    "prior_home_mean": 1.256800422548807,
+    "prior_home_win": 0.5522696878579643,
+    "training_games": 1441,
+    "training_decisive": 1435,
+    "training_max_season": 2020,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.04691135899673769,
+        1.0517070824695307
+      ],
+      "spread_total": [
+        -0.01782015348749862,
+        1.0535931865616,
+        -0.09730494398475699,
+        0.0004510865080106116
+      ]
+    },
+    "line_coefficients": [
+      -0.6454330755644591,
+      7.004565117295865
+    ],
+    "prior_home_mean": 1.1495243042996133,
+    "prior_home_win": 0.5478514079816067,
+    "training_games": 1457,
+    "training_decisive": 1451,
+    "training_max_season": 2020,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.07947523528807374,
+        1.054158795939182
+      ],
+      "spread_total": [
+        -0.04491717887080606,
+        1.0540777667675436,
+        -0.11469991231307354,
+        0.010377791231688676
+      ]
+    },
+    "line_coefficients": [
+      -0.7820104150436373,
+      6.9348657301703955
+    ],
+    "prior_home_mean": 1.0487739952023254,
+    "prior_home_win": 0.5428655959935359,
+    "training_games": 1472,
+    "training_decisive": 1466,
+    "training_max_season": 2020,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.08478733989277265,
+        1.064769621841081
+      ],
+      "spread_total": [
+        -0.0454208890789063,
+        1.049172540471348,
+        -0.1321022506533781,
+        0.06644307389712982
+      ]
+    },
+    "line_coefficients": [
+      -0.779972210705234,
+      7.067359554611601
+    ],
+    "prior_home_mean": 1.0307021746038845,
+    "prior_home_win": 0.5402705805883288,
+    "training_games": 1488,
+    "training_decisive": 1482,
+    "training_max_season": 2020,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.08006493278727449,
+        1.0306083616844952
+      ],
+      "spread_total": [
+        -0.03165004803601348,
+        0.9893950595673257,
+        -0.1732988413476409,
+        0.17453836882952412
+      ]
+    },
+    "line_coefficients": [
+      -0.7216833216739679,
+      6.95090216060094
+    ],
+    "prior_home_mean": 1.0512922269724,
+    "prior_home_win": 0.539284850639925,
+    "training_games": 1504,
+    "training_decisive": 1498,
+    "training_max_season": 2020,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2020,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.0712987621778913,
+        1.0250461793797658
+      ],
+      "spread_total": [
+        -0.024566964486391545,
+        0.9788021800142656,
+        -0.16497529453647294,
+        0.18510899549984106
+      ]
+    },
+    "line_coefficients": [
+      -0.7535206810005748,
+      7.063559759742932
+    ],
+    "prior_home_mean": 1.0136978563657248,
+    "prior_home_win": 0.5398484855005856,
+    "training_games": 1520,
+    "training_decisive": 1514,
+    "training_max_season": 2020,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.07345042285909038,
+        1.0697548735858573
+      ],
+      "spread_total": [
+        -0.016077792647689444,
+        1.0104892611343914,
+        -0.1968855502682337,
+        0.2318772649233019
+      ]
+    },
+    "line_coefficients": [
+      -0.7470006062666696,
+      7.120693098104184
+    ],
+    "prior_home_mean": 0.9214068026145814,
+    "prior_home_win": 0.5373484851244398,
+    "training_games": 1280,
+    "training_decisive": 1274,
+    "training_max_season": 2020,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.07287694806242083,
+        1.0522630549375658
+      ],
+      "spread_total": [
+        -0.018945386244623143,
+        0.99592027878876,
+        -0.1816017904716082,
+        0.21443310000946184
+      ]
+    },
+    "line_coefficients": [
+      -0.7357316995348157,
+      6.984676225194943
+    ],
+    "prior_home_mean": 0.8872729878993728,
+    "prior_home_win": 0.5363615594559358,
+    "training_games": 1296,
+    "training_decisive": 1290,
+    "training_max_season": 2021,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.07971800051691501,
+        1.0572784812705105
+      ],
+      "spread_total": [
+        -0.020547554988819664,
+        1.0076977379338112,
+        -0.19229896696066728,
+        0.1862694665942091
+      ]
+    },
+    "line_coefficients": [
+      -0.805866106512786,
+      7.03910989731858
+    ],
+    "prior_home_mean": 0.8445172324232175,
+    "prior_home_win": 0.5354086757754336,
+    "training_games": 1312,
+    "training_decisive": 1306,
+    "training_max_season": 2021,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.08686862158830289,
+        1.0628139909354986
+      ],
+      "spread_total": [
+        -0.030401069711963578,
+        1.022888622313456,
+        -0.17395616521264437,
+        0.1445638689091379
+      ]
+    },
+    "line_coefficients": [
+      -0.7583468126784384,
+      7.093353687797163
+    ],
+    "prior_home_mean": 0.910071306886813,
+    "prior_home_win": 0.5344882526645427,
+    "training_games": 1328,
+    "training_decisive": 1322,
+    "training_max_season": 2021,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.10188306548571283,
+        1.0643133965175984
+      ],
+      "spread_total": [
+        -0.03904004008563035,
+        1.0144187107805676,
+        -0.19212853834463503,
+        0.17647559637933055
+      ]
+    },
+    "line_coefficients": [
+      -0.808071570301103,
+      7.161184254618562
+    ],
+    "prior_home_mean": 0.8979241063354945,
+    "prior_home_win": 0.5319880424346599,
+    "training_games": 1344,
+    "training_decisive": 1338,
+    "training_max_season": 2021,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.112902822335357,
+        1.0851008842859367
+      ],
+      "spread_total": [
+        -0.04285600334188421,
+        1.0311576726547684,
+        -0.21621662894309243,
+        0.19683690757619615
+      ]
+    },
+    "line_coefficients": [
+      -0.8414598087649959,
+      7.207697778368491
+    ],
+    "prior_home_mean": 0.8925562160135807,
+    "prior_home_win": 0.5311693944493266,
+    "training_games": 1360,
+    "training_decisive": 1354,
+    "training_max_season": 2021,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.1225709679494995,
+        1.0943549247972033
+      ],
+      "spread_total": [
+        -0.052867425298352005,
+        1.0412865758223206,
+        -0.20506144132727555,
+        0.17991401692928574
+      ]
+    },
+    "line_coefficients": [
+      -0.921021317677549,
+      7.313356522701943
+    ],
+    "prior_home_mean": 0.7711095308512916,
+    "prior_home_win": 0.5272912952169871,
+    "training_games": 1374,
+    "training_decisive": 1368,
+    "training_max_season": 2021,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.11394536735667316,
+        1.0914892925522994
+      ],
+      "spread_total": [
+        -0.053097994855126,
+        1.0435846512076206,
+        -0.1775966056313445,
+        0.1569715984174972
+      ]
+    },
+    "line_coefficients": [
+      -0.777042072752826,
+      7.301450725993858
+    ],
+    "prior_home_mean": 0.9832686838504846,
+    "prior_home_win": 0.5306961943788445,
+    "training_games": 1387,
+    "training_decisive": 1381,
+    "training_max_season": 2021,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.12257795277654239,
+        1.061019579475183
+      ],
+      "spread_total": [
+        -0.05556635001043199,
+        1.0148552874229129,
+        -0.19612253489973377,
+        0.15511935457710735
+      ]
+    },
+    "line_coefficients": [
+      -0.8162019401206985,
+      7.2272543539776235
+    ],
+    "prior_home_mean": 0.9159549932690526,
+    "prior_home_win": 0.5276015200408698,
+    "training_games": 1402,
+    "training_decisive": 1396,
+    "training_max_season": 2021,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.12267776644523871,
+        1.015488673645975
+      ],
+      "spread_total": [
+        -0.05578362160764478,
+        0.9847831492606667,
+        -0.19139366282815107,
+        0.10550972241478951
+      ]
+    },
+    "line_coefficients": [
+      -0.8950273618426807,
+      7.032991734890049
+    ],
+    "prior_home_mean": 0.826833254881408,
+    "prior_home_win": 0.5269936702065893,
+    "training_games": 1416,
+    "training_decisive": 1410,
+    "training_max_season": 2021,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.10371153936846172,
+        0.9867819721280903
+      ],
+      "spread_total": [
+        -0.04306005464232874,
+        0.958902782211989,
+        -0.1692206782938411,
+        0.0910289982439773
+      ]
+    },
+    "line_coefficients": [
+      -0.8047538716565883,
+      6.95671169927185
+    ],
+    "prior_home_mean": 0.8759285623376003,
+    "prior_home_win": 0.5287953369589043,
+    "training_games": 1430,
+    "training_decisive": 1423,
+    "training_max_season": 2021,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.11994658896560864,
+        0.987146338631071
+      ],
+      "spread_total": [
+        -0.0655851024529082,
+        0.9585698382066139,
+        -0.15209107992044946,
+        0.0920947413638217
+      ]
+    },
+    "line_coefficients": [
+      -0.9489719533641899,
+      6.931793756438565
+    ],
+    "prior_home_mean": 0.7405142214977107,
+    "prior_home_win": 0.5257816164086017,
+    "training_games": 1445,
+    "training_decisive": 1438,
+    "training_max_season": 2021,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.10478020799268196,
+        0.9781587543048967
+      ],
+      "spread_total": [
+        -0.04682303719155279,
+        0.9544561458630014,
+        -0.1617471261283152,
+        0.07894812750322153
+      ]
+    },
+    "line_coefficients": [
+      -0.8239529754702458,
+      6.937606024234689
+    ],
+    "prior_home_mean": 0.833102468357818,
+    "prior_home_win": 0.527508394587067,
+    "training_games": 1460,
+    "training_decisive": 1453,
+    "training_max_season": 2021,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.10589353656153512,
+        0.9805049864653635
+      ],
+      "spread_total": [
+        -0.047811644597408165,
+        0.9572493022347387,
+        -0.16342618838253872,
+        0.07772562435513806
+      ]
+    },
+    "line_coefficients": [
+      -0.8687758147603142,
+      7.054762113467155
+    ],
+    "prior_home_mean": 0.7519787978300884,
+    "prior_home_win": 0.5253669051002209,
+    "training_games": 1474,
+    "training_decisive": 1467,
+    "training_max_season": 2021,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.11210202730414635,
+        1.0095745268407603
+      ],
+      "spread_total": [
+        -0.05597987357273005,
+        0.9935319537955083,
+        -0.15772940482133346,
+        0.05720919619234579
+      ]
+    },
+    "line_coefficients": [
+      -0.8639830731219719,
+      7.265443307350441
+    ],
+    "prior_home_mean": 0.8402021812087321,
+    "prior_home_win": 0.5263598028821813,
+    "training_games": 1488,
+    "training_decisive": 1481,
+    "training_max_season": 2021,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.11229557505174269,
+        0.9953711117738494
+      ],
+      "spread_total": [
+        -0.061198864683105,
+        0.9818732794818897,
+        -0.14394222838927848,
+        0.04669953113997018
+      ]
+    },
+    "line_coefficients": [
+      -0.7811617168018954,
+      7.067363289540243
+    ],
+    "prior_home_mean": 0.8746050303941886,
+    "prior_home_win": 0.5257140046680568,
+    "training_games": 1504,
+    "training_decisive": 1497,
+    "training_max_season": 2021,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.10087035520510775,
+        0.9855484964113613
+      ],
+      "spread_total": [
+        -0.050737894365307665,
+        0.9749359551287178,
+        -0.143863172160293,
+        0.037584227812656315
+      ]
+    },
+    "line_coefficients": [
+      -0.7213825358520802,
+      7.155824765675431
+    ],
+    "prior_home_mean": 0.9640337179093961,
+    "prior_home_win": 0.5281289024253952,
+    "training_games": 1520,
+    "training_decisive": 1513,
+    "training_max_season": 2021,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2021,
+    "target_week": 18,
+    "win_coefficients": {
+      "spread": [
+        -0.09461198157848283,
+        0.995562623982896
+      ],
+      "spread_total": [
+        -0.036392664739956726,
+        1.0030034797289682,
+        -0.16545803800984166,
+        -0.021555916215407034
+      ]
+    },
+    "line_coefficients": [
+      -0.535151778898498,
+      7.258418079460896
+    ],
+    "prior_home_mean": 1.2495871647595123,
+    "prior_home_win": 0.531981298291841,
+    "training_games": 1536,
+    "training_decisive": 1529,
+    "training_max_season": 2021,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.09223179510540086,
+        0.9702144806116884
+      ],
+      "spread_total": [
+        -0.035368962873705556,
+        0.9762779041597588,
+        -0.16336046551354855,
+        -0.01527748543606529
+      ]
+    },
+    "line_coefficients": [
+      -0.4723966026781044,
+      7.103606937898149
+    ],
+    "prior_home_mean": 1.175014316490155,
+    "prior_home_win": 0.5282436547444243,
+    "training_games": 1296,
+    "training_decisive": 1291,
+    "training_max_season": 2021,
+    "training_max_week": 18,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.09662734664554377,
+        0.9620479739484027
+      ],
+      "spread_total": [
+        -0.03347543746904347,
+        0.9496326835413559,
+        -0.18647633895136437,
+        0.04808125014000106
+      ]
+    },
+    "line_coefficients": [
+      -0.4793525645540016,
+      7.083195623299366
+    ],
+    "prior_home_mean": 1.088622933876584,
+    "prior_home_win": 0.5251411797115101,
+    "training_games": 1312,
+    "training_decisive": 1306,
+    "training_max_season": 2022,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.08189211822680338,
+        0.9537410039140299
+      ],
+      "spread_total": [
+        -0.023226045044533083,
+        0.9367009220820482,
+        -0.17735412435562123,
+        0.06556796395852879
+      ]
+    },
+    "line_coefficients": [
+      -0.3640919753108701,
+      7.070668329206996
+    ],
+    "prior_home_mean": 1.2473210400665862,
+    "prior_home_win": 0.5292975800730708,
+    "training_games": 1328,
+    "training_decisive": 1322,
+    "training_max_season": 2022,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.07631561563595562,
+        0.9470409140507879
+      ],
+      "spread_total": [
+        -0.02736109723855677,
+        0.9355329141113866,
+        -0.14830613996835196,
+        0.04202897610092237
+      ]
+    },
+    "line_coefficients": [
+      -0.4253217409233298,
+      7.046348130780522
+    ],
+    "prior_home_mean": 1.127164471582454,
+    "prior_home_win": 0.5285526016496271,
+    "training_games": 1344,
+    "training_decisive": 1338,
+    "training_max_season": 2022,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.08316175062394643,
+        0.958119697372997
+      ],
+      "spread_total": [
+        -0.03411624615401302,
+        0.9491715501443758,
+        -0.15103436861949007,
+        0.03194193051025756
+      ]
+    },
+    "line_coefficients": [
+      -0.4224655635954373,
+      7.037792909773618
+    ],
+    "prior_home_mean": 1.134962765321633,
+    "prior_home_win": 0.527831869226688,
+    "training_games": 1360,
+    "training_decisive": 1354,
+    "training_max_season": 2022,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.09476144991096765,
+        0.9585805765540089
+      ],
+      "spread_total": [
+        -0.05712671690112223,
+        0.9421644414430234,
+        -0.11828935960216158,
+        0.05739312261923863
+      ]
+    },
+    "line_coefficients": [
+      -0.4246047887449862,
+      7.026233509276065
+    ],
+    "prior_home_mean": 1.187738426533726,
+    "prior_home_win": 0.5271343320362986,
+    "training_games": 1376,
+    "training_decisive": 1370,
+    "training_max_season": 2022,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.08066609834528671,
+        0.9357973207506896
+      ],
+      "spread_total": [
+        -0.047603991026881065,
+        0.9244797129872232,
+        -0.10429413320851588,
+        0.037893292031953206
+      ]
+    },
+    "line_coefficients": [
+      -0.38704696721014714,
+      6.913911023142545
+    ],
+    "prior_home_mean": 1.1650104076836774,
+    "prior_home_win": 0.5281009389076864,
+    "training_games": 1390,
+    "training_decisive": 1384,
+    "training_max_season": 2022,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.06894812511343335,
+        0.9141733060564613
+      ],
+      "spread_total": [
+        -0.030039675994921137,
+        0.8855819179292171,
+        -0.1287744895856128,
+        0.10726952076134626
+      ]
+    },
+    "line_coefficients": [
+      -0.3524373137966494,
+      6.7714272552380805
+    ],
+    "prior_home_mean": 1.1908464164454169,
+    "prior_home_win": 0.5305963908594442,
+    "training_games": 1404,
+    "training_decisive": 1398,
+    "training_max_season": 2022,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.07415715773574365,
+        0.9285282878863433
+      ],
+      "spread_total": [
+        -0.04454766083621955,
+        0.9033522861749116,
+        -0.09939000746808731,
+        0.09387351830079106
+      ]
+    },
+    "line_coefficients": [
+      -0.2877987596686567,
+      6.801616245781624
+    ],
+    "prior_home_mean": 1.2819228031688787,
+    "prior_home_win": 0.5306593726386529,
+    "training_games": 1419,
+    "training_decisive": 1413,
+    "training_max_season": 2022,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.0659091445250307,
+        0.9248216253528521
+      ],
+      "spread_total": [
+        -0.03443237437270658,
+        0.9050728628367498,
+        -0.10447094591058051,
+        0.07185408743260356
+      ]
+    },
+    "line_coefficients": [
+      -0.2178024719474949,
+      6.735482098466421
+    ],
+    "prior_home_mean": 1.2885861057371715,
+    "prior_home_win": 0.5308154016540595,
+    "training_games": 1432,
+    "training_decisive": 1426,
+    "training_max_season": 2022,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.05788047964528864,
+        0.9030495774114454
+      ],
+      "spread_total": [
+        -0.025288544254588596,
+        0.8746680774513523,
+        -0.11143525637119302,
+        0.10610327586518777
+      ]
+    },
+    "line_coefficients": [
+      -0.195745560198444,
+      6.644284054286488
+    ],
+    "prior_home_mean": 1.3390744882679866,
+    "prior_home_win": 0.5332256561743618,
+    "training_games": 1446,
+    "training_decisive": 1440,
+    "training_max_season": 2022,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.07686177682339825,
+        0.9257491127523759
+      ],
+      "spread_total": [
+        -0.04959800121892767,
+        0.899024423191446,
+        -0.09485889157325043,
+        0.10065328900332232
+      ]
+    },
+    "line_coefficients": [
+      -0.34574024612117465,
+      6.713956913530229
+    ],
+    "prior_home_mean": 1.183740100205443,
+    "prior_home_win": 0.5294496383097244,
+    "training_games": 1460,
+    "training_decisive": 1454,
+    "training_max_season": 2022,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.06713729624880826,
+        0.9374828227096322
+      ],
+      "spread_total": [
+        -0.0293324612082988,
+        0.908026255577532,
+        -0.13443387873999715,
+        0.11003195858042229
+      ]
+    },
+    "line_coefficients": [
+      -0.27710677655082394,
+      6.698563849115933
+    ],
+    "prior_home_mean": 1.294575060796994,
+    "prior_home_win": 0.5332973966932956,
+    "training_games": 1476,
+    "training_decisive": 1470,
+    "training_max_season": 2022,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.05896111998531908,
+        0.9609233708661977
+      ],
+      "spread_total": [
+        -0.028710107592710088,
+        0.9402438301073576,
+        -0.10702005117074845,
+        0.07562064344539933
+      ]
+    },
+    "line_coefficients": [
+      -0.19332621473080286,
+      6.784436199480229
+    ],
+    "prior_home_mean": 1.3800112386455412,
+    "prior_home_win": 0.5356235168125293,
+    "training_games": 1491,
+    "training_decisive": 1484,
+    "training_max_season": 2022,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.057767640971516813,
+        0.9624319940250442
+      ],
+      "spread_total": [
+        -0.03715386085170845,
+        0.9448167387802087,
+        -0.0729587361561727,
+        0.06527950272533235
+      ]
+    },
+    "line_coefficients": [
+      -0.2068012626008139,
+      6.764912227721228
+    ],
+    "prior_home_mean": 1.3574870743018503,
+    "prior_home_win": 0.5356789300697371,
+    "training_games": 1504,
+    "training_decisive": 1497,
+    "training_max_season": 2022,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.053862522401590396,
+        0.9744273957911996
+      ],
+      "spread_total": [
+        -0.035351866299936203,
+        0.9569995519488541,
+        -0.06586275089010164,
+        0.06323546884751197
+      ]
+    },
+    "line_coefficients": [
+      -0.19138162515617962,
+      6.713820913856814
+    ],
+    "prior_home_mean": 1.3339299353334881,
+    "prior_home_win": 0.5363242411668726,
+    "training_games": 1520,
+    "training_decisive": 1513,
+    "training_max_season": 2022,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.05881154749685649,
+        0.9847579860058095
+      ],
+      "spread_total": [
+        -0.047970445694091,
+        0.9678291983269776,
+        -0.039565112906270725,
+        0.06649353850963649
+      ]
+    },
+    "line_coefficients": [
+      -0.17898470349597795,
+      6.704040721442856
+    ],
+    "prior_home_mean": 1.3349088966897351,
+    "prior_home_win": 0.535454201197324,
+    "training_games": 1536,
+    "training_decisive": 1529,
+    "training_max_season": 2022,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2022,
+    "target_week": 18,
+    "win_coefficients": {
+      "spread": [
+        -0.056725433656186916,
+        1.0032013299289297
+      ],
+      "spread_total": [
+        -0.05118354621026931,
+        0.9921181141614569,
+        -0.020253169929123613,
+        0.045498428117780154
+      ]
+    },
+    "line_coefficients": [
+      -0.125734620826799,
+      6.726118684603279
+    ],
+    "prior_home_mean": 1.3956947615614737,
+    "prior_home_win": 0.5368958174418882,
+    "training_games": 1551,
+    "training_decisive": 1544,
+    "training_max_season": 2022,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.05454036694997057,
+        0.9997679535723303
+      ],
+      "spread_total": [
+        -0.043775957156033364,
+        0.9933459757222587,
+        -0.04247789444545185,
+        0.021476171308568385
+      ]
+    },
+    "line_coefficients": [
+      -0.14144393588188073,
+      6.658124973013998
+    ],
+    "prior_home_mean": 1.4058031904772306,
+    "prior_home_win": 0.5386437427948453,
+    "training_games": 1311,
+    "training_decisive": 1304,
+    "training_max_season": 2022,
+    "training_max_week": 18,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.07501150589222784,
+        1.0012269218680303
+      ],
+      "spread_total": [
+        -0.06263598256029214,
+        1.0019911757500592,
+        -0.05266445801618337,
+        -0.01062187206098337
+      ]
+    },
+    "line_coefficients": [
+      -0.2804604714948118,
+      6.705542441002652
+    ],
+    "prior_home_mean": 1.2785220835612197,
+    "prior_home_win": 0.5344860337007051,
+    "training_games": 1327,
+    "training_decisive": 1320,
+    "training_max_season": 2023,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.08568137179175359,
+        1.0122691061545899
+      ],
+      "spread_total": [
+        -0.07418846630223287,
+        1.0142781521101245,
+        -0.05135038395913475,
+        -0.01548769090652573
+      ]
+    },
+    "line_coefficients": [
+      -0.26743293361818776,
+      6.748065513068286
+    ],
+    "prior_home_mean": 1.2809454999313776,
+    "prior_home_win": 0.5320396779386689,
+    "training_games": 1343,
+    "training_decisive": 1336,
+    "training_max_season": 2023,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.08182365066733387,
+        0.9977247556385421
+      ],
+      "spread_total": [
+        -0.06853226619657868,
+        0.9957403366130115,
+        -0.05950192835597521,
+        0.00190712518401544
+      ]
+    },
+    "line_coefficients": [
+      -0.21116999247329363,
+      6.825318907958513
+    ],
+    "prior_home_mean": 1.3705926617378938,
+    "prior_home_win": 0.5328018366727479,
+    "training_games": 1359,
+    "training_decisive": 1352,
+    "training_max_season": 2023,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.0872760094055582,
+        1.0186861028624705
+      ],
+      "spread_total": [
+        -0.07566110821544443,
+        1.0156965251602215,
+        -0.05286890498745799,
+        0.008053087579643726
+      ]
+    },
+    "line_coefficients": [
+      -0.1462629856893975,
+      6.848181209311637
+    ],
+    "prior_home_mean": 1.4279895157534481,
+    "prior_home_win": 0.5319856853267716,
+    "training_games": 1375,
+    "training_decisive": 1368,
+    "training_max_season": 2023,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.09042133983384144,
+        1.0119434749862162
+      ],
+      "spread_total": [
+        -0.07245773545696929,
+        1.0009499651423115,
+        -0.08128265584673808,
+        0.04300347819916698
+      ]
+    },
+    "line_coefficients": [
+      -0.20421138162791524,
+      6.833015630774993
+    ],
+    "prior_home_mean": 1.3755482489211819,
+    "prior_home_win": 0.5312918868702984,
+    "training_games": 1389,
+    "training_decisive": 1382,
+    "training_max_season": 2023,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.0747608569126543,
+        1.0094462212087725
+      ],
+      "spread_total": [
+        -0.04964777393579938,
+        0.9853686981516274,
+        -0.11934735367177843,
+        0.11323880554441426
+      ]
+    },
+    "line_coefficients": [
+      -0.14877443303757568,
+      6.800605330922526
+    ],
+    "prior_home_mean": 1.4283006861498084,
+    "prior_home_win": 0.5344193657123113,
+    "training_games": 1404,
+    "training_decisive": 1397,
+    "training_max_season": 2023,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.05220176986608217,
+        0.9845883826337417
+      ],
+      "spread_total": [
+        -0.02698184601924657,
+        0.9524291169164982,
+        -0.12909389388454204,
+        0.1665492734187896
+      ]
+    },
+    "line_coefficients": [
+      -0.0051989756483933475,
+      6.723347018395782
+    ],
+    "prior_home_mean": 1.5346778777291363,
+    "prior_home_win": 0.5375744493325443,
+    "training_games": 1417,
+    "training_decisive": 1410,
+    "training_max_season": 2023,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.048034596845857654,
+        0.9955819691360913
+      ],
+      "spread_total": [
+        -0.026170796100872588,
+        0.9676677674888693,
+        -0.12162985112353762,
+        0.1519206517929192
+      ]
+    },
+    "line_coefficients": [
+      0.028882464044573033,
+      6.7174818396355045
+    ],
+    "prior_home_mean": 1.546011658308969,
+    "prior_home_win": 0.5381829892240826,
+    "training_games": 1433,
+    "training_decisive": 1426,
+    "training_max_season": 2023,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.03867944113909613,
+        1.010129882276452
+      ],
+      "spread_total": [
+        -0.018450531267174174,
+        0.9861621798696771,
+        -0.11392742281193916,
+        0.1310081290763056
+      ]
+    },
+    "line_coefficients": [
+      0.07644306634798154,
+      6.823285608700934
+    ],
+    "prior_home_mean": 1.6527690023086024,
+    "prior_home_win": 0.5419356691945307,
+    "training_games": 1447,
+    "training_decisive": 1440,
+    "training_max_season": 2023,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.03623551044938372,
+        0.9968501086781663
+      ],
+      "spread_total": [
+        -0.011251074588431546,
+        0.9726713594752339,
+        -0.15016429262128897,
+        0.1375349972628132
+      ]
+    },
+    "line_coefficients": [
+      0.04475039146975815,
+      6.870732825081544
+    ],
+    "prior_home_mean": 1.655584303574611,
+    "prior_home_win": 0.5425616269610429,
+    "training_games": 1461,
+    "training_decisive": 1454,
+    "training_max_season": 2023,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.022914178421834797,
+        1.0069447402218963
+      ],
+      "spread_total": [
+        0.0026348863334078616,
+        0.9826504827522543,
+        -0.15699919285137928,
+        0.14171659128467617
+      ]
+    },
+    "line_coefficients": [
+      0.032800399666964804,
+      6.898411630829866
+    ],
+    "prior_home_mean": 1.7096008574142694,
+    "prior_home_win": 0.5477100813789095,
+    "training_games": 1475,
+    "training_decisive": 1468,
+    "training_max_season": 2023,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.028732795480444724,
+        1.0129415069514895
+      ],
+      "spread_total": [
+        -0.00275369618455284,
+        0.9914227273144475,
+        -0.17559792316091635,
+        0.13894414287258125
+      ]
+    },
+    "line_coefficients": [
+      -0.02362247331356566,
+      7.028849904017063
+    ],
+    "prior_home_mean": 1.6341281901415536,
+    "prior_home_win": 0.5450583939127245,
+    "training_games": 1491,
+    "training_decisive": 1484,
+    "training_max_season": 2023,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.04021148892532702,
+        1.0122644038570243
+      ],
+      "spread_total": [
+        -0.018233256927926655,
+        0.9887008504349991,
+        -0.15508824190511547,
+        0.1538294084488835
+      ]
+    },
+    "line_coefficients": [
+      -0.11203240766396193,
+      7.04070481254019
+    ],
+    "prior_home_mean": 1.5274947279887798,
+    "prior_home_win": 0.5419268397136258,
+    "training_games": 1504,
+    "training_decisive": 1497,
+    "training_max_season": 2023,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.032842682863116895,
+        0.9808698013080789
+      ],
+      "spread_total": [
+        -0.011215739400167464,
+        0.9513454646614049,
+        -0.17099895774173401,
+        0.21878567287005632
+      ]
+    },
+    "line_coefficients": [
+      -0.011358457950500795,
+      6.917536140096462
+    ],
+    "prior_home_mean": 1.6334310129862915,
+    "prior_home_win": 0.5432280605111431,
+    "training_games": 1519,
+    "training_decisive": 1512,
+    "training_max_season": 2023,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.015659197430671914,
+        0.988963738834892
+      ],
+      "spread_total": [
+        0.0054673111529524735,
+        0.9613727341379982,
+        -0.18330025723372154,
+        0.21589240618623382
+      ]
+    },
+    "line_coefficients": [
+      0.12102936145232868,
+      7.002605069294556
+    ],
+    "prior_home_mean": 1.7621369141810457,
+    "prior_home_win": 0.5466570868041235,
+    "training_games": 1535,
+    "training_decisive": 1528,
+    "training_max_season": 2023,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.018493416755721408,
+        0.9781460683115629
+      ],
+      "spread_total": [
+        0.0005234775043304368,
+        0.9501637785165488,
+        -0.1771682317302275,
+        0.2384266757165946
+      ]
+    },
+    "line_coefficients": [
+      0.17986319088718447,
+      6.836515704451021
+    ],
+    "prior_home_mean": 1.7795313375790722,
+    "prior_home_win": 0.5455535330783622,
+    "training_games": 1551,
+    "training_decisive": 1544,
+    "training_max_season": 2023,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2023,
+    "target_week": 18,
+    "win_coefficients": {
+      "spread": [
+        -0.017832221621354425,
+        0.9840326855492412
+      ],
+      "spread_total": [
+        0.0018567432013279624,
+        0.9585561144490854,
+        -0.18376686189766697,
+        0.20826922538094791
+      ]
+    },
+    "line_coefficients": [
+      0.22660297900720328,
+      6.815366321326237
+    ],
+    "prior_home_mean": 1.8638275867749277,
+    "prior_home_win": 0.5474203417615272,
+    "training_games": 1567,
+    "training_decisive": 1560,
+    "training_max_season": 2023,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.03446203834778983,
+        0.9917717977358045
+      ],
+      "spread_total": [
+        -0.019498203200490297,
+        0.9704672983365932,
+        -0.17788218408410864,
+        0.19605425854912986
+      ]
+    },
+    "line_coefficients": [
+      0.28007839084841146,
+      6.885530134241103
+    ],
+    "prior_home_mean": 1.8483039588757637,
+    "prior_home_win": 0.541527939800575,
+    "training_games": 1327,
+    "training_decisive": 1322,
+    "training_max_season": 2023,
+    "training_max_week": 18,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.02713310116906632,
+        1.0021477495995859
+      ],
+      "spread_total": [
+        -0.01271444741591951,
+        0.9785616406033097,
+        -0.16313504701804385,
+        0.22306565559650673
+      ]
+    },
+    "line_coefficients": [
+      0.28695917168859364,
+      6.898940087622422
+    ],
+    "prior_home_mean": 1.903630465330687,
+    "prior_home_win": 0.5451825825806441,
+    "training_games": 1343,
+    "training_decisive": 1338,
+    "training_max_season": 2024,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.04112239935062139,
+        0.9731911247986065
+      ],
+      "spread_total": [
+        -0.02983034002062909,
+        0.9554923523965281,
+        -0.1424767276885063,
+        0.17142968541817274
+      ]
+    },
+    "line_coefficients": [
+      0.1994743729693758,
+      6.777410970685908
+    ],
+    "prior_home_mean": 1.7850456208551821,
+    "prior_home_win": 0.5409498133198472,
+    "training_games": 1359,
+    "training_decisive": 1354,
+    "training_max_season": 2024,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.05044097026191772,
+        0.9486712755206538
+      ],
+      "spread_total": [
+        -0.0382031953765975,
+        0.9276817658837562,
+        -0.14478537748333142,
+        0.20477274823817398
+      ]
+    },
+    "line_coefficients": [
+      0.23347435191927535,
+      6.694662853645158
+    ],
+    "prior_home_mean": 1.8119124621505476,
+    "prior_home_win": 0.5383940033695387,
+    "training_games": 1375,
+    "training_decisive": 1370,
+    "training_max_season": 2024,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.04618556319529694,
+        0.9472064570898442
+      ],
+      "spread_total": [
+        -0.03406171600201898,
+        0.925425760573159,
+        -0.16157471361541384,
+        0.23503338999079468
+      ]
+    },
+    "line_coefficients": [
+      0.23391440494054536,
+      6.6675575339862805
+    ],
+    "prior_home_mean": 1.796621525864747,
+    "prior_home_win": 0.5389848749677155,
+    "training_games": 1391,
+    "training_decisive": 1386,
+    "training_max_season": 2024,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.04632142932169547,
+        0.9496207920381169
+      ],
+      "spread_total": [
+        -0.033747382766807436,
+        0.9285401340909966,
+        -0.17173735172463042,
+        0.2199395737073937
+      ]
+    },
+    "line_coefficients": [
+      0.2818498237607333,
+      6.67345549098087
+    ],
+    "prior_home_mean": 1.8619816124894173,
+    "prior_home_win": 0.5396785229563459,
+    "training_games": 1405,
+    "training_decisive": 1400,
+    "training_max_season": 2024,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.06967101312481688,
+        0.9832728725994466
+      ],
+      "spread_total": [
+        -0.05963643395287643,
+        0.964577687733087,
+        -0.14654467395643558,
+        0.20592435837724563
+      ]
+    },
+    "line_coefficients": [
+      0.09547274614262544,
+      6.866138880779277
+    ],
+    "prior_home_mean": 1.6657429782399131,
+    "prior_home_win": 0.5342620803808248,
+    "training_games": 1419,
+    "training_decisive": 1414,
+    "training_max_season": 2024,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.07371636550891345,
+        1.0011811245687106
+      ],
+      "spread_total": [
+        -0.06332713695869005,
+        0.9837444660173981,
+        -0.1635929707230033,
+        0.19969814097771518
+      ]
+    },
+    "line_coefficients": [
+      0.04611739065911201,
+      6.989511723545652
+    ],
+    "prior_home_mean": 1.647604683091299,
+    "prior_home_win": 0.5342404608523762,
+    "training_games": 1434,
+    "training_decisive": 1429,
+    "training_max_season": 2024,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.0617281857274923,
+        0.9973108055428529
+      ],
+      "spread_total": [
+        -0.05014657440345931,
+        0.9809077337687543,
+        -0.17916240242051168,
+        0.1965058299148055
+      ]
+    },
+    "line_coefficients": [
+      0.0791243720027756,
+      7.028028661237603
+    ],
+    "prior_home_mean": 1.6846617476917665,
+    "prior_home_win": 0.5364278219071723,
+    "training_games": 1450,
+    "training_decisive": 1445,
+    "training_max_season": 2024,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.04867341852090055,
+        1.0183508793767027
+      ],
+      "spread_total": [
+        -0.03690115848188926,
+        1.0002525165082592,
+        -0.180514860809446,
+        0.2212257042136378
+      ]
+    },
+    "line_coefficients": [
+      0.1092612296948998,
+      7.089624739189924
+    ],
+    "prior_home_mean": 1.7516372344828643,
+    "prior_home_win": 0.5408572147144803,
+    "training_games": 1465,
+    "training_decisive": 1460,
+    "training_max_season": 2024,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.0520875277483655,
+        1.0178887287797618
+      ],
+      "spread_total": [
+        -0.03900507413736877,
+        0.9970191451628528,
+        -0.18992500529593423,
+        0.2617166733769509
+      ]
+    },
+    "line_coefficients": [
+      0.09081054539464826,
+      7.029530307882896
+    ],
+    "prior_home_mean": 1.6702336941483003,
+    "prior_home_win": 0.5385058147724141,
+    "training_games": 1479,
+    "training_decisive": 1474,
+    "training_max_season": 2024,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.04824105497865039,
+        1.0255209233510598
+      ],
+      "spread_total": [
+        -0.037487674363908124,
+        1.0078486627512182,
+        -0.1629441007549503,
+        0.2282260957711853
+      ]
+    },
+    "line_coefficients": [
+      0.1768845847288331,
+      7.172036702652603
+    ],
+    "prior_home_mean": 1.7768571365898738,
+    "prior_home_win": 0.5391926095981666,
+    "training_games": 1493,
+    "training_decisive": 1488,
+    "training_max_season": 2024,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.06155572968616069,
+        1.0243180470985196
+      ],
+      "spread_total": [
+        -0.051124271032667874,
+        1.0062411340694626,
+        -0.16987168467490943,
+        0.2546039384328611
+      ]
+    },
+    "line_coefficients": [
+      0.13908129631485314,
+      7.195552079580123
+    ],
+    "prior_home_mean": 1.694929975826999,
+    "prior_home_win": 0.5347103747744558,
+    "training_games": 1506,
+    "training_decisive": 1501,
+    "training_max_season": 2024,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 6,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.07559834657923463,
+        1.0542868927167917
+      ],
+      "spread_total": [
+        -0.0642392195004338,
+        1.0366107585088993,
+        -0.1820160841390131,
+        0.25155066794914677
+      ]
+    },
+    "line_coefficients": [
+      0.14291069374829604,
+      7.185102089711399
+    ],
+    "prior_home_mean": 1.727280225905229,
+    "prior_home_win": 0.5338875416893684,
+    "training_games": 1522,
+    "training_decisive": 1517,
+    "training_max_season": 2024,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 9
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.06949517272945342,
+        1.0703262384243033
+      ],
+      "spread_total": [
+        -0.058657731541883355,
+        1.0517334118563313,
+        -0.15944670592095414,
+        0.2512929731811196
+      ]
+    },
+    "line_coefficients": [
+      0.17587106899527669,
+      7.17985049957644
+    ],
+    "prior_home_mean": 1.7930632360117806,
+    "prior_home_win": 0.5369328781940454,
+    "training_games": 1535,
+    "training_decisive": 1530,
+    "training_max_season": 2024,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.09260848141416952,
+        1.097903406301329
+      ],
+      "spread_total": [
+        -0.08081620117883836,
+        1.0807124757532864,
+        -0.17563445308061523,
+        0.24042681189954876
+      ]
+    },
+    "line_coefficients": [
+      0.089277435489186,
+      7.25699023232062
+    ],
+    "prior_home_mean": 1.6686881337182815,
+    "prior_home_win": 0.5316512651889848,
+    "training_games": 1551,
+    "training_decisive": 1546,
+    "training_max_season": 2024,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.06376279732189792,
+        1.0998941937205797
+      ],
+      "spread_total": [
+        -0.05125504026105555,
+        1.0823606313051854,
+        -0.16802504542434174,
+        0.21386952065763598
+      ]
+    },
+    "line_coefficients": [
+      0.18579579427152823,
+      7.336828107335145
+    ],
+    "prior_home_mean": 1.804971886103067,
+    "prior_home_win": 0.5382234040543642,
+    "training_games": 1567,
+    "training_decisive": 1562,
+    "training_max_season": 2024,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2024,
+    "target_week": 18,
+    "win_coefficients": {
+      "spread": [
+        -0.05898373078886397,
+        1.1190883206661333
+      ],
+      "spread_total": [
+        -0.04909541009798215,
+        1.1029719705702328,
+        -0.1501118410867735,
+        0.2163280993836556
+      ]
+    },
+    "line_coefficients": [
+      0.13825323364571995,
+      7.568854638314494
+    ],
+    "prior_home_mean": 1.7760870056983107,
+    "prior_home_win": 0.5387879603538761,
+    "training_games": 1583,
+    "training_decisive": 1578,
+    "training_max_season": 2024,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.05634470403912605,
+        1.1283717979494152
+      ],
+      "spread_total": [
+        -0.04880156421741747,
+        1.11277572683425,
+        -0.13870183950645484,
+        0.2585940859073517
+      ]
+    },
+    "line_coefficients": [
+      0.32040285697337706,
+      7.5956056927924935
+    ],
+    "prior_home_mean": 1.999459698437249,
+    "prior_home_win": 0.5405184239654567,
+    "training_games": 1343,
+    "training_decisive": 1339,
+    "training_max_season": 2024,
+    "training_max_week": 18,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.05409928915268155,
+        1.1503380065002613
+      ],
+      "spread_total": [
+        -0.04750999638214313,
+        1.1348146653972266,
+        -0.10663681851182322,
+        0.24219866517154984
+      ]
+    },
+    "line_coefficients": [
+      0.39944650293207806,
+      7.580033890351673
+    ],
+    "prior_home_mean": 2.0536685972296924,
+    "prior_home_win": 0.5410629393845501,
+    "training_games": 1359,
+    "training_decisive": 1355,
+    "training_max_season": 2025,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.07016400428392588,
+        1.1687534343698125
+      ],
+      "spread_total": [
+        -0.06477746069108539,
+        1.1519803286353083,
+        -0.08910431753336695,
+        0.26481629838317666
+      ]
+    },
+    "line_coefficients": [
+      0.3044410403376215,
+      7.680107955606201
+    ],
+    "prior_home_mean": 1.9831315868367019,
+    "prior_home_win": 0.5385109924416208,
+    "training_games": 1375,
+    "training_decisive": 1371,
+    "training_max_season": 2025,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.041379984664212284,
+        1.1594075665296828
+      ],
+      "spread_total": [
+        -0.035374885714674856,
+        1.143021370351298,
+        -0.10472680233295603,
+        0.25427481048290684
+      ]
+    },
+    "line_coefficients": [
+      0.45827776918741997,
+      7.633293486514205
+    ],
+    "prior_home_mean": 2.113436935556249,
+    "prior_home_win": 0.5436864178129003,
+    "training_games": 1391,
+    "training_decisive": 1387,
+    "training_max_season": 2025,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.02521437098868454,
+        1.159477626014296
+      ],
+      "spread_total": [
+        -0.018877474769955147,
+        1.1432451072912964,
+        -0.10865676472675094,
+        0.24962246188883636
+      ]
+    },
+    "line_coefficients": [
+      0.5983294867273916,
+      7.665348718712732
+    ],
+    "prior_home_mean": 2.2807497322028634,
+    "prior_home_win": 0.5480160015775332,
+    "training_games": 1407,
+    "training_decisive": 1402,
+    "training_max_season": 2025,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 6,
+    "win_coefficients": {
+      "spread": [
+        -0.04674574973123786,
+        1.1237736658731996
+      ],
+      "spread_total": [
+        -0.04063896198117395,
+        1.1083303332425134,
+        -0.10696014419699468,
+        0.2253196538892439
+      ]
+    },
+    "line_coefficients": [
+      0.48286817293507867,
+      7.6609330114159615
+    ],
+    "prior_home_mean": 2.164303641611421,
+    "prior_home_win": 0.5424435711924342,
+    "training_games": 1421,
+    "training_decisive": 1416,
+    "training_max_season": 2025,
+    "training_max_week": 5,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 7,
+    "win_coefficients": {
+      "spread": [
+        -0.035609120386307785,
+        1.123413845929885
+      ],
+      "spread_total": [
+        -0.02885316512840742,
+        1.1087824735731768,
+        -0.11003890847398191,
+        0.210937184202855
+      ]
+    },
+    "line_coefficients": [
+      0.5717089431818408,
+      7.554021300513384
+    ],
+    "prior_home_mean": 2.2027773382373903,
+    "prior_home_win": 0.5437467639476258,
+    "training_games": 1436,
+    "training_decisive": 1431,
+    "training_max_season": 2025,
+    "training_max_week": 6,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 8,
+    "win_coefficients": {
+      "spread": [
+        -0.031160473732513495,
+        1.1393451650111368
+      ],
+      "spread_total": [
+        -0.025364315044170582,
+        1.1259619466161408,
+        -0.09608942486007273,
+        0.19408930386839607
+      ]
+    },
+    "line_coefficients": [
+      0.5778364361639544,
+      7.660608512805321
+    ],
+    "prior_home_mean": 2.2267131148341877,
+    "prior_home_win": 0.5450145967297185,
+    "training_games": 1451,
+    "training_decisive": 1446,
+    "training_max_season": 2025,
+    "training_max_week": 7,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 9,
+    "win_coefficients": {
+      "spread": [
+        -0.03375592581579928,
+        1.1512657503110213
+      ],
+      "spread_total": [
+        -0.027499897554539486,
+        1.1357883281982115,
+        -0.09858564233686046,
+        0.21416205394609514
+      ]
+    },
+    "line_coefficients": [
+      0.5548726324426874,
+      7.806901959746551
+    ],
+    "prior_home_mean": 2.285204720565461,
+    "prior_home_win": 0.5463872164555783,
+    "training_games": 1464,
+    "training_decisive": 1459,
+    "training_max_season": 2025,
+    "training_max_week": 8,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 10,
+    "win_coefficients": {
+      "spread": [
+        -0.05280672876308838,
+        1.1280615517903165
+      ],
+      "spread_total": [
+        -0.04516289207162705,
+        1.112622805011126,
+        -0.09074856179582202,
+        0.1775182832597547
+      ]
+    },
+    "line_coefficients": [
+      0.4580925653649182,
+      7.766753087025472
+    ],
+    "prior_home_mean": 2.1642468316008663,
+    "prior_home_win": 0.5409247349074204,
+    "training_games": 1478,
+    "training_decisive": 1473,
+    "training_max_season": 2025,
+    "training_max_week": 9,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 11,
+    "win_coefficients": {
+      "spread": [
+        -0.04626653123521216,
+        1.1222602553040313
+      ],
+      "spread_total": [
+        -0.03706175632084758,
+        1.1043869619855824,
+        -0.10067151203596243,
+        0.18893633029822288
+      ]
+    },
+    "line_coefficients": [
+      0.46656221362924893,
+      7.724275016709443
+    ],
+    "prior_home_mean": 2.1444410140694616,
+    "prior_home_win": 0.5415614881976311,
+    "training_games": 1492,
+    "training_decisive": 1487,
+    "training_max_season": 2025,
+    "training_max_week": 10,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 12,
+    "win_coefficients": {
+      "spread": [
+        -0.04458138621666984,
+        1.1338935533332457
+      ],
+      "spread_total": [
+        -0.0377478028146871,
+        1.1183023859201797,
+        -0.08121298534132458,
+        0.18067383662771927
+      ]
+    },
+    "line_coefficients": [
+      0.4976847901528707,
+      7.716948054623638
+    ],
+    "prior_home_mean": 2.145676839251479,
+    "prior_home_win": 0.541377501351982,
+    "training_games": 1507,
+    "training_decisive": 1502,
+    "training_max_season": 2025,
+    "training_max_week": 11,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 13,
+    "win_coefficients": {
+      "spread": [
+        -0.037569653237254065,
+        1.1429413001448496
+      ],
+      "spread_total": [
+        -0.03254201092229216,
+        1.1239096342462778,
+        -0.05659088677925985,
+        0.2143016698100149
+      ]
+    },
+    "line_coefficients": [
+      0.5206157905129272,
+      7.652071011777295
+    ],
+    "prior_home_mean": 2.16780236859766,
+    "prior_home_win": 0.543482219248945,
+    "training_games": 1521,
+    "training_decisive": 1516,
+    "training_max_season": 2025,
+    "training_max_week": 12,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 14,
+    "win_coefficients": {
+      "spread": [
+        -0.03813094419220615,
+        1.120500519847993
+      ],
+      "spread_total": [
+        -0.03374363935237979,
+        1.1080712871929002,
+        -0.05322308819248827,
+        0.13894024303499353
+      ]
+    },
+    "line_coefficients": [
+      0.44430004377662835,
+      7.645617063492636
+    ],
+    "prior_home_mean": 2.0859061290930705,
+    "prior_home_win": 0.5424564183993842,
+    "training_games": 1537,
+    "training_decisive": 1532,
+    "training_max_season": 2025,
+    "training_max_week": 13,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 15,
+    "win_coefficients": {
+      "spread": [
+        -0.04401213813396012,
+        1.1078878436057407
+      ],
+      "spread_total": [
+        -0.042702460730686634,
+        1.0909028589561522,
+        -0.016631665797526868,
+        0.2008006229204268
+      ]
+    },
+    "line_coefficients": [
+      0.37714874272163995,
+      7.66708315137102
+    ],
+    "prior_home_mean": 1.9975875301377153,
+    "prior_home_win": 0.5401125228181531,
+    "training_games": 1551,
+    "training_decisive": 1546,
+    "training_max_season": 2025,
+    "training_max_week": 14,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 16,
+    "win_coefficients": {
+      "spread": [
+        -0.04894160554758946,
+        1.1071378807957248
+      ],
+      "spread_total": [
+        -0.04524351205571002,
+        1.0920711213132057,
+        -0.04240847976503578,
+        0.19966803637625322
+      ]
+    },
+    "line_coefficients": [
+      0.36159253400419683,
+      7.745857862890972
+    ],
+    "prior_home_mean": 2.104161505914106,
+    "prior_home_win": 0.5420972948151206,
+    "training_games": 1567,
+    "training_decisive": 1562,
+    "training_max_season": 2025,
+    "training_max_week": 15,
+    "iterations": {
+      "spread": 8,
+      "spread_total": 11
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 17,
+    "win_coefficients": {
+      "spread": [
+        -0.061768354165953485,
+        1.1064825796751747
+      ],
+      "spread_total": [
+        -0.054513020587227845,
+        1.0944580719072274,
+        -0.09129892708609362,
+        0.1644481502756715
+      ]
+    },
+    "line_coefficients": [
+      0.2791868687342298,
+      7.684388944134561
+    ],
+    "prior_home_mean": 1.9725593994207342,
+    "prior_home_win": 0.538209272872743,
+    "training_games": 1583,
+    "training_decisive": 1578,
+    "training_max_season": 2025,
+    "training_max_week": 16,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2025,
+    "target_week": 18,
+    "win_coefficients": {
+      "spread": [
+        -0.05854055954705464,
+        1.0883909805367977
+      ],
+      "spread_total": [
+        -0.05434742365444591,
+        1.076995701381406,
+        -0.06254239335779521,
+        0.1646325030569328
+      ]
+    },
+    "line_coefficients": [
+      0.26126199490617746,
+      7.6802844043731575
+    ],
+    "prior_home_mean": 1.8258992619588768,
+    "prior_home_win": 0.534431421379766,
+    "training_games": 1599,
+    "training_decisive": 1594,
+    "training_max_season": 2025,
+    "training_max_week": 17,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2026,
+    "target_week": 1,
+    "win_coefficients": {
+      "spread": [
+        -0.040889665053838564,
+        1.0741069541422923
+      ],
+      "spread_total": [
+        -0.0377749304146273,
+        1.0701370767611154,
+        -0.06661210017622027,
+        0.10718586657184057
+      ]
+    },
+    "line_coefficients": [
+      0.3639687411673606,
+      7.79181503754268
+    ],
+    "prior_home_mean": 2.110352254106222,
+    "prior_home_win": 0.5419189139902229,
+    "training_games": 1359,
+    "training_decisive": 1355,
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2026,
+    "target_week": 2,
+    "win_coefficients": {
+      "spread": [
+        -0.03772687537119859,
+        1.0805709941727961
+      ],
+      "spread_total": [
+        -0.03403234049645625,
+        1.0768860257893849,
+        -0.06964418214002635,
+        0.08864645810183581
+      ]
+    },
+    "line_coefficients": [
+      0.29961572995714436,
+      7.788181480965392
+    ],
+    "prior_home_mean": 2.0783962958494215,
+    "prior_home_win": 0.5439668051364536,
+    "training_games": 1375,
+    "training_decisive": 1371,
+    "training_max_season": 2026,
+    "training_max_week": 1,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2026,
+    "target_week": 3,
+    "win_coefficients": {
+      "spread": [
+        -0.05694090186525446,
+        1.0744497954771228
+      ],
+      "spread_total": [
+        -0.055042141829850046,
+        1.0706235899328411,
+        -0.044667529915251324,
+        0.10000021685073177
+      ]
+    },
+    "line_coefficients": [
+      0.18429494108283415,
+      7.8004513682081935
+    ],
+    "prior_home_mean": 2.0168523493259496,
+    "prior_home_win": 0.5413581190669633,
+    "training_games": 1391,
+    "training_decisive": 1387,
+    "training_max_season": 2026,
+    "training_max_week": 2,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2026,
+    "target_week": 4,
+    "win_coefficients": {
+      "spread": [
+        -0.03106817674392866,
+        1.0546595648448156
+      ],
+      "spread_total": [
+        -0.028500275929092645,
+        1.049155290141361,
+        -0.08050157773774327,
+        0.17120319658169403
+      ]
+    },
+    "line_coefficients": [
+      0.2528550190842179,
+      7.702168567130108
+    ],
+    "prior_home_mean": 2.0225194218648004,
+    "prior_home_win": 0.5449144383123368,
+    "training_games": 1407,
+    "training_decisive": 1403,
+    "training_max_season": 2026,
+    "training_max_week": 3,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  },
+  {
+    "target_season": 2026,
+    "target_week": 5,
+    "win_coefficients": {
+      "spread": [
+        -0.035218925536953945,
+        1.0526135617334091
+      ],
+      "spread_total": [
+        -0.030781510727137782,
+        1.0490530482468878,
+        -0.09396773679718236,
+        0.11191136120633481
+      ]
+    },
+    "line_coefficients": [
+      0.224398770118562,
+      7.625787703740749
+    ],
+    "prior_home_mean": 1.9736628998235461,
+    "prior_home_win": 0.5438273855158973,
+    "training_games": 1423,
+    "training_decisive": 1419,
+    "training_max_season": 2026,
+    "training_max_week": 4,
+    "iterations": {
+      "spread": 7,
+      "spread_total": 10
+    }
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "policy": "R003-PLAIN-ATS-110-v1",
+  "plain_configuration": "direct_ref_h2_t3_p0",
+  "odds_basis": "User-specified -110 on both sides; assumed uniformly in retrospective replay, not independently archived quotes",
+  "strategy": "At most one 1u risk bet at forecast line; highest strictly positive model EV, otherwise pass",
+  "thresholds_searched": false,
+  "model_refitted": false,
+  "production_changed": false,
+  "independent_validation": false,
+  "favorite_control": "Spread favorite on identical selected games; home at zero spread",
+  "null": "Fair 50/50 conditional ATS probability, -4.545% per decisive bet; scaled by observed non-push fraction",
+  "bootstrap": "10000 paired whole-week draws within season, seed 20261016",
+  "hashes": {
+    "research/experiments/R003_pooled_travel/predictions.csv.gz": "ab7ce2b2119e8d498d2cd69b21d02ad3cc6d398086f5d7eff1d271cc7fe47573",
+    "research/plain_ats_110.py": "bbed1a12f8947571fe46e6fe05dbb750f78d4222dd4dd8670c4f8efbce27eaac",
+    "research/schedule_context_empirical.py": "7de2610eacb1eaa7217b251db0c1d8e0630a02bd5b662dee3fae5b3476156a2b",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1"
+  }
+}

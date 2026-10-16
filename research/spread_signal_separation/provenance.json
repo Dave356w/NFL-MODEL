@@ -1,0 +1,24 @@
+{
+  "basis": "Exposed historical development; no independent confirmation",
+  "new_models": "Fixed market-only prior-week baselines, no model/ROI selection",
+  "forecast_games": 1950,
+  "hashes": {
+    "research/experiments/R000_reproduction/frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "research/experiments/R003_pooled_travel/predictions.csv.gz": "ab7ce2b2119e8d498d2cd69b21d02ad3cc6d398086f5d7eff1d271cc7fe47573",
+    "research/experiments/R003_ats_calibration/predictions.csv.gz": "d60825313421262fa2cbdfe838436a65f39add0f26e7d2be113445ae02090e89",
+    "research/experiments/R003_ats_calibration/distribution_metrics.csv": "f93a8b354418fe585359c1a182b4c688e22576dbf1f782ac84dfec8e2fd1bb96",
+    "research/experiments/R003_score_support/predictions.csv.gz": "00b06928ae667b84873137a162a3678fe660966de467e6dd7038f21ea86f5045",
+    "research/spread_signal_separation.py": "89750e3286fa95ba98a52cfbe1b96b7af522768d81d4e4259edd76e798447e06",
+    "research/plain_ats_110.py": "bbed1a12f8947571fe46e6fe05dbb750f78d4222dd4dd8670c4f8efbce27eaac",
+    "research/market_context_empirical.py": "2a38d1e1cf426e6646e487dec7975771a0dc9e83511c4d8aaa7982ac3d0aad0c",
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1",
+    "research/spread_signal_separation/PLAN.md": "85a77cce59eb7671ff65890cf0932092143744e3a391bf825b32a67587f90772"
+  },
+  "ATS_price_assumption": "Both sides -110; not verified historical offers",
+  "price_comparison": "Even-money decomposition keeps the original -110 selected games fixed; no repricing/reselection",
+  "moneyline_policy": "Flat 1u on more likely winner, same quoted prices and pickem exclusions as existing research",
+  "descriptive_regression": "Fits current evaluation outcomes for diagnosis only; separate from prior-trained forecasts",
+  "AC1_margin_winner_availability": "2023-25 only; no raw substitutes for missing older coherent distributions",
+  "production_changed": false
+}

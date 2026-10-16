@@ -1,0 +1,53 @@
+[
+  {
+    "basis": "2023-25",
+    "games": 816,
+    "correlation": 0.4765873032288104,
+    "raw_spread_R2": 0.22043492997500203,
+    "descriptive_intercept": 0.40049456327938776,
+    "descriptive_slope": 1.1658334807149233,
+    "intercept_ci95": [
+      -0.45462012328907647,
+      1.255609249847852
+    ],
+    "slope_ci95": [
+      1.020962955310037,
+      1.3107040061198096
+    ],
+    "interpretation": "Same-cohort descriptive OLS; not an out-of-sample forecast"
+  },
+  {
+    "basis": "2019-22",
+    "games": 1055,
+    "correlation": 0.4466794274400723,
+    "raw_spread_R2": 0.1975697412042957,
+    "descriptive_intercept": -0.5735823744748032,
+    "descriptive_slope": 0.9760649046003184,
+    "intercept_ci95": [
+      -1.3253651892977127,
+      0.17820044034810634
+    ],
+    "slope_ci95": [
+      0.8628755674273518,
+      1.089254241773285
+    ],
+    "interpretation": "Same-cohort descriptive OLS; not an out-of-sample forecast"
+  },
+  {
+    "basis": "2026 diagnostic",
+    "games": 79,
+    "correlation": 0.3262488082913043,
+    "raw_spread_R2": 0.09034994442630795,
+    "descriptive_intercept": -1.2312791601866244,
+    "descriptive_slope": 0.854989631933644,
+    "intercept_ci95": [
+      -3.805441753839002,
+      1.342883433465753
+    ],
+    "slope_ci95": [
+      0.3955200002799309,
+      1.314459263587357
+    ],
+    "interpretation": "Same-cohort descriptive OLS; not an out-of-sample forecast"
+  }
+]

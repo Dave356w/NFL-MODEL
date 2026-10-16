@@ -1,0 +1,13 @@
+{
+  "original_protected_files_unchanged": 192,
+  "all_source_input_hashes_preserved": true,
+  "forecast_rows": 21646,
+  "calibration_windows": 1956,
+  "converged_fits": 1950,
+  "minimum_data_fallbacks": 6,
+  "all_cutoffs_strictly_earlier": true,
+  "raw_ATS_reproduced": true,
+  "raw_push_mass_preserved": true,
+  "unsupported_atom_groups": 0,
+  "exact_repeat_files": 15
+}

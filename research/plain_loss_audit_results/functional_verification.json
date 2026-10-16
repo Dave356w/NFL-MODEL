@@ -1,0 +1,9 @@
+{
+  "original_protected_files_unchanged": 192,
+  "all_source_input_and_forward_hashes_preserved": true,
+  "backtest_bets": 2450,
+  "main_losses": 259,
+  "main_disagreements": 7,
+  "single_source_sensitive_disagreements": 6,
+  "numerical_artifacts_exact_repeat": 11
+}

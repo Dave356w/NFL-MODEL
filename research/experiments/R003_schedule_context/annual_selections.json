@@ -1,0 +1,1222 @@
+[
+  {
+    "target_season": 2017,
+    "family": "all",
+    "chosen": "travel_k100",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "slot_k30": 7.198475433358112,
+      "slot_k100": 7.189715986993173,
+      "rest_k30": 7.240206897498767,
+      "rest_k100": 7.217029612669062,
+      "travel_k30": 7.189538296370105,
+      "travel_k100": 7.187097184102849,
+      "body_clock_k30": 7.2080341538676835,
+      "body_clock_k100": 7.1995108089612785,
+      "venue_k30": 7.2014238756420905,
+      "venue_k100": 7.191897675516889,
+      "phase_k30": 7.230710054064371,
+      "phase_k100": 7.2077125879073,
+      "joint_k30": 7.192442369940089,
+      "joint_k100": 7.191781535496751,
+      "additive_k30": 7.197620761523237,
+      "additive_k100": 7.194388694678371
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "slot",
+    "chosen": "slot_k100",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "slot_k30": 7.198475433358112,
+      "slot_k100": 7.189715986993173
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "rest_k30": 7.240206897498767,
+      "rest_k100": 7.217029612669062
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "travel",
+    "chosen": "travel_k100",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "travel_k30": 7.189538296370105,
+      "travel_k100": 7.187097184102849
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "body_clock_k30": 7.2080341538676835,
+      "body_clock_k100": 7.1995108089612785
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "venue_k30": 7.2014238756420905,
+      "venue_k100": 7.191897675516889
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "phase_k30": 7.230710054064371,
+      "phase_k100": 7.2077125879073
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "joint_k30": 7.192442369940089,
+      "joint_k100": 7.191781535496751
+    }
+  },
+  {
+    "target_season": 2017,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2016,
+    "selection_games": 512,
+    "losses": {
+      "plain": 7.191379095151832,
+      "additive_k30": 7.197620761523237,
+      "additive_k100": 7.194388694678371
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "all",
+    "chosen": "travel_k100",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "slot_k30": 7.377615037880982,
+      "slot_k100": 7.361674376080406,
+      "rest_k30": 7.391422829885084,
+      "rest_k100": 7.373290569236427,
+      "travel_k30": 7.360473670382006,
+      "travel_k100": 7.3519924541307775,
+      "body_clock_k30": 7.366731583093665,
+      "body_clock_k100": 7.359077296096671,
+      "venue_k30": 7.370004566848489,
+      "venue_k100": 7.357430662756478,
+      "phase_k30": 7.384345059524885,
+      "phase_k100": 7.366158410123698,
+      "joint_k30": 7.355883470930501,
+      "joint_k100": 7.355298902384237,
+      "additive_k30": 7.360940724566029,
+      "additive_k100": 7.356959116314903
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "slot_k30": 7.377615037880982,
+      "slot_k100": 7.361674376080406
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "rest_k30": 7.391422829885084,
+      "rest_k100": 7.373290569236427
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "travel",
+    "chosen": "travel_k100",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "travel_k30": 7.360473670382006,
+      "travel_k100": 7.3519924541307775
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "body_clock_k30": 7.366731583093665,
+      "body_clock_k100": 7.359077296096671
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "venue_k30": 7.370004566848489,
+      "venue_k100": 7.357430662756478
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "phase_k30": 7.384345059524885,
+      "phase_k100": 7.366158410123698
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "joint_k30": 7.355883470930501,
+      "joint_k100": 7.355298902384237
+    }
+  },
+  {
+    "target_season": 2018,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2017,
+    "selection_games": 768,
+    "losses": {
+      "plain": 7.35494854147462,
+      "additive_k30": 7.360940724566029,
+      "additive_k100": 7.356959116314903
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "all",
+    "chosen": "travel_k100",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "slot_k30": 7.414875217864369,
+      "slot_k100": 7.398134779734104,
+      "rest_k30": 7.41766352348012,
+      "rest_k100": 7.40199854081405,
+      "travel_k30": 7.398159113877221,
+      "travel_k100": 7.388785470749423,
+      "body_clock_k30": 7.402462299680971,
+      "body_clock_k100": 7.394215313736678,
+      "venue_k30": 7.407677177978824,
+      "venue_k100": 7.393374950106977,
+      "phase_k30": 7.41795033563831,
+      "phase_k100": 7.400899515682851,
+      "joint_k30": 7.390316969400721,
+      "joint_k100": 7.389676646588727,
+      "additive_k30": 7.395551391127081,
+      "additive_k100": 7.391504256284606
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "slot_k30": 7.414875217864369,
+      "slot_k100": 7.398134779734104
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "rest_k30": 7.41766352348012,
+      "rest_k100": 7.40199854081405
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "travel",
+    "chosen": "travel_k100",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "travel_k30": 7.398159113877221,
+      "travel_k100": 7.388785470749423
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "body_clock_k30": 7.402462299680971,
+      "body_clock_k100": 7.394215313736678
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "venue_k30": 7.407677177978824,
+      "venue_k100": 7.393374950106977
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "phase_k30": 7.41795033563831,
+      "phase_k100": 7.400899515682851
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "joint_k30": 7.390316969400721,
+      "joint_k100": 7.389676646588727
+    }
+  },
+  {
+    "target_season": 2019,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2018,
+    "selection_games": 1024,
+    "losses": {
+      "plain": 7.389423896867941,
+      "additive_k30": 7.395551391127081,
+      "additive_k100": 7.391504256284606
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "all",
+    "chosen": "travel_k100",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "slot_k30": 7.444159652527004,
+      "slot_k100": 7.428036748307598,
+      "rest_k30": 7.445344410887787,
+      "rest_k100": 7.430900576667352,
+      "travel_k30": 7.428962402019119,
+      "travel_k100": 7.419746873927013,
+      "body_clock_k30": 7.432678998413449,
+      "body_clock_k100": 7.42464713779396,
+      "venue_k30": 7.44441512791394,
+      "venue_k100": 7.427262896032623,
+      "phase_k30": 7.4492236725301995,
+      "phase_k100": 7.431935263296305,
+      "joint_k30": 7.4212863813655945,
+      "joint_k100": 7.420426869765609,
+      "additive_k30": 7.426306559302487,
+      "additive_k100": 7.422260060631949
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "slot_k30": 7.444159652527004,
+      "slot_k100": 7.428036748307598
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "rest_k30": 7.445344410887787,
+      "rest_k100": 7.430900576667352
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "travel",
+    "chosen": "travel_k100",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "travel_k30": 7.428962402019119,
+      "travel_k100": 7.419746873927013
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "body_clock_k30": 7.432678998413449,
+      "body_clock_k100": 7.42464713779396
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "venue_k30": 7.44441512791394,
+      "venue_k100": 7.427262896032623
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "phase_k30": 7.4492236725301995,
+      "phase_k100": 7.431935263296305
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "joint_k30": 7.4212863813655945,
+      "joint_k100": 7.420426869765609
+    }
+  },
+  {
+    "target_season": 2020,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2019,
+    "selection_games": 1280,
+    "losses": {
+      "plain": 7.420013921757589,
+      "additive_k30": 7.426306559302487,
+      "additive_k100": 7.422260060631949
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "all",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "slot_k30": 7.409982290456914,
+      "slot_k100": 7.395204604766321,
+      "rest_k30": 7.416038967670232,
+      "rest_k100": 7.400682640091797,
+      "travel_k30": 7.39826561659753,
+      "travel_k100": 7.389258005271752,
+      "body_clock_k30": 7.398593737003626,
+      "body_clock_k100": 7.391807529545116,
+      "venue_k30": 7.412964776701137,
+      "venue_k100": 7.396238145972663,
+      "phase_k30": 7.414454081203126,
+      "phase_k100": 7.3982176433490165,
+      "joint_k30": 7.389444995726463,
+      "joint_k100": 7.388822314510449,
+      "additive_k30": 7.393858294360615,
+      "additive_k100": 7.390420700546007
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "slot_k30": 7.409982290456914,
+      "slot_k100": 7.395204604766321
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "rest_k30": 7.416038967670232,
+      "rest_k100": 7.400682640091797
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "travel_k30": 7.39826561659753,
+      "travel_k100": 7.389258005271752
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "body_clock_k30": 7.398593737003626,
+      "body_clock_k100": 7.391807529545116
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "venue_k30": 7.412964776701137,
+      "venue_k100": 7.396238145972663
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "phase_k30": 7.414454081203126,
+      "phase_k100": 7.3982176433490165
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "joint_k30": 7.389444995726463,
+      "joint_k100": 7.388822314510449
+    }
+  },
+  {
+    "target_season": 2021,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2020,
+    "selection_games": 1536,
+    "losses": {
+      "plain": 7.388653567056154,
+      "additive_k30": 7.393858294360615,
+      "additive_k100": 7.390420700546007
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "all",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "slot_k30": 7.448058475082404,
+      "slot_k100": 7.433116506443351,
+      "rest_k30": 7.452222814976475,
+      "rest_k100": 7.4367829370673215,
+      "travel_k30": 7.438397271401142,
+      "travel_k100": 7.4276525039854535,
+      "body_clock_k30": 7.437067167836062,
+      "body_clock_k100": 7.4291944150713105,
+      "venue_k30": 7.449919016180511,
+      "venue_k100": 7.432785563025119,
+      "phase_k30": 7.452423445403785,
+      "phase_k100": 7.435698902040294,
+      "joint_k30": 7.425877292170303,
+      "joint_k100": 7.4252068663977955,
+      "additive_k30": 7.4318714649968785,
+      "additive_k100": 7.427750384508825
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "slot_k30": 7.448058475082404,
+      "slot_k100": 7.433116506443351
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "rest_k30": 7.452222814976475,
+      "rest_k100": 7.4367829370673215
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "travel_k30": 7.438397271401142,
+      "travel_k100": 7.4276525039854535
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "body_clock_k30": 7.437067167836062,
+      "body_clock_k100": 7.4291944150713105
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "venue_k30": 7.449919016180511,
+      "venue_k100": 7.432785563025119
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "phase_k30": 7.452423445403785,
+      "phase_k100": 7.435698902040294
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "joint_k30": 7.425877292170303,
+      "joint_k100": 7.4252068663977955
+    }
+  },
+  {
+    "target_season": 2022,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2021,
+    "selection_games": 1808,
+    "losses": {
+      "plain": 7.42506879537844,
+      "additive_k30": 7.4318714649968785,
+      "additive_k100": 7.427750384508825
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "all",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "slot_k30": 7.384207959992398,
+      "slot_k100": 7.368501463621388,
+      "rest_k30": 7.385240295092924,
+      "rest_k100": 7.3700610640928605,
+      "travel_k30": 7.371941898601314,
+      "travel_k100": 7.361861780099499,
+      "body_clock_k30": 7.371796348327089,
+      "body_clock_k100": 7.364031517432601,
+      "venue_k30": 7.382588032085028,
+      "venue_k100": 7.366300487711885,
+      "phase_k30": 7.387283516145,
+      "phase_k100": 7.37006769711383,
+      "joint_k30": 7.3597924995481065,
+      "joint_k100": 7.359055965538888,
+      "additive_k30": 7.3662632499020155,
+      "additive_k100": 7.362080883697272
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "slot_k30": 7.384207959992398,
+      "slot_k100": 7.368501463621388
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "rest_k30": 7.385240295092924,
+      "rest_k100": 7.3700610640928605
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "travel_k30": 7.371941898601314,
+      "travel_k100": 7.361861780099499
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "body_clock_k30": 7.371796348327089,
+      "body_clock_k100": 7.364031517432601
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "venue_k30": 7.382588032085028,
+      "venue_k100": 7.366300487711885
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "phase_k30": 7.387283516145,
+      "phase_k100": 7.37006769711383
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "joint",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "joint_k30": 7.3597924995481065,
+      "joint_k100": 7.359055965538888
+    }
+  },
+  {
+    "target_season": 2023,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2022,
+    "selection_games": 2079,
+    "losses": {
+      "plain": 7.358912621160283,
+      "additive_k30": 7.3662632499020155,
+      "additive_k100": 7.362080883697272
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "all",
+    "chosen": "joint_k100",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "slot_k30": 7.373372809387699,
+      "slot_k100": 7.359818029228181,
+      "rest_k30": 7.376150808360282,
+      "rest_k100": 7.362614696055579,
+      "travel_k30": 7.363697524289336,
+      "travel_k100": 7.3544311113853125,
+      "body_clock_k30": 7.362989605791008,
+      "body_clock_k100": 7.356074665007936,
+      "venue_k30": 7.377544799822854,
+      "venue_k100": 7.360736354718498,
+      "phase_k30": 7.3834669863564315,
+      "phase_k100": 7.365129360667206,
+      "joint_k30": 7.353259035803516,
+      "joint_k100": 7.352707434066248,
+      "additive_k30": 7.358739522586482,
+      "additive_k100": 7.355145004851459
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "slot_k30": 7.373372809387699,
+      "slot_k100": 7.359818029228181
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "rest_k30": 7.376150808360282,
+      "rest_k100": 7.362614696055579
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "travel_k30": 7.363697524289336,
+      "travel_k100": 7.3544311113853125
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "body_clock_k30": 7.362989605791008,
+      "body_clock_k100": 7.356074665007936
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "venue_k30": 7.377544799822854,
+      "venue_k100": 7.360736354718498
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "phase_k30": 7.3834669863564315,
+      "phase_k100": 7.365129360667206
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "joint",
+    "chosen": "joint_k100",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "joint_k30": 7.353259035803516,
+      "joint_k100": 7.352707434066248
+    }
+  },
+  {
+    "target_season": 2024,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2023,
+    "selection_games": 2351,
+    "losses": {
+      "plain": 7.352720849149075,
+      "additive_k30": 7.358739522586482,
+      "additive_k100": 7.355145004851459
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "all",
+    "chosen": "joint_k100",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "slot_k30": 7.344584251696941,
+      "slot_k100": 7.331045875503904,
+      "rest_k30": 7.347814914454633,
+      "rest_k100": 7.334215812290389,
+      "travel_k30": 7.332599951356355,
+      "travel_k100": 7.324896725350284,
+      "body_clock_k30": 7.3337911529760555,
+      "body_clock_k100": 7.327353768602221,
+      "venue_k30": 7.348118462174775,
+      "venue_k100": 7.331533962244055,
+      "phase_k30": 7.3539761274893,
+      "phase_k100": 7.336385873337064,
+      "joint_k30": 7.324070928596144,
+      "joint_k100": 7.323905262299686,
+      "additive_k30": 7.329295299489109,
+      "additive_k100": 7.326221955967804
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "slot_k30": 7.344584251696941,
+      "slot_k100": 7.331045875503904
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "rest_k30": 7.347814914454633,
+      "rest_k100": 7.334215812290389
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "travel_k30": 7.332599951356355,
+      "travel_k100": 7.324896725350284
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "body_clock_k30": 7.3337911529760555,
+      "body_clock_k100": 7.327353768602221
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "venue_k30": 7.348118462174775,
+      "venue_k100": 7.331533962244055
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "phase_k30": 7.3539761274893,
+      "phase_k100": 7.336385873337064
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "joint",
+    "chosen": "joint_k100",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "joint_k30": 7.324070928596144,
+      "joint_k100": 7.323905262299686
+    }
+  },
+  {
+    "target_season": 2025,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2024,
+    "selection_games": 2623,
+    "losses": {
+      "plain": 7.324250037453446,
+      "additive_k30": 7.329295299489109,
+      "additive_k100": 7.326221955967804
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "all",
+    "chosen": "joint_k100",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "slot_k30": 7.339284372263832,
+      "slot_k100": 7.325097303011093,
+      "rest_k30": 7.336864491545406,
+      "rest_k100": 7.325416478702347,
+      "travel_k30": 7.325823875259029,
+      "travel_k100": 7.318230107757685,
+      "body_clock_k30": 7.326709551487225,
+      "body_clock_k100": 7.320674513057688,
+      "venue_k30": 7.341704099470522,
+      "venue_k100": 7.325226890492223,
+      "phase_k30": 7.349665065663737,
+      "phase_k100": 7.331115447856013,
+      "joint_k30": 7.318021473057475,
+      "joint_k100": 7.317790436810861,
+      "additive_k30": 7.322427058022651,
+      "additive_k100": 7.3195925194807385
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "slot",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "slot_k30": 7.339284372263832,
+      "slot_k100": 7.325097303011093
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "rest",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "rest_k30": 7.336864491545406,
+      "rest_k100": 7.325416478702347
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "travel",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "travel_k30": 7.325823875259029,
+      "travel_k100": 7.318230107757685
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "body_clock",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "body_clock_k30": 7.326709551487225,
+      "body_clock_k100": 7.320674513057688
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "venue",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "venue_k30": 7.341704099470522,
+      "venue_k100": 7.325226890492223
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "phase",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "phase_k30": 7.349665065663737,
+      "phase_k100": 7.331115447856013
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "joint",
+    "chosen": "joint_k100",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "joint_k30": 7.318021473057475,
+      "joint_k100": 7.317790436810861
+    }
+  },
+  {
+    "target_season": 2026,
+    "family": "additive",
+    "chosen": "plain",
+    "selection_max_season": 2025,
+    "selection_games": 2895,
+    "losses": {
+      "plain": 7.318104300502309,
+      "additive_k30": 7.322427058022651,
+      "additive_k100": 7.3195925194807385
+    }
+  }
+]

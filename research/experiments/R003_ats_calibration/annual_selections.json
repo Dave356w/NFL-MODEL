@@ -1,0 +1,130 @@
+[
+  {
+    "target_season": 2019,
+    "selection_max_season": 2018,
+    "chosen": "fair",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6982447760778641,
+      "context_r100": 0.6953828386843857,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6939088118896086,
+      "platt_r100": 0.6939088118896086,
+      "raw": 0.7007768659316295,
+      "temperature_r10": 0.6931471805599453,
+      "temperature_r100": 0.6931471805599453
+    }
+  },
+  {
+    "target_season": 2020,
+    "selection_max_season": 2019,
+    "chosen": "platt_r100",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6948603469902175,
+      "context_r100": 0.6931519499302587,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6927510913480269,
+      "platt_r100": 0.6927260461544749,
+      "raw": 0.698602070261043,
+      "temperature_r10": 0.6932121580337118,
+      "temperature_r100": 0.6931598729676298
+    }
+  },
+  {
+    "target_season": 2021,
+    "selection_max_season": 2020,
+    "chosen": "platt_r100",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6953631695524924,
+      "context_r100": 0.6934936143402156,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6930088435455344,
+      "platt_r100": 0.6929902292141187,
+      "raw": 0.7002567109019001,
+      "temperature_r10": 0.6932044844470318,
+      "temperature_r100": 0.6931584679208623
+    }
+  },
+  {
+    "target_season": 2022,
+    "selection_max_season": 2021,
+    "chosen": "platt_r100",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6946924542383768,
+      "context_r100": 0.6932480422266127,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6930286214881332,
+      "platt_r100": 0.6929906556825811,
+      "raw": 0.698709854805273,
+      "temperature_r10": 0.6932038339480336,
+      "temperature_r100": 0.6931568977348068
+    }
+  },
+  {
+    "target_season": 2023,
+    "selection_max_season": 2022,
+    "chosen": "platt_r100",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6944121930284575,
+      "context_r100": 0.69306536255774,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6930827329266613,
+      "platt_r100": 0.6930601346345381,
+      "raw": 0.6976320838331775,
+      "temperature_r10": 0.6931396569186515,
+      "temperature_r100": 0.6931405024746587
+    }
+  },
+  {
+    "target_season": 2024,
+    "selection_max_season": 2023,
+    "chosen": "fair",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6947698130734289,
+      "context_r100": 0.6934454872435335,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6932374549434737,
+      "platt_r100": 0.693160970758384,
+      "raw": 0.6983165935870459,
+      "temperature_r10": 0.6932109358018973,
+      "temperature_r100": 0.6931523446907487
+    }
+  },
+  {
+    "target_season": 2025,
+    "selection_max_season": 2024,
+    "chosen": "fair",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6947574882649404,
+      "context_r100": 0.6935499819679393,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.6933774207712385,
+      "platt_r100": 0.6932620773844571,
+      "raw": 0.6992930516894806,
+      "temperature_r10": 0.6932648990523217,
+      "temperature_r100": 0.6931647042893052
+    }
+  },
+  {
+    "target_season": 2026,
+    "selection_max_season": 2025,
+    "chosen": "fair",
+    "criterion": "cover_log_loss",
+    "losses": {
+      "context_r10": 0.6946812573412469,
+      "context_r100": 0.6935765000098817,
+      "fair": 0.6931471805599453,
+      "platt_r10": 0.693402231427587,
+      "platt_r100": 0.693308624914328,
+      "raw": 0.6984581408612311,
+      "temperature_r10": 0.6932429703862518,
+      "temperature_r100": 0.6931605312777299
+    }
+  }
+]

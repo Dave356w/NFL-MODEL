@@ -1,0 +1,46 @@
+{
+  "experiment": "R003-RF1",
+  "registration": {
+    "experiment": "R003-RF1",
+    "protocol_sha256": "173838db53a0ab538144b91d2ddbc4393b0e7b6158dfd002bb674a257c3cb9c1",
+    "recorded_utc": "2026-10-16T19:33:11.623400+00:00",
+    "registration": "local specification frozen before candidate execution; history already exposed; no external preregistration"
+  },
+  "source_hashes": {
+    "research/r003_rare_frequency.py": "a7049ab2c76e9dc30ee8191b4ca57851bc8654f9670d8b20a50e7873b4b56a49",
+    "research/distribution_ablations.py": "ac9bcc2dd295c06982b96605efc4f8be59024fa3e02fca3c8dd9a096abc21e32",
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/tie_hurdle.py": "c4587d981ed531dad8cdf21e51d3398cac7db34893079a8f1159ea719d31f18f",
+    "research/joint_market_residuals_report.py": "afba09da32fcc26456f9b325433c65451141f306f719fec56cc0cbf65ede82f1",
+    "research/tie_hurdle_report.py": "bf6cffaf9d142c614ab1e88354ce4b4333cd4bd14b2af78acbc62ef9f2ba2571"
+  },
+  "input_hashes": {
+    "research/experiments/R000_reproduction/features.csv.gz": "e4cfef45e9f0cad3e2ee1866fd724abf48072f13ace9f21779b8663c66c4feb5",
+    "research/experiments/R000_reproduction/coefficient_audit.jsonl": "9ed288d94d369fc40db8e4af7bdb0966c9bdea6a65e6cac2feda74a1cb0c0fb5",
+    "research/experiments/R003_score_support/predictions.csv.gz": "00b06928ae667b84873137a162a3678fe660966de467e6dd7038f21ea86f5045"
+  },
+  "baseline_max_error": 7.105427357601002e-15,
+  "integrity": {
+    "normalized_joint": true,
+    "identical_support": true,
+    "coherent_means": true,
+    "positive_realized_probability": true,
+    "prior_week_calibration": true,
+    "pmf_normalization": true,
+    "event_probability_agreement": true,
+    "row_alignment": true,
+    "calibration_cutoffs": true
+  },
+  "io": {
+    "rows": 4924,
+    "csv_sha256": "3a1c02dfa5eeefdad7956db8d19e2fe48caf0cc024457c67bfb0b577822a98e8",
+    "gzip_sha256": "fb9cd6917dcef7fafab4a901358344575d145812baa194a752ea2d60a5f09377",
+    "gzip_eof_verified": true,
+    "method": "complete in-memory gzip; fsync; atomic replace; readback validation"
+  },
+  "numpy": "2.5.4",
+  "pandas": "3.0.6",
+  "historical_quote_timestamps": "unknown",
+  "independent_validation": false,
+  "production_changed": false
+}

@@ -1,0 +1,14 @@
+{
+  "experiment": "R003-MC2",
+  "gates": {
+    "practical_gain": false,
+    "positive_interval": false,
+    "annual_consistency": false,
+    "better_than_global": true,
+    "event_scores": false,
+    "integrity": true
+  },
+  "recommendation": "fails advancement gate",
+  "independent_validation": false,
+  "production_promotion": false
+}

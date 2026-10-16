@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "REPORT.md": true,
+    "annual_selections.json": true,
+    "comparisons.json": true,
+    "decision.json": true,
+    "feature_table.csv.gz": true,
+    "fitted_windows.json": true,
+    "metrics.csv": true,
+    "moneyline.json": true,
+    "paired_controls.json": true,
+    "predictions.csv.gz": true,
+    "provenance.json": true,
+    "review_provenance.json": true,
+    "stability.json": true,
+    "support_comparison.json": true,
+    "travel_slices.json": true
+  },
+  "all_passed": true,
+  "method": "Separate process and output directory; exact byte equality"
+}

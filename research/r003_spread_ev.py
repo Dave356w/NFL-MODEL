@@ -14,7 +14,10 @@ import numpy as np
 
 POLICY = "R003-SPREAD-EV-v1"
 ARM = "empirical__R003_score_support"
+RF1_ARM = "empirical__R003_rare_frequency"
+ARMS = (ARM, RF1_ARM)
 DEFAULT_PMFS = Path(__file__).resolve().parent / "experiments/R003_score_support/marginal_probabilities.npz"
+RF1_PMFS = Path(__file__).resolve().parent / "experiments/R003_rare_frequency/marginal_probabilities.npz"
 EPS = 1e-12
 
 
@@ -100,8 +103,10 @@ def evaluate_offers(pmf, support, offers):
                 reason="positive model-estimated EV" if selected else "no offer has positive net model-estimated EV")
 
 
-def load_margin(path, game_id):
+def load_margin(path, game_id, *, arm=ARM):
     """Read exactly one empirical R003 marginal; reject ambiguous/malformed packs."""
+    if arm not in ARMS:
+        raise ValueError('Unknown R003 research arm')
     with np.load(path, allow_pickle=False) as pack:
         ids = pack["game_ids"]
         if ids.ndim != 1 or len(set(ids.tolist())) != len(ids):
@@ -109,22 +114,24 @@ def load_margin(path, game_id):
         matches = np.flatnonzero(ids == game_id)
         if len(matches) != 1:
             raise ValueError(f"Game not present exactly once in R003 PMFs: {game_id}")
-        marginals = pack[ARM + "__margin"]
+        marginals = pack[arm + "__margin"]
         if marginals.ndim != 2 or marginals.shape[0] != len(ids):
             raise ValueError("PMF rows must align with game IDs")
         p, s = _distribution(marginals[matches[0]], pack["margin_support"])
     return p, s
 
 
-def evaluate_request(pmfs, request):
+def evaluate_request(pmfs, request, *, arm=ARM):
     if not isinstance(request, dict) or set(request) != {"game_id", "offers"}:
         raise ValueError("Request needs exactly game_id and offers; outcomes are not accepted")
     game_id = request["game_id"]
     if not isinstance(game_id, str) or not game_id:
         raise ValueError("game_id must be a nonempty string")
-    p, s = load_margin(pmfs, game_id)
+    p, s = load_margin(pmfs, game_id, arm=arm)
     decision = evaluate_offers(p, s, request["offers"])
-    return dict(game_id=game_id, arm=ARM, pmf_sha256=hashlib.sha256(Path(pmfs).read_bytes()).hexdigest(),
+    if arm == RF1_ARM:
+        decision['policy'] = 'R003-RF1-SPREAD-EV-v1'
+    return dict(game_id=game_id, arm=arm, pmf_sha256=hashlib.sha256(Path(pmfs).read_bytes()).hexdigest(),
                 quote_basis="user-supplied prices and timestamps; availability is not independently verified",
                 evidence="research calculation only; no execution or forward registration", **decision)
 
@@ -132,13 +139,17 @@ def evaluate_request(pmfs, request):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("request", type=Path, help="JSON with game_id and quoted offers")
-    parser.add_argument("--pmfs", type=Path, default=DEFAULT_PMFS)
+    parser.add_argument("--arm", choices=ARMS, default=ARM,
+                        help="Research PMF arm; original R003 remains the default")
+    parser.add_argument("--pmfs", type=Path, help="Override the selected arm's generated PMF pack")
     args = parser.parse_args(argv)
+    pmfs = args.pmfs or (RF1_PMFS if args.arm == RF1_ARM else DEFAULT_PMFS)
     try:
-        result = evaluate_request(args.pmfs, json.loads(args.request.read_text()))
+        result = evaluate_request(pmfs, json.loads(args.request.read_text()), arm=args.arm)
     except (ValueError, KeyError, OSError) as exc:
-        hint = (". Regenerate missing marginals with: python research/distribution_ablations.py R003"
-                if not args.pmfs.exists() else "")
+        command = ("python research/r003_rare_frequency.py" if args.arm == RF1_ARM
+                   else "python research/distribution_ablations.py R003")
+        hint = (". Regenerate missing marginals with: " + command if not pmfs.exists() else "")
         parser.error(f"{exc}{hint}")
     print(json.dumps(result, indent=2, allow_nan=False))
 

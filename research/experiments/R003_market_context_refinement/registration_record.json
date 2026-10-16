@@ -1,0 +1,6 @@
+{
+  "experiment": "R003-MC2",
+  "protocol_sha256": "3121912e29367d05703b60319b61a6547016f0cd9960b9df82306023fd2b1ce6",
+  "recorded_utc": "2026-10-16T19:55:45.415071+00:00",
+  "status": "exploratory iteration frozen after MC1 results, before MC2 scoring; all history exposed"
+}

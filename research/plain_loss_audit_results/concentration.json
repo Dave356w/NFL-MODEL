@@ -1,0 +1,38 @@
+{
+  "agree": {
+    "n": 805,
+    "single_source_pick_flips": 4,
+    "median_ess": 216.76069320750648,
+    "median_absolute_spread_blur": 0.42516282446128706,
+    "max_source_weight": 0.18416248639637853
+  },
+  "disagree": {
+    "n": 7,
+    "single_source_pick_flips": 6,
+    "median_ess": 34.250602809775984,
+    "median_absolute_spread_blur": 0.28632302000313237,
+    "max_source_weight": 0.26137795794640756
+  },
+  "all": {
+    "n": 812,
+    "single_source_pick_flips": 10,
+    "median_ess": 216.21137498517584,
+    "median_absolute_spread_blur": 0.4213927968705382,
+    "max_source_weight": 0.26137795794640756
+  },
+  "proper_score": {
+    "total_gain": -3.471925852439184,
+    "gross_negative": 30.180916049223445,
+    "worst_10_share_of_gross_negative": 0.10735334121589661,
+    "annual_gains": {
+      "2023": -0.0007357150690620995,
+      "2024": -0.004144339245137727,
+      "2025": -0.007913472616150665
+    },
+    "leave_one_season_gain": {
+      "2023": -0.00602543527376481,
+      "2024": -0.004317984489432268,
+      "2025": -0.0024400271570999134
+    }
+  }
+}

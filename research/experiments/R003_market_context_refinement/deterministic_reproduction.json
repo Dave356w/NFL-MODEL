@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "predictions.csv.gz": true,
+    "metrics.csv": true,
+    "annual_selections.json": true,
+    "comparisons.json": true,
+    "moneyline.json": true,
+    "reliability.json": true,
+    "market_controls.json": true,
+    "provenance.json": true,
+    "decision.json": true,
+    "stability.json": true,
+    "reference_provenance.json": true,
+    "REPORT.md": true
+  },
+  "all_passed": true,
+  "method": "Independent process and output directory, byte comparison of predictions, selections, audits, summaries and reports"
+}
