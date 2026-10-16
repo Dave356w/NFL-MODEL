@@ -797,6 +797,38 @@ def historical_pick_reference(latest, game, edge):
             "Records are reconstructed, not locked forward evidence or this game's cover probability. "
             "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
 
+def kalshi_live_quotes(data, now):
+    """Best actual Kalshi bid/ask, fresh within 4 hours and before kickoff."""
+    file = Path(data) / "kalshi_live_board.json"
+    if not file.exists():
+        return {}
+    try:
+        blob=json.loads(file.read_text())
+        t=pd.to_datetime(blob["captured_utc"],utc=True).to_pydatetime()
+        if t > now or (now-t).total_seconds() > 4*3600:
+            return {}
+        output={}
+        for rec in blob.get("games",[]):
+            if pd.to_datetime(rec["kickoff_utc"],utc=True).to_pydatetime()<=now:
+                continue
+            w=rec.get("winner",{})
+            if not all(k in w for k in ("home","away")):continue
+            h,a = num(w["home"].get("ask")),num(w["away"].get("ask"))
+            if not all(math.isfinite(v) and 0<v<1 for v in (h,a)):continue
+            fav=rec["home"] if h>a else rec["away"]
+            candidates=[q for q in rec.get("spread_ladder",[])
+                        if q.get("team")==fav and math.isfinite(num(q.get("strike")))
+                        and 0<num(q.get("bid"))<num(q.get("ask"))<1]
+            best=min(candidates,key=lambda q:abs((num(q["bid"])+num(q["ask"]))/2-.5)) if candidates else None
+            line=(1 if fav==rec["home"] else -1)*float(best["strike"]) if best else math.nan
+            output[rec["game_id"]]={"home_ask":h,"away_ask":a,"kalshi_line":line,
+                "spread_ticker":best["ticker"] if best else "",
+                "captured_utc":rec["captured_utc"]}
+        return output
+    except (ValueError,TypeError,KeyError,OverflowError):
+        return {}
+
+
 def render_index(latest, ledger, built, now=None, data=DATA):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
