@@ -562,11 +562,13 @@ def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypat
     retro.to_csv(path, index=False)
     out = tmp_path / 'public'
     b.render_all(out, data, now=NOW)
-    for page in ['index.html', 'grades.html']:
-        html = (out / page).read_text()
-        assert 'Model spread · 2026 graded results' in html
-        assert 'assumed −110 · 1u per bet · not locked pregame picks' in html
-        assert html.index('Model spread · 2026 graded results') < html.index("class='grid'" if page == 'index.html' else 'Rebuilt history')
+    idx = (out / 'index.html').read_text()
+    assert 'Kalshi-only historical record' in idx or 'Kalshi historical archive is not yet published' in idx
+    assert 'Model spread · 2026 graded results' not in idx
+    html = (out / 'grades.html').read_text()
+    assert 'Model spread · 2026 graded results' in html
+    assert 'assumed −110 · 1u per bet · not locked pregame picks' in html
+    assert html.index('Model spread · 2026 graded results') < html.index('Rebuilt history')
     html = (out / 'grades.html').read_text()
     assert 'Model spread · rebuilt history' in html
     assert '<th>Spread pick</th>' in html and '<th>ATS result</th>' in html
