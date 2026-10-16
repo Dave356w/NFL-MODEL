@@ -150,6 +150,58 @@ def line_quote(row, markets, asof, get=kalshi.fetch):
     return q, "quoted"
 
 
+
+def kalshi_main_quote(row, markets, winners, asof, get=kalshi.fetch):
+    """Derive a Kalshi-only benchmark line, without reading sportsbook spread_line.
+
+    Find the balanced binary winner-margin contract nearest a fair 50/50
+    market from contemporaneous ASK and BID. Limit candidate requests using
+    no-vig game-winner asks as a *search guide only*; source of the chosen
+    handicap is solely the quoted spread contract. Report line quote exactly.
+    """
+    if "home" not in winners or "away" not in winners:
+        return None, "missing_kalshi_winner_pair"
+    home_ask = winners["home"]["yes_ask"]
+    away_ask = winners["away"]["yes_ask"]
+    total = home_ask + away_ask
+    if not 0 < total < 2:
+        return None, "invalid_kalshi_winner_pair"
+    home_prob = home_ask / total
+    if abs(home_prob - .5) < .001:
+        return None, "pickem_no_spread_favorite"
+    favorite = row["home"] if home_prob > .5 else row["away"]
+    from scipy.special import ndtri
+    p = min(.99, max(.505, max(home_prob, 1-home_prob)))
+    approx = 12.37 * float(ndtri(p))
+    # Broader than typical favorite line, but bounded API reads per game.
+    candidates = sorted(
+        ((m,part,strike) for m,part,team,strike in spread_contracts(
+            markets,row["away"],row["home"]) if team == favorite),
+        key=lambda o: abs(o[2]-approx))
+    if not candidates:
+        return None, "no_kalshi_spread_contracts"
+    inspected = []
+    for m,part,strike in candidates[:8]:
+        quote = quote_market(m,part,asof,get)
+        if quote:
+            midpoint = .5*(quote["yes_bid"]+quote["yes_ask"])
+            inspected.append((abs(midpoint-.5),abs(strike-approx),m,part,strike,quote))
+    if not inspected:
+        return None, "no_fresh_main_kalshi_ladder_quotes"
+    best = min(inspected,key=lambda v:(v[0],v[1]))
+    _,_,m,part,strike,q = best
+    home_fav = favorite == row["home"]
+    line = strike if home_fav else -strike
+    q.update({"event_ticker":m["event_ticker"],"ticker":m["ticker"],
+              "favorite":favorite,"strike":strike,"kalshi_spread_line":line,
+              "home_ask":q["yes_ask"] if home_fav else q["no_ask"],
+              "away_ask":q["no_ask"] if home_fav else q["yes_ask"],
+              "market_source":part,
+              "selection_rule":"min_half_bid_ask_midpoint_distance_from_50pct_among_nearest_8"})
+    return q, "quoted"
+
+
+
 def alternate_line_quote(row, markets, asof, get=kalshi.fetch):
     """Quoted Kalshi binary rung nearest ORIGINAL model-implied margin.
 
@@ -215,14 +267,20 @@ def historical_quotes(games, *, get=kalshi.fetch, cutoff_hours=2., max_games=10)
         events = {s:event_for_game(catalog[s],r,s) for s in SERIES}
         spreads = markets_for_event(events[kalshi.SPREAD_SERIES],get)
         winners = markets_for_event(events[kalshi.GAME_SERIES],get)
-        q,why = line_quote(r, spreads, cutoff, get=get)
-        alt,alt_why = (alternate_line_quote(r, spreads, cutoff, get=get)
-                       if r.get("model_spread") is not None else (None,"model_spread_unavailable"))
         w = winner_quote(r,winners,cutoff,get=get)
+        native,native_why = kalshi_main_quote(r,spreads,w,cutoff,get=get)
+        q,why = line_quote(r, spreads, cutoff, get=get)
+        alt_input = dict(r)
+        if native:
+            alt_input["spread_line"] = native["kalshi_spread_line"]
+        alt,alt_why = (alternate_line_quote(alt_input, spreads, cutoff, get=get)
+                       if r.get("model_spread") is not None and native
+                       else (None,"kalshi_main_or_model_unavailable"))
         result = {"game_id":r["game_id"],"away":r["away"],"home":r["home"],
                   "cutoff_utc":cutoff.isoformat(),"kickoff_utc":kick.isoformat(),
                   "spread_line":float(r["spread_line"]),
-                  "status":why,"alternate_status":alt_why,
+                  "status":why,"kalshi_main_status":native_why,
+                  "alternate_status":alt_why,
                   "price_basis":"kalshi_completed_minute_2h_pregame",
                   "winner_home_ask":w.get("home",{}).get("yes_ask"),
                   "winner_away_ask":w.get("away",{}).get("yes_ask"),
@@ -233,6 +291,15 @@ def historical_quotes(games, *, get=kalshi.fetch, cutoff_hours=2., max_games=10)
         if q: result.update({k:q[k] for k in ("ticker","event_ticker","strike","favorite",
                         "home_ask","away_ask","yes_bid","yes_ask","no_ask",
                         "age_seconds","source_ts","market_source")})
+        if native:
+            result.update(kalshi_spread_line=native["kalshi_spread_line"],
+                          kalshi_ticker=native["ticker"],kalshi_favorite=native["favorite"],
+                          kalshi_strike=native["strike"],
+                          kalshi_home_ask=native["home_ask"],
+                          kalshi_away_ask=native["away_ask"],
+                          kalshi_yes_bid=native["yes_bid"],kalshi_yes_ask=native["yes_ask"],
+                          kalshi_source_ts=native["source_ts"],
+                          kalshi_market_source=native["market_source"])
         if alt:
             result.update(alt_ticker=alt["ticker"],alt_selection_side=alt["selection_side"],
                           alt_contract=alt["selection_contract"],alt_ask=alt["selection_ask"],
@@ -371,6 +438,7 @@ def main(argv=None):
         print(f"Matched Kalshi ML asks: {len(ml)} / {len(records)}")
     print(json.dumps({"games_requested":len(records),
                       "spread_quotes":sum(r.get("status")=="quoted" for r in records),
+                      "kalshi_native_main_quotes":sum(r.get("kalshi_main_status")=="quoted" for r in records),
                       "alt_spread_quotes":sum(r.get("alternate_status")=="quoted" for r in records),
                       "with_both_winners":sum(r.get("winner_home_ask") is not None and r.get("winner_away_ask") is not None for r in records)},indent=2))
 
