@@ -319,40 +319,61 @@ def score_kalshi_price(p_home, p_away, p_push, ask):
 
 
 def joined_ats_results(frame, kalshi_quotes):
-    """Same games/side; quote-missing games excluded, no -110 fallback."""
-    d = frame.copy()
-    quotes = pd.DataFrame(kalshi_quotes)
-    if quotes.empty: return d.iloc[:0]
-    if quotes.game_id.duplicated().any(): raise ValueError("duplicate Kalshi game quotes")
-    use = quotes[(quotes.status=="quoted") & quotes.home_ask.notna() & quotes.away_ask.notna()].copy()
-    d=d.merge(use, on="game_id",how="inner",validate="one_to_one",
-              suffixes=("","_kalshi"))
+    """Grade original and fixed-band models on the KALSHI-DEFINED market line.
+
+    The market line, actual YES/NO asks and the outcome are all taken from
+    the Kalshi binary contract; the nflverse sportsbook line and pregraded
+    bookmaker W/L are never reused. Quote-unavailable games are excluded.
+    """
+    q = pd.DataFrame(kalshi_quotes)
+    if q.empty or "kalshi_spread_line" not in q:
+        return frame.iloc[:0].copy()
+    if q.game_id.duplicated().any():
+        raise ValueError("duplicate Kalshi quote IDs")
+    avail = q[q.kalshi_main_status.eq("quoted") & q.kalshi_spread_line.notna()].copy()
+    d = frame.merge(avail, on="game_id", how="inner", validate="one_to_one",
+                    suffixes=("","_kalshi"))
     if d.empty: return d
-    for arm in ("original","fixed_band","cover_probability"):
-        s = d[arm+"_side"]
-        a = np.where(s=="home",d.home_ask,np.where(s=="away",d.away_ask,np.nan))
-        # In a half-point market there are no pushes; W and L are exhaustive.
-        won=d[arm+"_grade"].eq("W")
-        lost=d[arm+"_grade"].eq("L")
-        fee=FEE_RATE*a*(1-a)
-        units=np.where(won,1/a-1-fee/a,np.where(lost,-1-fee/a,0.))
-        d[arm+"_kalshi_ask"]=a
-        d[arm+"_kalshi_units"]=np.where(s.isin(["home","away"]),units,0.)
-    # Original model spread as a separately priced alternate binary rung.
-    if {"alt_ask","alt_target_strike","alt_selection_side","alt_contract"}.issubset(d.columns):
-        eligible = (d.alt_ask.notna() & d.alt_target_strike.notna() &
-                    d.alt_selection_side.eq(d.original_side) &
-                    d.alt_contract.isin(["YES","NO"]))
-        fav_margin = np.where(d.model_spread>0,d.margin,-d.margin)
-        yes_hit = fav_margin>d.alt_target_strike
-        side_hit = np.where(d.alt_contract.eq("YES"),yes_hit,~yes_hit)
-        prices=pd.to_numeric(d.alt_ask,errors="coerce")
-        eligible &= prices.gt(0)&prices.lt(1)
-        fee=FEE_RATE*(1-prices)
-        d["original_model_alt_kalshi_units"] = np.where(
-            eligible, np.where(side_hit,1/prices-1-fee,-1-fee),np.nan)
-        d["original_model_alt_kalshi_grade"] = np.where(
-            eligible,np.where(side_hit,"W","L"),"")
+    for c in ("margin","model_spread","fixed_band_spread","kalshi_spread_line",
+              "kalshi_home_ask","kalshi_away_ask","kalshi_strike"):
+        d[c] = pd.to_numeric(d[c],errors="coerce")
+    if not np.isfinite(d[["margin","model_spread","kalshi_spread_line"]]).all(axis=1).all():
+        raise ValueError("Kalshi grading requires realized margins and model spread")
+    line = d.kalshi_spread_line.to_numpy(float)
+    outcome = d.margin.to_numpy(float) > line
+    # Single Kalshi binary, positive home-margin line means the home team
+    # is the favorite and YES wins if margin > line.
+    for arm, prediction in (
+        ("original",d.model_spread),
+        ("fixed_band",d.fixed_band_spread),
+    ):
+        gap = prediction.to_numpy(float) - line
+        chosen = np.where(np.isnan(gap),"",np.where(gap > 1e-9,"home",
+                          np.where(gap < -1e-9,"away","")))
+        ask = np.where(chosen == "home",d.kalshi_home_ask,
+                       np.where(chosen=="away",d.kalshi_away_ask,np.nan))
+        ask = np.asarray(ask,float)
+        valid=(ask>0)&(ask<1)&np.isfinite(ask)
+        wins=np.where(chosen=="home",outcome,~outcome)
+        pnl=np.where(wins,1/np.where(valid,ask,1)-1,-1)-FEE_RATE*(1-np.where(valid,ask,1))
+        d[arm+"_kalshi_side"] = chosen
+        d[arm+"_kalshi_ask"] = np.where(valid,ask,np.nan)
+        d[arm+"_kalshi_grade"] = np.where(valid,np.where(wins,"W","L"),"")
+        d[arm+"_kalshi_units"] = np.where(valid,pnl,np.nan)
+    # This arm was calibrated at the sportsbook spread and cannot be
+    # reinterpreted as a Kalshi cover probability. Do not invent a bet.
+    d["cover_probability_kalshi_ask"] = np.nan
+    d["cover_probability_kalshi_units"] = np.nan
+    if {"alt_ask","alt_target_strike","alt_selection_side","alt_contract"}.issubset(d):
+        alt_ask=pd.to_numeric(d.alt_ask,errors="coerce")
+        valid=alt_ask.gt(0)&alt_ask.lt(1)&d.alt_selection_side.eq(d.original_kalshi_side)
+        fav_margin=np.where(d.model_spread.gt(0),d.margin,-d.margin)
+        yes_hit = fav_margin > pd.to_numeric(d.alt_target_strike,errors="coerce")
+        hit = np.where(d.alt_contract.eq("YES"),yes_hit,~yes_hit)
+        valid &= d.alt_contract.isin(["YES","NO"]) & d.alt_target_strike.notna()
+        pnl=np.where(hit,1/np.where(valid,alt_ask,1)-1,-1) - FEE_RATE*(1-np.where(valid,alt_ask,1))
+        d["original_model_alt_kalshi_units"]=np.where(valid,pnl,np.nan)
+        d["original_model_alt_kalshi_grade"]=np.where(valid,np.where(hit,"W","L"),"")
     return d
 
 
