@@ -1,53 +1,67 @@
-# Kalshi-only NFL pricing migration — partial, verified 2026-10-15
+# Kalshi-only NFL pricing migration (October 15, 2026)
 
-**Scope:** Replace sportsbook/flat-110 *pricing* inside the separate ATS research and new ATS forward-shadow comparison, with actual Kalshi prices where available. **Do not overwrite** old bookmaker source columns, price-incompatible v1.18 coefficient fits or historical forward locks. Original production winner model, frozen recipe, and append-only `data/forward_predictions.jsonl` stay unchanged pending complete coverage + new full training / validation. **No fake replacement values.**
+## Status and definition
 
-## Documented API endpoints
+**Kalshi quotes are now the primary, observed price source** for the current site board and for the historical **2025–2026** winner, Kalshi-defined main-spread and model-target alternate-spread *pricing/settlement* evaluation. Older sportsbook valuation is retained only under clearly labeled **legacy** sections/files so pre-2025 forecasts can be reproduced. All existing model forecasts and first pregame locks are preserved.
 
-Official [historical-data guide](https://docs.kalshi.com/getting_started/historical_data) requires using `GET /historical/cutoff` to route settled markets to `GET /historical/markets?event_ticker=...` and `GET /historical/markets/{ticker}/candlesticks`. Newer markets use `GET /markets?event_ticker=...` and `GET /series/{series_ticker}/markets/{ticker}/candlesticks`. `GET /events?series_ticker=...&min_close_ts=...` continues to list events after market archival.
+**Important technical limit:** The underlying **v1.18 probability model is not re-trained solely on Kalshi features**; some frozen model inputs and historical coefficient fits are based on the prior nflverse/bookmaker data. Kalshi's NFL spread markets did not exist for 2021–2024, so a genuine fully Kalshi-trained 2021–26 backtest or equivalent recalibration is not possible. Do not label the frozen model Kalshi-trained.
 
-The model's existing `kalshi.py` identifies `KXNFLGAME` winner and `KXNFLSPREAD` alternative-spread markets. Historical quote adapter: `research/kalshi_ats_prices.py`. Fresh native capture: `kalshi.py` plus `research/ats_forward_shadow.py`.
+## Completed 2025–2026 API backfill
 
-**Historical coverage limit:** Kalshi football spread/total event contracts launched in August 2025. There is no actual Kalshi NFL alternative-spread quote in 2021–24. Every unavailable game must remain excluded or tagged `unavailable` in Kalshi-only analysis, never priced at retrospective book −110 or assigned invented fair odds.
+[Full backfill workflow](https://github.com/Dave356w/NFL-MODEL/actions/runs/38827189182): 23 separate weekly API retrieval jobs (2025 Weeks 1–18 and completed 2026 Weeks 1–5), **all passed**, plus successful merge and commit. Output is persisted and source auditable:
 
-## Price point, side, and settlement convention
+- `data/kalshi_historical/kalshi_quotes.csv`: 351 quote/game rows with game ID, Kalshi tickers, YES/NO ask, threshold, cutoff and actual source timestamp, missing/quote status.
+- `data/kalshi_historical/kalshi_moneyline_graded.csv`: model-selected winner contract at Kalshi YES ask, including $0.50 tie settlement.
+- `data/kalshi_historical/kalshi_ats_graded.csv`: original and fixed-band sides compared against **Kalshi's own quoted spread**, plus original-model target alternate contract if available. Final score is graded relative to the actual contract strike, not to a sportsbook handicap.
+- `data/kalshi_historical/kalshi_summary.json`: counts, coverage and money-at-risk ROI; reproducible via `research/kalshi_backfill.py`.
 
-- Historical research quotes are **completed 1-minute candlesticks at or before kickoff minus 2 hours**, with at most 30 minutes' staleness; labeled a *retrospective cutoff*, **not** the actual first v1.18 native model lock. `yes_bid.close_dollars` and `yes_ask.close_dollars` are required; don't use last trade or settled price as a tradable bid/ask.
-- Favorited home team and `spread_line=+3.5`: YES contract `home wins by >3.5`; home ATS side buys YES at its ask, away ATS side buys **NO** at `1−YES bid`. For `spread_line=−3.5`, favorite is away, with respective sides reversed. Both positions share a single contract; exact half-integer only, since integer sportsbook lines can **push**, unlike this Kalshi event contract.
-- Winning margin has integer support. A contract at X.5 settles without a margin push. Expected-vs-book `P(cover)` must be evaluated at exactly the quoted contract threshold; no linear "price per point", no interpolation and no fictitious −110.
-- Return per *unit risked* at YES/NO ask `a` is `+1/a−1−f(a)/a` for winning contract, and `−1−f(a)/a` for losing contract; `f(a)≈0.07a(1−a)` is a **fee approximation**. Real venue fee schedule, rounding, depth, partial fills and slippage still need confirmation.
-- Original model alt target: nearest advertised half-integer threshold to `abs(model_spread)`; choose the original model's market-ATS **same side**, YES or NO as appropriate. Only an exact listed, time-matched alternative contract can be graded. No guess when missing.
-- Winner markets: separate YES asks for home and away. In the existing forward comparison, a final tied game has a $0.50 outcome, not an NFL "push" in a fixed-priced book; explicitly grade `0.5/ask−1−fee`.
+Coverage of this *reconstructed model-pick* cohort:
 
-## API smoke test completed (October 15, 2026)
+| Year | Graded games | Winner quote pairs | Kalshi main-spread offers | Original-model target alternate offers |
+|---:|---:|---:|---:|---:|
+| 2025 | 272 | 272 | 272 | 170 |
+| 2026 W1–5 | 79 | 79 | 79 | 67 |
+| **Total** | **351** | **351** | **351** | **237** |
 
-[Audited GitHub run for five 2025 Week 1 games](https://github.com/Dave356w/NFL-MODEL/actions/runs/38826039620) fetched historical candlesticks, archived/active market metadata, resolved game IDs, and uploaded a three-file artifact.
+**The 237 alternates are a separate availability-selected subset**. Do not compare their ROI directly with an all-games strategy without restricting both to the same games.
 
-| Item | Available |
-|---|---:|
-| Both Kalshi winner asks | 5/5 |
-| Exact Kalshi main-line ATS ask/NO complement | 4/5 |
-| Kalshi alternate-contract quote at rounded original model spread | 5/5 |
-| Nonmatching integer sportsbook spread | 1/5 |
-| Original signal across matched 4 (fee-adjusted, descriptive) | −1.0408u |
-| Fixed-band signal across matched 4 (fee-adjusted, descriptive) | +0.8125u |
+## Observed price-based results
 
-In this tiny cohort, the four matched original-model alternate bets summed to **−1.0408u**, the same as the original-spread main-line result; a same-rung quote or same-side outcome can produce identical results. This is not evidence of general equivalence between the two handicaps. The quote sample verifies *retrieval* but not a model signal.\n\n**These results are smoke-test coverage, not model validation or an ROI claim.** They are conditioned on available Kalshi lines. The original 2021–26 895-game assumed −110 result is not directly comparable to this sample.
+All results use actual captured Kalshi asks, $1 risked per contract, a *proxy* fee of `0.07 × price × (1 − price)` charged on entry and no slippage. Source timestamp is a completed one-minute bid/ask candle at or before **kickoff minus 2 hours**, max 30 minutes old. This is a fixed *research cutoff*, not the time at which each legacy model prediction was really locked.
 
-The workflow `.github/workflows/kalshi-ats-prices.yml` can be dispatched with NFL season (2025/2026), week and maximum games. It builds a refreshed historical Test 48 prediction table, fetches Kalshi markets/candlesticks, then exports raw audit rows, matched main-spread ATS grading, original-model alternate-spread results and Kalshi winner price grading. No API key is needed for these public-market-data endpoints. Each row preserves market ticker, contract side, ask and price timestamp.
+| Season | Market | Bets | Units | ROI |
+|---|---|---:|---:|---:|
+| 2025 | Model winner YES | 272 | −1.28 | −0.47% |
+| 2025 | Original ATS, Kalshi main | 272 | −1.25 | −0.46% |
+| 2025 | Fixed-band ATS, Kalshi main | 272 | −4.92 | −1.81% |
+| 2025 | Original-model alt | 170 | −2.98 | −1.75% |
+| 2026 W1–5 | Model winner YES | 79 | −4.95 | −6.26% |
+| 2026 W1–5 | Original ATS, Kalshi main | 79 | −7.40 | −9.36% |
+| 2026 W1–5 | Fixed-band ATS, Kalshi main | 79 | +2.39 | +3.02% |
+| 2026 W1–5 | Original-model alt | 67 | −1.09 | −1.63% |
+| **Combined** | **Model winner YES** | **351** | **−6.23** | **−1.77%** |
+| **Combined** | **Original ATS** | **351** | **−8.64** | **−2.46%** |
+| **Combined** | **Fixed-band ATS** | **351** | **−2.53** | **−0.72%** |
+| **Combined** | **Original-model alt** | **237** | **−4.08** | **−1.72%** |
 
-## New forward ATS shadow
+These outcomes are **exploratory after historical exposure** and insufficient to establish edge. All four combined point estimates are negative. A prior four-game smoke test priced the main Kalshi contract but reused the bookmaker spread W/L result and is **superseded** by this corrected Kalshi-native settlement backtest.
 
-Starting after the previously registered shadow launch cutoff, `research/ats_forward_shadow.py` reads only `data/kalshi_snapshots.jsonl` records captured **after** a newly locked forecast and within 30 minutes, before kickoff. It chooses the identical game, favorite and exact half-integer strike, stores both YES and implied NO asks, both winner asks (if available), the captured timestamp, and its source snapshot hash.
+## Implemented price convention
 
-The probability decision uses `P(cover)` at the observed Kalshi ask with the fee proxy. No matching price means `probability_side=""`, `quote_basis="no_matching_kalshi_quote"`; no −110 substitution. Research-only graded returns `*_units_kalshi` are calculated using the recorded quote. The 2026 native winner model continues unchanged, and old locked predictions remain untouched.
+- Historical `research/kalshi_ats_prices.py` reads `KXNFLGAME`, `KXNFLSPREAD` events and archival/live historical candlesticks. It only uses **completed one-minute bid/ask candles**, never an after-game settlement price, and records quote timestamp and source ticker. Queries are routed to active or archived partitions.
+- Kalshi main handicap is selected using the **closest-to-50% contemporaneous favorite YES midquote** across up to the 8 offered strikes nearest the spread magnitude suggested by the Kalshi winner market. No sportsbook main handicap is used to select the *priced* benchmark; its remaining column is only a legacy diagnostic. This defines a **research heuristic**, not an official venue canonical main line; alternative choices may change ATS picks and ROI.
+- A positive `kalshi_spread_line` means a Kalshi contract on the home team's winning margin above its half-point strike; a negative line means the away favorite. Home and away ATS picks are YES and the opposite NO with ask `1 − YES bid`. Integer sportsbook lines are not mapped to imaginary pushes; all Kalshi ATS grades come from an **actual binary contract threshold**.
+- Original-model alternate: the model's forecasted signed margin identifies the favorite and target half-point; its side is selected by discrepancy from Kalshi **market** threshold, not the bookmaker line; ask/YES/NO and exact contract settlement separately captured. No interpolation or fixed "price per point".
+- Current `kalshi.safe_live_board` refreshes actual order-book winner and spread ladders for pregame games. `build_site.py` shows live Kalshi asks and market line only when source quote is within 4 hours, otherwise **"Kalshi quote unavailable"**. It never populates current price from the old schedule's bookmaker moneylines.
+- Native forward `research/ats_forward_shadow.py`: first future snapshot and quote no more than 30 minutes after lock. **Absent quote means no priced candidate**. Existing locked predictions remain unchanged, and quotes after the snapshot are explicitly marked.
 
-## Not yet done / important distinction
+## Mandatory limitations / no false full replacement
 
-1. **Full archive backfill, 2025 onward**, and coverage diagnostics by season, week, time, sportsbook main line, Kalshi threshold and missingness (limited to five-game audit so far); the API provides retrievable data but exact quote coverage over whole seasons is unverified.
-2. **Production replacement of underlying market features:** v1.18 was fitted using nflverse sportsbook moneylines and spread inputs in prior seasons. Swapping a few current-season price rows under a frozen recipe would be a different, unvalidated model. 2021–24 Kalshi spread data are nonexistent. Proper Kalshi-only refit requires a new cohort start after Kalshi market availability, adequate training history, and a separately identified revision; do not silently relabel the existing v1.18 as Kalshi-trained.
-3. **Historical point-in-time accuracy**: 2h pregame research quote does not equal when an old model was genuinely locked. Archive bid/ask candle is a summary of that minute, not guaranteed executable size at the candle close. PnL is approximate.
-4. **Live Kalshi capture is distinct from model feature lock**: forward shadow requires a quote after the pregame forecast; this is marked so it cannot be called the model's original lock price.
-5. A model expected scoring margin is **not** a calibrated cover probability. Test 48 found tiny unresolved score gains and negative ROI at −110. Re-estimate price-adjusted cover events on a Kalshi-only cohort before ranking selections.
+1. **2021–2024 Kalshi NFL spread prices do not exist**, so those past games cannot be assigned an actual Kalshi price. Old sportsbook backtests are kept only as **legacy research**.
+2. **The v1.18 model's underlying training features were built with sportsbook-market history.** Changing price displays and grading does not retroactively re-train coefficients. A new independently identified Kalshi-trained model would require sufficient data from its 2025+ launch and later genuinely forward results.
+3. A completed-minute candle's bid/ask does not guarantee the displayed quote could fill one or more contracts at the exact minute close. Fee proxy ignores per-order rounding, depth, and slippage.
+4. The quote cutoff is a retrospective common time, not each model's contemporaneous original lock. Hindsight recipe selection remains an additional source of leakage.
+5. The Kalshi main-spread selection heuristic and quote availability are research definitions, not market-standard bookmaker spreads. Preserve them as versioned inputs, not assumptions about an official "market line".
+6. **No automatic migration of immutable historical predictions:** old pregame snapshot price fields and native forward ledgers stay untouched by design; new versioned quote records reference them separately.
 
-**Current decision:** observed Kalshi prices replace hypothetical bookmaker prices **inside the new matched research grade and native shadow**. The full production/historical sportsbook-price replacement remains **incomplete** and must not be represented as delivered until the distinct Kalshi-supported backtest and quote coverage pass.
+**Conclusion:** Full Kalshi price acquisition and Kalshi-contract settlement comparison are completed for every graded 2025–2026 game currently available to the model. Kalshi-only training for older NFL seasons remains structurally impossible. Production probability coefficients remain frozen until a legitimate forward redesign is validated.
