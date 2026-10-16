@@ -26,6 +26,8 @@ REVISION = "boxscore-composite-v1.18"
 START_UTC = dt.datetime.fromisoformat("2026-10-16T00:00:00+00:00")
 MAX_CAPTURE_AGE_HOURS = 3.
 STATE = "ats_forward_shadow.jsonl"
+POLICY_VERSION = "fixed-band-ats-2026-10-15-v1"
+EPS = fixed_bands.EPS
 
 
 def utc(value: str) -> dt.datetime:
@@ -78,7 +80,8 @@ def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
     return rows
 
 
-def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
+def freeze(raw: dict, historical: pd.DataFrame, mapping: dict,
+           archived_utc: dt.datetime | None = None) -> dict:
     year = int(raw["season"])
     if mapping is None or mapping["training_max_season"] >= year:
         raise ValueError("no chronological fixed-band rule")
@@ -86,7 +89,8 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
     spread = float(cp.SIGMA * ndtri(np.clip(float(raw["model_wp"]), .005, .995)))
     line = float(raw["spread_line"])
     fixed = float(fixed_bands.apply([spread], mapping)[0])
-    _, adjusted = cp.distribution(line, spread - line, fit)
+    base, adjusted = cp.distribution(line, spread - line, fit)
+    mh, ma, mp = cp.event(base, line)
     h, a, p = cp.event(adjusted, line)
     ev_h, ev_a = cp.WIN_PROFIT*h-a, cp.WIN_PROFIT*a-h
     probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
@@ -94,15 +98,22 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
         return "home" if gap > cp.EPS else "away" if gap < -cp.EPS else ""
     fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
     original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
+    fixed_side = side(fixed - line)
     return {
         "revision": REVISION, "game_id": raw["game_id"], "season": year,
         "week": int(raw["week"]), "away": raw["away"], "home": raw["home"],
         "generated_utc": raw["generated_utc"], "kickoff_utc": raw["kickoff_utc"],
+        "archived_utc": archived_utc.isoformat() if archived_utc is not None else None,
+        "policy_version": POLICY_VERSION, "zero_edge_tolerance": EPS,
         "market_spread": line, "raw_spread": spread,
         "fixed_band_spread": fixed,
-        "raw_side": side(spread-line), "fixed_band_side": side(fixed-line),
+        "fixed_band_edge": fixed - line,
+        "selected_side": fixed_side,
+        "skip_reason": "zero_edge" if not fixed_side else None,
+        "raw_side": side(spread-line), "fixed_band_side": fixed_side,
         "probability_side": probability_side,
         "p_home_cover": h, "p_away_cover": a, "p_push": p,
+        "market_p_home_cover": mh, "market_p_away_cover": ma, "market_p_push": mp,
         "home_ev_proxy_minus110": ev_h, "away_ev_proxy_minus110": ev_a,
         "assumed_price": -110, "quote_basis": "unverified_proxy_only",
         "source_snapshot_sha256": hashlib.sha256(original_json.encode()).hexdigest(),
@@ -142,7 +153,7 @@ def record(data: Path | str = "data", now: dt.datetime | None = None) -> int:
         key = (REVISION, r["game_id"])
         if key in existing:
             continue
-        row = freeze(r, prior, rules.get(int(r["season"])))
+        row = freeze(r, prior, rules.get(int(r["season"])), archived_utc=now)
         new.append(row)
         existing.add(key)
     if new:
