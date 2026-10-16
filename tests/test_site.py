@@ -152,12 +152,13 @@ def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
     assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
-    assert "TB QB: J.Daniels" in html and "DAL −485" in html
+    assert "TB QB: J.Daniels" in html and "Kalshi quote unavailable" in html
+    assert "DAL −485" not in html
     assert "Final 20–27" in html and "Moneyline result BUF · W" in html
     assert "pts off market" not in html and "Largest drivers" not in html
     assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
     # record box: forward ledger, KC@BUF picked BUF -135 and won
-    assert "Model 1-0 (100.0%) · ROI +74.1%" in html and "always favorite 1-0" in html
+    assert "Kalshi-priced record" in html and "no sportsbook backfill" in html
 
 
 def test_pooled_2026_v118_picks_no_double_count(tmp_path):
@@ -216,7 +217,7 @@ def test_index_before_any_graded_pick(tmp_path):
     data = make_data(tmp_path / "data", with_ledger=False)
     b.render_all(tmp_path / "public", data, now=NOW)
     html = (tmp_path / "public" / "index.html").read_text()
-    assert "No graded picks yet." in html
+    assert "Kalshi-priced record" in html
 
 
 def test_ledger_tiles_are_comparable_controls(tmp_path):
@@ -375,15 +376,13 @@ def test_team_logos_from_espn_with_code_fallback(tmp_path):
     assert "teamlogos" not in (out / "grades.html").read_text()
 
 
-def test_card_shows_price_band_for_market_and_model(tmp_path):
+def test_cards_do_not_inherit_sportsbook_prices(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    # TB@DAL: pick DAL -485; no held-out or forward side was priced that short
-    assert "At this price · DAL −485 is in the ≤ −250 range" in idx and "no games at this price yet" in idx
-    # KC@BUF: pick BUF -135. Market: 300 held-out sides at -150 plus the graded forward BUF -135 side.
-    # Model: held-out picks in the band plus the forward pick (BUF won).
-    assert "At this price · BUF −135 is in the −174 to −130 range" in idx and "301 teams" in idx
-    assert "Same games for both: 2024" in idx and "plus 1 locked pick this season" in idx
+    assert "Kalshi quote unavailable" in idx
+    assert "At this price · DAL" not in idx
+    assert "At this price · BUF" not in idx
+    assert "Moneyline result BUF · W" in idx  # Side outcome, independent of wager quote
 
 
 def test_band_windows_use_the_same_games_and_add_forward_picks():
@@ -420,10 +419,11 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
                         dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    assert "<span>Model DAL −5.0</span> · <span>Market DAL −9.5</span>" in idx
+    assert "<span>Model DAL −5.0</span>" in idx
+    assert "Market DAL −9.5" not in idx
     assert "<td>Model spread</td><td class=n>+5.0</td><td class=n>−5.0</td>" in idx
     assert "Model DAL −3.1" not in idx
-    assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
+    assert "<td>Kalshi spread</td><td class=n>—</td><td class=n>—</td>" in idx
     for page in ['grades.html', 'market-calibration.html']:
         text = (out / page).read_text()
         assert "<h2 class='sec'>Model spread</h2>" in text
@@ -629,6 +629,6 @@ def test_cards_show_separate_picks_and_historical_reference(tmp_path,monkeypatch
     text=(out/'index.html').read_text()
     assert "<span class='kind'>Moneyline</span>" in text
     assert "<span class='kind'>Spread</span>" in text
-    assert 'projected edge' in text
-    assert 'Historical reference · reconstructed' in text
-    assert 'model probability' in text and 'recorded moneylines' in text
+    assert 'Kalshi quote unavailable' in text
+    assert 'Historical reference · reconstructed' not in text
+    assert 'recorded moneylines' not in text
