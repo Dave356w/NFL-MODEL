@@ -32,7 +32,7 @@ def fit(history, season):
         g = d.iloc[np.flatnonzero(band == k)]
         pred = np.sign(g.model_spread.to_numpy())[:, None] * grid
         edge = pred - g.spread_line.to_numpy()[:, None]
-        side = np.sign(edge)
+        side = np.where(np.abs(edge) <= EPS, 0., np.sign(edge))
         reward = np.sign(side * (g.result - g.spread_line).to_numpy()[:, None]).sum(0)
         distance = ((pred - g.model_spread.to_numpy()[:, None]) ** 2).mean(0)
         scores.append(reward - 1e-8 * distance)
