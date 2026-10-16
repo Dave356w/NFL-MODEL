@@ -888,7 +888,7 @@ def kalshi_historical_quotes(data):
 
 def kalshi_display_alt(quote, game, line):
     """Original-model alternate: use only the exact listed contract ask."""
-    original=num(game.get("model_spread"))
+    original=model_spread(game)
     if not(math.isfinite(original) and math.isfinite(line) and abs(original)>=.5 and abs(original-line)>1e-9):
         return None
     side="home" if original > line else "away"
@@ -897,6 +897,7 @@ def kalshi_display_alt(quote, game, line):
         if quote.get("alt_side")!=side or not(math.isfinite(ask) and 0<ask<1):
             return None
         return {"side":side,"ask":ask,"contract":quote.get("alt_contract"),
+                "strike":num(quote.get("alt_target_strike")),
                 "ticker":quote.get("alt_ticker")}
     favorite=game["home"] if original>0 else game["away"]
     target=math.floor(abs(original))+.5
@@ -907,7 +908,8 @@ def kalshi_display_alt(quote, game, line):
     is_yes=game[side]==favorite
     ask=num(rung.get("ask")) if is_yes else 1-num(rung.get("bid"))
     if not(math.isfinite(ask) and 0<ask<1):return None
-    return {"side":side,"ask":ask,"contract":"YES" if is_yes else "NO","ticker":rung.get("ticker")}
+    return {"side":side,"ask":ask,"contract":"YES" if is_yes else "NO",
+            "strike":target,"ticker":rung.get("ticker")}
 
 
 def render_index(latest, ledger, built, now=None, data=DATA):
@@ -999,21 +1001,10 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         if team:
             moneyline_pick += f' · {pct(p if team == home else 1-p)} model win probability'
         alt_text="Kalshi alternate quote unavailable"
-        if current_quote and math.isfinite(ks):
-            raw=model_spread(r)
-            if math.isfinite(raw) and abs(raw)>=.5 and abs(raw-ks)>1e-9:
-                target=math.floor(abs(raw))+.5
-                raw_favorite=home if raw>0 else away
-                raw_side=home if raw>ks else away
-                rungs=[q for q in current_quote.get("spread_ladder",[])
-                       if q.get("team")==raw_favorite and math.isclose(num(q.get("strike")),target)
-                       and 0<num(q.get("bid"))<num(q.get("ask"))<1]
-                if len(rungs)==1:
-                    rung=rungs[0]
-                    is_yes=raw_side==raw_favorite
-                    quote_ask=float(rung["ask"]) if is_yes else 1-float(rung["bid"])
-                    alt_text=(f"{esc(raw_side)} {'YES' if is_yes else 'NO'} "
-                              f"at >{target:g} margin · Kalshi ${quote_ask:.3f}")
+        if alt_quote:
+            selected=home if alt_quote["side"]=="home" else away
+            alt_text=(f"{esc(selected)} {esc(alt_quote['contract'])} at "
+                      f">{alt_quote['strike']:g} margin · Kalshi ${alt_quote['ask']:.3f}")
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
                  f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span>"
                  f"<span class='kind'>Model alt</span><span>{alt_text}</span></div>")
