@@ -21,6 +21,11 @@ Unknown quote timestamps prevent executable-price claims. R001/R002 remain
 research candidates; R003 fails its practical advancement gate. No production
 or forward-capture activation follows from this import.
 
+The optional [R003 spread EV evaluator](R003_SPREAD_EV.md) prices the offered
+handicap using cover/loss/push probabilities and the supplied odds. It selects
+at most one positive-EV 1u offer per game or passes. Historical spread odds are
+absent, so this addition makes no historical spread ROI claim.
+
 The following method describes the original production-family studies.
 
 **Method (all tests).** Each variant runs the production walk-forward grid
