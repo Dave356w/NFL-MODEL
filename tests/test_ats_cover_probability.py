@@ -158,7 +158,7 @@ def test_native_shadow_three_way_scores_include_skips_and_pushes(tmp_path):
     rows = [dict(base, game_id=f"2026_08_{k}", raw_side="home",
                  fixed_band_side=side, probability_side="away")
             for k, side in enumerate(sides)]
-    (data / shadow.STATE).write_text("".join(json.dumps(r)+"\\n" for r in rows))
+    (data / shadow.STATE).write_text("".join(json.dumps(r)+"\n" for r in rows))
     pd.DataFrame({
         "revision": [shadow.REVISION]*3,
         "game_id": [r["game_id"] for r in rows],
@@ -187,7 +187,7 @@ def test_legacy_shadow_missing_market_control_is_not_backfilled(tmp_path):
          "season": 2026, "market_spread": 3., "generated_utc": "2026-10-16T15:00:00+00:00",
          "fixed_band_side": "home", "raw_side": "home", "probability_side": "home",
          "p_home_cover": .5, "p_away_cover": .5, "p_push": 0.}
-    (data / shadow.STATE).write_text(json.dumps(r)+"\\n")
+    (data / shadow.STATE).write_text(json.dumps(r)+"\n")
     pd.DataFrame([{"revision": shadow.REVISION, "game_id": r["game_id"],
                    "generated_utc": r["generated_utc"], "status": "final",
                    "result": 4.}]).to_csv(data / "forward_ledger.csv", index=False)
