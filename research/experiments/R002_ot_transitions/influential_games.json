@@ -1,0 +1,322 @@
+[
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_15_BUF_DET",
+    "gain": 0.38345510113504666,
+    "home_score": 42,
+    "away_score": 48
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_13_PIT_CIN",
+    "gain": 0.3738757441299203,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2023_13_SEA_DAL",
+    "gain": 0.28530267295362677,
+    "home_score": 41,
+    "away_score": 35
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_18_CAR_ATL",
+    "gain": 0.28133017675568794,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2023_14_LA_BAL",
+    "gain": 0.2708869321452534,
+    "home_score": 37,
+    "away_score": 31
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_17_DET_SF",
+    "gain": 0.26695310929456895,
+    "home_score": 34,
+    "away_score": 40
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_05_TB_ATL",
+    "gain": 0.25045180091831565,
+    "home_score": 36,
+    "away_score": 30
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2025_02_NYG_DAL",
+    "gain": 0.24191322754057154,
+    "home_score": 40,
+    "away_score": 37
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_05_BAL_CIN",
+    "gain": 0.2161626654356965,
+    "home_score": 38,
+    "away_score": 41
+  },
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_01_ARI_BUF",
+    "gain": 0.20814682464755663,
+    "home_score": 34,
+    "away_score": 28
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2025_04_GB_DAL",
+    "gain": -2.155371667008657,
+    "home_score": 40,
+    "away_score": 40
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_15_BUF_DET",
+    "gain": 0.40944082845823715,
+    "home_score": 42,
+    "away_score": 48
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_13_PIT_CIN",
+    "gain": 0.40110097420976665,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_13_SEA_DAL",
+    "gain": 0.3043308773197211,
+    "home_score": 41,
+    "away_score": 35
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_18_CAR_ATL",
+    "gain": 0.3037272836685503,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_14_LA_BAL",
+    "gain": 0.2942147257226351,
+    "home_score": 37,
+    "away_score": 31
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_17_DET_SF",
+    "gain": 0.29322927734543924,
+    "home_score": 34,
+    "away_score": 40
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_05_TB_ATL",
+    "gain": 0.27760183944764893,
+    "home_score": 36,
+    "away_score": 30
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2025_02_NYG_DAL",
+    "gain": 0.26862220482418664,
+    "home_score": 40,
+    "away_score": 37
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_05_BAL_CIN",
+    "gain": 0.24244161838908695,
+    "home_score": 38,
+    "away_score": 41
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_15_BUF_DET",
+    "gain": 0.3773993023566131,
+    "home_score": 42,
+    "away_score": 48
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_13_PIT_CIN",
+    "gain": 0.3737590158801911,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2023_13_SEA_DAL",
+    "gain": 0.2729898995451947,
+    "home_score": 41,
+    "away_score": 35
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2023_14_LA_BAL",
+    "gain": 0.2605347657892976,
+    "home_score": 37,
+    "away_score": 31
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_05_TB_ATL",
+    "gain": 0.24817061557646447,
+    "home_score": 36,
+    "away_score": 30
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2025_02_NYG_DAL",
+    "gain": 0.23836374982208675,
+    "home_score": 40,
+    "away_score": 37
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_17_DET_SF",
+    "gain": 0.20655656376718756,
+    "home_score": 34,
+    "away_score": 40
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2025_01_PIT_NYJ",
+    "gain": 0.1892667466218434,
+    "home_score": 32,
+    "away_score": 34
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2024_14_NYJ_MIA",
+    "gain": 0.18847202614120562,
+    "home_score": 32,
+    "away_score": 26
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "game_id": "2025_04_PHI_TB",
+    "gain": 0.18532405655431194,
+    "home_score": 25,
+    "away_score": 31
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2025_04_GB_DAL",
+    "gain": -2.0095786766187462,
+    "home_score": 40,
+    "away_score": 40
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2024_15_BUF_DET",
+    "gain": 0.39912711469702344,
+    "home_score": 42,
+    "away_score": 48
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2024_13_PIT_CIN",
+    "gain": 0.396631570023283,
+    "home_score": 38,
+    "away_score": 44
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_13_SEA_DAL",
+    "gain": 0.2888529549829819,
+    "home_score": 41,
+    "away_score": 35
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_14_LA_BAL",
+    "gain": 0.28009618405760417,
+    "home_score": 37,
+    "away_score": 31
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2024_05_TB_ATL",
+    "gain": 0.27102138196422043,
+    "home_score": 36,
+    "away_score": 30
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2025_02_NYG_DAL",
+    "gain": 0.2607904642362193,
+    "home_score": 40,
+    "away_score": 37
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2024_17_DET_SF",
+    "gain": 0.2287049308101361,
+    "home_score": 34,
+    "away_score": 40
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2025_01_PIT_NYJ",
+    "gain": 0.21396340827656068,
+    "home_score": 32,
+    "away_score": 34
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2025_04_PHI_TB",
+    "gain": 0.209762580595668,
+    "home_score": 25,
+    "away_score": 31
+  }
+]

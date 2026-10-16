@@ -1,0 +1,5 @@
+{
+  "csv_sha256": "01b5e3d36331b4335aafc7ab6c7b6c2a21c8b4f49cab53d66f851064fa58d123",
+  "gzip_sha256": "0a56826f97ea44fb40f8906753b4824225dba2a4efeb2eceba5058e7998485ee",
+  "model_specification": "unchanged; serialization-only engineering revision after R003 failed compressed-file check"
+}

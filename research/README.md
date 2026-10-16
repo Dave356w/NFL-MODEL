@@ -1,7 +1,27 @@
 # Research
 
-Research-only scripts. They import `nfl_model.py` and change settings inside their
-own process. They never write `data/`, the frozen recipe or the forward ledger.
+Research-only scripts and experiment records. Some import `nfl_model.py` and
+change settings inside their own process; the joint-score track below is
+standalone. They never write `data/`, the frozen recipe or the forward ledger.
+
+## Joint-score distribution research - October 16, 2026
+
+Start with [integration and reproduction notes](JOINT_SCORE_INTEGRATION.md),
+[results](RESULTS_SUMMARY.md), and the [experiment registry](EXPERIMENT_REGISTRY.md).
+R000 reproduces the eight fixed market/residual distributions. R001 changes tie
+mass; R002 tests fixed terminal score transport; R003 independently conditions
+on a football scoring support mask. These use frozen inputs and prior-week fits,
+with their primary comparison on 816 games from 2023-25. They do not use the
+production recipe-selection procedure described in the older studies below.
+
+The empirical candidates retain the same 812 hypothetical moneyline bets:
+-0.9055u, -0.1115% ROI +/- 2.4716 percentage points SE. Same-row favorites return
++0.1801u (+0.0222%); the negative-hold null is approximately -4.0995%.
+Unknown quote timestamps prevent executable-price claims. R001/R002 remain
+research candidates; R003 fails its practical advancement gate. No production
+or forward-capture activation follows from this import.
+
+The following method describes the original production-family studies.
 
 **Method (all tests).** Each variant runs the production walk-forward grid
 (team half-lives 4/8/16 × ridge 0.01/0.1/1/10) on 2021–2025. For each held-out season

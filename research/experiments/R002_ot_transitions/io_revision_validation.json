@@ -1,0 +1,7 @@
+{
+  "model_design_changed": false,
+  "canonical_prediction_csv_identical": true,
+  "old_csv_sha256": "01b5e3d36331b4335aafc7ab6c7b6c2a21c8b4f49cab53d66f851064fa58d123",
+  "new_csv_sha256": "01b5e3d36331b4335aafc7ab6c7b6c2a21c8b4f49cab53d66f851064fa58d123",
+  "reason": "Explicit complete gzip/atomic-write verification after R003 output incident; not a new forecasting candidate"
+}

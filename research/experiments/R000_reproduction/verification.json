@@ -1,0 +1,12 @@
+{
+  "all_fit_cutoffs_prior": true,
+  "all_history_cutoffs_prior": true,
+  "no_reported_covariance_fallback": true,
+  "identical_game_sets": true,
+  "probabilities_nonnegative_and_normalized": true,
+  "win_loss_tie_sum_to_one": true,
+  "mean_identities": true,
+  "cover_and_total_sum_to_one": true,
+  "primary_game_count": true,
+  "pmf_rows_match_order": true
+}

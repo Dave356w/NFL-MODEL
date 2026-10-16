@@ -1,0 +1,6 @@
+{
+  "protocol_commit": "715d4d624d1c8ed325542896258e7fe1bb814212",
+  "commit_time": "2026-10-16T08:57:26-07:00",
+  "protocol_sha256": "2b2e4eac2727748d385c5c41fff3c23b487cdb91384e2f89afba96c56509517d",
+  "status": "local design lock before candidate execution; historical sample already exposed; no external timestamp attestation"
+}

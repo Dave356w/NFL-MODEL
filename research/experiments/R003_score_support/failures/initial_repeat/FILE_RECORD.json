@@ -1,0 +1,22 @@
+{
+  "support_mask.npy": {
+    "bytes": 6689,
+    "sha256": "639f5204fdf199d126a1f5f4c09b13f8606d156fbe1b971aea6494a009048c4b"
+  },
+  "predictions.csv.gz": {
+    "bytes": 4425158,
+    "sha256": "306dcfc5a63f66b0a16cff146c61c97b05609ed72e7e488a44af32e4207fe2bb"
+  },
+  "support_definition.json": {
+    "bytes": 805,
+    "sha256": "5c838130426700045d4f1e93993556dffc7552e05bbfec00763bd7a4943a6ad3"
+  },
+  "PROTOCOL.md": {
+    "bytes": 4152,
+    "sha256": "baff8890d6ceea01f280ae15ba7d08a3191694720f90988ef6ab2b6350b0c851"
+  },
+  "registration_record.json": {
+    "bytes": 267,
+    "sha256": "7da412498890cfb48ca5f187d811d17706b1f7e20bbb84be5500918520d54cdc"
+  }
+}

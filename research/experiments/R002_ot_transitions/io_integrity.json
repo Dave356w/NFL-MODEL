@@ -1,0 +1,7 @@
+{
+  "rows": 14772,
+  "csv_sha256": "01b5e3d36331b4335aafc7ab6c7b6c2a21c8b4f49cab53d66f851064fa58d123",
+  "gzip_sha256": "d90ab8fc90d1cf6738c3a05addc880ce8d4697816668b7d2e815a198f7141952",
+  "gzip_eof_verified": true,
+  "method": "complete in-memory gzip; fsync; atomic replace; readback validation"
+}

@@ -1,0 +1,2 @@
+{"rows": 9848, "baseline_reconstruction_max_error": 2.1316282072803006e-14}
+{"experiment": "R001", "checks": {"predictions.csv.gz": true, "tie_fit_audit.csv": true, "provenance.json": true, "marginal_probabilities.npz_arrays": true, "example_joint_probabilities.npz_arrays": true}, "all_passed": true, "note": "NPZ arrays compared; ZIP container modification times are not semantic."}

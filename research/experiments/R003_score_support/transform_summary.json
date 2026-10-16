@@ -1,0 +1,22 @@
+[
+  {
+    "shape": "empirical",
+    "n": 816,
+    "removed_mass_mean": 0.0002860484468573545,
+    "valid_one_point_mass_mean": 0.006301003669716805,
+    "excluded_cells_mean": 13.0,
+    "removed_mass_max": 0.0048796545720287,
+    "valid_one_point_mass_max": 0.0274965537161835,
+    "excluded_cells_max": 13.0
+  },
+  {
+    "shape": "smooth",
+    "n": 816,
+    "removed_mass_mean": 0.00033639186231249855,
+    "valid_one_point_mass_mean": 0.007410506269109773,
+    "excluded_cells_mean": 13.0,
+    "removed_mass_max": 0.0057335362865864,
+    "valid_one_point_mass_max": 0.0323263784631566,
+    "excluded_cells_max": 13.0
+  }
+]

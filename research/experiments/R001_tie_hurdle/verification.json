@@ -1,0 +1,16 @@
+{
+  "prior_week_tie_fit": true,
+  "no_duplicate_arm_games": true,
+  "normalized_marginals": true,
+  "win_loss_tie_normalized": true,
+  "spread_total_event_sums": true,
+  "coherent_means": true,
+  "primary_n_816": true,
+  "all_probabilities_finite": true,
+  "conditional_winner_invariant": true,
+  "moneyline_choices_and_settlements_invariant": true,
+  "analytic_nll_gain_identity": true,
+  "pmf_row_alignment": true,
+  "identical_games": true,
+  "candidate_tie_matches_prior_fit": true
+}

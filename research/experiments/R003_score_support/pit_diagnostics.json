@@ -1,0 +1,914 @@
+[
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__A_market",
+    "target": "home",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      74,
+      86,
+      88,
+      65,
+      87,
+      83,
+      91,
+      81,
+      71,
+      90
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__A_market",
+    "target": "away",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      88,
+      78,
+      95,
+      81,
+      87,
+      77,
+      70,
+      73,
+      73,
+      94
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__A_market",
+    "target": "margin",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      86,
+      61,
+      71,
+      87,
+      110,
+      84,
+      79,
+      83,
+      56,
+      99
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__A_market",
+    "target": "total",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      66,
+      92,
+      85,
+      83,
+      92,
+      92,
+      74,
+      69,
+      78,
+      85
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__R003_score_support",
+    "target": "home",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      74,
+      86,
+      88,
+      65,
+      87,
+      83,
+      91,
+      81,
+      71,
+      90
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__R003_score_support",
+    "target": "away",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      88,
+      78,
+      95,
+      81,
+      87,
+      77,
+      70,
+      73,
+      73,
+      94
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__R003_score_support",
+    "target": "margin",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      86,
+      61,
+      71,
+      87,
+      110,
+      84,
+      79,
+      83,
+      56,
+      99
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "empirical__R003_score_support",
+    "target": "total",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      66,
+      92,
+      85,
+      83,
+      92,
+      92,
+      74,
+      69,
+      78,
+      85
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__A_market",
+    "target": "home",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      74,
+      87,
+      90,
+      68,
+      77,
+      87,
+      91,
+      74,
+      77,
+      91
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__A_market",
+    "target": "away",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      87,
+      79,
+      97,
+      80,
+      88,
+      77,
+      67,
+      70,
+      74,
+      97
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__A_market",
+    "target": "margin",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      88,
+      61,
+      75,
+      79,
+      112,
+      86,
+      78,
+      80,
+      58,
+      99
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__A_market",
+    "target": "total",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      67,
+      93,
+      84,
+      89,
+      92,
+      90,
+      69,
+      68,
+      76,
+      88
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__R003_score_support",
+    "target": "home",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      74,
+      88,
+      89,
+      68,
+      77,
+      87,
+      91,
+      75,
+      76,
+      91
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__R003_score_support",
+    "target": "away",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      87,
+      79,
+      97,
+      80,
+      88,
+      77,
+      67,
+      70,
+      74,
+      97
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__R003_score_support",
+    "target": "margin",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      88,
+      61,
+      75,
+      79,
+      112,
+      86,
+      78,
+      80,
+      58,
+      99
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "historical_2023_25",
+    "arm": "smooth__R003_score_support",
+    "target": "total",
+    "n": 816,
+    "midpoint_pit_deciles": [
+      67,
+      93,
+      86,
+      87,
+      92,
+      90,
+      69,
+      68,
+      76,
+      88
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__A_market",
+    "target": "home",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      151,
+      165,
+      177,
+      170,
+      164,
+      156,
+      135,
+      148,
+      139,
+      162
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__A_market",
+    "target": "away",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      163,
+      144,
+      174,
+      147,
+      166,
+      172,
+      158,
+      145,
+      143,
+      155
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__A_market",
+    "target": "margin",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      153,
+      142,
+      162,
+      154,
+      178,
+      176,
+      171,
+      141,
+      134,
+      156
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__A_market",
+    "target": "total",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      163,
+      162,
+      187,
+      159,
+      155,
+      157,
+      140,
+      138,
+      145,
+      161
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__R003_score_support",
+    "target": "home",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      152,
+      164,
+      177,
+      170,
+      164,
+      156,
+      135,
+      148,
+      139,
+      162
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__R003_score_support",
+    "target": "away",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      163,
+      144,
+      176,
+      145,
+      166,
+      172,
+      159,
+      144,
+      143,
+      155
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__R003_score_support",
+    "target": "margin",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      153,
+      142,
+      162,
+      155,
+      177,
+      176,
+      171,
+      141,
+      134,
+      156
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "empirical__R003_score_support",
+    "target": "total",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      163,
+      162,
+      187,
+      159,
+      155,
+      157,
+      140,
+      138,
+      145,
+      161
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__A_market",
+    "target": "home",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      159,
+      156,
+      173,
+      177,
+      163,
+      156,
+      134,
+      150,
+      135,
+      164
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__A_market",
+    "target": "away",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      162,
+      154,
+      172,
+      142,
+      169,
+      171,
+      159,
+      139,
+      140,
+      159
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__A_market",
+    "target": "margin",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      152,
+      142,
+      165,
+      159,
+      166,
+      182,
+      163,
+      142,
+      140,
+      156
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__A_market",
+    "target": "total",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      166,
+      168,
+      185,
+      160,
+      153,
+      153,
+      138,
+      135,
+      147,
+      162
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__R003_score_support",
+    "target": "home",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      160,
+      155,
+      173,
+      179,
+      161,
+      156,
+      134,
+      150,
+      135,
+      164
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__R003_score_support",
+    "target": "away",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      162,
+      154,
+      172,
+      142,
+      169,
+      171,
+      159,
+      139,
+      140,
+      159
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__R003_score_support",
+    "target": "margin",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      152,
+      142,
+      165,
+      159,
+      166,
+      182,
+      163,
+      142,
+      140,
+      156
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "earlier_2017_22",
+    "arm": "smooth__R003_score_support",
+    "target": "total",
+    "n": 1567,
+    "midpoint_pit_deciles": [
+      167,
+      167,
+      187,
+      158,
+      154,
+      152,
+      138,
+      135,
+      147,
+      162
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__A_market",
+    "target": "home",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      8,
+      10,
+      5,
+      10,
+      7,
+      3,
+      12,
+      9,
+      10,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__A_market",
+    "target": "away",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      7,
+      5,
+      8,
+      9,
+      4,
+      6,
+      13,
+      10,
+      11,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__A_market",
+    "target": "margin",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      12,
+      7,
+      5,
+      11,
+      8,
+      11,
+      6,
+      5,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__A_market",
+    "target": "total",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      6,
+      7,
+      13,
+      10,
+      4,
+      5,
+      6,
+      7,
+      15,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__R003_score_support",
+    "target": "home",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      8,
+      10,
+      5,
+      10,
+      7,
+      3,
+      12,
+      9,
+      10,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__R003_score_support",
+    "target": "away",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      7,
+      5,
+      8,
+      9,
+      4,
+      6,
+      13,
+      10,
+      11,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__R003_score_support",
+    "target": "margin",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      12,
+      7,
+      5,
+      11,
+      8,
+      11,
+      6,
+      5,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "empirical__R003_score_support",
+    "target": "total",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      6,
+      7,
+      13,
+      10,
+      4,
+      5,
+      6,
+      7,
+      15,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__A_market",
+    "target": "home",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      9,
+      9,
+      4,
+      11,
+      6,
+      6,
+      9,
+      11,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__A_market",
+    "target": "away",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      8,
+      4,
+      7,
+      10,
+      4,
+      5,
+      13,
+      9,
+      13,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__A_market",
+    "target": "margin",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      13,
+      6,
+      7,
+      10,
+      9,
+      9,
+      5,
+      6,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__A_market",
+    "target": "total",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      5,
+      10,
+      11,
+      9,
+      6,
+      4,
+      6,
+      8,
+      14,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__R003_score_support",
+    "target": "home",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      9,
+      9,
+      4,
+      11,
+      6,
+      6,
+      9,
+      11,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__R003_score_support",
+    "target": "away",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      8,
+      4,
+      7,
+      10,
+      4,
+      5,
+      13,
+      9,
+      13,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__R003_score_support",
+    "target": "margin",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      13,
+      6,
+      7,
+      10,
+      9,
+      9,
+      5,
+      6,
+      9,
+      5
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  },
+  {
+    "sample": "diagnostic_2026",
+    "arm": "smooth__R003_score_support",
+    "target": "total",
+    "n": 79,
+    "midpoint_pit_deciles": [
+      5,
+      10,
+      11,
+      9,
+      6,
+      4,
+      6,
+      8,
+      14,
+      6
+    ],
+    "note": "Discrete midpoint PIT is not exactly uniform."
+  }
+]

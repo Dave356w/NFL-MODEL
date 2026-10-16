@@ -1,0 +1,22 @@
+{
+  "experiment": "R003",
+  "historical_hypothesis_supported": false,
+  "gates": {
+    "practical_gain": false,
+    "adjusted_interval_positive": true,
+    "all_seasons_positive": true,
+    "secondary_tolerances": true,
+    "integrity": true
+  },
+  "recommendation": "reject advancement of this fixed candidate",
+  "secondary_violations": [],
+  "independent_validation": false,
+  "production_promotion": false,
+  "forward_consideration": false,
+  "mechanism_identified": null,
+  "limitations": [
+    "Previously exposed historical sample; unknown quote timestamps.",
+    "No prospective outcomes or executable-price claims.",
+    "Reachability conditioning alone does not model frequencies of common football scores."
+  ]
+}

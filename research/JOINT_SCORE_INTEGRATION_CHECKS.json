@@ -1,0 +1,90 @@
+{
+  "repository_base": "e93b936b9de03bab8e97a6b7ae71fb6d3a224fa7",
+  "validation_basis": "Fresh repository integration; historical forecast reproduction, no forward activation",
+  "full_repository_tests": {
+    "passed": 571,
+    "xfailed": 1,
+    "failed": 0,
+    "warnings": 2,
+    "command": "OPENBLAS_NUM_THREADS=1 python -m pytest tests/ -q"
+  },
+  "standalone_research_tests": {
+    "passed": 63,
+    "failed": 0
+  },
+  "notebook_sync": "already in sync; no generated notebook change",
+  "data_validation": {
+    "files_ok": 43,
+    "failed": 0
+  },
+  "reproduction": {
+    "R000": {
+      "predictions.csv.gz": true,
+      "features.csv.gz": true,
+      "history_audit.csv.gz": true,
+      "fit_audit.csv": true,
+      "coefficient_audit.jsonl": true,
+      "example_joint_probabilities.npz_arrays": true,
+      "summary.json_json": true
+    },
+    "R001": {
+      "predictions.csv.gz": true,
+      "tie_fit_audit.csv": true,
+      "provenance.json": true,
+      "example_joint_probabilities.npz_arrays": true,
+      "marginal_probabilities.npz_arrays": true,
+      "metrics.json_json": true,
+      "paired_comparisons.json_json": true,
+      "decision.json_json": true
+    },
+    "R002": {
+      "predictions.csv.gz": true,
+      "transform_audit.csv": true,
+      "provenance.json": true,
+      "example_joint_probabilities.npz_arrays": true,
+      "marginal_probabilities.npz_arrays": true,
+      "metrics.json_json": true,
+      "paired_comparisons.json_json": true,
+      "decision.json_json": true
+    },
+    "R003": {
+      "predictions.csv.gz": true,
+      "transform_audit.csv": true,
+      "provenance.json": true,
+      "example_joint_probabilities.npz_arrays": true,
+      "marginal_probabilities.npz_arrays": true,
+      "support_mask.npy": true,
+      "metrics.json_json": true,
+      "paired_comparisons.json_json": true,
+      "decision.json_json": true
+    }
+  },
+  "output_validation": {
+    "R000": {
+      "checks": 10,
+      "all_passed": true
+    },
+    "R001": {
+      "checks": 14,
+      "all_passed": true
+    },
+    "R002": {
+      "checks": 22,
+      "all_passed": true
+    },
+    "R003": {
+      "checks": 20,
+      "all_passed": true
+    }
+  },
+  "original_audit": {
+    "checksummed_files": 29,
+    "all_equal": true,
+    "source_merge_equal": true,
+    "historical_quote_timestamps": "unverifiable"
+  },
+  "reproduction_scope": "R000 numerical files and summaries; R001-R003 prediction/audit/provenance bytes, example PMF arrays, metrics, paired comparisons and decisions; R002/R003 full marginal arrays against supplied files; R000/R001 full marginals regenerated because delivery omitted them.",
+  "protected_paths_changed": [],
+  "model_specification_changed": false,
+  "forward_capture_activated": false
+}

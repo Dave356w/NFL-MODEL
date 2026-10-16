@@ -1,0 +1,38 @@
+[
+  {
+    "shape": "empirical",
+    "n": 816,
+    "raw_tie_mass_mean": 0.02495752798738169,
+    "target_tie_rate_mean": 0.004194601500968847,
+    "excess_tie_mass_mean": 0.0207629264864128,
+    "transported_mass_mean": 0.020762926486412772,
+    "untransportable_mass_mean": 2.417998391503097e-17,
+    "near_cap_renormalized_mass_mean": 1.750992510956859e-15,
+    "no_excess_mean": 0.0,
+    "raw_tie_mass_max": 0.0320237952419769,
+    "target_tie_rate_max": 0.0057164634146341,
+    "excess_tie_mass_max": 0.027040406537658,
+    "transported_mass_max": 0.027040406537658,
+    "untransportable_mass_max": 7.206339032310452e-15,
+    "near_cap_renormalized_mass_max": 4.180066057273405e-13,
+    "no_excess_max": 0.0
+  },
+  {
+    "shape": "smooth",
+    "n": 816,
+    "raw_tie_mass_mean": 0.02873384927511266,
+    "target_tie_rate_mean": 0.004194601500968847,
+    "excess_tie_mass_mean": 0.02453924777414377,
+    "transported_mass_mean": 0.024539247774143746,
+    "untransportable_mass_mean": 2.9121844917834695e-17,
+    "near_cap_renormalized_mass_mean": 2.109578727582523e-15,
+    "no_excess_mean": 0.0,
+    "raw_tie_mass_max": 0.0365880294716157,
+    "target_tie_rate_max": 0.0057164634146341,
+    "excess_tie_mass_max": 0.0316046407672967,
+    "transported_mass_max": 0.0316046407672968,
+    "untransportable_mass_max": 8.668546203934771e-15,
+    "near_cap_renormalized_mass_max": 5.028225232050524e-13,
+    "no_excess_max": 0.0
+  }
+]

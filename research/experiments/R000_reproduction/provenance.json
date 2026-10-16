@@ -1,0 +1,39 @@
+{
+  "base_commit": "e93b936b9de03bab8e97a6b7ae71fb6d3a224fa7",
+  "experiment": "joint-market-residuals-20261016",
+  "alpha": 0.4,
+  "ridge": 0.1,
+  "empirical_mix": 0.15,
+  "cap": 80,
+  "arms": [
+    "empirical__A_market",
+    "empirical__B_residual",
+    "empirical__C_absolute",
+    "empirical__C_squared",
+    "smooth__A_market",
+    "smooth__B_residual",
+    "smooth__C_absolute",
+    "smooth__C_squared"
+  ],
+  "input_rows": 3679,
+  "completed_games_by_year": {
+    "2017": 256,
+    "2018": 256,
+    "2019": 256,
+    "2020": 256,
+    "2021": 272,
+    "2022": 271,
+    "2023": 272,
+    "2024": 272,
+    "2025": 272,
+    "2026": 79
+  },
+  "source_hashes": {
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/JOINT_MARKET_RESIDUALS.md": "aa6f861a1324d193cd09142c5b66408bc28709e0f64b8aa288b64a32f0911d62",
+    "research/experiments/R000_reproduction/frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34"
+  },
+  "numpy_version": "2.3.5",
+  "pandas_version": "2.2.3",
+  "basis": "historical development; quote timestamps unknown; no native forward capture"
+}

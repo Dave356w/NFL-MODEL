@@ -1,0 +1,1218 @@
+[
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 1,
+    "n": 6,
+    "predicted": 0.1820117599449745,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 2,
+    "n": 30,
+    "predicted": 0.2628596493338568,
+    "observed": 0.2
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 3,
+    "n": 134,
+    "predicted": 0.3549147320070219,
+    "observed": 0.2835820895522388
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 4,
+    "n": 156,
+    "predicted": 0.43541121082274403,
+    "observed": 0.3974358974358974
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 5,
+    "n": 173,
+    "predicted": 0.5652944325413072,
+    "observed": 0.5895953757225434
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 6,
+    "n": 168,
+    "predicted": 0.6451873853697069,
+    "observed": 0.7142857142857143
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 7,
+    "n": 95,
+    "predicted": 0.7412182037538888,
+    "observed": 0.6947368421052632
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 8,
+    "n": 49,
+    "predicted": 0.85701778479739,
+    "observed": 0.8979591836734694
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "model",
+    "bin": 9,
+    "n": 4,
+    "predicted": 0.9223172854685583,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "empirical__A_market",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 1,
+    "n": 5,
+    "predicted": 0.17658263670534122,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 2,
+    "n": 34,
+    "predicted": 0.2656434622433922,
+    "observed": 0.23529411764705882
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 3,
+    "n": 129,
+    "predicted": 0.3537612026493678,
+    "observed": 0.2713178294573643
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 4,
+    "n": 160,
+    "predicted": 0.43711373472640724,
+    "observed": 0.4125
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 5,
+    "n": 168,
+    "predicted": 0.5661516809764384,
+    "observed": 0.5654761904761905
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 6,
+    "n": 171,
+    "predicted": 0.6442200312872124,
+    "observed": 0.7251461988304093
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 7,
+    "n": 96,
+    "predicted": 0.7423789080981568,
+    "observed": 0.6875
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 8,
+    "n": 49,
+    "predicted": 0.8609583285433727,
+    "observed": 0.9183673469387755
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "model",
+    "bin": 9,
+    "n": 3,
+    "predicted": 0.9295237173626866,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "empirical__B_residual",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 1,
+    "n": 5,
+    "predicted": 0.18188212632619977,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 2,
+    "n": 32,
+    "predicted": 0.26214546630611935,
+    "observed": 0.1875
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 3,
+    "n": 133,
+    "predicted": 0.3538025349671422,
+    "observed": 0.2706766917293233
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 4,
+    "n": 156,
+    "predicted": 0.4369734231406555,
+    "observed": 0.4166666666666667
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 5,
+    "n": 171,
+    "predicted": 0.5661797037772652,
+    "observed": 0.5730994152046783
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 6,
+    "n": 168,
+    "predicted": 0.6444037812914362,
+    "observed": 0.7380952380952381
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 7,
+    "n": 96,
+    "predicted": 0.7417652692645547,
+    "observed": 0.6666666666666666
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 8,
+    "n": 50,
+    "predicted": 0.8609926255548885,
+    "observed": 0.9
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "model",
+    "bin": 9,
+    "n": 4,
+    "predicted": 0.9231133346730437,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "empirical__C_absolute",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 1,
+    "n": 5,
+    "predicted": 0.1772078445734347,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 2,
+    "n": 34,
+    "predicted": 0.26456656051153804,
+    "observed": 0.23529411764705882
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 3,
+    "n": 130,
+    "predicted": 0.353367163624202,
+    "observed": 0.2692307692307692
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 4,
+    "n": 157,
+    "predicted": 0.4363258983922971,
+    "observed": 0.40764331210191085
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 5,
+    "n": 172,
+    "predicted": 0.5657560982562204,
+    "observed": 0.5755813953488372
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 6,
+    "n": 170,
+    "predicted": 0.6455081365684864,
+    "observed": 0.7352941176470589
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 7,
+    "n": 93,
+    "predicted": 0.7422242820176187,
+    "observed": 0.6666666666666666
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 8,
+    "n": 50,
+    "predicted": 0.8591939996240532,
+    "observed": 0.9
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "model",
+    "bin": 9,
+    "n": 4,
+    "predicted": 0.922224699840669,
+    "observed": 1.0
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "empirical__C_squared",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 1,
+    "n": 9,
+    "predicted": 0.17143960074928824,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 2,
+    "n": 39,
+    "predicted": 0.26432866575260433,
+    "observed": 0.1794871794871795
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 3,
+    "n": 146,
+    "predicted": 0.3561063575007436,
+    "observed": 0.3013698630136986
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 4,
+    "n": 134,
+    "predicted": 0.43624108222904434,
+    "observed": 0.4253731343283582
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 5,
+    "n": 154,
+    "predicted": 0.5644889893733447,
+    "observed": 0.5909090909090909
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 6,
+    "n": 169,
+    "predicted": 0.6437452784004452,
+    "observed": 0.6863905325443787
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 7,
+    "n": 100,
+    "predicted": 0.7430560148004015,
+    "observed": 0.73
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 8,
+    "n": 50,
+    "predicted": 0.8577517633471912,
+    "observed": 0.8
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "model",
+    "bin": 9,
+    "n": 14,
+    "predicted": 0.9195807194545921,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "smooth__A_market",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 1,
+    "n": 7,
+    "predicted": 0.16730511723774022,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 2,
+    "n": 45,
+    "predicted": 0.2644833903561431,
+    "observed": 0.24444444444444444
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 3,
+    "n": 131,
+    "predicted": 0.35358160319246784,
+    "observed": 0.2824427480916031
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 4,
+    "n": 145,
+    "predicted": 0.43605928478013,
+    "observed": 0.42758620689655175
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 5,
+    "n": 160,
+    "predicted": 0.5677242558638775,
+    "observed": 0.5625
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 6,
+    "n": 167,
+    "predicted": 0.6473068257421508,
+    "observed": 0.7245508982035929
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 7,
+    "n": 94,
+    "predicted": 0.7449011194426313,
+    "observed": 0.6914893617021277
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 8,
+    "n": 49,
+    "predicted": 0.8524081932496491,
+    "observed": 0.7959183673469388
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "model",
+    "bin": 9,
+    "n": 17,
+    "predicted": 0.9167605156347003,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "smooth__B_residual",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 1,
+    "n": 6,
+    "predicted": 0.16549689068418919,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 2,
+    "n": 43,
+    "predicted": 0.26061361959752943,
+    "observed": 0.2558139534883721
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 3,
+    "n": 137,
+    "predicted": 0.3529783395750679,
+    "observed": 0.27007299270072993
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 4,
+    "n": 142,
+    "predicted": 0.4365948834364125,
+    "observed": 0.43661971830985913
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 5,
+    "n": 157,
+    "predicted": 0.5671558514884883,
+    "observed": 0.5477707006369427
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 6,
+    "n": 169,
+    "predicted": 0.6463120290169249,
+    "observed": 0.7337278106508875
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 7,
+    "n": 98,
+    "predicted": 0.7463967061209758,
+    "observed": 0.6938775510204082
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 8,
+    "n": 46,
+    "predicted": 0.856888587224257,
+    "observed": 0.8043478260869565
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "model",
+    "bin": 9,
+    "n": 17,
+    "predicted": 0.9152387952746639,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "smooth__C_absolute",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 1,
+    "n": 6,
+    "predicted": 0.16266956743514868,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 2,
+    "n": 44,
+    "predicted": 0.2615872616970005,
+    "observed": 0.25
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 3,
+    "n": 137,
+    "predicted": 0.3536755258832463,
+    "observed": 0.291970802919708
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4369055740903113,
+    "observed": 0.41843971631205673
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 5,
+    "n": 160,
+    "predicted": 0.5676517362363868,
+    "observed": 0.55625
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 6,
+    "n": 168,
+    "predicted": 0.6478074181385852,
+    "observed": 0.7321428571428571
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 7,
+    "n": 97,
+    "predicted": 0.7478933741707268,
+    "observed": 0.7010309278350515
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 8,
+    "n": 44,
+    "predicted": 0.8558754210488838,
+    "observed": 0.7727272727272727
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "model",
+    "bin": 9,
+    "n": 18,
+    "predicted": 0.91483694189323,
+    "observed": 1.0
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 0,
+    "n": 1,
+    "predicted": 0.0875576036866359,
+    "observed": 0.0
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 1,
+    "n": 19,
+    "predicted": 0.16656626610527608,
+    "observed": 0.10526315789473684
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 2,
+    "n": 60,
+    "predicted": 0.25197215150825664,
+    "observed": 0.26666666666666666
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 3,
+    "n": 107,
+    "predicted": 0.35190897660383197,
+    "observed": 0.308411214953271
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 4,
+    "n": 141,
+    "predicted": 0.4425309608556495,
+    "observed": 0.3971631205673759
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 5,
+    "n": 153,
+    "predicted": 0.5586066971741578,
+    "observed": 0.6013071895424836
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 6,
+    "n": 147,
+    "predicted": 0.6454445729854908,
+    "observed": 0.6530612244897959
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 7,
+    "n": 122,
+    "predicted": 0.747017674989936,
+    "observed": 0.7295081967213115
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 8,
+    "n": 60,
+    "predicted": 0.8516112745385753,
+    "observed": 0.8833333333333333
+  },
+  {
+    "arm": "smooth__C_squared",
+    "source": "moneyline",
+    "bin": 9,
+    "n": 5,
+    "predicted": 0.9123381076379342,
+    "observed": 1.0
+  }
+]
