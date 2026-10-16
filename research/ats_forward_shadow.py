@@ -78,84 +78,20 @@ def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
     return rows
 
 
-def kalshi_lock_quote(raw: dict, snapshots: list[dict]) -> dict | None:
-    """Price the first available Kalshi-native balanced spread AFTER the model lock.
-
-    The legacy nflverse spread never determines the Kalshi contract or side.
-    Only a contemporaneous quote within 30 minutes of the initial model lock
-    qualifies; later quotes cannot be attached retrospectively.
-    """
-    locked, kickoff = utc(raw["generated_utc"]), utc(raw["kickoff_utc"])
-    eligible = sorted(
-        (r for r in snapshots if r.get("game_id") == raw["game_id"]
-         and locked <= utc(r["captured_utc"]) < kickoff
-         and (utc(r["captured_utc"]) - locked).total_seconds() <= 1800),
-        key=lambda r: utc(r["captured_utc"]),
-    )
-    for snap in eligible:
-        win = snap.get("winner", {})
-        try:
-            home_win = float(win["home"]["ask"])
-            away_win = float(win["away"]["ask"])
-        except (ValueError, TypeError, KeyError):
-            continue
-        if not all(np.isfinite(v) and 0 < v < 1 for v in (home_win, away_win)):
-            continue
-        if np.isclose(home_win, away_win, atol=1e-9):
-            continue
-        favorite = raw["home"] if home_win > away_win else raw["away"]
-        viable = []
-        for rung in snap.get("spread_ladder", []):
-            if rung.get("team") != favorite:
-                continue
-            try:
-                strike = float(rung["strike"])
-                bid, ask = float(rung["bid"]), float(rung["ask"])
-            except (TypeError, ValueError, KeyError):
-                continue
-            if not (np.isfinite(strike) and np.isclose(strike % 1, .5)
-                    and 0 < bid < ask < 1):
-                continue
-            viable.append((abs((bid + ask) / 2 - .5), strike, rung, bid, ask))
-        if not viable:
-            continue
-        _, strike, rung, bid, ask = min(viable, key=lambda x: (x[0], x[1]))
-        home_favorite = favorite == raw["home"]
-        return {
-            "spread_ticker": rung["ticker"], "captured_utc": snap["captured_utc"],
-            "market_spread": strike if home_favorite else -strike,
-            "favorite": favorite, "strike": strike,
-            "home_ask": ask if home_favorite else 1 - bid,
-            "away_ask": 1 - bid if home_favorite else ask,
-            "spread_yes_bid": bid, "spread_yes_ask": ask,
-            "winner_home_ask": home_win, "winner_away_ask": away_win,
-            "price_basis": "Kalshi first post-lock observed order book, <=30m",
-            "fee_rate_proxy": .07,
-        }
-    return None
-
-
-def freeze(raw: dict, historical: pd.DataFrame, mapping: dict, kalshi_quote: dict | None = None) -> dict:
+def freeze(raw: dict, historical: pd.DataFrame, mapping: dict) -> dict:
     year = int(raw["season"])
     if mapping is None or mapping["training_max_season"] >= year:
         raise ValueError("no chronological fixed-band rule")
     fit = cp.fit_prior(historical[historical.season < year], year)
     spread = float(cp.SIGMA * ndtri(np.clip(float(raw["model_wp"]), .005, .995)))
+    line = float(raw["spread_line"])
     fixed = float(fixed_bands.apply([spread], mapping)[0])
-    line = float(kalshi_quote["market_spread"]) if kalshi_quote else None
+    _, adjusted = cp.distribution(line, spread - line, fit)
+    h, a, p = cp.event(adjusted, line)
+    ev_h, ev_a = cp.WIN_PROFIT*h-a, cp.WIN_PROFIT*a-h
+    probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
     def side(gap):
         return "home" if gap > cp.EPS else "away" if gap < -cp.EPS else ""
-    raw_side, fixed_side, probability_side = "", "", ""
-    h = a = p = ev_h = ev_a = None
-    if line is not None:
-        raw_side, fixed_side = side(spread - line), side(fixed - line)
-        _, adjusted = cp.distribution(line, spread - line, fit)
-        h, a, p = cp.event(adjusted, line)
-        home_ask, away_ask = (float(kalshi_quote[k]) for k in ("home_ask", "away_ask"))
-        fee_h, fee_a = .07 * (1-home_ask), .07 * (1-away_ask)
-        ev_h = h*(1/home_ask - 1-fee_h) - a*(1+fee_h)
-        ev_a = a*(1/away_ask - 1-fee_a) - h*(1+fee_a)
-        probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
     fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
     original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
     return {
@@ -164,12 +100,11 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict, kalshi_quote: dic
         "generated_utc": raw["generated_utc"], "kickoff_utc": raw["kickoff_utc"],
         "market_spread": line, "raw_spread": spread,
         "fixed_band_spread": fixed,
-        "raw_side": raw_side, "fixed_band_side": fixed_side,
+        "raw_side": side(spread-line), "fixed_band_side": side(fixed-line),
         "probability_side": probability_side,
         "p_home_cover": h, "p_away_cover": a, "p_push": p,
-        "home_ev_kalshi": ev_h, "away_ev_kalshi": ev_a,
-        "kalshi_quote": kalshi_quote,
-        "quote_basis": "kalshi_main_spread_verified" if kalshi_quote else "no_matching_kalshi_quote",
+        "home_ev_proxy_minus110": ev_h, "away_ev_proxy_minus110": ev_a,
+        "assumed_price": -110, "quote_basis": "unverified_proxy_only",
         "source_snapshot_sha256": hashlib.sha256(original_json.encode()).hexdigest(),
         "calibration_sha256": hashlib.sha256(fit_json.encode()).hexdigest(),
         "fixed_rule": mapping, "beta": fit["beta"],
@@ -202,13 +137,12 @@ def record(data: Path | str = "data", now: dt.datetime | None = None) -> int:
         raise FileNotFoundError("required prior-season ATS research inputs missing")
     prior = pd.read_csv(source)
     rules = {int(r["season"]): r for r in json.loads(rule_file.read_text())}
-    quotes = read_jsonl(data / "kalshi_snapshots.jsonl")
     new = []
     for r in possible:
         key = (REVISION, r["game_id"])
         if key in existing:
             continue
-        row = freeze(r, prior, rules.get(int(r["season"])), kalshi_lock_quote(r, quotes))
+        row = freeze(r, prior, rules.get(int(r["season"])))
         new.append(row)
         existing.add(key)
     if new:
@@ -237,29 +171,11 @@ def graded_view(data: Path | str = "data") -> pd.DataFrame:
     g = g.merge(outcomes[keep], how="left", on="game_id", validate="one_to_one")
     for arm, col in [("raw", "raw_side"), ("fixed_band", "fixed_band_side"),
                      ("cover_probability", "probability_side")]:
-        grades, units, asks = [], [], []
-        for _, r in g.iterrows():
-            side = r[col]
-            if side in ("home", "away") and pd.notna(r["result"]) and pd.notna(r["market_spread"]):
-                grade, _ = cp.grade(float(r["result"]), float(r["market_spread"]), side)
-            else:
-                grade = "" if pd.isna(r["result"]) else "S"
-            quote = r.get("kalshi_quote")
-            ask = (quote or {}).get(side + "_ask") if side in ("home","away") else None
-            if not grade or ask is None or grade == "S":
-                value = np.nan
-            elif grade == "P":
-                value = 0.
-            else:
-                a = float(ask)
-                fee_unit = .07*(1-a)
-                value = (1/a-1-fee_unit) if grade == "W" else (-1-fee_unit)
-            grades.append(grade)
-            units.append(value)
-            asks.append(ask if ask is not None else np.nan)
-        g[arm+"_result"] = grades
-        g[arm+"_kalshi_ask"] = asks
-        g[arm+"_units_kalshi"] = units
+        graded = [cp.grade(float(r["result"]), float(r["market_spread"]), r[col])
+                  if pd.notna(r["result"]) else ("", np.nan)
+                  for _, r in g.iterrows()]
+        g[arm+"_result"] = [v[0] for v in graded]
+        g[arm+"_units_proxy_minus110"] = [v[1] for v in graded]
     return g
 
 

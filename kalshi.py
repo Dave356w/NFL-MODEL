@@ -272,30 +272,6 @@ def safe_record(data_dir=DATA, now=None, get=fetch):
         return 0
 
 
-def safe_live_board(data_dir=DATA, games=None, now=None, get=fetch):
-    """Refresh latest publicly displayed quotes separately from locked snapshots.
-
-    Deliberately NOT the immutable first-pregame betting ledger. Every
-    captured_utc is after model generation and is never backdated.
-    """
-    try:
-        now = now or dt.datetime.now(dt.timezone.utc)
-        upcoming = [g for g in (games or []) if g.get("kickoff_utc") and
-                    dt.datetime.fromisoformat(g["kickoff_utc"]) > now]
-        events = open_events(get) if upcoming else {}
-        out = [r for g in upcoming if (r := capture(g, events, get=get, now=now))]
-        path = Path(data_dir) / "kalshi_live_board.json"
-        path.write_text(json.dumps({"captured_utc":now.isoformat(),
-                                    "source":"Kalshi actual displayed public bid/ask",
-                                    "games":out},allow_nan=False)+"\n")
-        print(f"kalshi live: {len(out)} games with quotes / {len(upcoming)} upcoming")
-        return len(out)
-    except Exception as exc:
-        print(f"kalshi live: unavailable ({type(exc).__name__}: {exc})",file=sys.stderr)
-        return 0
-
-
-
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--data-dir", default=str(DATA))

@@ -1,4 +1,8 @@
-# Kalshi-only NFL pricing migration (October 15, 2026)
+# ARCHIVED: Kalshi-only NFL pricing migration experiment (October 15, 2026)
+
+> **ROLLED BACK (2026-10-15):** This document describes a completed research experiment, **not the active website or pick/ATS logic**. The site, native ATS shadow, and default price displays were restored exactly to commit [`608ffb7b22`](https://github.com/Dave356w/NFL-MODEL/commit/608ffb7b22344f955bab1bf01920f16b7a9b3d0b). Kalshi-only migration actions were disabled. The historical Kalshi API artifacts remain in `data/kalshi_historical/` solely for reproducibility. The legacy native Kalshi secondary snapshot mechanism, which predated this experiment, was restored too.
+
+
 
 ## Status and definition
 

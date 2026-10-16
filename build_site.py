@@ -797,122 +797,7 @@ def historical_pick_reference(latest, game, edge):
             "Records are reconstructed, not locked forward evidence or this game's cover probability. "
             "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
 
-def kalshi_primary_summary(data):
-    """Only real Kalshi-quoted historical results; no sportsbook fallback."""
-    f=Path(data)/"kalshi_historical"/"kalshi_summary.json"
-    if not f.exists():
-        return "<div class='gr-note'>Kalshi historical archive is not yet published. " \
-               "The legacy sportsbook replay below is not a Kalshi-priced record.</div>"
-    try:
-        report=json.loads(f.read_text())
-        rows=[]
-        for key,title in (("model_moneyline","Winner contract"),
-                          ("original_ats","Raw spread at Kalshi market line"),
-                          ("fixed_band_ats","Fixed-band at Kalshi market line"),
-                          ("original_model_alt_ats","Original model alternate contract")):
-            result=report.get("outcomes",{}).get(key,{})
-            bets=int(result.get("bets",0))
-            roi=result.get("roi_per_risked_unit")
-            u=float(result.get("units",0))
-            rows.append([esc(title),str(bets),f"{u:+.2f}",roi_short(roi)])
-        total=report.get("eligible_graded_games",0)
-        coverage=(f"{report.get('winner_quote_pairs',0)}/{total} winner quote pairs · "
-                  f"{report.get('kalshi_main_spread',0)}/{total} Kalshi main lines · "
-                  f"{report.get('model_target_alt_spread',0)}/{total} alt lines")
-        return ("<h2 class='sec'>Kalshi-only historical record (2025 onward)</h2>"
-                "<p class='mut small'>Historical quotes captured by API two hours before kickoff. "
-                "Wagers graded at the exact binary contract threshold; missing prices excluded. "
-                "Model picks are reconstructed, not forward locks. Fee approximation only. "
-                "Kalshi NFL spread history does not cover 2021–2024.</p>"
-                f"<p class='mut small'>{esc(coverage)}</p>"
-                +table(["Kalshi contract","Quoted bets","Units","ROI"],rows,num_cols=(1,2,3)))
-    except (ValueError,TypeError,KeyError):
-        return "<div class='gr-note'>Kalshi price summary could not be validated.</div>"
-
-
-def kalshi_live_quotes(data, now):
-    """Best actual Kalshi bid/ask, fresh within 4 hours and before kickoff."""
-    file = Path(data) / "kalshi_live_board.json"
-    if not file.exists():
-        return {}
-    try:
-        blob=json.loads(file.read_text())
-        t=pd.to_datetime(blob["captured_utc"],utc=True).to_pydatetime()
-        if t > now or (now-t).total_seconds() > 4*3600:
-            return {}
-        output={}
-        for rec in blob.get("games",[]):
-            if pd.to_datetime(rec["kickoff_utc"],utc=True).to_pydatetime()<=now:
-                continue
-            w=rec.get("winner",{})
-            if not all(k in w for k in ("home","away")):continue
-            h,a = num(w["home"].get("ask")),num(w["away"].get("ask"))
-            if not all(math.isfinite(v) and 0<v<1 for v in (h,a)):continue
-            fav=rec["home"] if h>a else rec["away"]
-            candidates=[q for q in rec.get("spread_ladder",[])
-                        if q.get("team")==fav and math.isfinite(num(q.get("strike")))
-                        and 0<num(q.get("bid"))<num(q.get("ask"))<1]
-            best=min(candidates,key=lambda q:abs((num(q["bid"])+num(q["ask"]))/2-.5)) if candidates else None
-            line=(1 if fav==rec["home"] else -1)*float(best["strike"]) if best else math.nan
-            output[rec["game_id"]]={"home_ask":h,"away_ask":a,"kalshi_line":line,
-                "spread_ticker":best["ticker"] if best else "",
-                "captured_utc":rec["captured_utc"],
-                "spread_ladder":rec.get("spread_ladder",[])}
-        return output
-    except (ValueError,TypeError,KeyError,OverflowError):
-        return {}
-
-
-def kalshi_historical_quotes(data):
-    """Recorded pregame quotes for completed 2025+ NFL games."""
-    file=Path(data)/"kalshi_historical"/"kalshi_quotes.csv"
-    if not file.exists(): return {}
-    out={}
-    for q in pd.read_csv(file).to_dict("records"):
-        h,a,line=(num(q.get(k)) for k in ("winner_home_ask","winner_away_ask","kalshi_spread_line"))
-        if q.get("kalshi_main_status")!="quoted" or not all(math.isfinite(v) for v in (h,a,line)):
-            continue
-        out[q["game_id"]]={"home_ask":h,"away_ask":a,"kalshi_line":line,
-            "spread_ticker":q.get("kalshi_ticker"),
-            "yes_ask":num(q.get("kalshi_yes_ask")),
-            "no_ask":1-num(q.get("kalshi_yes_bid")),
-            "quote_origin":"historical, two hours pregame",
-            "captured_utc":q.get("kalshi_source_ts"),
-            "alt_ask":num(q.get("alt_ask")),
-            "alt_contract":q.get("alt_contract"),
-            "alt_side":q.get("alt_selection_side"),
-            "alt_ticker":q.get("alt_ticker"),
-            "alt_target_strike":num(q.get("alt_target_strike"))}
-    return out
-
-
-def kalshi_display_alt(quote, game, line):
-    """Original-model alternate: use only the exact listed contract ask."""
-    original=model_spread(game)
-    if not(math.isfinite(original) and math.isfinite(line) and abs(original)>=.5 and abs(original-line)>1e-9):
-        return None
-    side="home" if original > line else "away"
-    if quote.get("quote_origin"):
-        ask=num(quote.get("alt_ask"))
-        if quote.get("alt_side")!=side or not(math.isfinite(ask) and 0<ask<1):
-            return None
-        return {"side":side,"ask":ask,"contract":quote.get("alt_contract"),
-                "strike":num(quote.get("alt_target_strike")),
-                "ticker":quote.get("alt_ticker")}
-    favorite=game["home"] if original>0 else game["away"]
-    target=math.floor(abs(original))+.5
-    matches=[r for r in quote.get("spread_ladder",[])
-             if r.get("team")==favorite and math.isclose(num(r.get("strike")),target,abs_tol=1e-9)]
-    if len(matches)!=1:return None
-    rung=matches[0]
-    is_yes=game[side]==favorite
-    ask=num(rung.get("ask")) if is_yes else 1-num(rung.get("bid"))
-    if not(math.isfinite(ask) and 0<ask<1):return None
-    return {"side":side,"ask":ask,"contract":"YES" if is_yes else "NO",
-            "strike":target,"ticker":rung.get("ticker")}
-
-
-def render_index(latest, ledger, built, now=None, data=DATA):
+def render_index(latest, ledger, built, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
         body = head("Projections", "No model run has been published yet; the first build writes this page.")
@@ -923,19 +808,13 @@ def render_index(latest, ledger, built, now=None, data=DATA):
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     recorded = {r.game_id: r for r in cur.itertuples(index=False)}
     parts = [head(f"Week {week}", f"Model win probabilities for every {season} week-{week} game. Tap a game for details.")]
-    parts.append("<p class='mut small'>Kalshi winner YES asks and exact NFL spread/alternate "
-                 "contract bids and asks are the sole current pricing sources. Unavailable "
-                 "Kalshi prices never fall back to sportsbook odds. Forecast coefficients "
-                 "retain their frozen, legacy market training.</p>")
-    parts.append(kalshi_primary_summary(data))
+    parts.append(spread_headline(latest, season))
 
     def pending(r):
         ko = m.kickoff_utc(r)
         return (has_avail and pd.isna(r.get("result")) and ko is not None and ko > now
                 and not m.injury_reports_ready(r, ko, now))
 
-    live_kalshi = kalshi_live_quotes(data, now)
-    historical_kalshi = kalshi_historical_quotes(data)
     rows = board.to_dict("records")
     n_pend = sum(1 for r in rows if pending(r))
     if n_pend:
@@ -948,28 +827,21 @@ def render_index(latest, ledger, built, now=None, data=DATA):
     impacts = impacts[np.isfinite(impacts)]
     cmax = float(impacts.abs().max()) if len(impacts) else 1.
     graded = cur[cur.status == "graded"] if len(cur) else cur
+    mkt_bands, mdl_bands, band_years, n_fwd = band_windows(latest, graded)
     cards = []
     for r in rows:
         p = num(r["model_wp"])
         home, away = r["home"], r["away"]
         fav_home = p > .5
-        current_quote = (historical_kalshi.get(r["game_id"]) if pd.notna(r.get("result"))
-                         else live_kalshi.get(r["game_id"]))
-        hq = num(current_quote.get("home_ask")) if current_quote else math.nan
-        aq = num(current_quote.get("away_ask")) if current_quote else math.nan
-        q = hq/(hq+aq) if math.isfinite(hq) and math.isfinite(aq) else math.nan
-        # Choice of team is the immutable model forecast. Quoted price, if any,
-        # is taken exclusively from Kalshi, never the sportsbook flat_bets helper.
-        team = home if p > .5 else away if p < .5 else ""
+        q = num(m.market_ml_wp(pd.DataFrame([r]))[0])
+        bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
+        team = home if bet.side == "home" else away if bet.side == "away" else ""
         flags = []
         if pd.notna(r.get("result")):
             flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
-            outcome = num(r.get("home won"))
-            if team and outcome in (0., .5, 1.):
-                result = "P" if outcome == .5 else (
-                    "W" if (outcome == 1.) == (team == home) else "L")
-                flags.append(f"<span class='badge {'w' if result == 'W' else 'l' if result == 'L' else ''}'>"
-                             f"Model winner {esc(team)} · {result}</span>")
+            if team and bet.result in ("W", "L", "P"):
+                flags.append(f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
+                             f"Moneyline result {esc(team)} · {bet.result}</span>")
         else:
             if r["game_id"] in recorded:
                 flags.append("<span class='badge'>Locked</span>")
@@ -981,37 +853,16 @@ def render_index(latest, ledger, built, now=None, data=DATA):
             e, u = r.get(f"{side}_qb_expected"), r.get(f"{side}_qb_usual")
             if isinstance(e, str) and isinstance(u, str) and e != u:
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
-        hm, am = hq, aq
-        mk = (f"Kalshi YES ask · {esc(away)} ${am:.3f} · {esc(home)} ${hm:.3f}" if math.isfinite(hm) and math.isfinite(am) else "Kalshi quote unavailable")
-        ms, ks = num(r.get("fixed_band_spread")), num(current_quote.get("kalshi_line")) if current_quote else math.nan
+        hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
+        mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
+        ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
         spread_pick, edge = ats_card_pick(ms, ks, home, away)
-        if current_quote and math.isfinite(ms) and math.isfinite(ks) and abs(ms-ks)>1e-9:
-            side="home" if ms>ks else "away"
-            favorite_side="home" if ks>0 else "away"
-            is_yes=side==favorite_side
-            if current_quote.get("quote_origin"):
-                quoted=num(current_quote.get("yes_ask" if is_yes else "no_ask"))
-            else:
-                rung=next((x for x in current_quote.get("spread_ladder",[])
-                           if x.get("ticker")==current_quote.get("spread_ticker")),None)
-                quoted=(num(rung.get("ask")) if is_yes else 1-num(rung.get("bid"))) if rung else math.nan
-            if math.isfinite(quoted) and 0<quoted<1:
-                spread_pick+=f" · Kalshi {'YES' if is_yes else 'NO'} ${quoted:.3f}"
-            else:
-                spread_pick+=" · spread contract quote unavailable"
-        alt_quote=kalshi_display_alt(current_quote,r,ks) if current_quote else None
-        edge_text = f' · {edge:g}-point Kalshi handicap signal' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
-        moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
+        edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
+        moneyline_pick = pick_text(team, bet.price)
         if team:
-            moneyline_pick += f' · {pct(p if team == home else 1-p)} model win probability'
-        alt_text="Kalshi alternate quote unavailable"
-        if alt_quote:
-            selected=home if alt_quote["side"]=="home" else away
-            alt_text=(f"{esc(selected)} {esc(alt_quote['contract'])} at "
-                      f">{alt_quote['strike']:g} margin · Kalshi ${alt_quote['ask']:.3f}")
+            moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
-                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span>"
-                 f"<span class='kind'>Model alt</span><span>{alt_text}</span></div>")
+                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
         band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
@@ -1034,25 +885,19 @@ def render_index(latest, ledger, built, now=None, data=DATA):
                    f"{f'<div class=flags>{chr(10).join(flags)}</div>' if flags else ''}<span class='chev'>⌄</span></summary>")
         det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
             ["Model", pct(1 - p), pct(p)],
-            ["Kalshi normalized asks", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
-            ["Kalshi YES ask", f"${am:.3f}" if math.isfinite(am) else "—", f"${hm:.3f}" if math.isfinite(hm) else "—"],
+            ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
+            ["Moneyline", ml_text(am), ml_text(hm)],
             ["Model spread", spread_text(ms, False), spread_text(ms, True)],
-            ["Kalshi spread", spread_text(ks, False), spread_text(ks, True)]]
+            ["Market spread", spread_text(ks, False), spread_text(ks, True)]]
             + ([["Model range", f"{pct(1 - hi)}–{pct(1 - lo)}", f"{pct(lo)}–{pct(hi)}"]] if band else []), num_cols=(1, 2))]
         if band:
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
-        if current_quote:
-            label=current_quote.get("quote_origin","live order book")
-            det.append(f"<p class='mut small'>Kalshi {esc(label)} · "
-                       f"quote time {esc(current_quote.get('captured_utc'))}. "
-                       "Quoted asks are not guaranteed executions.</p>")
-        if alt_quote:
-            team_alt=home if alt_quote["side"]=="home" else away
-            det.append(f"<p class='mut small'>Original model alternate: "
-                       f"{esc(team_alt)} Kalshi {esc(alt_quote['contract'])} "
-                       f"at ${alt_quote['ask']:.3f} · {esc(alt_quote['ticker'])}</p>")
+        det.append(historical_pick_reference(latest, r, edge))
+        if team and math.isfinite(num(bet.price)) and math.isfinite(q):
+            det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
+                                       mkt_bands, mdl_bands, band_years, n_fwd))
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
@@ -1077,8 +922,14 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         cards.append(f"<details class='card'>{summary}{''.join(det)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     graded = cur[cur.status == "graded"] if len(cur) else cur
-    parts.append("<div class='record'><div class='l'>Kalshi-priced record</div>"
-                 "<div class='mono'>Only actual Kalshi asks are counted · no sportsbook backfill</div>"
+    ctrl = control_records(graded)
+    if ctrl and ctrl["model"]["bets"]:
+        r, f = ctrl["model"], ctrl["favorite"]
+        line = (f"Model {wl_text(r)} ({100 * r['win_pct']:.1f}%) · ROI {roi_short(r['roi'])}"
+                f"<span class='mut'> · always favorite {wl_text(f)} · ROI {roi_short(f['roi'])}</span>")
+    else:
+        line = "<span class='mut'>No graded picks yet. The record starts with the first locked pick.</span>"
+    parts.append(f"<div class='record'><div class='l'>Model record</div><div class='mono'>{line}</div>"
                  "<div class='go'><a href='grades.html'>Ledger →</a></div></div>")
     return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built)
 
@@ -1184,12 +1035,10 @@ def pooled_2026_v118_header(latest, ledger):
     return "".join(parts)
 
 
-def render_grades(ledger, latest, built, data=DATA):
+def render_grades(ledger, latest, built):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Kalshi ledger", "Kalshi bids and asks are the price basis of the primary record; "
-                            "legacy sportsbook reports below remain for historical reproducibility.")]
-    parts.append(kalshi_primary_summary(data))
-    parts.append("<h2 class='sec'>Legacy sportsbook-based results (not Kalshi prices)</h2>")
+    parts = [head("Ledger", "2026 picks combine earlier reconstructed games and native forward locks, "
+                            "with one pick per game. Native locks use their recorded pregame moneylines.")]
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     graded = cur[cur.status == "graded"] if len(cur) else cur
     pooled_header = pooled_2026_v118_header(latest, ledger)
@@ -1359,43 +1208,9 @@ def market_sides(df):
     return sides
 
 
-
-def kalshi_market_calibration_html(data):
-    """Calendar-season matchups with actual Kalshi winner YES bid/ask prices."""
-    path=Path(data)/"kalshi_historical"/"kalshi_moneyline_graded.csv"
-    if not path.exists():
-        return "<div class='gr-note'>No archived Kalshi winner prices yet.</div>"
-    try:
-        d=pd.read_csv(path)
-        h=pd.to_numeric(d["winner_home_ask"],errors="coerce")
-        a=pd.to_numeric(d["winner_away_ask"],errors="coerce")
-        y=pd.to_numeric(d["home won"],errors="coerce")
-        valid=(h>0)&(a>0)&(h<1)&(a<1)&y.isin([0,.5,1])
-        d=d.loc[valid].copy()
-        if d.empty:return "<div class='gr-note'>No matched Kalshi YES quotes.</div>"
-        h=h[valid].to_numpy(float)
-        a=a[valid].to_numpy(float)
-        y=y[valid].to_numpy(float)
-        normalized=h/(h+a)
-        fav=np.maximum(normalized,1-normalized)
-        actual=np.where(normalized>=.5,y,1-y)
-        notes=(f"{len(d)} Kalshi priced games · favorite won {100*actual.mean():.1f}% "
-               f"vs {100*fav.mean():.1f}% normalized YES asks; "
-               "hindsight analysis with 2h-before-kickoff quotes.")
-        return ("<h2 class='sec'>Kalshi winner-market calibration (2025 onward)</h2>"
-                "<p class='mut small'>Paired contract asks are normalized for an "
-                "approximate probability comparison; this is not a book no-vig market. "
-                "Ties count as half wins and no sportsbook prices are substituted.</p>"
-                f"<div class='gr-note'>{esc(notes)}</div>")
-    except (ValueError,KeyError,TypeError):
-        return "<div class='gr-note'>Kalshi calibration data unavailable.</div>"
-
-
-def render_calibration(latest, ledger, built, data=DATA):
-    parts = [head("Kalshi market calibration", "Verified Kalshi winner prices are primary. "
-                                       "Sportsbook market history is labeled legacy below.")]
-    parts.append(kalshi_market_calibration_html(data))
-    parts.append("<h2 class='sec'>Legacy sportsbook-market calibration (not Kalshi)</h2>")
+def render_calibration(latest, ledger, built):
+    parts = [head("Market calibration", "What the moneyline implied against what happened, by price. "
+                                        "This grades the <i>market</i>, not the model.")]
     retro = latest.get("retro_ledger") if latest else None
     sides = market_sides(retro)
     if len(sides):
@@ -1464,9 +1279,9 @@ def render_all(out_dir, data=DATA, now=None):
         rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
         (out / 'fixed_band_rules.json').write_text(rules)
-    pages = {"index.html": render_index(latest, ledger, built, now, data=data),
-             "grades.html": render_grades(ledger, latest, built, data=data),
-             "market-calibration.html": render_calibration(latest, ledger, built, data=data)}
+    pages = {"index.html": render_index(latest, ledger, built, now),
+             "grades.html": render_grades(ledger, latest, built),
+             "market-calibration.html": render_calibration(latest, ledger, built)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
     (out / "ledger_report.txt").write_text(published_report(Path(data)))
@@ -1499,23 +1314,15 @@ def main(argv=None):
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
-        kalshi.safe_record(DATA)  # native lock captures; never backdate a quote
-        upcoming = []
-        for r in pd.read_csv(LATEST / "board.csv").to_dict("records"):
-            k = m.kickoff_utc(r)
-            if k is not None:
-                upcoming.append({"game_id":r["game_id"],"home":r["home"],"away":r["away"],
-                                 "season":int(r["season"]),"week":int(r["week"]),
-                                 "kickoff_utc":k.isoformat()})
-        kalshi.safe_live_board(DATA, upcoming)
+        kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
         version_report.run(DATA,LATEST)
+    files = render_all(args.out)
     if not args.pages_only:
         count = ats_forward_shadow.record(DATA)
         print(f"ATS research: {count} new immutable shadow locks")
-    files = render_all(args.out)
     print(f"site: {len(files)} files -> {args.out}")
     return 0
 
