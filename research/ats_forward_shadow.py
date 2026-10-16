@@ -79,38 +79,59 @@ def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
 
 
 def kalshi_lock_quote(raw: dict, snapshots: list[dict]) -> dict | None:
-    """Same-game, post-lock/pregame market order-book capture, <=30m after lock.
+    """Price the first available Kalshi-native balanced spread AFTER the model lock.
 
-    A quoted main spread must match the exact half-point Kalshi threshold.
-    The complementary side is the NO contract at 1 - the YES bid.
+    The legacy nflverse spread never determines the Kalshi contract or side.
+    Only a contemporaneous quote within 30 minutes of the initial model lock
+    qualifies; later quotes cannot be attached retrospectively.
     """
-    cutoff, kickoff = utc(raw["generated_utc"]), utc(raw["kickoff_utc"])
-    eligible = sorted((r for r in snapshots
-                       if r.get("game_id") == raw["game_id"] and
-                       cutoff <= utc(r["captured_utc"]) < kickoff and
-                       (utc(r["captured_utc"])-cutoff).total_seconds() <= 1800),
-                      key=lambda r: utc(r["captured_utc"]))
-    line = float(raw["spread_line"])
-    if not np.isfinite(line) or abs(line) < 1e-9 or not np.isclose(abs(line) % 1, .5):
-        return None
-    fav = raw["home"] if line > 0 else raw["away"]
+    locked, kickoff = utc(raw["generated_utc"]), utc(raw["kickoff_utc"])
+    eligible = sorted(
+        (r for r in snapshots if r.get("game_id") == raw["game_id"]
+         and locked <= utc(r["captured_utc"]) < kickoff
+         and (utc(r["captured_utc"]) - locked).total_seconds() <= 1800),
+        key=lambda r: utc(r["captured_utc"]),
+    )
     for snap in eligible:
-        options = [v for v in snap.get("spread_ladder", [])
-                   if v["team"] == fav and np.isclose(float(v["strike"]), abs(line))]
-        if len(options) != 1:
+        win = snap.get("winner", {})
+        try:
+            home_win = float(win["home"]["ask"])
+            away_win = float(win["away"]["ask"])
+        except (ValueError, TypeError, KeyError):
             continue
-        rung = options[0]
-        bid, ask = float(rung["bid"]), float(rung["ask"])
-        if not 0 < bid < ask < 1:
+        if not all(np.isfinite(v) and 0 < v < 1 for v in (home_win, away_win)):
             continue
-        return {"spread_ticker": rung["ticker"], "captured_utc": snap["captured_utc"],
-                "market_spread": line, "home_ask": ask if line > 0 else 1-bid,
-                "away_ask": 1-bid if line > 0 else ask,
-                "spread_yes_bid": bid, "spread_yes_ask": ask,
-                "winner_home_ask": (snap.get("winner", {}).get("home") or {}).get("ask"),
-                "winner_away_ask": (snap.get("winner", {}).get("away") or {}).get("ask"),
-                "price_basis": "Kalshi live order-book top, after model lock",
-                "fee_rate_proxy": .07}
+        if np.isclose(home_win, away_win, atol=1e-9):
+            continue
+        favorite = raw["home"] if home_win > away_win else raw["away"]
+        viable = []
+        for rung in snap.get("spread_ladder", []):
+            if rung.get("team") != favorite:
+                continue
+            try:
+                strike = float(rung["strike"])
+                bid, ask = float(rung["bid"]), float(rung["ask"])
+            except (TypeError, ValueError, KeyError):
+                continue
+            if not (np.isfinite(strike) and np.isclose(strike % 1, .5)
+                    and 0 < bid < ask < 1):
+                continue
+            viable.append((abs((bid + ask) / 2 - .5), strike, rung, bid, ask))
+        if not viable:
+            continue
+        _, strike, rung, bid, ask = min(viable, key=lambda x: (x[0], x[1]))
+        home_favorite = favorite == raw["home"]
+        return {
+            "spread_ticker": rung["ticker"], "captured_utc": snap["captured_utc"],
+            "market_spread": strike if home_favorite else -strike,
+            "favorite": favorite, "strike": strike,
+            "home_ask": ask if home_favorite else 1 - bid,
+            "away_ask": 1 - bid if home_favorite else ask,
+            "spread_yes_bid": bid, "spread_yes_ask": ask,
+            "winner_home_ask": home_win, "winner_away_ask": away_win,
+            "price_basis": "Kalshi first post-lock observed order book, <=30m",
+            "fee_rate_proxy": .07,
+        }
     return None
 
 
@@ -120,25 +141,21 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict, kalshi_quote: dic
         raise ValueError("no chronological fixed-band rule")
     fit = cp.fit_prior(historical[historical.season < year], year)
     spread = float(cp.SIGMA * ndtri(np.clip(float(raw["model_wp"]), .005, .995)))
-    line = float(raw["spread_line"])
     fixed = float(fixed_bands.apply([spread], mapping)[0])
-    _, adjusted = cp.distribution(line, spread - line, fit)
-    h, a, p = cp.event(adjusted, line)
-    ev_h, ev_a = None, None
-    probability_side = ""  # abstain when no real Kalshi quote exists
+    line = float(kalshi_quote["market_spread"]) if kalshi_quote else None
     def side(gap):
         return "home" if gap > cp.EPS else "away" if gap < -cp.EPS else ""
-    # Only an actually observed Kalshi main spread quote can supply ATS EV.
-    if kalshi_quote:
-        p_home, p_away = float(kalshi_quote["home_ask"]), float(kalshi_quote["away_ask"])
-        fee_h = .07 * (1-p_home)
-        fee_a = .07 * (1-p_away)
-        # Probabilities include push, but at an exact half-point push is zero.
-        ev_h = h*(1/p_home-1-fee_h) - a*(1+fee_h)
-        ev_a = a*(1/p_away-1-fee_a) - h*(1+fee_a)
+    raw_side, fixed_side, probability_side = "", "", ""
+    h = a = p = ev_h = ev_a = None
+    if line is not None:
+        raw_side, fixed_side = side(spread - line), side(fixed - line)
+        _, adjusted = cp.distribution(line, spread - line, fit)
+        h, a, p = cp.event(adjusted, line)
+        home_ask, away_ask = (float(kalshi_quote[k]) for k in ("home_ask", "away_ask"))
+        fee_h, fee_a = .07 * (1-home_ask), .07 * (1-away_ask)
+        ev_h = h*(1/home_ask - 1-fee_h) - a*(1+fee_h)
+        ev_a = a*(1/away_ask - 1-fee_a) - h*(1+fee_a)
         probability_side = ("home" if ev_h > ev_a else "away") if max(ev_h, ev_a) > cp.EPS else ""
-    else:
-        ev_h, ev_a, probability_side = None, None, ""
     fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
     original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
     return {
@@ -147,7 +164,7 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict, kalshi_quote: dic
         "generated_utc": raw["generated_utc"], "kickoff_utc": raw["kickoff_utc"],
         "market_spread": line, "raw_spread": spread,
         "fixed_band_spread": fixed,
-        "raw_side": side(spread-line), "fixed_band_side": side(fixed-line),
+        "raw_side": raw_side, "fixed_band_side": fixed_side,
         "probability_side": probability_side,
         "p_home_cover": h, "p_away_cover": a, "p_push": p,
         "home_ev_kalshi": ev_h, "away_ev_kalshi": ev_a,
@@ -223,16 +240,14 @@ def graded_view(data: Path | str = "data") -> pd.DataFrame:
         grades, units, asks = [], [], []
         for _, r in g.iterrows():
             side = r[col]
-            if pd.notna(r["result"]):
+            if side in ("home", "away") and pd.notna(r["result"]) and pd.notna(r["market_spread"]):
                 grade, _ = cp.grade(float(r["result"]), float(r["market_spread"]), side)
             else:
-                grade = ""
+                grade = "" if pd.isna(r["result"]) else "S"
             quote = r.get("kalshi_quote")
             ask = (quote or {}).get(side + "_ask") if side in ("home","away") else None
-            if not grade or ask is None:
+            if not grade or ask is None or grade == "S":
                 value = np.nan
-            elif grade == "S":
-                value = 0.
             elif grade == "P":
                 value = 0.
             else:
