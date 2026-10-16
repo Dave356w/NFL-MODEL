@@ -664,3 +664,27 @@ def test_current_kalshi_quotes_replace_sportsbook_display(tmp_path,monkeypatch):
     stale=(tmp_path/"public"/"index.html").read_text()
     assert "Kalshi quote unavailable" in stale
     assert "DAL YES at Kalshi $0.720" not in stale
+
+
+def test_completed_game_uses_kalshi_historical_quote_not_bookmaker_price(tmp_path):
+    data=make_data(tmp_path/"data")
+    archive=data/"kalshi_historical"
+    archive.mkdir()
+    pd.DataFrame([{
+        "game_id":"2026_05_KC_BUF","kalshi_main_status":"quoted",
+        "winner_home_ask":.62,"winner_away_ask":.40,
+        "kalshi_spread_line":2.5,"kalshi_ticker":"KXNFLSPREAD-BUF3",
+        "kalshi_yes_ask":.51,"kalshi_yes_bid":.49,
+        "kalshi_source_ts":"2026-10-04T18:25:00+00:00",
+        "alt_ask":.42,"alt_contract":"NO","alt_selection_side":"away",
+        "alt_target_strike":1.5,"alt_ticker":"KXNFLSPREAD-BUF2"
+    }]).to_csv(archive/"kalshi_quotes.csv",index=False)
+    out=tmp_path/"public"
+    b.render_all(out,data,now=NOW)
+    html=(out/"index.html").read_text()
+    assert "Kalshi YES ask · KC $0.400 · BUF $0.620" in html
+    assert "KC NO at >1.5 margin · Kalshi $0.420" in html
+    assert "historical, two hours pregame" in html
+    assert "BUF −135" not in html
+    # The quote is research-cutoff data, not the game forecast's lock quote.
+    assert "2026-10-04T18:25:00+00:00" in html
