@@ -24,27 +24,41 @@ def fit(history, season):
     if min(counts) < 30:
         return None
     grid = np.arange(22, dtype=float)
-    scores = []
+    # Optimize reward AND >=90% selection coverage jointly. The previous
+    # procedure chose the unconstrained W-L maximum and rejected it if too
+    # many exact market equalities skipped; a feasible runner-up was missed.
+    scores, coverage = [], []
     for k in range(4):
         g = d.iloc[np.flatnonzero(band == k)]
         pred = np.sign(g.model_spread.to_numpy())[:, None] * grid
-        side = np.sign(pred - g.spread_line.to_numpy()[:, None])
+        edge = pred - g.spread_line.to_numpy()[:, None]
+        side = np.where(np.abs(edge) <= EPS, 0., np.sign(edge))
         reward = np.sign(side * (g.result - g.spread_line).to_numpy()[:, None]).sum(0)
         distance = ((pred - g.model_spread.to_numpy()[:, None]) ** 2).mean(0)
         scores.append(reward - 1e-8 * distance)
-    dp = scores[0].copy()
-    paths = [(j,) for j in range(len(grid))]
+        coverage.append(np.count_nonzero(np.abs(edge) > EPS, axis=0))
+    minimum = int(np.ceil(.90 * len(d) - 1e-12))
+    # (selected_games, last_magnitude_index) -> (objective, 4-band path).
+    # The state includes coverage so dropping a skip-heavy partial solution
+    # cannot inadvertently discard the best feasible monotone map.
+    states = {(int(coverage[0][j]), j): (float(scores[0][j]), (j,))
+              for j in range(len(grid))}
     for k in range(1, 4):
-        new, newpaths = [], []
-        for j in range(len(grid)):
-            i = int(np.argmax(dp[:j + 1]))
-            new.append(dp[i] + scores[k][j])
-            newpaths.append(paths[i] + (j,))
-        dp, paths = np.array(new), newpaths
-    magnitudes = grid[list(paths[int(np.argmax(dp))])]
-    prediction = np.sign(d.model_spread.to_numpy()) * magnitudes[band]
-    if np.mean(abs(prediction - d.spread_line.to_numpy()) > EPS) < .90:
+        following = {}
+        for (selected, previous), (value, path) in states.items():
+            for j in range(previous, len(grid)):
+                key = (selected + int(coverage[k][j]), j)
+                candidate = (value + float(scores[k][j]), path + (j,))
+                incumbent = following.get(key)
+                if incumbent is None or (candidate[0], tuple(-m for m in candidate[1])) > (
+                        incumbent[0], tuple(-m for m in incumbent[1])):
+                    following[key] = candidate
+        states = following
+    feasible = [v for (selected, _), v in states.items() if selected >= minimum]
+    if not feasible:
         return None
+    winner = max(feasible, key=lambda v: (v[0], tuple(-m for m in v[1])))
+    magnitudes = grid[list(winner[1])]
     return dict(season=int(season), training_max_season=int(d.season.max()),
                 training_games=len(d), cuts=CUTS, magnitudes=magnitudes.tolist())
 
@@ -123,7 +137,11 @@ def summary(frame):
             w, l, p, s = [int((r == x).sum()) for x in ['W', 'L', 'P', 'S']]
             bets = w + l + p
             units = w / 1.1 - l
-            rows.append(dict(season=str(group), method=label, games=len(g), bets=bets,
-                             wins=w, losses=l, pushes=p, skips=s, units=units,
-                             roi=units / bets if bets else np.nan))
+            if bets + s != len(g):
+                raise AssertionError("Every eligible ATS opportunity must be selected or skipped")
+            rows.append(dict(season=str(group), method=label, games=len(g),
+                             opportunities=len(g), bets=bets, selected=bets,
+                             wins=w, losses=l, pushes=p, skips=s,
+                             selection_rate=bets / len(g) if len(g) else np.nan,
+                             units=units, roi=units / bets if bets else np.nan))
     return pd.DataFrame(rows)
