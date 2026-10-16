@@ -3,11 +3,13 @@
 Weekly NFL win probabilities from prior-game box-score profiles and player
 availability, built and published as a static site by GitHub Actions.
 
-**Goal: flat 1-unit ROI.** Every game the model decides gets 1u on the side it
-makes the favorite, graded at that side's moneyline. Every game's first pregame
-forecast is locked into a forward ledger with the moneyline it saw, then graded
-on units and ROI against the same-row market favorite and the market-correct
-null. Log loss is kept as a secondary score.
+**Goal: evaluate win projections and flat-risk Kalshi contract returns.**
+The primary website prices current winner and spread selections exclusively
+from observed Kalshi YES/NO asks. The 2025–2026 retrospective price record
+settles each available Kalshi contract at its exact outcome threshold and a
+documented approximate fee. Absent quotes produce **no priced wager**.
+Original first-pregame forecasts and their bookmaker-era fields remain immutable
+for audit, but those old entries are not presented as Kalshi trades.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
@@ -25,19 +27,21 @@ remain unchanged; retrospective replay at their original quotes is separately la
 Adoption follows exposed historical development, with reliable profit superiority
 still unresolved.
 
-The displayed **Model spread** uses the fixed-band mapping (2026: 4/5/7/13
-points for original spread magnitudes below 3, 3–7, 7–10, and 10+). Ledger and
-calibration pages show season-by-season retrospective ATS results at assumed
-−110, including pushes and skips, with downloadable per-game data. Each mapping
-uses earlier seasons only; these are exposed historical comparisons. Win
-probabilities and moneyline picks retain the v1.18 recipe. See `fixed_bands.py`
-and the fixed-band section in `MODEL.md` for the full rule and grading basis.
+The displayed **Model spread signal** retains the fixed-band mapping
+(2026: 4/5/7/13 points for original implied spread magnitudes below 3, 3–7,
+7–10, and 10+). It is evaluated against the **Kalshi-native** observed
+half-point winning-margin contract, not an imaginary bookmaker alternate quote.
+The primary historical comparison uses Kalshi asks and the venue's contract
+settlement. Legacy −110 ATS/sportsbook statistics remain clearly labeled for
+research provenance, not treated as Kalshi performance. The win probabilities
+still come from frozen v1.18 weights; they are **not** Kalshi-only trained.
+See `research/KALSHI_PRICE_MIGRATION.md` for the exact boundary.
 
 | Page | For |
 |---|---|
-| [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
-| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pick graded at its moneyline, beside always-favorite and always-home on the same games; then the current model's rebuilt history since 2021 (hindsight) |
-| [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | What each moneyline implied vs what happened; how often the model's picks won at each confidence |
+| [Projections](https://dave356w.github.io/NFL-MODEL/) | Current Kalshi winner asks, actual spread/alternate YES or NO contract asks when quoted, alongside model probabilities and injury reports |
+| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Primary Kalshi-priced 2025–2026 historical contract record; frozen native and sportsbook-era research clearly identified separately |
+| [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Kalshi winner-ask calibration, followed by clearly labeled legacy sportsbook calibrations |
 
 The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
 held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research
@@ -49,6 +53,29 @@ published `ledger_report.txt` carries the version comparison and snapshot replay
 | [`MODEL.md`](MODEL.md) | What the model does today and how the pipeline fits together. The full version history is the docstring at the top of `nfl_model.py`. |
 | [`CLAUDE.md`](CLAUDE.md) | Working standards: evidence ladder, ledger protection, versioning, validation before a PR. |
 | [`data/ledger_report.txt`](data/ledger_report.txt) | Latest graded forward results (regenerated every build). |
+
+## Kalshi price migration (2026-10-15)
+
+- **Current:** live public Kalshi winner YES asks and selected spread/alternate
+  contract asks are captured with timestamps. No quote means unavailable; an
+  unpriced game is never filled from nflverse sportsbook moneylines.
+- **History:** `data/kalshi_historical/` stores a successfully audited
+  351-game Kalshi-only 2025–2026 quote and settlement record
+  (351 winner quote pairs, 351 main-spread contracts, 237 model-target alternates).
+  The historical timestamp is two hours before kickoff; these are retrospective
+  observed asks, **not** original native model decision-time trade confirmations.
+- **Refresh:** `research/kalshi_incremental.py` and
+  `.github/workflows/kalshi-incremental.yml` incorporate new completed games
+  without modifying previously archived game prices.
+- **Boundary:** Kalshi NFL spread history prior to 2025 cannot be reconstructed.
+  The frozen v1.18 **model training** itself predates Kalshi and still contains
+  legacy sportsbook-derived feature inputs. Neither historical artifacts nor
+  original forward locks are falsified or overwritten.
+
+Sources and validation: [migration report](research/KALSHI_PRICE_MIGRATION.md),
+[quote archive](data/kalshi_historical/kalshi_quotes.csv),
+[actual Kalshi summary](data/kalshi_historical/kalshi_summary.json), and
+[backfill workflow](https://github.com/Dave356w/NFL-MODEL/actions/runs/38827189182).
 
 ## Production qualification research
 
