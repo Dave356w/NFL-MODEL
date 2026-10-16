@@ -137,7 +137,11 @@ def summary(frame):
             w, l, p, s = [int((r == x).sum()) for x in ['W', 'L', 'P', 'S']]
             bets = w + l + p
             units = w / 1.1 - l
-            rows.append(dict(season=str(group), method=label, games=len(g), bets=bets,
-                             wins=w, losses=l, pushes=p, skips=s, units=units,
-                             roi=units / bets if bets else np.nan))
+            if bets + s != len(g):
+                raise AssertionError("Every eligible ATS opportunity must be selected or skipped")
+            rows.append(dict(season=str(group), method=label, games=len(g),
+                             opportunities=len(g), bets=bets, selected=bets,
+                             wins=w, losses=l, pushes=p, skips=s,
+                             selection_rate=bets / len(g) if len(g) else np.nan,
+                             units=units, roi=units / bets if bets else np.nan))
     return pd.DataFrame(rows)
