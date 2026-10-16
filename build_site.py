@@ -890,10 +890,10 @@ def render_index(latest, ledger, built, now=None, data=DATA):
             if isinstance(e, str) and isinstance(u, str) and e != u:
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
         hm, am = hq, aq
-        mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
+        mk = (f"Kalshi YES ask · {esc(away)} ${am:.3f} · {esc(home)} ${hm:.3f}" if math.isfinite(hm) and math.isfinite(am) else "Kalshi quote unavailable")
         ms, ks = num(r.get("fixed_band_spread")), num(current_quote.get("kalshi_line")) if current_quote else math.nan
         spread_pick, edge = ats_card_pick(ms, ks, home, away)
-        edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
+        edge_text = f' · {edge:g}-point Kalshi handicap signal' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
         moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
         if team:
             moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
@@ -1073,8 +1073,10 @@ def pooled_2026_v118_header(latest, ledger):
 
 def render_grades(ledger, latest, built, data=DATA):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Ledger", "2026 picks combine earlier reconstructed games and native forward locks, "
-                            "with one pick per game. Native locks use their recorded pregame moneylines.")]
+    parts = [head("Kalshi ledger", "Kalshi bids and asks are the price basis of the primary record; "
+                            "legacy sportsbook reports below remain for historical reproducibility.")]
+    parts.append(kalshi_primary_summary(data))
+    parts.append("<h2 class='sec'>Legacy sportsbook-based results (not Kalshi prices)</h2>")
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     graded = cur[cur.status == "graded"] if len(cur) else cur
     pooled_header = pooled_2026_v118_header(latest, ledger)
@@ -1351,14 +1353,22 @@ def main(argv=None):
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
         kalshi.safe_record(DATA)  # native lock captures; never backdate a quote
+        upcoming = []
+        for r in pd.read_csv(LATEST / "board.csv").to_dict("records"):
+            k = m.kickoff_utc(r)
+            if k is not None:
+                upcoming.append({"game_id":r["game_id"],"home":r["home"],"away":r["away"],
+                                 "season":int(r["season"]),"week":int(r["week"]),
+                                 "kickoff_utc":k.isoformat()})
+        kalshi.safe_live_board(DATA, upcoming)
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
         version_report.run(DATA,LATEST)
-    files = render_all(args.out)
     if not args.pages_only:
         count = ats_forward_shadow.record(DATA)
         print(f"ATS research: {count} new immutable shadow locks")
+    files = render_all(args.out)
     print(f"site: {len(files)} files -> {args.out}")
     return 0
 
