@@ -77,9 +77,11 @@ def test_live_shadow_uses_lock_time_quote_and_rejects_stale():
           "winner":{"home":{"ask":.3},"away":{"ask":.7}}}
     q=sh.kalshi_lock_quote(raw,[snap])
     assert q["home_ask"] == .52 and q["away_ask"] == .53
+    assert q["market_spread"] == -3.5 and q["favorite"] == "BAL"
     assert q["winner_away_ask"] == .7
     assert sh.kalshi_lock_quote(raw,[{**snap,"captured_utc":"2026-10-17T12:00:00+00:00"}]) is None
-    assert sh.kalshi_lock_quote({**raw,"spread_line":-3},[snap]) is None
+    assert sh.kalshi_lock_quote({**raw,"spread_line":-3},[snap])["market_spread"] == -3.5
+    assert sh.kalshi_lock_quote({**raw,"spread_line":99.5},[snap])["market_spread"] == -3.5
     assert sh.kalshi_lock_quote(raw,[{**snap,"captured_utc":"2026-10-17T10:00:00+00:00"}]) is None
 
 
