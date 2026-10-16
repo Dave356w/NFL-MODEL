@@ -154,7 +154,7 @@ def test_index_cards_flags_and_record(tmp_path):
     assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
     assert "TB QB: J.Daniels" in html and "Kalshi quote unavailable" in html
     assert "DAL −485" not in html
-    assert "Final 20–27" in html and "Moneyline result BUF · W" in html
+    assert "Final 20–27" in html and "Model winner BUF · W" in html
     assert "pts off market" not in html and "Largest drivers" not in html
     assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
     # record box: forward ledger, KC@BUF picked BUF -135 and won
@@ -382,7 +382,7 @@ def test_cards_do_not_inherit_sportsbook_prices(tmp_path):
     assert "Kalshi quote unavailable" in idx
     assert "At this price · DAL" not in idx
     assert "At this price · BUF" not in idx
-    assert "Moneyline result BUF · W" in idx  # Side outcome, independent of wager quote
+    assert "Model winner BUF · W" in idx  # Side outcome, independent of wager quote
 
 
 def test_band_windows_use_the_same_games_and_add_forward_picks():
