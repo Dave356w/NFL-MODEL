@@ -1,3 +1,5 @@
+import json
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import fixed_bands as f
@@ -89,3 +91,18 @@ def test_strict_zero_edge_and_explicit_selection_denominator():
     assert fixed.selected == fixed.bets == 1
     assert fixed.skips == 2
     assert fixed.selection_rate == 1 / 3
+
+
+def test_committed_annual_maps_are_frozen_regression_targets():
+    # Source is the committed exposed-history ledger, not newly selected
+    # outcomes. A change to any saved band would invalidate ATS comparisons.
+    root = Path(__file__).resolve().parents[1]
+    d = pd.read_csv(root / 'data/latest/fixed_band_ledger.csv', low_memory=False)
+    archived = json.loads((root / 'data/latest/fixed_band_rules.json').read_text())
+    assert [int(r['season']) for r in archived] == [2023, 2024, 2025, 2026]
+    for stored in archived:
+        current = f.fit(d, int(stored['season']))
+        assert current is not None
+        assert current['magnitudes'] == stored['magnitudes']
+        assert current['cuts'] == stored['cuts']
+        assert current['training_games'] == stored['training_games']
