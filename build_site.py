@@ -797,7 +797,7 @@ def historical_pick_reference(latest, game, edge):
             "Records are reconstructed, not locked forward evidence or this game's cover probability. "
             "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
 
-def render_index(latest, ledger, built, now=None):
+def render_index(latest, ledger, built, now=None, data=DATA):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest["board"].empty:
         body = head("Projections", "No model run has been published yet; the first build writes this page.")
@@ -815,6 +815,7 @@ def render_index(latest, ledger, built, now=None):
         return (has_avail and pd.isna(r.get("result")) and ko is not None and ko > now
                 and not m.injury_reports_ready(r, ko, now))
 
+    live_kalshi = kalshi_live_quotes(data, now)
     rows = board.to_dict("records")
     n_pend = sum(1 for r in rows if pending(r))
     if n_pend:
@@ -833,9 +834,12 @@ def render_index(latest, ledger, built, now=None):
         p = num(r["model_wp"])
         home, away = r["home"], r["away"]
         fav_home = p > .5
-        q = num(m.market_ml_wp(pd.DataFrame([r]))[0])
+        current_quote = live_kalshi.get(r["game_id"])
+        hq = num(current_quote.get("home_ask")) if current_quote else math.nan
+        aq = num(current_quote.get("away_ask")) if current_quote else math.nan
+        q = hq/(hq+aq) if math.isfinite(hq) and math.isfinite(aq) else math.nan
         bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
-        team = home if bet.side == "home" else away if bet.side == "away" else ""
+        team = home if p > .5 else away if p < .5 else ""
         flags = []
         if pd.notna(r.get("result")):
             flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
@@ -853,12 +857,12 @@ def render_index(latest, ledger, built, now=None):
             e, u = r.get(f"{side}_qb_expected"), r.get(f"{side}_qb_usual")
             if isinstance(e, str) and isinstance(u, str) and e != u:
                 flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
-        hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
+        hm, am = hq, aq
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
-        ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
+        ms, ks = num(r.get("fixed_band_spread")), num(current_quote.get("kalshi_line")) if current_quote else math.nan
         spread_pick, edge = ats_card_pick(ms, ks, home, away)
         edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
-        moneyline_pick = pick_text(team, bet.price)
+        moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
         if team:
             moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
@@ -886,9 +890,9 @@ def render_index(latest, ledger, built, now=None):
         det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
             ["Model", pct(1 - p), pct(p)],
             ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
-            ["Moneyline", ml_text(am), ml_text(hm)],
+            ["Kalshi YES ask", f"${am:.3f}" if math.isfinite(am) else "—", f"${hm:.3f}" if math.isfinite(hm) else "—"],
             ["Model spread", spread_text(ms, False), spread_text(ms, True)],
-            ["Market spread", spread_text(ks, False), spread_text(ks, True)]]
+            ["Kalshi spread", spread_text(ks, False), spread_text(ks, True)]]
             + ([["Model range", f"{pct(1 - hi)}–{pct(1 - lo)}", f"{pct(lo)}–{pct(hi)}"]] if band else []), num_cols=(1, 2))]
         if band:
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
@@ -1035,7 +1039,7 @@ def pooled_2026_v118_header(latest, ledger):
     return "".join(parts)
 
 
-def render_grades(ledger, latest, built):
+def render_grades(ledger, latest, built, data=DATA):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
     parts = [head("Ledger", "2026 picks combine earlier reconstructed games and native forward locks, "
                             "with one pick per game. Native locks use their recorded pregame moneylines.")]
@@ -1279,8 +1283,8 @@ def render_all(out_dir, data=DATA, now=None):
         rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
         (out / 'fixed_band_rules.json').write_text(rules)
-    pages = {"index.html": render_index(latest, ledger, built, now),
-             "grades.html": render_grades(ledger, latest, built),
+    pages = {"index.html": render_index(latest, ledger, built, now, data=data),
+             "grades.html": render_grades(ledger, latest, built, data=data),
              "market-calibration.html": render_calibration(latest, ledger, built)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
@@ -1314,7 +1318,7 @@ def main(argv=None):
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
-        kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
+        kalshi.safe_record(DATA)  # native lock captures; never backdate a quote
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
