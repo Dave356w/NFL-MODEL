@@ -187,7 +187,58 @@ def graded_view(data: Path | str = "data") -> pd.DataFrame:
                   for _, r in g.iterrows()]
         g[arm+"_result"] = [v[0] for v in graded]
         g[arm+"_units_proxy_minus110"] = [v[1] for v in graded]
+    # Proper scores are calculated for every completed game (including
+    # policy skips and actual ATS pushes), not only the selected bets.
+    # The three events are mutually exclusive: home cover, away cover, push.
+    delta = pd.to_numeric(g["result"], errors="coerce") - pd.to_numeric(g["market_spread"], errors="coerce")
+    outcome = np.where(np.abs(delta) <= EPS, 2, np.where(delta > 0, 0, 1))
+    targets = np.eye(3)[outcome]
+    for name, cols in [
+        ("model", ["p_home_cover", "p_away_cover", "p_push"]),
+        ("market", ["market_p_home_cover", "market_p_away_cover", "market_p_push"]),
+    ]:
+        # Older research locks did not store a market probability control;
+        # leave their market proper scores unavailable rather than fabricate it.
+        if not set(cols).issubset(g.columns):
+            continue
+        p = g[cols].apply(pd.to_numeric, errors="coerce").to_numpy(float)
+        valid = np.isfinite(delta.to_numpy(float)) & np.isfinite(p).all(axis=1)
+        valid &= np.all((p >= 0) & (p <= 1), axis=1) & np.isclose(p.sum(axis=1), 1., atol=1e-8)
+        observed = p[np.arange(len(g)), outcome]
+        g[name+"_ats_3way_log_loss"] = np.where(
+            valid, -np.log(np.clip(observed, 1e-15, 1.)), np.nan)
+        g[name+"_ats_3way_brier"] = np.where(
+            valid, ((p - targets)**2).sum(axis=1), np.nan)
     return g
+
+
+def summary(view: pd.DataFrame) -> pd.DataFrame:
+    """All game opportunities, policy skips and separate three-way scores."""
+    if view.empty:
+        return pd.DataFrame()
+    done = view[pd.to_numeric(view["result"], errors="coerce").notna()]
+    rows = []
+    for season, games in [("All", done), *[(str(k), v) for k, v in done.groupby("season")]]:
+        if games.empty:
+            continue
+        for arm in ("raw", "fixed_band", "cover_probability"):
+            result = games[arm+"_result"]
+            bets = int(result.ne("S").sum())
+            units = float(games[arm+"_units_proxy_minus110"].sum())
+            rows.append(dict(season=season, policy=arm, opportunities=len(games), selections=bets,
+                skips=int(result.eq("S").sum()), wins=int(result.eq("W").sum()),
+                losses=int(result.eq("L").sum()), pushes=int(result.eq("P").sum()),
+                selection_rate=bets/len(games), units_proxy_minus110=units,
+                roi_proxy_minus110=units/bets if bets else np.nan,
+                model_3way_ll=games["model_ats_3way_log_loss"].mean()
+                    if "model_ats_3way_log_loss" in games else np.nan,
+                market_3way_ll=games["market_ats_3way_log_loss"].mean()
+                    if "market_ats_3way_log_loss" in games else np.nan,
+                model_3way_brier=games["model_ats_3way_brier"].mean()
+                    if "model_ats_3way_brier" in games else np.nan,
+                market_3way_brier=games["market_ats_3way_brier"].mean()
+                    if "market_ats_3way_brier" in games else np.nan))
+    return pd.DataFrame(rows)
 
 
 def main() -> None:
@@ -201,6 +252,7 @@ def main() -> None:
     if len(view):
         print(view[["game_id", "status", "raw_result", "fixed_band_result",
                     "cover_probability_result"]].to_string(index=False))
+        print(summary(view).to_string(index=False))
 
 
 if __name__ == "__main__":
