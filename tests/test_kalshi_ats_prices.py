@@ -45,20 +45,26 @@ def test_exact_halfpoint_quotes_and_no_ask_complement():
                         "2026-10-18T15:00:00+00:00",fake_get)[1]=="missing_or_ambiguous_exact_strike"
 
 
-def test_model_vs_fixed_graded_only_matched_kalshi_games():
-    d=pd.DataFrame([{"game_id":"g1","original_side":"home","original_grade":"W",
-                     "fixed_band_side":"away","fixed_band_grade":"L",
-                     "cover_probability_side":"","cover_probability_grade":"S"},
-                    {"game_id":"g2","original_side":"away","original_grade":"W",
-                     "fixed_band_side":"away","fixed_band_grade":"W",
-                     "cover_probability_side":"home","cover_probability_grade":"L"}])
-    quotes=[{"game_id":"g1","status":"quoted","home_ask":.48,"away_ask":.54},
-            {"game_id":"g2","status":"missing","home_ask":None,"away_ask":None}]
+def test_kalshi_native_main_prices_not_bookmaker_spread_grading():
+    d=pd.DataFrame([
+        {"game_id":"g1","model_spread":4.,"fixed_band_spread":-1.,
+         "margin":1.,"spread_line":7.,"original_grade":"L","fixed_band_grade":"W"},
+        {"game_id":"g2","model_spread":-5.,"fixed_band_spread":-5.,"margin":-10.},
+    ])
+    quotes=[
+        {"game_id":"g1","kalshi_main_status":"quoted",
+         "kalshi_spread_line":.5,"kalshi_strike":.5,
+         "kalshi_home_ask":.48,"kalshi_away_ask":.54},
+        {"game_id":"g2","kalshi_main_status":"missing","kalshi_spread_line":None},
+    ]
     x=p.joined_ats_results(d,quotes)
     assert len(x)==1 and x.iloc[0].game_id=="g1"
+    # Home wins on Kalshi's 0.5, even though sportsbook +7 graded "L".
+    assert x.iloc[0].original_kalshi_grade=="W"
     assert np.isclose(x.iloc[0].original_kalshi_units,1/.48-1-.07*.52)
+    assert x.iloc[0].fixed_band_kalshi_grade=="L"
     assert np.isclose(x.iloc[0].fixed_band_kalshi_units,-1-.07*.46)
-    assert x.iloc[0].cover_probability_kalshi_units==0
+    assert np.isnan(x.iloc[0].cover_probability_kalshi_units)
 
 
 def test_live_shadow_uses_lock_time_quote_and_rejects_stale():
@@ -122,15 +128,33 @@ def test_original_model_spread_uses_quote_nearest_binary_half_integer():
 
 def test_alt_grading_remains_missing_without_actual_contract_quote():
     base=pd.DataFrame([{"game_id":"g","model_spread":-5.2,"margin":-7,
-                         "original_side":"away","original_grade":"W",
-                         "fixed_band_side":"away","fixed_band_grade":"W",
-                         "cover_probability_side":"","cover_probability_grade":"S"}])
-    quote={"game_id":"g","status":"quoted","home_ask":.52,"away_ask":.49,
+                        "fixed_band_spread":-7.}])
+    quote={"game_id":"g","kalshi_main_status":"quoted",
+           "kalshi_spread_line":-3.5,"kalshi_strike":3.5,
+           "kalshi_home_ask":.52,"kalshi_away_ask":.49,
            "alt_ask":.24,"alt_target_strike":5.5,
            "alt_selection_side":"away","alt_contract":"YES"}
     d=p.joined_ats_results(base,[quote])
     assert len(d)==1
-    assert np.isclose(d.iloc[0].original_model_alt_kalshi_units, 1/.24-1-.07*.76)
+    assert np.isclose(d.iloc[0].original_model_alt_kalshi_units,1/.24-1-.07*.76)
     assert d.iloc[0].original_model_alt_kalshi_grade=="W"
     no=p.joined_ats_results(base,[{**quote,"alt_ask":None}])
     assert np.isnan(no.iloc[0].original_model_alt_kalshi_units)
+
+
+def test_kalshi_main_is_chosen_from_actual_quote_not_bookmaker_line():
+    r={"home":"CLE","away":"BAL","spread_line":-15.,"kickoff_utc":"2026-10-18T17:00:00+00:00"}
+    ev="KXNFLSPREAD-26OCT18BALCLE"
+    candles=int(pd.Timestamp("2026-10-18T15:00:00Z").timestamp())-60
+    markets=[({"ticker":ev+"-BAL"+str(int(t+.5)),"event_ticker":ev,"floor_strike":t},
+              "historical") for t in (2.5,3.5,4.5)]
+    lookup={2.5:(.58,.62),3.5:(.47,.51),4.5:(.40,.44)}
+    def get(path):
+        k=int(path.split("-BAL")[-1].split("/")[0])
+        t=k-.5
+        bid,ask=lookup[t]
+        return {"candlesticks":[snapshot(candles,str(bid),str(ask))]}
+    winners={"away":{"yes_ask":.68},"home":{"yes_ask":.34}}
+    main,status=p.kalshi_main_quote(r,markets,winners,"2026-10-18T15:00:00Z",get)
+    assert status=="quoted" and main["kalshi_spread_line"]==-3.5
+    assert main["away_ask"]==.51 and main["home_ask"]==.53
