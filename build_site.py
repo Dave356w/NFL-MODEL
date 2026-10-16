@@ -923,7 +923,11 @@ def render_index(latest, ledger, built, now=None, data=DATA):
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     recorded = {r.game_id: r for r in cur.itertuples(index=False)}
     parts = [head(f"Week {week}", f"Model win probabilities for every {season} week-{week} game. Tap a game for details.")]
-    parts.append(spread_headline(latest, season))
+    parts.append("<p class='mut small'>Kalshi winner YES asks and exact NFL spread/alternate "
+                 "contract bids and asks are the sole current pricing sources. Unavailable "
+                 "Kalshi prices never fall back to sportsbook odds. Forecast coefficients "
+                 "retain their frozen, legacy market training.</p>")
+    parts.append(kalshi_primary_summary(data))
 
     def pending(r):
         ko = m.kickoff_utc(r)
