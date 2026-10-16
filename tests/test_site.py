@@ -653,7 +653,7 @@ def test_current_kalshi_quotes_replace_sportsbook_display(tmp_path,monkeypatch):
     html=(tmp_path/"public"/"index.html").read_text()
     assert "Kalshi YES ask · TB $0.300 · DAL $0.720" in html
     assert "DAL YES at Kalshi $0.720" in html
-    assert "TB NO at &gt;3.5 margin · Kalshi $0.430" in html
+    assert "TB NO at >3.5 margin · Kalshi $0.430" in html
     assert "Market DAL −4.5" in html
     assert "Market DAL −9.5" not in html
     assert "DAL −485" not in html
