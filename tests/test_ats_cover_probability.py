@@ -118,6 +118,12 @@ def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
     r = snap[0]
     assert r["game_id"] == base["game_id"] and r["training_max_season"] == 2025
     assert r["research_only"] and r["quote_basis"] == "unverified_proxy_only"
+    assert r["policy_version"] == shadow.POLICY_VERSION
+    assert r["archived_utc"] == now.isoformat()
+    assert r["selected_side"] == r["fixed_band_side"]
+    assert r["skip_reason"] == ("zero_edge" if not r["selected_side"] else None)
+    assert np.isclose(r["market_p_home_cover"]+r["market_p_away_cover"]+
+                      r["market_p_push"], 1.)
     assert r["raw_spread"] < float(shadow.cp.SIGMA * shadow.ndtri(.9))
     assert r["fixed_band_side"] in ("home", "away", "")
     assert np.isclose(r["p_home_cover"]+r["p_away_cover"]+r["p_push"],1.)
@@ -139,3 +145,53 @@ def test_shadow_no_record_after_kickoff(tmp_path):
     (data / "forward_predictions.jsonl").write_text(json.dumps(r)+"\n")
     assert shadow.possible_locks(data, dt.datetime.fromisoformat("2026-10-17T12:00:00+00:00")) == []
     assert shadow.record(data, dt.datetime.fromisoformat("2026-10-17T12:00:00+00:00")) == 0
+
+
+def test_native_shadow_three_way_scores_include_skips_and_pushes(tmp_path):
+    data = tmp_path
+    base = {
+        "revision": shadow.REVISION, "season": 2026, "week": 8,
+        "market_spread": 3., "p_home_cover": .6, "p_away_cover": .3, "p_push": .1,
+        "market_p_home_cover": .475, "market_p_away_cover": .475, "market_p_push": .05,
+        "generated_utc": "2026-10-16T15:00:00+00:00"}
+    sides = ["home", "", "away"]
+    rows = [dict(base, game_id=f"2026_08_{k}", raw_side="home",
+                 fixed_band_side=side, probability_side="away")
+            for k, side in enumerate(sides)]
+    (data / shadow.STATE).write_text("".join(json.dumps(r)+"\\n" for r in rows))
+    pd.DataFrame({
+        "revision": [shadow.REVISION]*3,
+        "game_id": [r["game_id"] for r in rows],
+        "generated_utc": [r["generated_utc"] for r in rows],
+        "status": ["final"]*3,
+        "result": [5., 2., 3.]
+    }).to_csv(data / "forward_ledger.csv", index=False)
+    graded = shadow.graded_view(data)
+    assert list(graded.fixed_band_result) == ["W", "S", "P"]
+    np.testing.assert_allclose(graded.model_ats_3way_log_loss,
+                               -np.log([.6, .3, .1]))
+    np.testing.assert_allclose(graded.market_ats_3way_log_loss,
+                               -np.log([.475, .475, .05]))
+    assert graded.model_ats_3way_brier.notna().all()
+    records = shadow.summary(graded)
+    fixed = records.query("policy == 'fixed_band' and season == 'All'").iloc[0]
+    assert fixed.opportunities == 3 and fixed.selections == 2 and fixed.skips == 1
+    assert fixed.wins == 1 and fixed.pushes == 1 and fixed.losses == 0
+    assert fixed.selection_rate == 2/3
+    assert np.isclose(fixed.model_3way_ll, -np.log([.6, .3, .1]).mean())
+
+
+def test_legacy_shadow_missing_market_control_is_not_backfilled(tmp_path):
+    data = tmp_path
+    r = {"revision": shadow.REVISION, "game_id": "2026_08_legacy",
+         "season": 2026, "market_spread": 3., "generated_utc": "2026-10-16T15:00:00+00:00",
+         "fixed_band_side": "home", "raw_side": "home", "probability_side": "home",
+         "p_home_cover": .5, "p_away_cover": .5, "p_push": 0.}
+    (data / shadow.STATE).write_text(json.dumps(r)+"\\n")
+    pd.DataFrame([{"revision": shadow.REVISION, "game_id": r["game_id"],
+                   "generated_utc": r["generated_utc"], "status": "final",
+                   "result": 4.}]).to_csv(data / "forward_ledger.csv", index=False)
+    d = shadow.graded_view(data)
+    assert "model_ats_3way_log_loss" in d
+    assert "market_ats_3way_log_loss" not in d
+    assert np.isfinite(shadow.summary(d).iloc[0].model_3way_ll)
