@@ -1272,9 +1272,43 @@ def market_sides(df):
     return sides
 
 
-def render_calibration(latest, ledger, built):
-    parts = [head("Market calibration", "What the moneyline implied against what happened, by price. "
-                                        "This grades the <i>market</i>, not the model.")]
+
+def kalshi_market_calibration_html(data):
+    """Calendar-season matchups with actual Kalshi winner YES bid/ask prices."""
+    path=Path(data)/"kalshi_historical"/"kalshi_moneyline_graded.csv"
+    if not path.exists():
+        return "<div class='gr-note'>No archived Kalshi winner prices yet.</div>"
+    try:
+        d=pd.read_csv(path)
+        h=pd.to_numeric(d["winner_home_ask"],errors="coerce")
+        a=pd.to_numeric(d["winner_away_ask"],errors="coerce")
+        y=pd.to_numeric(d["home won"],errors="coerce")
+        valid=(h>0)&(a>0)&(h<1)&(a<1)&y.isin([0,.5,1])
+        d=d.loc[valid].copy()
+        if d.empty:return "<div class='gr-note'>No matched Kalshi YES quotes.</div>"
+        h=h[valid].to_numpy(float)
+        a=a[valid].to_numpy(float)
+        y=y[valid].to_numpy(float)
+        normalized=h/(h+a)
+        fav=np.maximum(normalized,1-normalized)
+        actual=np.where(normalized>=.5,y,1-y)
+        notes=(f"{len(d)} Kalshi priced games · favorite won {100*actual.mean():.1f}% "
+               f"vs {100*fav.mean():.1f}% normalized YES asks; "
+               "hindsight analysis with 2h-before-kickoff quotes.")
+        return ("<h2 class='sec'>Kalshi winner-market calibration (2025 onward)</h2>"
+                "<p class='mut small'>Paired contract asks are normalized for an "
+                "approximate probability comparison; this is not a book no-vig market. "
+                "Ties count as half wins and no sportsbook prices are substituted.</p>"
+                f"<div class='gr-note'>{esc(notes)}</div>")
+    except (ValueError,KeyError,TypeError):
+        return "<div class='gr-note'>Kalshi calibration data unavailable.</div>"
+
+
+def render_calibration(latest, ledger, built, data=DATA):
+    parts = [head("Kalshi market calibration", "Verified Kalshi winner prices are primary. "
+                                       "Sportsbook market history is labeled legacy below.")]
+    parts.append(kalshi_market_calibration_html(data))
+    parts.append("<h2 class='sec'>Legacy sportsbook-market calibration (not Kalshi)</h2>")
     retro = latest.get("retro_ledger") if latest else None
     sides = market_sides(retro)
     if len(sides):
@@ -1345,7 +1379,7 @@ def render_all(out_dir, data=DATA, now=None):
         (out / 'fixed_band_rules.json').write_text(rules)
     pages = {"index.html": render_index(latest, ledger, built, now, data=data),
              "grades.html": render_grades(ledger, latest, built, data=data),
-             "market-calibration.html": render_calibration(latest, ledger, built)}
+             "market-calibration.html": render_calibration(latest, ledger, built, data=data)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
     (out / "ledger_report.txt").write_text(published_report(Path(data)))
