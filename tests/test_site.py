@@ -632,3 +632,34 @@ def test_cards_show_separate_picks_and_historical_reference(tmp_path,monkeypatch
     assert 'Kalshi quote unavailable' in text
     assert 'Historical reference · reconstructed' not in text
     assert 'recorded moneylines' not in text
+
+
+def test_current_kalshi_quotes_replace_sportsbook_display(tmp_path,monkeypatch):
+    data=make_data(tmp_path/"data")
+    monkeypatch.setattr(b.fixed_bands,'fit', lambda history,year:
+                        dict(cuts=[3,7,10],magnitudes=[4,5,7,13]))
+    live={"captured_utc":"2026-10-07T14:30:00+00:00","games":[{
+        "game_id":"2026_05_TB_DAL","season":2026,"week":5,
+        "away":"TB","home":"DAL","kickoff_utc":"2026-10-09T00:15:00+00:00",
+        "winner":{"home":{"ask":.72},"away":{"ask":.30}},
+        "spread_ladder":[
+            {"team":"DAL","strike":3.5,"bid":.57,"ask":.61,"ticker":"DAL4"},
+            {"team":"DAL","strike":4.5,"bid":.49,"ask":.53,"ticker":"DAL5"},
+            {"team":"DAL","strike":5.5,"bid":.40,"ask":.44,"ticker":"DAL6"},
+        ]}]}
+    file=data/"kalshi_live_board.json"
+    file.write_text(json.dumps(live))
+    b.render_all(tmp_path/"public",data,now=NOW)
+    html=(tmp_path/"public"/"index.html").read_text()
+    assert "Kalshi YES ask · TB $0.300 · DAL $0.720" in html
+    assert "DAL YES at Kalshi $0.720" in html
+    assert "Market DAL −4.5" in html
+    assert "Market DAL −9.5" not in html
+    assert "DAL −485" not in html
+    # A stale snapshot is unavailable, never silently replaced by sportsbook.
+    live["captured_utc"]="2026-10-07T08:00:00+00:00"
+    file.write_text(json.dumps(live))
+    b.render_all(tmp_path/"public",data,now=NOW)
+    stale=(tmp_path/"public"/"index.html").read_text()
+    assert "Kalshi quote unavailable" in stale
+    assert "DAL YES at Kalshi $0.720" not in stale
