@@ -902,14 +902,18 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         hq = num(current_quote.get("home_ask")) if current_quote else math.nan
         aq = num(current_quote.get("away_ask")) if current_quote else math.nan
         q = hq/(hq+aq) if math.isfinite(hq) and math.isfinite(aq) else math.nan
-        bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
+        # Choice of team is the immutable model forecast. Quoted price, if any,
+        # is taken exclusively from Kalshi, never the sportsbook flat_bets helper.
         team = home if p > .5 else away if p < .5 else ""
         flags = []
         if pd.notna(r.get("result")):
             flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
-            if team and bet.result in ("W", "L", "P"):
-                flags.append(f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
-                             f"Moneyline result {esc(team)} · {bet.result}</span>")
+            outcome = num(r.get("home won"))
+            if team and outcome in (0., .5, 1.):
+                result = "P" if outcome == .5 else (
+                    "W" if (outcome == 1.) == (team == home) else "L")
+                flags.append(f"<span class='badge {'w' if result == 'W' else 'l' if result == 'L' else ''}'>"
+                             f"Model winner {esc(team)} · {result}</span>")
         else:
             if r["game_id"] in recorded:
                 flags.append("<span class='badge'>Locked</span>")
@@ -928,7 +932,7 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         edge_text = f' · {edge:g}-point Kalshi handicap signal' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
         moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
         if team:
-            moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
+            moneyline_pick += f' · {pct(p if team == home else 1-p)} model win probability'
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
                  f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
