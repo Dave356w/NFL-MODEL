@@ -856,7 +856,8 @@ def kalshi_live_quotes(data, now):
             line=(1 if fav==rec["home"] else -1)*float(best["strike"]) if best else math.nan
             output[rec["game_id"]]={"home_ask":h,"away_ask":a,"kalshi_line":line,
                 "spread_ticker":best["ticker"] if best else "",
-                "captured_utc":rec["captured_utc"]}
+                "captured_utc":rec["captured_utc"],
+                "spread_ladder":rec.get("spread_ladder",[])}
         return output
     except (ValueError,TypeError,KeyError,OverflowError):
         return {}
@@ -933,8 +934,25 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         moneyline_pick = (f"{esc(team)} YES at Kalshi ${hq if team==home else aq:.3f}" if current_quote and team else "Kalshi quote unavailable — no priced bet")
         if team:
             moneyline_pick += f' · {pct(p if team == home else 1-p)} model win probability'
+        alt_text="Kalshi alternate quote unavailable"
+        if current_quote and math.isfinite(ks):
+            raw=model_spread(r)
+            if math.isfinite(raw) and abs(raw)>=.5 and abs(raw-ks)>1e-9:
+                target=math.floor(abs(raw))+.5
+                raw_favorite=home if raw>0 else away
+                raw_side=home if raw>ks else away
+                rungs=[q for q in current_quote.get("spread_ladder",[])
+                       if q.get("team")==raw_favorite and math.isclose(num(q.get("strike")),target)
+                       and 0<num(q.get("bid"))<num(q.get("ask"))<1]
+                if len(rungs)==1:
+                    rung=rungs[0]
+                    is_yes=raw_side==raw_favorite
+                    quote_ask=float(rung["ask"]) if is_yes else 1-float(rung["bid"])
+                    alt_text=(f"{esc(raw_side)} {'YES' if is_yes else 'NO'} "
+                              f"at >{target:g} margin · Kalshi ${quote_ask:.3f}")
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
-                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
+                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span>"
+                 f"<span class='kind'>Model alt</span><span>{alt_text}</span></div>")
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
         band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
