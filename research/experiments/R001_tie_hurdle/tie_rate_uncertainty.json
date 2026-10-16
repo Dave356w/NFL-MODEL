@@ -1,0 +1,10 @@
+{
+  "n": 816,
+  "ties": 1,
+  "observed_rate": 0.0012254901960784314,
+  "clopper_pearson_ci95": [
+    3.102624414707473e-05,
+    0.006808898096458874
+  ],
+  "note": "Binomial count interval assumes independent equal-rate trials; descriptive with changing NFL contexts."
+}

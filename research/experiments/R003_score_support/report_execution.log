@@ -1,0 +1,47 @@
+{
+  "primary": {
+    "sample": "historical_2023_25",
+    "shape": "empirical",
+    "comparator": "A_market",
+    "metric": "joint_nll",
+    "primary": true,
+    "n": 816,
+    "baseline": 7.125371553806147,
+    "candidate": 7.125085395603681,
+    "gain": 0.00028615820246593004,
+    "ci95": [
+      0.0002566189534217582,
+      0.0003194377444592511
+    ],
+    "two_contrast_ci": [
+      0.00025288570420257847,
+      0.0003247148043872129
+    ],
+    "nine_contrast_sensitivity_ci": [
+      0.0002462591028399939,
+      0.00033836391770058637
+    ]
+  },
+  "decision": {
+    "experiment": "R003",
+    "historical_hypothesis_supported": false,
+    "gates": {
+      "practical_gain": false,
+      "adjusted_interval_positive": true,
+      "all_seasons_positive": true,
+      "secondary_tolerances": true,
+      "integrity": true
+    },
+    "recommendation": "reject advancement of this fixed candidate",
+    "secondary_violations": [],
+    "independent_validation": false,
+    "production_promotion": false,
+    "forward_consideration": false,
+    "mechanism_identified": null,
+    "limitations": [
+      "Previously exposed historical sample; unknown quote timestamps.",
+      "No prospective outcomes or executable-price claims.",
+      "Reachability conditioning alone does not model frequencies of common football scores."
+    ]
+  }
+}

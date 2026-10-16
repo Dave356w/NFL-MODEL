@@ -1,0 +1,26 @@
+{
+  "previous_artifacts_unchanged": true,
+  "previous_artifact_count": 59,
+  "current": {
+    "R002_ot_transitions": {
+      "output_checks": 22,
+      "all_passed": true,
+      "rows": 14772,
+      "deterministic": true,
+      "source_and_protocol_current": true
+    },
+    "R003_score_support": {
+      "output_checks": 20,
+      "all_passed": true,
+      "rows": 9848,
+      "deterministic": true,
+      "source_and_protocol_current": true
+    }
+  },
+  "final_unit_tests": "63 passed; 0 current failures",
+  "retained_failures": [
+    "R003 initial truncated gzip/report failure",
+    "R003 initial repeat CSV equality failure"
+  ],
+  "production_mutations": false
+}

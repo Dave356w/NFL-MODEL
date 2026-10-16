@@ -1,0 +1,122 @@
+[
+  {
+    "shape": "smooth",
+    "game_id": "2025_04_GB_DAL",
+    "joint_nll_gain": -2.155371667008657,
+    "tie": true
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2023_14_HOU_NYJ",
+    "joint_nll_gain": 0.03227831237568779,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2023_13_ATL_NYJ",
+    "joint_nll_gain": 0.03171161401689915,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2023_15_ATL_CAR",
+    "joint_nll_gain": 0.031100943228706157,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2025_03_PIT_NE",
+    "joint_nll_gain": 0.030130838316893893,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2023_14_JAX_CLE",
+    "joint_nll_gain": 0.029832547532944176,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2023_11_PIT_CLE",
+    "joint_nll_gain": 0.02980672993921285,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2025_02_DEN_IND",
+    "joint_nll_gain": 0.02977757583083207,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2025_04_SEA_ARI",
+    "joint_nll_gain": 0.029773493366532122,
+    "tie": false
+  },
+  {
+    "shape": "smooth",
+    "game_id": "2024_17_MIA_CLE",
+    "joint_nll_gain": 0.029766222963245603,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2025_04_GB_DAL",
+    "joint_nll_gain": -2.0095786766187462,
+    "tie": true
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2023_14_HOU_NYJ",
+    "joint_nll_gain": 0.027551926675873695,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2023_13_ATL_NYJ",
+    "joint_nll_gain": 0.027014718434816842,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2023_15_ATL_CAR",
+    "joint_nll_gain": 0.026500763249059034,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2025_03_PIT_NE",
+    "joint_nll_gain": 0.025370923682991986,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2023_11_PIT_CLE",
+    "joint_nll_gain": 0.025191815018997588,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2023_14_JAX_CLE",
+    "joint_nll_gain": 0.025182961348892974,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2024_17_MIA_CLE",
+    "joint_nll_gain": 0.025173228302598716,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2025_02_DEN_IND",
+    "joint_nll_gain": 0.025106390152543234,
+    "tie": false
+  },
+  {
+    "shape": "empirical",
+    "game_id": "2025_04_SEA_ARI",
+    "joint_nll_gain": 0.025072274116232585,
+    "tie": false
+  }
+]

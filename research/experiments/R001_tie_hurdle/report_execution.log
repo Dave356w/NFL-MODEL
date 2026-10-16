@@ -1,0 +1,30 @@
+{
+  "primary": {
+    "sample": "historical_2023_25",
+    "shape": "empirical",
+    "metric": "joint_nll",
+    "primary": true,
+    "n": 816,
+    "baseline": 7.125371553806147,
+    "candidate": 7.106782443937767,
+    "baseline_minus_candidate": 0.01858910986837853,
+    "ci95": [
+      0.013490147344642805,
+      0.02128705540142611
+    ],
+    "seven_contrast_sensitivity_ci": [
+      0.010955703338697713,
+      0.02140081413139194
+    ],
+    "interpretation": "positive favors lower candidate loss; coverage/width differences are not quality rankings"
+  },
+  "decision": {
+    "historical_hypothesis_supported": true,
+    "recommendation": "retain for research",
+    "independent_validation": false,
+    "production_promotion": false,
+    "forward_consideration": "planned, locked comparative assessment only; no qualification claim",
+    "secondary_tolerance_violations": [],
+    "next_experiment": "R002: explicit tie resolution with score transitions; register a single rule before fresh evaluation"
+  }
+}

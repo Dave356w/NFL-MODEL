@@ -1,0 +1,162 @@
+[
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_18_NYJ_NE",
+    "gain": 0.005750036104188894,
+    "home_score": 3,
+    "away_score": 17
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2024_17_MIA_CLE",
+    "gain": 0.0034355917981807593,
+    "home_score": 3,
+    "away_score": 20
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_14_NE_PIT",
+    "gain": 0.003390153493099568,
+    "home_score": 18,
+    "away_score": 21
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_15_ATL_CAR",
+    "gain": 0.003337904180590101,
+    "home_score": 9,
+    "away_score": 7
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_14_HOU_NYJ",
+    "gain": 0.002895488975921623,
+    "home_score": 30,
+    "away_score": 6
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_18_PIT_BAL",
+    "gain": 0.0027604006294472683,
+    "home_score": 10,
+    "away_score": 17
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_17_NYJ_CLE",
+    "gain": 0.002258635386145791,
+    "home_score": 37,
+    "away_score": 20
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_13_ATL_NYJ",
+    "gain": 0.0022129269790918116,
+    "home_score": 8,
+    "away_score": 13
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2023_18_KC_LAC",
+    "gain": 0.0019283735405615232,
+    "home_score": 12,
+    "away_score": 13
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "game_id": "2025_14_TEN_CLE",
+    "gain": 0.0019064035451368255,
+    "home_score": 29,
+    "away_score": 31
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_18_NYJ_NE",
+    "gain": 0.004891598958561616,
+    "home_score": 3,
+    "away_score": 17
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2024_17_MIA_CLE",
+    "gain": 0.002921376994284408,
+    "home_score": 3,
+    "away_score": 20
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_14_NE_PIT",
+    "gain": 0.002884366621807466,
+    "home_score": 18,
+    "away_score": 21
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_15_ATL_CAR",
+    "gain": 0.0028387514688601456,
+    "home_score": 9,
+    "away_score": 7
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_14_HOU_NYJ",
+    "gain": 0.0024622316435145564,
+    "home_score": 30,
+    "away_score": 6
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_18_PIT_BAL",
+    "gain": 0.0023470665701372795,
+    "home_score": 10,
+    "away_score": 17
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_17_NYJ_CLE",
+    "gain": 0.0019206126473454432,
+    "home_score": 37,
+    "away_score": 20
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_13_ATL_NYJ",
+    "gain": 0.0018819271983305796,
+    "home_score": 8,
+    "away_score": 13
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2023_18_KC_LAC",
+    "gain": 0.0016395129337762882,
+    "home_score": 12,
+    "away_score": 13
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "game_id": "2025_14_TEN_CLE",
+    "gain": 0.001621079385127011,
+    "home_score": 29,
+    "away_score": 31
+  }
+]

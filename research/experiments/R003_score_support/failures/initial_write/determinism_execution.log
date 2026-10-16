@@ -1,0 +1,8 @@
+{"experiment": "R003", "rows": 9848, "baseline_max_error": 2.1316282072803006e-14}
+Traceback (most recent call last):
+  File "/workspace/scratch/438e23d785f0/work/research/check_ablation_determinism.py", line 33, in <module>
+    run(parser.parse_args().experiment)
+  File "/workspace/scratch/438e23d785f0/work/research/check_ablation_determinism.py", line 27, in run
+    if not result['all_passed']:raise AssertionError(result)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'experiment': 'R003', 'all_passed': False, 'checks': {'predictions.csv.gz': False, 'transform_audit.csv': True, 'provenance.json': True, 'marginal_probabilities.npz_arrays': True, 'example_joint_probabilities.npz_arrays': True, 'support_mask.npy': True}, 'note': 'NPZ arrays, not archive metadata timestamps, are numerical model content.'}

@@ -1,0 +1,82 @@
+[
+  {
+    "shape": "smooth",
+    "comparator": "R001_tie_hurdle",
+    "annual_gain": {
+      "2023": 0.009904974677337182,
+      "2024": 0.01944344820554726,
+      "2025": 0.008021136387635294
+    },
+    "positive_game_fraction": 0.2647058823529412,
+    "leave_one_week_out_gain_range": [
+      0.011739089812514281,
+      0.013212559293761618
+    ],
+    "leave_one_season_out_gain": {
+      "2023": 0.013732292296591276,
+      "2024": 0.008963055532486237,
+      "2025": 0.01467421144144222
+    },
+    "top_ten_absolute_contribution_fraction": 0.06977486370707275
+  },
+  {
+    "shape": "smooth",
+    "comparator": "A_market",
+    "annual_gain": {
+      "2023": 0.03443817207472307,
+      "2024": 0.04484328280039999,
+      "2025": 0.024954311161612154
+    },
+    "positive_game_fraction": 0.29901960784313725,
+    "leave_one_week_out_gain_range": [
+      0.03396450873002208,
+      0.03719294691894249
+    ],
+    "leave_one_season_out_gain": {
+      "2023": 0.03489879698100607,
+      "2024": 0.029696241618167613,
+      "2025": 0.03964072743756153
+    },
+    "top_ten_absolute_contribution_fraction": 0.15155070694530262
+  },
+  {
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "annual_gain": {
+      "2023": 0.005717191259771718,
+      "2024": 0.011842722179074797,
+      "2025": 0.0037033064879524215
+    },
+    "positive_game_fraction": 0.2647058823529412,
+    "leave_one_week_out_gain_range": [
+      0.006407176985948388,
+      0.007657900726574543
+    ],
+    "leave_one_season_out_gain": {
+      "2023": 0.007773014333513608,
+      "2024": 0.00471024887386207,
+      "2025": 0.008779956719423257
+    },
+    "top_ten_absolute_contribution_fraction": 0.08243869790210977
+  },
+  {
+    "shape": "empirical",
+    "comparator": "A_market",
+    "annual_gain": {
+      "2023": 0.026488976917070216,
+      "2024": 0.033252079706688864,
+      "2025": 0.01728949290817543
+    },
+    "positive_game_fraction": 0.3014705882352941,
+    "leave_one_week_out_gain_range": [
+      0.024958561829405985,
+      0.027929514045538117
+    ],
+    "leave_one_season_out_gain": {
+      "2023": 0.02527078630743215,
+      "2024": 0.02188923491262282,
+      "2025": 0.029870528311879536
+    },
+    "top_ten_absolute_contribution_fraction": 0.18254951933901137
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "registration_commit": "efbbeefba35e6eb280bad81af66000cdf55deb37",
+  "protocol_sha256": "04c4df8d24d6e9854af9a9660fbdda7df9e5f9d1058b3fc178930fd1abd422f5",
+  "scope": "local pre-execution lock on already exposed historical outcomes; not independent validation"
+}

@@ -1,0 +1,9 @@
+{
+  "error": "Truncated gzip output detected before metric evaluation",
+  "rows_decompressible": 9613,
+  "expected_rows_including_header": 9849,
+  "gzip_eof": false,
+  "sha256": "f7b72821ab46c1f311fef35d3dae87b2dedd49617c3a4e8e5ec6cf175b175e13",
+  "root_cause": "not yet identified",
+  "response": "Preserve output and logs; exact-spec rerun only; no parameter change."
+}

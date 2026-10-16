@@ -1,0 +1,3122 @@
+[
+  {
+    "basis": "annual_2017",
+    "arm": "empirical__A_market",
+    "bets": 253,
+    "units": 8.366857315088536,
+    "roi": 0.033070582273077215,
+    "roi_se": 0.04373295589961649,
+    "roi_ci95": [
+      -0.07597953954565499,
+      0.14493516099841874
+    ],
+    "wins": 178,
+    "losses": 75,
+    "pushes": 0,
+    "market_null": -0.024111890989684973,
+    "market_favorite_picks": 248,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": 11.405318853550074,
+    "underdog_subset_units": -3.0384615384615383,
+    "paired_favorite_gain": -0.0224571476197159,
+    "paired_favorite_ci95": [
+      -0.060624035659079374,
+      0.015384615384615385
+    ],
+    "excess_over_market_null": 0.057182473262762205,
+    "excess_over_market_null_ci95": [
+      -0.051725136433315756,
+      0.16897682080674264
+    ],
+    "paired_underdog_gain": 0.2032226041642295,
+    "paired_underdog_ci95": [
+      -0.14038768138501612,
+      0.5348163929496714
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "empirical__B_residual",
+    "bets": 253,
+    "units": 6.644047789291241,
+    "roi": 0.026261058455696606,
+    "roi_se": 0.04384018887493408,
+    "roi_ci95": [
+      -0.09409921390439555,
+      0.14403390534455474
+    ],
+    "wins": 177,
+    "losses": 76,
+    "pushes": 0,
+    "market_null": -0.024111890989684977,
+    "market_favorite_picks": 247,
+    "market_underdog_picks": 6,
+    "favorite_subset_units": 10.682509327752785,
+    "underdog_subset_units": -4.038461538461538,
+    "paired_favorite_gain": -0.02926667143709651,
+    "paired_favorite_ci95": [
+      -0.0890413012480553,
+      0.015629788538155075
+    ],
+    "excess_over_market_null": 0.0503729494453816,
+    "excess_over_market_null_ci95": [
+      -0.070073762627963,
+      0.16808011476415474
+    ],
+    "paired_underdog_gain": 0.1964130803468489,
+    "paired_underdog_ci95": [
+      -0.15043767433105415,
+      0.53173163052449
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "empirical__C_absolute",
+    "bets": 253,
+    "units": 4.977381122624573,
+    "roi": 0.019673443172429143,
+    "roi_se": 0.04395311964363313,
+    "roi_ci95": [
+      -0.09794298290434181,
+      0.1338544746449568
+    ],
+    "wins": 176,
+    "losses": 77,
+    "pushes": 0,
+    "market_null": -0.024111890989684977,
+    "market_favorite_picks": 246,
+    "market_underdog_picks": 7,
+    "favorite_subset_units": 10.015842661086113,
+    "underdog_subset_units": -5.038461538461538,
+    "paired_favorite_gain": -0.03585428672036397,
+    "paired_favorite_ci95": [
+      -0.0952930024928772,
+      0.009061888579960872
+    ],
+    "excess_over_market_null": 0.04378533416211414,
+    "excess_over_market_null_ci95": [
+      -0.07407585119474554,
+      0.15787229377033085
+    ],
+    "paired_underdog_gain": 0.18982546506358144,
+    "paired_underdog_ci95": [
+      -0.15363832024424978,
+      0.5207089777163003
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "empirical__C_squared",
+    "bets": 253,
+    "units": 8.52900354150363,
+    "roi": 0.03371147644863095,
+    "roi_se": 0.04378113478455183,
+    "roi_ci95": [
+      -0.07894495423420464,
+      0.14706394541481374
+    ],
+    "wins": 178,
+    "losses": 75,
+    "pushes": 0,
+    "market_null": -0.024111890989684973,
+    "market_favorite_picks": 248,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": 11.56746507996517,
+    "underdog_subset_units": -3.0384615384615383,
+    "paired_favorite_gain": -0.021816253444162166,
+    "paired_favorite_ci95": [
+      -0.06758761234235146,
+      0.015693883225208503
+    ],
+    "excess_over_market_null": 0.05782336743831594,
+    "excess_over_market_null_ci95": [
+      -0.05485384455368258,
+      0.17113162502594859
+    ],
+    "paired_underdog_gain": 0.20386349833978323,
+    "paired_underdog_ci95": [
+      -0.1389949442822804,
+      0.5354119324913985
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "smooth__A_market",
+    "bets": 253,
+    "units": 8.366857315088536,
+    "roi": 0.033070582273077215,
+    "roi_se": 0.04373295589961649,
+    "roi_ci95": [
+      -0.07597953954565499,
+      0.14493516099841874
+    ],
+    "wins": 178,
+    "losses": 75,
+    "pushes": 0,
+    "market_null": -0.024111890989684973,
+    "market_favorite_picks": 248,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": 11.405318853550074,
+    "underdog_subset_units": -3.0384615384615383,
+    "paired_favorite_gain": -0.0224571476197159,
+    "paired_favorite_ci95": [
+      -0.060624035659079374,
+      0.015384615384615385
+    ],
+    "excess_over_market_null": 0.057182473262762205,
+    "excess_over_market_null_ci95": [
+      -0.051725136433315756,
+      0.16897682080674264
+    ],
+    "paired_underdog_gain": 0.2032226041642295,
+    "paired_underdog_ci95": [
+      -0.14038768138501612,
+      0.5348163929496714
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "smooth__B_residual",
+    "bets": 253,
+    "units": 4.81523489620948,
+    "roi": 0.019032548996875415,
+    "roi_se": 0.04390431631609222,
+    "roi_ci95": [
+      -0.09158032228294254,
+      0.130795111714167
+    ],
+    "wins": 176,
+    "losses": 77,
+    "pushes": 0,
+    "market_null": -0.024111890989684977,
+    "market_favorite_picks": 246,
+    "market_underdog_picks": 7,
+    "favorite_subset_units": 9.853696434671019,
+    "underdog_subset_units": -5.038461538461538,
+    "paired_favorite_gain": -0.0364951808959177,
+    "paired_favorite_ci95": [
+      -0.08333756667017513,
+      0.007673180994813291
+    ],
+    "excess_over_market_null": 0.0431444399865604,
+    "excess_over_market_null_ci95": [
+      -0.06749431599501322,
+      0.15501338353287752
+    ],
+    "paired_underdog_gain": 0.18918457088802773,
+    "paired_underdog_ci95": [
+      -0.15105207240007934,
+      0.5205208832621744
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "smooth__C_absolute",
+    "bets": 253,
+    "units": 3.03398489620948,
+    "roi": 0.011992035162883321,
+    "roi_se": 0.04398371664755622,
+    "roi_ci95": [
+      -0.10538383868085652,
+      0.1278765835040354
+    ],
+    "wins": 175,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.024111890989684977,
+    "market_favorite_picks": 245,
+    "market_underdog_picks": 8,
+    "favorite_subset_units": 9.072446434671019,
+    "underdog_subset_units": -6.038461538461538,
+    "paired_favorite_gain": -0.0435356947299098,
+    "paired_favorite_ci95": [
+      -0.1030366883677461,
+      0.007459032818399192
+    ],
+    "excess_over_market_null": 0.036103926152568314,
+    "excess_over_market_null_ci95": [
+      -0.08124795295745776,
+      0.151890472594248
+    ],
+    "paired_underdog_gain": 0.1821440570540356,
+    "paired_underdog_ci95": [
+      -0.16289853435711457,
+      0.5173141492388221
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "smooth__C_squared",
+    "bets": 253,
+    "units": 4.918940648421868,
+    "roi": 0.019442453155817663,
+    "roi_se": 0.04393445873361336,
+    "roi_ci95": [
+      -0.09080680363852524,
+      0.1311727344991956
+    ],
+    "wins": 176,
+    "losses": 77,
+    "pushes": 0,
+    "market_null": -0.024111890989684977,
+    "market_favorite_picks": 246,
+    "market_underdog_picks": 7,
+    "favorite_subset_units": 9.957402186883408,
+    "underdog_subset_units": -5.038461538461538,
+    "paired_favorite_gain": -0.036085276736975445,
+    "paired_favorite_ci95": [
+      -0.08174235350540071,
+      0.007673180994813291
+    ],
+    "excess_over_market_null": 0.04355434414550266,
+    "excess_over_market_null_ci95": [
+      -0.06664627823009385,
+      0.15515959441993976
+    ],
+    "paired_underdog_gain": 0.18959447504696994,
+    "paired_underdog_ci95": [
+      -0.15104178413101074,
+      0.5205208832621744
+    ]
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "control_favorite",
+    "bets": 253,
+    "units": 14.048515662876657,
+    "roi": 0.05552772989279311,
+    "roi_se": 0.04353579766496718,
+    "roi_ci95": [
+      -0.049155386034257884,
+      0.15832997297520698
+    ],
+    "wins": 181,
+    "losses": 72,
+    "pushes": 0,
+    "market_null": -0.02411189098968497
+  },
+  {
+    "basis": "annual_2017",
+    "arm": "control_underdog",
+    "bets": 253,
+    "units": -43.048461538461545,
+    "roi": -0.17015202189115236,
+    "roi_se": 0.08986391631640006,
+    "roi_ci95": [
+      -0.39386374108818,
+      0.06870244369157412
+    ],
+    "wins": 72,
+    "losses": 181,
+    "pushes": 0,
+    "market_null": -0.02411189098968497
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "empirical__A_market",
+    "bets": 254,
+    "units": -5.808883437451087,
+    "roi": -0.022869619832484592,
+    "roi_se": 0.044329717470214386,
+    "roi_ci95": [
+      -0.10027527561659123,
+      0.05355180894719311
+    ],
+    "wins": 169,
+    "losses": 83,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 249,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": -6.96042189898955,
+    "underdog_subset_units": 1.1515384615384614,
+    "paired_favorite_gain": 0.009051383173356131,
+    "paired_favorite_ci95": [
+      -0.015362911134797826,
+      0.03374376544926418
+    ],
+    "excess_over_market_null": 0.0015944383203820715,
+    "excess_over_market_null_ci95": [
+      -0.07579231626125298,
+      0.0780184834212139
+    ],
+    "paired_underdog_gain": -0.006970164956651766,
+    "paired_underdog_ci95": [
+      -0.23807635088308607,
+      0.23762494659495423
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "empirical__B_residual",
+    "bets": 254,
+    "units": -5.8513309898986385,
+    "roi": -0.0230367361807033,
+    "roi_se": 0.044315856684836896,
+    "roi_ci95": [
+      -0.09790281781599158,
+      0.050795572182360554
+    ],
+    "wins": 169,
+    "losses": 83,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 251,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.0513309898986405,
+    "underdog_subset_units": 1.2000000000000002,
+    "paired_favorite_gain": 0.00888426682513742,
+    "paired_favorite_ci95": [
+      -0.015547169811320755,
+      0.034114665796492395
+    ],
+    "excess_over_market_null": 0.00142732197216336,
+    "excess_over_market_null_ci95": [
+      -0.07343125905780794,
+      0.07523046395140859
+    ],
+    "paired_underdog_gain": -0.007137281304870459,
+    "paired_underdog_ci95": [
+      -0.230292635328288,
+      0.22888913643744113
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "empirical__C_absolute",
+    "bets": 254,
+    "units": -7.858883437451086,
+    "roi": -0.030940485974216874,
+    "roi_se": 0.0442923496830218,
+    "roi_ci95": [
+      -0.10368630752558619,
+      0.042009732146571485
+    ],
+    "wins": 168,
+    "losses": 84,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 250,
+    "market_underdog_picks": 4,
+    "favorite_subset_units": -7.96042189898955,
+    "underdog_subset_units": 0.10153846153846136,
+    "paired_favorite_gain": 0.0009805170316238498,
+    "paired_favorite_ci95": [
+      -0.022487066619824067,
+      0.02379581507986177
+    ],
+    "excess_over_market_null": -0.006476427821350214,
+    "excess_over_market_null_ci95": [
+      -0.07912222081431419,
+      0.06631878874550713
+    ],
+    "paired_underdog_gain": -0.015041031098384044,
+    "paired_underdog_ci95": [
+      -0.24540343752667387,
+      0.22629719270086024
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "empirical__C_squared",
+    "bets": 254,
+    "units": -3.889792528360176,
+    "roi": -0.015314143812441637,
+    "roi_se": 0.044315818574894965,
+    "roi_ci95": [
+      -0.09152796478582384,
+      0.059036041490503774
+    ],
+    "wins": 170,
+    "losses": 82,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 250,
+    "market_underdog_picks": 4,
+    "favorite_subset_units": -6.051330989898638,
+    "underdog_subset_units": 2.161538461538462,
+    "paired_favorite_gain": 0.01660685919339908,
+    "paired_favorite_ci95": [
+      -0.014962058707514289,
+      0.04793966817496229
+    ],
+    "excess_over_market_null": 0.00914991434042502,
+    "excess_over_market_null_ci95": [
+      -0.06688457836238722,
+      0.0835494298469303
+    ],
+    "paired_underdog_gain": 0.0005853110633911869,
+    "paired_underdog_ci95": [
+      -0.22354974283943105,
+      0.23652608015951257
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "smooth__A_market",
+    "bets": 254,
+    "units": -8.001330989898639,
+    "roi": -0.03150130310983716,
+    "roi_se": 0.04423889666997575,
+    "roi_ci95": [
+      -0.10564117344139219,
+      0.04261003866667423
+    ],
+    "wins": 168,
+    "losses": 84,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 252,
+    "market_underdog_picks": 2,
+    "favorite_subset_units": -8.05133098989864,
+    "underdog_subset_units": 0.050000000000000044,
+    "paired_favorite_gain": 0.00041969989600356485,
+    "paired_favorite_ci95": [
+      -0.023227843343606704,
+      0.023745173745173744
+    ],
+    "excess_over_market_null": -0.007037244956970492,
+    "excess_over_market_null_ci95": [
+      -0.08122622023415715,
+      0.06711152305790127
+    ],
+    "paired_underdog_gain": -0.015601848234004326,
+    "paired_underdog_ci95": [
+      -0.24567602865658492,
+      0.22816056740715657
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "smooth__B_residual",
+    "bets": 254,
+    "units": -5.8513309898986385,
+    "roi": -0.0230367361807033,
+    "roi_se": 0.044315856684836896,
+    "roi_ci95": [
+      -0.09790281781599158,
+      0.050795572182360554
+    ],
+    "wins": 169,
+    "losses": 83,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 251,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.0513309898986405,
+    "underdog_subset_units": 1.2000000000000002,
+    "paired_favorite_gain": 0.00888426682513742,
+    "paired_favorite_ci95": [
+      -0.015547169811320755,
+      0.034114665796492395
+    ],
+    "excess_over_market_null": 0.00142732197216336,
+    "excess_over_market_null_ci95": [
+      -0.07343125905780794,
+      0.07523046395140859
+    ],
+    "paired_underdog_gain": -0.007137281304870459,
+    "paired_underdog_ci95": [
+      -0.230292635328288,
+      0.22888913643744113
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "smooth__C_absolute",
+    "bets": 254,
+    "units": -5.8513309898986385,
+    "roi": -0.0230367361807033,
+    "roi_se": 0.044315856684836896,
+    "roi_ci95": [
+      -0.09790281781599158,
+      0.050795572182360554
+    ],
+    "wins": 169,
+    "losses": 83,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 251,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.0513309898986405,
+    "underdog_subset_units": 1.2000000000000002,
+    "paired_favorite_gain": 0.00888426682513742,
+    "paired_favorite_ci95": [
+      -0.015547169811320755,
+      0.034114665796492395
+    ],
+    "excess_over_market_null": 0.00142732197216336,
+    "excess_over_market_null_ci95": [
+      -0.07343125905780794,
+      0.07523046395140859
+    ],
+    "paired_underdog_gain": -0.007137281304870459,
+    "paired_underdog_ci95": [
+      -0.230292635328288,
+      0.22888913643744113
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "smooth__C_squared",
+    "bets": 254,
+    "units": -5.8513309898986385,
+    "roi": -0.0230367361807033,
+    "roi_se": 0.044315856684836896,
+    "roi_ci95": [
+      -0.09790281781599158,
+      0.050795572182360554
+    ],
+    "wins": 169,
+    "losses": 83,
+    "pushes": 2,
+    "market_null": -0.024464058152866668,
+    "market_favorite_picks": 251,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.0513309898986405,
+    "underdog_subset_units": 1.2000000000000002,
+    "paired_favorite_gain": 0.00888426682513742,
+    "paired_favorite_ci95": [
+      -0.015547169811320755,
+      0.034114665796492395
+    ],
+    "excess_over_market_null": 0.00142732197216336,
+    "excess_over_market_null_ci95": [
+      -0.07343125905780794,
+      0.07523046395140859
+    ],
+    "paired_underdog_gain": -0.007137281304870459,
+    "paired_underdog_ci95": [
+      -0.230292635328288,
+      0.22888913643744113
+    ]
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "control_favorite",
+    "bets": 254,
+    "units": -8.107934763483543,
+    "roi": -0.03192100300584072,
+    "roi_se": 0.04420031602804621,
+    "roi_ci95": [
+      -0.09598730213364916,
+      0.034516273229009777
+    ],
+    "wins": 168,
+    "losses": 84,
+    "pushes": 2,
+    "market_null": -0.024464058152866668
+  },
+  {
+    "basis": "annual_2018",
+    "arm": "control_underdog",
+    "bets": 254,
+    "units": -4.038461538461541,
+    "roi": -0.015899454875832837,
+    "roi_se": 0.09613931474218286,
+    "roi_ci95": [
+      -0.1911518344378642,
+      0.1537918027918028
+    ],
+    "wins": 84,
+    "losses": 168,
+    "pushes": 2,
+    "market_null": -0.02446405815286666
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "empirical__A_market",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733359
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -19.778525248941698,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.051084771585059356,
+    "excess_over_market_null_ci95": [
+      -0.1373697208266972,
+      0.0332755446711616
+    ],
+    "paired_underdog_gain": -0.10709077612394773,
+    "paired_underdog_ci95": [
+      -0.4030150622731912,
+      0.17008426451736347
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "empirical__B_residual",
+    "bets": 254,
+    "units": -17.798133092078952,
+    "roi": -0.07007139012629508,
+    "roi_se": 0.04428976731588852,
+    "roi_ci95": [
+      -0.149060396120223,
+      0.00904293208352845
+    ],
+    "wins": 164,
+    "losses": 89,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.7785252489417,
+    "underdog_subset_units": 0.9803921568627452,
+    "paired_favorite_gain": 0.007796819515207658,
+    "paired_favorite_ci95": [
+      0.0,
+      0.023860146468225846
+    ],
+    "excess_over_market_null": -0.0432879520698517,
+    "excess_over_market_null_ci95": [
+      -0.12226309384997788,
+      0.03586379541499504
+    ],
+    "paired_underdog_gain": -0.09929395660874006,
+    "paired_underdog_ci95": [
+      -0.38459624302342565,
+      0.17270741989053318
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "empirical__C_absolute",
+    "bets": 254,
+    "units": -17.798133092078952,
+    "roi": -0.07007139012629508,
+    "roi_se": 0.04428976731588852,
+    "roi_ci95": [
+      -0.149060396120223,
+      0.00904293208352845
+    ],
+    "wins": 164,
+    "losses": 89,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.7785252489417,
+    "underdog_subset_units": 0.9803921568627452,
+    "paired_favorite_gain": 0.007796819515207658,
+    "paired_favorite_ci95": [
+      0.0,
+      0.023860146468225846
+    ],
+    "excess_over_market_null": -0.0432879520698517,
+    "excess_over_market_null_ci95": [
+      -0.12226309384997788,
+      0.03586379541499504
+    ],
+    "paired_underdog_gain": -0.09929395660874006,
+    "paired_underdog_ci95": [
+      -0.38459624302342565,
+      0.17270741989053318
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "empirical__C_squared",
+    "bets": 254,
+    "units": -17.798133092078952,
+    "roi": -0.07007139012629508,
+    "roi_se": 0.04428976731588852,
+    "roi_ci95": [
+      -0.149060396120223,
+      0.00904293208352845
+    ],
+    "wins": 164,
+    "losses": 89,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.7785252489417,
+    "underdog_subset_units": 0.9803921568627452,
+    "paired_favorite_gain": 0.007796819515207658,
+    "paired_favorite_ci95": [
+      0.0,
+      0.023860146468225846
+    ],
+    "excess_over_market_null": -0.0432879520698517,
+    "excess_over_market_null_ci95": [
+      -0.12226309384997788,
+      0.03586379541499504
+    ],
+    "paired_underdog_gain": -0.09929395660874006,
+    "paired_underdog_ci95": [
+      -0.38459624302342565,
+      0.17270741989053318
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "smooth__A_market",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733359
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -19.778525248941698,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.051084771585059356,
+    "excess_over_market_null_ci95": [
+      -0.1373697208266972,
+      0.0332755446711616
+    ],
+    "paired_underdog_gain": -0.10709077612394773,
+    "paired_underdog_ci95": [
+      -0.4030150622731912,
+      0.17008426451736347
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "smooth__B_residual",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733359
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -19.778525248941698,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.051084771585059356,
+    "excess_over_market_null_ci95": [
+      -0.1373697208266972,
+      0.0332755446711616
+    ],
+    "paired_underdog_gain": -0.10709077612394773,
+    "paired_underdog_ci95": [
+      -0.4030150622731912,
+      0.17008426451736347
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "smooth__C_absolute",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733359
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -19.778525248941698,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.051084771585059356,
+    "excess_over_market_null_ci95": [
+      -0.1373697208266972,
+      0.0332755446711616
+    ],
+    "paired_underdog_gain": -0.10709077612394773,
+    "paired_underdog_ci95": [
+      -0.4030150622731912,
+      0.17008426451736347
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "smooth__C_squared",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733359
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -19.778525248941698,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.051084771585059356,
+    "excess_over_market_null_ci95": [
+      -0.1373697208266972,
+      0.0332755446711616
+    ],
+    "paired_underdog_gain": -0.10709077612394773,
+    "paired_underdog_ci95": [
+      -0.4030150622731912,
+      0.17008426451736347
+    ]
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "control_favorite",
+    "bets": 254,
+    "units": -19.778525248941698,
+    "roi": -0.07786820964150275,
+    "roi_se": 0.04424509723162321,
+    "roi_ci95": [
+      -0.1642131248655904,
+      0.006338569814733358
+    ],
+    "wins": 163,
+    "losses": 90,
+    "pushes": 1,
+    "market_null": -0.02678343805644339
+  },
+  {
+    "basis": "annual_2019",
+    "arm": "control_underdog",
+    "bets": 254,
+    "units": 7.422531886541021,
+    "roi": 0.029222566482444964,
+    "roi_se": 0.0951606429921804,
+    "roi_ci95": [
+      -0.16975348883337116,
+      0.2390282683382438
+    ],
+    "wins": 90,
+    "losses": 163,
+    "pushes": 1,
+    "market_null": -0.026783438056443405
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "empirical__A_market",
+    "bets": 256,
+    "units": -7.28843954834601,
+    "roi": -0.0284704669857266,
+    "roi_se": 0.043609713934534146,
+    "roi_ci95": [
+      -0.10090492432701809,
+      0.04958233419916352
+    ],
+    "wins": 172,
+    "losses": 83,
+    "pushes": 1,
+    "market_null": -0.02677132013796955,
+    "market_favorite_picks": 255,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -6.288439548346012,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.007591391509433962,
+    "paired_favorite_ci95": [
+      -0.023227843343606704,
+      0.0
+    ],
+    "excess_over_market_null": -0.0016991468477570437,
+    "excess_over_market_null_ci95": [
+      -0.0740779613821305,
+      0.07610688857723441
+    ],
+    "paired_underdog_gain": 0.04968758589888879,
+    "paired_underdog_ci95": [
+      -0.18786534949452752,
+      0.29277098894649567
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "empirical__B_residual",
+    "bets": 256,
+    "units": -10.923298750267804,
+    "roi": -0.04266913574323361,
+    "roi_se": 0.043680477430551305,
+    "roi_ci95": [
+      -0.11175308123567973,
+      0.033840224514965066
+    ],
+    "wins": 170,
+    "losses": 85,
+    "pushes": 1,
+    "market_null": -0.026771320137969547,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.923298750267805,
+    "underdog_subset_units": -3.0,
+    "paired_favorite_gain": -0.02179006026694097,
+    "paired_favorite_ci95": [
+      -0.04459897469973084,
+      0.0
+    ],
+    "excess_over_market_null": -0.01589781560526405,
+    "excess_over_market_null_ci95": [
+      -0.0848887605075956,
+      0.06060268712299113
+    ],
+    "paired_underdog_gain": 0.035488917141381776,
+    "paired_underdog_ci95": [
+      -0.19874464921975699,
+      0.2781686361357532
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "empirical__C_absolute",
+    "bets": 256,
+    "units": -9.075841123149159,
+    "roi": -0.0354525043873014,
+    "roi_se": 0.0436563622337953,
+    "roi_ci95": [
+      -0.10700314177157964,
+      0.042634899514968676
+    ],
+    "wins": 171,
+    "losses": 84,
+    "pushes": 1,
+    "market_null": -0.02677132013796955,
+    "market_favorite_picks": 254,
+    "market_underdog_picks": 2,
+    "favorite_subset_units": -7.075841123149161,
+    "underdog_subset_units": -2.0,
+    "paired_favorite_gain": -0.014573428911008764,
+    "paired_favorite_ci95": [
+      -0.03641337471354188,
+      0.0
+    ],
+    "excess_over_market_null": -0.008681184249331847,
+    "excess_over_market_null_ci95": [
+      -0.08023494580612901,
+      0.06947692651775128
+    ],
+    "paired_underdog_gain": 0.042705548497313985,
+    "paired_underdog_ci95": [
+      -0.19323723970803308,
+      0.28711715658136655
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "empirical__C_squared",
+    "bets": 256,
+    "units": -10.923298750267804,
+    "roi": -0.04266913574323361,
+    "roi_se": 0.043680477430551305,
+    "roi_ci95": [
+      -0.11175308123567973,
+      0.033840224514965066
+    ],
+    "wins": 170,
+    "losses": 85,
+    "pushes": 1,
+    "market_null": -0.026771320137969547,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.923298750267805,
+    "underdog_subset_units": -3.0,
+    "paired_favorite_gain": -0.02179006026694097,
+    "paired_favorite_ci95": [
+      -0.04459897469973084,
+      0.0
+    ],
+    "excess_over_market_null": -0.01589781560526405,
+    "excess_over_market_null_ci95": [
+      -0.0848887605075956,
+      0.06060268712299113
+    ],
+    "paired_underdog_gain": 0.035488917141381776,
+    "paired_underdog_ci95": [
+      -0.19874464921975699,
+      0.2781686361357532
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "smooth__A_market",
+    "bets": 256,
+    "units": -7.28843954834601,
+    "roi": -0.0284704669857266,
+    "roi_se": 0.043609713934534146,
+    "roi_ci95": [
+      -0.10090492432701809,
+      0.04958233419916352
+    ],
+    "wins": 172,
+    "losses": 83,
+    "pushes": 1,
+    "market_null": -0.02677132013796955,
+    "market_favorite_picks": 255,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -6.288439548346012,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.007591391509433962,
+    "paired_favorite_ci95": [
+      -0.023227843343606704,
+      0.0
+    ],
+    "excess_over_market_null": -0.0016991468477570437,
+    "excess_over_market_null_ci95": [
+      -0.0740779613821305,
+      0.07610688857723441
+    ],
+    "paired_underdog_gain": 0.04968758589888879,
+    "paired_underdog_ci95": [
+      -0.18786534949452752,
+      0.29277098894649567
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "smooth__B_residual",
+    "bets": 256,
+    "units": -10.923298750267804,
+    "roi": -0.04266913574323361,
+    "roi_se": 0.043680477430551305,
+    "roi_ci95": [
+      -0.11175308123567973,
+      0.033840224514965066
+    ],
+    "wins": 170,
+    "losses": 85,
+    "pushes": 1,
+    "market_null": -0.026771320137969547,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.923298750267805,
+    "underdog_subset_units": -3.0,
+    "paired_favorite_gain": -0.02179006026694097,
+    "paired_favorite_ci95": [
+      -0.04459897469973084,
+      0.0
+    ],
+    "excess_over_market_null": -0.01589781560526405,
+    "excess_over_market_null_ci95": [
+      -0.0848887605075956,
+      0.06060268712299113
+    ],
+    "paired_underdog_gain": 0.035488917141381776,
+    "paired_underdog_ci95": [
+      -0.19874464921975699,
+      0.2781686361357532
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "smooth__C_absolute",
+    "bets": 256,
+    "units": -10.923298750267804,
+    "roi": -0.04266913574323361,
+    "roi_se": 0.043680477430551305,
+    "roi_ci95": [
+      -0.11175308123567973,
+      0.033840224514965066
+    ],
+    "wins": 170,
+    "losses": 85,
+    "pushes": 1,
+    "market_null": -0.026771320137969547,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.923298750267805,
+    "underdog_subset_units": -3.0,
+    "paired_favorite_gain": -0.02179006026694097,
+    "paired_favorite_ci95": [
+      -0.04459897469973084,
+      0.0
+    ],
+    "excess_over_market_null": -0.01589781560526405,
+    "excess_over_market_null_ci95": [
+      -0.0848887605075956,
+      0.06060268712299113
+    ],
+    "paired_underdog_gain": 0.035488917141381776,
+    "paired_underdog_ci95": [
+      -0.19874464921975699,
+      0.2781686361357532
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "smooth__C_squared",
+    "bets": 256,
+    "units": -10.923298750267804,
+    "roi": -0.04266913574323361,
+    "roi_se": 0.043680477430551305,
+    "roi_ci95": [
+      -0.11175308123567973,
+      0.033840224514965066
+    ],
+    "wins": 170,
+    "losses": 85,
+    "pushes": 1,
+    "market_null": -0.026771320137969547,
+    "market_favorite_picks": 253,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -7.923298750267805,
+    "underdog_subset_units": -3.0,
+    "paired_favorite_gain": -0.02179006026694097,
+    "paired_favorite_ci95": [
+      -0.04459897469973084,
+      0.0
+    ],
+    "excess_over_market_null": -0.01589781560526405,
+    "excess_over_market_null_ci95": [
+      -0.0848887605075956,
+      0.06060268712299113
+    ],
+    "paired_underdog_gain": 0.035488917141381776,
+    "paired_underdog_ci95": [
+      -0.19874464921975699,
+      0.2781686361357532
+    ]
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "control_favorite",
+    "bets": 256,
+    "units": -5.345043321930915,
+    "roi": -0.020879075476292638,
+    "roi_se": 0.043607237814501786,
+    "roi_ci95": [
+      -0.09337287008020223,
+      0.05663085349405049
+    ],
+    "wins": 173,
+    "losses": 82,
+    "pushes": 1,
+    "market_null": -0.02677132013796955
+  },
+  {
+    "basis": "annual_2020",
+    "arm": "control_underdog",
+    "bets": 256,
+    "units": -20.008461538461535,
+    "roi": -0.07815805288461537,
+    "roi_se": 0.09406053421321837,
+    "roi_ci95": [
+      -0.2507331495837355,
+      0.09840887550200787
+    ],
+    "wins": 82,
+    "losses": 173,
+    "pushes": 1,
+    "market_null": -0.026771320137969526
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "empirical__A_market",
+    "bets": 272,
+    "units": -32.21868114816432,
+    "roi": -0.11845103363295706,
+    "roi_se": 0.04286872411855604,
+    "roi_ci95": [
+      -0.18655166517528043,
+      -0.04812076048366255
+    ],
+    "wins": 169,
+    "losses": 102,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 268,
+    "market_underdog_picks": 4,
+    "favorite_subset_units": -32.33106210054527,
+    "underdog_subset_units": 0.11238095238095225,
+    "paired_favorite_gain": 0.0009890582124796926,
+    "paired_favorite_ci95": [
+      -0.028156592501393723,
+      0.030887842316413748
+    ],
+    "excess_over_market_null": -0.09045500106814452,
+    "excess_over_market_null_ci95": [
+      -0.15826413652130225,
+      -0.02023666978164671
+    ],
+    "paired_underdog_gain": -0.22195953205495028,
+    "paired_underdog_ci95": [
+      -0.45671513058453034,
+      0.017920686979891354
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "empirical__B_residual",
+    "bets": 272,
+    "units": -34.045127429156054,
+    "roi": -0.1251659096660149,
+    "roi_se": 0.042848471047967185,
+    "roi_ci95": [
+      -0.192304616202838,
+      -0.05467921614894329
+    ],
+    "wins": 168,
+    "losses": 103,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": -33.157508381537006,
+    "underdog_subset_units": -0.8876190476190478,
+    "paired_favorite_gain": -0.005725817820578159,
+    "paired_favorite_ci95": [
+      -0.047188852210202796,
+      0.030129755605946048
+    ],
+    "excess_over_market_null": -0.09716987710120237,
+    "excess_over_market_null_ci95": [
+      -0.1642114701721154,
+      -0.027021778896675737
+    ],
+    "paired_underdog_gain": -0.22867440808800815,
+    "paired_underdog_ci95": [
+      -0.46199770943467344,
+      0.011232815694375942
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "empirical__C_absolute",
+    "bets": 272,
+    "units": -34.045127429156054,
+    "roi": -0.1251659096660149,
+    "roi_se": 0.042848471047967185,
+    "roi_ci95": [
+      -0.192304616202838,
+      -0.05467921614894329
+    ],
+    "wins": 168,
+    "losses": 103,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": -33.157508381537006,
+    "underdog_subset_units": -0.8876190476190478,
+    "paired_favorite_gain": -0.005725817820578159,
+    "paired_favorite_ci95": [
+      -0.047188852210202796,
+      0.030129755605946048
+    ],
+    "excess_over_market_null": -0.09716987710120237,
+    "excess_over_market_null_ci95": [
+      -0.1642114701721154,
+      -0.027021778896675737
+    ],
+    "paired_underdog_gain": -0.22867440808800815,
+    "paired_underdog_ci95": [
+      -0.46199770943467344,
+      0.011232815694375942
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "empirical__C_squared",
+    "bets": 272,
+    "units": -34.045127429156054,
+    "roi": -0.1251659096660149,
+    "roi_se": 0.042848471047967185,
+    "roi_ci95": [
+      -0.192304616202838,
+      -0.05467921614894329
+    ],
+    "wins": 168,
+    "losses": 103,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": -33.157508381537006,
+    "underdog_subset_units": -0.8876190476190478,
+    "paired_favorite_gain": -0.005725817820578159,
+    "paired_favorite_ci95": [
+      -0.047188852210202796,
+      0.030129755605946048
+    ],
+    "excess_over_market_null": -0.09716987710120237,
+    "excess_over_market_null_ci95": [
+      -0.1642114701721154,
+      -0.027021778896675737
+    ],
+    "paired_underdog_gain": -0.22867440808800815,
+    "paired_underdog_ci95": [
+      -0.46199770943467344,
+      0.011232815694375942
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "smooth__A_market",
+    "bets": 272,
+    "units": -30.20868114816432,
+    "roi": -0.11106132775060412,
+    "roi_se": 0.04294483204596607,
+    "roi_ci95": [
+      -0.18053197846059701,
+      -0.04106012446831811
+    ],
+    "wins": 170,
+    "losses": 101,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": -31.33106210054527,
+    "underdog_subset_units": 1.1223809523809525,
+    "paired_favorite_gain": 0.008378764094832633,
+    "paired_favorite_ci95": [
+      -0.021650062774424998,
+      0.039642525216188274
+    ],
+    "excess_over_market_null": -0.08306529518579157,
+    "excess_over_market_null_ci95": [
+      -0.15222578572019654,
+      -0.013427715233908332
+    ],
+    "paired_underdog_gain": -0.21456982617259734,
+    "paired_underdog_ci95": [
+      -0.4467677679990367,
+      0.021836576447087683
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "smooth__B_residual",
+    "bets": 272,
+    "units": -37.4861530701817,
+    "roi": -0.13781673922860918,
+    "roi_se": 0.04285546063737979,
+    "roi_ci95": [
+      -0.20729287159889104,
+      -0.0639097251296037
+    ],
+    "wins": 166,
+    "losses": 105,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 265,
+    "market_underdog_picks": 7,
+    "favorite_subset_units": -34.598534022562646,
+    "underdog_subset_units": -2.8876190476190473,
+    "paired_favorite_gain": -0.018376647383172424,
+    "paired_favorite_ci95": [
+      -0.06046443776673261,
+      0.02099523146459788
+    ],
+    "excess_over_market_null": -0.10982070666379663,
+    "excess_over_market_null_ci95": [
+      -0.17905720308781026,
+      -0.03645673022005763
+    ],
+    "paired_underdog_gain": -0.2413252376506024,
+    "paired_underdog_ci95": [
+      -0.4751629530484729,
+      -0.0007652300852503277
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "smooth__C_absolute",
+    "bets": 272,
+    "units": -37.4861530701817,
+    "roi": -0.13781673922860918,
+    "roi_se": 0.04285546063737979,
+    "roi_ci95": [
+      -0.20729287159889104,
+      -0.0639097251296037
+    ],
+    "wins": 166,
+    "losses": 105,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 265,
+    "market_underdog_picks": 7,
+    "favorite_subset_units": -34.598534022562646,
+    "underdog_subset_units": -2.8876190476190473,
+    "paired_favorite_gain": -0.018376647383172424,
+    "paired_favorite_ci95": [
+      -0.06046443776673261,
+      0.02099523146459788
+    ],
+    "excess_over_market_null": -0.10982070666379663,
+    "excess_over_market_null_ci95": [
+      -0.17905720308781026,
+      -0.03645673022005763
+    ],
+    "paired_underdog_gain": -0.2413252376506024,
+    "paired_underdog_ci95": [
+      -0.4751629530484729,
+      -0.0007652300852503277
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "smooth__C_squared",
+    "bets": 272,
+    "units": -35.84512742915605,
+    "roi": -0.13178355672483844,
+    "roi_se": 0.042832240211341396,
+    "roi_ci95": [
+      -0.2010430668470042,
+      -0.05898296110841663
+    ],
+    "wins": 167,
+    "losses": 104,
+    "pushes": 1,
+    "market_null": -0.02799603256481252,
+    "market_favorite_picks": 266,
+    "market_underdog_picks": 6,
+    "favorite_subset_units": -33.95750838153701,
+    "underdog_subset_units": -1.8876190476190478,
+    "paired_favorite_gain": -0.012343464879401687,
+    "paired_favorite_ci95": [
+      -0.05439350944504135,
+      0.02436874541743456
+    ],
+    "excess_over_market_null": -0.1037875241600259,
+    "excess_over_market_null_ci95": [
+      -0.17271330505906465,
+      -0.03132941072679658
+    ],
+    "paired_underdog_gain": -0.23529205514683166,
+    "paired_underdog_ci95": [
+      -0.4690986320321481,
+      0.0045840164311067
+    ]
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "control_favorite",
+    "bets": 272,
+    "units": -32.48770498195879,
+    "roi": -0.11944009184543673,
+    "roi_se": 0.04277088765080746,
+    "roi_ci95": [
+      -0.1930950948497008,
+      -0.04385656202727528
+    ],
+    "wins": 169,
+    "losses": 102,
+    "pushes": 1,
+    "market_null": -0.027996032564812524
+  },
+  {
+    "basis": "annual_2021",
+    "arm": "control_underdog",
+    "bets": 272,
+    "units": 28.154311570782156,
+    "roi": 0.10350849842199322,
+    "roi_se": 0.09573844639857405,
+    "roi_ci95": [
+      -0.07005775116690369,
+      0.2814458829990529
+    ],
+    "wins": 102,
+    "losses": 169,
+    "pushes": 1,
+    "market_null": -0.027996032564812548
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "empirical__A_market",
+    "bets": 270,
+    "units": -5.298933687982128,
+    "roi": -0.019625680325859735,
+    "roi_se": 0.044044129107135274,
+    "roi_ci95": [
+      -0.08770962222637432,
+      0.04777215238919189
+    ],
+    "wins": 177,
+    "losses": 91,
+    "pushes": 2,
+    "market_null": -0.026429622120458806,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -6.390472149520588,
+    "underdog_subset_units": 1.0915384615384616,
+    "paired_favorite_gain": 0.008311410497851177,
+    "paired_favorite_ci95": [
+      -0.013890658850516121,
+      0.03201421317491806
+    ],
+    "excess_over_market_null": 0.006803941794599061,
+    "excess_over_market_null_ci95": [
+      -0.06129782567995588,
+      0.07424152228631642
+    ],
+    "paired_underdog_gain": 0.051837565948979335,
+    "paired_underdog_ci95": [
+      -0.1523982109844331,
+      0.26114584948833824
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "empirical__B_residual",
+    "bets": 270,
+    "units": -4.58937744407474,
+    "roi": -0.016997694237313853,
+    "roi_se": 0.04425311463653144,
+    "roi_ci95": [
+      -0.08111320302673146,
+      0.04939024935412662
+    ],
+    "wins": 177,
+    "losses": 91,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 261,
+    "market_underdog_picks": 9,
+    "favorite_subset_units": -5.791789692020971,
+    "underdog_subset_units": 1.2024122479462287,
+    "paired_favorite_gain": 0.010939396586397058,
+    "paired_favorite_ci95": [
+      -0.030696865168586315,
+      0.05566943780450659
+    ],
+    "excess_over_market_null": 0.009431927883144947,
+    "excess_over_market_null_ci95": [
+      -0.054611890951319846,
+      0.07584247521308228
+    ],
+    "paired_underdog_gain": 0.054465552037525206,
+    "paired_underdog_ci95": [
+      -0.14564050408625795,
+      0.26179595211522705
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "empirical__C_absolute",
+    "bets": 270,
+    "units": -8.439304451374012,
+    "roi": -0.03125668315323708,
+    "roi_se": 0.04425731945559326,
+    "roi_ci95": [
+      -0.10071535270629305,
+      0.03853711237788908
+    ],
+    "wins": 175,
+    "losses": 93,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 261,
+    "market_underdog_picks": 9,
+    "favorite_subset_units": -7.521716699320241,
+    "underdog_subset_units": -0.9175877520537715,
+    "paired_favorite_gain": -0.003319592329526163,
+    "paired_favorite_ci95": [
+      -0.03790046396174941,
+      0.03723276689537581
+    ],
+    "excess_over_market_null": -0.00482706103277828,
+    "excess_over_market_null_ci95": [
+      -0.07435381514144282,
+      0.06494601947355158
+    ],
+    "paired_underdog_gain": 0.04020656312160198,
+    "paired_underdog_ci95": [
+      -0.16424192993054265,
+      0.24941821854799615
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "empirical__C_squared",
+    "bets": 270,
+    "units": -8.439304451374012,
+    "roi": -0.03125668315323708,
+    "roi_se": 0.04425731945559326,
+    "roi_ci95": [
+      -0.10071535270629305,
+      0.03853711237788908
+    ],
+    "wins": 175,
+    "losses": 93,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 261,
+    "market_underdog_picks": 9,
+    "favorite_subset_units": -7.521716699320241,
+    "underdog_subset_units": -0.9175877520537715,
+    "paired_favorite_gain": -0.003319592329526163,
+    "paired_favorite_ci95": [
+      -0.03790046396174941,
+      0.03723276689537581
+    ],
+    "excess_over_market_null": -0.00482706103277828,
+    "excess_over_market_null_ci95": [
+      -0.07435381514144282,
+      0.06494601947355158
+    ],
+    "paired_underdog_gain": 0.04020656312160198,
+    "paired_underdog_ci95": [
+      -0.16424192993054265,
+      0.24941821854799615
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "smooth__A_market",
+    "bets": 270,
+    "units": -5.298933687982128,
+    "roi": -0.019625680325859735,
+    "roi_se": 0.044044129107135274,
+    "roi_ci95": [
+      -0.08770962222637432,
+      0.04777215238919189
+    ],
+    "wins": 177,
+    "losses": 91,
+    "pushes": 2,
+    "market_null": -0.026429622120458806,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": -6.390472149520588,
+    "underdog_subset_units": 1.0915384615384616,
+    "paired_favorite_gain": 0.008311410497851177,
+    "paired_favorite_ci95": [
+      -0.013890658850516121,
+      0.03201421317491806
+    ],
+    "excess_over_market_null": 0.006803941794599061,
+    "excess_over_market_null_ci95": [
+      -0.06129782567995588,
+      0.07424152228631642
+    ],
+    "paired_underdog_gain": 0.051837565948979335,
+    "paired_underdog_ci95": [
+      -0.1523982109844331,
+      0.26114584948833824
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "smooth__B_residual",
+    "bets": 270,
+    "units": -6.379304451374013,
+    "roi": -0.023627053523607455,
+    "roi_se": 0.044294116600281264,
+    "roi_ci95": [
+      -0.09751179804087912,
+      0.04832490185053356
+    ],
+    "wins": 176,
+    "losses": 92,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 260,
+    "market_underdog_picks": 10,
+    "favorite_subset_units": -6.521716699320242,
+    "underdog_subset_units": 0.14241224794622853,
+    "paired_favorite_gain": 0.0043100373001034665,
+    "paired_favorite_ci95": [
+      -0.033206391747023244,
+      0.046834778145360585
+    ],
+    "excess_over_market_null": 0.0028025685968513514,
+    "excess_over_market_null_ci95": [
+      -0.07109170049622437,
+      0.07459607045011017
+    ],
+    "paired_underdog_gain": 0.04783619275123159,
+    "paired_underdog_ci95": [
+      -0.160372970341303,
+      0.25944990223986714
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "smooth__C_absolute",
+    "bets": 270,
+    "units": -6.379304451374013,
+    "roi": -0.023627053523607455,
+    "roi_se": 0.044294116600281264,
+    "roi_ci95": [
+      -0.09751179804087912,
+      0.04832490185053356
+    ],
+    "wins": 176,
+    "losses": 92,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 260,
+    "market_underdog_picks": 10,
+    "favorite_subset_units": -6.521716699320242,
+    "underdog_subset_units": 0.14241224794622853,
+    "paired_favorite_gain": 0.0043100373001034665,
+    "paired_favorite_ci95": [
+      -0.033206391747023244,
+      0.046834778145360585
+    ],
+    "excess_over_market_null": 0.0028025685968513514,
+    "excess_over_market_null_ci95": [
+      -0.07109170049622437,
+      0.07459607045011017
+    ],
+    "paired_underdog_gain": 0.04783619275123159,
+    "paired_underdog_ci95": [
+      -0.160372970341303,
+      0.25944990223986714
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "smooth__C_squared",
+    "bets": 270,
+    "units": -6.379304451374013,
+    "roi": -0.023627053523607455,
+    "roi_se": 0.044294116600281264,
+    "roi_ci95": [
+      -0.09751179804087912,
+      0.04832490185053356
+    ],
+    "wins": 176,
+    "losses": 92,
+    "pushes": 2,
+    "market_null": -0.026429622120458813,
+    "market_favorite_picks": 260,
+    "market_underdog_picks": 10,
+    "favorite_subset_units": -6.521716699320242,
+    "underdog_subset_units": 0.14241224794622853,
+    "paired_favorite_gain": 0.0043100373001034665,
+    "paired_favorite_ci95": [
+      -0.033206391747023244,
+      0.046834778145360585
+    ],
+    "excess_over_market_null": 0.0028025685968513514,
+    "excess_over_market_null_ci95": [
+      -0.07109170049622437,
+      0.07459607045011017
+    ],
+    "paired_underdog_gain": 0.04783619275123159,
+    "paired_underdog_ci95": [
+      -0.160372970341303,
+      0.25944990223986714
+    ]
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "control_favorite",
+    "bets": 270,
+    "units": -7.543014522401945,
+    "roi": -0.027937090823710906,
+    "roi_se": 0.04395181286929495,
+    "roi_ci95": [
+      -0.09863316475492882,
+      0.048928196988453874
+    ],
+    "wins": 176,
+    "losses": 92,
+    "pushes": 2,
+    "market_null": -0.02642962212045881
+  },
+  {
+    "basis": "annual_2022",
+    "arm": "control_underdog",
+    "bets": 270,
+    "units": -19.295076494206555,
+    "roi": -0.07146324627483909,
+    "roi_se": 0.08240316990696495,
+    "roi_ci95": [
+      -0.2202077255788379,
+      0.07329430679254473
+    ],
+    "wins": 92,
+    "losses": 176,
+    "pushes": 2,
+    "market_null": -0.026429622120458813
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "empirical__A_market",
+    "bets": 270,
+    "units": 4.925972623810301,
+    "roi": 0.01824434305114926,
+    "roi_se": 0.043985557946132174,
+    "roi_ci95": [
+      -0.060161261093625726,
+      0.09696163168366013
+    ],
+    "wins": 184,
+    "losses": 86,
+    "pushes": 0,
+    "market_null": -0.041006963063124895,
+    "market_favorite_picks": 266,
+    "market_underdog_picks": 4,
+    "favorite_subset_units": 4.673591671429351,
+    "underdog_subset_units": 0.2523809523809524,
+    "paired_favorite_gain": 0.002989702452068044,
+    "paired_favorite_ci95": [
+      -0.025132631772015496,
+      0.03262594893029676
+    ],
+    "excess_over_market_null": 0.059251306114274156,
+    "excess_over_market_null_ci95": [
+      -0.019192653410625336,
+      0.13790242811435083
+    ],
+    "paired_underdog_gain": 0.10407906541746204,
+    "paired_underdog_ci95": [
+      -0.12370717856125606,
+      0.32540256559365993
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "empirical__B_residual",
+    "bets": 270,
+    "units": -0.5495416313649706,
+    "roi": -0.002035339375425817,
+    "roi_se": 0.04414288297327098,
+    "roi_ci95": [
+      -0.08800121806202764,
+      0.08237805815302021
+    ],
+    "wins": 181,
+    "losses": 89,
+    "pushes": 0,
+    "market_null": -0.04100696306312488,
+    "market_favorite_picks": 265,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": 2.1504583686350314,
+    "underdog_subset_units": -2.7,
+    "paired_favorite_gain": -0.01728997997450704,
+    "paired_favorite_ci95": [
+      -0.04679868533429587,
+      0.012390476663850089
+    ],
+    "excess_over_market_null": 0.03897162368769907,
+    "excess_over_market_null_ci95": [
+      -0.04695340223464623,
+      0.12337188543225683
+    ],
+    "paired_underdog_gain": 0.08379938299088696,
+    "paired_underdog_ci95": [
+      -0.1489472486435923,
+      0.3109360056839549
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "empirical__C_absolute",
+    "bets": 270,
+    "units": 2.973591671429349,
+    "roi": 0.011013302486775366,
+    "roi_se": 0.04400904276347908,
+    "roi_ci95": [
+      -0.06823020760274975,
+      0.0910044953138796
+    ],
+    "wins": 183,
+    "losses": 87,
+    "pushes": 0,
+    "market_null": -0.041006963063124895,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": 3.6735916714293513,
+    "underdog_subset_units": -0.7,
+    "paired_favorite_gain": -0.004241338112305855,
+    "paired_favorite_ci95": [
+      -0.027306826706676668,
+      0.019390548744197118
+    ],
+    "excess_over_market_null": 0.05202026554990025,
+    "excess_over_market_null_ci95": [
+      -0.02725531245024013,
+      0.13207888563514789
+    ],
+    "paired_underdog_gain": 0.09684802485308813,
+    "paired_underdog_ci95": [
+      -0.1310038504801147,
+      0.3204283236698271
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "empirical__C_squared",
+    "bets": 270,
+    "units": 2.973591671429349,
+    "roi": 0.011013302486775366,
+    "roi_se": 0.04400904276347908,
+    "roi_ci95": [
+      -0.06823020760274975,
+      0.0910044953138796
+    ],
+    "wins": 183,
+    "losses": 87,
+    "pushes": 0,
+    "market_null": -0.041006963063124895,
+    "market_favorite_picks": 267,
+    "market_underdog_picks": 3,
+    "favorite_subset_units": 3.6735916714293513,
+    "underdog_subset_units": -0.7,
+    "paired_favorite_gain": -0.004241338112305855,
+    "paired_favorite_ci95": [
+      -0.027306826706676668,
+      0.019390548744197118
+    ],
+    "excess_over_market_null": 0.05202026554990025,
+    "excess_over_market_null_ci95": [
+      -0.02725531245024013,
+      0.13207888563514789
+    ],
+    "paired_underdog_gain": 0.09684802485308813,
+    "paired_underdog_ci95": [
+      -0.1310038504801147,
+      0.3204283236698271
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "smooth__A_market",
+    "bets": 270,
+    "units": 3.0785149966916574,
+    "roi": 0.011401907395154287,
+    "roi_se": 0.04403820568971058,
+    "roi_ci95": [
+      -0.07101933013168434,
+      0.09367603841793747
+    ],
+    "wins": 183,
+    "losses": 87,
+    "pushes": 0,
+    "market_null": -0.041006963063124895,
+    "market_favorite_picks": 265,
+    "market_underdog_picks": 5,
+    "favorite_subset_units": 3.8261340443107064,
+    "underdog_subset_units": -0.7476190476190474,
+    "paired_favorite_gain": -0.003852733203926934,
+    "paired_favorite_ci95": [
+      -0.033993961570291734,
+      0.02766462416232001
+    ],
+    "excess_over_market_null": 0.052408870458279175,
+    "excess_over_market_null_ci95": [
+      -0.03001232468515553,
+      0.13468535215457045
+    ],
+    "paired_underdog_gain": 0.09723662976146706,
+    "paired_underdog_ci95": [
+      -0.132150090968802,
+      0.32020897930328934
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "smooth__B_residual",
+    "bets": 270,
+    "units": -2.1668255819822555,
+    "roi": -0.008025279933267612,
+    "roi_se": 0.044236774277861685,
+    "roi_ci95": [
+      -0.09256114932264678,
+      0.0765965410642817
+    ],
+    "wins": 180,
+    "losses": 90,
+    "pushes": 0,
+    "market_null": -0.04100696306312488,
+    "market_favorite_picks": 264,
+    "market_underdog_picks": 6,
+    "favorite_subset_units": 1.5331744180177482,
+    "underdog_subset_units": -3.7,
+    "paired_favorite_gain": -0.023279920532348834,
+    "paired_favorite_ci95": [
+      -0.05379527235140346,
+      0.008267247886905098
+    ],
+    "excess_over_market_null": 0.032981683129857275,
+    "excess_over_market_null_ci95": [
+      -0.05167434534131417,
+      0.11766135976465673
+    ],
+    "paired_underdog_gain": 0.07780944243304516,
+    "paired_underdog_ci95": [
+      -0.15189905336480342,
+      0.30355009407067174
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "smooth__C_absolute",
+    "bets": 270,
+    "units": -2.1668255819822555,
+    "roi": -0.008025279933267612,
+    "roi_se": 0.044236774277861685,
+    "roi_ci95": [
+      -0.09256114932264678,
+      0.0765965410642817
+    ],
+    "wins": 180,
+    "losses": 90,
+    "pushes": 0,
+    "market_null": -0.04100696306312488,
+    "market_favorite_picks": 264,
+    "market_underdog_picks": 6,
+    "favorite_subset_units": 1.5331744180177482,
+    "underdog_subset_units": -3.7,
+    "paired_favorite_gain": -0.023279920532348834,
+    "paired_favorite_ci95": [
+      -0.05379527235140346,
+      0.008267247886905098
+    ],
+    "excess_over_market_null": 0.032981683129857275,
+    "excess_over_market_null_ci95": [
+      -0.05167434534131417,
+      0.11766135976465673
+    ],
+    "paired_underdog_gain": 0.07780944243304516,
+    "paired_underdog_ci95": [
+      -0.15189905336480342,
+      0.30355009407067174
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "smooth__C_squared",
+    "bets": 270,
+    "units": -2.1668255819822555,
+    "roi": -0.008025279933267612,
+    "roi_se": 0.044236774277861685,
+    "roi_ci95": [
+      -0.09256114932264678,
+      0.0765965410642817
+    ],
+    "wins": 180,
+    "losses": 90,
+    "pushes": 0,
+    "market_null": -0.04100696306312488,
+    "market_favorite_picks": 264,
+    "market_underdog_picks": 6,
+    "favorite_subset_units": 1.5331744180177482,
+    "underdog_subset_units": -3.7,
+    "paired_favorite_gain": -0.023279920532348834,
+    "paired_favorite_ci95": [
+      -0.05379527235140346,
+      0.008267247886905098
+    ],
+    "excess_over_market_null": 0.032981683129857275,
+    "excess_over_market_null_ci95": [
+      -0.05167434534131417,
+      0.11766135976465673
+    ],
+    "paired_underdog_gain": 0.07780944243304516,
+    "paired_underdog_ci95": [
+      -0.15189905336480342,
+      0.30355009407067174
+    ]
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "control_favorite",
+    "bets": 270,
+    "units": 4.11875296175193,
+    "roi": 0.015254640599081224,
+    "roi_se": 0.043747997617985465,
+    "roi_ci95": [
+      -0.06292235601538208,
+      0.09082859806799365
+    ],
+    "wins": 184,
+    "losses": 86,
+    "pushes": 0,
+    "market_null": -0.041006963063124895
+  },
+  {
+    "basis": "annual_2023",
+    "arm": "control_underdog",
+    "bets": 270,
+    "units": -23.17537503890445,
+    "roi": -0.08583472236631277,
+    "roi_se": 0.08847344759653734,
+    "roi_ci95": [
+      -0.23434692237481988,
+      0.06758120078877321
+    ],
+    "wins": 86,
+    "losses": 184,
+    "pushes": 0,
+    "market_null": -0.04100696306312492
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "empirical__A_market",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "empirical__B_residual",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "empirical__C_absolute",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "empirical__C_squared",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "smooth__A_market",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "smooth__B_residual",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "smooth__C_absolute",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "smooth__C_squared",
+    "bets": 271,
+    "units": 12.215652163302908,
+    "roi": 0.045076207244660174,
+    "roi_se": 0.04166091175746179,
+    "roi_ci95": [
+      -0.04764095060062976,
+      0.134105957835927
+    ],
+    "wins": 193,
+    "losses": 78,
+    "pushes": 0,
+    "market_null": -0.040947871674811,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": 13.215652163302908,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.0069847127042699,
+    "paired_favorite_ci95": [
+      -0.02110993096123208,
+      0.0
+    ],
+    "excess_over_market_null": 0.08602407891947116,
+    "excess_over_market_null_ci95": [
+      -0.006761547437150873,
+      0.17513029091263713
+    ],
+    "paired_underdog_gain": 0.26713610459433396,
+    "paired_underdog_ci95": [
+      -0.011306063033231617,
+      0.516829513498639
+    ]
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "control_favorite",
+    "bets": 271,
+    "units": 14.10850930616005,
+    "roi": 0.05206091994893007,
+    "roi_se": 0.04159743966850347,
+    "roi_ci95": [
+      -0.04463099890186657,
+      0.1448516143782094
+    ],
+    "wins": 194,
+    "losses": 77,
+    "pushes": 0,
+    "market_null": -0.040947871674811
+  },
+  {
+    "basis": "annual_2024",
+    "arm": "control_underdog",
+    "bets": 271,
+    "units": -60.178232181761594,
+    "roi": -0.22205989734967377,
+    "roi_se": 0.07923434277654953,
+    "roi_ci95": [
+      -0.3866672892830432,
+      -0.03416819387161245
+    ],
+    "wins": 77,
+    "losses": 194,
+    "pushes": 0,
+    "market_null": -0.04094787167481102
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "empirical__A_market",
+    "bets": 271,
+    "units": -18.047143334139413,
+    "roi": -0.06659462484922293,
+    "roi_se": 0.04262389482560202,
+    "roi_ci95": [
+      -0.15414022163500052,
+      0.021075029873831513
+    ],
+    "wins": 177,
+    "losses": 93,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 271,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -18.047143334139413,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.02556452506008944,
+    "excess_over_market_null_ci95": [
+      -0.11314638636028831,
+      0.06212169207253103
+    ],
+    "paired_underdog_gain": -0.042732857099892725,
+    "paired_underdog_ci95": [
+      -0.3082013771837821,
+      0.2072204072100694
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "empirical__B_residual",
+    "bets": 271,
+    "units": -19.880476667472742,
+    "roi": -0.07335969249989942,
+    "roi_se": 0.04263174532609851,
+    "roi_ci95": [
+      -0.16451027223614437,
+      0.017110855706743255
+    ],
+    "wins": 176,
+    "losses": 94,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.880476667472742,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.006765067650676507,
+    "paired_favorite_ci95": [
+      -0.020446096654275093,
+      0.0
+    ],
+    "excess_over_market_null": -0.03232959271076594,
+    "excess_over_market_null_ci95": [
+      -0.12349064598070977,
+      0.05816613868978886
+    ],
+    "paired_underdog_gain": -0.04949792475056922,
+    "paired_underdog_ci95": [
+      -0.31565255070568776,
+      0.2033458771710934
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "empirical__C_absolute",
+    "bets": 271,
+    "units": -19.880476667472742,
+    "roi": -0.07335969249989942,
+    "roi_se": 0.04263174532609851,
+    "roi_ci95": [
+      -0.16451027223614437,
+      0.017110855706743255
+    ],
+    "wins": 176,
+    "losses": 94,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.880476667472742,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.006765067650676507,
+    "paired_favorite_ci95": [
+      -0.020446096654275093,
+      0.0
+    ],
+    "excess_over_market_null": -0.03232959271076594,
+    "excess_over_market_null_ci95": [
+      -0.12349064598070977,
+      0.05816613868978886
+    ],
+    "paired_underdog_gain": -0.04949792475056922,
+    "paired_underdog_ci95": [
+      -0.31565255070568776,
+      0.2033458771710934
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "empirical__C_squared",
+    "bets": 271,
+    "units": -19.880476667472742,
+    "roi": -0.07335969249989942,
+    "roi_se": 0.04263174532609851,
+    "roi_ci95": [
+      -0.16451027223614437,
+      0.017110855706743255
+    ],
+    "wins": 176,
+    "losses": 94,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.880476667472742,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.006765067650676507,
+    "paired_favorite_ci95": [
+      -0.020446096654275093,
+      0.0
+    ],
+    "excess_over_market_null": -0.03232959271076594,
+    "excess_over_market_null_ci95": [
+      -0.12349064598070977,
+      0.05816613868978886
+    ],
+    "paired_underdog_gain": -0.04949792475056922,
+    "paired_underdog_ci95": [
+      -0.31565255070568776,
+      0.2033458771710934
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "smooth__A_market",
+    "bets": 271,
+    "units": -19.847143334139417,
+    "roi": -0.07323669126988715,
+    "roi_se": 0.04264125437330727,
+    "roi_ci95": [
+      -0.15802532054459234,
+      0.010236061572336011
+    ],
+    "wins": 176,
+    "losses": 94,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 270,
+    "market_underdog_picks": 1,
+    "favorite_subset_units": -18.847143334139414,
+    "underdog_subset_units": -1.0,
+    "paired_favorite_gain": -0.006642066420664207,
+    "paired_favorite_ci95": [
+      -0.020224719101123598,
+      0.0
+    ],
+    "excess_over_market_null": -0.03220659148075365,
+    "excess_over_market_null_ci95": [
+      -0.11703442957766037,
+      0.05126755530362256
+    ],
+    "paired_underdog_gain": -0.049374923520556925,
+    "paired_underdog_ci95": [
+      -0.3130807521999896,
+      0.19635739052909432
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "smooth__B_residual",
+    "bets": 271,
+    "units": -21.680476667472746,
+    "roi": -0.08000175892056365,
+    "roi_se": 0.04264519937012344,
+    "roi_ci95": [
+      -0.16836159817469606,
+      0.007392374267627344
+    ],
+    "wins": 175,
+    "losses": 95,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 269,
+    "market_underdog_picks": 2,
+    "favorite_subset_units": -19.68047666747275,
+    "underdog_subset_units": -2.0,
+    "paired_favorite_gain": -0.013407134071340716,
+    "paired_favorite_ci95": [
+      -0.03333333333333333,
+      0.0
+    ],
+    "excess_over_market_null": -0.03897165913143015,
+    "excess_over_market_null_ci95": [
+      -0.12733726621689886,
+      0.04843996382005071
+    ],
+    "paired_underdog_gain": -0.05613999117123341,
+    "paired_underdog_ci95": [
+      -0.3203000036894986,
+      0.1924056692954259
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "smooth__C_absolute",
+    "bets": 271,
+    "units": -21.680476667472746,
+    "roi": -0.08000175892056365,
+    "roi_se": 0.04264519937012344,
+    "roi_ci95": [
+      -0.16836159817469606,
+      0.007392374267627344
+    ],
+    "wins": 175,
+    "losses": 95,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 269,
+    "market_underdog_picks": 2,
+    "favorite_subset_units": -19.68047666747275,
+    "underdog_subset_units": -2.0,
+    "paired_favorite_gain": -0.013407134071340716,
+    "paired_favorite_ci95": [
+      -0.03333333333333333,
+      0.0
+    ],
+    "excess_over_market_null": -0.03897165913143015,
+    "excess_over_market_null_ci95": [
+      -0.12733726621689886,
+      0.04843996382005071
+    ],
+    "paired_underdog_gain": -0.05613999117123341,
+    "paired_underdog_ci95": [
+      -0.3203000036894986,
+      0.1924056692954259
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "smooth__C_squared",
+    "bets": 271,
+    "units": -21.680476667472746,
+    "roi": -0.08000175892056365,
+    "roi_se": 0.04264519937012344,
+    "roi_ci95": [
+      -0.16836159817469606,
+      0.007392374267627344
+    ],
+    "wins": 175,
+    "losses": 95,
+    "pushes": 1,
+    "market_null": -0.04103009978913349,
+    "market_favorite_picks": 269,
+    "market_underdog_picks": 2,
+    "favorite_subset_units": -19.68047666747275,
+    "underdog_subset_units": -2.0,
+    "paired_favorite_gain": -0.013407134071340716,
+    "paired_favorite_ci95": [
+      -0.03333333333333333,
+      0.0
+    ],
+    "excess_over_market_null": -0.03897165913143015,
+    "excess_over_market_null_ci95": [
+      -0.12733726621689886,
+      0.04843996382005071
+    ],
+    "paired_underdog_gain": -0.05613999117123341,
+    "paired_underdog_ci95": [
+      -0.3203000036894986,
+      0.1924056692954259
+    ]
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "control_favorite",
+    "bets": 271,
+    "units": -18.047143334139413,
+    "roi": -0.06659462484922293,
+    "roi_se": 0.04262389482560202,
+    "roi_ci95": [
+      -0.15414022163500052,
+      0.021075029873831513
+    ],
+    "wins": 177,
+    "losses": 93,
+    "pushes": 1,
+    "market_null": -0.04103009978913349
+  },
+  {
+    "basis": "annual_2025",
+    "arm": "control_underdog",
+    "bets": 271,
+    "units": -6.466539060068476,
+    "roi": -0.02386176774933017,
+    "roi_se": 0.08821890233877401,
+    "roi_ci95": [
+      -0.19215605797754484,
+      0.15847818191152477
+    ],
+    "wins": 93,
+    "losses": 177,
+    "pushes": 1,
+    "market_null": -0.04103009978913349
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "empirical__A_market",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "empirical__B_residual",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "empirical__C_absolute",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "empirical__C_squared",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "smooth__A_market",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "smooth__B_residual",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "smooth__C_absolute",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "smooth__C_squared",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769,
+    "market_favorite_picks": 79,
+    "market_underdog_picks": 0,
+    "favorite_subset_units": -3.703379463288224,
+    "underdog_subset_units": 0.0,
+    "paired_favorite_gain": 0.0,
+    "paired_favorite_ci95": [
+      0.0,
+      0.0
+    ],
+    "excess_over_market_null": -0.0058930922356936095,
+    "excess_over_market_null_ci95": [
+      -0.11105374008721554,
+      0.10908827631194809
+    ],
+    "paired_underdog_gain": -0.06638181996219888,
+    "paired_underdog_ci95": [
+      -0.2695468171253637,
+      0.18978563044274202
+    ]
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "control_favorite",
+    "bets": 79,
+    "units": -3.703379463288224,
+    "roi": -0.04687822105428132,
+    "roi_se": 0.08222011749251444,
+    "roi_ci95": [
+      -0.15207259911403756,
+      0.06805129581754937
+    ],
+    "wins": 50,
+    "losses": 28,
+    "pushes": 1,
+    "market_null": -0.04098512881858769
+  },
+  {
+    "basis": "annual_2026",
+    "arm": "control_underdog",
+    "bets": 79,
+    "units": 1.540784313725489,
+    "roi": 0.019503598907917582,
+    "roi_se": 0.16354285460090345,
+    "roi_ci95": [
+      -0.13947381484239266,
+      0.13587500000000002
+    ],
+    "wins": 28,
+    "losses": 50,
+    "pushes": 1,
+    "market_null": -0.040985128818587756
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "experiment": "R001",
+  "baseline_reconstruction_max_abs_error": 2.1316282072803006e-14,
+  "protocol_sha256": "2b2e4eac2727748d385c5c41fff3c23b487cdb91384e2f89afba96c56509517d",
+  "code_sha256": "c4587d981ed531dad8cdf21e51d3398cac7db34893079a8f1159ea719d31f18f",
+  "source_hashes": {
+    "frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "features.csv.gz": "e4cfef45e9f0cad3e2ee1866fd724abf48072f13ace9f21779b8663c66c4feb5",
+    "coefficient_audit.jsonl": "9ed288d94d369fc40db8e4af7bdb0966c9bdea6a65e6cac2feda74a1cb0c0fb5",
+    "predictions.csv.gz": "8e5bd840513f8e0690ebaa9bef337eb48bc3569ffea996423a6dbf1b95e52f90"
+  },
+  "probability_version": "R001-jeffreys-unweighted-six-seasons-v1",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "quote_timestamps": "unknown",
+  "prior_result_exposure": true
+}

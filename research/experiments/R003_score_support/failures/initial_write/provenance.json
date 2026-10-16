@@ -1,0 +1,28 @@
+{
+  "experiment": "R003",
+  "registration": {
+    "registration_commit": "efbbeefba35e6eb280bad81af66000cdf55deb37",
+    "protocol_sha256": "baff8890d6ceea01f280ae15ba7d08a3191694720f90988ef6ab2b6350b0c851",
+    "scope": "local pre-execution lock on already exposed historical outcomes; not independent validation"
+  },
+  "protocol_sha256": "baff8890d6ceea01f280ae15ba7d08a3191694720f90988ef6ab2b6350b0c851",
+  "source_files": {
+    "research/distribution_ablations.py": "9d6d5a68d73a42f6e02e8f7032037e6366b7c7050184ab13d306a367613dc6d4",
+    "research/joint_market_residuals.py": "ffbca08d2a074e798022e5ffc1946df32f01d91fb4a86a4fa63b516f4eac4815",
+    "research/tie_hurdle.py": "c4587d981ed531dad8cdf21e51d3398cac7db34893079a8f1159ea719d31f18f",
+    "research/RULE_SOURCES.json": "de7f8cd0300af2ebf6a031ba6cd8107d46e7df7eb8b3775de8d4c996f3eea9fd"
+  },
+  "input_hashes": {
+    "frozen_inputs.csv.gz": "6ce2895d06ae20e1d181b88f2acc46b3f1803f8d172f12f39e6b20cca1b8be34",
+    "features.csv.gz": "e4cfef45e9f0cad3e2ee1866fd724abf48072f13ace9f21779b8663c66c4feb5",
+    "coefficient_audit.jsonl": "9ed288d94d369fc40db8e4af7bdb0966c9bdea6a65e6cac2feda74a1cb0c0fb5",
+    "predictions.csv.gz": "8e5bd840513f8e0690ebaa9bef337eb48bc3569ffea996423a6dbf1b95e52f90"
+  },
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "baseline_reconstruction_max_abs_error": 2.1316282072803006e-14,
+  "historical_quote_timestamps": "unknown",
+  "fresh_validation": false,
+  "full_joint_transform_checked_every_game": true,
+  "realized_score_positive_probability_every_game": true
+}

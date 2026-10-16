@@ -1,0 +1,12 @@
+{
+  "experiment": "R002",
+  "all_passed": true,
+  "checks": {
+    "predictions.csv.gz": true,
+    "transform_audit.csv": true,
+    "provenance.json": true,
+    "marginal_probabilities.npz_arrays": true,
+    "example_joint_probabilities.npz_arrays": true
+  },
+  "note": "NPZ arrays, not archive metadata timestamps, are numerical model content."
+}

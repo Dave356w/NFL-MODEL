@@ -1,0 +1,47 @@
+{
+  "primary": {
+    "sample": "historical_2023_25",
+    "shape": "empirical",
+    "comparator": "R001_tie_hurdle",
+    "metric": "joint_nll",
+    "primary": true,
+    "n": 816,
+    "baseline": 7.106782443937767,
+    "candidate": 7.099694703962169,
+    "gain": 0.007087739975599645,
+    "ci95": [
+      0.003590019874130441,
+      0.010804016967508105
+    ],
+    "two_contrast_ci": [
+      0.003099460964283191,
+      0.0113909289533918
+    ],
+    "nine_contrast_sensitivity_ci": [
+      0.0022275230707010842,
+      0.0124363465291133
+    ]
+  },
+  "decision": {
+    "experiment": "R002",
+    "historical_hypothesis_supported": true,
+    "gates": {
+      "practical_gain": true,
+      "adjusted_interval_positive": true,
+      "all_seasons_positive": true,
+      "secondary_tolerances": true,
+      "integrity": true
+    },
+    "recommendation": "retain for research",
+    "secondary_violations": [],
+    "independent_validation": false,
+    "production_promotion": false,
+    "forward_consideration": true,
+    "mechanism_identified": false,
+    "limitations": [
+      "Previously exposed historical sample; unknown quote timestamps.",
+      "No prospective outcomes or executable-price claims.",
+      "No regulation/OT labels to identify a mechanistic overtime process."
+    ]
+  }
+}
