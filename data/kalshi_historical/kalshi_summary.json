@@ -1,0 +1,53 @@
+{
+  "price_source": "Kalshi public historical candlestick bid/ask, completed minute only",
+  "cutoff": "two hours before scheduled kickoff, 30-minute max staleness",
+  "fee": "approximate 7% * price * (1-price); no slippage/depth",
+  "note": "2025+ hindsight model picks; not native forward prices",
+  "eligible_graded_games": 351,
+  "captured_games": 351,
+  "winner_quote_pairs": 351,
+  "kalshi_main_spread": 351,
+  "model_target_alt_spread": 237,
+  "year_breakdown": {
+    "2025": {
+      "graded": 272,
+      "winner_pairs": 272,
+      "main_spread_quotes": 272,
+      "model_alt_quotes": 170,
+      "missing_reasons": {
+        "quoted": 272
+      }
+    },
+    "2026": {
+      "graded": 79,
+      "winner_pairs": 79,
+      "main_spread_quotes": 79,
+      "model_alt_quotes": 67,
+      "missing_reasons": {
+        "quoted": 79
+      }
+    }
+  },
+  "outcomes": {
+    "model_moneyline": {
+      "bets": 351,
+      "units": -6.227335413665761,
+      "roi_per_risked_unit": -0.017741696335230088
+    },
+    "original_ats": {
+      "bets": 351,
+      "units": -8.64268223999807,
+      "roi_per_risked_unit": -0.024623026324780826
+    },
+    "fixed_band_ats": {
+      "bets": 351,
+      "units": -2.5287564871482004,
+      "roi_per_risked_unit": -0.007204434436319659
+    },
+    "original_model_alt_ats": {
+      "bets": 237,
+      "units": -4.07585809910888,
+      "roi_per_risked_unit": -0.017197713498349705
+    }
+  }
+}
