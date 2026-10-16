@@ -120,7 +120,8 @@ def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
     assert r["research_only"] and r["quote_basis"] == "no_matching_kalshi_quote"
     assert r["raw_spread"] < float(shadow.cp.SIGMA * shadow.ndtri(.9))
     assert r["fixed_band_side"] in ("home", "away", "")
-    assert np.isclose(r["p_home_cover"]+r["p_away_cover"]+r["p_push"],1.)
+    assert r["market_spread"] is None and r["probability_side"] == ""
+    assert r["p_home_cover"] is None and r["p_away_cover"] is None and r["p_push"] is None
     before = (data / shadow.STATE).read_bytes()
     assert shadow.record(data, now) == 0
     assert (data / shadow.STATE).read_bytes() == before
