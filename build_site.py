@@ -797,6 +797,39 @@ def historical_pick_reference(latest, game, edge):
             "Records are reconstructed, not locked forward evidence or this game's cover probability. "
             "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
 
+def kalshi_primary_summary(data):
+    """Only real Kalshi-quoted historical results; no sportsbook fallback."""
+    f=Path(data)/"kalshi_historical"/"kalshi_summary.json"
+    if not f.exists():
+        return "<div class='gr-note'>Kalshi historical archive is not yet published. " \
+               "The legacy sportsbook replay below is not a Kalshi-priced record.</div>"
+    try:
+        report=json.loads(f.read_text())
+        rows=[]
+        for key,title in (("model_moneyline","Winner contract"),
+                          ("original_ats","Raw spread at Kalshi market line"),
+                          ("fixed_band_ats","Fixed-band at Kalshi market line"),
+                          ("original_model_alt_ats","Original model alternate contract")):
+            result=report.get("outcomes",{}).get(key,{})
+            bets=int(result.get("bets",0))
+            roi=result.get("roi_per_risked_unit")
+            u=float(result.get("units",0))
+            rows.append([esc(title),str(bets),f"{u:+.2f}",roi_short(roi)])
+        total=report.get("eligible_graded_games",0)
+        coverage=(f"{report.get('winner_quote_pairs',0)}/{total} winner quote pairs · "
+                  f"{report.get('kalshi_main_spread',0)}/{total} Kalshi main lines · "
+                  f"{report.get('model_target_alt_spread',0)}/{total} alt lines")
+        return ("<h2 class='sec'>Kalshi-only historical record (2025 onward)</h2>"
+                "<p class='mut small'>Historical quotes captured by API two hours before kickoff. "
+                "Wagers graded at the exact binary contract threshold; missing prices excluded. "
+                "Model picks are reconstructed, not forward locks. Fee approximation only. "
+                "Kalshi NFL spread history does not cover 2021–2024.</p>"
+                f"<p class='mut small'>{esc(coverage)}</p>"
+                +table(["Kalshi contract","Quoted bets","Units","ROI"],rows,num_cols=(1,2,3)))
+    except (ValueError,TypeError,KeyError):
+        return "<div class='gr-note'>Kalshi price summary could not be validated.</div>"
+
+
 def kalshi_live_quotes(data, now):
     """Best actual Kalshi bid/ask, fresh within 4 hours and before kickoff."""
     file = Path(data) / "kalshi_live_board.json"
@@ -931,9 +964,6 @@ def render_index(latest, ledger, built, now=None, data=DATA):
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
         det.append(historical_pick_reference(latest, r, edge))
-        if team and math.isfinite(num(bet.price)) and math.isfinite(q):
-            det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
-                                       mkt_bands, mdl_bands, band_years, n_fwd))
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
@@ -958,14 +988,8 @@ def render_index(latest, ledger, built, now=None, data=DATA):
         cards.append(f"<details class='card'>{summary}{''.join(det)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     graded = cur[cur.status == "graded"] if len(cur) else cur
-    ctrl = control_records(graded)
-    if ctrl and ctrl["model"]["bets"]:
-        r, f = ctrl["model"], ctrl["favorite"]
-        line = (f"Model {wl_text(r)} ({100 * r['win_pct']:.1f}%) · ROI {roi_short(r['roi'])}"
-                f"<span class='mut'> · always favorite {wl_text(f)} · ROI {roi_short(f['roi'])}</span>")
-    else:
-        line = "<span class='mut'>No graded picks yet. The record starts with the first locked pick.</span>"
-    parts.append(f"<div class='record'><div class='l'>Model record</div><div class='mono'>{line}</div>"
+    parts.append("<div class='record'><div class='l'>Kalshi-priced record</div>"
+                 "<div class='mono'>Only actual Kalshi asks are counted · no sportsbook backfill</div>"
                  "<div class='go'><a href='grades.html'>Ledger →</a></div></div>")
     return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built)
 
