@@ -1170,6 +1170,30 @@ def render_retro(latest):
     return "".join(out)
 
 
+def ats_comparison_tiles(frame):
+    """Compare ATS sides on identical selected, completed, non-pick'em games."""
+    d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
+                  & np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
+                  & np.isfinite(frame.result) & np.isfinite(frame.fixed_band_spread)]
+    tiles = [stat('Compared games', str(len(d)), 'Historical replay · same games')]
+    for label, prediction in [('Model ATS', d.fixed_band_spread),
+                              ('Market favorite ATS', d.spread_line + np.sign(d.spread_line)),
+                              ('Home side ATS', d.spread_line + 1)]:
+        results, returns = fixed_bands.grade(d, prediction)
+        wins, losses, pushes = [int((results == x).sum()) for x in ['W', 'L', 'P']]
+        if len(d):
+            rate = f'{100 * wins / (wins + losses):.1f}%' if wins + losses else '—'
+            tiles.append(stat(label, f'{wins}–{losses}–{pushes}',
+                              f'{rate} covered · {returns.sum():+.2f}u · ROI {roi_short(returns.mean())}',
+                              'model' if label == 'Model ATS' else ''))
+        else:
+            tiles.append(stat(label, '—', 'No compared games yet'))
+    return ("<h3>ATS comparison</h3><div class='gr-summary'>" + ''.join(tiles) + "</div>"
+            "<p class='mut small'>Same completed games with a model ATS selection and a market favorite. "
+            "Model skips and market pick’em games are excluded from all three records. "
+            "Cover rates exclude pushes; ROI includes pushes. All-season totals below include pick’em games.</p>")
+
+
 def render_fixed_bands(latest, details=False):
     d = latest.get('fixed_band_ledger', pd.DataFrame())
     if d.empty:
@@ -1181,6 +1205,7 @@ def render_fixed_bands(latest, details=False):
            "Matching model and market lines are skipped. Pushes return the stake.</div>"]
     if eligible.empty:
         return ''.join(out) + "<p class='mut'>Spread results will appear when enough historical games are available.</p>"
+    out.append(ats_comparison_tiles(eligible))
     results = fixed_bands.summary(d).query("method == 'Fixed bands'")
     def result_rows(frame):
         return [[esc('All seasons' if r.season == 'All' else r.season),

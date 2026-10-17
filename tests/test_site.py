@@ -466,6 +466,7 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
         if page == 'market-calibration.html':
             assert '<h3>2026 graded results</h3>' not in text  # history is only 2024
         assert 'Per-season results' in text
+        assert 'ATS comparison' in text and 'Market favorite ATS' in text and 'Home side ATS' in text
         assert '−110' in text and 'Historical replay' in text
 
 
@@ -474,6 +475,24 @@ def test_missing_training_never_falls_back_to_old_spread(tmp_path):
     idx = (out / 'index.html').read_text()
     assert '<span>Model —</span>' in idx
     assert 'Model DAL −3.1' not in idx
+
+
+def test_ats_comparison_uses_common_selected_games():
+    # Home win, away win, push; omit a model skip, market pick'em and pending game.
+    d = pd.DataFrame({'fixed_band_spread': [7., -7., 7., 3., 3., 7.],
+                      'spread_line': [3., -3., 3., 3., 0., 3.],
+                      'result': [7., -7., 3., 10., 7., np.nan],
+                      'fixed_band_ats_result': ['W', 'W', 'P', 'S', 'W', '']})
+    html = b.ats_comparison_tiles(d)
+    assert 'Compared games' in html and '>3<' in html
+    assert html.count('2–0–1') == 2  # model and market favorite
+    assert '1–1–1' in html  # home side
+    assert '100.0% covered · +1.82u · ROI +60.6%' in html
+    assert '50.0% covered · -0.09u · ROI −3.0%' in html
+    assert 'pick’em' in html and 'Model skips' in html
+    empty = b.ats_comparison_tiles(d.iloc[3:4])
+    assert empty.count('No compared games yet') == 3
+    assert 'nan' not in empty
 
 
 def test_spread_text_sides_pickem_and_missing():
