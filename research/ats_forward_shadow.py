@@ -99,9 +99,6 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict,
     fit_json = json.dumps(fit, sort_keys=True, separators=(",", ":"))
     original_json = json.dumps(raw, sort_keys=True, separators=(",", ":"))
     fixed_side = side(fixed - line)
-    # Freeze the production ATS v2 decision from the same pregame snapshot.
-    import ats_v2
-    v2 = ats_v2.decide(spread, fixed, line, h, a, p)
     return {
         "revision": REVISION, "game_id": raw["game_id"], "season": year,
         "week": int(raw["week"]), "away": raw["away"], "home": raw["home"],
@@ -113,9 +110,6 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict,
         "fixed_band_edge": fixed - line,
         "selected_side": fixed_side,
         "skip_reason": "zero_edge" if not fixed_side else None,
-        "v2_policy": ats_v2.POLICY_VERSION, "v2_selected_side": v2["side"],
-        "v2_selection_source": v2["source"], "v2_skip_reason": v2["reason"],
-        "v2_ev_proxy_minus110": v2["ev"],
         "raw_side": side(spread-line), "fixed_band_side": fixed_side,
         "probability_side": probability_side,
         "p_home_cover": h, "p_away_cover": a, "p_push": p,

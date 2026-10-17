@@ -47,7 +47,6 @@ import matchup
 import nfl_model as m
 import totals
 import fixed_bands
-import ats_v2
 from research import version_report
 from research import ats_forward_shadow
 
@@ -515,12 +514,12 @@ def control_tiles(ctrl, first_label, first_value, first_sub):
 
 
 def spread_record(latest, season=None):
-    d = (latest or {}).get('ats_v2_ledger', pd.DataFrame())
+    d = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
     if d.empty:
         return None
-    s = ats_v2.summary(d)
-    r = s[s.season == ('All' if season is None else str(season))]
-    return r.iloc[0] if len(r) and r.iloc[0].opportunities else None
+    s = fixed_bands.summary(d)
+    r = s[(s.method == 'Fixed bands') & (s.season == ('All' if season is None else str(season)))]
+    return r.iloc[0] if len(r) and r.iloc[0].games else None
 
 
 def spread_record_text(r):
@@ -530,12 +529,11 @@ def spread_record_text(r):
 
 def spread_headline(latest, season=None):
     r = spread_record(latest, season)
-    label = f'ATS v2 · {season} graded results' if season is not None else 'ATS v2 · rebuilt history'
+    label = f'Model spread · {season} graded results' if season is not None else 'Model spread · rebuilt history'
     text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
     basis = ('Completed games, graded retrospectively' if season is not None else 'Eligible seasons, reconstructed')
     return (f"<div class='record'><div class='l'>{esc(label)}</div><div class='mono'>{text}"
-            f"<div class='mut small'>{basis} · scoring-aware selection · assumed −110 · "
-            "no verified ATS prices · not locked pregame picks</div>"
+            f"<div class='mut small'>{basis} · assumed −110 · 1u per bet · not locked pregame picks</div>"
             "</div></div>")
 
 
@@ -858,20 +856,13 @@ def render_index(latest, ledger, built, now=None):
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
         ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
-        spread_pick_legacy, edge = ats_card_pick(ms, ks, home, away)
-        v2_side = r.get("v2_ats_side", "")
-        v2_side = v2_side if v2_side in ("home", "away") else ""
-        if v2_side and math.isfinite(ks):
-            spread_pick = f'{esc(home if v2_side == "home" else away)} {spread_text(ks, v2_side == "home")}'
-            edge_text = ' · scoring-aware confirmation'
-        else:
-            spread_pick = 'No ATS selection · ' + esc(str(r.get("v2_ats_skip_reason") or "no approved edge").replace("_", " "))
-            edge_text = ''
+        spread_pick, edge = ats_card_pick(ms, ks, home, away)
+        edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
         moneyline_pick = pick_text(team, bet.price)
         if team:
             moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
-                 f"<span class='kind'>ATS v2</span><span>{spread_pick}{edge_text}</span></div>")
+                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
         lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
         band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
@@ -903,9 +894,6 @@ def render_index(latest, ledger, built, now=None):
             det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
                        "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
                        "adds more, so the real range is wider.</p>")
-        det.append(f"<p class='mut small'>Legacy fixed-band comparator: {spread_pick_legacy}. "
-                   "ATS v2 uses scoring-aware cover, noncover and push probabilities; "
-                   "the quote basis is an unverified −110 proxy.</p>")
         det.append(historical_pick_reference(latest, r, edge))
         if team and math.isfinite(num(bet.price)) and math.isfinite(q):
             det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
@@ -1083,7 +1071,6 @@ def render_grades(ledger, latest, built):
                                 table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
-        parts.append(render_ats_v2(latest, details=True))
         parts.append(render_fixed_bands(latest, details=True))
     parts.append("<p class='mut small'>Full statistics, earlier model versions and research comparisons: "
                  "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
@@ -1132,60 +1119,13 @@ def render_retro(latest):
     return "".join(out)
 
 
-
-def render_ats_v2(latest, details=False):
-    d = latest.get('ats_v2_ledger', pd.DataFrame())
-    if d.empty:
-        return ''
-    s = ats_v2.summary(d)
-    season = str(int(latest['manifest']['season']))
-    out = ["<h2 class='sec'>ATS v2 · scoring-aware selection</h2>",
-           "<p class='mut small'>Production ATS policy, separate from the unchanged moneyline model. "
-           "Uses earlier-season scoring-margin distributions and verifies candidate sides against "
-           "estimated −110 break-even return; unsupported reversals and weak signals skip. "
-           "Historical returns are retrospective and based on unverified −110 quotes, "
-           "not evidence of executable bets or independent validation.</p>"]
-    rows = []
-    for r in s.itertuples(index=False):
-        rows.append(["All seasons" if r.season == 'All' else esc(r.season),
-                     str(r.opportunities), f"{r.wins}–{r.losses}–{r.pushes}",
-                     str(r.skips), f"{100*r.coverage:.1f}%",
-                     f"{r.units:+.2f}", roi_short(r.roi)])
-    cur = [r for r in rows if r[0] == season]
-    columns = ['Season', 'Opportunities', 'W–L–P', 'Skips', 'Selection', 'Units', 'ROI']
-    if cur:
-        out.append(f"<h3>{season} retrospective ATS v2</h3>"
-                   + table(columns, cur, num_cols=(1, 3, 4, 5, 6)))
-    out.append("<h3>Chronological historical evaluation</h3>"
-               + table(columns, rows, num_cols=(1, 3, 4, 5, 6)))
-    out.append("<p class='mut small'><a href='ats_v2_ledger.csv'>Per-game v2 audit</a> · "
-               "<a href='ats_v2_summary.csv'>Season results</a> · "
-               "<a href='ats_v2_policy.json'>Policy version</a>. "
-               "The frozen four-band approach remains available below as a benchmark.</p>")
-    if details:
-        eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
-        for year, group in eligible.groupby('season', sort=False):
-            rows = []
-            for r in group.sort_values(['week', 'game_id'], ascending=False).itertuples(index=False):
-                pick = (f"{esc(r.v2_ats_team)} {spread_text(r.spread_line, r.v2_ats_side == 'home')}"
-                        if r.v2_ats_team else "Skip")
-                rows.append([f"W{int(r.week)} · {esc(r.away)} @ {esc(r.home)}",
-                             pick, esc(r.v2_ats_source or r.v2_ats_skip_reason),
-                             'Skip' if r.v2_ats_result == 'S' else result_badge(r.v2_ats_result),
-                             f"{r.v2_ats_units:+.2f}"])
-            out.append(folded(f"{int(year)} · ATS v2 · reconstructed",
-                              table(['Game', 'ATS selection', 'Decision', 'Result', 'Units'], rows),
-                              int(year) == int(season)))
-    return ''.join(out)
-
-
 def render_fixed_bands(latest, details=False):
     d = latest.get('fixed_band_ledger', pd.DataFrame())
     if d.empty:
         return ''
     eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
     current_season = int(latest['manifest']['season'])
-    out = ["<h2 class='sec'>Legacy fixed-band benchmark</h2>",
+    out = ["<h2 class='sec'>Model spread</h2>",
            "<div class='gr-note flag-note'>Reconstructed history, not locked forward results. "
            "Each season's mapping uses earlier seasons only; the model and calibration design were developed on exposed history. "
            "At least two prior seasons are required. Tied finals are included. "
@@ -1310,7 +1250,6 @@ def render_calibration(latest, ledger, built):
     elif not len(s):
         parts.append("<div class='gr-note'>No graded picks yet.</div>")
     if latest is not None:
-        parts.append(render_ats_v2(latest))
         parts.append(render_fixed_bands(latest))
     return html_document("".join(parts), f"{SITE_NAME} market calibration", "market-calibration.html", built)
 
@@ -1327,8 +1266,7 @@ def render_all(out_dir, data=DATA, now=None):
     if latest is not None and 'fixed_band_ledger' in latest:
         exports = {'fixed_band_ledger.csv': latest['fixed_band_ledger'],
                    'fixed_band_summary.csv': fixed_bands.summary(latest['fixed_band_ledger']),
-                   'fixed_band_board.csv': latest['board'].drop(
-                       columns=[x for x in latest['board'] if x.startswith('v2_')])}
+                   'fixed_band_board.csv': latest['board']}
         for name, frame in exports.items():
             frame.to_csv(Path(data) / 'latest' / name, index=False)
             if name == 'fixed_band_summary.csv':
@@ -1341,23 +1279,6 @@ def render_all(out_dir, data=DATA, now=None):
         rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
         (out / 'fixed_band_rules.json').write_text(rules)
-    if latest is not None and 'ats_v2_ledger' in latest:
-        v2_exports = {
-            'ats_v2_ledger.csv': latest['ats_v2_ledger'],
-            'ats_v2_summary.csv': ats_v2.summary(latest['ats_v2_ledger']),
-            'ats_v2_board.csv': latest['board'],
-        }
-        for name, frame in v2_exports.items():
-            frame.to_csv(Path(data) / 'latest' / name, index=False)
-            frame.to_csv(out / name, index=False)
-        v2_policy = json.dumps({'version': ats_v2.POLICY_VERSION,
-                                'min_expected_return': ats_v2.MIN_EV,
-                                'assumed_american_odds': -110,
-                                'odds_verified': False,
-                                'training': 'strictly earlier seasons',
-                                'legacy_fixed_bands_unchanged': True}, indent=2)
-        (Path(data) / 'latest' / 'ats_v2_policy.json').write_text(v2_policy)
-        (out / 'ats_v2_policy.json').write_text(v2_policy)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built)}

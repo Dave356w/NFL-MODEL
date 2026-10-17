@@ -25,29 +25,13 @@ remain unchanged; retrospective replay at their original quotes is separately la
 Adoption follows exposed historical development, with reliable profit superiority
 still unresolved.
 
-**Production ATS v2 (2026-10-16)** is a separate scoring-aware *selection*
-policy; the v1.18 moneyline model and frozen fixed-band benchmarks are unchanged.
-The board still shows the historical fixed-band **Model spread** magnitude (2026:
-4/5/7/13 for raw spread magnitudes <3, 3–<7, 7–<10 and >=10), but the displayed
-**ATS v2** selection is no longer mechanically determined by its difference
-from the market line. The original raw spread and fixed band each propose a
-side; an earlier-season-trained discrete scoring-margin model calculates
-home-cover, away-cover and push probabilities. At an assumed -110 payout,
-only a candidate with positive modeled expected units is selected. When the
-raw and fixed-band sides disagree, the probability model confirms one or
-abstains; forced reversals and coverage targets do not apply. An exact
-raw/fixed equality with the market offers no candidate from that source.
-No ATS sportsbook prices have been verified.
-
-The Ledger and Market calibration pages display the live v2 policy's
-*retrospectively reconstructed* scores and separately retain the original
-fixed-band benchmark with its 2023-2026 unchanged selections. Public and
-committed audits: `ats_v2_ledger.csv`, `ats_v2_summary.csv`,
-`ats_v2_board.csv`, and `ats_v2_policy.json` under `data/latest/`; new
-native pregame ATS shadow records also freeze v2 decisions and policy IDs.
-The old fixed-band history was used in deciding to build this policy and is
-**not** independent evidence of profitability. The model's moneyline picks
-retain the v1.18 recipe.
+The displayed **Model spread** uses the fixed-band mapping (2026: 4/5/7/13
+points for original spread magnitudes below 3, 3–7, 7–10, and 10+). Ledger and
+calibration pages show season-by-season retrospective ATS results at assumed
+−110, including pushes and skips, with downloadable per-game data. Each mapping
+uses earlier seasons only; these are exposed historical comparisons. Win
+probabilities and moneyline picks retain the v1.18 recipe. See `fixed_bands.py`
+and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 
 | Page | For |
 |---|---|

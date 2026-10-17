@@ -100,8 +100,7 @@ def render(tmp_path, **kw):
 
 
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
-SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json",
-                  "ats_v2_ledger.csv", "ats_v2_summary.csv", "ats_v2_board.csv", "ats_v2_policy.json"}
+SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json"}
 
 def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     # NFL schedule input is Eastern clock time. Presentation must be Pacific.
@@ -427,8 +426,7 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
     assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
     for page in ['grades.html', 'market-calibration.html']:
         text = (out / page).read_text()
-        assert "<h2 class='sec'>Legacy fixed-band benchmark</h2>" in text
-        assert "<h2 class='sec'>ATS v2 · scoring-aware selection</h2>" in text
+        assert "<h2 class='sec'>Model spread</h2>" in text
         assert 'Fixed-band spread · retrospective ATS' not in text
         if page == 'market-calibration.html':
             assert '<h3>2026 graded results</h3>' not in text  # history is only 2024
@@ -551,7 +549,7 @@ def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
         assert '<td>2024</td>' in html and '<td>2026</td>' in html
         assert 'Fixed-band spread · retrospective ATS' not in html
     html = (out / 'grades.html').read_text()
-    assert 'ATS v2 · 2026 graded results' in html
+    assert 'model spread · graded results' in html
 
 
 def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypatch):
@@ -566,11 +564,11 @@ def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypat
     b.render_all(out, data, now=NOW)
     for page in ['index.html', 'grades.html']:
         html = (out / page).read_text()
-        assert 'ATS v2 · 2026 graded results' in html
-        assert 'scoring-aware selection · assumed −110' in html
-        assert html.index('ATS v2 · 2026 graded results') < html.index("class='grid'" if page == 'index.html' else 'Rebuilt history')
+        assert 'Model spread · 2026 graded results' in html
+        assert 'assumed −110 · 1u per bet · not locked pregame picks' in html
+        assert html.index('Model spread · 2026 graded results') < html.index("class='grid'" if page == 'index.html' else 'Rebuilt history')
     html = (out / 'grades.html').read_text()
-    assert 'ATS v2 · rebuilt history' in html
+    assert 'Model spread · rebuilt history' in html
     assert '<th>Spread pick</th>' in html and '<th>ATS result</th>' in html
     latest = b.load_latest(data / 'latest')
     for year in [2024, 2026]:
@@ -630,7 +628,7 @@ def test_cards_show_separate_picks_and_historical_reference(tmp_path,monkeypatch
     out,_=render(tmp_path)
     text=(out/'index.html').read_text()
     assert "<span class='kind'>Moneyline</span>" in text
-    assert "<span class='kind'>ATS v2</span>" in text
-    assert 'Legacy fixed-band comparator' in text
+    assert "<span class='kind'>Spread</span>" in text
+    assert 'projected edge' in text
     assert 'Historical reference · reconstructed' in text
     assert 'model probability' in text and 'recorded moneylines' in text
