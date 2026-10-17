@@ -1,0 +1,8 @@
+{
+  "version": "ats-v2-key-aware-2026-10-16-v1",
+  "min_expected_return": 0.0,
+  "assumed_american_odds": -110,
+  "odds_verified": false,
+  "training": "strictly earlier seasons",
+  "legacy_fixed_bands_unchanged": true
+}
