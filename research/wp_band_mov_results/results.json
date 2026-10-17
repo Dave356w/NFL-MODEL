@@ -1,0 +1,3741 @@
+{
+  "status": "exposed historical development; assumed -110 ATS prices",
+  "decision": "retain_production_no_candidate_qualifies",
+  "nominees": [],
+  "primary_mean_arm": "wp_mean",
+  "primary_median_arm": "wp_median",
+  "paired_comparisons": {
+    "primary_2023_2025": [
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -1.7230006958360342,
+        "ci95": [
+          -3.494020640815151,
+          -0.07791281028639456
+        ],
+        "ci_five_candidates": [
+          -4.069594368334856,
+          0.3991617209039106
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.04540553650908226,
+        "ci95": [
+          -0.11590339331096723,
+          0.021822409404118955
+        ],
+        "ci_five_candidates": [
+          -0.13818573449758473,
+          0.042659984035901065
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.009358288770053475,
+        "ci95": [
+          -0.051470588235294115,
+          0.07226328072905089
+        ],
+        "ci_five_candidates": [
+          -0.06851935193519353,
+          0.09381339804016753
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -1.019970972124282,
+        "ci95": [
+          -4.8684595778736925,
+          2.4679800370362774
+        ],
+        "ci_five_candidates": [
+          -6.1905785805772915,
+          3.452415524975629
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.01682202415097041,
+        "ci95": [
+          -0.13801322468070892,
+          0.10652148739320556
+        ],
+        "ci_five_candidates": [
+          -0.17590627568910888,
+          0.14266948526339143
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.010472370766488406,
+        "ci95": [
+          -0.06812763947543898,
+          0.047582124493970986
+        ],
+        "ci_five_candidates": [
+          -0.089162409192749,
+          0.06680314947412094
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 3.758521674934542,
+        "ci95": [
+          1.032731836928035,
+          6.404082695103662
+        ],
+        "ci_five_candidates": [
+          0.23610497873141972,
+          7.240770612222324
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.05854562290785313,
+        "ci95": [
+          -0.03884551217722361,
+          0.1559083818383766
+        ],
+        "ci_five_candidates": [
+          -0.06599450552118678,
+          0.1847276276526713
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.01236631016042781,
+        "ci95": [
+          -0.0849842902045477,
+          0.06215570172935799
+        ],
+        "ci_five_candidates": [
+          -0.10485258342876841,
+          0.08638101826735702
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -1.7230006958360342,
+        "ci95": [
+          -3.494020640815151,
+          -0.07791281028639456
+        ],
+        "ci_five_candidates": [
+          -4.069594368334856,
+          0.3991617209039106
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.04540553650908226,
+        "ci95": [
+          -0.11590339331096723,
+          0.021822409404118955
+        ],
+        "ci_five_candidates": [
+          -0.13818573449758473,
+          0.042659984035901065
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.009358288770053475,
+        "ci95": [
+          -0.051470588235294115,
+          0.07226328072905089
+        ],
+        "ci_five_candidates": [
+          -0.06851935193519353,
+          0.09381339804016753
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -1.019970972124282,
+        "ci95": [
+          -4.8684595778736925,
+          2.4679800370362774
+        ],
+        "ci_five_candidates": [
+          -6.1905785805772915,
+          3.452415524975629
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.01682202415097041,
+        "ci95": [
+          -0.13801322468070892,
+          0.10652148739320556
+        ],
+        "ci_five_candidates": [
+          -0.17590627568910888,
+          0.14266948526339143
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.010472370766488406,
+        "ci95": [
+          -0.06812763947543898,
+          0.047582124493970986
+        ],
+        "ci_five_candidates": [
+          -0.089162409192749,
+          0.06680314947412094
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 3.758521674934542,
+        "ci95": [
+          1.032731836928035,
+          6.404082695103662
+        ],
+        "ci_five_candidates": [
+          0.23610497873141972,
+          7.240770612222324
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.05854562290785313,
+        "ci95": [
+          -0.03884551217722361,
+          0.1559083818383766
+        ],
+        "ci_five_candidates": [
+          -0.06599450552118678,
+          0.1847276276526713
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.01236631016042781,
+        "ci95": [
+          -0.0849842902045477,
+          0.06215570172935799
+        ],
+        "ci_five_candidates": [
+          -0.10485258342876841,
+          0.08638101826735702
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -2.7131020762735143,
+        "ci95": [
+          -4.727928963013703,
+          -0.7592196047037008
+        ],
+        "ci_five_candidates": [
+          -5.49568332343693,
+          -0.1710583810680954
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.06470240438896462,
+        "ci95": [
+          -0.14688544163863348,
+          0.01793173687671172
+        ],
+        "ci_five_candidates": [
+          -0.1724253320499268,
+          0.04045961143035064
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.011697860962566848,
+        "ci95": [
+          -0.058064143618857034,
+          0.0825938334687562
+        ],
+        "ci_five_candidates": [
+          -0.07839452460442331,
+          0.1048951048951049
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -2.010072352561761,
+        "ci95": [
+          -6.0076501329531595,
+          1.6675667718026235
+        ],
+        "ci_five_candidates": [
+          -7.39153480749896,
+          2.6515724087664805
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.03611889203085273,
+        "ci95": [
+          -0.16683198033281785,
+          0.09208165849096873
+        ],
+        "ci_five_candidates": [
+          -0.2046327147371516,
+          0.13518663648194595
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.008132798573975036,
+        "ci95": [
+          -0.06616663613014773,
+          0.05085222770745578
+        ],
+        "ci_five_candidates": [
+          -0.08152081885982246,
+          0.06829582799573769
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 2.7684202944970617,
+        "ci95": [
+          0.657401920402236,
+          4.871747063738176
+        ],
+        "ci_five_candidates": [
+          -0.013261283801492017,
+          5.572781777588289
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.0392487550279708,
+        "ci95": [
+          -0.03312730895048035,
+          0.10930875416616789
+        ],
+        "ci_five_candidates": [
+          -0.05401704014316183,
+          0.12966631125751368
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.010026737967914437,
+        "ci95": [
+          -0.055487233270901104,
+          0.038001335594871545
+        ],
+        "ci_five_candidates": [
+          -0.06902403779522426,
+          0.05383069019432655
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -4.0247209001823405,
+        "ci95": [
+          -7.343157472556137,
+          -0.7128385413607374
+        ],
+        "ci_five_candidates": [
+          -8.400051508197134,
+          0.1792850795873389
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.06167174765222952,
+        "ci95": [
+          -0.18211504586470476,
+          0.059671251009454675
+        ],
+        "ci_five_candidates": [
+          -0.2208124884037781,
+          0.09368369346583376
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.0018939393939393955,
+        "ci95": [
+          -0.09203284744420054,
+          0.09917430777583396
+        ],
+        "ci_five_candidates": [
+          -0.1180466997156278,
+          0.13110434675922086
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -3.3216911764705883,
+        "ci95": [
+          -7.576923938237228,
+          0.6705920036079094
+        ],
+        "ci_five_candidates": [
+          -9.06506791249795,
+          1.885043256033708
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.03308823529411765,
+        "ci95": [
+          -0.17661867045142385,
+          0.1068398136897529
+        ],
+        "ci_five_candidates": [
+          -0.2166488019190737,
+          0.1477475758223923
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.017936720142602485,
+        "ci95": [
+          -0.08262425448565006,
+          0.044617559674052155
+        ],
+        "ci_five_candidates": [
+          -0.103197238469142,
+          0.06318352223895594
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 1.4568014705882353,
+        "ci95": [
+          -1.0759421595750942,
+          3.9788821230847073
+        ],
+        "ci_five_candidates": [
+          -1.8387610683578157,
+          4.733069317018116
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.042279411764705885,
+        "ci95": [
+          -0.06071999740537445,
+          0.14652278702892196
+        ],
+        "ci_five_candidates": [
+          -0.08921934198517463,
+          0.1750318305202634
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.019830659536541895,
+        "ci95": [
+          -0.09505456176433189,
+          0.0582902738946685
+        ],
+        "ci_five_candidates": [
+          -0.12062247651381525,
+          0.08220393372224921
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -2.3017202043463065,
+        "ci95": [
+          -4.710026243880741,
+          0.1862760577318458
+        ],
+        "ci_five_candidates": [
+          -5.489959115619608,
+          0.8165378146205493
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.01626621114314724,
+        "ci95": [
+          -0.10473463110133187,
+          0.07373974153646025
+        ],
+        "ci_five_candidates": [
+          -0.12920828597449743,
+          0.10223299592310578
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.0074643493761140855,
+        "ci95": [
+          -0.08219312941568133,
+          0.06636102932528161
+        ],
+        "ci_five_candidates": [
+          -0.10647454090942596,
+          0.08757528089270164
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -4.437711096260772,
+        "ci95": [
+          -7.661451183069078,
+          -1.217448464690867
+        ],
+        "ci_five_candidates": [
+          -8.569523223037951,
+          -0.2723815029441839
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.049416845691445214,
+        "ci95": [
+          -0.15943994987905305,
+          0.05913434337936669
+        ],
+        "ci_five_candidates": [
+          -0.18937744462286424,
+          0.08965584377766318
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.04177807486631016,
+        "ci95": [
+          -0.04132281921235021,
+          0.12876018950010681
+        ],
+        "ci_five_candidates": [
+          -0.06640968021441027,
+          0.15415041296212995
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -3.7346813725490198,
+        "ci95": [
+          -7.783328530205923,
+          0.25161382657278114
+        ],
+        "ci_five_candidates": [
+          -9.088084644930202,
+          1.3196715531854077
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -0.020833333333333332,
+        "ci95": [
+          -0.1557490684509414,
+          0.11646341463414635
+        ],
+        "ci_five_candidates": [
+          -0.19557016350844134,
+          0.15917445441116895
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.021947415329768266,
+        "ci95": [
+          -0.03731093457948954,
+          0.08064786696237324
+        ],
+        "ci_five_candidates": [
+          -0.057738644487311884,
+          0.09827807375500625
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 1.0438112745098038,
+        "ci95": [
+          -0.8016517005292402,
+          2.8778734233076197
+        ],
+        "ci_five_candidates": [
+          -1.4022814700277515,
+          3.45863913734246
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.0545343137254902,
+        "ci95": [
+          -0.012239902080783354,
+          0.11682966160968046
+        ],
+        "ci_five_candidates": [
+          -0.03473066671534979,
+          0.13485231775493955
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.020053475935828874,
+        "ci95": [
+          -0.03392684590807121,
+          0.07389915903353063
+        ],
+        "ci_five_candidates": [
+          -0.048764845911918986,
+          0.09000233390167647
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mse",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": -1.7246090199872577,
+        "ci95": [
+          -3.7870204572882313,
+          0.30360749317345603
+        ],
+        "ci_five_candidates": [
+          -4.464677355301883,
+          0.9579307367974367
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mae",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.015285558697519394,
+        "ci95": [
+          -0.05056596529848859,
+          0.08050226004608498
+        ],
+        "ci_five_candidates": [
+          -0.0744076206414524,
+          0.0998907273921743
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 816,
+        "season_week_blocks": 54,
+        "gain": 0.030080213903743307,
+        "ci95": [
+          -0.020065958438898697,
+          0.07986950294805707
+        ],
+        "ci_five_candidates": [
+          -0.03551570969357531,
+          0.0976184756809366
+        ]
+      }
+    ],
+    "all_2023_onward": [
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.8912512537539414,
+        "ci95": [
+          -3.527773997661086,
+          -0.35980046843492447
+        ],
+        "ci_five_candidates": [
+          -4.061381535445721,
+          0.12056643701981219
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.048465234390644804,
+        "ci95": [
+          -0.11365989582386195,
+          0.01396622258749307
+        ],
+        "ci_five_candidates": [
+          -0.1357353929089039,
+          0.034738679003687066
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.008532249873031994,
+        "ci95": [
+          -0.048789235514207704,
+          0.06825990776498819
+        ],
+        "ci_five_candidates": [
+          -0.06489403725844949,
+          0.0877511748429528
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.6923387740333304,
+        "ci95": [
+          -5.357558549412458,
+          1.6120501732284533
+        ],
+        "ci_five_candidates": [
+          -6.5802279079984185,
+          2.6297201488979454
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.042431901977719726,
+        "ci95": [
+          -0.16072812518061774,
+          0.07689999841484445
+        ],
+        "ci_five_candidates": [
+          -0.19440171357039132,
+          0.1118781373261814
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.0143219908583037,
+        "ci95": [
+          -0.06924623909453174,
+          0.04006657078296175
+        ],
+        "ci_five_candidates": [
+          -0.08845554585803624,
+          0.05894263616667428
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 2.7909014494303572,
+        "ci95": [
+          0.22899311329631242,
+          5.290015371251568
+        ],
+        "ci_five_candidates": [
+          -0.5862459647936475,
+          6.0873979198160635
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.03131111478205682,
+        "ci95": [
+          -0.061622493326687795,
+          0.12186343721135369
+        ],
+        "ci_five_candidates": [
+          -0.08942954287011139,
+          0.1531408324707133
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.02102590147282884,
+        "ci95": [
+          -0.08902130514403281,
+          0.049678978535506596
+        ],
+        "ci_five_candidates": [
+          -0.10917293607675689,
+          0.07223322950897643
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.8912512537539414,
+        "ci95": [
+          -3.527773997661086,
+          -0.35980046843492447
+        ],
+        "ci_five_candidates": [
+          -4.061381535445721,
+          0.12056643701981219
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.048465234390644804,
+        "ci95": [
+          -0.11365989582386195,
+          0.01396622258749307
+        ],
+        "ci_five_candidates": [
+          -0.1357353929089039,
+          0.034738679003687066
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.008532249873031994,
+        "ci95": [
+          -0.048789235514207704,
+          0.06825990776498819
+        ],
+        "ci_five_candidates": [
+          -0.06489403725844949,
+          0.0877511748429528
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.6923387740333304,
+        "ci95": [
+          -5.357558549412458,
+          1.6120501732284533
+        ],
+        "ci_five_candidates": [
+          -6.5802279079984185,
+          2.6297201488979454
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.042431901977719726,
+        "ci95": [
+          -0.16072812518061774,
+          0.07689999841484445
+        ],
+        "ci_five_candidates": [
+          -0.19440171357039132,
+          0.1118781373261814
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.0143219908583037,
+        "ci95": [
+          -0.06924623909453174,
+          0.04006657078296175
+        ],
+        "ci_five_candidates": [
+          -0.08845554585803624,
+          0.05894263616667428
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 2.7909014494303572,
+        "ci95": [
+          0.22899311329631242,
+          5.290015371251568
+        ],
+        "ci_five_candidates": [
+          -0.5862459647936475,
+          6.0873979198160635
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.03131111478205682,
+        "ci95": [
+          -0.061622493326687795,
+          0.12186343721135369
+        ],
+        "ci_five_candidates": [
+          -0.08942954287011139,
+          0.1531408324707133
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.02102590147282884,
+        "ci95": [
+          -0.08902130514403281,
+          0.049678978535506596
+        ],
+        "ci_five_candidates": [
+          -0.10917293607675689,
+          0.07223322950897643
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -2.37255027646781,
+        "ci95": [
+          -4.290297669305211,
+          -0.4944064687682685
+        ],
+        "ci_five_candidates": [
+          -4.974331642334229,
+          0.013314596862895574
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.06124089566876139,
+        "ci95": [
+          -0.13761752552724715,
+          0.015603607511464607
+        ],
+        "ci_five_candidates": [
+          -0.1596162301271952,
+          0.03602481959951446
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.002133062468258,
+        "ci95": [
+          -0.0629150124813133,
+          0.06833626326926188
+        ],
+        "ci_five_candidates": [
+          -0.08245243128964061,
+          0.08765192163628048
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -2.173637796747199,
+        "ci95": [
+          -5.973152725826208,
+          1.3231086569808093
+        ],
+        "ci_five_candidates": [
+          -7.124956934175248,
+          2.297784074910497
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.05520756325583631,
+        "ci95": [
+          -0.1791243632688017,
+          0.06909840746486579
+        ],
+        "ci_five_candidates": [
+          -0.21396789386744985,
+          0.10498349327620951
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.020721178263077702,
+        "ci95": [
+          -0.07811389337367836,
+          0.03730964831628549
+        ],
+        "ci_five_candidates": [
+          -0.09487917644824616,
+          0.05616175312446498
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 2.3096024267164883,
+        "ci95": [
+          0.3740762458777191,
+          4.283098828688044
+        ],
+        "ci_five_candidates": [
+          -0.24452057454184567,
+          4.84394844986385
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.018535453503940223,
+        "ci95": [
+          -0.04861851831586469,
+          0.08405293917923591
+        ],
+        "ci_five_candidates": [
+          -0.0691453040214692,
+          0.10216872312996646
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.027425088877602845,
+        "ci95": [
+          -0.07579203132900547,
+          0.024425725376203043
+        ],
+        "ci_five_candidates": [
+          -0.09049882405414438,
+          0.04159084490245714
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -3.663716948994354,
+        "ci95": [
+          -6.765120436260445,
+          -0.6125294152665268
+        ],
+        "ci_five_candidates": [
+          -7.6766979346661515,
+          0.22909612575144456
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.04402215922856753,
+        "ci95": [
+          -0.1541410003182312,
+          0.06745434900057977
+        ],
+        "ci_five_candidates": [
+          -0.19038354390622939,
+          0.09729176180283418
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.0079228034535297,
+        "ci95": [
+          -0.07904816501173101,
+          0.09718636719204722
+        ],
+        "ci_five_candidates": [
+          -0.10321132047833707,
+          0.125407172085161
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -3.464804469273743,
+        "ci95": [
+          -7.495043838826939,
+          0.3173451533468906
+        ],
+        "ci_five_candidates": [
+          -8.771936281052032,
+          1.5128718091009814
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.03798882681564246,
+        "ci95": [
+          -0.1727992485238862,
+          0.09455138345829069
+        ],
+        "ci_five_candidates": [
+          -0.2142049512987013,
+          0.13522833726657071
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.014931437277805992,
+        "ci95": [
+          -0.07733481374059639,
+          0.04591679300361618
+        ],
+        "ci_five_candidates": [
+          -0.09691067463365186,
+          0.06453009815849325
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 1.018435754189944,
+        "ci95": [
+          -1.3839742118914604,
+          3.413710622456528
+        ],
+        "ci_five_candidates": [
+          -2.1302108938547484,
+          4.157594991482873
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.035754189944134075,
+        "ci95": [
+          -0.06091253138106763,
+          0.1350896860986547
+        ],
+        "ci_five_candidates": [
+          -0.09242968465842563,
+          0.1634945017691125
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.021635347892331146,
+        "ci95": [
+          -0.09241642041653812,
+          0.05121262399018304
+        ],
+        "ci_five_candidates": [
+          -0.11833655460302032,
+          0.07474081912917581
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.7724656952404132,
+        "ci95": [
+          -4.004944079349924,
+          0.5023702263905417
+        ],
+        "ci_five_candidates": [
+          -4.715357940589442,
+          1.1333357511982922
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.004443075162077264,
+        "ci95": [
+          -0.07709775612908958,
+          0.08684744072623642
+        ],
+        "ci_five_candidates": [
+          -0.09896959293752959,
+          0.11280183248424465
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.0006094464195022908,
+        "ci95": [
+          -0.06929993336196302,
+          0.06692209947852551
+        ],
+        "ci_five_candidates": [
+          -0.09192488653130293,
+          0.08838629584434914
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -3.6511471165921194,
+        "ci95": [
+          -6.677368593891335,
+          -0.6324958791223431
+        ],
+        "ci_five_candidates": [
+          -7.553399307001013,
+          0.20829885403161796
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.02223444973136084,
+        "ci95": [
+          -0.12324165976608316,
+          0.07749878577699393
+        ],
+        "ci_five_candidates": [
+          -0.15223754108346152,
+          0.10542149190779543
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.05139664804469273,
+        "ci95": [
+          -0.0277089069018088,
+          0.13327336535564258
+        ],
+        "ci_five_candidates": [
+          -0.05003242919320407,
+          0.15796827426187837
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -3.4522346368715082,
+        "ci95": [
+          -7.294628092725003,
+          0.3034156248014775
+        ],
+        "ci_five_candidates": [
+          -8.437444596055476,
+          1.2600241483453107
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -0.016201117318435754,
+        "ci95": [
+          -0.14278637161768365,
+          0.11228219471996194
+        ],
+        "ci_five_candidates": [
+          -0.17980244854427618,
+          0.1543624541971067
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.028542407313357037,
+        "ci95": [
+          -0.02767266197820521,
+          0.08384052102314907
+        ],
+        "ci_five_candidates": [
+          -0.04525391174777397,
+          0.10299685894572243
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 1.0310055865921788,
+        "ci95": [
+          -0.678843424203784,
+          2.736789232904513
+        ],
+        "ci_five_candidates": [
+          -1.222668242872807,
+          3.2539295143856695
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.057541899441340784,
+        "ci95": [
+          -0.003910833484519572,
+          0.11633301834848729
+        ],
+        "ci_five_candidates": [
+          -0.02578518842655879,
+          0.13271218714669947
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.02183849669883189,
+        "ci95": [
+          -0.029471072405855024,
+          0.07232854102419317
+        ],
+        "ci_five_candidates": [
+          -0.043620361571229185,
+          0.08775323221011912
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mse",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": -1.2785968401243093,
+        "ci95": [
+          -3.215079065117405,
+          0.6021251939052593
+        ],
+        "ci_five_candidates": [
+          -3.856370197309566,
+          1.3285329468954525
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mae",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.03900644593740055,
+        "ci95": [
+          -0.02075254586486001,
+          0.09926476614355066
+        ],
+        "ci_five_candidates": [
+          -0.04350078322020408,
+          0.11649856249599791
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 895,
+        "season_week_blocks": 59,
+        "gain": 0.04926358557643473,
+        "ci95": [
+          -0.001216209062676463,
+          0.09877350768426155
+        ],
+        "ci_five_candidates": [
+          -0.016595141157321282,
+          0.1156560431872056
+        ]
+      }
+    ],
+    "2026": [
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -3.629130434273083,
+        "ci95": [
+          -7.741703021382401,
+          -0.20395985739991343
+        ],
+        "ci_five_candidates": [
+          -8.299134201146048,
+          0.9171347936083833
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.08006920238248054,
+        "ci95": [
+          -0.1671005983917754,
+          0.05975569193340106
+        ],
+        "ci_five_candidates": [
+          -0.17488111677635984,
+          0.11737541868808296
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.0,
+        "ci95": [
+          -0.21477272727272728,
+          0.22314049586776863
+        ],
+        "ci_five_candidates": [
+          -0.2625,
+          0.27272727272727276
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -8.6373023988154,
+        "ci95": [
+          -18.279827662723278,
+          3.9029015683627533
+        ],
+        "ci_five_candidates": [
+          -19.574889070194462,
+          8.145378216619646
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.3069592476312317,
+        "ci95": [
+          -0.6881432507545653,
+          0.20140605614195684
+        ],
+        "ci_five_candidates": [
+          -0.7034690298928962,
+          0.4110504227022651
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.054085155350978124,
+        "ci95": [
+          -0.18881118881118877,
+          0.13522727272727272
+        ],
+        "ci_five_candidates": [
+          -0.2016317016317016,
+          0.20568181818181816
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -7.20375809501793,
+        "ci95": [
+          -15.355897277462432,
+          -0.15331691476210968
+        ],
+        "ci_five_candidates": [
+          -18.037775026861837,
+          1.3850677982368702
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.249997222314776,
+        "ci95": [
+          -0.529792963691662,
+          0.0015637166051812423
+        ],
+        "ci_five_candidates": [
+          -0.5997512432276589,
+          0.029162975817745206
+        ]
+      },
+      {
+        "candidate": "wp_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.11047180667433831,
+        "ci95": [
+          -0.3113636363636364,
+          0.07019562715765248
+        ],
+        "ci_five_candidates": [
+          -0.39431818181818185,
+          0.11852704257767549
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -3.629130434273083,
+        "ci95": [
+          -7.741703021382401,
+          -0.20395985739991343
+        ],
+        "ci_five_candidates": [
+          -8.299134201146048,
+          0.9171347936083833
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.08006920238248054,
+        "ci95": [
+          -0.1671005983917754,
+          0.05975569193340106
+        ],
+        "ci_five_candidates": [
+          -0.17488111677635984,
+          0.11737541868808296
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.0,
+        "ci95": [
+          -0.21477272727272728,
+          0.22314049586776863
+        ],
+        "ci_five_candidates": [
+          -0.2625,
+          0.27272727272727276
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -8.6373023988154,
+        "ci95": [
+          -18.279827662723278,
+          3.9029015683627533
+        ],
+        "ci_five_candidates": [
+          -19.574889070194462,
+          8.145378216619646
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.3069592476312317,
+        "ci95": [
+          -0.6881432507545653,
+          0.20140605614195684
+        ],
+        "ci_five_candidates": [
+          -0.7034690298928962,
+          0.4110504227022651
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.054085155350978124,
+        "ci95": [
+          -0.18881118881118877,
+          0.13522727272727272
+        ],
+        "ci_five_candidates": [
+          -0.2016317016317016,
+          0.20568181818181816
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -7.20375809501793,
+        "ci95": [
+          -15.355897277462432,
+          -0.15331691476210968
+        ],
+        "ci_five_candidates": [
+          -18.037775026861837,
+          1.3850677982368702
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.249997222314776,
+        "ci95": [
+          -0.529792963691662,
+          0.0015637166051812423
+        ],
+        "ci_five_candidates": [
+          -0.5997512432276589,
+          0.029162975817745206
+        ]
+      },
+      {
+        "candidate": "wp_monotone_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.11047180667433831,
+        "ci95": [
+          -0.3113636363636364,
+          0.07019562715765248
+        ],
+        "ci_five_candidates": [
+          -0.39431818181818185,
+          0.11852704257767549
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 1.145048060765788,
+        "ci95": [
+          -5.2562001771604585,
+          7.386265092743881
+        ],
+        "ci_five_candidates": [
+          -6.791329795176386,
+          8.911069713562338
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.025486577748687716,
+        "ci95": [
+          -0.18164554192750004,
+          0.13065022294686673
+        ],
+        "ci_five_candidates": [
+          -0.23227369170980236,
+          0.17522152166510305
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.09666283084004605,
+        "ci95": [
+          -0.24165707710011505,
+          0.04833141542002302
+        ],
+        "ci_five_candidates": [
+          -0.26250000000000007,
+          0.07160008741258594
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -3.8631239037765273,
+        "ci95": [
+          -11.977147440089116,
+          9.259322220527235
+        ],
+        "ci_five_candidates": [
+          -12.752540006544447,
+          15.16685158036494
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.2523766229974388,
+        "ci95": [
+          -0.6005321918307028,
+          0.17203958818467352
+        ],
+        "ci_five_candidates": [
+          -0.6510670247232985,
+          0.3057210419445851
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.15074798619102417,
+        "ci95": [
+          -0.3717948717948718,
+          0.0649999999999967
+        ],
+        "ci_five_candidates": [
+          -0.4380165289256198,
+          0.12386363636363636
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -2.4295795999790593,
+        "ci95": [
+          -5.825732215587503,
+          0.4327001405660522
+        ],
+        "ci_five_candidates": [
+          -7.1485540230532125,
+          1.0851223311178906
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.19541459768098318,
+        "ci95": [
+          -0.3087514325420351,
+          -0.08491118369145753
+        ],
+        "ci_five_candidates": [
+          -0.34857893590724415,
+          -0.05325263851245634
+        ]
+      },
+      {
+        "candidate": "four_band_mean",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.20713463751438435,
+        "ci95": [
+          -0.45337995337995335,
+          0.11852704257767549
+        ],
+        "ci_five_candidates": [
+          -0.4958677685950414,
+          0.23935558112773303
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.06513398985877261,
+        "ci95": [
+          -6.00451183480796,
+          3.2920349882332425
+        ],
+        "ci_five_candidates": [
+          -8.917252971284318,
+          3.442868565888733
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.13828245031204228,
+        "ci95": [
+          0.03507919096201621,
+          0.23450844804835566
+        ],
+        "ci_five_candidates": [
+          0.009315715878745606,
+          0.26916668334127447
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.07019562715765247,
+        "ci95": [
+          -0.1461449942462601,
+          0.2540792540792541
+        ],
+        "ci_five_candidates": [
+          -0.2186421173762946,
+          0.295159386068477
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -4.943037974683544,
+        "ci95": [
+          -15.081168831168831,
+          6.6625
+        ],
+        "ci_five_candidates": [
+          -17.76298701298701,
+          10.315625
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.08860759493670886,
+        "ci95": [
+          -0.44805194805194803,
+          0.3625
+        ],
+        "ci_five_candidates": [
+          -0.512987012987013,
+          0.53125
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.016110471806674347,
+        "ci95": [
+          -0.18065268065268064,
+          0.2409090909090909
+        ],
+        "ci_five_candidates": [
+          -0.22077922077922074,
+          0.3113636363636364
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -3.509493670886076,
+        "ci95": [
+          -10.75625,
+          4.246835443037975
+        ],
+        "ci_five_candidates": [
+          -12.434375,
+          6.09375
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.03164556962025317,
+        "ci95": [
+          -0.35443037974683544,
+          0.26875
+        ],
+        "ci_five_candidates": [
+          -0.4438389423076922,
+          0.35
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.040276179516685856,
+        "ci95": [
+          -0.283084004602992,
+          0.16363636363636364
+        ],
+        "ci_five_candidates": [
+          -0.36013986013986016,
+          0.1875
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 3.6942644241318554,
+        "ci95": [
+          0.8038716389924748,
+          6.066923821569046
+        ],
+        "ci_five_candidates": [
+          0.2759014891778215,
+          6.089781005682944
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.21835165269452284,
+        "ci95": [
+          0.14329537667240472,
+          0.30239878197260467
+        ],
+        "ci_five_candidates": [
+          0.12549680948676628,
+          0.3270870241822548
+        ]
+      },
+      {
+        "candidate": "wp_median",
+        "baseline": "wp_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.07019562715765247,
+        "ci95": [
+          -0.01631701631701632,
+          0.17727272727272725
+        ],
+        "ci_five_candidates": [
+          -0.029515938606847706,
+          0.20227272727272724
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 4.473361837960039,
+        "ci95": [
+          -3.996897333175594,
+          13.28203282728457
+        ],
+        "ci_five_candidates": [
+          -6.474533733544951,
+          15.896792453808185
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.2585356148690044,
+        "ci95": [
+          0.12002929608353022,
+          0.4223152563243172
+        ],
+        "ci_five_candidates": [
+          0.08622364123457485,
+          0.48324372507162305
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "model_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.15074798619102417,
+        "ci95": [
+          -0.1277330264672037,
+          0.3974358974358974
+        ],
+        "ci_five_candidates": [
+          -0.20909090909090913,
+          0.43919716646989376
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": -0.5348101265822784,
+        "ci95": [
+          -11.037418831168821,
+          10.665625
+        ],
+        "ci_five_candidates": [
+          -13.584415584415584,
+          14.79375
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.03164556962025317,
+        "ci95": [
+          -0.3141025641025641,
+          0.4375
+        ],
+        "ci_five_candidates": [
+          -0.37662337662337664,
+          0.54375
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "spread_line",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.09666283084004601,
+        "ci95": [
+          -0.036130536130536135,
+          0.27272727272727276
+        ],
+        "ci_five_candidates": [
+          -0.07438016528925619,
+          0.34318181818181814
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.8987341772151899,
+        "ci95": [
+          -2.392405063291139,
+          4.4625
+        ],
+        "ci_five_candidates": [
+          -3.2564102564102564,
+          5.5375
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.08860759493670886,
+        "ci95": [
+          -0.03896103896103896,
+          0.225
+        ],
+        "ci_five_candidates": [
+          -0.07792207792207792,
+          0.2625
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "fixed_band_spread",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.04027617951668584,
+        "ci95": [
+          -0.08041958041958042,
+          0.15795454545454546
+        ],
+        "ci_five_candidates": [
+          -0.1238853438228438,
+          0.18181818181818182
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mse",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 3.3283137771942495,
+        "ci95": [
+          -1.9832405734722631,
+          8.507079269094099
+        ],
+        "ci_five_candidates": [
+          -3.3986892341406247,
+          9.830189478936939
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "mae",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.28402219261769207,
+        "ci95": [
+          0.22682241092213246,
+          0.34122197431325163
+        ],
+        "ci_five_candidates": [
+          0.21498922102473472,
+          0.3575711241719375
+        ]
+      },
+      {
+        "candidate": "four_band_median",
+        "baseline": "four_band_mean",
+        "metric": "ats_units_per_opportunity",
+        "games": 79,
+        "season_week_blocks": 5,
+        "gain": 0.2474108170310702,
+        "ci95": [
+          0.005681818181818177,
+          0.4014167650531287
+        ],
+        "ci_five_candidates": [
+          -0.10356731875719219,
+          0.4132231404958678
+        ]
+      }
+    ]
+  },
+  "integer_line_sensitivity": {
+    "primary_2023_2025": {
+      "fixed_band_spread": {
+        "-0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 409,
+          "losses": 388,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -16.181818181818173,
+          "roi": -0.019830659536541877,
+          "units_per_opportunity": -0.019830659536541877
+        },
+        "0.0": {
+          "opportunities": 816,
+          "bets": 783,
+          "wins": 401,
+          "losses": 363,
+          "pushes": 19,
+          "skips": 33,
+          "coverage": 0.9595588235294118,
+          "units": 1.5454545454545485,
+          "roi": 0.0019737605944502535,
+          "units_per_opportunity": 0.0018939393939393977
+        },
+        "0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 426,
+          "losses": 371,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 16.272727272727273,
+          "roi": 0.019942067736185384,
+          "units_per_opportunity": 0.019942067736185384
+        }
+      },
+      "wp_median": {
+        "-0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 395,
+          "losses": 402,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -42.90909090909091,
+          "roi": -0.05258467023172905,
+          "units_per_opportunity": -0.05258467023172905
+        },
+        "0.0": {
+          "opportunities": 816,
+          "bets": 666,
+          "wins": 337,
+          "losses": 321,
+          "pushes": 8,
+          "skips": 150,
+          "coverage": 0.8161764705882353,
+          "units": -14.636363636363628,
+          "roi": -0.021976521976521963,
+          "units_per_opportunity": -0.017936720142602485
+        },
+        "0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 418,
+          "losses": 379,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 1.0000000000000098,
+          "roi": 0.0012254901960784433,
+          "units_per_opportunity": 0.0012254901960784433
+        }
+      },
+      "four_band_median": {
+        "-0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 419,
+          "losses": 378,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 2.9090909090909145,
+          "roi": 0.003565062388591807,
+          "units_per_opportunity": 0.003565062388591807
+        },
+        "0.0": {
+          "opportunities": 816,
+          "bets": 709,
+          "wins": 375,
+          "losses": 323,
+          "pushes": 11,
+          "skips": 107,
+          "coverage": 0.8688725490196079,
+          "units": 17.909090909090907,
+          "roi": 0.025259648672906778,
+          "units_per_opportunity": 0.021947415329768266
+        },
+        "0.01": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 430,
+          "losses": 367,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 23.909090909090914,
+          "roi": 0.029300356506238866,
+          "units_per_opportunity": 0.029300356506238866
+        }
+      }
+    },
+    "all_2023_onward": {
+      "fixed_band_spread": {
+        "-0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 450,
+          "losses": 420,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -10.909090909090903,
+          "roi": -0.012188928390045702,
+          "units_per_opportunity": -0.012188928390045702
+        },
+        "0.0": {
+          "opportunities": 895,
+          "bets": 856,
+          "wins": 440,
+          "losses": 394,
+          "pushes": 22,
+          "skips": 39,
+          "coverage": 0.9564245810055866,
+          "units": 6.000000000000009,
+          "roi": 0.007009345794392534,
+          "units_per_opportunity": 0.00670391061452515
+        },
+        "0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 466,
+          "losses": 404,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 19.63636363636364,
+          "roi": 0.02194007110208228,
+          "units_per_opportunity": 0.02194007110208228
+        }
+      },
+      "wp_median": {
+        "-0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 434,
+          "losses": 436,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -41.45454545454545,
+          "roi": -0.04631792788217369,
+          "units_per_opportunity": -0.04631792788217369
+        },
+        "0.0": {
+          "opportunities": 895,
+          "bets": 724,
+          "wins": 367,
+          "losses": 347,
+          "pushes": 10,
+          "skips": 171,
+          "coverage": 0.8089385474860336,
+          "units": -13.363636363636363,
+          "roi": -0.018458061275740834,
+          "units_per_opportunity": -0.014931437277805992
+        },
+        "0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 456,
+          "losses": 414,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 0.5454545454545547,
+          "roi": 0.0006094464195022958,
+          "units_per_opportunity": 0.0006094464195022958
+        }
+      },
+      "four_band_median": {
+        "-0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 460,
+          "losses": 410,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 8.18181818181819,
+          "roi": 0.009141696292534291,
+          "units_per_opportunity": 0.009141696292534291
+        },
+        "0.0": {
+          "opportunities": 895,
+          "bets": 774,
+          "wins": 412,
+          "losses": 349,
+          "pushes": 13,
+          "skips": 121,
+          "coverage": 0.864804469273743,
+          "units": 25.545454545454547,
+          "roi": 0.03300446323702138,
+          "units_per_opportunity": 0.028542407313357037
+        },
+        "0.01": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 473,
+          "losses": 397,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 33.00000000000001,
+          "roi": 0.03687150837988828,
+          "units_per_opportunity": 0.03687150837988828
+        }
+      }
+    },
+    "2026": {
+      "fixed_band_spread": {
+        "-0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 41,
+          "losses": 32,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 5.272727272727273,
+          "roi": 0.06674338319907941,
+          "units_per_opportunity": 0.06674338319907941
+        },
+        "0.0": {
+          "opportunities": 79,
+          "bets": 73,
+          "wins": 39,
+          "losses": 31,
+          "pushes": 3,
+          "skips": 6,
+          "coverage": 0.9240506329113924,
+          "units": 4.454545454545454,
+          "roi": 0.0610211706102117,
+          "units_per_opportunity": 0.05638665132336018
+        },
+        "0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 40,
+          "losses": 33,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 3.3636363636363633,
+          "roi": 0.04257767548906789,
+          "units_per_opportunity": 0.04257767548906789
+        }
+      },
+      "wp_median": {
+        "-0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 39,
+          "losses": 34,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 1.454545454545455,
+          "roi": 0.018411967779056394,
+          "units_per_opportunity": 0.018411967779056394
+        },
+        "0.0": {
+          "opportunities": 79,
+          "bets": 58,
+          "wins": 30,
+          "losses": 26,
+          "pushes": 2,
+          "skips": 21,
+          "coverage": 0.7341772151898734,
+          "units": 1.2727272727272734,
+          "roi": 0.02194357366771161,
+          "units_per_opportunity": 0.016110471806674347
+        },
+        "0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 38,
+          "losses": 35,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -0.4545454545454539,
+          "roi": -0.005753739930955113,
+          "units_per_opportunity": -0.005753739930955113
+        }
+      },
+      "four_band_median": {
+        "-0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 41,
+          "losses": 32,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 5.272727272727272,
+          "roi": 0.06674338319907938,
+          "units_per_opportunity": 0.06674338319907938
+        },
+        "0.0": {
+          "opportunities": 79,
+          "bets": 65,
+          "wins": 37,
+          "losses": 26,
+          "pushes": 2,
+          "skips": 14,
+          "coverage": 0.8227848101265823,
+          "units": 7.636363636363635,
+          "roi": 0.11748251748251747,
+          "units_per_opportunity": 0.09666283084004601
+        },
+        "0.01": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 43,
+          "losses": 30,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 9.090909090909086,
+          "roi": 0.11507479861910236,
+          "units_per_opportunity": 0.11507479861910236
+        }
+      }
+    }
+  },
+  "cohorts": {
+    "primary_2023_2025": {
+      "model_spread": {
+        "games": 816,
+        "mae": 9.715901781759536,
+        "mse": 159.40205606060198,
+        "rmse": 12.62545270715478,
+        "bias_prediction_minus_actual": -0.821427874379838,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 409,
+          "losses": 388,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -16.181818181818176,
+          "roi": -0.019830659536541884,
+          "units_per_opportunity": -0.019830659536541884
+        }
+      },
+      "spread_line": {
+        "games": 816,
+        "mae": 9.744485294117647,
+        "mse": 160.10508578431373,
+        "rmse": 12.653263839196342,
+        "bias_prediction_minus_actual": -0.6574754901960784,
+        "ats": {
+          "opportunities": 816,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 816,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 816,
+        "mae": 9.819852941176471,
+        "mse": 164.88357843137254,
+        "rmse": 12.840700075594498,
+        "bias_prediction_minus_actual": -1.0428921568627452,
+        "ats": {
+          "opportunities": 816,
+          "bets": 783,
+          "wins": 401,
+          "losses": 363,
+          "pushes": 19,
+          "skips": 33,
+          "coverage": 0.9595588235294118,
+          "units": 1.5454545454545485,
+          "roi": 0.0019737605944502535,
+          "units_per_opportunity": 0.0018939393939393977
+        }
+      },
+      "wp_mean": {
+        "games": 816,
+        "mae": 9.761307318268617,
+        "mse": 161.125056756438,
+        "rmse": 12.69350451043517,
+        "bias_prediction_minus_actual": -0.8216252671301043,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 413,
+          "losses": 384,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -8.54545454545454,
+          "roi": -0.010472370766488406,
+          "units_per_opportunity": -0.010472370766488406
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 816,
+        "mae": 9.761307318268617,
+        "mse": 161.125056756438,
+        "rmse": 12.69350451043517,
+        "bias_prediction_minus_actual": -0.8216252671301043,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 413,
+          "losses": 384,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -8.54545454545454,
+          "roi": -0.010472370766488406,
+          "units_per_opportunity": -0.010472370766488406
+        }
+      },
+      "four_band_mean": {
+        "games": 816,
+        "mae": 9.7806041861485,
+        "mse": 162.11515813687546,
+        "rmse": 12.732445096558456,
+        "bias_prediction_minus_actual": -0.8586136004287565,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 414,
+          "losses": 383,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -6.63636363636363,
+          "roi": -0.008132798573975036,
+          "units_per_opportunity": -0.008132798573975036
+        }
+      },
+      "wp_median": {
+        "games": 816,
+        "mae": 9.777573529411764,
+        "mse": 163.4267769607843,
+        "rmse": 12.78384828448712,
+        "bias_prediction_minus_actual": -0.9123774509803921,
+        "ats": {
+          "opportunities": 816,
+          "bets": 666,
+          "wins": 337,
+          "losses": 321,
+          "pushes": 8,
+          "skips": 150,
+          "coverage": 0.8161764705882353,
+          "units": -14.636363636363628,
+          "roi": -0.021976521976521963,
+          "units_per_opportunity": -0.017936720142602485
+        }
+      },
+      "four_band_median": {
+        "games": 816,
+        "mae": 9.76531862745098,
+        "mse": 163.83976715686273,
+        "rmse": 12.799990904561719,
+        "bias_prediction_minus_actual": -0.9160539215686274,
+        "ats": {
+          "opportunities": 816,
+          "bets": 709,
+          "wins": 375,
+          "losses": 323,
+          "pushes": 11,
+          "skips": 107,
+          "coverage": 0.8688725490196079,
+          "units": 17.909090909090907,
+          "roi": 0.025259648672906778,
+          "units_per_opportunity": 0.021947415329768266
+        }
+      }
+    },
+    "all_2023_onward": {
+      "model_spread": {
+        "games": 895,
+        "mae": 9.74145270110663,
+        "mse": 159.40946740854756,
+        "rmse": 12.62574621194912,
+        "bias_prediction_minus_actual": -0.6280105083554481,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 445,
+          "losses": 425,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -20.454545454545453,
+          "roi": -0.0228542407313357,
+          "units_per_opportunity": -0.0228542407313357
+        }
+      },
+      "spread_line": {
+        "games": 895,
+        "mae": 9.747486033519554,
+        "mse": 159.60837988826816,
+        "rmse": 12.633621012531133,
+        "bias_prediction_minus_actual": -0.4681564245810056,
+        "ats": {
+          "opportunities": 895,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 895,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 895,
+        "mae": 9.82122905027933,
+        "mse": 164.09162011173186,
+        "rmse": 12.809825139779694,
+        "bias_prediction_minus_actual": -0.8312849162011173,
+        "ats": {
+          "opportunities": 895,
+          "bets": 856,
+          "wins": 440,
+          "losses": 394,
+          "pushes": 22,
+          "skips": 39,
+          "coverage": 0.9564245810055866,
+          "units": 6.000000000000009,
+          "roi": 0.007009345794392534,
+          "units_per_opportunity": 0.00670391061452515
+        }
+      },
+      "wp_mean": {
+        "games": 895,
+        "mae": 9.789917935497272,
+        "mse": 161.30071866230148,
+        "rmse": 12.70042198756803,
+        "bias_prediction_minus_actual": -0.6149362736008046,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 449,
+          "losses": 421,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -12.818181818181811,
+          "roi": -0.0143219908583037,
+          "units_per_opportunity": -0.0143219908583037
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 895,
+        "mae": 9.789917935497272,
+        "mse": 161.30071866230148,
+        "rmse": 12.70042198756803,
+        "bias_prediction_minus_actual": -0.6149362736008046,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 449,
+          "losses": 421,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -12.818181818181811,
+          "roi": -0.0143219908583037,
+          "units_per_opportunity": -0.0143219908583037
+        }
+      },
+      "four_band_mean": {
+        "games": 895,
+        "mae": 9.802693596775388,
+        "mse": 161.78201768501538,
+        "rmse": 12.719356024776387,
+        "bias_prediction_minus_actual": -0.6649497829973529,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 446,
+          "losses": 424,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -18.545454545454543,
+          "roi": -0.020721178263077702,
+          "units_per_opportunity": -0.020721178263077702
+        }
+      },
+      "wp_median": {
+        "games": 895,
+        "mae": 9.785474860335196,
+        "mse": 163.0731843575419,
+        "rmse": 12.770011133806497,
+        "bias_prediction_minus_actual": -0.711731843575419,
+        "ats": {
+          "opportunities": 895,
+          "bets": 724,
+          "wins": 367,
+          "losses": 347,
+          "pushes": 10,
+          "skips": 171,
+          "coverage": 0.8089385474860336,
+          "units": -13.363636363636363,
+          "roi": -0.018458061275740834,
+          "units_per_opportunity": -0.014931437277805992
+        }
+      },
+      "four_band_median": {
+        "games": 895,
+        "mae": 9.763687150837988,
+        "mse": 163.06061452513967,
+        "rmse": 12.769518962166886,
+        "bias_prediction_minus_actual": -0.723463687150838,
+        "ats": {
+          "opportunities": 895,
+          "bets": 774,
+          "wins": 412,
+          "losses": 349,
+          "pushes": 13,
+          "skips": 121,
+          "coverage": 0.864804469273743,
+          "units": 25.545454545454547,
+          "roi": 0.03300446323702138,
+          "units_per_opportunity": 0.028542407313357037
+        }
+      }
+    },
+    "2023": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.967181594348695,
+        "mse": 173.53244976996265,
+        "rmse": 13.173171591153084,
+        "bias_prediction_minus_actual": -1.2790072531189622,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 125,
+          "losses": 133,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -19.36363636363636,
+          "roi": -0.07118983957219249,
+          "units_per_opportunity": -0.07118983957219249
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.900735294117647,
+        "mse": 170.84375,
+        "rmse": 13.07072109716981,
+        "bias_prediction_minus_actual": -1.025735294117647,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 10.080882352941176,
+        "mse": 179.0808823529412,
+        "rmse": 13.382110534326833,
+        "bias_prediction_minus_actual": -1.6176470588235294,
+        "ats": {
+          "opportunities": 272,
+          "bets": 260,
+          "wins": 129,
+          "losses": 117,
+          "pushes": 14,
+          "skips": 12,
+          "coverage": 0.9558823529411765,
+          "units": 0.2727272727272716,
+          "roi": 0.0010489510489510446,
+          "units_per_opportunity": 0.0010026737967914396
+        }
+      },
+      "wp_mean": {
+        "games": 272,
+        "mae": 10.069900538774974,
+        "mse": 177.76836394324008,
+        "rmse": 13.33298030986471,
+        "bias_prediction_minus_actual": -1.3648063892248283,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 122,
+          "losses": 136,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -25.090909090909093,
+          "roi": -0.09224598930481284,
+          "units_per_opportunity": -0.09224598930481284
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 272,
+        "mae": 10.069900538774974,
+        "mse": 177.76836394324008,
+        "rmse": 13.33298030986471,
+        "bias_prediction_minus_actual": -1.3648063892248283,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 122,
+          "losses": 136,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -25.090909090909093,
+          "roi": -0.09224598930481284,
+          "units_per_opportunity": -0.09224598930481284
+        }
+      },
+      "four_band_mean": {
+        "games": 272,
+        "mae": 10.019536944156993,
+        "mse": 176.55883022434003,
+        "rmse": 13.287544175818947,
+        "bias_prediction_minus_actual": -1.363854252562047,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 136,
+          "losses": 122,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 1.636363636363635,
+          "roi": 0.006016042780748658,
+          "units_per_opportunity": 0.006016042780748658
+        }
+      },
+      "wp_median": {
+        "games": 272,
+        "mae": 10.053308823529411,
+        "mse": 179.2159926470588,
+        "rmse": 13.387157750884196,
+        "bias_prediction_minus_actual": -1.5496323529411764,
+        "ats": {
+          "opportunities": 272,
+          "bets": 221,
+          "wins": 105,
+          "losses": 110,
+          "pushes": 6,
+          "skips": 51,
+          "coverage": 0.8125,
+          "units": -14.545454545454545,
+          "roi": -0.0658165364047717,
+          "units_per_opportunity": -0.053475935828877004
+        }
+      },
+      "four_band_median": {
+        "games": 272,
+        "mae": 9.994485294117647,
+        "mse": 177.0909926470588,
+        "rmse": 13.307553969346088,
+        "bias_prediction_minus_actual": -1.4466911764705883,
+        "ats": {
+          "opportunities": 272,
+          "bets": 245,
+          "wins": 124,
+          "losses": 112,
+          "pushes": 9,
+          "skips": 27,
+          "coverage": 0.9007352941176471,
+          "units": 0.7272727272727302,
+          "roi": 0.002968460111317266,
+          "units_per_opportunity": 0.002673796791443861
+        }
+      }
+    },
+    "2024": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.593267998382627,
+        "mse": 155.78459781944446,
+        "rmse": 12.481370029746111,
+        "bias_prediction_minus_actual": -0.6207997956568159,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 137,
+          "losses": 131,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -6.454545454545452,
+          "roi": -0.023729946524064162,
+          "units_per_opportunity": -0.023729946524064162
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.610294117647058,
+        "mse": 158.88970588235293,
+        "rmse": 12.6051460079744,
+        "bias_prediction_minus_actual": -0.375,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 9.602941176470589,
+        "mse": 158.43382352941177,
+        "rmse": 12.587049834230886,
+        "bias_prediction_minus_actual": -0.6691176470588235,
+        "ats": {
+          "opportunities": 272,
+          "bets": 255,
+          "wins": 131,
+          "losses": 120,
+          "pushes": 4,
+          "skips": 17,
+          "coverage": 0.9375,
+          "units": -0.9090909090909065,
+          "roi": -0.00356506238859179,
+          "units_per_opportunity": -0.003342245989304803
+        }
+      },
+      "wp_mean": {
+        "games": 272,
+        "mae": 9.597376017792577,
+        "mse": 155.49351690227263,
+        "rmse": 12.469703962094394,
+        "bias_prediction_minus_actual": -0.5531834796028896,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 136,
+          "losses": 132,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -8.36363636363636,
+          "roi": -0.030748663101604262,
+          "units_per_opportunity": -0.030748663101604262
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 272,
+        "mae": 9.597376017792577,
+        "mse": 155.49351690227263,
+        "rmse": 12.469703962094394,
+        "bias_prediction_minus_actual": -0.5531834796028896,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 136,
+          "losses": 132,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -8.36363636363636,
+          "roi": -0.030748663101604262,
+          "units_per_opportunity": -0.030748663101604262
+        }
+      },
+      "four_band_mean": {
+        "games": 272,
+        "mae": 9.644752611589407,
+        "mse": 157.16999117681814,
+        "rmse": 12.536745637398015,
+        "bias_prediction_minus_actual": -0.5905722599440603,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 135,
+          "losses": 133,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -10.272727272727273,
+          "roi": -0.03776737967914439,
+          "units_per_opportunity": -0.03776737967914439
+        }
+      },
+      "wp_median": {
+        "games": 272,
+        "mae": 9.632352941176471,
+        "mse": 158.63235294117646,
+        "rmse": 12.594933621944042,
+        "bias_prediction_minus_actual": -0.5441176470588235,
+        "ats": {
+          "opportunities": 272,
+          "bets": 214,
+          "wins": 108,
+          "losses": 105,
+          "pushes": 1,
+          "skips": 58,
+          "coverage": 0.7867647058823529,
+          "units": -6.81818181818182,
+          "roi": -0.031860662701784205,
+          "units_per_opportunity": -0.025066844919786103
+        }
+      },
+      "four_band_median": {
+        "games": 272,
+        "mae": 9.625,
+        "mse": 159.59558823529412,
+        "rmse": 12.633114747966715,
+        "bias_prediction_minus_actual": -0.5441176470588235,
+        "ats": {
+          "opportunities": 272,
+          "bets": 215,
+          "wins": 110,
+          "losses": 104,
+          "pushes": 1,
+          "skips": 57,
+          "coverage": 0.7904411764705882,
+          "units": -4.0,
+          "roi": -0.018604651162790697,
+          "units_per_opportunity": -0.014705882352941176
+        }
+      }
+    },
+    "2025": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.58725575254728,
+        "mse": 148.8891205923988,
+        "rmse": 12.202012972964699,
+        "bias_prediction_minus_actual": -0.5644765743637353,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 147,
+          "losses": 124,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 9.636363636363637,
+          "roi": 0.03542780748663102,
+          "units_per_opportunity": 0.03542780748663102
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.722426470588236,
+        "mse": 150.58180147058823,
+        "rmse": 12.271177672521421,
+        "bias_prediction_minus_actual": -0.5716911764705882,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 9.775735294117647,
+        "mse": 157.1360294117647,
+        "rmse": 12.535391075342034,
+        "bias_prediction_minus_actual": -0.8419117647058824,
+        "ats": {
+          "opportunities": 272,
+          "bets": 268,
+          "wins": 141,
+          "losses": 126,
+          "pushes": 1,
+          "skips": 4,
+          "coverage": 0.9852941176470589,
+          "units": 2.1818181818181817,
+          "roi": 0.008141112618724558,
+          "units_per_opportunity": 0.00802139037433155
+        }
+      },
+      "wp_mean": {
+        "games": 272,
+        "mae": 9.616645398238305,
+        "mse": 150.11328942380135,
+        "rmse": 12.25207286232829,
+        "bias_prediction_minus_actual": -0.5468859325625952,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 155,
+          "losses": 116,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 24.90909090909091,
+          "roi": 0.09157754010695188,
+          "units_per_opportunity": 0.09157754010695188
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 272,
+        "mae": 9.616645398238305,
+        "mse": 150.11328942380135,
+        "rmse": 12.25207286232829,
+        "bias_prediction_minus_actual": -0.5468859325625952,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 155,
+          "losses": 116,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 24.90909090909091,
+          "roi": 0.09157754010695188,
+          "units_per_opportunity": 0.09157754010695188
+        }
+      },
+      "four_band_mean": {
+        "games": 272,
+        "mae": 9.6775230026991,
+        "mse": 152.61665300946825,
+        "rmse": 12.353811274641856,
+        "bias_prediction_minus_actual": -0.621414288780162,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 143,
+          "losses": 128,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 2.0,
+          "roi": 0.007352941176470588,
+          "units_per_opportunity": 0.007352941176470588
+        }
+      },
+      "wp_median": {
+        "games": 272,
+        "mae": 9.647058823529411,
+        "mse": 152.43198529411765,
+        "rmse": 12.346334893162329,
+        "bias_prediction_minus_actual": -0.6433823529411765,
+        "ats": {
+          "opportunities": 272,
+          "bets": 231,
+          "wins": 124,
+          "losses": 106,
+          "pushes": 1,
+          "skips": 41,
+          "coverage": 0.8492647058823529,
+          "units": 6.727272727272727,
+          "roi": 0.02912239275875639,
+          "units_per_opportunity": 0.024732620320855613
+        }
+      },
+      "four_band_median": {
+        "games": 272,
+        "mae": 9.676470588235293,
+        "mse": 154.8327205882353,
+        "rmse": 12.443179681586026,
+        "bias_prediction_minus_actual": -0.7573529411764706,
+        "ats": {
+          "opportunities": 272,
+          "bets": 249,
+          "wins": 141,
+          "losses": 107,
+          "pushes": 1,
+          "skips": 23,
+          "coverage": 0.9154411764705882,
+          "units": 21.18181818181818,
+          "roi": 0.0850675428988682,
+          "units_per_opportunity": 0.07787433155080213
+        }
+      }
+    },
+    "2026": {
+      "model_spread": {
+        "games": 79,
+        "mae": 10.005371057906977,
+        "mse": 159.4860200658081,
+        "rmse": 12.62877745729206,
+        "bias_prediction_minus_actual": 1.3698195002002755,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 36,
+          "losses": 37,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -4.2727272727272725,
+          "roi": -0.05408515535097813,
+          "units_per_opportunity": -0.05408515535097813
+        }
+      },
+      "spread_line": {
+        "games": 79,
+        "mae": 9.778481012658228,
+        "mse": 154.47784810126583,
+        "rmse": 12.428911782664878,
+        "bias_prediction_minus_actual": 1.4873417721518987,
+        "ats": {
+          "opportunities": 79,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 79,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 79,
+        "mae": 9.835443037974683,
+        "mse": 155.91139240506328,
+        "rmse": 12.486448350314163,
+        "bias_prediction_minus_actual": 1.3544303797468353,
+        "ats": {
+          "opportunities": 79,
+          "bets": 73,
+          "wins": 39,
+          "losses": 31,
+          "pushes": 3,
+          "skips": 6,
+          "coverage": 0.9240506329113924,
+          "units": 4.454545454545454,
+          "roi": 0.0610211706102117,
+          "units_per_opportunity": 0.05638665132336018
+        }
+      },
+      "wp_mean": {
+        "games": 79,
+        "mae": 10.085440260289461,
+        "mse": 163.11515050008123,
+        "rmse": 12.771654180257201,
+        "bias_prediction_minus_actual": 1.5199778874106964,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 36,
+          "losses": 37,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -4.272727272727272,
+          "roi": -0.054085155350978124,
+          "units_per_opportunity": -0.054085155350978124
+        }
+      },
+      "wp_monotone_mean": {
+        "games": 79,
+        "mae": 10.085440260289461,
+        "mse": 163.11515050008123,
+        "rmse": 12.771654180257201,
+        "bias_prediction_minus_actual": 1.5199778874106964,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 36,
+          "losses": 37,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -4.272727272727272,
+          "roi": -0.054085155350978124,
+          "units_per_opportunity": -0.054085155350978124
+        }
+      },
+      "four_band_mean": {
+        "games": 79,
+        "mae": 10.030857635655666,
+        "mse": 158.34097200504237,
+        "rmse": 12.583360918492419,
+        "bias_prediction_minus_actual": 1.3354258502181575,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 32,
+          "losses": 41,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -11.90909090909091,
+          "roi": -0.15074798619102417,
+          "units_per_opportunity": -0.15074798619102417
+        }
+      },
+      "wp_median": {
+        "games": 79,
+        "mae": 9.867088607594937,
+        "mse": 159.42088607594937,
+        "rmse": 12.626198401575566,
+        "bias_prediction_minus_actual": 1.360759493670886,
+        "ats": {
+          "opportunities": 79,
+          "bets": 58,
+          "wins": 30,
+          "losses": 26,
+          "pushes": 2,
+          "skips": 21,
+          "coverage": 0.7341772151898734,
+          "units": 1.2727272727272734,
+          "roi": 0.02194357366771161,
+          "units_per_opportunity": 0.016110471806674347
+        }
+      },
+      "four_band_median": {
+        "games": 79,
+        "mae": 9.746835443037975,
+        "mse": 155.0126582278481,
+        "rmse": 12.450407954273953,
+        "bias_prediction_minus_actual": 1.2658227848101267,
+        "ats": {
+          "opportunities": 79,
+          "bets": 65,
+          "wins": 37,
+          "losses": 26,
+          "pushes": 2,
+          "skips": 14,
+          "coverage": 0.8227848101265823,
+          "units": 7.636363636363635,
+          "roi": 0.11748251748251747,
+          "units_per_opportunity": 0.09666283084004601
+        }
+      }
+    }
+  },
+  "seed": 20261017,
+  "bootstrap_draws": 10000
+}

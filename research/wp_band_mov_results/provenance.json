@@ -1,0 +1,11 @@
+{
+  "sources": {
+    "research/continuous_spread_results/input.csv": "55f5d0e42725a5eec9baca068f5d12d6511722e3f36222d470e47c5978f90a0c",
+    "research/continuous_spread_results/board_input.csv": "e3288fcec8c6ead51298c2343f0bd6f220b4af15c238cecc5dee3b91ad17a98f",
+    "research/wp_band_mov.py": "5e5876df141eecf261843a95784b8c4ab54cf0b869fc4c6618ee2538eacb1c7b",
+    "research/WP_BAND_MOV.md": "8c3be973615174799050da0842b2728a27f5c75d658531eefd0f5b941c485523",
+    "research/continuous_spread.py": "27194e74ec8f67e49b7cc8f39e439f15b93b925e9191448298a3fe17f8c57aa3",
+    "fixed_bands.py": "b568588a09b9f3d3f354ea17f5dd9962ff8817f4631f29c60a6b34fc4db44683"
+  },
+  "scope": "research only; no production or ledger writes"
+}

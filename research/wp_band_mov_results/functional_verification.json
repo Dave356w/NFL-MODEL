@@ -1,0 +1,7 @@
+{
+  "prior_band_counts_signed_means_and_medians_independently_recomputed": true,
+  "weighted_isotonic_matches_scipy": true,
+  "all_five_arms_and_895_forecasts_independently_recomputed": true,
+  "primary_current_pooled_metrics_and_ats_grades_independently_recomputed": true,
+  "no_own_or_future_season_in_fits": true
+}
