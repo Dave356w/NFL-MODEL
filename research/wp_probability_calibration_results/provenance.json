@@ -1,0 +1,20 @@
+{
+  "source_commit": "690c0c6740f7a5a6c4ef3c2abe244cc0df0dca2d",
+  "source_url": "https://github.com/Dave356w/NFL-MODEL/blob/690c0c6740f7a5a6c4ef3c2abe244cc0df0dca2d/data/latest/fixed_band_ledger.csv",
+  "sha256": {
+    "input.csv": "47d0fea606903b65656a5b3ff3009e85d5b224925116a61177f9f00e7dbd47d2",
+    "board_input.csv": "b8f7d4e57976722a6b3808f59a1ae620c6c9b74f133c4df010bf3697b3089dcc",
+    "wp_probability_calibration.py": "94b5193a0b572058d10476e3cb3441c47f3b03a946a8ac623f8dc4278c5ae379",
+    "WP_PROBABILITY_CALIBRATION.md": "91048605e93adca4f49c9493bf746783738eb9fffab4440c533e818bc479090a"
+  },
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "pandas": "2.2.3",
+  "scipy": "1.17.0",
+  "isotonic_implementation": "weighted PAV plus linear interpolation",
+  "scope": "Previously examined historical data; no production changes; ties excluded from binary target",
+  "raw_games": 1438,
+  "decisive_games": 1433,
+  "scored_games": 893,
+  "round_trip_max_error": 1.1102230246251565e-16
+}

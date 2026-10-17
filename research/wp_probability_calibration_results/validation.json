@@ -1,0 +1,15 @@
+{
+  "deterministic_reproduction": {
+    "per_game.csv": true,
+    "calibration.csv": true,
+    "scores.csv": true,
+    "fits.json": true,
+    "results.json": true,
+    "current_counterfactuals.csv": true,
+    "provenance.json": true
+  },
+  "native_PAV_vs_independent_sklearn_max_difference": 2.220446049250313e-16,
+  "decisive_games": 893,
+  "reference_validation": "tests/test_wp_probability_calibration.py",
+  "no_production_model_change": true
+}

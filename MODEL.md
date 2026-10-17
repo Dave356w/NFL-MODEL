@@ -21,8 +21,11 @@ week 6) and the penalty's forward verdict (`research/FAVORITE_PENALTY.md`: 200 g
 running as registered. Shadow rows are graded in `ledger_report.txt` only.
 
 **Public site.** The pages show the production revision only. Earlier revisions, the shadow lock,
-the competing-model comparison and snapshot replays are in `ledger_report.txt`; the published copy
-appends `version_report.md` and `regraded_ledger_report.md`.
+the competing-model comparison and snapshot replays are in the repository's
+`data/ledger_report.txt`. Each page build appends `version_report.md`,
+`regraded_ledger_report.md`, the independent production audit and frozen WP
+calibration research there, idempotently. Research is not published as a website
+download. The customer navigation is Projections, Results and Performance.
 
 Evidence for the penalty (log-loss gain vs v1.16; picks identical): +0.0040 ± 0.0027 on 2017–20 out
 of sample and +0.0023 ± 0.0017 on 2021–25 (both exposed; λ chosen on 2021–25), +0.026 ± 0.025 on
@@ -509,7 +512,7 @@ schedule_gate.py ──► build_site.py
                        │                          writes data/frozen_recipe_<season>_<REVISION>.json, caches in .nfl_cache/
                        ├─ snapshot()            → data/latest/ (page inputs), data/projections/<season>_weekNN.csv
                        ├─ grade_ledger.main()   → data/forward_ledger.csv, data/ledger_report.txt
-                       └─ render_all()          → public/ (index, grades, market-calibration, model, board)
+                       └─ render_all()          → public/ (index, grades, market-calibration), repo report appendices
 validate_data_files.py ─► commit_data.py (signed commit of data/) ─► Pages deploy
 ```
 
@@ -549,8 +552,9 @@ assumed -110 is 412-349-13 with 121 skips, +25.55u on 774 selections. This is
 reconstructed development, not locked native forward evidence. No historical
 native prediction is rewritten to make it a median-MOV pick.
 
-Ledger and calibration pages compare original and fixed-band ATS results on
-identical eligible retrospective games. Evaluation includes tied finals;
+Results and Performance pages show the production median ATS results. The original
+continuous-spread comparison stays in repository data and reports, on identical
+eligible retrospective games. Evaluation includes tied finals;
 zero edge (tolerance 1e-10) skips before checking pushes. At assumed −110,
 risk 1u, win +0.9091u, loss −1u; pushes retain their stake in ROI's denominator,
 skips do not. This is exposed development history with unknown quote-capture
@@ -566,14 +570,24 @@ data files; original snapshots are never rewritten.
 
 Game cards distinguish the v1.18 moneyline pick from the fixed-band ATS pick.
 ATS edge is the absolute fixed-band minus market spread; zero edge is no bet.
-Expanded historical references use fixed confidence bands 50–55%, 55–65%,
+The research-only historical reference helper uses fixed confidence bands 50–55%, 55–65%,
 65–75%, 75–85%, 85–100% for moneyline picks, and edge bands (0,1], (1,3],
 (3,7], (7,infinity) for ATS picks. Each reference excludes the game itself,
 same-date and later games; absent historical dates, only earlier seasons qualify.
 Records show W–L–P, sample size, skips, win/cover rates excluding pushes,
 and flat 1u ROI including pushed stakes (recorded moneylines or assumed −110).
 Fewer than 100 decisive bets is labeled small sample. These exposed historical
-rates are descriptive references, not per-game cover probabilities.
+rates are descriptive references, not per-game cover probabilities. They are no
+longer included on customer game cards. Partial coefficient-only probability
+ranges, fitting details and confidence-to-margin diagnostics also stay off the
+public pages; their source inputs and definitions remain in repository reports.
+
+`python -m research.production_sanity` independently recomputes annual signed
+medians, grading and denominators, checks source snapshot hashes and pregame
+timestamps, and separates historical returns from native median ATS archives.
+The native ledger's `ats_result` column remains its legacy continuous-spread
+diagnostic and is explicitly labelled that way. Native median-policy results
+come only from archived median-policy forecasts, never retroactive backfills.
 
 
 New ATS research-shadow captures use the median policy identity and require the
