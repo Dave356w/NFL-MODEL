@@ -1,0 +1,61 @@
+{
+  "historical": [
+    {
+      "target_season": 2023,
+      "training_max_season": 2022,
+      "training_games": 543,
+      "ridge": 200.0,
+      "sigma": 12.37,
+      "beta_gap": 0.20270022871795793,
+      "beta_signal": 0.1610789938560242,
+      "beta_reinforcing": 0.0,
+      "beta_other": 0.24908681511019368
+    },
+    {
+      "target_season": 2024,
+      "training_max_season": 2023,
+      "training_games": 815,
+      "ridge": 200.0,
+      "sigma": 12.37,
+      "beta_gap": 0.1501142095619811,
+      "beta_signal": 0.14563837346986389,
+      "beta_reinforcing": 0.014950250372712994,
+      "beta_other": 0.14812734813780806
+    },
+    {
+      "target_season": 2025,
+      "training_max_season": 2024,
+      "training_games": 1087,
+      "ridge": 200.0,
+      "sigma": 12.37,
+      "beta_gap": 0.36122026985772765,
+      "beta_signal": 0.2861670144132379,
+      "beta_reinforcing": 0.376457906234173,
+      "beta_other": 0.2515968675884462
+    },
+    {
+      "target_season": 2026,
+      "training_max_season": 2025,
+      "training_games": 1359,
+      "ridge": 200.0,
+      "sigma": 12.37,
+      "beta_gap": 0.4524617035920922,
+      "beta_signal": 0.3282890504508262,
+      "beta_reinforcing": 0.6356142401754916,
+      "beta_other": 0.27084033559547915
+    }
+  ],
+  "board": [
+    {
+      "target_season": 2026,
+      "training_max_season": 2025,
+      "training_games": 1359,
+      "ridge": 200.0,
+      "sigma": 12.37,
+      "beta_gap": 0.4524617035920922,
+      "beta_signal": 0.3282890504508262,
+      "beta_reinforcing": 0.6356142401754916,
+      "beta_other": 0.27084033559547915
+    }
+  ]
+}

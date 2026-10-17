@@ -1,0 +1,995 @@
+{
+  "status": "exposed historical development; assumed -110 ATS prices",
+  "decision": "retain_production_no_candidate_qualifies",
+  "nominees": [],
+  "primary_comparisons": [
+    {
+      "candidate": "gap_anchor",
+      "baseline": "model_spread",
+      "metric": "mse",
+      "gain": -0.10259031535452258,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -2.557616802948192,
+        2.7663944573545796
+      ],
+      "ci_three_candidates": [
+        -2.9826551280349456,
+        3.5421248674319665
+      ]
+    },
+    {
+      "candidate": "gap_anchor",
+      "baseline": "model_spread",
+      "metric": "mae",
+      "gain": -0.00825610456348498,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.08874393032358335,
+        0.07876070613453263
+      ],
+      "ci_three_candidates": [
+        -0.1037818124954655,
+        0.09929143346686009
+      ]
+    },
+    {
+      "candidate": "gap_anchor",
+      "baseline": "spread_line",
+      "metric": "mse",
+      "gain": 0.6004394083572301,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.23123899320558722,
+        1.388560278256473
+      ],
+      "ci_three_candidates": [
+        -0.4183485827873599,
+        1.5788271892465922
+      ]
+    },
+    {
+      "candidate": "gap_anchor",
+      "baseline": "spread_line",
+      "metric": "mae",
+      "gain": 0.020327407794626894,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.008209917468269906,
+        0.04856265436050623
+      ],
+      "ci_three_candidates": [
+        -0.014247305481770053,
+        0.05494657505067537
+      ]
+    },
+    {
+      "candidate": "gap_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mse",
+      "gain": 5.378932055416054,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        1.7438697645407173,
+        9.14592452221888
+      ],
+      "ci_three_candidates": [
+        1.000271461770882,
+        10.022776622393003
+      ]
+    },
+    {
+      "candidate": "gap_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mae",
+      "gain": 0.09569505485345042,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.03371662521259543,
+        0.22260467894186395
+      ],
+      "ci_three_candidates": [
+        -0.061690707168295625,
+        0.24904303472216774
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "model_spread",
+      "metric": "mse",
+      "gain": -0.4236795051258665,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -3.1239709775826925,
+        2.6525111831527552
+      ],
+      "ci_three_candidates": [
+        -3.5796851981330486,
+        3.4754395563975256
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "model_spread",
+      "metric": "mae",
+      "gain": -0.008669290313787745,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.09848136503404711,
+        0.08779498414705662
+      ],
+      "ci_three_candidates": [
+        -0.11567200455650628,
+        0.10957939096506392
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "spread_line",
+      "metric": "mse",
+      "gain": 0.27935021858588643,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.3602266655698887,
+        0.8768995796161271
+      ],
+      "ci_three_candidates": [
+        -0.49209801039371265,
+        1.0023601013155903
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "spread_line",
+      "metric": "mae",
+      "gain": 0.01991422204432413,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.0022103842223195253,
+        0.040620197813979325
+      ],
+      "ci_three_candidates": [
+        -0.006424963252742364,
+        0.045286401956636205
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mse",
+      "gain": 5.0578428656447105,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        1.3810360882557065,
+        8.921084590537784
+      ],
+      "ci_three_candidates": [
+        0.5506916538355643,
+        9.80584550240776
+      ]
+    },
+    {
+      "candidate": "signal_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mae",
+      "gain": 0.09528186910314768,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.03783271240524933,
+        0.22638033363604634
+      ],
+      "ci_three_candidates": [
+        -0.06505742357365815,
+        0.2536868381347517
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "model_spread",
+      "metric": "mse",
+      "gain": -0.5187450383396943,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -3.110379964801429,
+        2.3832952813974893
+      ],
+      "ci_three_candidates": [
+        -3.5814886181867798,
+        3.141134190690772
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "model_spread",
+      "metric": "mae",
+      "gain": -0.011719244348917256,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.09796723166482733,
+        0.08007233999384011
+      ],
+      "ci_three_candidates": [
+        -0.11338556111868606,
+        0.10139147600022665
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "spread_line",
+      "metric": "mse",
+      "gain": 0.1842846853720584,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.6374482333478381,
+        0.9512209171577163
+      ],
+      "ci_three_candidates": [
+        -0.8199665298524034,
+        1.1099869474906563
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "spread_line",
+      "metric": "mae",
+      "gain": 0.016864268009194612,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.009654946673508503,
+        0.04238061731989948
+      ],
+      "ci_three_candidates": [
+        -0.015087258021564293,
+        0.04794371851943427
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mse",
+      "gain": 4.962777332430882,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        1.3729342832015177,
+        8.701783247864874
+      ],
+      "ci_three_candidates": [
+        0.613050174469283,
+        9.578658613279108
+      ]
+    },
+    {
+      "candidate": "split_signal_anchor",
+      "baseline": "fixed_band_spread",
+      "metric": "mae",
+      "gain": 0.09223191506801814,
+      "games": 816,
+      "blocks": 54,
+      "ci95": [
+        -0.03846688478772569,
+        0.22073883836779168
+      ],
+      "ci_three_candidates": [
+        -0.06630970435036061,
+        0.24720302223064838
+      ]
+    }
+  ],
+  "cohorts": {
+    "primary_2023_2025": {
+      "model_spread": {
+        "games": 816,
+        "mae": 9.715901781759536,
+        "mse": 159.40205606060198,
+        "rmse": 12.62545270715478,
+        "bias_prediction_minus_actual": -0.821427874379838,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 409,
+          "losses": 388,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -16.181818181818176,
+          "roi": -0.019830659536541884,
+          "units_per_opportunity": -0.019830659536541884
+        }
+      },
+      "spread_line": {
+        "games": 816,
+        "mae": 9.744485294117647,
+        "mse": 160.10508578431373,
+        "rmse": 12.653263839196342,
+        "bias_prediction_minus_actual": -0.6574754901960784,
+        "ats": {
+          "opportunities": 816,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 816,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 816,
+        "mae": 9.819852941176471,
+        "mse": 164.88357843137254,
+        "rmse": 12.840700075594498,
+        "bias_prediction_minus_actual": -1.0428921568627452,
+        "ats": {
+          "opportunities": 816,
+          "bets": 783,
+          "wins": 401,
+          "losses": 363,
+          "pushes": 19,
+          "skips": 33,
+          "coverage": 0.9595588235294118,
+          "units": 1.5454545454545485,
+          "roi": 0.0019737605944502535,
+          "units_per_opportunity": 0.0018939393939393977
+        }
+      },
+      "gap_anchor": {
+        "games": 816,
+        "mae": 9.724157886323018,
+        "mse": 159.5046463759565,
+        "rmse": 12.629514890761106,
+        "bias_prediction_minus_actual": -0.6860189120404044,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 409,
+          "losses": 388,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -16.181818181818176,
+          "roi": -0.019830659536541884,
+          "units_per_opportunity": -0.019830659536541884
+        }
+      },
+      "signal_anchor": {
+        "games": 816,
+        "mae": 9.724571072073322,
+        "mse": 159.82573556572783,
+        "rmse": 12.642220357426453,
+        "bias_prediction_minus_actual": -0.6980829691968157,
+        "ats": {
+          "opportunities": 816,
+          "bets": 816,
+          "wins": 426,
+          "losses": 371,
+          "pushes": 19,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 16.272727272727273,
+          "roi": 0.019942067736185384,
+          "units_per_opportunity": 0.019942067736185384
+        }
+      },
+      "split_signal_anchor": {
+        "games": 816,
+        "mae": 9.727621026108453,
+        "mse": 159.92080109894167,
+        "rmse": 12.64597964172573,
+        "bias_prediction_minus_actual": -0.7080526814543023,
+        "ats": {
+          "opportunities": 816,
+          "bets": 670,
+          "wins": 352,
+          "losses": 307,
+          "pushes": 11,
+          "skips": 146,
+          "coverage": 0.821078431372549,
+          "units": 12.999999999999998,
+          "roi": 0.01940298507462686,
+          "units_per_opportunity": 0.015931372549019607
+        }
+      }
+    },
+    "all_2023_onward": {
+      "model_spread": {
+        "games": 895,
+        "mae": 9.74145270110663,
+        "mse": 159.40946740854756,
+        "rmse": 12.62574621194912,
+        "bias_prediction_minus_actual": -0.6280105083554481,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 445,
+          "losses": 425,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -20.454545454545453,
+          "roi": -0.0228542407313357,
+          "units_per_opportunity": -0.0228542407313357
+        }
+      },
+      "spread_line": {
+        "games": 895,
+        "mae": 9.747486033519554,
+        "mse": 159.60837988826816,
+        "rmse": 12.633621012531133,
+        "bias_prediction_minus_actual": -0.4681564245810056,
+        "ats": {
+          "opportunities": 895,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 895,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 895,
+        "mae": 9.82122905027933,
+        "mse": 164.09162011173186,
+        "rmse": 12.809825139779694,
+        "bias_prediction_minus_actual": -0.8312849162011173,
+        "ats": {
+          "opportunities": 895,
+          "bets": 856,
+          "wins": 440,
+          "losses": 394,
+          "pushes": 22,
+          "skips": 39,
+          "coverage": 0.9564245810055866,
+          "units": 6.000000000000009,
+          "roi": 0.007009345794392534,
+          "units_per_opportunity": 0.00670391061452515
+        }
+      },
+      "gap_anchor": {
+        "games": 895,
+        "mae": 9.737294726274685,
+        "mse": 159.17413575613298,
+        "rmse": 12.616423255270607,
+        "bias_prediction_minus_actual": -0.4988739710477904,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 445,
+          "losses": 425,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -20.454545454545453,
+          "roi": -0.0228542407313357,
+          "units_per_opportunity": -0.0228542407313357
+        }
+      },
+      "signal_anchor": {
+        "games": 895,
+        "mae": 9.732013799426797,
+        "mse": 159.3931576497841,
+        "rmse": 12.625100302563306,
+        "bias_prediction_minus_actual": -0.5130631227577366,
+        "ats": {
+          "opportunities": 895,
+          "bets": 895,
+          "wins": 456,
+          "losses": 414,
+          "pushes": 25,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 0.5454545454545499,
+          "roi": 0.0006094464195022904,
+          "units_per_opportunity": 0.0006094464195022904
+        }
+      },
+      "split_signal_anchor": {
+        "games": 895,
+        "mae": 9.736481320338376,
+        "mse": 159.50091258883316,
+        "rmse": 12.629367070001297,
+        "bias_prediction_minus_actual": -0.5181845724782249,
+        "ats": {
+          "opportunities": 895,
+          "bets": 749,
+          "wins": 382,
+          "losses": 350,
+          "pushes": 17,
+          "skips": 146,
+          "coverage": 0.8368715083798882,
+          "units": -2.727272727272724,
+          "roi": -0.003641218594489618,
+          "units_per_opportunity": -0.0030472320975114234
+        }
+      }
+    },
+    "2023": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.967181594348695,
+        "mse": 173.53244976996265,
+        "rmse": 13.173171591153084,
+        "bias_prediction_minus_actual": -1.2790072531189622,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 125,
+          "losses": 133,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -19.36363636363636,
+          "roi": -0.07118983957219249,
+          "units_per_opportunity": -0.07118983957219249
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.900735294117647,
+        "mse": 170.84375,
+        "rmse": 13.07072109716981,
+        "bias_prediction_minus_actual": -1.025735294117647,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 10.080882352941176,
+        "mse": 179.0808823529412,
+        "rmse": 13.382110534326833,
+        "bias_prediction_minus_actual": -1.6176470588235294,
+        "ats": {
+          "opportunities": 272,
+          "bets": 260,
+          "wins": 129,
+          "losses": 117,
+          "pushes": 14,
+          "skips": 12,
+          "coverage": 0.9558823529411765,
+          "units": 0.2727272727272716,
+          "roi": 0.0010489510489510446,
+          "units_per_opportunity": 0.0010026737967914396
+        }
+      },
+      "gap_anchor": {
+        "games": 272,
+        "mae": 9.906149223026663,
+        "mse": 170.9038469784162,
+        "rmse": 13.073019810985379,
+        "bias_prediction_minus_actual": -1.0770735781350589,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 125,
+          "losses": 133,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -19.36363636363636,
+          "roi": -0.07118983957219249,
+          "units_per_opportunity": -0.07118983957219249
+        }
+      },
+      "signal_anchor": {
+        "games": 272,
+        "mae": 9.899837281173786,
+        "mse": 170.80307817611813,
+        "rmse": 13.069165167527654,
+        "bias_prediction_minus_actual": -1.0806605583959554,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 131,
+          "losses": 127,
+          "pushes": 14,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -7.9090909090909065,
+          "roi": -0.029077540106951863,
+          "units_per_opportunity": -0.029077540106951863
+        }
+      },
+      "split_signal_anchor": {
+        "games": 272,
+        "mae": 9.903338303825198,
+        "mse": 171.03864931410075,
+        "rmse": 13.078174540588634,
+        "bias_prediction_minus_actual": -1.1149910658737057,
+        "ats": {
+          "opportunities": 272,
+          "bets": 126,
+          "wins": 57,
+          "losses": 63,
+          "pushes": 6,
+          "skips": 146,
+          "coverage": 0.4632352941176471,
+          "units": -11.181818181818182,
+          "roi": -0.08874458874458874,
+          "units_per_opportunity": -0.041109625668449196
+        }
+      }
+    },
+    "2024": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.593267998382627,
+        "mse": 155.78459781944446,
+        "rmse": 12.481370029746111,
+        "bias_prediction_minus_actual": -0.6207997956568159,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 137,
+          "losses": 131,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -6.454545454545452,
+          "roi": -0.023729946524064162,
+          "units_per_opportunity": -0.023729946524064162
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.610294117647058,
+        "mse": 158.88970588235293,
+        "rmse": 12.6051460079744,
+        "bias_prediction_minus_actual": -0.375,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 9.602941176470589,
+        "mse": 158.43382352941177,
+        "rmse": 12.587049834230886,
+        "bias_prediction_minus_actual": -0.6691176470588235,
+        "ats": {
+          "opportunities": 272,
+          "bets": 255,
+          "wins": 131,
+          "losses": 120,
+          "pushes": 4,
+          "skips": 17,
+          "coverage": 0.9375,
+          "units": -0.9090909090909065,
+          "roi": -0.00356506238859179,
+          "units_per_opportunity": -0.003342245989304803
+        }
+      },
+      "gap_anchor": {
+        "games": 272,
+        "mae": 9.605836001157884,
+        "mse": 158.1815083773158,
+        "rmse": 12.577023033186979,
+        "bias_prediction_minus_actual": -0.41189804203551944,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 137,
+          "losses": 131,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -6.454545454545452,
+          "roi": -0.023729946524064162,
+          "units_per_opportunity": -0.023729946524064162
+        }
+      },
+      "signal_anchor": {
+        "games": 272,
+        "mae": 9.604247966667673,
+        "mse": 158.48858102710895,
+        "rmse": 12.58922479849768,
+        "bias_prediction_minus_actual": -0.41357318803523135,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 143,
+          "losses": 125,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 4.9999999999999964,
+          "roi": 0.018382352941176457,
+          "units_per_opportunity": 0.018382352941176457
+        }
+      },
+      "split_signal_anchor": {
+        "games": 272,
+        "mae": 9.605700306983628,
+        "mse": 158.5810616811731,
+        "rmse": 12.592897271127606,
+        "bias_prediction_minus_actual": -0.41325303562133037,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 143,
+          "losses": 125,
+          "pushes": 4,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 4.9999999999999964,
+          "roi": 0.018382352941176457,
+          "units_per_opportunity": 0.018382352941176457
+        }
+      }
+    },
+    "2025": {
+      "model_spread": {
+        "games": 272,
+        "mae": 9.58725575254728,
+        "mse": 148.8891205923988,
+        "rmse": 12.202012972964699,
+        "bias_prediction_minus_actual": -0.5644765743637353,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 147,
+          "losses": 124,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 9.636363636363637,
+          "roi": 0.03542780748663102,
+          "units_per_opportunity": 0.03542780748663102
+        }
+      },
+      "spread_line": {
+        "games": 272,
+        "mae": 9.722426470588236,
+        "mse": 150.58180147058823,
+        "rmse": 12.271177672521421,
+        "bias_prediction_minus_actual": -0.5716911764705882,
+        "ats": {
+          "opportunities": 272,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 272,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 272,
+        "mae": 9.775735294117647,
+        "mse": 157.1360294117647,
+        "rmse": 12.535391075342034,
+        "bias_prediction_minus_actual": -0.8419117647058824,
+        "ats": {
+          "opportunities": 272,
+          "bets": 268,
+          "wins": 141,
+          "losses": 126,
+          "pushes": 1,
+          "skips": 4,
+          "coverage": 0.9852941176470589,
+          "units": 2.1818181818181817,
+          "roi": 0.008141112618724558,
+          "units_per_opportunity": 0.00802139037433155
+        }
+      },
+      "gap_anchor": {
+        "games": 272,
+        "mae": 9.660488434784513,
+        "mse": 149.4285837721375,
+        "rmse": 12.224098485047374,
+        "bias_prediction_minus_actual": -0.5690851159506347,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 147,
+          "losses": 124,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 9.636363636363637,
+          "roi": 0.03542780748663102,
+          "units_per_opportunity": 0.03542780748663102
+        }
+      },
+      "signal_anchor": {
+        "games": 272,
+        "mae": 9.66962796837851,
+        "mse": 150.18554749395645,
+        "rmse": 12.255021317564342,
+        "bias_prediction_minus_actual": -0.6000151611592602,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 152,
+          "losses": 119,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 19.18181818181818,
+          "roi": 0.07052139037433154,
+          "units_per_opportunity": 0.07052139037433154
+        }
+      },
+      "split_signal_anchor": {
+        "games": 272,
+        "mae": 9.67382446751653,
+        "mse": 150.14269230155114,
+        "rmse": 12.253272717994616,
+        "bias_prediction_minus_actual": -0.5959139428678714,
+        "ats": {
+          "opportunities": 272,
+          "bets": 272,
+          "wins": 152,
+          "losses": 119,
+          "pushes": 1,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": 19.18181818181818,
+          "roi": 0.07052139037433154,
+          "units_per_opportunity": 0.07052139037433154
+        }
+      }
+    },
+    "2026": {
+      "model_spread": {
+        "games": 79,
+        "mae": 10.005371057906977,
+        "mse": 159.4860200658081,
+        "rmse": 12.62877745729206,
+        "bias_prediction_minus_actual": 1.3698195002002755,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 36,
+          "losses": 37,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -4.2727272727272725,
+          "roi": -0.05408515535097813,
+          "units_per_opportunity": -0.05408515535097813
+        }
+      },
+      "spread_line": {
+        "games": 79,
+        "mae": 9.778481012658228,
+        "mse": 154.47784810126583,
+        "rmse": 12.428911782664878,
+        "bias_prediction_minus_actual": 1.4873417721518987,
+        "ats": {
+          "opportunities": 79,
+          "bets": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "skips": 79,
+          "coverage": 0.0,
+          "units": 0.0,
+          "roi": null,
+          "units_per_opportunity": 0.0
+        }
+      },
+      "fixed_band_spread": {
+        "games": 79,
+        "mae": 9.835443037974683,
+        "mse": 155.91139240506328,
+        "rmse": 12.486448350314163,
+        "bias_prediction_minus_actual": 1.3544303797468353,
+        "ats": {
+          "opportunities": 79,
+          "bets": 73,
+          "wins": 39,
+          "losses": 31,
+          "pushes": 3,
+          "skips": 6,
+          "coverage": 0.9240506329113924,
+          "units": 4.454545454545454,
+          "roi": 0.0610211706102117,
+          "units_per_opportunity": 0.05638665132336018
+        }
+      },
+      "gap_anchor": {
+        "games": 79,
+        "mae": 9.872986642737432,
+        "mse": 155.76025391086776,
+        "rmse": 12.480394781851565,
+        "bias_prediction_minus_actual": 1.4341674447746542,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 36,
+          "losses": 37,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -4.2727272727272725,
+          "roi": -0.05408515535097813,
+          "units_per_opportunity": -0.05408515535097813
+        }
+      },
+      "signal_anchor": {
+        "games": 79,
+        "mae": 9.808890578166466,
+        "mse": 154.9250110749728,
+        "rmse": 12.446887605942813,
+        "bias_prediction_minus_actual": 1.3980279493218661,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 30,
+          "losses": 43,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -15.727272727272727,
+          "roi": -0.19907940161104717,
+          "units_per_opportunity": -0.19907940161104717
+        }
+      },
+      "split_signal_anchor": {
+        "games": 79,
+        "mae": 9.82800030883987,
+        "mse": 155.1638363325225,
+        "rmse": 12.456477685626965,
+        "bias_prediction_minus_actual": 1.4429847556797413,
+        "ats": {
+          "opportunities": 79,
+          "bets": 79,
+          "wins": 30,
+          "losses": 43,
+          "pushes": 6,
+          "skips": 0,
+          "coverage": 1.0,
+          "units": -15.727272727272727,
+          "roi": -0.19907940161104717,
+          "units_per_opportunity": -0.19907940161104717
+        }
+      }
+    }
+  },
+  "seed": 20261017,
+  "bootstrap_draws": 10000
+}

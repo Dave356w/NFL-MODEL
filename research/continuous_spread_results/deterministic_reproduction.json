@@ -1,0 +1,8 @@
+{
+  "input.csv": true,
+  "board_input.csv": true,
+  "per_game.csv": true,
+  "current_counterfactuals.csv": true,
+  "fits.json": true,
+  "results.json": true
+}
