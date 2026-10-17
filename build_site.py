@@ -1363,6 +1363,8 @@ def main(argv=None):
     if not args.pages_only:
         count = ats_forward_shadow.record(DATA)
         print(f"ATS research: {count} new immutable shadow locks")
+        # Captures happen after rendering; include this build's new archive rows.
+        (DATA / 'ledger_report.txt').write_text(published_report(DATA), encoding='utf-8')
     print(f"site: {len(files)} files -> {args.out}")
     return 0
 
