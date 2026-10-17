@@ -25,8 +25,9 @@ remain unchanged; retrospective replay at their original quotes is separately la
 Adoption follows exposed historical development, with reliable profit superiority
 still unresolved.
 
-The displayed **Model spread** uses the fixed-band mapping (2026: 4/5/7/13
-points for original spread magnitudes below 3, 3–7, 7–10, and 10+). Ledger and
+The displayed **Model spread** uses prior-season median signed margins in four
+fixed groups (2026: **3/4/7/14** points for original spread magnitudes below 3,
+3–7, 7–10, and 10+). Losses are negative and tied finals count as zero. Results and
 calibration pages show season-by-season retrospective ATS results at assumed
 −110, including pushes and skips, with downloadable per-game data. Each mapping
 uses earlier seasons only; these are exposed historical comparisons. Win
@@ -36,13 +37,32 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 | Page | For |
 |---|---|
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
-| [Ledger](https://dave356w.github.io/NFL-MODEL/grades.html) | Every locked pick graded at its moneyline, beside always-favorite and always-home on the same games; then the current model's rebuilt history since 2021 (hindsight) |
-| [Market calibration](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | What each moneyline implied vs what happened; how often the model's picks won at each confidence |
+| [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Recorded forecasts, season moneyline results, and separately labelled historical replay with median ATS results |
+| [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Forecast confidence, market outcomes and spread performance |
 
 The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
 held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research
-arm are in [`data/ledger_report.txt`](data/ledger_report.txt) and `data/latest/`; the site's
-published `ledger_report.txt` carries the version comparison and snapshot replays as appendices.
+arm are in [`data/ledger_report.txt`](data/ledger_report.txt) and `data/latest/`.
+Each page build consolidates the version comparison, snapshot replay, independent
+production checks and frozen WP-calibration research into the **repository** report.
+The website links to that report as documentation; it does not publish research
+pages or a separate `ledger_report.txt` download. Short historical-replay and
+recorded-forecast labels remain on the customer pages so their evidence bases stay clear.
+
+The median ATS archive has its own policy identity and source hashes. The native
+ledger's older continuous-spread diagnostic is explicitly labelled as such; it
+is not the median-MOV ATS record. Run the read-only check with:
+
+```bash
+python -m research.production_sanity
+```
+
+The win-probability calibration comparison remains research only. Both seven-band
+empirical rates and monotone calibration were tested on v1.16 and v1.18 using
+strictly earlier-season calibration; no replacement qualified. Reproduce it with
+`python -m research.wp_probability_calibration`; see the
+[protocol](research/WP_PROBABILITY_CALIBRATION.md) and
+[results](research/wp_probability_calibration_results/REPORT.md).
 
 | Where to look | For |
 |---|---|

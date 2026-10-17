@@ -682,8 +682,9 @@ def report_text(g, now=None, h5=None):
             lines.append("  No graded bets with a saved moneyline yet.")
         decided = part.ats_result.isin(["W", "L"]).sum()
         if decided:
-            lines.append(f"  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread "
+            lines.append(f"  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread "
                          f"(break-even at -110: {100 * ATS_BREAKEVEN:.1f}%)")
+            lines.append("    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.")
             for lab, gap in (("all games", 0.), (f"|gap| >= {ATS_GAP_POINTS:g} pts", ATS_GAP_POINTS)):
                 a = ats_summary(part, gap)
                 if a["wins"] + a["losses"]:

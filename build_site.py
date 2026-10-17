@@ -7,7 +7,7 @@ grade the forward ledger, and render static pages into public/.
 
 Pages (public: the production model only; W-L, win % and ROI. Standard errors, log loss, model
 internals, earlier revisions, the v1.16 shadow lock and every research arm stay in
-data/ledger_report.txt and data/latest/; the published ledger_report.txt carries them as appendices)
+the repository's data/ledger_report.txt and data/latest/)
   index.html               this week's games: model vs market, pick, biggest factors, injury reports
   grades.html              locked picks graded, beside always-favorite and always-home; rebuilt history
   market-calibration.html  the moneyline graded by price; model confidence vs results
@@ -49,13 +49,15 @@ import totals
 import fixed_bands
 from research import version_report
 from research import ats_forward_shadow
+from research import production_sanity
 
 DATA = Path("data")
 LATEST = DATA / "latest"
 PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
-SITE_NAME = "NFL Box-Score Composite"
+SITE_NAME = "NFL Forecasts"
+REPO_REPORT = "https://github.com/Dave356w/NFL-MODEL/blob/main/data/ledger_report.txt"
 
 # run-folder file -> data/latest file
 SNAPSHOT = {
@@ -363,8 +365,60 @@ try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){
 window.toggleTheme=function(){var d=r.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
 var n=d==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();</script>"""
 
-PAGES = (("index.html", "Projections"), ("grades.html", "Ledger"),
-         ("market-calibration.html", "Market calibration"))
+PAGES = (("index.html", "Projections"), ("grades.html", "Results"),
+         ("market-calibration.html", "Performance"))
+
+# Customer-facing presentation. Calculation and archival code remain independent.
+CSS += r"""
+:root{--bg:#f4f7fa;--ink:#14263c;--muted:#52677c;--faint:#627589;
+ --lean:9,125,97;--lean-tx:7,107,83;--r:14px;--r-s:6px;
+ --shadow:0 3px 16px -8px rgba(20,38,60,.16)}
+body{padding:26px 24px 54px}.mx-wrap{max-width:1180px}
+.topbar{align-items:center;border-bottom:0;margin-bottom:22px;padding:0}
+.brand{display:flex;align-items:center;gap:12px;font-size:20px;letter-spacing:-.03em;text-transform:none}
+.brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
+ background:rgb(var(--lean));color:white;font:800 13px/1 var(--sans);letter-spacing:.02em}
+.brand-version{font:600 11px/1 var(--mono);color:var(--muted);border:1px solid var(--line);padding:5px 7px;border-radius:6px}
+.nav{gap:5px;margin-bottom:30px;padding:5px;background:var(--surface);border:1px solid var(--line);
+ border-radius:12px;width:fit-content;max-width:100%;overflow-x:auto;flex-wrap:nowrap}
+.nav a{padding:10px 18px;border:0;border-radius:8px;white-space:nowrap}
+.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.gr-head{margin:0 0 22px}.gr-h1{font-size:32px;letter-spacing:-.04em;margin-bottom:9px}
+.gr-lead{font-size:15px;line-height:1.6}.gr-summary{gap:14px;margin-bottom:20px}
+.gr-stat{padding:19px 20px}.gr-stat .l{font-size:11px;letter-spacing:.07em}
+.gr-stat .v{font-size:27px;margin:9px 0 6px}.gr-stat .s{font-family:var(--sans);font-size:13px}
+.gr-note{padding:13px 16px;line-height:1.6;border-radius:10px}
+h2.sec{font-size:16px;letter-spacing:-.015em;text-transform:none;margin:32px 0 14px}
+h3{font-size:14px}.record{padding:15px 18px;margin-bottom:18px;margin-top:0}
+.record .l{margin-bottom:8px}.record .mono{font-size:13px;line-height:1.65}
+.grid{border-radius:16px}.game-summary{padding:22px 45px 18px 22px}
+.teams{grid-template-columns:minmax(0,1fr) minmax(190px,.9fr) minmax(0,1fr);gap:18px}
+.chip{width:48px;height:48px;border:0;background:transparent}
+.chip .logo{width:38px;height:38px}.club .nm{font-size:17px}.club .wp{font-size:28px;margin-top:5px}
+.mid .t{font:650 12px/1.4 var(--sans);color:var(--muted)}.mid .mk{font-size:11px;line-height:1.6}
+.probbar{height:4px;margin-top:17px}.pick-lines{grid-template-columns:78px 1fr;font-size:12px;line-height:1.5;margin-top:14px}
+.detail{padding:20px 22px 24px}.detail .gr-tablewrap{box-shadow:none}.detail h3{letter-spacing:.04em}
+table.gr th{padding:13px 15px}table.gr td{padding:12px 15px}
+table.gr tbody tr:hover{background:var(--surface-2)}
+.fold>summary{padding:16px 18px}.fold .rt{font-size:12px}.flags{justify-content:flex-start}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;line-height:1.6;padding-top:18px;margin-top:36px}
+.foot a{color:var(--muted)}.skip-link{position:absolute;left:16px;top:-80px;padding:10px;background:var(--surface);z-index:10}
+.skip-link:focus{top:10px}:focus-visible{outline:3px solid rgb(var(--lean));outline-offset:4px}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1724;--ink:#e7f0f8;--muted:#a2b3c5;--faint:#8fa2b7;--lean:61,192,151;--lean-tx:110,218,184}}
+html[data-theme="dark"]{--bg:#0d1724;--ink:#e7f0f8;--muted:#a2b3c5;--faint:#8fa2b7;--lean:61,192,151;--lean-tx:110,218,184}
+@media(max-width:640px){body{padding:18px 12px 34px}.topbar{margin-bottom:16px}.brand{font-size:18px;gap:8px}
+ .brand-mark{width:32px;height:32px}.brand-version{display:none}.nav{width:100%;margin-bottom:24px}
+ .nav a{flex:1;text-align:center;padding:10px 12px}.gr-h1{font-size:28px}
+ .gr-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.gr-stat{padding:13px 12px}.gr-stat .v{font-size:22px}
+ .teams{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);gap:8px}
+ .game-summary{padding:17px 29px 16px 14px}.club .nm{font-size:13px}.club .wp{font-size:23px}
+ .mid .mk{font-size:10px}.mid .t{font-size:11px}.chev{right:10px}.detail{padding:15px 12px}
+ table.gr th,table.gr td{padding:10px 11px}.pick-lines{grid-template-columns:68px 1fr;font-size:11.5px}
+ .record .mono{font-family:var(--sans)}.fold>summary{flex-wrap:wrap}.fold .rt{margin-left:0}
+ .week-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .week-summary .gr-stat{padding:12px 9px}.week-summary .l{font-size:10px}.week-summary .s{font-size:11px}
+}
+"""
 
 
 def font_face_css(assets=ASSETS):
@@ -384,13 +438,14 @@ def html_document(body, title, current, built):
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
-            f"<title>{esc(title)}</title><meta name='description' content='NFL box-score composite win probabilities, forward ledger and market calibration'>"
-            f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><div class='mx-wrap'>"
-            f"<div class='topbar'><a class='brand' href='index.html'>{SITE_NAME}</a>"
+            f"<title>{esc(title)}</title><meta name='description' content='NFL forecasts, win probabilities, projected spreads and season results'>"
+            f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
+            f"<div class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
+            f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
             "<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme'>Theme</button></div>"
-            f"<nav class='nav'>{nav}</nav>{body}"
-            f"<div class='foot'>Built <span class='stamp'>{esc(built)}</span>. Win probabilities from each team's "
-            "earlier games and this week's injury reports. Not betting advice.</div></div></body></html>")
+            f"<nav class='nav' aria-label='Main navigation'>{nav}</nav><main id='main-content'>{body}</main>"
+            f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span></span>"
+            f"<a href='{REPO_REPORT}'>Model documentation</a></footer></div></body></html>")
 
 
 def head(title, lead):
@@ -529,11 +584,17 @@ def spread_record_text(r):
 
 def spread_headline(latest, season=None):
     r = spread_record(latest, season)
-    label = f'Model spread · {season} graded results' if season is not None else 'Model spread · rebuilt history'
+    label = f'Spread results · {season}' if season is not None else 'Spread results · historical replay'
     text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
-    basis = ('Completed games, graded retrospectively' if season is not None else 'Eligible seasons, reconstructed')
+    basis = 'Historical replay'
+    data=(latest or {}).get('fixed_band_ledger',pd.DataFrame())
+    if len(data) and season is not None:
+        covered=data[(data.season==season)&data.fixed_band_spread.notna()&data.result.notna()&data.spread_line.notna()]
+        if len(covered):basis+=f' · through week {int(covered.week.max())}'
+    if r is not None:
+        basis += f' · {int(r.selected)} selections from {int(r.opportunities)} games'
     return (f"<div class='record'><div class='l'>{esc(label)}</div><div class='mono'>{text}"
-            f"<div class='mut small'>{basis} · assumed −110 · 1u per bet · not locked pregame picks</div>"
+            f"<div class='mut small'>{basis} · −110 pricing · 1-unit stakes</div>"
             "</div></div>")
 
 
@@ -807,7 +868,17 @@ def render_index(latest, ledger, built, now=None):
     has_avail = (man.get("recipe") or {}).get("family", "") in m.AVAIL_FAMILIES
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     recorded = {r.game_id: r for r in cur.itertuples(index=False)}
-    parts = [head(f"Week {week}", f"Model win probabilities for every {season} week-{week} game. Tap a game for details.")]
+    parts = [head(f"Week {week} projections", f"{season} regular season · Win probabilities and projected spreads. Open a game for matchup details.")]
+    upcoming = int(board.result.isna().sum()) if 'result' in board else len(board)
+    stamp=pd.to_datetime(man.get('generated_utc'),utc=True,errors='coerce')
+    local=stamp.tz_convert(PT) if pd.notna(stamp) else None
+    updated=local.strftime('%-I:%M') if local is not None else '—'
+    update_note=local.strftime('%p %Z · %b %-d') if local is not None else 'Awaiting forecast'
+    parts.append("<div class='gr-summary week-summary'>"
+                 + stat("Upcoming", str(upcoming), "games on the schedule")
+                 + stat("Completed", str(len(board)-upcoming), "games this week")
+                 + stat("Updated", updated, update_note)
+                 + "</div>")
     parts.append(spread_headline(latest, season))
 
     def pending(r):
@@ -827,7 +898,6 @@ def render_index(latest, ledger, built, now=None):
     impacts = impacts[np.isfinite(impacts)]
     cmax = float(impacts.abs().max()) if len(impacts) else 1.
     graded = cur[cur.status == "graded"] if len(cur) else cur
-    mkt_bands, mdl_bands, band_years, n_fwd = band_windows(latest, graded)
     cards = []
     for r in rows:
         p = num(r["model_wp"])
@@ -863,8 +933,6 @@ def render_index(latest, ledger, built, now=None):
             moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
         picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
                  f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
-        lo, hi = num(r.get("model_wp_lo")), num(r.get("model_wp_hi"))
-        band = math.isfinite(lo) and math.isfinite(hi)
         sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
               + (f" · <span>Market {favorite_spread_text(ks, home, away)}</span>" if math.isfinite(ks) else ""))
 
@@ -888,16 +956,7 @@ def render_index(latest, ledger, built, now=None):
             ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
             ["Moneyline", ml_text(am), ml_text(hm)],
             ["Model spread", spread_text(ms, False), spread_text(ms, True)],
-            ["Market spread", spread_text(ks, False), spread_text(ks, True)]]
-            + ([["Model range", f"{pct(1 - hi)}–{pct(1 - lo)}", f"{pct(lo)}–{pct(hi)}"]] if band else []), num_cols=(1, 2))]
-        if band:
-            det.append(f"<p class='mut small'>Model range: {100 * m.BAND_LEVEL:.0f}% of the model's plausible "
-                       "estimates, counting only uncertainty in its fitted weights. Uncertainty in the team stats "
-                       "adds more, so the real range is wider.</p>")
-        det.append(historical_pick_reference(latest, r, edge))
-        if team and math.isfinite(num(bet.price)) and math.isfinite(q):
-            det.append(price_band_html(team, bet.price, q if bet.side == "home" else 1 - q,
-                                       mkt_bands, mdl_bands, band_years, n_fwd))
+            ["Market spread", spread_text(ks, False), spread_text(ks, True)]], num_cols=(1, 2))]
         rec = recorded.get(r["game_id"])
         if rec is not None:
             det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
@@ -913,8 +972,7 @@ def render_index(latest, ledger, built, now=None):
                     trs.append(cells)
             if trs:
                 det.append("<h3>Biggest factors</h3>" + table(["Factor", "Model impact"], trs)
-                           + "<p class='mut small'>Direction shows each term’s contribution to this forecast, after any favorite-confidence shrinkage. "
-                             "Bars share one scale across this week’s games.</p>")
+                           + "<p class='mut small'>Factors favoring each team. Bars use the same scale across this week's matchups.</p>")
         if has_avail:
             det.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(r, 'away')} · {esc(home)} {_qb(r, 'home')}</p>")
             det.append(report_notes_html(latest.get("report_notes"), (away, home), int(r["week"])))
@@ -929,15 +987,15 @@ def render_index(latest, ledger, built, now=None):
                 f"<span class='mut'> · always favorite {wl_text(f)} · ROI {roi_short(f['roi'])}</span>")
     else:
         line = "<span class='mut'>No graded picks yet. The record starts with the first locked pick.</span>"
-    parts.append(f"<div class='record'><div class='l'>Model record</div><div class='mono'>{line}</div>"
-                 "<div class='go'><a href='grades.html'>Ledger →</a></div></div>")
+    parts.append(f"<div class='record'><div class='l'>Recorded moneyline results</div><div class='mono'>{line}</div>"
+                 "<div class='go'><a href='grades.html'>View results →</a></div></div>")
     return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built)
 
 
 STATE_TEXT = {
-    "none": "Week {w} report not out yet; players listed last week count as available until it is.",
-    "practice": "Practice report only so far; listed players still count as available.",
-    "final": "Final report: Out and Doubtful count fully, Questionable a quarter.",
+    "none": "Week {w} injury report is pending.",
+    "practice": "Practice report available; final game status is pending.",
+    "final": "Final injury report available.",
 }
 
 
@@ -952,11 +1010,9 @@ def report_notes_html(notes, teams, week):
             continue
         rows = []
         for x in n.itertuples(index=False):
-            counted = num(x.counted)
-            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>", esc(x.this_week),
-                         f"{100 * counted:.0f}%" if math.isfinite(counted) else "—"])
+            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>", esc(x.this_week)])
         out.append(f"<p class='mut'><b>{esc(t)}</b> · {esc(STATE_TEXT.get(n.report_state.iloc[0], '').format(w=week))}</p>"
-                   + table(["Player", f"Week {week}", "Counted out"], rows, num_cols=(2,)))
+                   + table(["Player", f"Week {week} status"], rows))
     return "".join(out) if len(out) > 1 else ""
 
 
@@ -1013,15 +1069,14 @@ def pooled_2026_v118_header(latest, ledger):
     ctrl = control_records(rows)
     model = (ctrl or {}).get("model")
     eligible = int(model["bets"]) if model else 0
-    sub = f"{replay_count} replayed · {native_count} native · {pending} pending"
-    parts = ["<h2 class='sec'>2026 v1.18 · season-to-date picks</h2>",
+    sub = f"{replay_count} historical replay · {native_count} recorded · {pending} pending"
+    parts = ["<h2 class='sec'>Moneyline · 2026 season overview</h2>",
              control_tiles(ctrl, "Graded", str(eligible), sub)]
     if model and eligible:
-        parts.append(f"<p class='mut small'>Pooled moneyline: {wl_text(model)} · "
+        parts.append(f"<p class='mut small'>Season moneyline: {wl_text(model)} · "
                      f"{model['units']:+.2f}u · ROI {roi_short(model['roi'])}. "
-                     "Earlier games use reconstructed 2026 walk-forward picks and historical prices; "
-                     "native v1.18 picks use their locked prices. Native games always take precedence "
-                     "and are counted only once. This is not a purely forward record.</p>")
+                     "Includes historical replay and recorded forecasts, with one result per game. "
+                     "Recorded forecasts use their saved pregame prices and replace any replay of the same game.</p>")
         weekly = []
         for week, group in rows.groupby("week", sort=True):
             summary = control_records(group)
@@ -1037,23 +1092,20 @@ def pooled_2026_v118_header(latest, ledger):
 
 def render_grades(ledger, latest, built):
     rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Ledger", "2026 picks combine earlier reconstructed games and native forward locks, "
-                            "with one pick per game. Native locks use their recorded pregame moneylines.")]
+    parts = [head("Results", "Review moneyline and spread results by season. Open a week or season for game-by-game details.")]
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     graded = cur[cur.status == "graded"] if len(cur) else cur
     pooled_header = pooled_2026_v118_header(latest, ledger)
     if pooled_header:
         parts.append(pooled_header)
-        parts.append("<h2 class='sec'>Native forward pick details · " + esc(rev) + "</h2>")
     else:
         pending = int(cur.status.eq("pending").sum()) if len(cur) else 0
         parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{pending} pending"))
     if latest is not None:
         parts.append(spread_headline(latest, int(latest['manifest']['season'])))
-    parts.append(disagreement_note(graded, "Native locked picks"))
+    parts.append("<h2 class='sec'>Recorded forecasts</h2><p class='mut small'>Saved before kickoff, using the market prices available at capture.</p>")
     if cur.empty:
-        parts.append("<div class='gr-note'>No picks locked yet. The first native pick locks once a week's final injury "
-                     "reports are out.</div>")
+        parts.append("<div class='gr-note'>No picks locked yet. Forecasts are saved after final injury reports are available.</div>")
     else:
         weeks = sorted({(int(s), int(w)) for s, w in zip(cur.season, cur.week)}, reverse=True)
         for i, (s, w) in enumerate(weeks):
@@ -1071,10 +1123,8 @@ def render_grades(ledger, latest, built):
                                 table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
     if latest is not None:
         parts.append(render_retro(latest))
-        parts.append(render_fixed_bands(latest, details=True))
-    parts.append("<p class='mut small'>Full statistics, earlier model versions and research comparisons: "
-                 "<a href='ledger_report.txt'>ledger_report.txt</a>.</p>")
-    return html_document("".join(parts), f"{SITE_NAME} ledger", "grades.html", built)
+        parts.append(render_fixed_bands(latest))
+    return html_document("".join(parts), f"{SITE_NAME} results", "grades.html", built)
 
 
 def render_retro(latest):
@@ -1083,14 +1133,15 @@ def render_retro(latest):
     if retro is None or retro.empty:
         return ""
     seasons = sorted(int(x) for x in retro.season.unique())
-    out = ["<h2 class='sec'>Rebuilt history</h2>",
-           f"<div class='gr-note flag-note'>The current model replayed on every game since {seasons[0]}, each week "
-           "predicted from earlier games only. <b>Hindsight, not a track record:</b> the model was designed after "
-           "these games were played.</div>"]
+    out = ["<h2 class='sec'>Historical replay</h2>",
+           f"<div class='gr-note'>Results calculated with the current model for {seasons[0]}–{seasons[-1]}. "
+           "Recorded forecasts are shown separately above.</div>"]
     played = retro[pd.to_numeric(retro["home won"], errors="coerce").isin([0., .5, 1.])]
-    out.append(control_tiles(control_records(played), "Games", f"{len(played)}", f"{seasons[0]}–{seasons[-1]}"))
+    controls=control_records(played)
+    compared=(controls or {}).get('model',{}).get('bets',0)
+    out.append(control_tiles(controls, "Compared games", str(compared), f"{seasons[0]}–{seasons[-1]}"))
+    out.append("<p class='mut small'>Benchmarks use games with a priced model selection and a market favorite.</p>")
     out.append(spread_headline(latest))
-    out.append(disagreement_note(played, "Rebuilt history"))
     for yr in reversed(seasons):
         g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
         units = g.units.dropna()
@@ -1125,16 +1176,11 @@ def render_fixed_bands(latest, details=False):
         return ''
     eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
     current_season = int(latest['manifest']['season'])
-    out = ["<h2 class='sec'>Model spread</h2>",
-           "<div class='gr-note flag-note'>Reconstructed history, not locked forward results. "
-           "Each season's mapping uses earlier seasons only; the model and calibration design were developed on exposed history. "
-           "At least two prior seasons are required. Tied finals are included. "
-           "Risk 1 unit per bet at assumed −110: wins +0.9091u, losses −1u, pushes 0u. "
-           "A forecast equal to the market line skips. ROI includes pushed stakes and excludes skips. "
-           "Historical quote capture times are unknown; no executable-price claim. "
-           "Win probabilities and moneyline picks are unchanged.</div>"]
+    out = ["<h2 class='sec'>Spread performance</h2>",
+           "<div class='gr-note'>Historical replay · Returns use −110 pricing and fixed 1-unit stakes. "
+           "Matching model and market lines are skipped. Pushes return the stake.</div>"]
     if eligible.empty:
-        return ''.join(out) + "<p class='mut'>Insufficient prior-season history for fixed-band evaluation.</p>"
+        return ''.join(out) + "<p class='mut'>Spread results will appear when enough historical games are available.</p>"
     results = fixed_bands.summary(d).query("method == 'Fixed bands'")
     def result_rows(frame):
         return [[esc('All seasons' if r.season == 'All' else r.season),
@@ -1143,16 +1189,15 @@ def render_fixed_bands(latest, details=False):
     headers = ['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
     current = results[results.season == str(current_season)]
     if len(current):
+        last_week=int(eligible.loc[eligible.season==current_season,'week'].max())
         out.append(f"<h3>{current_season} graded results</h3>"
-                   "<p class='mut small'>Completed games this season, graded retrospectively against the market spread. "
-                   "Reconstructed results, not locked pregame picks.</p>")
+                   f"<p class='mut small'>Historical replay of completed games this season, through week {last_week}.</p>")
         out.append(table(headers, result_rows(current), num_cols=(1, 2, 3, 4)))
     out.append("<h3>Per-season results</h3>")
     out.append(table(headers, result_rows(results), num_cols=(1, 2, 3, 4)))
     out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
-               "<a href='fixed_band_summary.csv'>Season results</a> · <a href='fixed_band_rules.json'>Season mappings</a>. "
-               "ATS side follows forecast minus market, independently of the outright winner. "
-               "The forecast uses the prior-season median signed MOV in each fixed model-confidence group; losses and tied finals are included.</p>")
+               "<a href='fixed_band_summary.csv'>Season results</a>. "
+               "Win and cover rates exclude pushes; ROI includes pushed stakes and excludes skipped games.</p>")
     if details:
         for year, g in eligible.groupby('season', sort=False):
             rows = []
@@ -1168,25 +1213,6 @@ def render_fixed_bands(latest, details=False):
             out.append(folded(f'{int(year)} · model spread · {label}',
                              table(['Game', 'Model spread', 'Market', 'ATS pick', 'ATS result', 'Units'], rows),
                              int(year) == current_season))
-    else:
-        out.append("<h3>Model confidence and margin calibration</h3><p class='mut small'>"
-                   "Fixed groups follow model win confidence. Realized MOV is signed toward the model pick; "
-                   "losses are negative and ties are zero. These point-error diagnostics are separate from ATS profitability.</p>")
-        rows = []
-        model_bands = np.digitize(eligible.model_spread.abs(), fixed_bands.CUTS)
-        confidence_labels = ['50–59.58%', '59.58–71.43%', '71.43–79.06%', '79.06%+']
-        for k, band in enumerate(confidence_labels):
-            g = eligible[model_bands == k]
-            if g.empty:
-                continue
-            direction = np.sign(g.model_spread)
-            realized = direction * g.result
-            forecast = direction * g.fixed_band_spread
-            rows.append([esc(band), str(len(g)), f'{forecast.median():.2f}',
-                         f'{realized.median():+.2f}', f'{realized.mean():+.2f}',
-                         f'{(g.fixed_band_spread-g.result).abs().mean():.2f}'])
-        out.append(table(['Model confidence', 'Games', 'Median forecast MOV',
-                          'Realized median MOV', 'Realized mean MOV', 'MAE'], rows, num_cols=(1, 2, 3, 4, 5)))
     return ''.join(out)
 
 
@@ -1212,8 +1238,7 @@ def market_sides(df):
 
 
 def render_calibration(latest, ledger, built):
-    parts = [head("Market calibration", "What the moneyline implied against what happened, by price. "
-                                        "This grades the <i>market</i>, not the model.")]
+    parts = [head("Performance", "Compare forecast confidence with game outcomes and review spread results.")]
     retro = latest.get("retro_ledger") if latest else None
     sides = market_sides(retro)
     if len(sides):
@@ -1241,20 +1266,22 @@ def render_calibration(latest, ledger, built):
         parts.append(table(["Moneyline", "Home side", "Away side", "Both", "Avg margin"], rows, num_cols=(1, 2, 3, 4)))
         parts.append(f"<p class='mut small'>Won % vs the price's implied % with the bookmaker's margin removed, then games. "
                      f"Avg margin: points the side won or lost by on average, vs the average spread for it. "
-                     f"Regular season {seasons[0]}–{seasons[-1]}, closing lines.</p>")
+                     f"Historical replay · Regular season {seasons[0]}–{seasons[-1]} · Stored market prices.</p>")
     rev = latest["manifest"]["revision"] if latest else m.REVISION
     s = grade_ledger.scored_frame(ledger[ledger.revision == rev]) if len(ledger) else pd.DataFrame()
     parts.append("<h2 class='sec'>Model confidence</h2>")
     if len(s):
-        parts.append("<p class='mut small'>Locked picks.</p>" + records_table(m.band_records(s)))
+        parts.append("<h3>Recorded forecasts</h3>" + records_table(m.band_records(s)))
     if latest is not None and len(latest["band_records"]):
-        parts.append("<p class='mut small'>Past games, each predicted from earlier games only (reconstructed).</p>"
+        years=heldout_seasons(latest)
+        span=f' · {years[0]}–{years[-1]}' if years else ''
+        parts.append(f"<h3>Historical replay{span}</h3>"
                      + records_table(latest["band_records"]))
     elif not len(s):
         parts.append("<div class='gr-note'>No graded picks yet.</div>")
     if latest is not None:
         parts.append(render_fixed_bands(latest))
-    return html_document("".join(parts), f"{SITE_NAME} market calibration", "market-calibration.html", built)
+    return html_document("".join(parts), f"{SITE_NAME} performance", "market-calibration.html", built)
 
 
 # ---------------------------------------------------------------- driver
@@ -1287,24 +1314,34 @@ def render_all(out_dir, data=DATA, now=None):
              "market-calibration.html": render_calibration(latest, ledger, built)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
-    (out / "ledger_report.txt").write_text(published_report(Path(data)))
+    # Repository-only analyst report. Do not publish a second research surface.
+    report_path = Path(data) / 'ledger_report.txt'
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(published_report(Path(data)), encoding='utf-8')
+    for retired in ('ledger_report.txt', 'model.html', 'board.html'):
+        (out / retired).unlink(missing_ok=True)
     (out / ".nojekyll").write_text("")
     return sorted(p.name for p in out.iterdir())
 
 
 APPENDICES = (("version_report.md", "Appendix A: competing model versions and research arms"),
               ("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"))
+RESEARCH_MARKER = '\n\n' + '=' * 78 + '\nRepository analysis appendices\n' + '=' * 78 + '\n'
 
 
 def published_report(data):
-    """The only public home of research data: the ledger report, then the version comparison and
-    snapshot-replay reports as appendices. Site pages show the production model only."""
+    """Consolidate research in the repo report, idempotently across page-only builds."""
     path = data / "ledger_report.txt"
-    parts = [path.read_text() if path.exists() else "No ledger yet.\n"]
+    base = path.read_text().split(RESEARCH_MARKER, 1)[0] if path.exists() else "No ledger yet.\n"
+    parts = [base, RESEARCH_MARKER]
     for name, title in APPENDICES:
         source = data / "latest" / name
         if source.exists():
             parts.append(f"\n\n{'=' * 78}\n{title} (from data/latest/{name})\n{'=' * 78}\n\n{source.read_text()}")
+    parts.append('\n\nAppendix C: current production sanity checks\n\n' + production_sanity.report(data))
+    calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
+    if calibration.exists():
+        parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())
     return "".join(parts)
 
 
