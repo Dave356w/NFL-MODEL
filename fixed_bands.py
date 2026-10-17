@@ -125,6 +125,10 @@ def prepare(latest):
             mask = board.season == year
             board.loc[mask, 'fixed_band_spread'] = apply(board.loc[mask, 'model_spread'], rule)
         latest['board'] = board
+    # ATS v2 is a separate production decision policy. Never mutate the
+    # original-model or frozen fixed-band benchmark selections.
+    import ats_v2
+    ats_v2.prepare(latest)
 
 
 def summary(frame):
