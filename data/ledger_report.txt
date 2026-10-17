@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-17 13:44 UTC
+NFL forward ledger report -- 2026-10-17 19:53 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -12,7 +12,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   ROI by the picked side's price band (model):
       −174 to −130  n=1    0-1-0    -1.00u  ROI -100.0%  q 56.3%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 56.3%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  no decided games
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.03u, ROI -103.0%
@@ -47,7 +48,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
       −174 to −130  n=6    3-2-1    +0.12u  ROI   +2.0%  q 57.5%
       −129 to −100  n=1    0-1-0    -1.00u  ROI -100.0%  q 53.2%
          All games  n=15   9-5-1    -0.63u  ROI   -4.2%  q 62.8%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  3-11-1  cover 21.4% (Wilson 95% 7.6-47.6)
      |gap| >= 3 pts  0-2-0  cover 0.0% (Wilson 95% 0.0-65.8)
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 9-5, -0.82u, ROI -5.5% +/- 19.4
@@ -86,7 +88,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
       −174 to −130  n=4    2-2-0    -0.58u  ROI  -14.6%  q 56.5%
       +100 to +129  n=1    0-1-0    -1.00u  ROI -100.0%  q 44.9%
          All games  n=14   8-5-1    -1.34u  ROI   -9.6%  q 62.6%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  4-9-1  cover 30.8% (Wilson 95% 12.7-57.6)
      |gap| >= 3 pts  0-3-0  cover 0.0% (Wilson 95% 0.0-56.2)
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 8-5, -1.59u, ROI -11.4% +/- 19.9
@@ -121,7 +124,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 79.1%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
@@ -153,7 +157,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.0%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
@@ -185,7 +190,8 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   ROI by the picked side's price band (model):
             ≤ −250  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
          All games  n=1    0-1-0    -1.00u  ROI -100.0%  q 80.8%
-  Diagnostic, not the goal metric: model-implied spread vs the snapshot spread (break-even at -110: 52.4%)
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
           all games  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
      |gap| >= 3 pts  1-0-0  cover 100.0% (Wilson 95% 20.7-100.0)
   Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 0-1, -1.01u, ROI -101.4%
@@ -229,3 +235,525 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   1-2-0, -0.80u, ROI -26.7% +/- 73.3 (1 SE); market-correct null -4.0%; same rows, favorite +0.02u
   verdict: needs 10 graded bets to report
 
+
+
+==============================================================================
+Repository analysis appendices
+==============================================================================
+
+
+==============================================================================
+Appendix A: competing model versions and research arms (from data/latest/version_report.md)
+==============================================================================
+
+# Production restoration and all competing-model results
+
+Current production: **boxscore-composite-v1.18**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
+Configuration: `73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20`. Owner decision 2026-10-13.
+Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.
+
+## Native forward results
+
+Each experiment contains one original pregame forecast per game. Different revisions can overlap and have different lock quotes; do not pool them. Ties push; binary scores exclude ties. Pending games remain ungraded.
+
+| Original revision | N | W-L-P | Units | ROI ± SE | Favorite units | Null ROI | LL ↓ | Market LL ↓ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
+| boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
+| boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
+| boxscore-composite-v1.16 | 27 | 9-5-1 | -0.63 | -4.17% ± 18.77 | -0.63 | -4.08% | 0.774497 | 0.589794 |
+| boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
+| boxscore-composite-v1.18 | 13 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -3.97% | 0.840233 | 0.828949 |
+
+## Frozen archived-input counterfactuals
+
+These forecasts use the archived v1.16 input cohort and original moneylines. Total/cover/over schedule quote capture times are unknown. They are reconstructed research forecasts, not executable native locks. No missing games are backfilled. Outcomes are taken from the current graded ledger.
+
+| Study and arm | N | W-L-P | Units | ROI ± SE | Favorite units | Null ROI | LL ↓ | Market LL ↓ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| market_offset: with_market | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.738627 | 0.540710 |
+| market_offset: without_market | 13 | 6-6-1 | -3.59 | -27.62% ± 19.80 | +1.37 | -4.07% | 0.803355 | 0.540710 |
+| market_offset: market_only | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.540710 | 0.540710 |
+| shrinkage: production | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.738627 | 0.540710 |
+| shrinkage: product_only | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.617611 | 0.540710 |
+| shrinkage: active_10 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.728070 | 0.540710 |
+| shrinkage: active_30 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.711994 | 0.540710 |
+| shrinkage: active_100 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.680775 | 0.540710 |
+| shrinkage: information_30 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.659836 | 0.540710 |
+| profile_robustness: production | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.738627 | 0.540710 |
+| profile_robustness: profile_4 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.715757 | 0.540710 |
+| profile_robustness: profile_12 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.693564 | 0.540710 |
+| profile_robustness: bounded_2 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.713827 | 0.540710 |
+| profile_robustness: combined_4_2 | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.706598 | 0.540710 |
+| profile_robustness: market | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.540710 | 0.540710 |
+| margin_total: production_matched | 13 | 10-2-1 | +3.42 | +26.35% ± 17.22 | +1.37 | -4.07% | 0.745556 | 0.540710 |
+| margin_total: forecast_additive | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.727586 | 0.540710 |
+| margin_total: margin_total | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.728437 | 0.540710 |
+| margin_total: pass_total | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.722123 | 0.540710 |
+| margin_total: pass_market_total | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.723230 | 0.540710 |
+| margin_total: production_full | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.738627 | 0.540710 |
+| margin_total: direct_margin_corrected | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.722482 | 0.540710 |
+| market_residual: production_matched | 13 | 10-2-1 | +3.42 | +26.35% ± 17.22 | +1.37 | -4.07% | 0.745556 | 0.540710 |
+| market_residual: forecast_additive | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.739854 | 0.540710 |
+| market_residual: margin_total | 13 | 10-2-1 | +3.42 | +26.35% ± 17.22 | +1.37 | -4.07% | 0.737952 | 0.540710 |
+| market_residual: pass_total | 13 | 10-2-1 | +3.42 | +26.35% ± 17.22 | +1.37 | -4.07% | 0.736200 | 0.540710 |
+| market_residual: pass_market_total | 13 | 10-2-1 | +3.42 | +26.35% ± 17.22 | +1.37 | -4.07% | 0.737256 | 0.540710 |
+| market_residual: production_full | 13 | 9-3-1 | +1.37 | +10.58% ± 18.40 | +1.37 | -4.07% | 0.738627 | 0.540710 |
+
+## All committed historical tests
+
+Exposed 2023–2025 chronological development. Compare arms within each study; cohorts differ (811 versus 812 bets), warm-up training histories differ, and the label production in the older qualification/context studies describes the pre-v1.16 model. Repeated control rows are not independent evidence.
+
+| Study and arm | N | W-L-P | Units | ROI ± SE | Favorite units | Null ROI | LL ↓ | Market LL ↓ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| qualification: production | 812 | 547-264-1 | +16.30 | +2.01% ± 2.65 | +0.18 | -4.10% | 0.631630 | 0.608072 |
+| qualification: market_additive | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608005 | 0.608072 |
+| qualification: market_product | 812 | 554-257-1 | -1.11 | -0.14% ± 2.47 | +0.18 | -4.10% | 0.606162 | 0.608072 |
+| qualification: market_qualified | 812 | 556-255-1 | +3.73 | +0.46% ± 2.48 | +0.18 | -4.10% | 0.607887 | 0.608072 |
+| qualification: market_extreme | 812 | 558-253-1 | +6.88 | +0.85% ± 2.47 | +0.18 | -4.10% | 0.607723 | 0.608072 |
+| qualification: fixed_market_product | 812 | 562-249-1 | +19.32 | +2.38% ± 2.49 | +0.18 | -4.10% | 0.607584 | 0.608072 |
+| qualification: q | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+| context: production | 811 | 546-264-1 | +15.38 | +1.90% ± 2.65 | +1.18 | -4.10% | 0.631630 | 0.608072 |
+| context: fixed_market_product | 811 | 562-248-1 | +20.32 | +2.51% ± 2.49 | +1.18 | -4.10% | 0.607584 | 0.608072 |
+| context: q | 811 | 555-255-1 | +1.18 | +0.15% ± 2.47 | +1.18 | -4.10% | 0.608072 | 0.608072 |
+| context: hinge_0.5 | 811 | 563-247-1 | +23.43 | +2.89% ± 2.50 | +1.18 | -4.10% | 0.607527 | 0.608072 |
+| context: hinge_1 | 811 | 565-245-1 | +27.24 | +3.36% ± 2.50 | +1.18 | -4.10% | 0.608663 | 0.608072 |
+| context: hinge_1.5 | 811 | 561-249-1 | +22.45 | +2.77% ± 2.53 | +1.18 | -4.10% | 0.606111 | 0.608072 |
+| context: hinge_2 | 811 | 563-247-1 | +23.02 | +2.84% ± 2.50 | +1.18 | -4.10% | 0.607533 | 0.608072 |
+| context: multiscale | 811 | 564-246-1 | +24.88 | +3.07% ± 2.50 | +1.18 | -4.10% | 0.607778 | 0.608072 |
+| context: one_extreme | 811 | 564-246-1 | +24.41 | +3.01% ± 2.50 | +1.18 | -4.10% | 0.608473 | 0.608072 |
+| context: market_context | 811 | 564-246-1 | +24.41 | +3.01% ± 2.50 | +1.18 | -4.10% | 0.608570 | 0.608072 |
+| context: early_context | 811 | 564-246-1 | +24.41 | +3.01% ± 2.50 | +1.18 | -4.10% | 0.609078 | 0.608072 |
+| context: hinge_0.5_fixed_r0.1 | 811 | 559-251-1 | +17.74 | +2.19% ± 2.52 | +1.18 | -4.10% | 0.606478 | 0.608072 |
+| context: hinge_1_fixed_r0.1 | 811 | 565-245-1 | +30.06 | +3.71% ± 2.52 | +1.18 | -4.10% | 0.605605 | 0.608072 |
+| context: hinge_1.5_fixed_r0.1 | 811 | 565-245-1 | +28.73 | +3.54% ± 2.52 | +1.18 | -4.10% | 0.605986 | 0.608072 |
+| context: hinge_2_fixed_r0.1 | 811 | 563-247-1 | +23.02 | +2.84% ± 2.50 | +1.18 | -4.10% | 0.607533 | 0.608072 |
+| context: multiscale_fixed_r0.1 | 811 | 560-250-1 | +22.34 | +2.75% ± 2.54 | +1.18 | -4.10% | 0.605923 | 0.608072 |
+| context: one_extreme_fixed_r0.1 | 811 | 558-252-1 | +14.51 | +1.79% ± 2.51 | +1.18 | -4.10% | 0.607517 | 0.608072 |
+| context: market_context_fixed_r0.1 | 811 | 565-245-1 | +26.54 | +3.27% ± 2.50 | +1.18 | -4.10% | 0.607805 | 0.608072 |
+| context: early_context_fixed_r0.1 | 811 | 561-249-1 | +18.66 | +2.30% ± 2.50 | +1.18 | -4.10% | 0.608259 | 0.608072 |
+| market_offset: with_market | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605605 | 0.608072 |
+| market_offset: without_market | 812 | 544-267-1 | +19.01 | +2.34% ± 2.72 | +0.18 | -4.10% | 0.625832 | 0.608072 |
+| market_offset: market_only | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+| shrinkage: production | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605605 | 0.608072 |
+| shrinkage: product_only | 812 | 562-249-1 | +19.32 | +2.38% ± 2.49 | +0.18 | -4.10% | 0.607584 | 0.608072 |
+| shrinkage: market | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+| shrinkage: active_10 | 812 | 563-248-1 | +25.50 | +3.14% ± 2.53 | +0.18 | -4.10% | 0.605505 | 0.608072 |
+| shrinkage: active_30 | 812 | 563-248-1 | +25.50 | +3.14% ± 2.53 | +0.18 | -4.10% | 0.605549 | 0.608072 |
+| shrinkage: active_100 | 812 | 563-248-1 | +23.93 | +2.95% ± 2.52 | +0.18 | -4.10% | 0.606001 | 0.608072 |
+| shrinkage: information_30 | 812 | 561-250-1 | +17.76 | +2.19% ± 2.50 | +0.18 | -4.10% | 0.606599 | 0.608072 |
+| shrinkage: selected | 812 | 564-247-1 | +24.48 | +3.01% ± 2.50 | +0.18 | -4.10% | 0.606627 | 0.608072 |
+| profile_robustness: production | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605605 | 0.608072 |
+| profile_robustness: profile_4 | 812 | 563-248-1 | +25.34 | +3.12% ± 2.53 | +0.18 | -4.10% | 0.605271 | 0.608072 |
+| profile_robustness: profile_12 | 812 | 565-246-1 | +29.19 | +3.60% ± 2.53 | +0.18 | -4.10% | 0.605358 | 0.608072 |
+| profile_robustness: bounded_2 | 812 | 566-245-1 | +31.92 | +3.93% ± 2.53 | +0.18 | -4.10% | 0.605829 | 0.608072 |
+| profile_robustness: combined_4_2 | 812 | 563-248-1 | +24.62 | +3.03% ± 2.51 | +0.18 | -4.10% | 0.605700 | 0.608072 |
+| profile_robustness: selected | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605610 | 0.608072 |
+| profile_robustness: market | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+| margin_total: production_matched | 812 | 562-249-1 | +27.19 | +3.35% ± 2.55 | +0.18 | -4.10% | 0.607431 | 0.608072 |
+| margin_total: forecast_additive | 812 | 560-251-1 | +19.99 | +2.46% ± 2.53 | +0.18 | -4.10% | 0.605717 | 0.608072 |
+| margin_total: margin_total | 812 | 561-250-1 | +21.83 | +2.69% ± 2.53 | +0.18 | -4.10% | 0.605814 | 0.608072 |
+| margin_total: pass_total | 812 | 565-246-1 | +29.76 | +3.67% ± 2.53 | +0.18 | -4.10% | 0.605569 | 0.608072 |
+| margin_total: pass_market_total | 812 | 564-247-1 | +28.10 | +3.46% ± 2.53 | +0.18 | -4.10% | 0.604746 | 0.608072 |
+| margin_total: selected | 812 | 565-246-1 | +29.98 | +3.69% ± 2.53 | +0.18 | -4.10% | 0.606025 | 0.608072 |
+| margin_total: production_full | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605605 | 0.608072 |
+| margin_total: direct_margin_corrected | 812 | 554-257-1 | +4.83 | +0.59% ± 2.50 | +0.18 | -4.10% | 0.608977 | 0.608072 |
+| margin_total: direct_margin_standalone | 812 | 542-269-1 | +17.72 | +2.18% ± 2.73 | +0.18 | -4.10% | 0.628899 | 0.608072 |
+| margin_total: market | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+| market_residual: production_matched | 812 | 562-249-1 | +27.19 | +3.35% ± 2.55 | +0.18 | -4.10% | 0.607431 | 0.608072 |
+| market_residual: forecast_additive | 812 | 571-240-1 | +44.50 | +5.48% ± 2.54 | +0.18 | -4.10% | 0.606827 | 0.608072 |
+| market_residual: margin_total | 812 | 567-244-1 | +35.31 | +4.35% ± 2.53 | +0.18 | -4.10% | 0.607230 | 0.608072 |
+| market_residual: pass_total | 812 | 572-239-1 | +46.32 | +5.70% ± 2.54 | +0.18 | -4.10% | 0.606426 | 0.608072 |
+| market_residual: pass_market_total | 812 | 569-242-1 | +39.44 | +4.86% ± 2.54 | +0.18 | -4.10% | 0.606498 | 0.608072 |
+| market_residual: selected | 812 | 565-246-1 | +31.93 | +3.93% ± 2.54 | +0.18 | -4.10% | 0.608215 | 0.608072 |
+| market_residual: production_full | 812 | 565-246-1 | +29.06 | +3.58% ± 2.52 | +0.18 | -4.10% | 0.605605 | 0.608072 |
+| market_residual: direct_margin_selected | 812 | 557-254-1 | +4.08 | +0.50% ± 2.47 | +0.18 | -4.10% | 0.607748 | 0.608072 |
+| market_residual: direct_margin_relationships | 812 | 557-254-1 | +4.08 | +0.50% ± 2.47 | +0.18 | -4.10% | 0.607748 | 0.608072 |
+| market_residual: market | 812 | 555-256-1 | +0.18 | +0.02% ± 2.47 | +0.18 | -4.10% | 0.608072 | 0.608072 |
+
+## Selection-adjusted benchmark
+
+Basis: Exposed 2023-2025 held-out walk-forward; fixed committed forecasts; not forward evidence.
+
+Across 53 committed arms on the same 809 games, if the market were exactly right the best arm would beat the same-row favorite by a median +16.7u by luck alone (95th percentile +44.7u).
+Observed best: market_residual:pass_total beats it by +46.1u (market-correct p 0.042; Reality Check p 0.037). v1.16 beats it by +30.6u (p 0.180 against the best-arm null; 0.007 unadjusted). v1.17 beats it by +46.1u (p 0.042).
+Log loss: best arm margin_total:pass_market_total gains +0.0035 over the market (market-correct p 0.047; Reality Check p 0.697).
+Forecasts are fixed and only committed arms are included. Many more configurations were tried, so the real selection adjustment is larger and these p-values are optimistic.
+
+Source: `research/selection_benchmark_results/REPORT.md`.
+
+## Interpretation
+
+v1.17 has the highest tested historical return among the recent fixed challengers, but its paired advantage over v1.16 remains unresolved (98.75% ROI-difference interval −0.27 to +4.89 percentage points). v1.16 has better historical binary scores than v1.17. The extra passing-by-total interaction beats the additive market-target challenger on returns through one changed historical pick. Shrinkage and bounded variants do not establish replacement superiority.
+Historical intervals condition on exposed model development and omit design-selection uncertainty. ROI ± SE is one standard error, not a confidence interval. Native results are small-sample descriptive evidence. Source reports retain paired week-cluster intervals and annual comparisons.
+The restored production is not qualified as reliably profitable. Retrospective snapshot grades are reported separately from native outcomes, and repeated snapshots are never counted as independent games.
+
+
+==============================================================================
+Appendix B: original snapshots replayed with the current model (from data/latest/regraded_ledger_report.md)
+==============================================================================
+
+# boxscore-composite-v1.18 retrospective ledger replay
+
+Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
+
+Snapshots: 57; unique games: 28. Repeated snapshots are not independent games.
+Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
+Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
+
+                   group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
+        All unique games     28       12     9       6       1 -1.625059 -0.101566 0.185509        -0.040725       -1.625059     -0.101566            15  0.698110         0.654952 0.250445      0.230488
+boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.579691         1.567153 0.630375      0.626253
+boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.622113         1.609438 0.644037      0.640000
+boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.663882         1.651078 0.657068      0.653118
+boxscore-composite-v1.16     27       12     9       5       1 -0.625059 -0.041671 0.187696        -0.040755       -0.625059     -0.041671            14  0.635140         0.589794 0.223307      0.202219
+boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.622306         0.574300 0.217136      0.194824
+boxscore-composite-v1.18     13       12     0       1       0 -1.000000 -1.000000      NaN        -0.039683       -1.000000     -1.000000             1  0.840233         0.828949 0.323067      0.317523
+
+       original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
+boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.793961          L  -1.000000
+boxscore-composite-v1.13  2026_05_TB_DAL           0.632918  0.802519          L  -1.000000
+boxscore-composite-v1.14  2026_05_TB_DAL           0.619215  0.810598          L  -1.000000
+boxscore-composite-v1.16 2026_05_BAL_ATL           0.709701  0.636071          L  -1.000000
+boxscore-composite-v1.16  2026_05_CHI_GB           0.498569  0.498569          L  -1.000000
+boxscore-composite-v1.16 2026_05_CIN_MIA           0.257985  0.257985          W   0.281690
+boxscore-composite-v1.16 2026_05_CLE_NYJ           0.543821  0.543821          W   0.740741
+boxscore-composite-v1.16 2026_05_DEN_LAC           0.413441  0.413441          W   0.520833
+boxscore-composite-v1.16 2026_05_DET_ARI           0.342853  0.342853          W   0.400000
+boxscore-composite-v1.16 2026_05_HOU_TEN           0.242192  0.247778          W   0.277778
+boxscore-composite-v1.16 2026_05_IND_PIT           0.540172  0.540172          W   0.675676
+boxscore-composite-v1.16   2026_05_LV_NE           0.611193  0.611193          W   0.520833
+boxscore-composite-v1.16  2026_05_MIN_NO           0.482003  0.482003          W   0.704225
+boxscore-composite-v1.16 2026_05_NYG_WAS           0.576515  0.576515          P   0.000000
+boxscore-composite-v1.16 2026_05_PHI_JAX           0.795347  0.772018          W   0.253165
+boxscore-composite-v1.16  2026_05_SF_SEA           0.939039  0.700411          L  -1.000000
+boxscore-composite-v1.17 2026_05_BAL_ATL           0.700461  0.636071          L  -1.000000
+boxscore-composite-v1.17  2026_05_CHI_GB           0.490153  0.488236          L  -1.000000
+boxscore-composite-v1.17 2026_05_CIN_MIA           0.260088  0.261754          W   0.289855
+boxscore-composite-v1.17 2026_05_CLE_NYJ           0.536092  0.543821          W   0.740741
+boxscore-composite-v1.17 2026_05_DEN_LAC           0.424978  0.413441          W   0.520833
+boxscore-composite-v1.17 2026_05_DET_ARI           0.268344  0.337207          W   0.387597
+boxscore-composite-v1.17 2026_05_HOU_TEN           0.251574  0.250796          W   0.281690
+boxscore-composite-v1.17 2026_05_IND_PIT           0.542488  0.540172          W   0.675676
+boxscore-composite-v1.17   2026_05_LV_NE           0.598425  0.611193          W   0.520833
+boxscore-composite-v1.17  2026_05_MIN_NO           0.507626  0.494208          W   0.740741
+boxscore-composite-v1.17 2026_05_NYG_WAS           0.588250  0.589476          P   0.000000
+boxscore-composite-v1.17 2026_05_PHI_JAX           0.804659  0.777518          W   0.243902
+boxscore-composite-v1.17  2026_05_SF_SEA           0.940683  0.700411          L  -1.000000
+boxscore-composite-v1.17  2026_05_BUF_LA           0.661319  0.620637          L  -1.000000
+boxscore-composite-v1.16  2026_05_BUF_LA           0.664820  0.620637          L  -1.000000
+boxscore-composite-v1.18 2026_06_SEA_DEN           0.431610  0.431610          L  -1.000000
+boxscore-composite-v1.16 2026_06_SEA_DEN           0.412161  0.431610          L  -1.000000
+boxscore-composite-v1.18  2026_06_ARI_LA           0.814123  0.814123                   NaN
+boxscore-composite-v1.18 2026_06_BAL_CLE           0.435435  0.435435                   NaN
+boxscore-composite-v1.18  2026_06_BUF_LV           0.320416  0.320416                   NaN
+boxscore-composite-v1.18 2026_06_CAR_PHI           0.392247  0.392247                   NaN
+boxscore-composite-v1.18 2026_06_CHI_ATL           0.542147  0.542147                   NaN
+boxscore-composite-v1.18  2026_06_DAL_GB           0.522847  0.522847                   NaN
+boxscore-composite-v1.18 2026_06_HOU_JAX           0.582992  0.582992                   NaN
+boxscore-composite-v1.18  2026_06_LAC_KC           0.756928  0.756928                   NaN
+boxscore-composite-v1.18  2026_06_NO_NYG           0.448717  0.448717                   NaN
+boxscore-composite-v1.18  2026_06_NYJ_NE           0.741555  0.741555                   NaN
+boxscore-composite-v1.18  2026_06_PIT_TB           0.471129  0.471129                   NaN
+boxscore-composite-v1.18 2026_06_TEN_IND           0.727969  0.727969                   NaN
+boxscore-composite-v1.16  2026_06_ARI_LA           0.814123  0.814123                   NaN
+boxscore-composite-v1.16 2026_06_BAL_CLE           0.435435  0.435435                   NaN
+boxscore-composite-v1.16  2026_06_BUF_LV           0.279990  0.320416                   NaN
+boxscore-composite-v1.16 2026_06_CAR_PHI           0.360418  0.392247                   NaN
+boxscore-composite-v1.16 2026_06_CHI_ATL           0.542147  0.542147                   NaN
+boxscore-composite-v1.16  2026_06_DAL_GB           0.544711  0.522847                   NaN
+boxscore-composite-v1.16 2026_06_HOU_JAX           0.625817  0.582992                   NaN
+boxscore-composite-v1.16  2026_06_LAC_KC           0.756928  0.756928                   NaN
+boxscore-composite-v1.16  2026_06_NO_NYG           0.448717  0.448717                   NaN
+boxscore-composite-v1.16  2026_06_NYJ_NE           0.744276  0.741555                   NaN
+boxscore-composite-v1.16  2026_06_PIT_TB           0.471129  0.471129                   NaN
+boxscore-composite-v1.16 2026_06_TEN_IND           0.727969  0.727969                   NaN
+
+
+Appendix C: current production sanity checks
+
+Production sanity check: v1.18 and fixed-band median ATS
+Status: PASS
+Basis: historical replay, native moneyline snapshots, and median-policy ATS archives remain separate.
+ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.
+Grading: forecast-minus-market chooses side; equality within 1e-10 skips before push grading.
+Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.
+Source prices have no independent quote timestamp; historical ATS returns are proxy reconstructions.
+
+  PASS unique_historical_games
+  PASS historical_moneyline_outcomes
+  PASS historical_moneyline_returns
+  PASS 2023_prior_only_medians
+  PASS 2024_prior_only_medians
+  PASS 2025_prior_only_medians
+  PASS 2026_prior_only_medians
+  PASS exported_median_predictions
+  PASS exported_ats_grades
+  PASS production_grading_matches_independent
+  PASS exported_rule_schema
+  PASS exported_prior_season_maps
+  PASS unique_production_snapshot_keys
+  PASS production_snapshots_before_kickoff
+  PASS native_moneyline_outcomes
+  PASS native_moneyline_returns
+  PASS median_archive_source_hashes
+  PASS median_archive_matches_frozen_rule_and_line
+  PASS median_archive_before_kickoff
+  PASS median_archive_unique_games
+  PASS median_archive_prior_season_fit
+
+Prior-season maps (training excludes the forecast season):
+  2023: [2.0, 3.0, 6.5, 14.5]; prior n=543, band counts=[197, 184, 100, 62], through 2022
+  2024: [3.0, 3.0, 7.0, 14.0]; prior n=815, band counts=[310, 280, 133, 92], through 2023
+  2025: [3.0, 4.0, 6.5, 14.0]; prior n=1087, band counts=[407, 388, 178, 114], through 2024
+  2026: [3.0, 4.0, 7.0, 14.0]; prior n=1359, band counts=[497, 478, 228, 156], through 2025
+
+Historical replay: median ATS versus moneyline on identical game opportunities:
+  All: ATS 412-349-13, 121 skips, 774/895 selected, +25.55u, ROI +3.30% +/- 3.39pp (1 SE)
+    ML 616-277-2, +24.02u, ROI +2.68% +/- 2.42pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=891 (excludes market pick'ems for both): model +24.21u, ROI +2.72%; favorite -3.52u, ROI -0.40%
+    Binary proper scores n=893: log loss 0.612146, market 0.611800; Brier 0.212009; tied finals excluded from binary scoring.
+  2023: ATS 124-112-9, 27 skips, 245/272 selected, +0.73u, ROI +0.30% +/- 5.99pp (1 SE)
+    ML 185-87-0, +8.35u, ROI +3.07% +/- 4.53pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=270 (excludes market pick'ems for both): model +8.44u, ROI +3.12%; favorite +4.12u, ROI +1.53%
+    Binary proper scores n=272: log loss 0.630622, market 0.627349; Brier 0.220167; tied finals excluded from binary scoring.
+  2024: ATS 110-104-1, 57 skips, 215/272 selected, -4.00u, ROI -1.86% +/- 6.51pp (1 SE)
+    ML 198-74-0, +23.47u, ROI +8.63% +/- 4.22pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=271 (excludes market pick'ems for both): model +24.47u, ROI +9.03%; favorite +14.11u, ROI +5.21%
+    Binary proper scores n=272: log loss 0.585169, market 0.587489; Brier 0.199123; tied finals excluded from binary scoring.
+  2025: ATS 141-107-1, 23 skips, 249/272 selected, +21.18u, ROI +8.51% +/- 5.99pp (1 SE)
+    ML 184-87-1, -2.94u, ROI -1.08% +/- 4.35pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=271 (excludes market pick'ems for both): model -3.85u, ROI -1.42%; favorite -18.05u, ROI -6.66%
+    Binary proper scores n=271: log loss 0.603441, market 0.609383; Brier 0.209128; tied finals excluded from binary scoring.
+  2026: ATS 37-26-2, 14 skips, 65/79 selected, +7.64u, ROI +11.75% +/- 11.57pp (1 SE)
+    ML 49-29-1, -4.85u, ROI -6.14% +/- 8.35pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=79 (excludes market pick'ems for both): model -4.85u, ROI -6.14%; favorite -3.70u, ROI -4.69%
+    Binary proper scores n=78: log loss 0.672035, market 0.650754; Brier 0.238503; tied finals excluded from binary scoring.
+
+Native boxscore-composite-v1.18 moneyline: {"graded": 1, "moneyline": {"bets": 1, "losses": 1, "pushes": 0, "roi": -1.0, "units": -1.0, "wins": 0}, "pending": 12, "snapshots": 13, "ties": 0}
+Native median ATS archive: {"completed": 0, "pending": 12, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 12}
+The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
+Never backfill median ATS locks for games that finished before adoption.
+The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.
+Median ATS history currently ends at the last week present in retro_ledger.csv, not necessarily the newest completed board game.
+Historical development and selection are exposed; an unresolved comparison is not forward evidence of superiority.
+
+
+Appendix D: win-probability calibration theory (frozen research)
+
+# Win-probability calibration theory: test results
+
+October 17, 2026. Research only. No production changes.
+
+## Finding and concrete ideas
+
+**Empirical win-frequency calibration does not currently establish a better WP
+forecast than continuous v1.18.** The literal median of binary win/loss labels
+is 0 or 1 (or sometimes 0.5), so the statistically meaningful analogue is a
+calibrated win frequency, not a median probability.
+
+1. **Do not replace WP with a stepped win-rate lookup based on this test.**
+   v1.18 plus seven win-rate bands worsens both primary log loss and Brier loss,
+   and also worsens the separate 2026 diagnostic.
+2. **A monotone probability calibrator is a research comparison only.**
+   Its primary log loss is essentially unchanged/slightly worse. It improves
+   the 78-game 2026 slice but remains behind the market there. No challenger
+   passes the specified adjusted primary comparison against both v1.18 and market.
+3. **Keep probability calibration and median margin estimation distinct.**
+   Outcomes of a binary event estimate WP through their frequency. A margin
+   median estimates a different target. Better median-margin classifications
+   do not imply that discretizing WP improves the underlying probabilities.
+
+## Design and sample
+
+Tested two calibration methods on each of v1.16 and v1.18: four challengers.
+Each forecast season's calibrator uses strictly earlier seasons only. 2021–22
+provide 540 decisive warm-up games; 2023, 2024, 2025, and 2026 calibration fits
+use 540, 812, 1084, and 1355 earlier decisive games respectively.
+
+The source contains 1438 games and five tied finals. Ties are excluded from
+the binary W/L target. Primary evaluation is **2023–25: 815 decisive games**
+(54 season-week blocks). Separate diagnostic is **2026 Weeks 1–5: 78 decisive
+games** (five week blocks). The one tie in each evaluation cohort explains
+the difference from the margin study's 816 and 79 games.
+
+Current v1.18 is observed directly. v1.16 is recovered by analytically reversing
+the fixed lambda=0.2 favorite-confidence penalty. Recovered probabilities match
+all 1433 decisive retrospective reference rows, with maximum absolute difference
+9.15e-11. Reference native snapshots
+have different quote vintages and are excluded from this reconstruction check.
+
+Seven-band method: fixed confidence cuts at 55%, 60%, 65%, 70%, 75%, and 80%,
+Jeffreys-smoothed success frequencies (wins+0.5)/(games+1), returned to home
+orientation. An exactly 50% forecast remains 50%. Rates below 50%, if learned,
+are allowed. No cuts or smoothing parameters were optimized on scored outcomes.
+
+Monotone method: symmetric isotonic regression of forecast probability on binary
+outcome. Mirrored orientations each have weight 0.5 per original game, preserving
+the original independent game count. Fixed bounds [.005,.995] prevent endpoint
+log-loss singularities. Out-of-training-range values use the nearest endpoint.
+This curve is monotone and interpolates between fitted thresholds; it is not
+necessarily completely smooth or strictly increasing.
+
+## Moneyline goal metric: same decisive-game cohorts
+
+These probability calibrators were fitted on win frequencies/proper scores, never ROI.
+Tied finals are excluded here to match the probability-test cohorts. Market pick'ems are
+excluded from both sides of the common-row favorite comparison. Historical prices have
+no independent quote timestamp. These are replay diagnostics, not a new profitability claim.
+
+| Method | 2023–25 units | ROI ± 1 SE | 2026 W1–5 units | ROI ± 1 SE |
+|---|---:|---:|---:|---:|
+| Current v1.18 | +28.87 | +3.54% ± 2.53 pp | -4.85 | -6.22% ± 8.46 pp |
+| v1.18 + win-rate bands | +28.87 | +3.54% ± 2.53 pp | -4.85 | -6.22% ± 8.46 pp |
+| v1.18 + monotone calibration | +28.87 | +3.54% ± 2.53 pp | -4.85 | -6.22% ± 8.46 pp |
+| Unadjusted v1.16 | +28.87 | +3.54% ± 2.53 pp | -4.85 | -6.22% ± 8.46 pp |
+| v1.16 + win-rate bands | -5.55 | -0.68% ± 2.61 pp | -4.85 | -6.22% ± 8.46 pp |
+| v1.16 + monotone calibration | +28.87 | +3.54% ± 2.53 pp | -4.85 | -6.22% ± 8.46 pp |
+
+Current v1.18 has 815 primary decisive selections, market-correct null ROI -4.10%. On the 811 common priced rows, model ROI is +3.58% versus favorite ROI +0.02%.
+The 2026 comparison has 78 decisive selections: model ROI -6.22% versus same-row favorite -4.75%, null -4.10%.
+
+v1.18 bands and monotone calibration change probabilities but none of the model choices in these cohorts, so their moneyline returns are identical. The v1.16 band lookup reverses some low-confidence selections and worsens primary returns.
+
+## Primary results: 2023–25
+
+Lower log loss and Brier loss are better. Confidence-bin expected calibration
+error (ECE) is descriptive and depends on grouping.
+
+| Method | Log loss | Brier loss | Confidence-bin ECE |
+|---|---:|---:|---:|
+| No-vig market | 0.608072 | 0.210334 | 5.27 pp |
+| Unadjusted v1.16 | 0.605605 | 0.208989 | 5.33 pp |
+| Current v1.18 | 0.606414 | 0.209473 | 6.32 pp |
+| v1.16 + win-rate bands | 0.614241 | 0.212286 | 5.82 pp |
+| v1.16 + monotone calibration | 0.609966 | 0.210394 | 4.84 pp |
+| v1.18 + win-rate bands | 0.608429 | 0.210050 | 5.55 pp |
+| v1.18 + monotone calibration | 0.606860 | 0.209887 | 5.93 pp |
+
+Both new methods have worse primary proper-score point estimates than their
+own parent model. v1.18 monotone calibration improves its confidence-bin ECE
+from 6.32 to 5.93 percentage points, while slightly worsening log loss and Brier
+loss. A better-looking reliability grouping does not establish improved total
+forecast quality.
+
+## Separate 2026 diagnostic
+
+| Method | Log loss | Brier loss | Confidence-bin ECE |
+|---|---:|---:|---:|
+| No-vig market | 0.650754 | 0.228903 | 6.04 pp |
+| Unadjusted v1.16 | 0.698291 | 0.245934 | 12.74 pp |
+| Current v1.18 | 0.672035 | 0.238503 | 8.14 pp |
+| v1.16 + win-rate bands | 0.679085 | 0.240450 | 7.80 pp |
+| v1.16 + monotone calibration | 0.715567 | 0.240759 | 5.18 pp |
+| v1.18 + win-rate bands | 0.675428 | 0.239409 | 6.31 pp |
+| v1.18 + monotone calibration | 0.661412 | 0.233792 | 5.17 pp |
+
+v1.18 monotone calibration improves log loss by +0.010623 per decisive game
+and Brier loss by +0.004711 relative to current v1.18. The descriptive paired
+95% log-loss gain interval is [+0.000407, +0.020395]; the wider sensitivity
+interval is [-0.002156, +0.024157]. This is only five week blocks on already
+examined data, not independent prospective confirmation. Its log loss still
+trails the market's 0.650754.
+
+## Annual stability: log loss
+
+| Year | Games | Current v1.18 | v1.18 + bands | v1.18 + monotone |
+|---|---:|---:|---:|---:|
+| 2023 | 272 | 0.630622 | 0.637194 | 0.640341 |
+| 2024 | 272 | 0.585169 | 0.583736 | 0.582417 |
+| 2025 | 271 | 0.603441 | 0.604343 | 0.597789 |
+| 2026 | 78 | 0.672035 | 0.675428 | 0.661412 |
+
+Monotone v1.18 calibration hurts 2023 and helps 2024, 2025 and the small 2026
+slice. Later calibrators have more training data, but these results do not
+establish that sample size is the cause or justify discarding 2023.
+
+## Paired primary uncertainty
+
+Positive gain means the challenger reduces log loss. Whole weeks are resampled
+within seasons, 10,000 draws, seed 20261017. Intervals condition on the fitted
+calibration paths. The 99.375% bounds are an eight-primary-comparison Bonferroni
+sensitivity check, not an adjustment for all previous research or input-vintage
+uncertainty. No candidate has positive adjusted lower bounds against both
+current v1.18 and market.
+
+| Challenger | Comparator | Log-loss gain | 95% interval | 99.375% sensitivity interval |
+|---|---|---:|---|---|
+| v1.16 + win-rate bands | Current v1.18 | -0.007827 | [-0.014073, -0.001117] | [-0.016342, +0.001450] |
+| v1.16 + win-rate bands | No-vig market | -0.006169 | [-0.015222, +0.003031] | [-0.018731, +0.007454] |
+| v1.16 + monotone calibration | Current v1.18 | -0.003552 | [-0.009934, +0.002415] | [-0.012398, +0.004789] |
+| v1.16 + monotone calibration | No-vig market | -0.001894 | [-0.010326, +0.006288] | [-0.013768, +0.009743] |
+| v1.18 + win-rate bands | Current v1.18 | -0.002015 | [-0.006710, +0.002703] | [-0.008634, +0.004361] |
+| v1.18 + win-rate bands | No-vig market | -0.000357 | [-0.007250, +0.006500] | [-0.010156, +0.009366] |
+| v1.18 + monotone calibration | Current v1.18 | -0.000446 | [-0.004885, +0.004022] | [-0.006905, +0.005890] |
+| v1.18 + monotone calibration | No-vig market | +0.001212 | [-0.005388, +0.007728] | [-0.007991, +0.010263] |
+
+## What the empirical lookup learns for 2026
+
+Fitted using 1355 decisive games through 2025:
+
+| Parent confidence | Prior games | Empirical calibrated confidence |
+|---|---:|---:|
+| 50–55% | 252 | 57.91% |
+| 55–60% | 259 | 60.96% |
+| 60–65% | 224 | 65.56% |
+| 65–70% | 189 | 66.58% |
+| 70–75% | 161 | 75.62% |
+| 75–80% | 134 | 72.96% |
+| 80%+ | 136 | 87.96% |
+
+The 70–75% group's fitted success frequency exceeds the 75–80% group's rate.
+This shows the sampling irregularity that a direct lookup can transmit into
+future forecasts. Isotonic calibration enforces order, but flexibility still
+requires evaluation outside its training seasons.
+
+## Validation and reproduction
+
+- Independent archived v1.16 reconstruction check: 1433 matched decisive games.
+- Label-invariance check: changing all outcomes in or after a forecast season
+  leaves that season's probabilities unchanged, at all four year boundaries.
+- Known-count bin fixture, neutral forecast, probability bounds, symmetry and
+  isotonic monotonicity checks pass.
+- Scores agree with independent scikit-learn log-loss/Brier implementations.
+- Duplicate game records are rejected.
+- Seven output artifacts reproduce byte for byte in a separate process.
+
+From the repository root, run:
+
+```bash
+python -m research.wp_probability_calibration
+python -m pytest tests/test_wp_probability_calibration.py -q
+```
+
+Dependencies and exact versions are recorded in `provenance.json`.
+This directory includes frozen source inputs. The independently archived reference forecasts remain in `research/favorite_penalty_results/inputs.csv`. The research runner and tests retain the
+fixed protocol, annual maps, per-game forecasts, calibration tables,
+current-board counterfactuals and paired uncertainty estimates. Current-board
+counterfactuals are research output, not archived forward forecasts.
+
+## Limits
+
+The base model recipe and favorite penalty were selected after historical
+development; 2023–25 is already examined. Strict earlier-season calibration
+prevents leakage at the calibration stage but does not undo that upstream
+selection. These are reconstructed historical forecasts with uncertain source
+quote vintages. No raw NFL features were rebuilt in this test. No new independent
+holdout, prospective performance, ATS improvement or financial edge is claimed.
+Do not select a new rule on a favorable annual slice or a grouped calibration
+chart alone. The supplied decision applies only to the four specified challengers.
+
+## Sources
+
+- [Frozen historical ledger](https://github.com/Dave356w/NFL-MODEL/blob/690c0c6740f7a5a6c4ef3c2abe244cc0df0dca2d/data/latest/fixed_band_ledger.csv)
+- [Favorite-confidence transformation and research history](https://github.com/Dave356w/NFL-MODEL/blob/690c0c6740f7a5a6c4ef3c2abe244cc0df0dca2d/research/FAVORITE_PENALTY.md)
+- [Independent frozen v1.16 inputs](https://github.com/Dave356w/NFL-MODEL/blob/690c0c6740f7a5a6c4ef3c2abe244cc0df0dca2d/research/favorite_penalty_results/inputs.csv)
+- [scikit-learn probability calibration documentation](https://scikit-learn.org/stable/modules/calibration.html)
+
+Log loss and Brier loss measure overall probabilistic forecasting quality;
+their values incorporate discrimination as well as calibration. ECE is
+reported separately rather than treated as a proper score.
+
+## Repository implementation
+
+The weighted PAV calibrator is implemented with NumPy rather than adding a production dependency. Its per-game probabilities match the independently executed scikit-learn reference to numerical precision. `provenance.json` records source hashes and current runtime versions.
