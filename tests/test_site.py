@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pytest
 
 import build_site as b
 import grade_ledger as g
@@ -147,6 +148,31 @@ def test_retired_research_artifacts_are_removed_from_public_output(tmp_path):
     assert (data/'ledger_report.txt').exists()
     html=(out/'index.html').read_text()
     assert b.REPO_REPORT in html and "id='main-content'" in html and "aria-label='Main navigation'" in html
+
+
+@pytest.mark.parametrize('pages_only',[False,True])
+def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_only):
+    data=tmp_path/'data';data.mkdir();latest=data/'latest';latest.mkdir()
+    monkeypatch.setattr(b,'DATA',data);monkeypatch.setattr(b,'LATEST',latest)
+    monkeypatch.setattr(b,'run_model',lambda:tmp_path/'run')
+    monkeypatch.setattr(b,'snapshot',lambda _: (2026,6))
+    monkeypatch.setattr(b.kalshi,'safe_record',lambda *_:None)
+    monkeypatch.setattr(b.matchup,'safe_record',lambda *_:None)
+    monkeypatch.setattr(b.totals,'safe_record',lambda *_:None)
+    monkeypatch.setattr(b.grade_ledger,'main',lambda *_:None)
+    monkeypatch.setattr(b.version_report,'run',lambda *_:None)
+    def render(_):
+        (data/'ledger_report.txt').write_text('before capture')
+        return []
+    def capture(_):
+        (data/'capture-marker').write_text('new archive')
+        return 1
+    monkeypatch.setattr(b,'render_all',render)
+    monkeypatch.setattr(b.ats_forward_shadow,'record',capture)
+    monkeypatch.setattr(b,'published_report',lambda path:(path/'capture-marker').read_text())
+    assert b.main(['--pages-only'] if pages_only else [])==0
+    assert (data/'ledger_report.txt').read_text()==('before capture' if pages_only else 'new archive')
+    assert (data/'capture-marker').exists()!=pages_only
 
 
 def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
