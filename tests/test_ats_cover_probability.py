@@ -95,7 +95,8 @@ def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
     latest.mkdir(parents=True)
     mock_history().to_csv(latest / "fixed_band_ledger.csv", index=False)
     rules = [{"season": 2026, "training_max_season": 2025,
-              "cuts": [3., 7., 10.], "magnitudes": [4., 5., 7., 13.]}]
+              "cuts": [3., 7., 10.], "magnitudes": [3., 4., 7., 14.],
+              "policy_version": shadow.POLICY_VERSION, "method": "median_signed_mov"}]
     (latest / "fixed_band_rules.json").write_text(json.dumps(rules))
     # Need prior observations up through 2025 to fit 2026.
     d = mock_history()
@@ -135,6 +136,29 @@ def test_shadow_first_lock_no_backfill_and_idempotence(tmp_path):
     past = dict(base, generated_utc="2026-10-15T23:30:00+00:00")
     path.write_text("\n".join(json.dumps(v) for v in (past, base)) + "\n")
     assert shadow.possible_locks(data, now) == []
+    # A first lock earlier on adoption day is also excluded from the new policy.
+    past = dict(base, generated_utc="2026-10-17T05:30:00+00:00")
+    path.write_text("\n".join(json.dumps(v) for v in (past, base)) + "\n")
+    assert shadow.possible_locks(data, now) == []
+
+
+def test_shadow_rejects_superseded_mapping_identity():
+    with pytest.raises(ValueError, match="median-MOV policy"):
+        shadow.freeze({'season': 2026}, mock_history(),
+                      {'training_max_season': 2025, 'cuts': [3, 7, 10],
+                       'magnitudes': [4, 5, 7, 13]})
+
+
+def test_shadow_summary_never_pools_policy_versions():
+    d = pd.DataFrame({'season': [2026, 2026], 'result': [1., 1.],
+        'policy_version': ['old-fixed-band', shadow.POLICY_VERSION],
+        **{arm+'_result': ['W', 'L'] for arm in ('raw', 'fixed_band', 'cover_probability')},
+        **{arm+'_units_proxy_minus110': [10/11, -1.]
+           for arm in ('raw', 'fixed_band', 'cover_probability')}})
+    s = shadow.summary(d)
+    all_rows = s.query("season == 'All' and policy == 'fixed_band'")
+    assert set(all_rows.policy_version) == {'old-fixed-band', shadow.POLICY_VERSION}
+    assert list(all_rows.opportunities) == [1, 1]
 
 
 def test_shadow_no_record_after_kickoff(tmp_path):

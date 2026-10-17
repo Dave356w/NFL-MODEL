@@ -1152,7 +1152,7 @@ def render_fixed_bands(latest, details=False):
     out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
                "<a href='fixed_band_summary.csv'>Season results</a> · <a href='fixed_band_rules.json'>Season mappings</a>. "
                "ATS side follows forecast minus market, independently of the outright winner. "
-               "The calibration maximizes earlier-season W−L, not ROI.</p>")
+               "The forecast uses the prior-season median signed MOV in each fixed model-confidence group; losses and tied finals are included.</p>")
     if details:
         for year, g in eligible.groupby('season', sort=False):
             rows = []
@@ -1169,21 +1169,24 @@ def render_fixed_bands(latest, details=False):
                              table(['Game', 'Model spread', 'Market', 'ATS pick', 'ATS result', 'Units'], rows),
                              int(year) == current_season))
     else:
-        out.append("<h3>Spread magnitude calibration</h3><p class='mut small'>Bands use the Model spread's "
-                   "absolute spread. Realized margin is signed toward the forecast favorite; losses are negative. "
-                   "These point-error diagnostics are separate from ATS profitability.</p>")
+        out.append("<h3>Model confidence and margin calibration</h3><p class='mut small'>"
+                   "Fixed groups follow model win confidence. Realized MOV is signed toward the model pick; "
+                   "losses are negative and ties are zero. These point-error diagnostics are separate from ATS profitability.</p>")
         rows = []
-        model_bands = np.asarray(fixed_bands.BANDS)[np.digitize(eligible.fixed_band_spread.abs(), fixed_bands.CUTS)]
-        for band in fixed_bands.BANDS:
-            g = eligible[model_bands == band]
+        model_bands = np.digitize(eligible.model_spread.abs(), fixed_bands.CUTS)
+        confidence_labels = ['50–59.58%', '59.58–71.43%', '71.43–79.06%', '79.06%+']
+        for k, band in enumerate(confidence_labels):
+            g = eligible[model_bands == k]
             if g.empty:
                 continue
-            realized = np.sign(g.fixed_band_spread) * g.result
-            rows.append([esc(band), str(len(g)),
-                         f'{g.fixed_band_spread.abs().mean():.2f}', f'{realized.mean():+.2f}',
+            direction = np.sign(g.model_spread)
+            realized = direction * g.result
+            forecast = direction * g.fixed_band_spread
+            rows.append([esc(band), str(len(g)), f'{forecast.median():.2f}',
+                         f'{realized.median():+.2f}', f'{realized.mean():+.2f}',
                          f'{(g.fixed_band_spread-g.result).abs().mean():.2f}'])
-        out.append(table(['Model spread magnitude', 'Games', 'Avg model spread',
-                          'Avg realized margin', 'MAE'], rows, num_cols=(1, 2, 3, 4)))
+        out.append(table(['Model confidence', 'Games', 'Median forecast MOV',
+                          'Realized median MOV', 'Realized mean MOV', 'MAE'], rows, num_cols=(1, 2, 3, 4, 5)))
     return ''.join(out)
 
 

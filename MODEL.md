@@ -517,25 +517,37 @@ Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
 walk-forward grid.
 
-### Fixed-band displayed spread (2026-10-15)
+### Median-MOV displayed spread (2026-10-17)
 
-The site's existing **Model spread** now displays the fixed-band calibrated
-spread, replacing the probability-implied value. This is a reporting layer in
-`fixed_bands.py`; v1.18 win probabilities, moneyline bets, config identity, and
-append-only original snapshots are unchanged. `model_spread` in original model
-exports remains the probability-implied calibration input; internal derived data exports the
-replacement explicitly as `fixed_band_spread` in `fixed_band_board.csv`. Public
-downloads expose the calibrated value as `model_spread` and omit the previous
-spread forecasts and ATS comparisons; internal derived data retains both.
+The site's **Model spread** uses a prior-season median signed MOV calibration
+in `fixed_bands.py`, replacing the earlier ATS W-L optimized values. The
+v1.18 win probabilities, moneyline bets, config identity and original append-only
+snapshots are unchanged. Original exports retain probability-derived
+`model_spread`; compatibility exports use `fixed_band_spread` internally and
+publish the calibrated value as `model_spread`.
 
-For absolute input bands [0,3), [3,7), [7,10), [10,infinity), choose monotone
-integer magnitudes 0–21 maximizing earlier-season ATS W−L, with a deterministic
-squared-distance tie-break and at least 90% training coverage. Preserve the
-input sign. Fit once per target season using strictly earlier seasons, excluding
-tied finals from training, with two prior seasons and 30 observations per band.
-No current-season outcomes enter that season's mapping. The adopted 2026 map is
-4/5/7/13 points, fitted through 2025. Historical 2023–2025 maps are independently
-fitted at their season boundaries, never backfilled with the current map.
+For absolute probability-derived input groups [0,3), [3,7), [7,10), [10,infinity),
+calculate the sample median of actual margin signed toward the model's pick.
+These correspond to confidence cutpoints 59.5812%, 71.4264% and 79.0572% under
+sigma 12.37. Include negative margins for losses and zero for tied finals;
+exclude an exact 50%/zero-spread forecast from directed training. Fit once per
+target season using strictly earlier seasons, at least two seasons/300 games
+and 30 observations in every group. Even samples average the two central
+values. No integer rounding, monotonic constraint, market line or ATS return
+selects the values. A signed median may be negative; it is not forced to agree
+with the outright winner probability.
+
+The 2026 map fitted through 2025 is **3/4/7/14**. Earlier seasons independently
+use **2/3/6.5/14.5** (2023), **3/3/7/14** (2024), and **3/4/6.5/14** (2025).
+Rules include counts, `method=median_signed_mov` and policy identity
+`median-mov-ats-2026-10-17-v1`. `fit_legacy` remains available only to reproduce
+the superseded W-L optimizer; the production preparation path calls `fit`.
+
+The owner selected this production mapping after reviewing historical tests;
+statistical superiority was not established. The 895-game exposed replay at
+assumed -110 is 412-349-13 with 121 skips, +25.55u on 774 selections. This is
+reconstructed development, not locked native forward evidence. No historical
+native prediction is rewritten to make it a median-MOV pick.
 
 Ledger and calibration pages compare original and fixed-band ATS results on
 identical eligible retrospective games. Evaluation includes tied finals;
@@ -562,3 +574,9 @@ Records show W–L–P, sample size, skips, win/cover rates excluding pushes,
 and flat 1u ROI including pushed stakes (recorded moneylines or assumed −110).
 Fewer than 100 decisive bets is labeled small sample. These exposed historical
 rates are descriptive references, not per-game cover probabilities.
+
+
+New ATS research-shadow captures use the median policy identity and require the
+first native source snapshot to be generated on or after 2026-10-17 05:31 UTC.
+Existing rows remain immutable. Reports separate shadow records by policy
+version rather than pooling the superseded fixed-band and median-MOV policies.

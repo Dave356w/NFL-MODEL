@@ -1,0 +1,66 @@
+[
+  {
+    "season": 2023,
+    "training_max_season": 2022,
+    "training_games": 540,
+    "cuts": [
+      3.0,
+      7.0,
+      10.0
+    ],
+    "magnitudes": [
+      2.0,
+      2.0,
+      6.0,
+      13.0
+    ]
+  },
+  {
+    "season": 2024,
+    "training_max_season": 2023,
+    "training_games": 812,
+    "cuts": [
+      3.0,
+      7.0,
+      10.0
+    ],
+    "magnitudes": [
+      2.0,
+      4.0,
+      6.0,
+      13.0
+    ]
+  },
+  {
+    "season": 2025,
+    "training_max_season": 2024,
+    "training_games": 1084,
+    "cuts": [
+      3.0,
+      7.0,
+      10.0
+    ],
+    "magnitudes": [
+      4.0,
+      5.0,
+      6.0,
+      13.0
+    ]
+  },
+  {
+    "season": 2026,
+    "training_max_season": 2025,
+    "training_games": 1355,
+    "cuts": [
+      3.0,
+      7.0,
+      10.0
+    ],
+    "magnitudes": [
+      4.0,
+      5.0,
+      7.0,
+      13.0
+    ]
+  }
+]

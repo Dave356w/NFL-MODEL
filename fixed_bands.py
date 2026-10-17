@@ -1,10 +1,9 @@
-"""Reporting-only fixed-band spread calibration, adopted 2026-10-15.
+"""Production median-MOV spread calibration, adopted 2026-10-17.
 
-Reproduce the supplied previous_fixed_bands procedure: sign-preserving monotone
-integer magnitudes 0..21, cuts 3/7/10, maximum training W-L, >=90% coverage.
-Training excludes tied games, uses seasons strictly before the target season,
-and requires two seasons and 30 observations per band. Evaluation includes ties.
-This exposed historical calibration is not native forward evidence.
+Fixed input groups 0/3/7/10 are equivalent to model pick-confidence bands.
+Each output is the prior-season sample median of signed pick margin, including
+losses and tied finals. No ATS objective, rounding or market input fits the map.
+Legacy W-L fitting is retained only to reproduce the superseded research rule.
 """
 import numpy as np
 import pandas as pd
@@ -12,9 +11,12 @@ import pandas as pd
 CUTS = [3., 7., 10.]
 EPS = 1e-10
 BANDS = ['<3', '3–<7', '7–<10', '10+']
+POLICY_VERSION = 'median-mov-ats-2026-10-17-v1'
+METHOD = 'median_signed_mov'
 
 
-def fit(history, season):
+def fit_legacy(history, season):
+    """Frozen superseded ATS W-L optimizer; never used by production prepare."""
     d = history[(history.season < season) & history['home won'].isin([0., 1.])]
     d = d.dropna(subset=['model_spread', 'spread_line', 'result'])
     if d.season.nunique() < 2:
@@ -61,6 +63,28 @@ def fit(history, season):
     magnitudes = grid[list(winner[1])]
     return dict(season=int(season), training_max_season=int(d.season.max()),
                 training_games=len(d), cuts=CUTS, magnitudes=magnitudes.tolist())
+
+
+
+def fit(history, season):
+    """Prior-season signed MOV medians; ties count as zero, losses negative."""
+    d = history.loc[history.season < season].copy()
+    for name in ('model_spread', 'result'):
+        d[name] = pd.to_numeric(d[name], errors='coerce')
+    d = d.loc[np.isfinite(d[['model_spread', 'result']]).all(axis=1)
+              & d.model_spread.ne(0)]
+    if d.season.nunique() < 2 or len(d) < 300:
+        return None
+    band = np.digitize(d.model_spread.abs(), CUTS)
+    counts = np.bincount(band, minlength=4)
+    if min(counts) < 30:
+        return None
+    signed_margin = np.sign(d.model_spread.to_numpy()) * d.result.to_numpy()
+    medians = [float(np.median(signed_margin[band == k])) for k in range(4)]
+    return dict(season=int(season), training_max_season=int(d.season.max()),
+                training_games=len(d), training_band_counts=counts.tolist(),
+                cuts=list(CUTS), magnitudes=medians, method=METHOD,
+                policy_version=POLICY_VERSION, includes_tied_finals=True)
 
 
 def apply(spread, rule):
@@ -141,6 +165,7 @@ def summary(frame):
                 raise AssertionError("Every eligible ATS opportunity must be selected or skipped")
             rows.append(dict(season=str(group), method=label, games=len(g),
                              opportunities=len(g), bets=bets, selected=bets,
+                             policy_version=POLICY_VERSION, calibration_method=METHOD,
                              wins=w, losses=l, pushes=p, skips=s,
                              selection_rate=bets / len(g) if len(g) else np.nan,
                              units=units, roi=units / bets if bets else np.nan))
