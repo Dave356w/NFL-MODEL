@@ -12,15 +12,15 @@ def history():
                          'spread_line': spread + .5, 'result': spread + 2})
 
 
-def test_training_excludes_target_and_future_seasons_and_ties():
+def test_legacy_training_excludes_target_and_future_seasons_and_ties():
     d = history()
-    rule = f.fit(d, 2023)
+    rule = f.fit_legacy(d, 2023)
     assert rule and rule['training_max_season'] == 2022
     poison = d.assign(season=2023, result=-100., **{'home won': 0.})
     tied = d.assign(result=0., **{'home won': .5})
-    assert f.fit(pd.concat([d, poison, poison.assign(season=2024), tied]), 2023) == rule
-    assert f.fit(d, 2022) is None
-    assert f.fit(d.iloc[:20], 2023) is None
+    assert f.fit_legacy(pd.concat([d, poison, poison.assign(season=2024), tied]), 2023) == rule
+    assert f.fit_legacy(d, 2022) is None
+    assert f.fit_legacy(d.iloc[:20], 2023) is None
 
 
 def test_signed_boundaries_missing_and_pickem():
@@ -58,7 +58,7 @@ def test_coverage_is_enforced_inside_monotone_optimization():
     sign = np.where((np.arange(len(d)) // 4) % 2 == 0, 1., -1.)
     d['result'] = d.spread_line + 2 * sign
     d['home won'] = (d.result > 0).astype(float)
-    rule = f.fit(d, 2023)
+    rule = f.fit_legacy(d, 2023)
     assert rule is not None
     mapped = f.apply(d.model_spread, rule)
     assert (np.abs(mapped - d.spread_line) > f.EPS).mean() >= .90
@@ -72,7 +72,7 @@ def test_no_feasible_coverage_returns_no_map():
     d.loc[d.model_spread == 1, 'model_spread'] = 0.
     d['spread_line'] = 0.
     d['result'] = 3.
-    assert f.fit(d, 2023) is None
+    assert f.fit_legacy(d, 2023) is None
 
 
 def test_strict_zero_edge_and_explicit_selection_denominator():
@@ -98,11 +98,76 @@ def test_committed_annual_maps_are_frozen_regression_targets():
     # outcomes. A change to any saved band would invalidate ATS comparisons.
     root = Path(__file__).resolve().parents[1]
     d = pd.read_csv(root / 'data/latest/fixed_band_ledger.csv', low_memory=False)
-    archived = json.loads((root / 'data/latest/fixed_band_rules.json').read_text())
+    archived = json.loads((root / 'tests/fixtures/legacy_fixed_band_rules.json').read_text())
     assert [int(r['season']) for r in archived] == [2023, 2024, 2025, 2026]
     for stored in archived:
-        current = f.fit(d, int(stored['season']))
+        current = f.fit_legacy(d, int(stored['season']))
         assert current is not None
         assert current['magnitudes'] == stored['magnitudes']
         assert current['cuts'] == stored['cuts']
         assert current['training_games'] == stored['training_games']
+
+
+def test_production_median_includes_ties_and_ignores_target_future_and_prices():
+    d = history()
+    rule = f.fit(d, 2023)
+    assert rule['magnitudes'] == [3., 6., 10., 14.]
+    assert rule['method'] == 'median_signed_mov'
+    assert rule['policy_version'] == f.POLICY_VERSION
+    assert rule['includes_tied_finals']
+    assert rule['training_band_counts'] == [80]*4
+    poison = d.assign(season=2023, result=-100.)
+    assert f.fit(pd.concat([d, poison, poison.assign(season=2024)]), 2023) == rule
+    tied = d.assign(result=0., **{'home won': .5})
+    changed = f.fit(pd.concat([d, tied]), 2023)
+    assert changed['training_games'] == 640
+    assert changed['magnitudes'] == [1.5, 3., 5., 7.]
+    assert f.fit(d.drop(columns=['home won', 'spread_line']), 2023) == rule
+    assert f.fit(d, 2022) is None
+    assert f.fit(d.iloc[:20], 2023) is None
+
+
+def test_median_signed_losses_away_symmetry_half_points_and_negative_values():
+    d = history()
+    d['model_spread'] *= np.where((np.arange(len(d))//4) % 2, -1., 1.)
+    for k, magnitude in enumerate([1, 4, 8, 12]):
+        ix = np.flatnonzero(d.model_spread.abs() == magnitude)
+        signed_margin = np.resize([-10., 0., 3., 10.], len(ix)) + 2*k
+        d.loc[ix, 'result'] = np.sign(d.loc[ix, 'model_spread'])*signed_margin
+    rule = f.fit(d, 2023)
+    assert rule['magnitudes'] == [1.5, 3.5, 5.5, 7.5]
+    np.testing.assert_allclose(f.apply([1., -4., 8., -12.], rule), [1.5, -3.5, 5.5, -7.5])
+    d['result'] = -3*np.sign(d.model_spread)
+    rule = f.fit(d, 2023)
+    assert rule['magnitudes'] == [-3.]*4
+    assert f.apply([1.], rule)[0] == -3
+
+
+def test_median_insufficient_band_and_zero_direction_training_unavailable():
+    d = history()
+    assert f.fit(d[d.model_spread != 1], 2023) is None
+    assert f.fit(d.assign(model_spread=0.), 2023) is None
+
+
+def test_production_median_reproduces_tested_maps_and_895_game_replay():
+    root = Path(__file__).resolve().parents[1]
+    d = pd.read_csv(root/'data/latest/retro_ledger.csv')
+    import nfl_model as m
+    d['model_spread'] = m.implied_spread(d.model_wp)
+    expected = {2023: [2., 3., 6.5, 14.5], 2024: [3., 3., 7., 14.],
+                2025: [3., 4., 6.5, 14.], 2026: [3., 4., 7., 14.]}
+    scored = []
+    for year, values in expected.items():
+        rule = f.fit(d, year)
+        assert rule['magnitudes'] == values
+        assert rule['training_max_season'] < year
+        if year == 2026:
+            assert rule['training_games'] == 1359
+        g = d[d.season == year]
+        grades, units = f.grade(g, f.apply(g.model_spread, rule))
+        scored.extend(zip(grades, units))
+    # This fixture snapshot stops at W5; later bot-updated snapshots may add rows.
+    if len(scored) == 895:
+        grades = [a for a, _ in scored]
+        assert [grades.count(k) for k in ('W', 'L', 'P', 'S')] == [412, 349, 13, 121]
+        assert np.isclose(sum(u for _, u in scored), 25.545454545454547)

@@ -23,10 +23,10 @@ import fixed_bands
 from research import ats_cover_probability as cp
 
 REVISION = "boxscore-composite-v1.18"
-START_UTC = dt.datetime.fromisoformat("2026-10-16T00:00:00+00:00")
+START_UTC = dt.datetime.fromisoformat("2026-10-17T05:31:00+00:00")
 MAX_CAPTURE_AGE_HOURS = 3.
 STATE = "ats_forward_shadow.jsonl"
-POLICY_VERSION = "fixed-band-ats-2026-10-15-v1"
+POLICY_VERSION = fixed_bands.POLICY_VERSION
 EPS = fixed_bands.EPS
 
 
@@ -85,6 +85,8 @@ def freeze(raw: dict, historical: pd.DataFrame, mapping: dict,
     year = int(raw["season"])
     if mapping is None or mapping["training_max_season"] >= year:
         raise ValueError("no chronological fixed-band rule")
+    if mapping.get("policy_version") != POLICY_VERSION or mapping.get("method") != fixed_bands.METHOD:
+        raise ValueError("mapping does not match the current median-MOV policy")
     fit = cp.fit_prior(historical[historical.season < year], year)
     spread = float(cp.SIGMA * ndtri(np.clip(float(raw["model_wp"]), .005, .995)))
     line = float(raw["spread_line"])
@@ -218,26 +220,31 @@ def summary(view: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame()
     done = view[pd.to_numeric(view["result"], errors="coerce").notna()]
     rows = []
-    for season, games in [("All", done), *[(str(k), v) for k, v in done.groupby("season")]]:
-        if games.empty:
-            continue
-        for arm in ("raw", "fixed_band", "cover_probability"):
-            result = games[arm+"_result"]
-            bets = int(result.ne("S").sum())
-            units = float(games[arm+"_units_proxy_minus110"].sum())
-            rows.append(dict(season=season, policy=arm, opportunities=len(games), selections=bets,
-                skips=int(result.eq("S").sum()), wins=int(result.eq("W").sum()),
-                losses=int(result.eq("L").sum()), pushes=int(result.eq("P").sum()),
-                selection_rate=bets/len(games), units_proxy_minus110=units,
-                roi_proxy_minus110=units/bets if bets else np.nan,
-                model_3way_ll=games["model_ats_3way_log_loss"].mean()
-                    if "model_ats_3way_log_loss" in games else np.nan,
-                market_3way_ll=games["market_ats_3way_log_loss"].mean()
-                    if "market_ats_3way_log_loss" in games else np.nan,
-                model_3way_brier=games["model_ats_3way_brier"].mean()
-                    if "model_ats_3way_brier" in games else np.nan,
-                market_3way_brier=games["market_ats_3way_brier"].mean()
-                    if "market_ats_3way_brier" in games else np.nan))
+    done = done.copy()
+    if 'policy_version' not in done:
+        done['policy_version'] = 'legacy-unversioned'
+    done['policy_version'] = done.policy_version.fillna('legacy-unversioned')
+    for policy_version, version_games in done.groupby('policy_version', sort=True):
+        for season, games in [("All", version_games), *[(str(k), v) for k, v in version_games.groupby("season")]]:
+            if games.empty:
+                continue
+            for arm in ("raw", "fixed_band", "cover_probability"):
+                result = games[arm+"_result"]
+                bets = int(result.ne("S").sum())
+                units = float(games[arm+"_units_proxy_minus110"].sum())
+                rows.append(dict(season=season, policy=arm, policy_version=policy_version, opportunities=len(games), selections=bets,
+                    skips=int(result.eq("S").sum()), wins=int(result.eq("W").sum()),
+                    losses=int(result.eq("L").sum()), pushes=int(result.eq("P").sum()),
+                    selection_rate=bets/len(games), units_proxy_minus110=units,
+                    roi_proxy_minus110=units/bets if bets else np.nan,
+                    model_3way_ll=games["model_ats_3way_log_loss"].mean()
+                        if "model_ats_3way_log_loss" in games else np.nan,
+                    market_3way_ll=games["market_ats_3way_log_loss"].mean()
+                        if "market_ats_3way_log_loss" in games else np.nan,
+                    model_3way_brier=games["model_ats_3way_brier"].mean()
+                        if "model_ats_3way_brier" in games else np.nan,
+                    market_3way_brier=games["market_ats_3way_brier"].mean()
+                        if "market_ats_3way_brier" in games else np.nan))
     return pd.DataFrame(rows)
 
 
