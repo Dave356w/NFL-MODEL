@@ -7,13 +7,13 @@ Summary uses the earliest original snapshot per game, globally and within each o
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     29       13     9       6       1 -1.625059 -0.101566 0.185509        -0.040725       -1.625059     -0.101566            15  0.698110         0.654952 0.250445      0.230488
+        All unique games     29       12     9       7       1 -2.625059 -0.154415 0.182093        -0.040765       -2.625059     -0.154415            16  0.709144         0.667065 0.256035      0.236536
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.579691         1.567153 0.630375      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.622113         1.609438 0.644037      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.663882         1.651078 0.657068      0.653118
-boxscore-composite-v1.16     28       13     9       5       1 -0.625059 -0.041671 0.187696        -0.040755       -0.625059     -0.041671            14  0.635140         0.589794 0.223307      0.202219
+boxscore-composite-v1.16     28       12     9       6       1 -1.625059 -0.101566 0.185509        -0.040797       -1.625059     -0.101566            15  0.651108         0.607059 0.231079      0.210555
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.622306         0.574300 0.217136      0.194824
-boxscore-composite-v1.18     14       13     0       1       0 -1.000000 -1.000000      NaN        -0.039683       -1.000000     -1.000000             1  0.840233         0.828949 0.323067      0.317523
+boxscore-composite-v1.18     14       12     0       2       0 -2.000000 -1.000000 0.000000        -0.040548       -2.000000     -1.000000             2  0.857442         0.838860 0.331474      0.322388
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.793961          L  -1.000000
@@ -55,7 +55,7 @@ boxscore-composite-v1.18  2026_06_BUF_LV           0.320416  0.320416           
 boxscore-composite-v1.18 2026_06_CAR_PHI           0.392247  0.392247                   NaN
 boxscore-composite-v1.18 2026_06_CHI_ATL           0.542147  0.542147                   NaN
 boxscore-composite-v1.18  2026_06_DAL_GB           0.522847  0.522847                   NaN
-boxscore-composite-v1.18 2026_06_HOU_JAX           0.582992  0.582992                   NaN
+boxscore-composite-v1.18 2026_06_HOU_JAX           0.582992  0.582992          L  -1.000000
 boxscore-composite-v1.18  2026_06_LAC_KC           0.756928  0.756928                   NaN
 boxscore-composite-v1.18  2026_06_NO_NYG           0.448717  0.448717                   NaN
 boxscore-composite-v1.18  2026_06_NYJ_NE           0.741555  0.741555                   NaN
@@ -67,7 +67,7 @@ boxscore-composite-v1.16  2026_06_BUF_LV           0.279990  0.320416           
 boxscore-composite-v1.16 2026_06_CAR_PHI           0.360418  0.392247                   NaN
 boxscore-composite-v1.16 2026_06_CHI_ATL           0.542147  0.542147                   NaN
 boxscore-composite-v1.16  2026_06_DAL_GB           0.544711  0.522847                   NaN
-boxscore-composite-v1.16 2026_06_HOU_JAX           0.625817  0.582992                   NaN
+boxscore-composite-v1.16 2026_06_HOU_JAX           0.625817  0.582992          L  -1.000000
 boxscore-composite-v1.16  2026_06_LAC_KC           0.756928  0.756928                   NaN
 boxscore-composite-v1.16  2026_06_NO_NYG           0.448717  0.448717                   NaN
 boxscore-composite-v1.16  2026_06_NYJ_NE           0.744276  0.741555                   NaN
