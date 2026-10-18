@@ -1,10 +1,10 @@
-NFL forward ledger report -- 2026-10-17 21:10 UTC
+NFL forward ledger report -- 2026-10-18 14:00 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
 Log loss/Brier market: the probability saved in each original snapshot; no-vig moneylines for v1.16/v1.17, spread-derived for earlier revisions.
 
-== boxscore-composite-v1.18: 13 snapshots, 1 graded, 12 pending, 0 ties
+== boxscore-composite-v1.18: 14 snapshots, 1 graded, 13 pending, 0 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 0-1-0, -1.00u, ROI -100.0% +/- nan (1 SE)
     win 0.0% vs no-vig q 56.3% (excess -56.3pp); market-correct null ROI -4.0%
     same rows, market favorite every game: -1.00u, ROI -100.0%
@@ -37,7 +37,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
          80%+               0-0 |              0-0
     All picks        0-1 (.000) |       0-1 (.000)
 
-== boxscore-composite-v1.16: 27 snapshots, 14 graded, 12 pending, 1 ties
+== boxscore-composite-v1.16: 28 snapshots, 14 graded, 13 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 9-5-1, -0.63u, ROI -4.2% +/- 18.8 (1 SE)
     win 64.3% vs no-vig q 62.8% (excess +1.3pp); market-correct null ROI -4.1%
     same rows, market favorite every game: -0.63u, ROI -4.2%
@@ -57,7 +57,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 6-2, +2.30u, ROI +28.8% +/- 28.9
     same rows, favorite at its Kalshi game-winner ask: +2.39u, ROI +29.9%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 2-2, +2.93u, ROI +73.2% +/- 107.7
-    Kalshi-mid null -6.6% on the same bets; 7 games qualified so far
+    Kalshi-mid null -6.6% on the same bets; 8 games qualified so far
   Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
     model's side, n=15: the no-vig price moved +0.29 pts +/- 0.33 on average (positive = toward the model's side)
     line move vs the model's departure from the lock price: slope +0.001 +/- 0.026 (positive = the market moved toward the model)
@@ -219,14 +219,14 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   n=15 graded games, partial r -0.045 [-0.589, +0.520] (95%): unresolved
 
 == Pre-registered H1/H2/H6 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addenda 2026-10-13 in research/PREREGISTRATION.md)
-  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 13 priced rows; verdict: no qualifying graded rows
+  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 14 priced rows; verdict: no qualifying graded rows
   H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=1 -0.0574; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no late-season rows
   H2 secondary, flat 1u ROI: weeks 5-13 n=1 -100.0% (null -4.0%, favorite -100.0%); weeks 14-18 n=0
-  H6, the model backs the market underdog (its side's no-vig q < 0.5): 0 graded bets of 13 priced rows; verdict: no verdict before 10 graded bets
+  H6, the model backs the market underdog (its side's no-vig q < 0.5): 0 graded bets of 14 priced rows; verdict: no verdict before 10 graded bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H9 (one row per game, first production snapshot from 2026 week 6; prices only): moneyline vs spread disagreement
-  13 games with lock prices, 1 graded binary; b needs 30 graded games over 10 weeks; verdict: no verdict before 300 graded binary games
+  14 games with lock prices, 1 graded binary; b needs 30 graded games over 10 weeks; verdict: no verdict before 300 graded binary games
   Rule, |dis| >= 0.11133, 1u on the side the spread favors more: 0 graded bets; verdict: no verdict before 100 bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
@@ -261,9 +261,9 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
 | boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
 | boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
-| boxscore-composite-v1.16 | 27 | 9-5-1 | -0.63 | -4.17% ± 18.77 | -0.63 | -4.08% | 0.774497 | 0.589794 |
+| boxscore-composite-v1.16 | 28 | 9-5-1 | -0.63 | -4.17% ± 18.77 | -0.63 | -4.08% | 0.774497 | 0.589794 |
 | boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
-| boxscore-composite-v1.18 | 13 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -3.97% | 0.840233 | 0.828949 |
+| boxscore-composite-v1.18 | 14 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -3.97% | 0.840233 | 0.828949 |
 
 ## Frozen archived-input counterfactuals
 
@@ -397,18 +397,18 @@ Appendix B: original snapshots replayed with the current model (from data/latest
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 57; unique games: 28. Repeated snapshots are not independent games.
+Snapshots: 59; unique games: 29. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     28       12     9       6       1 -1.625059 -0.101566 0.185509        -0.040725       -1.625059     -0.101566            15  0.698110         0.654952 0.250445      0.230488
+        All unique games     29       13     9       6       1 -1.625059 -0.101566 0.185509        -0.040725       -1.625059     -0.101566            15  0.698110         0.654952 0.250445      0.230488
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.579691         1.567153 0.630375      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.622113         1.609438 0.644037      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.663882         1.651078 0.657068      0.653118
-boxscore-composite-v1.16     27       12     9       5       1 -0.625059 -0.041671 0.187696        -0.040755       -0.625059     -0.041671            14  0.635140         0.589794 0.223307      0.202219
+boxscore-composite-v1.16     28       13     9       5       1 -0.625059 -0.041671 0.187696        -0.040755       -0.625059     -0.041671            14  0.635140         0.589794 0.223307      0.202219
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.622306         0.574300 0.217136      0.194824
-boxscore-composite-v1.18     13       12     0       1       0 -1.000000 -1.000000      NaN        -0.039683       -1.000000     -1.000000             1  0.840233         0.828949 0.323067      0.317523
+boxscore-composite-v1.18     14       13     0       1       0 -1.000000 -1.000000      NaN        -0.039683       -1.000000     -1.000000             1  0.840233         0.828949 0.323067      0.317523
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.793961          L  -1.000000
@@ -468,6 +468,8 @@ boxscore-composite-v1.16  2026_06_NO_NYG           0.448717  0.448717           
 boxscore-composite-v1.16  2026_06_NYJ_NE           0.744276  0.741555                   NaN
 boxscore-composite-v1.16  2026_06_PIT_TB           0.471129  0.471129                   NaN
 boxscore-composite-v1.16 2026_06_TEN_IND           0.727969  0.727969                   NaN
+boxscore-composite-v1.18  2026_06_WAS_SF           0.798081  0.798081                   NaN
+boxscore-composite-v1.16  2026_06_WAS_SF           0.823334  0.798081                   NaN
 
 
 Appendix C: current production sanity checks
@@ -530,8 +532,8 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
     Common-row ML/favorite control n=79 (excludes market pick'ems for both): model -4.85u, ROI -6.14%; favorite -3.70u, ROI -4.69%
     Binary proper scores n=78: log loss 0.672035, market 0.650754; Brier 0.238503; tied finals excluded from binary scoring.
 
-Native boxscore-composite-v1.18 moneyline: {"graded": 1, "moneyline": {"bets": 1, "losses": 1, "pushes": 0, "roi": -1.0, "units": -1.0, "wins": 0}, "pending": 12, "snapshots": 13, "ties": 0}
-Native median ATS archive: {"completed": 0, "pending": 12, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 12}
+Native boxscore-composite-v1.18 moneyline: {"graded": 1, "moneyline": {"bets": 1, "losses": 1, "pushes": 0, "roi": -1.0, "units": -1.0, "wins": 0}, "pending": 13, "snapshots": 14, "ties": 0}
+Native median ATS archive: {"completed": 0, "pending": 13, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
 Never backfill median ATS locks for games that finished before adoption.
 The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.
