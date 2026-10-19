@@ -10,7 +10,7 @@ internals, earlier revisions, the v1.16 shadow lock and every research arm stay 
 the repository's data/ledger_report.txt and data/latest/)
   index.html               this week's games: model vs market, pick, biggest factors, injury reports
   grades.html              locked picks graded, beside always-favorite and always-home; rebuilt history
-  market-calibration.html  the moneyline graded by price; model confidence vs results
+  market-calibration.html  ATS performance and same-game spread controls (legacy URL)
 
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
@@ -58,7 +58,7 @@ LATEST = DATA / "latest"
 PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
-SITE_NAME = "NFL Forecasts"
+SITE_NAME = "NFL ATS"
 REPO_REPORT = "https://github.com/Dave356w/NFL-MODEL/blob/main/data/ledger_report.txt"
 
 # run-folder file -> data/latest file
@@ -367,7 +367,7 @@ try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){
 window.toggleTheme=function(){var d=r.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
 var n=d==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();</script>"""
 
-PAGES = (("index.html", "Projections"), ("grades.html", "Results"),
+PAGES = (("index.html", "Picks"), ("grades.html", "Results"),
          ("market-calibration.html", "Performance"))
 
 # Customer-facing presentation. Calculation and archival code remain independent.
@@ -440,7 +440,7 @@ def html_document(body, title, current, built):
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
-            f"<title>{esc(title)}</title><meta name='description' content='NFL forecasts, win probabilities, projected spreads and season results'>"
+            f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, projected spreads, locked handicaps and season results'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
             f"<div class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
             f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
@@ -869,162 +869,140 @@ def historical_pick_reference(latest, game, edge):
             "Records are reconstructed, not locked forward evidence or this game's cover probability. "
             "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
 
+def ats_card_state(latest, row, now):
+    """One ATS-only display state shared by cards and the board download."""
+    rev = latest['manifest']['revision']
+    home, away = row['home'], row['away']
+    ms, line = num(row.get('fixed_band_spread')), num(row.get('spread_line'))
+    saved = latest.get('ats_locks', {}).get((rev, row['game_id']))
+    ko = m.kickoff_utc(row)
+    cutoff = ats_locks.deadline(ko) if ko is not None else None
+    source, status, note = 'Provisional', 'provisional', ''
+    if saved is not None:
+        ms, line = num(saved['fixed_band_spread']), num(saved['market_spread'])
+        status = 'locked'
+        source = 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock'
+        when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
+        note = f'ATS locked {when}'
+    elif cutoff is not None and now >= cutoff:
+        status, source = 'unavailable', 'No saved ATS selection'
+        pooled = latest.get('pooled_ats', pd.DataFrame())
+        past = pooled[pooled.game_id.eq(row['game_id'])] if len(pooled) else pd.DataFrame()
+        if len(past) and past.iloc[0].ats_status == 'graded':
+            replay = past.iloc[0]
+            ms, line = num(replay.fixed_band_spread), num(replay.spread_line)
+            status, source, note = 'replay', replay.ats_basis, 'Replayed pick'
+        else:
+            note = 'ATS lock unavailable'
+    elif cutoff is not None:
+        when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
+        note = f'ATS provisional · locks {when}'
+    else:
+        note = 'ATS provisional · kickoff unconfirmed'
+    pick, gap = ats_card_pick(ms, line, home, away)
+    if status == 'unavailable':
+        pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
+    grade, units = '', math.nan
+    if status in ('locked', 'replay') and math.isfinite(num(row.get('result'))):
+        grades, returns = fixed_bands.grade(pd.DataFrame({
+            'spread_line': [line], 'result': [num(row['result'])]}), [ms])
+        grade, units = grades[0], returns[0]
+    side = '' if status == 'unavailable' or not math.isfinite(ms-line) or abs(ms-line) <= fixed_bands.EPS else (
+        'home' if ms > line else 'away')
+    return dict(model_spread=ms, spread_line=line, pick=pick, gap=gap, status=status,
+                source=source, note=note, saved=saved, result=grade, units=units,
+                selected_side=side, selected_team=row[side] if side else '',
+                handicap=(-line if side == 'home' else line) if side else math.nan)
+
+
 def render_index(latest, ledger, built, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
-    if latest is None or latest["board"].empty:
-        body = head("Projections", "No model run has been published yet; the first build writes this page.")
-        return html_document(body, f"{SITE_NAME} projections", "index.html", built)
-    man, board = latest["manifest"], latest["board"].copy()
-    rev, season, week = man["revision"], int(man["season"]), int(man["week"])
-    has_avail = (man.get("recipe") or {}).get("family", "") in m.AVAIL_FAMILIES
-    cur = ledger[ledger.revision == rev] if len(ledger) else ledger
-    recorded = {r.game_id: r for r in cur.itertuples(index=False)}
-    parts = [head(f"Week {week} projections", f"{season} regular season · Spread picks lock 60 minutes before kickoff. Open a game for matchup details.")]
+    if latest is None or latest['board'].empty:
+        return html_document(head('ATS picks', 'No model run has been published yet; the first build writes this page.'),
+                             f'{SITE_NAME} picks', 'index.html', built)
+    man, board = latest['manifest'], latest['board']
+    season, week = int(man['season']), int(man['week'])
+    has_avail = (man.get('recipe') or {}).get('family', '') in m.AVAIL_FAMILIES
+    parts = [head(f'Week {week} ATS picks',
+                  f'{season} regular season · Picks lock 60 minutes before kickoff. Open a game for spread and injury details.')]
     upcoming = int(board.result.isna().sum()) if 'result' in board else len(board)
-    stamp=pd.to_datetime(man.get('generated_utc'),utc=True,errors='coerce')
-    local=stamp.tz_convert(PT) if pd.notna(stamp) else None
-    updated=local.strftime('%-I:%M') if local is not None else '—'
-    update_note=local.strftime('%p %Z · %b %-d') if local is not None else 'Awaiting forecast'
+    stamp = pd.to_datetime(man.get('generated_utc'), utc=True, errors='coerce')
+    local = stamp.tz_convert(PT) if pd.notna(stamp) else None
     parts.append("<div class='gr-summary week-summary'>"
-                 + stat("Upcoming", str(upcoming), "games on the schedule")
-                 + stat("Completed", str(len(board)-upcoming), "games this week")
-                 + stat("Updated", updated, update_note)
-                 + "</div>")
+        + stat('Upcoming', str(upcoming), 'games on the schedule')
+        + stat('Completed', str(len(board)-upcoming), 'games this week')
+        + stat('Updated', local.strftime('%-I:%M') if local is not None else '—',
+               local.strftime('%p %Z · %b %-d') if local is not None else 'Awaiting forecast') + '</div>')
     parts.append(spread_headline(latest, season))
     if latest.get('ats_locks'):
         parts.append("<p class='mut small'><a href='ats_locked_picks.csv'>Saved spread picks</a> · "
                      "Recorded handicaps and selections remain fixed after lock.</p>")
 
-    def pending(r):
-        ko = m.kickoff_utc(r)
-        return (has_avail and pd.isna(r.get("result")) and ko is not None and ko > now
-                and not m.injury_reports_ready(r, ko, now))
+    def pending(row):
+        ko = m.kickoff_utc(row)
+        return (has_avail and pd.isna(row.get('result')) and ko is not None and ko > now
+                and not m.injury_reports_ready(row, ko, now))
 
-    rows = board.to_dict("records")
-    n_pend = sum(1 for r in rows if pending(r))
-    if n_pend:
-        parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {n_pend} "
-                     f"game{'s' if n_pend != 1 else ''} yet, so {'those numbers' if n_pend != 1 else 'that number'} can still move.</div>")
+    rows = board.to_dict('records')
+    count = sum(pending(r) for r in rows)
+    if count:
+        parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {count} "
+                     f"game{'s' if count != 1 else ''} yet, so {'those numbers' if count != 1 else 'that number'} can still move.</div>")
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
-    rows.sort(key=lambda r: (pd.notna(r.get("result")), m.kickoff_utc(r) or far, str(r["game_id"])))
-    contrib = latest["contributions"]
-    impacts = contrib["log-odds contribution"] if len(contrib) else pd.Series(dtype=float)
-    impacts = impacts[np.isfinite(impacts)]
-    cmax = float(impacts.abs().max()) if len(impacts) else 1.
-    graded = cur[cur.status == "graded"] if len(cur) else cur
+    rows.sort(key=lambda r: (pd.notna(r.get('result')), m.kickoff_utc(r) or far, str(r['game_id'])))
     cards = []
-    for r in rows:
-        p = num(r["model_wp"])
-        home, away = r["home"], r["away"]
-        fav_home = p > .5
-        q = num(m.market_ml_wp(pd.DataFrame([r]))[0])
-        bet = m.flat_bets(pd.DataFrame([r]), "model_wp").iloc[0]
-        team = home if bet.side == "home" else away if bet.side == "away" else ""
+    for row in rows:
+        home, away = row['home'], row['away']
+        state = ats_card_state(latest, row, now)
+        ms, line = state['model_spread'], state['spread_line']
         flags = []
-        if pd.notna(r.get("result")):
-            flags.append(f"<span class='badge'>Final {score_text(r.get('away_score'), r.get('home_score'))}</span>")
-            if team and bet.result in ("W", "L", "P"):
-                flags.append(f"<span class='badge {'w' if bet.result == 'W' else 'l' if bet.result == 'L' else ''}'>"
-                             f"Moneyline result {esc(team)} · {bet.result}</span>")
-        else:
-            if r["game_id"] in recorded:
-                flags.append("<span class='badge'>Moneyline locked</span>")
-            elif pending(r):
-                flags.append("<span class='badge warn'>Report pending</span>")
-            if not bool(r.get("ready", True)):
-                flags.append("<span class='badge'>Limited history</span>")
-        for side in ("away", "home"):
-            e, u = r.get(f"{side}_qb_expected"), r.get(f"{side}_qb_usual")
-            if isinstance(e, str) and isinstance(u, str) and e != u:
-                flags.append(f"<span class='badge warn'>{esc(r[side])} QB: {esc(e)}</span>")
-        hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
-        mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
-        ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
-        ats_lock = latest.get('ats_locks', {}).get((rev, r['game_id']))
-        ko = m.kickoff_utc(r)
-        cutoff = ats_locks.deadline(ko) if ko is not None else None
-        timed = cutoff is not None and cutoff >= ats_locks.ADOPTED_UTC
-        if ats_lock is not None:
-            ms, ks = num(ats_lock['fixed_band_spread']), num(ats_lock['market_spread'])
-        spread_pick, edge = ats_card_pick(ms, ks, home, away)
-        if ats_lock is not None:
-            when = ats_locks.utc(ats_lock['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
-            flags.append(f"<span class='badge'>ATS locked {esc(when)}</span>")
-        elif cutoff is not None and now >= cutoff:
-            spread_pick, edge = 'Unavailable · no saved pre-lock forecast', math.nan
-            flags.append("<span class='badge'>ATS lock unavailable</span>")
-        elif timed:
-            when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
-            flags.append(f"<span class='badge'>ATS provisional · locks {esc(when)}</span>")
-        edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
-        moneyline_pick = pick_text(team, bet.price)
-        if team:
-            moneyline_pick += f' · {pct(p if bet.side == "home" else 1-p)} model win probability'
-        picks = (f"<div class='pick-lines'><span class='kind'>Moneyline</span><span>{moneyline_pick}</span>"
-                 f"<span class='kind'>Spread</span><span>{spread_pick}{edge_text}</span></div>")
-        sp = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
-              + (f" · <span>Market {favorite_spread_text(ks, home, away)}</span>" if math.isfinite(ks) else ""))
+        if pd.notna(row.get('result')):
+            flags.append(f"<span class='badge'>Final {score_text(row.get('away_score'), row.get('home_score'))}</span>")
+        elif pending(row):
+            flags.append("<span class='badge warn'>Report pending</span>")
+        if not bool(row.get('ready', True)):
+            flags.append("<span class='badge'>Limited history</span>")
+        flags.append(f"<span class='badge'>{esc(state['note'])}</span>")
+        if state['result']:
+            result = 'Skip' if state['result'] == 'S' else state['result']
+            tone = 'w' if state['result'] == 'W' else 'l' if state['result'] == 'L' else ''
+            flags.append(f"<span class='badge {tone}'>ATS result · {esc(result)}</span>")
+        for side in ('away', 'home'):
+            expected, usual = row.get(f'{side}_qb_expected'), row.get(f'{side}_qb_usual')
+            if isinstance(expected, str) and isinstance(usual, str) and expected != usual:
+                flags.append(f"<span class='badge warn'>{esc(row[side])} QB: {esc(expected)}</span>")
+        difference = f" · {state['gap']:g}-point difference" if math.isfinite(state['gap']) and state['gap'] > fixed_bands.EPS else ''
+        pick = (f"<div class='pick-lines'><span class='kind'>ATS pick</span>"
+                f"<span>{state['pick']}{difference}</span></div>")
+        spreads = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
+                   + (f" · <span>Market {favorite_spread_text(line, home, away)}</span>" if math.isfinite(line) else ''))
 
-        def side_html(code, wp, fav, cls):
-            club = (f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div>"
-                    f"<div class='wp{' fav' if fav else ''}'>{pct(wp)}</div></div>")
+        def club(code, cls):
             chip = f"<div class='chip'><span>{esc(code)}</span>{logo_html(code)}</div>"
-            return f"<div class='side {cls}'>{chip + club if cls == 'away' else club + chip}</div>"
+            name = f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div></div>"
+            return f"<div class='side {cls}'>{chip + name if cls == 'away' else name + chip}</div>"
 
-        summary = (f"<summary class='game-summary'><div class='teams'>"
-                   f"{side_html(away, 1 - p, not fav_home and not math.isclose(p, .5), 'away')}"
-                   f"<div class='mid'><div class='t'>{esc(kickoff_text(r))}</div><div class='mk'>{mk}</div>"
-                   f"<div class='mk sp'>{sp}</div></div>"
-                   f"{side_html(home, p, fav_home, 'home')}</div>"
-                   f"<div class='probbar' aria-hidden='true'><i class='a' style='width:{100 * (1 - p):.1f}%'></i>"
-                   f"<i class='h' style='width:{100 * p:.1f}%'></i></div>"
-                   f"{picks}"
-                   f"{f'<div class=flags>{chr(10).join(flags)}</div>' if flags else ''}<span class='chev'>⌄</span></summary>")
-        det = ["<div class='detail'>", table(["", esc(away), esc(home)], [
-            ["Model", pct(1 - p), pct(p)],
-            ["Market", pct(1 - q) if math.isfinite(q) else "—", pct(q) if math.isfinite(q) else "—"],
-            ["Moneyline", ml_text(am), ml_text(hm)],
-            ["Model spread", spread_text(ms, False), spread_text(ms, True)],
-            ["Market spread", spread_text(ks, False), spread_text(ks, True)]], num_cols=(1, 2))]
-        rec = recorded.get(r["game_id"])
-        if rec is not None:
-            det.append(f"<p class='mut'>Moneyline locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
-                       f"at {pct(rec.model_wp)} {esc(home)}.</p>")
-        if ats_lock is not None:
-            stamp = ats_lock.get('generated_utc', ats_lock['archived_utc'] if 'archived_utc' in ats_lock else None)
-            forecast = ats_locks.utc(stamp).astimezone(PT).strftime('%a %-I:%M %p %Z')
-            det.append(f"<p class='mut'>Saved ATS selection · forecast {esc(forecast)}. "
-                       "The model spread, market handicap and selection shown above are fixed.</p>")
-        t = contrib[contrib.game_id == r["game_id"]] if len(contrib) else contrib
-        if len(t):
-            t = t[np.isfinite(t["log-odds contribution"]) & t["log-odds contribution"].ne(0)]
-            t = t.loc[t["log-odds contribution"].abs().sort_values(ascending=False).index].head(4)
-            trs = []
-            for c in t.to_dict("records"):
-                cells = factor_cells(c, away, home, cmax)
-                if cells:
-                    trs.append(cells)
-            if trs:
-                det.append("<h3>Biggest factors</h3>" + table(["Factor", "Model impact"], trs)
-                           + "<p class='mut small'>Factors favoring each team. Bars use the same scale across this week's matchups.</p>")
+        summary = (f"<summary class='game-summary'><div class='teams'>{club(away, 'away')}"
+                   f"<div class='mid'><div class='t'>{esc(kickoff_text(row))}</div><div class='mk sp'>{spreads}</div></div>"
+                   f"{club(home, 'home')}</div>{pick}<div class='flags'>{''.join(flags)}</div><span class='chev'>⌄</span></summary>")
+        detail = ["<div class='detail'>", table(['', esc(away), esc(home)], [
+            ['Model spread', spread_text(ms, False), spread_text(ms, True)],
+            ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]
+        if state['saved'] is not None:
+            forecast = ats_locks.utc(state['saved']['generated_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
+            detail.append(f"<p class='mut'>Saved ATS selection · forecast {esc(forecast)}. "
+                          "The model spread, market handicap and selection shown above are fixed.</p>")
+        elif state['status'] == 'replay':
+            detail.append("<p class='mut'>Historical replay of the saved pregame forecast. This is not a recorded ATS pick.</p>")
         if has_avail:
-            det.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(r, 'away')} · {esc(home)} {_qb(r, 'home')}</p>")
-            det.append(report_notes_html(latest.get("report_notes"), (away, home), int(r["week"])))
-        det.append("</div>")
-        cards.append(f"<details class='card'>{summary}{''.join(det)}</details>")
+            detail.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(row, 'away')} · {esc(home)} {_qb(row, 'home')}</p>")
+            detail.append(report_notes_html(latest.get('report_notes'), (away, home), int(row['week'])))
+        detail.append('</div>')
+        cards.append(f"<details class='card'>{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    graded = cur[cur.status == "graded"] if len(cur) else cur
-    ctrl = control_records(graded)
-    if ctrl and ctrl["model"]["bets"]:
-        r, f = ctrl["model"], ctrl["favorite"]
-        line = (f"Model {wl_text(r)} ({100 * r['win_pct']:.1f}%) · ROI {roi_short(r['roi'])}"
-                f"<span class='mut'> · always favorite {wl_text(f)} · ROI {roi_short(f['roi'])}</span>")
-    else:
-        line = "<span class='mut'>No graded picks yet. The record starts with the first locked pick.</span>"
-    parts.append(f"<div class='record'><div class='l'>Recorded moneyline results</div><div class='mono'>{line}</div>"
-                 "<div class='go'><a href='grades.html'>View results →</a></div></div>")
-    return html_document("".join(parts), f"{SITE_NAME} — week {week}", "index.html", built)
-
+    parts.append("<p class='mut small'>The point difference compares the projected spread with the market handicap. "
+                 "<a href='grades.html'>View ATS results →</a></p>")
+    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built)
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1124,42 +1102,87 @@ def pooled_2026_v118_header(latest, ledger):
     return "".join(parts)
 
 
-def render_grades(ledger, latest, built):
-    rev = latest["manifest"]["revision"] if latest else (ledger.revision.iloc[0] if len(ledger) else m.REVISION)
-    parts = [head("Results", "Review moneyline and spread results by season. Open a week or season for game-by-game details.")]
-    cur = ledger[ledger.revision == rev] if len(ledger) else ledger
-    graded = cur[cur.status == "graded"] if len(cur) else cur
-    pooled_header = pooled_2026_v118_header(latest, ledger)
-    if pooled_header:
-        parts.append(pooled_header)
-    else:
-        pending = int(cur.status.eq("pending").sum()) if len(cur) else 0
-        parts.append(control_tiles(control_records(graded), "Graded", f"{len(graded)}", f"{pending} pending"))
-    if latest is not None:
-        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
-    parts.append("<h2 class='sec'>Recorded forecasts</h2><p class='mut small'>Saved before kickoff, using the market prices available at capture.</p>")
-    if cur.empty:
-        parts.append("<div class='gr-note'>No picks locked yet. Forecasts are saved after final injury reports are available.</div>")
-    else:
-        weeks = sorted({(int(s), int(w)) for s, w in zip(cur.season, cur.week)}, reverse=True)
-        for i, (s, w) in enumerate(weeks):
-            g = cur[(cur.season == s) & (cur.week == w)].sort_values("kickoff_utc")
-            rows, wins, losses = [], 0, 0
-            for r in g.itertuples(index=False):
-                ko = pd.to_datetime(r.kickoff_utc, utc=True).tz_convert(PT).strftime("%a %-I:%M %p %Z")
-                res = getattr(r, "bet_result", "")
-                wins += res == "W"; losses += res == "L"
-                final = (score_text(r.away_score, r.home_score) if r.status == "graded"
-                         else f"<span class='badge'>{esc(r.status)}</span>")
-                rows.append([f"<span class='team-code'>{esc(r.away)} @ {esc(r.home)}</span> <span class='mut'>{esc(ko)}</span>",
-                             pick_text(getattr(r, "bet_team", ""), getattr(r, "bet_price", math.nan)), final, result_badge(res)])
-            parts.append(folded(f"{s} week {w} · {len(g)} picks <span class='rt'>{wins}-{losses}</span>",
-                                table(["Game", "Pick", "Final", "Result"], rows, num_cols=(2,)), i == 0))
-    if latest is not None:
-        parts.append(render_retro(latest))
-        parts.append(render_fixed_bands(latest))
-    return html_document("".join(parts), f"{SITE_NAME} results", "grades.html", built)
+def render_ats_basis(latest):
+    pooled = (latest or {}).get('pooled_ats', pd.DataFrame())
+    parts = ["<h2 class='sec'>Recorded and replayed results</h2>"]
+    if pooled.empty:
+        return ''.join(parts) + "<p class='mut'>No recorded ATS picks yet.</p>"
+    labels = [('Recorded pregame', 'Earlier recorded picks'), ('60-minute lock', '60-minute locks'),
+              ('Historical replay', 'Historical replay'), ('Replayed pregame forecast', 'Replayed pregame forecasts')]
+    rows = []
+    for basis, label in labels:
+        group = pooled[pooled.ats_basis.eq(basis)]
+        if group.empty and basis != '60-minute lock':
+            continue
+        r = season_ats.summary(group)
+        rate = pct(r['cover_rate'], 1)
+        record = f'{r["wins"]}–{r["losses"]}–{r["pushes"]}' if r['opportunities'] else '—'
+        rows.append([label, record, rate, str(r['skips']), str(r['pending']),
+                     f'{r["units"]:+.2f}', roi_short(r['roi'])])
+    parts.append(table(['Source', 'ATS W–L–P', 'Cover rate', 'Skips', 'Pending', 'Units', 'ROI'],
+                       rows, num_cols=(1, 2, 3, 4, 5, 6)))
+    parts.append("<p class='mut small'>Recorded picks use saved pregame handicaps. Earlier recordings retain their "
+                 "original capture times; the 60-minute record starts with the new lock policy. "
+                 "Replay is shown separately and is identified in the per-game download.</p>")
+    return ''.join(parts)
 
+
+def render_ats_games(latest):
+    if latest is None:
+        return ''
+    pooled = latest.get('pooled_ats', pd.DataFrame())
+    history = latest.get('fixed_band_ledger', pd.DataFrame())
+    frames = [pooled] if len(pooled) else []
+    if len(history):
+        historical = history[~history.season.eq(2026)].copy() if len(pooled) else history.copy()
+        historical = historical[historical.fixed_band_ats_result.isin(['W', 'L', 'P', 'S'])]
+        if len(historical):
+            historical['ats_basis'] = 'Historical replay'
+            historical['ats_status'] = np.where(historical.result.notna(), 'graded', 'pending')
+            frames.append(historical)
+    if not frames:
+        return "<p class='mut'>No game results yet.</p>"
+    games = pd.concat(frames, ignore_index=True, sort=False)
+    parts = ["<h2 class='sec'>Game-by-game ATS results</h2>"]
+    groups = list(games.groupby(['season', 'week'], sort=True))
+    for i, ((season, week), group) in enumerate(reversed(groups)):
+        rows = []
+        for r in group.sort_values('game_id').to_dict('records'):
+            grade = r.get('fixed_band_ats_result', '')
+            side, team = r.get('fixed_band_ats_side', ''), r.get('fixed_band_ats_team', '')
+            if grade == 'S':
+                pick, badge = 'Skip', "<span class='badge'>Skip</span>"
+            elif team:
+                pick = f'{esc(team)} {spread_text(num(r.get("spread_line")), side == "home")}'
+                badge = result_badge(grade) if grade else "<span class='badge'>Pending</span>"
+            else:
+                pick = 'Awaiting lock' if r.get('ats_status') == 'pending' else 'Unavailable'
+                badge = f"<span class='badge'>{esc(r.get('ats_status', 'unavailable').title())}</span>"
+            final = score_text(r.get('away_score'), r.get('home_score')) if math.isfinite(num(r.get('result'))) else 'Pending'
+            units = num(r.get('fixed_band_ats_units'))
+            ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
+            when = f" <span class='mut'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</span>" if pd.notna(ko) else ''
+            rows.append([f"<span class='team-code' data-game-id='{esc(r['game_id'])}'>{esc(r['away'])} @ {esc(r['home'])}</span>{when}",
+                         pick, final, badge, f'{units:+.2f}' if math.isfinite(units) else '—',
+                         esc(r.get('ats_basis', 'Historical replay'))])
+        stats = season_ats.summary(group)
+        label = f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]} · {stats["skips"]} skips'
+        parts.append(folded(label, table(['Game', 'ATS pick', 'Final', 'ATS result', 'Units', 'Source'],
+                                         rows, num_cols=(2, 4)), i == 0))
+    return ''.join(parts)
+
+
+def render_grades(ledger, latest, built):
+    parts = [head('ATS results', 'Season records, cover rates and returns at −110 with 1-unit stakes. '
+                  'Pushes return the stake; matching projected and market lines are skipped.')]
+    if latest is None:
+        parts.append("<p class='mut'>No picks locked yet.</p>")
+    else:
+        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
+        parts.append(render_ats_basis(latest))
+        parts.append(render_fixed_bands(latest))
+        parts.append(render_ats_games(latest))
+    return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
 
 def render_retro(latest):
     """The current model replayed on past seasons: hindsight, labelled as such."""
@@ -1330,51 +1353,16 @@ def market_sides(df):
 
 
 def render_calibration(latest, ledger, built):
-    parts = [head("Performance", "Compare forecast confidence with game outcomes and review spread results.")]
-    retro = latest.get("retro_ledger") if latest else None
-    sides = market_sides(retro)
-    if len(sides):
-        seasons = sorted(int(x) for x in retro.season.unique())
-        fav = sides[sides.q > .5]
-        home = sides[sides.side == "home"]
-        parts.append("<div class='gr-summary'>"
-                     + stat("Favorites won", f"{100 * fav.won.mean():.1f}%", f"vs {100 * fav.q.mean():.1f}% implied · {len(fav)} games")
-                     + stat("Home teams won", f"{100 * home.won.mean():.1f}%", f"vs {100 * home.q.mean():.1f}% implied · {len(home)} games")
-                     + "</div>")
-
-        def cell(s):
-            if s.empty:
-                return "—"
-            tone = "up" if s.won.mean() > s.q.mean() else "dn"
-            return (f"<span class='{tone}'>{100 * s.won.mean():.1f}%</span> vs {100 * s.q.mean():.1f}% "
-                    f"<span class='mut'>· {len(s)}</span>")
-        def margin_cell(s):
-            s = s[np.isfinite(s.margin.astype(float))]
-            return "—" if s.empty else margin_text(s.margin.mean(), s.spread.mean())
-        rows = [[esc(b), cell(sides[(sides.band == b) & (sides.side == "home")]),
-                 cell(sides[(sides.band == b) & (sides.side == "away")]), cell(sides[sides.band == b]),
-                 margin_cell(sides[sides.band == b])]
-                for b in m.ML_BANDS if (sides.band == b).any()]
-        parts.append(table(["Moneyline", "Home side", "Away side", "Both", "Avg margin"], rows, num_cols=(1, 2, 3, 4)))
-        parts.append(f"<p class='mut small'>Won % vs the price's implied % with the bookmaker's margin removed, then games. "
-                     f"Avg margin: points the side won or lost by on average, vs the average spread for it. "
-                     f"Historical replay · Regular season {seasons[0]}–{seasons[-1]} · Stored market prices.</p>")
-    rev = latest["manifest"]["revision"] if latest else m.REVISION
-    s = grade_ledger.scored_frame(ledger[ledger.revision == rev]) if len(ledger) else pd.DataFrame()
-    parts.append("<h2 class='sec'>Model confidence</h2>")
-    if len(s):
-        parts.append("<h3>Recorded forecasts</h3>" + records_table(m.band_records(s)))
-    if latest is not None and len(latest["band_records"]):
-        years=heldout_seasons(latest)
-        span=f' · {years[0]}–{years[-1]}' if years else ''
-        parts.append(f"<h3>Historical replay{span}</h3>"
-                     + records_table(latest["band_records"]))
-    elif not len(s):
-        parts.append("<div class='gr-note'>No graded picks yet.</div>")
-    if latest is not None:
+    # Keep the existing URL working while replacing its old probability view.
+    parts = [head('ATS performance', 'Compare ATS cover rates and returns on the same games. '
+                  'Results use −110 pricing and 1-unit stakes.')]
+    if latest is None:
+        parts.append("<p class='mut'>No ATS results yet.</p>")
+    else:
+        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
+        parts.append(render_ats_basis(latest))
         parts.append(render_fixed_bands(latest))
-    return html_document("".join(parts), f"{SITE_NAME} performance", "market-calibration.html", built)
-
+    return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 
 # ---------------------------------------------------------------- driver
 
@@ -1422,9 +1410,24 @@ def render_all(out_dir, data=DATA, now=None):
             frame.to_csv(Path(data) / 'latest' / name, index=False)
             if name == 'fixed_band_summary.csv':
                 public = frame[frame.method == 'Fixed bands'].assign(method='Model spread')
+            elif name == 'fixed_band_board.csv':
+                public_rows = []
+                for row in frame.to_dict('records'):
+                    state = ats_card_state(latest, row, now)
+                    item = {k: row.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
+                            'gameday', 'gametime', 'away_score', 'home_score', 'result')}
+                    item.update(model_spread=state['model_spread'], spread_line=state['spread_line'],
+                        ats_status=state['status'], ats_source=state['source'],
+                        selected_side=state['selected_side'], selected_team=state['selected_team'],
+                        handicap=state['handicap'], ats_result=state['result'], ats_units=state['units'])
+                    public_rows.append(item)
+                public = pd.DataFrame(public_rows)
             else:
-                public = frame.drop(columns=[c for c in frame if c.startswith('original_ats_')
-                                               or c in ('model_spread', 'spread_band')])
+                fields = ['game_id', 'season', 'week', 'home', 'away', 'gameday', 'away_score', 'home_score',
+                          'result', 'spread_line', 'fixed_band_spread', 'fixed_band_ats_side',
+                          'fixed_band_ats_team', 'fixed_band_ats_handicap', 'fixed_band_ats_result',
+                          'fixed_band_ats_units']
+                public = frame.reindex(columns=fields)
                 public = public.rename(columns={'fixed_band_spread': 'model_spread'})
             public.to_csv(out / name, index=False)
         rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)

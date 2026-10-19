@@ -6,6 +6,12 @@ code and data, report what the evidence establishes in proportion to its
 strength, and turn criticism into a measurable next step. The owner directs the
 product and decides which experiments to run.
 
+Public presentation (owner decision 2026-10-19 UTC) is ATS-only: picks, frozen
+handicaps, results, cover rates, units and ROI. Probability/moneyline calculations
+and the original archives remain internal and in repository research reports.
+Do not publish moneyline picks, win-probability values or moneyline CSV columns.
+This presentation change does not change v1.18, the median map or lock timing.
+
 ## Sources of truth
 
 - `nfl_model.py`: the model. Its docstring is the version history; `MODEL.md`
@@ -31,8 +37,8 @@ product and decides which experiments to run.
 3. **Current-season walk-forward and post-hoc slices**: diagnostics and
    hypotheses only.
 
-**The owner's goal metric is flat 1u ROI at the moneyline on the model's side**
-(see `MODEL.md`). Lead with it: units, ROI ± SE, n, the market-correct null
+**The legacy moneyline research goal is flat 1u ROI on the model's side**
+(see `MODEL.md`). Lead moneyline research reports with units, ROI ± SE, n, the market-correct null
 (negative by the hold, not zero) and the same-row market-favorite baseline.
 Log loss/Brier are secondary. ROI is reported, not optimized: recipe selection
 and coefficient fitting stay on log loss unless the owner decides otherwise.

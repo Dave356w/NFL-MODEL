@@ -114,7 +114,7 @@ def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     index = (out / "index.html").read_text()
     grades = (out / "grades.html").read_text()
     assert "Thu 5:15 PM PDT" in index  # upcoming game
-    assert "Moneyline locked Sat 5:00 AM PDT" in index
+    assert "Moneyline locked" not in index
     assert "Sun 1:25 PM PDT" in grades  # graded ledger kickoff
     for name in PUBLIC:
         html = (out / name).read_text()
@@ -189,12 +189,11 @@ def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
     assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
-    assert "TB QB: J.Daniels" in html and "DAL −485" in html
-    assert "Final 20–27" in html and "Moneyline result BUF · W" in html
+    assert "TB QB: J.Daniels" in html and "Market DAL −9.5" in html
+    assert "Final 20–27" in html and "Moneyline result" not in html
     assert "pts off market" not in html and "Largest drivers" not in html
     assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
-    # record box: forward ledger, KC@BUF picked BUF -135 and won
-    assert "Model 1-0 (100.0%) · ROI +74.1%" in html and "always favorite 1-0" in html
+    assert "View ATS results" in html and "model win probability" not in html
 
 
 def test_pooled_2026_v118_picks_no_double_count(tmp_path):
@@ -233,15 +232,14 @@ def test_pooled_2026_v118_picks_no_double_count(tmp_path):
     out = tmp_path / "public"
     b.render_all(out, data, now=NOW)
     page = (out / "grades.html").read_text()
-    assert "Moneyline · 2026 season overview" in page
-    assert "Season moneyline: 3-1-1 · +1.07u · ROI +21.5%" in page
-    assert "4 historical replay · 1 recorded · 1 pending" in page
-    assert "By week: W1 1-0 · W2 0-1 · W3 0-0-1 · W4 1-0 · W5 1-0" in page
-    assert "Recorded forecasts" in page
-    assert "replace any replay of the same game" in page
-    assert page.index("season overview") < page.index("<h2 class='sec'>Recorded forecasts")
-    assert page.count("Season moneyline:") == 1
-    assert "Includes historical replay and recorded forecasts" in page
+    # Legacy moneyline research helpers still work, but are not published.
+    research = b.pooled_2026_v118_header(latest, saved)
+    assert "Season moneyline: 3-1-1 · +1.07u · ROI +21.5%" in research
+    assert "4 historical replay · 1 recorded · 1 pending" in research
+    assert "Moneyline" not in page and "Season moneyline:" not in page
+    assert "ATS results" in page and "Game-by-game ATS results" in page
+    exported = pd.read_csv(out / 'ats_2026_results.csv')
+    assert not exported.game_id.duplicated().any()
 
     # A later revision cannot silently inherit v1.18's pooled headline.
     latest["manifest"]["revision"] = "boxscore-composite-v1.19"
@@ -253,16 +251,15 @@ def test_index_before_any_graded_pick(tmp_path):
     data = make_data(tmp_path / "data", with_ledger=False)
     b.render_all(tmp_path / "public", data, now=NOW)
     html = (tmp_path / "public" / "index.html").read_text()
-    assert "No graded picks yet." in html
+    assert "View ATS results" in html and "Recorded moneyline results" not in html
 
 
 def test_ledger_tiles_are_comparable_controls(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "grades.html").read_text()
-    for label in ("Graded", "Model", "Always favorite", "Always home"):
-        assert f">{label}<" in html
-    assert html.count("100.0% · ROI +74.1%") == 3  # BUF was model pick, favorite and home
-    assert "2026 week 5" in html and "BUF −135" in html and "ledger_report.txt" in html
+    assert 'Recorded and replayed results' in html and '60-minute locks' in html
+    assert 'Game-by-game ATS results' in html and 'ATS W–L–P' in html
+    assert "2026 week 5" in html and "BUF −135" not in html and "ledger_report.txt" in html
     assert not (out / "ledger_report.txt").exists()
     assert "native forward" in (tmp_path / "data/ledger_report.txt").read_text()
 
@@ -294,8 +291,8 @@ def test_market_sides_devig_and_bands():
 def test_calibration_page_grades_the_market_and_model_confidence(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
-    assert "Favorites won" in html and "Home teams won" in html and "Moneyline" in html
-    assert "Model confidence" in html and "Recorded forecasts" in html and "Historical replay" in html
+    assert "ATS performance" in html and "Cover rate" in html and "60-minute locks" in html
+    assert "Moneyline" not in html and "Model confidence" not in html and "Historical replay" in html
     assert "<svg" not in html
 
 
@@ -340,9 +337,8 @@ def test_rebuilt_history_is_graded_labelled_and_secondary(tmp_path):
     retro = pd.read_csv(tmp_path / "data" / "latest" / "retro_ledger.csv")
     r = b.control_records(retro)["model"]
     grades = (out / "grades.html").read_text()
-    assert "Historical replay" in grades and "Results calculated with the current model" in grades
-    assert grades.index("Always home") < grades.index("Results calculated with the current model")
-    assert f"{b.wl_text(r)}" in grades and f"ROI {b.roi_short(r['roi'])}" in grades
+    assert "Historical replay" in grades and "Game-by-game ATS results" in grades
+    assert "Moneyline pick" not in grades and "ML result" not in grades
     assert np.isclose(retro.units.sum(), m.roi_summary(m.flat_bets(retro))["units"])
     assert "Rebuilt history" not in (out / "index.html").read_text()
 
@@ -389,8 +385,7 @@ def test_biggest_factors_use_readable_game_descriptions(tmp_path):
     out = tmp_path / "public"
     b.render_all(out, data=data, now=NOW)
     page = (out / "index.html").read_text()
-    assert "TB passing vs DAL defense" in page and "Strong attack, strong defense" in page
-    assert "Toward DAL" in page and "Model impact" in page
+    assert "TB passing vs DAL defense" not in page and "Model impact" not in page
     assert "1 SD context" not in page and "Pass matchup product" not in page
 
 
@@ -416,7 +411,8 @@ def test_team_logos_from_espn_with_code_fallback(tmp_path):
 def test_cards_keep_game_prices_without_price_cohort_research(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    assert 'DAL −485' in idx and 'BUF −135' in idx
+    assert 'DAL −485' not in idx and 'BUF −135' not in idx
+    assert 'Market DAL −9.5' in idx and 'ATS pick' in idx
     assert 'At this price' not in idx and 'Same games for both' not in idx
     assert 'Model documentation' in idx and b.REPO_REPORT in idx
 
@@ -523,9 +519,8 @@ def test_market_sides_margin_is_from_each_sides_view():
 def test_calibration_page_shows_avg_margin(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
-    assert "<th class=n>Avg margin</th>" in html and "vs the average spread for it" in html
-    # fixture retro: home favorites at -150 win by 3 or lose by 3 on a 1-point line
-    assert re.search(r"<span class='(up|dn)'>[+−]\d+\.\d</span> vs [+−]\d+\.\d", html)
+    assert 'ATS performance' in html and 'ATS W–L–P' in html and 'Cover rate' in html
+    assert 'Avg margin' not in html and 'Model confidence' not in html
 
 
 def test_model_confidence_rows_carry_avg_margin():
@@ -622,13 +617,14 @@ def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypat
         html = (out / page).read_text()
         assert 'Spread results · 2026' in html
         assert '−110 pricing · 1-unit stakes' in html
-        assert html.index('Spread results · 2026') < html.index("class='grid'" if page == 'index.html' else 'Results calculated with the current model')
+        assert html.index('Spread results · 2026') < html.index("class='grid'" if page == 'index.html' else 'Game-by-game ATS results')
     html = (out / 'grades.html').read_text()
-    assert 'Spread results · historical replay' in html
-    assert '<th>Spread pick</th>' in html and '<th>ATS result</th>' in html
+    assert 'Historical replay' in html
+    assert '<th>ATS pick</th>' in html and '<th>ATS result</th>' in html
     latest = b.load_latest(data / 'latest')
     for year in [2024, 2026]:
-        assert b.spread_record_text(b.spread_record(latest, year)) in html
+        record = b.spread_record(latest, year)
+        assert f'{int(record.wins)}–{int(record.losses)}–{int(record.pushes)}' in html
     assert 'ROI' in html and 'skips' in html
 
 
@@ -683,8 +679,8 @@ def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch
                         dict(cuts=[3,7,10], magnitudes=[4,5,7,13]))
     out,_=render(tmp_path)
     text=(out/'index.html').read_text()
-    assert "<span class='kind'>Moneyline</span>" in text
-    assert "<span class='kind'>Spread</span>" in text
-    assert 'projected edge' in text
+    assert "<span class='kind'>ATS pick</span>" in text
+    assert "<span class='kind'>Moneyline</span>" not in text
+    assert 'point difference' in text
     assert 'Historical reference' not in text and 'At this price' not in text
-    assert 'model win probability' in text and 'Recorded moneyline results' in text
+    assert 'model win probability' not in text and 'Recorded moneyline results' not in text
