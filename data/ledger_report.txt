@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-19 18:03 UTC
+NFL forward ledger report -- 2026-10-19 18:35 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -482,12 +482,13 @@ Appendix C: current production sanity checks
 
 Production sanity check: v1.18 and fixed-band median ATS
 Status: PASS
-Basis: historical replay, native moneyline snapshots, and median-policy ATS archives remain separate.
+Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.
 ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.
 Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite (a pick'em line skips) before push grading.
 Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.
 Source prices have no independent quote timestamp; historical ATS returns are proxy reconstructions.
 
+  PASS primary_ats_store_integrity
   PASS unique_historical_games
   PASS historical_moneyline_outcomes
   PASS historical_moneyline_returns
@@ -540,8 +541,10 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
     Common-row ML/favorite control n=79 (excludes market pick'ems for both): model -4.85u, ROI -6.14%; favorite -3.70u, ROI -4.69%
     Binary proper scores n=78: log loss 0.672035, market 0.650754; Brier 0.238503; tied finals excluded from binary scoring.
 
-Native boxscore-composite-v1.18 moneyline: {"graded": 13, "moneyline": {"bets": 12, "losses": 6, "pushes": 0, "roi": -0.2438145833333333, "units": -2.925775, "wins": 6}, "pending": 1, "snapshots": 14, "ties": 0}
-Native median ATS archive: {"completed": 12, "pending": 1, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
+Legacy native boxscore-composite-v1.18 moneyline: {"graded": 13, "moneyline": {"bets": 12, "losses": 6, "pushes": 0, "roi": -0.2438145833333333, "units": -2.925775, "wins": 6}, "pending": 1, "snapshots": 14, "ties": 0}
+Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 12, "original_selections": 11, "original_skips": 2, "pending": 1, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
+Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 10, "original_selections": 0, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "timed_locks": 0}
+Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
 Never backfill median ATS locks for games that finished before adoption.
 The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.
@@ -558,7 +561,7 @@ Five-minute scheduled polls refresh forecasts near the deadline; scheduler deliv
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
 Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 9 saved candidates, 0 timed locks.
+Store validation: PASS; 10 saved candidates, 0 timed locks.
 
 2026 pooled ATS results
 
