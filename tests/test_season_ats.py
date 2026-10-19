@@ -39,15 +39,19 @@ class SeasonATS(unittest.TestCase):
             ats_locks={(m.REVISION,'overlap'):lock}, board=pd.DataFrame())
         return latest, native
 
-    def test_archived_skip_replaces_a_reconstructed_win_and_never_duplicates(self):
+    def test_archived_skip_is_backfilled_at_its_saved_line_and_never_duplicates(self):
         latest,native = self.fixture()
+        saved=copy.deepcopy(latest['ats_locks'])
         pool = s.build(latest,native)
         self.assertEqual(pool.game_id.nunique(),len(pool))
         row=pool.set_index('game_id').loc['overlap']
-        self.assertEqual(row.fixed_band_ats_result,'S')
-        self.assertEqual(row.fixed_band_ats_units,0.)
-        self.assertEqual(row.ats_basis,'Recorded pregame')
+        # The saved 7-vs-7 skip is graded as the IND favorite at the saved line, not 6.5.
+        self.assertEqual((row.fixed_band_ats_team,row.fixed_band_ats_handicap),('IND',-7.))
+        self.assertEqual(row.fixed_band_ats_result,'L')
+        self.assertEqual(row.fixed_band_ats_units,-1.)
+        self.assertEqual(row.ats_basis,'Backfilled recorded skip')
         self.assertEqual(row.spread_line,7.)
+        self.assertEqual(saved,latest['ats_locks'])
 
     def test_missing_post_adoption_lock_blocks_historical_and_native_reconstruction(self):
         latest,native=self.fixture()
@@ -69,16 +73,23 @@ class SeasonATS(unittest.TestCase):
         self.assertEqual(row.fixed_band_ats_result,'L')
         self.assertEqual(row.ats_basis,'Replayed pregame forecast')
 
-    def test_saved_v1_skip_stays_a_skip_while_v2_zero_edge_is_a_favorite_bet(self):
+    def test_saved_v1_skip_is_labelled_backfill_while_v2_favorite_is_a_lock(self):
         latest,native=self.fixture()
         lock=latest['ats_locks'][(m.REVISION,'overlap')]
         lock.update(legacy_lock=False, policy_version='median-mov-ats-t60-2026-10-19-v1')
         row=s.build(latest,native).set_index('game_id').loc['overlap']
-        self.assertEqual((row.fixed_band_ats_result,row.fixed_band_ats_side),('S',''))
+        self.assertEqual((row.fixed_band_ats_result,row.ats_basis),('L','Backfilled recorded skip'))
         lock.update(policy_version=ats_locks.POLICY_VERSION, selected_side='home', skip_reason=None)
         row=s.build(latest,native).set_index('game_id').loc['overlap']
         self.assertEqual((row.fixed_band_ats_result,row.fixed_band_ats_team),('L','IND'))
-        self.assertEqual(row.fixed_band_ats_units,-1.)
+        self.assertEqual(row.ats_basis,'60-minute lock')
+
+    def test_pickem_skip_is_not_backfilled(self):
+        latest,native=self.fixture()
+        lock=latest['ats_locks'][(m.REVISION,'overlap')]
+        lock.update(market_spread=0., fixed_band_spread=0.)
+        row=s.build(latest,native).set_index('game_id').loc['overlap']
+        self.assertEqual((row.fixed_band_ats_result,row.ats_basis),('S','Recorded pregame'))
 
     def test_timed_lock_has_priority_and_uses_only_saved_lines(self):
         latest,native=self.fixture()
@@ -108,10 +119,11 @@ class SeasonATS(unittest.TestCase):
         latest['fixed_band_ledger']=h
         pool=s.build(latest,native)
         total=s.summary(pool)
-        self.assertEqual((total['wins'],total['losses'],total['pushes'],total['skips']),(1,1,1,1))
-        self.assertEqual(total['bets'],3)
-        self.assertAlmostEqual(total['units'],1/1.1-1)
-        self.assertAlmostEqual(total['roi'],(1/1.1-1)/3)
+        # The backfilled skip is a stake: one win, two losses, one push.
+        self.assertEqual((total['wins'],total['losses'],total['pushes'],total['skips']),(1,2,1,0))
+        self.assertEqual(total['bets'],4)
+        self.assertAlmostEqual(total['units'],1/1.1-2)
+        self.assertAlmostEqual(total['roi'],(1/1.1-2)/4)
         for key in ['wins','losses','pushes','skips','bets','opportunities','units','pending','unavailable']:
             self.assertAlmostEqual(sum(s.summary(g)[key] for _,g in pool.groupby('week')),total[key])
 
@@ -140,30 +152,31 @@ class SeasonATS(unittest.TestCase):
         pool=s.build(latest,native).set_index('game_id')
         self.assertEqual(pool.loc['overlap'].result,12.)
         self.assertEqual(pool.loc['overlap'].spread_line,7.)
-        self.assertEqual(pool.loc['overlap'].fixed_band_ats_result,'S')
+        # Graded at the saved 7 with the newer final score: IND by 12 covers.
+        self.assertEqual(pool.loc['overlap'].fixed_band_ats_result,'W')
 
     def test_display_uses_pooled_count_and_labels_both_sources(self):
         latest,native=self.fixture();latest['pooled_ats']=s.build(latest,native)
         html=b.spread_headline(latest,2026)
-        self.assertIn('ATS 1–0–0 · 1 skips',html)
-        self.assertIn('1 replayed · 1 recorded',html)
+        self.assertIn('ATS 1–1–0 · 0 skips',html)
+        self.assertIn('1 replayed · 1 backfilled · 0 recorded',html)
         self.assertIn('1 unavailable',html)
 
-    def test_current_data_reconciles_and_preserves_ten_skip(self):
+    def test_current_data_reconciles_and_backfills_recorded_skips(self):
         data=Path(__file__).resolve().parents[1]/'data'
         latest=b.load_latest(data/'latest');latest['ats_locks']=ats_locks.display_records(data)
         pool=s.build(latest,b.load_ledger(data));r=s.summary(pool)
         self.assertEqual(pool.game_id.nunique(),len(pool))
-        self.assertEqual(pool.set_index('game_id').loc['2026_06_TEN_IND'].fixed_band_ats_result,'S')
+        self.assertEqual(pool.set_index('game_id').loc['2026_06_TEN_IND'].fixed_band_ats_result,'L')
         # Pin this snapshot only while it still has the same completed cohort.
         if r['opportunities']==92:
-            # Replay skips became favorite bets; the two recorded skips stay skips.
-            self.assertEqual((r['wins'],r['losses'],r['pushes'],r['skips']),(49,35,6,2))
-            self.assertAlmostEqual(r['units'],49/1.1-35)
-            self.assertEqual(r['bets'],90)
-            recorded=pool[pool.ats_basis.eq('Recorded pregame')]
-            self.assertEqual(sorted(recorded[recorded.fixed_band_ats_result.eq('S')].game_id),
-                             ['2026_06_BAL_CLE','2026_06_TEN_IND'])
+            # All skips are favorite bets; the two recorded skips are backfilled (0-2).
+            self.assertEqual((r['wins'],r['losses'],r['pushes'],r['skips']),(49,37,6,0))
+            self.assertAlmostEqual(r['units'],49/1.1-37)
+            self.assertEqual(r['bets'],92)
+            backfill=pool[pool.ats_basis.eq('Backfilled recorded skip')]
+            self.assertEqual(sorted(backfill.game_id),['2026_06_BAL_CLE','2026_06_TEN_IND'])
+            self.assertEqual(backfill.fixed_band_ats_result.tolist(),['L','L'])
         saved=copy.deepcopy(latest['ats_locks'])
         s.build(latest,b.load_ledger(data))
         self.assertEqual(saved,latest['ats_locks'])

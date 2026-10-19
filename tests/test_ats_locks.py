@@ -192,7 +192,7 @@ class TimedATS(unittest.TestCase):
         self.assertIn('ATS result · L', html)
         self.assertNotIn('TEN +6.5 ·', html)
 
-    def test_saved_v1_skip_stays_a_skip_and_validates_under_its_own_rule(self):
+    def test_saved_v1_skip_validates_unchanged_and_displays_as_backfilled_favorite(self):
         v1 = 'median-mov-ats-t60-2026-10-19-v1'
         current = a.POLICY_VERSION
         self.board(CUTOFF)
@@ -204,10 +204,14 @@ class TimedATS(unittest.TestCase):
         saved = self.locks()[0]
         self.assertEqual((saved['policy_version'], saved['selected_side'], saved['skip_reason']),
                          (v1, '', 'zero_edge'))
+        before = (self.data / a.LOCKS).read_bytes()
         self.assertEqual(a.validate_store(self.data), {'candidates': 1, 'locks': 1})
+        self.assertTrue(a.backfilled(saved))
         html = b.render_index(self.latest(), pd.DataFrame(), 'test', KO+dt.timedelta(hours=4))
-        self.assertIn('No bet · zero projected edge', html)
-        self.assertIn('ATS result · Skip', html)
+        self.assertIn('IND −7.0', html)
+        self.assertIn('skip backfilled as favorite', html)
+        self.assertIn('ATS result · L', html)
+        self.assertEqual((self.data / a.LOCKS).read_bytes(), before)
 
     def test_v2_candidate_saved_as_a_skip_is_rejected(self):
         self.board(CUTOFF)

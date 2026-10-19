@@ -593,7 +593,8 @@ Results and Performance pages show the production median ATS results. The origin
 continuous-spread comparison stays in repository data and reports, on identical
 eligible retrospective games. Evaluation includes tied finals;
 zero edge (tolerance 1e-10) takes the market favorite before checking pushes,
-and a pick'em zero edge skips. At assumed −110,
+and a pick'em zero edge skips; saved zero-edge skips are backfilled as favorite
+bets under their own basis. At assumed −110,
 risk 1u, win +0.9091u, loss −1u; pushes retain their stake in ROI's denominator,
 skips do not. This is exposed development history with unknown quote-capture
 times, not native forward or executable-price evidence. ATS accuracy and point
@@ -609,12 +610,15 @@ line, the ATS selection is the market favorite instead of a skip. A pick'em line
 The selection rule is `favorite-on-zero-edge-2026-10-19-v1` in `fixed_bands.py`,
 and 60-minute locks use `median-mov-ats-t60-favtie-2026-10-19-v2`.
 
-Every regenerated reconstruction applies the rule retrospectively: the historical
-replay from 2021 and the pregame-snapshot replay. Saved decisions do not change.
-The two recorded pregame skips (`2026_06_BAL_CLE`, `2026_06_TEN_IND`) and any
-lock saved under v1 (`median-mov-ats-t60-2026-10-19-v1`) keep their zero-edge
-skip, because a final score cannot authorize a new bet. `ats_locks.validate_store`
-checks each row against its own version's rule.
+The rule applies retrospectively everywhere: the historical replay from 2021, the
+pregame-snapshot replay, and, by a separate owner decision the same day, saved
+zero-edge skips. The saved files are not rewritten. The archive and lock rows keep
+their bytes, and `ats_locks.validate_store` checks each row against its own
+version's rule (v1 `median-mov-ats-t60-2026-10-19-v1` skipped a zero edge).
+Grading and display backfill a saved skip as a favorite bet under the separate
+basis **Backfilled recorded skip**. This is a post-result backfill, not a recorded
+pick or forward evidence. The two backfilled games, `2026_06_BAL_CLE` (BAL −3, lost
+3–0) and `2026_06_TEN_IND` (IND −7, lost 20–26), went 0-2, −2.0u.
 
 Evidence is exposed development history, chosen after reviewing the same games.
 On the 895-game 2023–26 replay, the 121 former skips (78 at a line of 3, 17 at 7)
@@ -632,7 +636,8 @@ data files; original snapshots are never rewritten.
 
 Game cards distinguish the v1.18 moneyline pick from the fixed-band ATS pick.
 ATS edge is the absolute fixed-band minus market spread; zero edge takes the
-market favorite, and an earlier saved zero-edge skip stays a skip.
+market favorite, and an earlier saved zero-edge skip is shown as a backfilled
+favorite bet.
 The research-only historical reference helper uses fixed confidence bands 50–55%, 55–65%,
 65–75%, 75–85%, 85–100% for moneyline picks, and edge bands (0,1], (1,3],
 (3,7], (7,infinity) for ATS picks. Each reference excludes the game itself,

@@ -5,7 +5,9 @@ finalize the latest eligible candidate, but never use post-cutoff inputs or
 backfill a game after kickoff. Earlier moneyline and ATS archives stay intact.
 
 v2 (owner decision 2026-10-19): a zero edge takes the market favorite. Rows saved
-under v1 keep and validate against v1's skip.
+under v1 keep their bytes and validate against v1's skip; grading and display
+backfill those saved skips as favorite bets (owner decision 2026-10-19), labelled
+separately from recorded selections.
 """
 from __future__ import annotations
 
@@ -64,9 +66,11 @@ def key(row):
     return row['revision'], row['game_id']
 
 
-def favorite_on_tie(row):
-    """Saved decisions keep their own rule; earlier archives skipped a zero edge."""
-    return POLICIES.get(row.get('policy_version'), False)
+def backfilled(row):
+    """A saved zero-edge skip that grading now treats as a favorite bet."""
+    line, mapped = row.get('market_spread'), row.get('fixed_band_spread')
+    return (not row.get('selected_side') and line is not None and mapped is not None
+            and select(float(mapped), float(line), True) != '')
 
 
 def select(mapped, line, favorite):
@@ -243,7 +247,8 @@ def report(data='data'):
     lines = ['ATS capture: latest saved forecast at or before kickoff minus 60 minutes.',
              f'Policy: {POLICY_VERSION}; adopted {ADOPTED_UTC.isoformat()}.',
              'A zero edge takes the market favorite; a pick\'em line with a zero mapped spread skips. '
-             'Rows saved under the v1 policy keep its zero-edge skip.',
+             'Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills '
+             'them as favorite bets, labelled separately.',
              'Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.',
              'Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.',
              'Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.',

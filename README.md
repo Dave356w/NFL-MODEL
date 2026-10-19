@@ -28,7 +28,9 @@ forecast, and no lock may be backfilled after kickoff. The saved forecast time,
 cutoff and finalization time are all retained; GitHub cron does not guarantee
 delivery at an exact minute. Missing pre-cutoff forecasts show as unavailable.
 Game cards and the saved-spread-picks download preserve locked handicaps and
-selections, including zero-edge skips saved before the favorite rule. Earlier ATS and moneyline records retain their original timing;
+selections. Zero-edge skips saved before the favorite rule are backfilled as
+favorite bets in results, labelled separately; the saved download keeps the
+original skip and flags `backfilled_favorite`. Earlier ATS and moneyline records retain their original timing;
 the new capture policy has a separate identity and never rewrites those records.
 
 The **2026 ATS season overview** pools historical replay and recorded selections,

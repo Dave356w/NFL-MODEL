@@ -899,17 +899,18 @@ def ats_card_state(latest, row, now):
         note = f'ATS provisional · locks {when}'
     else:
         note = 'ATS provisional · kickoff unconfirmed'
-    # A saved selection keeps the zero-edge rule it was saved under.
-    tie = ats_locks.favorite_on_tie(saved) if saved is not None else True
-    pick, gap = ats_card_pick(ms, line, home, away, tie)
+    if saved is not None and ats_locks.backfilled(saved):
+        # Owner decision 2026-10-19: a saved skip is graded as a favorite bet.
+        source, note = 'Backfilled recorded skip', note + ' · skip backfilled as favorite'
+    pick, gap = ats_card_pick(ms, line, home, away)
     if status == 'unavailable':
         pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
     grade, units = '', math.nan
     if status in ('locked', 'replay') and math.isfinite(num(row.get('result'))):
         grades, returns = fixed_bands.grade(pd.DataFrame({
-            'spread_line': [line], 'result': [num(row['result'])]}), [ms], tie)
+            'spread_line': [line], 'result': [num(row['result'])]}), [ms])
         grade, units = grades[0], returns[0]
-    chosen = fixed_bands.pick(ms, line, tie) if math.isfinite(ms-line) else 0.
+    chosen = fixed_bands.pick(ms, line) if math.isfinite(ms-line) else 0.
     side = '' if status == 'unavailable' or chosen == 0 else ('home' if chosen > 0 else 'away')
     return dict(model_spread=ms, spread_line=line, pick=pick, gap=gap, status=status,
                 source=source, note=note, saved=saved, result=grade, units=units,
@@ -1110,7 +1111,8 @@ def render_ats_basis(latest):
     if pooled.empty:
         return ''.join(parts) + "<p class='mut'>No recorded ATS picks yet.</p>"
     labels = [('Recorded pregame', 'Earlier recorded picks'), ('60-minute lock', '60-minute locks'),
-              ('Historical replay', 'Historical replay'), ('Replayed pregame forecast', 'Replayed pregame forecasts')]
+              ('Historical replay', 'Historical replay'), ('Replayed pregame forecast', 'Replayed pregame forecasts'),
+              ('Backfilled recorded skip', 'Recorded skips backfilled as favorite bets')]
     rows = []
     for basis, label in labels:
         group = pooled[pooled.ats_basis.eq(basis)]
@@ -1125,7 +1127,9 @@ def render_ats_basis(latest):
                        rows, num_cols=(1, 2, 3, 4, 5, 6)))
     parts.append("<p class='mut small'>Recorded picks use saved pregame handicaps. Earlier recordings retain their "
                  "original capture times; the 60-minute record starts with the new lock policy. "
-                 "Replay is shown separately and is identified in the per-game download.</p>")
+                 "Replay is shown separately and is identified in the per-game download. "
+                 "Backfilled rows were recorded as skips and are graded as favorite bets after the result; "
+                 "they are not recorded picks.</p>")
     return ''.join(parts)
 
 
@@ -1232,9 +1236,11 @@ def render_retro(latest):
 def pooled_basis_text(frame):
     graded = frame[frame.ats_status.eq('graded')]
     replay = int(graded.ats_basis.isin(['Historical replay', 'Replayed pregame forecast']).sum())
-    recorded = len(graded) - replay
+    backfill = int(graded.ats_basis.eq('Backfilled recorded skip').sum())
+    recorded = len(graded) - replay - backfill
     r = season_ats.summary(frame)
-    text = f'{replay} replayed · {recorded} recorded · {r["pending"]} pending'
+    text = f'{replay} replayed · ' + (f'{backfill} backfilled · ' if backfill else '')
+    text += f'{recorded} recorded · {r["pending"]} pending'
     if r['unavailable']:
         text += f' · {r["unavailable"]} unavailable'
     return text
@@ -1292,7 +1298,7 @@ def render_fixed_bands(latest, details=False):
                                                 weeks, num_cols=(1, 2, 3, 4, 5)), True))
         out.append("<p class='mut small'><a href='ats_2026_results.csv'>2026 per-game ATS results</a>. "
                    "The download identifies replayed and recorded selections. A model spread equal to the line "
-                   "takes the market favorite; earlier recorded skips stay skips. "
+                   "takes the market favorite. Earlier recorded skips are backfilled as favorite bets and shown separately. "
                    "Cover rates exclude pushes; ROI includes pushed stakes and excludes skips.</p>")
     out.append("<h3>Historical replay</h3><div class='gr-note'>Returns use −110 pricing and fixed 1-unit stakes. "
                "A model spread equal to the market line takes the market favorite. Pushes return the stake.</div>")
@@ -1401,7 +1407,7 @@ def render_all(out_dir, data=DATA, now=None):
                 model_spread=row['fixed_band_spread'], market_spread=row['market_spread'],
                 selected_side=side, selected_team=row[side] if side else '',
                 handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None,
-                skip_reason=row['skip_reason']))
+                skip_reason=row['skip_reason'], backfilled_favorite=ats_locks.backfilled(row)))
         pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
     else:
         (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
