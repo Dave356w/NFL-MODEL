@@ -1249,7 +1249,7 @@ def render_fixed_bands(latest, details=False):
     eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()] if len(d) else d
     current_season = int(latest['manifest']['season'])
     out = ["<h2 class='sec'>Spread performance</h2>"]
-    if len(pooled):
+    if len(pooled) and season_ats.summary(pooled)['opportunities']:
         r = season_ats.summary(pooled)
         out.append("<h3>2026 graded results</h3><p class='mut small'>Season total: historical replay and recorded "
                    "ATS selections, with one result per game. Saved selections replace replay, including skips. "
