@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-19 05:20 UTC
+NFL forward ledger report -- 2026-10-19 05:35 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -555,7 +555,19 @@ Five-minute scheduled polls refresh forecasts near the deadline; scheduler deliv
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
 Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 1 saved candidates, 0 timed locks.
+Store validation: PASS; 2 saved candidates, 0 timed locks.
+
+2026 pooled ATS results
+
+2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
+Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
+Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
+Record 43-31-2, 16 skips, 1 pending, 0 unavailable; +8.09u, ROI +10.65% at proxy -110.
+  Awaiting ATS lock: 0-0-0, 0 skips, 1 pending, 0 unavailable; +0.00u
+  Historical replay: 37-26-2, 14 skips, 0 pending, 0 unavailable; +7.64u
+  Recorded pregame: 6-4-0, 2 skips, 0 pending, 0 unavailable; +1.45u
+  Replayed pregame forecast: 0-1-0, 0 skips, 0 pending, 0 unavailable; -1.00u
+This mixed-basis season total is descriptive, not a pooled native-forward claim.
 
 Appendix D: win-probability calibration theory (frozen research)
 
