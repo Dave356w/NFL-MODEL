@@ -101,7 +101,7 @@ def render(tmp_path, **kw):
 
 
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
-SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json"}
+SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json", "ats_2026_results.csv"}
 
 def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     # NFL schedule input is Eastern clock time. Presentation must be Pacific.
@@ -600,7 +600,7 @@ def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
     for page in ['grades.html', 'market-calibration.html']:
         html = (out / page).read_text()
         assert '<h3>2026 graded results</h3>' in html
-        assert 'Historical replay of completed games this season' in html
+        assert 'historical replay and recorded' in html
         assert 'Per-season results' in html
         assert '<td>2024</td>' in html and '<td>2026</td>' in html
         assert 'Fixed-band spread · retrospective ATS' not in html
