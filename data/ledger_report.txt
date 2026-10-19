@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-19 18:35 UTC
+NFL forward ledger report -- 2026-10-19 22:38 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -543,7 +543,7 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
 
 Legacy native boxscore-composite-v1.18 moneyline: {"graded": 13, "moneyline": {"bets": 12, "losses": 6, "pushes": 0, "roi": -0.2438145833333333, "units": -2.925775, "wins": 6}, "pending": 1, "snapshots": 14, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 12, "original_selections": 11, "original_skips": 2, "pending": 1, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
-Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 10, "original_selections": 0, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "timed_locks": 0}
+Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 11, "original_selections": 0, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "timed_locks": 0}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
 Never backfill median ATS locks for games that finished before adoption.
@@ -561,7 +561,7 @@ Five-minute scheduled polls refresh forecasts near the deadline; scheduler deliv
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
 Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 10 saved candidates, 0 timed locks.
+Store validation: PASS; 11 saved candidates, 0 timed locks.
 
 2026 pooled ATS results
 
