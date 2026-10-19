@@ -7,6 +7,10 @@ The v1.19 implementation and rebuilt results below are research artifacts;
 they have not replaced the live model. See the
 [hold and evaluation requirements](research/MARKET_CONTEXT_ADOPTION.md).
 
+The [every-season variant retest](research/season_rule_retest_results/REPORT.md)
+evaluates 330 corrections and 990 ATS conversion paths. None clears the
+combined market rule; the promotion hold remains in place.
+
 NFL against-the-spread picks and results, built and published as a static site
 by GitHub Actions. Public pages and CSVs show ATS selections, projected and
 market spreads, lock status, cover rates, units and ROI. Win probabilities and

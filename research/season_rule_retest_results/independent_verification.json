@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "games": 1451,
+  "variants": 333,
+  "annual_rows_checked": 5994,
+  "policy_rows_checked": 999,
+  "sampled_week_models": 182,
+  "max_independent_probability_error": 1.22885071285328e-07,
+  "all_settlement_arrays_match": true,
+  "all_prior_season_median_maps_match": true,
+  "missing_2021_22_medians_preserved": true,
+  "six_season_probability_pass": 0,
+  "six_season_ats_pass": 0,
+  "six_season_joint_pass": 0,
+  "script_sha256": "057e2822cc88fed17856fce14fe5a71896c640c0fc9a2d59c6a32bd8d67bda7b"
+}

@@ -1,0 +1,132 @@
+{
+  "title": "Every-season market-rule retest",
+  "source_sha256": {
+    "annual_scores.csv": "c0002609cf75e57ca6e4364def9bfae679f835934dec623e78c5c485c3ec0560",
+    "gate_summary.csv": "417dca999236920b2600c4de4d447f19336350320a3e59a2294a4583725302c2",
+    "variants.csv": "005cc95107e70147a693ed3bfcbe47339f261e4aad1e540b3fc06a55b7f32fb9"
+  },
+  "rows": [
+    {
+      "variant_id": "market:moneyline",
+      "path": "raw",
+      "label": "Market moneyline anchor",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "market:spread_total",
+      "path": "raw",
+      "label": "Market spread/total anchor",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "incumbent:v118",
+      "path": "own_median",
+      "label": "v1.18 recipe \u00b7 own median",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "spread_total::full29::g1",
+      "path": "raw",
+      "label": "Held v1.19 \u00b7 full 29 \u00b7 raw",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "spread_total::full29::g1",
+      "path": "own_median",
+      "label": "Full 29 \u00b7 g1 \u00b7 own median",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "spread_total::full29::g1",
+      "path": "shared_median",
+      "label": "Full 29 \u00b7 g1 \u00b7 shared median",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "spread_total::full29::g0.1",
+      "path": "raw",
+      "label": "Full 29 \u00b7 g0.10 \u00b7 raw",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "spread_total::pair:d__allowed__rates_core__net_pass_yards_per_pass_play|d__avail__qb_delta::g0.25",
+      "path": "raw",
+      "label": "Defense + QB \u00b7 g0.25 \u00b7 raw",
+      "role": "fixed"
+    },
+    {
+      "variant_id": "moneyline::pair:d__allowed__rates_core__net_pass_yards_per_pass_play|d__avail__qb_delta::g0.25",
+      "path": "raw",
+      "role": "posthoc",
+      "label": "Post-hoc probability nearest miss (3/6)\nML \u00b7 allowed pass efficiency + QB availability \u00b7 g0.25 \u00b7 raw",
+      "descriptive_rank": [
+        "probability"
+      ]
+    },
+    {
+      "variant_id": "spread_total::single:d__allowed__rates_core__net_pass_yards_per_pass_play::g0.5",
+      "path": "raw",
+      "role": "posthoc",
+      "label": "Post-hoc ATS nearest miss (3/6)\nS/T \u00b7 allowed pass efficiency \u00b7 g0.5 \u00b7 raw",
+      "descriptive_rank": [
+        "ats"
+      ]
+    },
+    {
+      "variant_id": "spread_total::full29::g0.25",
+      "path": "own_median",
+      "role": "posthoc",
+      "label": "Post-hoc 2023\u201326 ATS-only (4/4)\nS/T \u00b7 full 29 \u00b7 g0.25 \u00b7 own median",
+      "descriptive_rank": [
+        "unique_secondary_window_ats_only_survivor"
+      ]
+    }
+  ],
+  "years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "games_per_year": {
+    "2021": 272,
+    "2022": 271,
+    "2023": 272,
+    "2024": 272,
+    "2025": 272,
+    "2026": 92
+  },
+  "descriptive_nearest_ranking": {
+    "probability": [
+      "probability_passing_seasons",
+      "worst_log_loss_gain_vs_both",
+      "worst_brier_gain_vs_both"
+    ],
+    "ats": [
+      "ats_passing_seasons",
+      "worst_roi",
+      "worst_roi_gain_own",
+      "worst_roi_gain_favorite"
+    ]
+  },
+  "derived_columns": {
+    "log_loss_gain": "1000 * min(log_loss_gain_ml, log_loss_gain_spread_total)",
+    "brier_gain": "1000 * min(brier_gain_ml, brier_gain_spread_total)",
+    "roi_pct": "100 * roi",
+    "roi_control_gain_pp": "100 * min(roi_gain_own, roi_gain_favorite)"
+  },
+  "coverage_mask": "Only ATS panels blank for paths without complete same-season coverage; proper scores remain visible",
+  "outputs": {
+    "season_rule_heatmap.png": "f967d0a08b9fac58fd0866d4104a9c52fb73e5800cfbe81fc545a55d3339d92f",
+    "season_rule_heatmap.svg": "e659f96ac25726caf31aebf23b181ec959e255229d662ef411bb3d5a26270537"
+  },
+  "warnings": [
+    "Exposed historical search, not fresh validation",
+    "2026 is partial",
+    "ATS \u2212110 is an assumption",
+    "Point estimates only; no significance claim",
+    "Winner proper scores do not estimate ATS-cover probabilities"
+  ]
+}

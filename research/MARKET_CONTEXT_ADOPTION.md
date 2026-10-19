@@ -6,6 +6,11 @@ demonstrates improvement over the market in every evaluated season.
 Production remains v1.18 with its median ATS policy. No production data,
 forecasts or public pages were replaced by this branch.
 
+The subsequent [fixed-variant retest](season_rule_retest_results/REPORT.md)
+found no qualifying replacement among 330 feature corrections and 990 ATS
+conversion paths. Its full-source comparisons, independent replay and
+search-adjusted uncertainty retain the hold.
+
 Evaluate each season separately against the same predeclared market-only
 baseline on identical eligible games, with strictly earlier-week fits and
 consistent prices. Keep probability accuracy and price-aware ATS returns

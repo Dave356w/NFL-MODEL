@@ -1,0 +1,44 @@
+{
+  "method": "paired whole-week bootstrap max standardized deviation",
+  "repetitions": 9999,
+  "seed": 20261019,
+  "family_contrasts": 25186,
+  "planned_contrasts": 31680,
+  "simultaneous_critical": 4.35463007532379,
+  "vanished_denominator_contrast_replicates": 0,
+  "conditional_on_frozen_forecasts": true,
+  "model_refits": false,
+  "partial_2026": true,
+  "small_sample_exact": false,
+  "independent_annual_verification": {
+    "contrasts": 31680,
+    "compared_numbers": 52800,
+    "max_absolute_error": 4.675587987525848e-16,
+    "stake_checks": 35640,
+    "stake_mismatches": 0
+  },
+  "source": "/workspace/nfl-market-update/research/season_rule_retest_results",
+  "games": 1451,
+  "variants": 333,
+  "script_sha256": "e7499ff2ef64bc13b71a9a61d1c031cd290a6c31e1db7121f9790fdddfd47eae",
+  "weeks_by_season": {
+    "2021": 18,
+    "2022": 18,
+    "2023": 18,
+    "2024": 18,
+    "2025": 18,
+    "2026": 6
+  },
+  "source_sha256": {
+    "games.csv": "bdcdf854f80026c88727974c99208acb82560477bb4e1a2e88393182b8297657",
+    "variants.csv": "005cc95107e70147a693ed3bfcbe47339f261e4aad1e540b3fc06a55b7f32fb9",
+    "predictions.npz": "a7b52d520b2b41112fe8deacee2b9342007432902f9eb509c9571b76b0a9ab83"
+  },
+  "stake_definition": "1u risk at assumed -110; pushes count, skips and missing policies do not",
+  "effect_definition": "benchmark loss minus candidate loss; candidate ROI minus benchmark ROI",
+  "strict_positive_tolerances": {
+    "proper": 1e-12,
+    "roi": 1e-10
+  },
+  "evidence_basis": "exposed historical research, conditional on frozen forecast paths"
+}

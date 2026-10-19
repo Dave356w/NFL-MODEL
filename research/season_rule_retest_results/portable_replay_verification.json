@@ -1,0 +1,27 @@
+{
+  "mode": "portable frozen inputs; no original source path required",
+  "exact_artifacts": {
+    "annual_scores.csv": true,
+    "gate_summary.csv": true,
+    "fit_audit.csv": true,
+    "games.csv": true,
+    "variants.csv": true
+  },
+  "arrays": {
+    "probabilities": true,
+    "variant_ids": true,
+    "game_ids": true,
+    "favorite_units": true,
+    "home_units": true,
+    "margins_raw": true,
+    "margins_own_median": true,
+    "margins_shared_median": true,
+    "sides_raw": true,
+    "sides_own_median": true,
+    "sides_shared_median": true,
+    "units_raw": true,
+    "units_own_median": true,
+    "units_shared_median": true
+  },
+  "status": "PASS"
+}

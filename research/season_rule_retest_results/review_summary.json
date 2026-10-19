@@ -1,0 +1,98 @@
+{
+  "status": "HOLD: no candidate qualifies",
+  "seasons": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "partial_season": 2026,
+  "completed_games": 1451,
+  "winner_scored_games": 1446,
+  "feature_generators": 330,
+  "feature_ats_paths": 990,
+  "full_coverage_raw_paths": 330,
+  "early_median_incomplete_paths": 660,
+  "full_six_season": {
+    "probability_pass": 0,
+    "own_anchor_probability_pass": 0,
+    "moneyline_probability_pass": 0,
+    "ats_pass": 0,
+    "joint_pass": 0,
+    "raw_positive_roi_every_season": 0,
+    "raw_beats_favorite_every_season": 4
+  },
+  "common_2023_2026": {
+    "probability_pass": 0,
+    "ats_pass": 1,
+    "joint_pass": 0
+  },
+  "max_raw_seasons": {
+    "probability": 3,
+    "own_anchor_probability": 4,
+    "positive_roi": 3,
+    "ats": 3
+  },
+  "uncertainty": {
+    "method": "paired whole-week bootstrap max standardized deviation",
+    "repetitions": 9999,
+    "seed": 20261019,
+    "family_contrasts": 25186,
+    "planned_contrasts": 31680,
+    "simultaneous_critical": 4.35463007532379,
+    "vanished_denominator_contrast_replicates": 0,
+    "conditional_on_frozen_forecasts": true,
+    "model_refits": false,
+    "partial_2026": true,
+    "small_sample_exact": false,
+    "independent_annual_verification": {
+      "contrasts": 31680,
+      "compared_numbers": 52800,
+      "max_absolute_error": 4.675587987525848e-16,
+      "stake_checks": 35640,
+      "stake_mismatches": 0
+    },
+    "source": "/workspace/nfl-market-update/research/season_rule_retest_results",
+    "games": 1451,
+    "variants": 333,
+    "script_sha256": "e7499ff2ef64bc13b71a9a61d1c031cd290a6c31e1db7121f9790fdddfd47eae",
+    "weeks_by_season": {
+      "2021": 18,
+      "2022": 18,
+      "2023": 18,
+      "2024": 18,
+      "2025": 18,
+      "2026": 6
+    },
+    "source_sha256": {
+      "games.csv": "bdcdf854f80026c88727974c99208acb82560477bb4e1a2e88393182b8297657",
+      "variants.csv": "005cc95107e70147a693ed3bfcbe47339f261e4aad1e540b3fc06a55b7f32fb9",
+      "predictions.npz": "a7b52d520b2b41112fe8deacee2b9342007432902f9eb509c9571b76b0a9ab83"
+    },
+    "stake_definition": "1u risk at assumed -110; pushes count, skips and missing policies do not",
+    "effect_definition": "benchmark loss minus candidate loss; candidate ROI minus benchmark ROI",
+    "strict_positive_tolerances": {
+      "proper": 1e-12,
+      "roi": 1e-10
+    },
+    "evidence_basis": "exposed historical research, conditional on frozen forecast paths"
+  },
+  "independent_verification": {
+    "status": "PASS",
+    "games": 1451,
+    "variants": 333,
+    "annual_rows_checked": 5994,
+    "policy_rows_checked": 999,
+    "sampled_week_models": 182,
+    "max_independent_probability_error": 1.22885071285328e-07,
+    "all_settlement_arrays_match": true,
+    "all_prior_season_median_maps_match": true,
+    "missing_2021_22_medians_preserved": true,
+    "six_season_probability_pass": 0,
+    "six_season_ats_pass": 0,
+    "six_season_joint_pass": 0,
+    "script_sha256": "057e2822cc88fed17856fce14fe5a71896c640c0fc9a2d59c6a32bd8d67bda7b"
+  }
+}
