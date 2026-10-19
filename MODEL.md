@@ -242,9 +242,44 @@ strictly prior-week fitted coefficients. It retains original probabilities,
 revision and timestamp beside the new forecast. Repeated snapshots of one game
 are not independent games. The native JSONL is never replaced or backfilled.
 
-## The goal: flat 1u ROI at the moneyline
+## The goal: flat 1u ATS results at −110
 
-The model is judged by flat-stake betting results. Every game it decides
+**Owner decision 2026-10-19.** The model is judged by ATS results. After the
+hold, break-even prices and variance, moneyline betting does not look
+profitable, so moneyline results are legacy research (next section). The
+v1.18 probability engine, its log-loss fitting and the median map are
+unchanged.
+
+Every locked game whose mapped spread differs from the market line gets 1u at
+an assumed −110. A win pays +0.9091u and a loss costs 1u. A push returns the
+stake and stays in ROI's denominator. A zero-edge skip is not a bet. Each ATS
+result is reported with:
+
+* W-L-P, skips, units, ROI ± one standard error and n;
+* cover rate excluding pushes, against the −110 break-even of 52.4%;
+* the same-row baselines of always taking the favorite and always taking home;
+* its basis: 60-minute lock, recorded pregame archive, replayed pregame
+  forecast or historical replay. Only the 60-minute locks are native forward
+  evidence. Season totals that mix bases are descriptive.
+
+Per-band and edge-band records are descriptive, not per-game cover
+probabilities. Walk-forward tests in which prior-season band rates and
+exact-spread rates were used as cover probabilities did not beat a flat rate.
+Spread point error (MAE) is a secondary diagnostic. On 2023–26 walk-forward
+games the mapped spread, the raw spread and the market line have the same
+error (9.74–9.76 points).
+
+**Open question: median map vs raw spread.** On 2023–26 walk-forward games,
+picks from the median map covered 54.1% (n=761) and picks from the raw spread
+covered 51.1% (n=870). The difference is about 3 points ± 2.5. It is
+unresolved, and the map was adopted with this history in view. Every
+60-minute lock saves `raw_spread` and `market_spread` with the mapped spread,
+so the raw-spread pick can be graded on the same locked games without new
+capture or backfill. The owner reviews the comparison at 100 decided locks.
+
+## Legacy research: flat 1u ROI at the moneyline
+
+Moneyline research is judged by flat-stake betting results. Every game it decides
 (model probability ≠ 50%) gets 1u on the side it makes the favorite, graded at
 that side's posted American moneyline. A win pays the price, a loss costs 1u,
 and a tie is a push. Each ROI is reported with:
