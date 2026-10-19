@@ -209,7 +209,10 @@ class TimedATS(unittest.TestCase):
         self.assertTrue(a.backfilled(saved))
         html = b.render_index(self.latest(), pd.DataFrame(), 'test', KO+dt.timedelta(hours=4))
         self.assertIn('IND −7.0', html)
-        self.assertIn('skip backfilled as favorite', html)
+        self.assertNotIn('skip backfilled as favorite', html)
+        latest = self.latest()
+        state = b.ats_card_state(latest, latest['board'].iloc[0].to_dict(), KO+dt.timedelta(hours=4))
+        self.assertEqual(state['source'], 'Backfilled recorded skip')
         self.assertIn('ATS result · L', html)
         self.assertEqual((self.data / a.LOCKS).read_bytes(), before)
 
