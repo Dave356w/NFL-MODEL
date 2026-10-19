@@ -29,20 +29,36 @@ This presentation change does not change v1.18, the median map or lock timing.
 
 ## Evidence: keep the bases separate
 
-1. **Forward ledger**: first pregame snapshots, injury-report gated. This is
-   the only native forward evidence.
+1. **Forward ledger and ATS locks**: first pregame snapshots, injury-report
+   gated, and the 60-minute ATS locks. These are the only native forward
+   evidence.
 2. **Held-out walk-forward seasons**: reconstructions with recipe selection
    restricted to earlier seasons. Use them for development and calibration
    shape; they are not forward confirmation.
 3. **Current-season walk-forward and post-hoc slices**: diagnostics and
    hypotheses only.
 
-**The legacy moneyline research goal is flat 1u ROI on the model's side**
-(see `MODEL.md`). Lead moneyline research reports with units, ROI ± SE, n, the market-correct null
-(negative by the hold, not zero) and the same-row market-favorite baseline.
-Log loss/Brier are secondary. ROI is reported, not optimized: recipe selection
-and coefficient fitting stay on log loss unless the owner decides otherwise.
-That would be a new `REVISION`.
+**The goal is flat 1u ATS results at −110** (owner decision 2026-10-19: after
+the hold, break-even prices and variance, moneyline betting does not look
+profitable). The ATS evidence base is the 60-minute locks in
+`data/ats_locks.jsonl`. Earlier ATS archives and replays are development
+history. Lead ATS reports with W-L-P, skips, units, ROI ± SE (pushes in
+the denominator), cover rate excluding pushes, n, the break-even cover rate of 52.4%
+and the same-row always-favorite and always-home baselines. Per-band records
+are descriptive, not per-game cover probabilities. Spread point error is a
+secondary diagnostic. ROI is reported, not optimized: recipe selection and
+coefficient fitting stay on log loss, and the median map stays fitted to
+prior-season margins, unless the owner decides otherwise. That would be a new
+`REVISION` or ATS policy version.
+
+The open ATS question is whether the median map beats the raw model spread
+(`raw_spread` against `market_spread` in the same lock). Compare both on the
+same locked games; the owner reviews at 100 decided locks. Each lock already
+saves both inputs, so this comparison needs no new capture.
+
+**Moneyline is legacy research.** Its reports keep the flat 1u ROI basis in
+`MODEL.md`: units, ROI ± SE, n, the market-correct null (negative by the hold,
+not zero) and the same-row market-favorite baseline.
 
 Report each comparison with its basis, n, revision, the same-row market
 baseline, a proper score and uncertainty. A confidence
