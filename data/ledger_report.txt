@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-19 17:23 UTC
+NFL forward ledger report -- 2026-10-19 17:59 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -558,7 +558,7 @@ Five-minute scheduled polls refresh forecasts near the deadline; scheduler deliv
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
 Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 7 saved candidates, 0 timed locks.
+Store validation: PASS; 8 saved candidates, 0 timed locks.
 
 2026 pooled ATS results
 
