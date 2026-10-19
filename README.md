@@ -1,13 +1,20 @@
-# NFL Box-Score Composite
+# NFL ATS
 
-Weekly NFL win probabilities from prior-game box-score profiles and player
-availability, built and published as a static site by GitHub Actions.
+NFL against-the-spread picks and results, built and published as a static site
+by GitHub Actions. Public pages show ATS selections, projected and market
+spreads, lock status, cover rates, units and ROI. Win probabilities and moneyline
+research stay internal to the model and repository reports.
 
-**Goal: flat 1-unit ROI.** Every game the model decides gets 1u on the side it
-makes the favorite, graded at that side's moneyline. Every game's first pregame
-forecast is locked into a forward ledger with the moneyline it saw, then graded
-on units and ROI against the same-row market favorite and the market-correct
-null. Log loss is kept as a secondary score.
+**Public goal: flat 1-unit ATS results.** The signed difference between the
+projected home margin and market margin chooses the ATS side. Matching lines
+skip; pushes return the stake. Returns assume −110, with cover rates excluding
+pushes and ROI including pushed stakes. Recorded and replayed results remain
+identified separately. Picks freeze at the 60-minute pregame cutoff.
+
+The v1.18 probability engine and prior-season median spread mapping are
+unchanged. Original moneyline snapshots and research scoring remain available
+in the repository, including their original pricing and capture times; the
+public interface and public CSVs contain ATS data only.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
