@@ -120,7 +120,7 @@
   "coverage_mask": "Only ATS panels blank for paths without complete same-season coverage; proper scores remain visible",
   "outputs": {
     "season_rule_heatmap.png": "f967d0a08b9fac58fd0866d4104a9c52fb73e5800cfbe81fc545a55d3339d92f",
-    "season_rule_heatmap.svg": "e659f96ac25726caf31aebf23b181ec959e255229d662ef411bb3d5a26270537"
+    "season_rule_heatmap.svg": "98eb3c8e7e05f1dc67f63855dd5390a9f0ded1bb05f48390f33f86bd6c8a4256"
   },
   "warnings": [
     "Exposed historical search, not fresh validation",

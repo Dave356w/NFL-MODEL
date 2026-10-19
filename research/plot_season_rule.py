@@ -251,6 +251,8 @@ def render(results: Path = RESULTS, out_dir: Path | None = None) -> dict:
     png, svg = out_dir / "season_rule_heatmap.png", out_dir / "season_rule_heatmap.svg"
     fig.savefig(png, dpi=175, bbox_inches="tight", facecolor=fig.get_facecolor(), metadata={"Software": "Matplotlib; saved-results-only research plot"})
     fig.savefig(svg, bbox_inches="tight", facecolor=fig.get_facecolor(), metadata={"Date": None})
+    # Matplotlib emits trailing spaces in SVG paths; keep generated diffs clean.
+    svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
     plt.close(fig)
     data.to_csv(out_dir / "season_rule_heatmap_data.csv", index=False)
     metadata = dict(
