@@ -1,6 +1,8 @@
 from pathlib import Path
+import json
 import numpy as np
 import pandas as pd
+import pytest
 from research import production_sanity as s
 
 
@@ -39,6 +41,10 @@ def test_current_production_snapshot_passes_independent_audit():
     data=Path(__file__).resolve().parents[1]/'data'
     audit=s.inspect(data)
     assert audit['status']=='PASS' and all(audit['checks'].values())
+    assert audit['ats_capture']['candidates'] >= audit['ats_capture']['timed_locks']
+    archive=audit['ats_archive']
+    assert archive['original_selections']+archive['original_skips']==archive['snapshots']
+    assert archive['backfilled_skips']<=archive['original_skips']
     rule=next(x for x in audit['rules'] if x['season']==2026)
     assert rule['magnitudes']==[3.,4.,7.,14.] and rule['training_max_season']==2025
     total=next(x for x in audit['historical'] if x['season']=='All')
@@ -53,3 +59,60 @@ def test_current_production_snapshot_passes_independent_audit():
 def test_missing_data_has_explicit_empty_state(tmp_path):
     assert s.inspect(tmp_path)['status']=='No historical inputs yet'
     assert 'No historical inputs yet' in s.report(tmp_path)
+
+
+def _timed_store(data, original_skip=False):
+    """One valid pre-cutoff candidate and matching pregame finalization."""
+    from scipy.special import ndtr
+    a=s.ats_locks
+    wp=float(ndtr(8./12.37))
+    legacy=next(policy for policy,favorite in a.POLICIES.items() if not favorite)
+    row=dict(revision=s.m.REVISION, game_id='2026_07_TEN_IND', season=2026,
+        generated_utc='2026-10-25T15:58:00+00:00', observed_utc='2026-10-25T15:59:00+00:00',
+        kickoff_utc='2026-10-25T17:00:00+00:00', lock_at_utc='2026-10-25T16:00:00+00:00',
+        policy_version=legacy if original_skip else a.POLICY_VERSION, lock_lead_minutes=60,
+        fixed_rule=dict(training_max_season=2025,cuts=[3.,7.,10.],magnitudes=[3.,4.,7.,14.]),
+        model_wp=wp, raw_spread=float(s.m.implied_spread([wp])[0]),
+        market_spread=7. if original_skip else 6.5, fixed_band_spread=7.,
+        selected_side='' if original_skip else 'home', skip_reason='zero_edge' if original_skip else None)
+    row['candidate_sha256']=a.digest(row)
+    (data/a.CANDIDATES).write_text(json.dumps(row)+'\n')
+    lock=dict(row,finalized_utc='2026-10-25T16:01:00+00:00')
+    (data/a.LOCKS).write_text(json.dumps(lock)+'\n')
+    return lock
+
+
+@pytest.mark.parametrize('original_skip',[False,True])
+def test_primary_capture_inventory_keeps_saved_skips_separate_and_read_only(tmp_path,original_skip):
+    _timed_store(tmp_path,original_skip)
+    paths=[tmp_path/s.ats_locks.CANDIDATES,tmp_path/s.ats_locks.LOCKS]
+    before=[p.read_bytes() for p in paths]
+    audit=s.inspect(tmp_path)
+    assert audit['checks']['primary_ats_store_integrity']
+    capture=audit['ats_capture']
+    assert (capture['candidates'],capture['timed_locks'])==(1,1)
+    assert capture['original_selections']==int(not original_skip)
+    assert capture['original_skips']==capture['backfilled_skips']==int(original_skip)
+    report=s.report(tmp_path)
+    assert 'Primary 60-minute ATS capture' in report
+    assert 'backfilled favorite bets are excluded from forward evidence' in report
+    assert [p.read_bytes() for p in paths]==before
+
+
+@pytest.mark.parametrize('with_history',[False,True])
+def test_corrupt_primary_lock_fails_standalone_sanity_with_or_without_history(tmp_path,with_history):
+    lock=_timed_store(tmp_path)
+    if with_history:
+        latest=tmp_path/'latest';latest.mkdir()
+        source=Path(__file__).resolve().parents[1]/'data/latest/retro_ledger.csv'
+        (latest/'retro_ledger.csv').write_bytes(source.read_bytes())
+    lock['fixed_band_spread']=14.  # diverges from the unchanged, hashed candidate
+    path=tmp_path/s.ats_locks.LOCKS
+    path.write_text(json.dumps(lock)+'\n')
+    before=path.read_bytes()
+    audit=s.inspect(tmp_path)
+    assert audit['status']=='FAIL'
+    assert audit['checks']['primary_ats_store_integrity'] is False
+    assert 'differs from its saved candidate' in audit['ats_capture']['error']
+    assert 'FAIL primary_ats_store_integrity' in s.report(tmp_path)
+    assert path.read_bytes()==before

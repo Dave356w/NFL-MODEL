@@ -28,7 +28,12 @@ class ATSOnlySite(unittest.TestCase):
                     gameday='2026-10-18', gametime='13:00', ready=True, result=-6.,
                     home_score=20., away_score=26., model_wp=.6, spread_line=6.5,
                     home_injury_report='final', away_injury_report='final')
-        pd.DataFrame([card]).to_csv(cls.data/'latest/board.csv',index=False)
+        # This game has a completed season selection but no saved ATS lock.
+        # Deliberately change the postgame board to a conflicting home pick.
+        historical = dict(card, game_id='2026_06_SEA_DEN', home='DEN', away='SEA',
+                          gameday='2026-10-15', gametime='20:15', result=float('nan'),
+                          home_score=float('nan'), away_score=float('nan'), model_wp=.99, spread_line=9.5)
+        pd.DataFrame([card, historical]).to_csv(cls.data/'latest/board.csv',index=False)
         manifest=json.loads((cls.data/'latest/manifest.json').read_text())
         manifest.update(season=2026,week=6,revision='boxscore-composite-v1.18',
                         generated_utc='2026-10-19T05:40:00+00:00')
@@ -86,9 +91,38 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(row.ats_result,'L')
         self.assertEqual(float(row.ats_units),-1.)
         saved=pd.read_csv(self.out/'ats_locked_picks.csv',keep_default_na=False).set_index('game_id')
-        # The saved-picks download keeps the original skip and flags the backfill.
-        self.assertEqual(saved.loc['2026_06_TEN_IND'].skip_reason,'zero_edge')
-        self.assertEqual(str(saved.loc['2026_06_TEN_IND'].backfilled_favorite),'True')
+        # Public downloads use the effective displayed favorite; originals and
+        # source/backfill flags remain in the unchanged backend archive.
+        self.assertEqual(saved.loc['2026_06_TEN_IND'].selected_side,'home')
+        self.assertEqual(saved.loc['2026_06_TEN_IND'].selected_team,'IND')
+        self.assertEqual(float(saved.loc['2026_06_TEN_IND'].handicap),-7.)
+        for field in ('timing_policy','skip_reason','backfilled_favorite','legacy_lock','ats_basis'):
+            self.assertNotIn(field,saved.columns)
+
+    def test_completed_card_and_board_download_use_the_season_selection(self):
+        expected=self.pool.set_index('game_id').loc['2026_06_SEA_DEN']
+        board=pd.read_csv(self.out/'fixed_band_board.csv',keep_default_na=False).set_index('game_id')
+        shown=board.loc['2026_06_SEA_DEN']
+        self.assertEqual(shown.ats_status,'graded')
+        self.assertEqual(float(shown.model_spread),float(expected.model_spread))
+        self.assertEqual(float(shown.spread_line),float(expected.spread_line))
+        self.assertEqual(shown.selected_team,expected.fixed_band_ats_team)
+        self.assertEqual(shown.selected_side,expected.fixed_band_ats_side)
+        self.assertEqual(shown.ats_result,expected.fixed_band_ats_result)
+        self.assertEqual(float(shown.ats_units),float(expected.fixed_band_ats_units))
+        self.assertEqual(float(shown.home_score),float(expected.home_score))
+        self.assertEqual(float(shown.away_score),float(expected.away_score))
+        self.assertEqual(float(shown.result),float(expected.result))
+        self.assertNotEqual(shown.spread_line,9.5)
+        html=(self.out/'index.html').read_text()
+        card=next(c for c in html.split("<details class='card")[1:] if 'Seahawks' in c.split('</summary>')[0])
+        summary=card.split('</summary>')[0]
+        self.assertIn('SEA −2.5',summary)
+        self.assertIn('ATS result · L',summary)
+        self.assertIn('Final 14–17',summary)
+        self.assertNotIn('Unavailable',card)
+        self.assertNotIn('so it is not graded',card)
+        self.assertNotIn('replay',self.visible(card).lower())
 
     def test_results_pool_each_game_once_and_keep_sources_internal(self):
         html=(self.out/'grades.html').read_text()

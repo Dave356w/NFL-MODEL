@@ -1,6 +1,7 @@
 """Page rendering from a synthetic data/ folder (no network, no model run)."""
 import datetime as dt
 import json
+import math
 import re
 from pathlib import Path
 
@@ -52,7 +53,9 @@ def make_data(root, with_ledger=True):
     bets = m.flat_bets(retro)
     retro = retro.assign(bet_side=bets.side, bet_team=np.where(bets.side == "home", "DAL", "TB"), bet_price=bets.price,
                          bet_band=bets.band, bet_q=bets.q, bet_result=bets.result, units=bets.units, null_ev=bets.null_ev,
-                         market_ml_wp=m.market_ml_wp(retro), home_score=20, away_score=17)
+                         market_ml_wp=m.market_ml_wp(retro),
+                         home_score=np.where(roi_hist['home won'] == 1,20,17),
+                         away_score=np.where(roi_hist['home won'] == 1,17,20))
     retro.to_csv(latest / "retro_ledger.csv", index=False)
     m.roi_table(retro, by="season").to_csv(latest / "retro_roi_by_season.csv", index=False)
     m.roi_table(retro).to_csv(latest / "retro_roi_bands.csv", index=False)
@@ -143,12 +146,17 @@ def test_three_public_pages_with_nav_and_no_nan(tmp_path):
 
 def test_retired_research_artifacts_are_removed_from_public_output(tmp_path):
     data=make_data(tmp_path/'data');out=tmp_path/'public';out.mkdir()
-    retired=('ledger_report.txt','model.html','board.html',*RESEARCH_EXPORTS)
+    retired=('ledger_report.txt','model.html','board.html',*RESEARCH_EXPORTS,'retro_ledger.csv','old_moneyline.csv')
     for name in retired:(out/name).write_text('OLD-RESEARCH')
+    (out/'assets').mkdir()
+    (out/'assets'/'reference.csv').write_text('asset\nretained\n')
+    (out/'favicon.svg').write_text('<svg/>')
     b.render_all(out,data,now=NOW)
     assert all(not (out/name).exists() for name in retired)
     assert (data/'ledger_report.txt').exists()
     assert all((data/'latest'/name).exists() for name in RESEARCH_EXPORTS)
+    assert (out/'assets'/'reference.csv').read_text() == 'asset\nretained\n'
+    assert (out/'favicon.svg').read_text() == '<svg/>'
     html=(out/'index.html').read_text()
     assert 'ledger_report.txt' not in html and "id='main-content'" in html and "aria-label='Main navigation'" in html
 
@@ -182,7 +190,7 @@ def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
     out, _ = render(tmp_path)
     for name in PUBLIC:
         text = visible_text((out / name).read_text())
-        for banned in ("±", " SE", "log loss", "Log loss", "no-vig q", "Excess", "excess pp", "Mkt null",
+        for banned in ("log loss", "Log loss", "no-vig q", "Excess", "excess pp", "Mkt null",
                        "rates_core", "recipe", "Brier", "coefficient", "Wilson", "research", "reconstructed",
                        "retrospective", "hindsight", "fitted weights", "MAE", "native", "favorite-confidence"):
             assert banned not in text, (name, banned)
@@ -585,6 +593,8 @@ def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_pat
     path = data / 'latest' / 'retro_ledger.csv'
     retro = pd.read_csv(path)
     retro.loc[retro.index[:3], 'season'] = 2026
+    retro.loc[retro.index[:3], 'gameday'] = '2026-09-10'
+    retro.loc[retro.index[:3], 'gametime'] = '13:00'
     retro.to_csv(path, index=False)
     out = tmp_path / 'public'
     b.render_all(out, data, now=NOW)
@@ -651,6 +661,87 @@ def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch
     assert 'point difference' in text
     assert 'Historical reference' not in text and 'At this price' not in text
     assert 'model win probability' not in text and 'Recorded moneyline results' not in text
+
+
+def completed_pool_fixture():
+    game = dict(game_id='2026_06_SEA_DEN', season=2026, week=6, home='DEN', away='SEA',
+                gameday='2026-10-15', gametime='20:15', result=3.,
+                fixed_band_spread=30., spread_line=9.5)
+    pooled = dict(game, ats_basis='Historical replay', ats_status='graded',
+                  home_score=17., away_score=14.,
+                  fixed_band_spread=-3., spread_line=-2.5,
+                  fixed_band_ats_result='L', fixed_band_ats_units=-1.)
+    latest = dict(manifest={'revision':m.REVISION}, ats_locks={}, pooled_ats=pd.DataFrame([pooled]))
+    return latest, game
+
+
+def test_completed_card_selection_uses_trusted_pool_before_live_postgame_prices():
+    latest, game = completed_pool_fixture()
+    state = b.ats_card_state(latest,game,NOW+dt.timedelta(days=20))
+    assert (state['status'],state['selected_team'],state['result'],state['units']) == ('graded','SEA','L',-1.)
+    assert (state['model_spread'],state['spread_line'],state['handicap']) == (-3.,-2.5,-2.5)
+    assert state['pick'] == 'SEA −2.5'
+    assert game['spread_line'] == 9.5 and game['fixed_band_spread'] == 30.
+
+
+@pytest.mark.parametrize('kind',['pending_pool','missing_pool'])
+def test_missing_or_pending_pool_never_backfills_an_unsaved_completed_card(kind):
+    latest, game = completed_pool_fixture()
+    if kind == 'pending_pool':
+        latest['pooled_ats']['ats_status'] = 'pending'
+    elif kind == 'missing_pool':
+        latest['pooled_ats'] = pd.DataFrame()
+    state = b.ats_card_state(latest,game,NOW+dt.timedelta(days=20))
+    assert state['status'] == 'unavailable' and not state['selected_side']
+    assert not state['result'] and not math.isfinite(state['units'])
+
+
+@pytest.mark.parametrize('stale_result',[np.nan,-10.])
+def test_completed_pool_outcomes_replace_missing_or_conflicting_board_scores(stale_result):
+    latest, game = completed_pool_fixture()
+    game.update(result=stale_result,home_score=10.,away_score=20.)
+    state = b.ats_card_state(latest,game,NOW+dt.timedelta(days=20))
+    assert state['status'] == 'graded' and state['result'] == 'L'
+    assert state['display_row']['result'] == 3.
+    assert state['display_row']['home_score'] == 17. and state['display_row']['away_score'] == 14.
+    assert game['home_score'] == 10. and game['away_score'] == 20.
+
+
+def test_saved_card_takes_priority_over_conflicting_completed_pool():
+    latest, game = completed_pool_fixture()
+    saved = dict(fixed_band_spread=7.,market_spread=7.,selected_side='home',
+                 generated_utc='2026-10-15T20:00:00Z',lock_at_utc='2026-10-15T23:15:00Z')
+    latest['ats_locks'][(m.REVISION,game['game_id'])] = saved
+    state = b.ats_card_state(latest,game,NOW+dt.timedelta(days=20))
+    assert state['saved'] is saved
+    assert (state['model_spread'],state['spread_line'],state['selected_team']) == (7.,7.,'DEN')
+    assert state['status'] == 'locked' and state['result'] == 'L'
+
+
+def test_public_ats_roi_uncertainty_includes_pushes_and_is_unavailable_for_one_bet():
+    frame = pd.DataFrame(dict(week=[6,6,6],ats_status=['graded']*3,
+                              fixed_band_ats_result=['W','L','P'],
+                              spread_line=[1.,1.,1.],fixed_band_spread=[2.,2.,2.],result=[2.,0.,1.]))
+    # Returns 10/11, -1, 0 have sample-mean SE sqrt(331)/33.
+    expected = f'± {100*math.sqrt(331)/33:.1f} pp SE'
+    assert expected in b.record_tiles(frame,'Season')
+    assert expected in b.weekly_table(frame)
+    assert b.ats_comparison_tiles(frame).count(expected) == 3
+    assert 'SE unavailable' in b.record_tiles(frame.iloc[:1],'One pick')
+    assert 'nan' not in b.weekly_table(frame.iloc[:1]).lower()
+
+
+def test_pick_badge_text_contrast_in_light_and_dark_themes():
+    def luminance(rgb):
+        linear = [v/12.92 if v <= .04045 else ((v+.055)/1.055)**2.4 for v in np.array(rgb)/255]
+        return sum(a*v for a,v in zip((.2126,.7152,.0722),linear))
+    for block in [b.CSS.split('@media')[0],b.CSS.split('html[data-theme="dark"]{',1)[1].split('}',1)[0]]:
+        background = tuple(int(v) for v in re.search(r'--accent:([\d,]+)',block).group(1).split(','))
+        foreground = re.search(r'--accent-on:#([0-9a-fA-F]{6})',block).group(1)
+        foreground = tuple(int(foreground[i:i+2],16) for i in (0,2,4))
+        light,dark = sorted([luminance(background),luminance(foreground)],reverse=True)
+        assert (light+.05)/(dark+.05) >= 4.5
+    assert 'color:var(--accent-on)' in b.CSS.split('.g-team.picked .nm::after{',1)[1].split('}',1)[0]
 
 
 def test_public_ats_keeps_all_season_sources_and_missing_locks():
