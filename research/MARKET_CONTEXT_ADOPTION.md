@@ -1,6 +1,26 @@
 # v1.19: market baseline with all 29 inputs
 
-Owner decision, 2026-10-19: promote the previously evaluated
+**Status: ON HOLD — DO NOT MERGE OR DEPLOY.** The latest owner instruction
+on 2026-10-19 supersedes the promotion request: hold until the candidate
+demonstrates improvement over the market in every evaluated season.
+Production remains v1.18 with its median ATS policy. No production data,
+forecasts or public pages were replaced by this branch.
+
+Evaluate each season separately against the same predeclared market-only
+baseline on identical eligible games, with strictly earlier-week fits and
+consistent prices. Keep probability accuracy and price-aware ATS returns
+separate; the market-favorite ATS control is not itself a market probability
+forecast. A pooled historical gain cannot compensate for a failing season.
+Beating a losing control does not establish profitability, and per-season
+point gains alone do not establish statistical reliability. Retain the prior
+requirement for fresh validation at actual quotes. Keep failed seasons visible
+and do not tune a separate candidate to each evaluation season to force a pass.
+
+v1.19 currently fails this requirement: its 2026 winner log loss is worse than
+the no-vig market benchmark and its ATS return trails the market-favorite
+control. Keep the implementation and retrospective evidence for research.
+
+Original owner request, superseded by the hold: promote the previously evaluated
 `spread_total::group:full::g1` forecast, use its raw continuous margin for ATS,
 and retrospectively regenerate all picks, results and performance. This is an
 explicit production choice after exposed development, not a new research gate
@@ -22,7 +42,7 @@ See the [matched-source comparison](market_context_adoption/matched_source_compa
 [cutoff audit](market_context_adoption/matched_source_cutoffs.csv) and
 [source audit](market_context_adoption/matched_source_audit.json).
 
-## Exact promoted rule
+## Exact implemented candidate
 
 `boxscore-composite-v1.19`, output `nfl_boxscore_output_v1_19`, recipe architecture
 `market_spread_total`. Fit before each week using only earlier weeks:
@@ -129,9 +149,11 @@ The existing `fixed_band_*` file/column names remain compatibility aliases for
 v1.19 continuous margins. New rules are empty; archived median rules continue
 to validate only their own records.
 
-Next evaluation: freeze this recipe and measure new native T−60 selections
-against same-game market controls and actual offered prices. The retrospective
-ROI cannot establish future return or executable-price profitability.
+Any future promotion evaluation must satisfy the season-by-season market
+comparison above and retain fresh validation at actual offered prices.
+The retrospective ROI cannot establish future return or executable-price
+profitability. No promotion or new production capture is authorized by this
+research branch while the hold remains in force.
 
 ## Validation and publication
 
@@ -145,6 +167,7 @@ this environment; team-code fallbacks worked.
 
 The full rebuild and rendered previews were tested in an isolated state copy.
 Tracked generated `data/` and `public/` are intentionally unchanged: the
-serialized build workflow regenerates and commits them when the source update
-lands on main. The source update, this frozen review record and its ATS results
-are reviewable before deployment.
+serialized build workflow would regenerate and commit them if the source update
+were merged. **Do not merge this branch while the hold remains in force.**
+The source update, this frozen review record and its ATS results remain
+available for research review.

@@ -10,15 +10,25 @@ Public presentation (owner decision 2026-10-19 UTC) is ATS-only: picks, frozen
 handicaps, results, cover rates, units and ROI. Probability/moneyline calculations
 and the original archives remain internal and in repository research reports.
 Do not publish moneyline picks, win-probability values or moneyline CSV columns.
-The current model is v1.19 (owner decision 2026-10-19): a spread/total market
-winner baseline plus all 29 football inputs, converted to a continuous spread.
-There is no median mapping or favorite-confidence penalty in this revision.
+**Promotion hold (latest owner decision, 2026-10-19): do not merge or deploy
+v1.19 until it demonstrates improvement over the market in every evaluated
+season.** This supersedes the earlier promotion request. Production remains
+v1.18 with its median ATS policy. v1.19 is an implemented research candidate:
+a spread/total market winner baseline plus all 29 football inputs, converted
+to a continuous spread without median mapping or a favorite-confidence penalty.
+Its code and retrospective artifacts remain isolated on the candidate branch.
+Use the same predeclared market-only benchmark, game cohort, fitting cutoff
+and price basis for every season; a pooled gain cannot override a failing
+season. Keep probability-score comparisons distinct from ATS returns and
+report uncertainty. Beating a negative-return favorite control alone does not
+establish an ATS edge. Keep failed seasons visible and do not tune a separate
+candidate to each evaluation season to force a pass.
 The public 2026 headline, weekly/game results, running units, same-game controls
-and season CSV use the current revision, one row per game (owner request
-2026-10-19). Rebuild all completed historical games with v1.19, including games
+and season CSV use the active production revision, one row per game. The
+offline candidate rebuild includes all completed historical games with v1.19, including games
 after the earlier median-policy adoption. These are retrospective forecasts,
 not newly recorded bets. Only saved v1.19 ATS selections take priority over
-v1.19 replay; never substitute older-revision locks. Keep source
+v1.19 replay in candidate evaluation; never substitute older-revision locks. Keep source
 tracking in backend reporting only, without source labels or breakdowns on the
 public pages or season CSV; the pooled total is descriptive.
 Show earlier seasons in the annual ATS performance table and history download;
@@ -59,18 +69,19 @@ the denominator), cover rate excluding pushes, n, the break-even cover rate of 5
 and the same-row always-favorite and always-home baselines. Per-band records
 are descriptive, not per-game cover probabilities. Spread point error is a
 secondary diagnostic. ROI is reported, not optimized: recipe selection and
-coefficient fitting stay on log loss. v1.19 adopts the previously tested full
-spread/total correction by explicit owner choice, after exposed development.
-Its point ROI advantage is unresolved and requires fresh validation at actual
-quotes. The former median-versus-raw comparison remains legacy research.
+coefficient fitting stay on log loss. The v1.19 candidate implements the
+previously tested full spread/total correction after exposed development.
+Its promotion is on hold: its historical point ROI advantage is unresolved,
+and its 2026 performance declines. Fresh validation at actual quotes is still
+required. The former median-versus-raw comparison remains legacy research.
 
 **Zero edge takes the market favorite** (owner decision 2026-10-19; lock policy
 v2). Only a pick'em line with a zero projected spread skips. It applies
 retrospectively. By owner decision (2026-10-19), saved zero-edge skips are
 backfilled as favorite bets in grading and display, tracked as **Backfilled
 recorded skip** in backend reporting and kept out of forward evidence. The saved files are never
-rewritten. v1.19 also has an explicitly authorized retrospective rebuild of
-derived picks/results, under its own revision and continuous ATS policy.
+rewritten. v1.19's retrospective rebuild remains offline under its own
+revision and continuous ATS policy while promotion is on hold.
 
 **Moneyline is legacy research.** Its reports keep the flat 1u ROI basis in
 `MODEL.md`: units, ROI ± SE, n, the market-correct null (negative by the hold,

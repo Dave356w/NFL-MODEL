@@ -4,10 +4,16 @@
 version history (v1 to v1.19), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.19`
+**Promotion hold, 2026-10-19:** v1.19 must not be merged or deployed until it
+demonstrates improvement over the market in every evaluated season. Production
+remains v1.18 with its median ATS policy. The v1.19 code and retrospective
+rebuild in this branch are candidate research; the earlier promotion request
+has been superseded. See [the hold record](research/MARKET_CONTEXT_ADOPTION.md).
 
-**Owner adoption, 2026-10-19.** The previously tested
-`spread_total::group:full::g1` raw variant replaces v1.18 and its median ATS
+## The implemented candidate: `boxscore-composite-v1.19`
+
+**Original implementation request, 2026-10-19; promotion now on hold.** The previously tested
+`spread_total::group:full::g1` raw variant would replace v1.18 and its median ATS
 mapping. New revision, output name (`nfl_boxscore_output_v1_19`), config
 signature and continuous-spread ATS policy. This decision follows exposed
 historical development; a reliable incremental edge remains unresolved.
@@ -51,7 +57,8 @@ ATS locks are never rewritten. Source tracking stays in backend reports;
 public pages and downloads show ATS data only. Annual ATS performance and
 all-season game data accompany the 2026 overview.
 
-The current policy is `raw-spread-ats-t60-favtie-2026-10-19-v1`, adopted at
+The candidate policy is `raw-spread-ats-t60-favtie-2026-10-19-v1`, with its
+original proposed adoption time of
 2026-10-19 19:09:27 UTC. It retains the T−60 generated-and-observed cutoff,
 injury-report gating and pre-kickoff finalization. There is no median-map
 requirement. Older policies remain valid for their archived rows. Compatibility
@@ -59,10 +66,10 @@ filenames and columns containing `fixed_band` carry the continuous value for
 v1.19; `fixed_band_rules.json` is empty. See
 [the adoption record](research/MARKET_CONTEXT_ADOPTION.md).
 
-## Archived v1.18: `boxscore-composite-v1.18`
+## Live production v1.18: `boxscore-composite-v1.18`
 
-The v1.18 and v1.16 descriptions below document the superseded models and
-their original evidence; they are retained for reproducibility.
+The v1.18 description below documents the live model. The v1.16 description
+retains its shared architecture and original evidence for reproducibility.
 
 **v1.16 with the favorite-confidence penalty (owner decision 2026-10-13).** New `REVISION`,
 `OUTPUT_NAME` (`nfl_boxscore_output_v1_18`) and config signature. Same features, fit and
@@ -305,8 +312,8 @@ are not independent games. The native JSONL is never replaced or backfilled.
 **Owner decision 2026-10-19.** The model is judged by ATS results. After the
 hold, break-even prices and variance, moneyline betting does not look
 profitable, so moneyline results are legacy research (next section). The
-current v1.19 engine fits log loss and uses its continuous spread directly.
-The older v1.18 median-policy history is described below for reproducibility.
+production v1.18 engine fits log loss and uses its median ATS policy. The held
+v1.19 candidate fits log loss and uses its continuous spread directly.
 
 Every locked game gets 1u at an assumed −110 on the side its model spread
 takes against the market line. When the model spread equals the line, the bet
@@ -615,10 +622,10 @@ Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
 walk-forward grid.
 
-### Archived median-MOV displayed spread (2026-10-17)
+### Production median-MOV displayed spread (2026-10-17)
 
-This section and the following median-policy sections describe v1.18. They
-were superseded by the v1.19 continuous-spread policy on 2026-10-19.
+This section and the following median-policy sections describe live v1.18.
+The proposed v1.19 continuous-spread replacement is on hold.
 
 The site's **Model spread** uses a prior-season median signed MOV calibration
 in `fixed_bands.py`, replacing the earlier ATS W-L optimized values. The

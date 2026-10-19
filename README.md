@@ -1,5 +1,12 @@
 # NFL ATS
 
+**v1.19 promotion is on hold (owner decision 2026-10-19). Do not merge or
+deploy this candidate until it demonstrates improvement over the market in
+every evaluated season. Production remains v1.18 with its median ATS policy.**
+The v1.19 implementation and rebuilt results below are research artifacts;
+they have not replaced the live model. See the
+[hold and evaluation requirements](research/MARKET_CONTEXT_ADOPTION.md).
+
 NFL against-the-spread picks and results, built and published as a static site
 by GitHub Actions. Public pages and CSVs show ATS selections, projected and
 market spreads, lock status, cover rates, units and ROI. Win probabilities and
@@ -7,7 +14,7 @@ moneyline research remain internal.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-Current model (owner decision 2026-10-19): **`boxscore-composite-v1.19`**.
+Implemented candidate, held from production: **`boxscore-composite-v1.19`**.
 It first fits a market-based home-win forecast from the offered spread, total
 and their interaction. It then corrects that baseline using **all 29 football
 inputs**, jointly fitted with ridge shrinkage. Both stages fit before each week
