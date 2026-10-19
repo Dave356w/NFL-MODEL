@@ -250,10 +250,12 @@ profitable, so moneyline results are legacy research (next section). The
 v1.18 probability engine, its log-loss fitting and the median map are
 unchanged.
 
-Every locked game whose mapped spread differs from the market line gets 1u at
-an assumed −110. A win pays +0.9091u and a loss costs 1u. A push returns the
-stake and stays in ROI's denominator. A zero-edge skip is not a bet. Each ATS
-result is reported with:
+Every locked game gets 1u at an assumed −110 on the side its mapped spread
+takes against the market line. When the mapped spread equals the line, the bet
+is the market favorite (see "Zero edge takes the favorite" below). Only a
+pick'em line with a zero mapped spread skips. A win pays +0.9091u and a loss
+costs 1u. A push returns the stake and stays in ROI's denominator. A skip is
+not a bet. Each ATS result is reported with:
 
 * W-L-P, skips, units, ROI ± one standard error and n;
 * cover rate excluding pushes, against the −110 break-even of 52.4%;
@@ -590,12 +592,37 @@ native prediction is rewritten to make it a median-MOV pick.
 Results and Performance pages show the production median ATS results. The original
 continuous-spread comparison stays in repository data and reports, on identical
 eligible retrospective games. Evaluation includes tied finals;
-zero edge (tolerance 1e-10) skips before checking pushes. At assumed −110,
+zero edge (tolerance 1e-10) takes the market favorite before checking pushes,
+and a pick'em zero edge skips. At assumed −110,
 risk 1u, win +0.9091u, loss −1u; pushes retain their stake in ROI's denominator,
 skips do not. This is exposed development history with unknown quote-capture
 times, not native forward or executable-price evidence. ATS accuracy and point
 error diagnostics are separate from probability calibration. Missing training
 history displays an unavailable spread rather than the superseded value.
+
+### Zero edge takes the favorite (2026-10-19)
+
+**Owner decision 2026-10-19.** When the median-mapped spread equals the market
+line, the ATS selection is the market favorite instead of a skip. A pick'em line
+(0) with a zero mapped spread still skips. The median map, its identity
+`median-mov-ats-2026-10-17-v1`, v1.18 and `config_signature()` are unchanged.
+The selection rule is `favorite-on-zero-edge-2026-10-19-v1` in `fixed_bands.py`,
+and 60-minute locks use `median-mov-ats-t60-favtie-2026-10-19-v2`.
+
+Every regenerated reconstruction applies the rule retrospectively: the historical
+replay from 2021 and the pregame-snapshot replay. Saved decisions do not change.
+The two recorded pregame skips (`2026_06_BAL_CLE`, `2026_06_TEN_IND`) and any
+lock saved under v1 (`median-mov-ats-t60-2026-10-19-v1`) keep their zero-edge
+skip, because a final score cannot authorize a new bet. `ats_locks.validate_store`
+checks each row against its own version's rule.
+
+Evidence is exposed development history, chosen after reviewing the same games.
+On the 895-game 2023–26 replay, the 121 former skips (78 at a line of 3, 17 at 7)
+went 61-48-12 for the favorite, +7.5u, ROI +6.2% ± 8.2 (1 SE). The full replay
+moves from 412-349-13, 121 skips, +25.5u (ROI +3.3% ± 3.4) to 473-397-25,
+0 skips, +33.0u (ROI +3.7% ± 3.1). The difference is unresolved. The forward
+check is the favorite's cover rate on locked zero-edge games against the 52.4%
+break-even, reviewed with the map at 100 decided locks.
 
 Each site build regenerates `data/latest/fixed_band_ledger.csv`,
 `fixed_band_summary.csv`, `fixed_band_board.csv`, and `fixed_band_rules.json`,
@@ -604,7 +631,8 @@ data files; original snapshots are never rewritten.
 
 
 Game cards distinguish the v1.18 moneyline pick from the fixed-band ATS pick.
-ATS edge is the absolute fixed-band minus market spread; zero edge is no bet.
+ATS edge is the absolute fixed-band minus market spread; zero edge takes the
+market favorite, and an earlier saved zero-edge skip stays a skip.
 The research-only historical reference helper uses fixed confidence bands 50–55%, 55–65%,
 65–75%, 75–85%, 85–100% for moneyline picks, and edge bands (0,1], (1,3],
 (3,7], (7,infinity) for ATS picks. Each reference excludes the game itself,

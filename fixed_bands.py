@@ -4,6 +4,10 @@ Fixed input groups 0/3/7/10 are equivalent to model pick-confidence bands.
 Each output is the prior-season sample median of signed pick margin, including
 losses and tied finals. No ATS objective, rounding or market input fits the map.
 Legacy W-L fitting is retained only to reproduce the superseded research rule.
+
+Selection (owner decision 2026-10-19): a mapped spread equal to the market line
+takes the market favorite instead of skipping. Only a pick'em line with a zero
+mapped spread still skips. Saved decisions keep the rule they were made under.
 """
 import numpy as np
 import pandas as pd
@@ -13,6 +17,7 @@ EPS = 1e-10
 BANDS = ['<3', '3–<7', '7–<10', '10+']
 POLICY_VERSION = 'median-mov-ats-2026-10-17-v1'
 METHOD = 'median_signed_mov'
+SELECTION_VERSION = 'favorite-on-zero-edge-2026-10-19-v1'
 
 
 def fit_legacy(history, season):
@@ -95,12 +100,21 @@ def apply(spread, rule):
         np.digitize(np.abs(x), rule['cuts'])], np.nan)
 
 
-def grade(frame, prediction):
-    """Grade against the signed home market margin; zero edge skips before pushes."""
+def pick(prediction, line, favorite_on_tie=True):
+    """+1 home, -1 away, 0 skip. Zero edge takes the market favorite unless the
+    line is a pick'em or the decision was saved under the earlier skip rule."""
+    edge = np.asarray(prediction, float) - np.asarray(line, float)
+    favorite = np.where(np.asarray(favorite_on_tie, bool), np.sign(np.asarray(line, float)), 0.)
+    side = np.where(abs(edge) <= EPS, favorite, np.sign(edge))
+    return np.where(np.isfinite(edge), side, np.nan)
+
+
+def grade(frame, prediction, favorite_on_tie=True):
+    """Grade against the signed home market margin; a skip is decided before pushes."""
     edge = np.asarray(prediction, float) - frame.spread_line.to_numpy(float)
     margin = frame.result.to_numpy(float) - frame.spread_line.to_numpy(float)
-    side = np.sign(edge)
-    result = np.where(~np.isfinite(edge), '', np.where(abs(edge) <= EPS, 'S',
+    side = pick(prediction, frame.spread_line.to_numpy(float), favorite_on_tie)
+    result = np.where(~np.isfinite(edge), '', np.where(side == 0, 'S',
              np.where(~np.isfinite(margin), '', np.where(abs(margin) <= EPS, 'P',
              np.where(side * margin > 0, 'W', 'L')))))
     units = np.where(result == 'W', 1 / 1.1, np.where(result == 'L', -1.,
@@ -127,17 +141,18 @@ def prepare(latest):
     for year, rule in rules.items():
         mask = history.season == year
         history.loc[mask, 'fixed_band_spread'] = apply(history.loc[mask, 'model_spread'], rule)
-    for prefix, col in [('original', 'model_spread'), ('fixed_band', 'fixed_band_spread')]:
-        history[prefix + '_ats_result'], history[prefix + '_ats_units'] = grade(history, history[col])
-        edge = history[col] - history.spread_line
-        history[prefix + '_ats_side'] = np.where(~np.isfinite(edge) | (abs(edge) <= EPS), '',
-                                                 np.where(edge > 0, 'home', 'away'))
+    # The continuous-spread comparison keeps its original skip definition.
+    for prefix, col, tie in [('original', 'model_spread', False), ('fixed_band', 'fixed_band_spread', True)]:
+        history[prefix + '_ats_result'], history[prefix + '_ats_units'] = grade(history, history[col], tie)
+        side = pick(history[col], history.spread_line, tie)
+        history[prefix + '_ats_side'] = np.where(side > 0, 'home', np.where(side < 0, 'away', ''))
         side = history[prefix + '_ats_side']
         history[prefix + '_ats_team'] = np.where(side == 'home', history.home,
                                                  np.where(side == 'away', history.away, ''))
         history[prefix + '_ats_handicap'] = np.where(side == 'home', -history.spread_line,
                                                      np.where(side == 'away', history.spread_line, np.nan))
     history['spread_band'] = np.asarray(BANDS)[np.digitize(history.model_spread.abs(), CUTS)]
+    history['selection_version'] = SELECTION_VERSION
     latest['fixed_band_ledger'] = history
     latest['fixed_band_rules'] = [r for r in rules.values() if r is not None]
     if len(board):

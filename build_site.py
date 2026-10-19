@@ -811,14 +811,14 @@ def price_band_html(team, price, q_pick, mkt, mdl, years, n_forward):
 
 # ---------------------------------------------------------------- pages
 
-def ats_card_pick(spread, market, home, away):
+def ats_card_pick(spread, market, home, away, favorite_on_tie=True):
     if not math.isfinite(spread) or not math.isfinite(market):
         return 'Unavailable', math.nan
-    gap = spread - market
-    if abs(gap) <= fixed_bands.EPS:
+    side = fixed_bands.pick(spread, market, favorite_on_tie)
+    if side == 0:
         return 'No bet · zero projected edge', 0.
-    team = home if gap > 0 else away
-    return f'{esc(team)} {spread_text(market, gap > 0)}', abs(gap)
+    team = home if side > 0 else away
+    return f'{esc(team)} {spread_text(market, side > 0)}', abs(spread - market)
 
 
 def historical_pick_reference(latest, game, edge):
@@ -899,16 +899,18 @@ def ats_card_state(latest, row, now):
         note = f'ATS provisional · locks {when}'
     else:
         note = 'ATS provisional · kickoff unconfirmed'
-    pick, gap = ats_card_pick(ms, line, home, away)
+    # A saved selection keeps the zero-edge rule it was saved under.
+    tie = ats_locks.favorite_on_tie(saved) if saved is not None else True
+    pick, gap = ats_card_pick(ms, line, home, away, tie)
     if status == 'unavailable':
         pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
     grade, units = '', math.nan
     if status in ('locked', 'replay') and math.isfinite(num(row.get('result'))):
         grades, returns = fixed_bands.grade(pd.DataFrame({
-            'spread_line': [line], 'result': [num(row['result'])]}), [ms])
+            'spread_line': [line], 'result': [num(row['result'])]}), [ms], tie)
         grade, units = grades[0], returns[0]
-    side = '' if status == 'unavailable' or not math.isfinite(ms-line) or abs(ms-line) <= fixed_bands.EPS else (
-        'home' if ms > line else 'away')
+    chosen = fixed_bands.pick(ms, line, tie) if math.isfinite(ms-line) else 0.
+    side = '' if status == 'unavailable' or chosen == 0 else ('home' if chosen > 0 else 'away')
     return dict(model_spread=ms, spread_line=line, pick=pick, gap=gap, status=status,
                 source=source, note=note, saved=saved, result=grade, units=units,
                 selected_side=side, selected_team=row[side] if side else '',
@@ -1289,10 +1291,11 @@ def render_fixed_bands(latest, details=False):
         out.append(folded('2026 · by week', table(['Week', 'ATS W–L–P', 'Skips', 'Pending', 'Units', 'ROI'],
                                                 weeks, num_cols=(1, 2, 3, 4, 5)), True))
         out.append("<p class='mut small'><a href='ats_2026_results.csv'>2026 per-game ATS results</a>. "
-                   "The download identifies replayed and recorded selections. Matching lines are skips; "
-                   "cover rates exclude pushes; ROI includes pushed stakes and excludes skips.</p>")
+                   "The download identifies replayed and recorded selections. A model spread equal to the line "
+                   "takes the market favorite; earlier recorded skips stay skips. "
+                   "Cover rates exclude pushes; ROI includes pushed stakes and excludes skips.</p>")
     out.append("<h3>Historical replay</h3><div class='gr-note'>Returns use −110 pricing and fixed 1-unit stakes. "
-               "Matching model and market lines are skipped. Pushes return the stake.</div>")
+               "A model spread equal to the market line takes the market favorite. Pushes return the stake.</div>")
     if eligible.empty:
         return ''.join(out) + "<p class='mut'>Historical spread results will appear when enough games are available.</p>"
     out.append(ats_comparison_tiles(eligible, title='Historical ATS comparison'))

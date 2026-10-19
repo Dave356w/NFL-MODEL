@@ -5,10 +5,15 @@ from research import production_sanity as s
 
 
 def test_independent_grading_skip_push_away_missing_and_pending():
-    grades=s.independent_grades([3.,3.+1e-11,4.,-2.,1.,4.,np.nan],
-                               [3.,3.,3.,-3.,0.,3.,3.],
-                               [3.,4.,3.,0.,0.,np.nan,7.])
-    assert grades.tolist()==['S','S','P','W','P','','']
+    args=([3.,3.+1e-11,4.,-2.,1.,4.,np.nan],[3.,3.,3.,-3.,0.,3.,3.],[3.,4.,3.,0.,0.,np.nan,7.])
+    assert s.independent_grades(*args,favorite_on_tie=False).tolist()==['S','S','P','W','P','','']
+    # Production: a matching line is a favorite bet, graded like any other.
+    assert s.independent_grades(*args).tolist()==['P','W','P','W','P','','']
+
+
+def test_independent_zero_edge_favorite_away_and_pickem_skip():
+    grades=s.independent_grades([-7.,-7.,0.,0.],[-7.,-7.,0.,0.],[-10.,-3.,5.,np.nan])
+    assert grades.tolist()==['W','L','S','S']
 
 
 def test_independent_moneyline_payouts_loss_tie_neutral_and_missing():
@@ -39,7 +44,7 @@ def test_current_production_snapshot_passes_independent_audit():
     total=next(x for x in audit['historical'] if x['season']=='All')
     assert total['selected']+total['skips']==total['opportunities']
     if total['opportunities']==895:
-        assert (total['wins'],total['losses'],total['pushes'],total['skips'])==(412,349,13,121)
+        assert (total['wins'],total['losses'],total['pushes'],total['skips'])==(473,397,25,0)
     for r in audit['historical']:
         if r['favorite']:
             assert r['favorite']['bets']==r['common_moneyline']['bets']

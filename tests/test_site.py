@@ -651,7 +651,11 @@ def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monke
 def test_ats_card_pick_disagrees_with_moneyline_and_handles_skips():
     pick, edge = b.ats_card_pick(-5., -5.5, 'LV', 'BUF')
     assert pick == 'LV +5.5' and edge == .5
-    assert b.ats_card_pick(-5., -5., 'LV', 'BUF')[0] == 'No bet · zero projected edge'
+    # A matching line takes the market favorite; a saved legacy skip and a pick'em still skip.
+    assert b.ats_card_pick(-5., -5., 'LV', 'BUF') == ('BUF −5.0', 0.)
+    assert b.ats_card_pick(5., 5., 'LV', 'BUF') == ('LV −5.0', 0.)
+    assert b.ats_card_pick(-5., -5., 'LV', 'BUF', False)[0] == 'No bet · zero projected edge'
+    assert b.ats_card_pick(0., 0., 'LV', 'BUF')[0] == 'No bet · zero projected edge'
     assert b.ats_card_pick(float('nan'), -5.5, 'LV', 'BUF')[0] == 'Unavailable'
     assert b.ats_card_pick(7., 3., 'LV', 'BUF') == ('LV −3.0', 4.)
 

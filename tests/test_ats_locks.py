@@ -94,8 +94,10 @@ class TimedATS(unittest.TestCase):
         a.record(self.data, CUTOFF + dt.timedelta(minutes=4))
         saved = self.locks()[0]
         self.assertEqual(saved['generated_utc'], previous.isoformat())
-        self.assertEqual(saved['selected_side'], '')
-        self.assertEqual(saved['skip_reason'], 'zero_edge')
+        # The saved zero edge (7 against 7) takes the market favorite.
+        self.assertEqual(saved['selected_side'], 'home')
+        self.assertIsNone(saved['skip_reason'])
+        self.assertEqual(saved['policy_version'], a.POLICY_VERSION)
         self.assertEqual(len(a.read(self.data / a.CANDIDATES)), 1)
 
     def test_old_generated_timestamp_first_observed_after_cutoff_is_rejected(self):
@@ -180,14 +182,65 @@ class TimedATS(unittest.TestCase):
                     board=pd.DataFrame([row]), contributions=pd.DataFrame(),
                     ats_locks=a.display_records(self.data))
 
-    def test_saved_skip_stays_a_skip_on_a_refreshed_winning_card(self):
+    def test_saved_zero_edge_favorite_stays_on_a_refreshed_winning_card(self):
         self.board(CUTOFF)
         a.record(self.data, CUTOFF)
         html = b.render_index(self.latest(), pd.DataFrame(), 'test', KO+dt.timedelta(hours=4))
-        self.assertIn('No bet · zero projected edge', html)
-        self.assertIn('Market IND −7.0', html)
+        self.assertIn('IND −7.0', html)
         self.assertIn('ATS locked', html)
+        # Graded at the saved 7, not the refreshed 6.5 line that would make TEN a winner.
+        self.assertIn('ATS result · L', html)
         self.assertNotIn('TEN +6.5 ·', html)
+
+    def test_saved_v1_skip_stays_a_skip_and_validates_under_its_own_rule(self):
+        v1 = 'median-mov-ats-t60-2026-10-19-v1'
+        current = a.POLICY_VERSION
+        self.board(CUTOFF)
+        a.POLICY_VERSION = v1
+        try:
+            a.record(self.data, CUTOFF)
+        finally:
+            a.POLICY_VERSION = current
+        saved = self.locks()[0]
+        self.assertEqual((saved['policy_version'], saved['selected_side'], saved['skip_reason']),
+                         (v1, '', 'zero_edge'))
+        self.assertEqual(a.validate_store(self.data), {'candidates': 1, 'locks': 1})
+        html = b.render_index(self.latest(), pd.DataFrame(), 'test', KO+dt.timedelta(hours=4))
+        self.assertIn('No bet · zero projected edge', html)
+        self.assertIn('ATS result · Skip', html)
+
+    def test_v2_candidate_saved_as_a_skip_is_rejected(self):
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        path = self.data / a.CANDIDATES
+        row = a.read(path)[0]
+        row.update(selected_side='', skip_reason='zero_edge')
+        row.pop('candidate_sha256')
+        row['candidate_sha256'] = a.digest(row)
+        path.write_text(json.dumps(row)+'\n')
+        (self.data / a.LOCKS).unlink()
+        with self.assertRaisesRegex(ValueError, 'does not match'):
+            a.validate_store(self.data)
+
+    def test_pickem_line_with_zero_mapped_spread_still_skips(self):
+        self.board(CUTOFF, model_wp=.5, spread_line=0.)
+        a.record(self.data, CUTOFF)
+        saved = self.locks()[0]
+        self.assertEqual((saved['fixed_band_spread'], saved['selected_side'], saved['skip_reason']),
+                         (0., '', 'zero_edge'))
+
+    def test_unknown_policy_version_is_rejected(self):
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        path = self.data / a.CANDIDATES
+        row = a.read(path)[0]
+        row['policy_version'] = 'unregistered'
+        row.pop('candidate_sha256')
+        row['candidate_sha256'] = a.digest(row)
+        path.write_text(json.dumps(row)+'\n')
+        (self.data / a.LOCKS).unlink()
+        with self.assertRaisesRegex(ValueError, 'timing policy mismatch'):
+            a.validate_store(self.data)
 
     def test_no_lock_means_unavailable_after_cutoff_not_a_reconstructed_pick(self):
         html = b.render_index(self.latest(), pd.DataFrame(), 'test', KO)

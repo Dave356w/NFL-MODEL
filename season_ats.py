@@ -2,7 +2,8 @@
 
 This is a reporting view, never an append to either forecast archive. Earlier
 unregistered ATS decisions can be reconstructed from pre-adoption moneyline
-snapshots, but are explicitly replay, not native ATS evidence.
+snapshots, but are explicitly replay, not native ATS evidence. Replays use the
+current zero-edge rule; saved decisions keep the rule they were saved under.
 """
 import numpy as np
 import pandas as pd
@@ -22,7 +23,7 @@ def build(latest, ledger):
         for r in history.loc[history.season.eq(2026)].to_dict('records'):
             if r['game_id'] in rows:
                 raise ValueError('duplicate historical ATS game')
-            rows[r['game_id']] = dict(r, ats_basis='Historical replay')
+            rows[r['game_id']] = dict(r, ats_basis='Historical replay', favorite_on_tie=True)
     # Actual scores may come from a newer board than the graded ledger. Only
     # outcomes are taken from the board, never postgame probabilities or lines.
     outcomes = {}
@@ -41,7 +42,8 @@ def build(latest, ledger):
     for r in native.to_dict('records'):
         row = {k: r.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
                'kickoff_utc', 'generated_utc', 'model_wp', 'result', 'home_score', 'away_score')}
-        row.update(spread_line=np.nan, fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock')
+        row.update(spread_line=np.nan, fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock',
+                   favorite_on_tie=True)
         rule = rules.get(2026)
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
         generated = pd.to_datetime(r.get('generated_utc'), utc=True, errors='coerce')
@@ -63,6 +65,7 @@ def build(latest, ledger):
             generated_utc=saved['generated_utc'], lock_at_utc=saved['lock_at_utc'],
             model_wp=saved['model_wp'], spread_line=saved['market_spread'],
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
+            favorite_on_tie=ats_locks.favorite_on_tie(saved),
             ats_basis='Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
     if not rows:
         return pd.DataFrame()
@@ -73,16 +76,16 @@ def build(latest, ledger):
         if name not in frame:
             frame[name] = np.nan
         frame[name] = pd.to_numeric(frame[name], errors='coerce')
-    grades, units = fixed_bands.grade(frame, frame.fixed_band_spread)
+    tie = frame.favorite_on_tie.fillna(True).astype(bool).to_numpy()
+    grades, units = fixed_bands.grade(frame, frame.fixed_band_spread, tie)
     # A pending zero-edge selection is not a completed skip yet.
     complete = np.isfinite(frame.result)
     frame['fixed_band_ats_result'] = np.where(complete, grades, '')
     frame['fixed_band_ats_units'] = np.where(complete, units, np.nan)
     frame['ats_status'] = np.where(~complete, 'pending',
         np.where(np.isin(frame.fixed_band_ats_result, list('WLPS')), 'graded', 'unavailable'))
-    edge = frame.fixed_band_spread - frame.spread_line
-    frame['fixed_band_ats_side'] = np.where(~np.isfinite(edge) | (abs(edge) <= fixed_bands.EPS), '',
-                                           np.where(edge > 0, 'home', 'away'))
+    side = fixed_bands.pick(frame.fixed_band_spread, frame.spread_line, tie)
+    frame['fixed_band_ats_side'] = np.where(side > 0, 'home', np.where(side < 0, 'away', ''))
     side = frame.fixed_band_ats_side
     frame['fixed_band_ats_team'] = np.where(side.eq('home'), frame.home, np.where(side.eq('away'), frame.away, ''))
     frame['fixed_band_ats_handicap'] = np.where(side.eq('home'), -frame.spread_line,

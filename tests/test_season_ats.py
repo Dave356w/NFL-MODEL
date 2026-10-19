@@ -63,8 +63,22 @@ class SeasonATS(unittest.TestCase):
         latest['ats_locks']={}
         pool=s.build(latest,native).set_index('game_id')
         row=pool.loc['overlap']
-        self.assertEqual(row.fixed_band_ats_result,'S')
+        # Replay is regenerated, so its zero edge takes the market favorite.
+        self.assertEqual(row.fixed_band_ats_side,'home')
+        self.assertEqual(row.fixed_band_ats_handicap,-7.)
+        self.assertEqual(row.fixed_band_ats_result,'L')
         self.assertEqual(row.ats_basis,'Replayed pregame forecast')
+
+    def test_saved_v1_skip_stays_a_skip_while_v2_zero_edge_is_a_favorite_bet(self):
+        latest,native=self.fixture()
+        lock=latest['ats_locks'][(m.REVISION,'overlap')]
+        lock.update(legacy_lock=False, policy_version='median-mov-ats-t60-2026-10-19-v1')
+        row=s.build(latest,native).set_index('game_id').loc['overlap']
+        self.assertEqual((row.fixed_band_ats_result,row.fixed_band_ats_side),('S',''))
+        lock.update(policy_version=ats_locks.POLICY_VERSION, selected_side='home', skip_reason=None)
+        row=s.build(latest,native).set_index('game_id').loc['overlap']
+        self.assertEqual((row.fixed_band_ats_result,row.fixed_band_ats_team),('L','IND'))
+        self.assertEqual(row.fixed_band_ats_units,-1.)
 
     def test_timed_lock_has_priority_and_uses_only_saved_lines(self):
         latest,native=self.fixture()
@@ -103,9 +117,10 @@ class SeasonATS(unittest.TestCase):
 
     def test_duplicate_ledger_uses_first_snapshot_not_later_probability(self):
         latest,native=self.fixture();latest['ats_locks']={}
-        later=native.iloc[[0]].assign(generated_utc='2026-10-17T13:00:00Z',model_wp=.9)
+        # The later snapshot would take the away side and win.
+        later=native.iloc[[0]].assign(generated_utc='2026-10-17T13:00:00Z',model_wp=.1)
         pool=s.build(latest,pd.concat([later,native],ignore_index=True)).set_index('game_id')
-        self.assertEqual(pool.loc['overlap'].fixed_band_ats_result,'S')
+        self.assertEqual(pool.loc['overlap'].fixed_band_ats_result,'L')
 
     def test_shadow_revisions_do_not_enter_pool(self):
         latest,native=self.fixture()
@@ -142,9 +157,13 @@ class SeasonATS(unittest.TestCase):
         self.assertEqual(pool.set_index('game_id').loc['2026_06_TEN_IND'].fixed_band_ats_result,'S')
         # Pin this snapshot only while it still has the same completed cohort.
         if r['opportunities']==92:
-            self.assertEqual((r['wins'],r['losses'],r['pushes'],r['skips']),(43,31,2,16))
-            self.assertAlmostEqual(r['units'],8.090909090909093)
-            self.assertEqual(r['bets'],76)
+            # Replay skips became favorite bets; the two recorded skips stay skips.
+            self.assertEqual((r['wins'],r['losses'],r['pushes'],r['skips']),(49,35,6,2))
+            self.assertAlmostEqual(r['units'],49/1.1-35)
+            self.assertEqual(r['bets'],90)
+            recorded=pool[pool.ats_basis.eq('Recorded pregame')]
+            self.assertEqual(sorted(recorded[recorded.fixed_band_ats_result.eq('S')].game_id),
+                             ['2026_06_BAL_CLE','2026_06_TEN_IND'])
         saved=copy.deepcopy(latest['ats_locks'])
         s.build(latest,b.load_ledger(data))
         self.assertEqual(saved,latest['ats_locks'])
