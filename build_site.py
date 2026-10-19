@@ -5,12 +5,12 @@ grade the forward ledger, and render static pages into public/.
     python build_site.py               # full build (what build.yml runs)
     python build_site.py --pages-only  # re-render from committed data/ only
 
-Pages (public: recorded ATS picks only; record, cover rate, units, ROI and same-game
-baselines. Historical and current-season replays, the median-map rules, standard errors,
-log loss, model internals, earlier revisions and every research arm stay in the
-repository's data/ledger_report.txt and data/latest/)
+Pages (public: pooled 2026 ATS results; record, cover rate, units, ROI and
+same-game baselines. Earlier seasons, median-map rules,
+standard errors, log loss, model internals, earlier revisions and every research
+arm stay in the repository's data/ledger_report.txt and data/latest/)
   index.html               this week's games: model vs market spread, pick, lock status, injury reports
-  grades.html              recorded picks graded game by game, by source, with downloads
+  grades.html              pooled season results game by game, with downloads
   market-calibration.html  ATS performance: running units, same-game baselines, by week (legacy URL)
 
 Data written (committed by build.yml through commit_data.py)
@@ -876,7 +876,7 @@ def ats_card_state(latest, row, now):
         note = 'ATS provisional · kickoff unconfirmed'
     if saved is not None and ats_locks.backfilled(saved):
         # Owner decision 2026-10-19: a saved skip is graded as a favorite bet.
-        source, note = 'Backfilled recorded skip', note + ' · skip backfilled as favorite'
+        source = 'Backfilled recorded skip'
     pick, gap = ats_card_pick(ms, line, home, away)
     if status == 'unavailable':
         pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
@@ -1100,25 +1100,19 @@ def pooled_2026_v118_header(latest, ledger):
     return "".join(parts)
 
 
-# Public pages show recorded ATS picks only. Historical and current-season replays
-# are research bases and stay in data/ledger_report.txt and data/latest/.
-PUBLIC_BASES = {'60-minute lock': '60-minute locks', 'Recorded pregame': 'Earlier recorded picks',
-                'Backfilled recorded skip': 'Recorded skips backfilled as favorite bets',
-                'Awaiting ATS lock': 'Awaiting lock'}
+# Every public season surface uses the same deduplicated pool. Provenance stays
+# in season_ats and the repository report rather than the customer interface.
+PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', '60-minute lock',
+                'Recorded pregame', 'Backfilled recorded skip', 'Awaiting ATS lock'}
 BREAK_EVEN = 110 / 210
 
 
 def public_ats(latest):
-    """Recorded 2026 ATS rows (saved picks, backfilled skips, games awaiting a lock); no replay."""
+    """All 2026 ATS rows from the season pool, including replay and pending games."""
     pooled = (latest or {}).get('pooled_ats', pd.DataFrame())
     if pooled is None or pooled.empty or 'ats_basis' not in pooled:
         return pd.DataFrame()
-    keep = pooled.ats_basis.isin(list(PUBLIC_BASES))
-    # A game without a saved pick counts only under the 60-minute policy; earlier games were never locked.
-    ko = pd.to_datetime(pooled.get('kickoff_utc'), utc=True, errors='coerce')
-    policy = ko - pd.Timedelta(minutes=ats_locks.LEAD_MINUTES) >= pd.Timestamp(ats_locks.ADOPTED_UTC)
-    keep &= ~pooled.ats_basis.eq('Awaiting ATS lock') | policy.fillna(False).to_numpy()
-    return pooled[keep].reset_index(drop=True)
+    return pooled.loc[pooled.ats_basis.isin(PUBLIC_BASES)].copy().reset_index(drop=True)
 
 
 def units_text(u):
@@ -1127,9 +1121,9 @@ def units_text(u):
 
 
 def record_tiles(frame, label):
-    """Record, cover rate against break-even, units and ROI for recorded picks."""
+    """Record, cover rate against break-even, units and ROI for the season pool."""
     if frame is None or frame.empty:
-        return "<div class='empty'>No recorded ATS picks yet. Results appear here once locked picks are graded.</div>"
+        return "<div class='empty'>No ATS results yet. Season results appear here as games are graded.</div>"
     r = season_ats.summary(frame)
     tone = lambda x: '' if not math.isfinite(num(x)) or num(x) == 0 else 'good' if num(x) > 0 else 'bad'
     rate = num(r['cover_rate'])
@@ -1144,28 +1138,6 @@ def record_tiles(frame, label):
              stat('Units', units_text(r['units']), 'Flat 1 unit per pick at −110', tone(r['units'])),
              stat('ROI', roi_short(r['roi']), 'Per unit staked · pushes included', tone(r['roi']))]
     return f"<div class='gr-summary'>{''.join(tiles)}</div>"
-
-
-def render_ats_basis(latest):
-    frame = public_ats(latest)
-    parts = ["<h2 class='sec'>Pick sources</h2>"]
-    if frame.empty:
-        return ''.join(parts) + "<p class='mut'>No recorded ATS picks yet.</p>"
-    rows = []
-    for basis, label in PUBLIC_BASES.items():
-        group = frame[frame.ats_basis.eq(basis)]
-        if group.empty and basis != '60-minute lock':
-            continue
-        r = season_ats.summary(group)
-        record = f'{r["wins"]}–{r["losses"]}–{r["pushes"]}' if r['opportunities'] else '—'
-        rows.append([label, record, pct(r['cover_rate'], 1), str(r['skips']), str(r['pending']),
-                     units_text(r['units']) if r['bets'] else '—', roi_short(r['roi'])])
-    parts.append(table(['Source', 'ATS W–L–P', 'Cover rate', 'Skips', 'Pending', 'Units', 'ROI'],
-                       rows, num_cols=(1, 2, 3, 4, 5, 6)))
-    parts.append("<p class='mut small'>Every pick uses its saved pregame handicap. Earlier recorded picks keep their "
-                 "original capture times; the 60-minute record starts with the current lock policy. Backfilled rows were "
-                 "saved as skips and are graded as bets on the market favorite; they are labelled separately.</p>")
-    return ''.join(parts)
 
 
 def game_rows(group):
@@ -1186,10 +1158,12 @@ def game_rows(group):
         tone = 'pos-tx' if units > 0 else 'neg-tx' if units < 0 else ''
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
         when = f"<div class='mut small'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</div>" if pd.notna(ko) else ''
+        day = pd.to_datetime(r.get('gameday'), errors='coerce')
+        if not when and pd.notna(day):
+            when = f"<div class='mut small'>{esc(day.strftime('%a %b %-d'))}</div>"
         rows.append([f"<span class='team-code' data-game-id='{esc(r['game_id'])}'>{esc(r['away'])} @ {esc(r['home'])}</span>{when}",
                      pick, favorite_spread_text(r.get('fixed_band_spread'), r['home'], r['away']), final, badge,
-                     f"<span class='{tone}'>{units_text(units)}</span>" if math.isfinite(units) else '—',
-                     esc(PUBLIC_BASES.get(r.get('ats_basis'), r.get('ats_basis', '')))])
+                     f"<span class='{tone}'>{units_text(units)}</span>" if math.isfinite(units) else '—'])
     return rows
 
 
@@ -1203,7 +1177,7 @@ def render_ats_games(latest):
         stats = season_ats.summary(group)
         label = (f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]} · {stats["skips"]} skips'
                  f"<span class='rt'>{units_text(stats['units']) if stats['bets'] else '—'}</span>")
-        parts.append(folded(label, table(['Game', 'ATS pick', 'Model', 'Final', 'Result', 'Units', 'Source'],
+        parts.append(folded(label, table(['Game', 'ATS pick', 'Model', 'Final', 'Result', 'Units'],
                                          game_rows(group), num_cols=(3, 5)), i == 0))
     return ''.join(parts)
 
@@ -1221,14 +1195,13 @@ def downloads(latest):
 
 def render_grades(ledger, latest, built):
     season = int(latest['manifest']['season']) if latest is not None else None
-    parts = [head('ATS results', 'Every recorded pick, graded against its saved handicap. Returns use −110 pricing '
+    parts = [head('ATS results', 'All 2026 season results. Returns use −110 pricing '
                   'and 1-unit stakes; pushes return the stake.', f'{season} season' if season else '')]
     if latest is None:
         parts.append("<p class='mut'>No picks locked yet.</p>")
     else:
         parts.append(record_tiles(public_ats(latest), f'{season} record'))
         parts.append(render_ats_games(latest))
-        parts.append(render_ats_basis(latest))
         parts.append(downloads(latest))
     return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
 
@@ -1246,7 +1219,7 @@ def pooled_basis_text(frame):
     return text
 
 
-def ats_comparison_tiles(frame, basis='Recorded picks', title='Model vs simple baselines'):
+def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple baselines'):
     """Compare ATS sides on identical selected, completed, non-pick'em games."""
     d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
                   & np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
@@ -1278,14 +1251,16 @@ def nice_step(span, ticks=4):
 
 
 def units_chart(frame):
-    """Running units over graded recorded picks, in kickoff order; one series, hover titles per pick."""
+    """Running season units; order by week, then kickoff or game date when available."""
     if frame is None or frame.empty:
         return ''
     g = frame[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])].copy()
     if len(g) < 2:
         return ''
     g['_ko'] = pd.to_datetime(g.get('kickoff_utc'), utc=True, errors='coerce')
-    g = g.sort_values(['_ko', 'game_id'], na_position='last')
+    day = pd.to_datetime(g.get('gameday', pd.Series(index=g.index, dtype=str)), utc=True, errors='coerce')
+    g['_ko'] = g['_ko'].fillna(day)
+    g = g.sort_values(['week', '_ko', 'game_id'], na_position='last')
     run = np.concatenate([[0.], np.cumsum(g.fixed_band_ats_units.astype(float).to_numpy())])
     W, H, L, R, T, B = 1000, 240, 40, 12, 12, 26
     step = nice_step(max(run.max(), 0) - min(run.min(), 0))
@@ -1311,7 +1286,7 @@ def units_chart(frame):
     out.append(f"<text class='ax' x='{L}' y='{H - 6}'>Start</text>"
                f"<text class='ax' x='{W - R}' y='{H - 6}' text-anchor='end'>Pick {len(run) - 1}</text></svg>")
     tone = 'pos-tx' if run[-1] > 0 else 'neg-tx' if run[-1] < 0 else ''
-    return (f"<div class='chart'><div class='chart-head'><span class='t'>Running units · graded recorded picks</span>"
+    return (f"<div class='chart'><div class='chart-head'><span class='t'>Running units · 2026 season</span>"
             f"<span class='v {tone}'>{units_text(run[-1])}</span></div>{''.join(out)}</div>")
 
 
@@ -1359,7 +1334,7 @@ def market_sides(df):
 def render_calibration(latest, ledger, built):
     # Keep the existing URL working while replacing its old probability view.
     season = int(latest['manifest']['season']) if latest is not None else None
-    parts = [head('ATS performance', 'How the recorded picks are doing against the spread, beside simple '
+    parts = [head('ATS performance', 'How all 2026 season picks are doing against the spread, beside simple '
                   'baselines on the same games. Results use −110 pricing and 1-unit stakes.',
                   f'{season} season' if season else '')]
     frame = public_ats(latest)
@@ -1370,7 +1345,6 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
-        parts.append(render_ats_basis(latest))
     parts.append("<h2 class='sec'>How picks work</h2><ol class='steps'>" +
                  ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
@@ -1388,13 +1362,13 @@ def render_all(out_dir, data=DATA, now=None):
         latest['pooled_ats'] = season_ats.build(latest, ledger)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    recorded = public_ats(latest)
-    if len(recorded):
-        fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_basis', 'ats_status',
-                  'generated_utc', 'lock_at_utc', 'policy_version', 'fixed_band_spread',
-                  'spread_line', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
+    season_results = public_ats(latest)
+    if len(season_results):
+        fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_status',
+                  'gameday', 'kickoff_utc', 'fixed_band_spread',
+                  'spread_line', 'home_score', 'away_score', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
                   'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units']
-        recorded.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
+        season_results.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
             out / 'ats_2026_results.csv', index=False)
     else:
         (out / 'ats_2026_results.csv').unlink(missing_ok=True)
@@ -1427,7 +1401,7 @@ def render_all(out_dir, data=DATA, now=None):
             item = {k: row.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
                     'gameday', 'gametime', 'away_score', 'home_score', 'result')}
             item.update(model_spread=state['model_spread'], spread_line=state['spread_line'],
-                ats_status=state['status'], ats_source=state['source'],
+                ats_status=state['status'],
                 selected_side=state['selected_side'], selected_team=state['selected_team'],
                 handicap=state['handicap'], ats_result=state['result'], ats_units=state['units'])
             public_rows.append(item)
