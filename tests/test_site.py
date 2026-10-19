@@ -114,7 +114,7 @@ def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     index = (out / "index.html").read_text()
     grades = (out / "grades.html").read_text()
     assert "Thu 5:15 PM PDT" in index  # upcoming game
-    assert "Pick locked Sat 5:00 AM PDT" in index
+    assert "Moneyline locked Sat 5:00 AM PDT" in index
     assert "Sun 1:25 PM PDT" in grades  # graded ledger kickoff
     for name in PUBLIC:
         html = (out / name).read_text()

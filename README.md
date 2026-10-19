@@ -11,6 +11,19 @@ null. Log loss is kept as a secondary score.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
+**ATS timing (adopted 2026-10-19 UTC):** spread picks remain provisional until
+60 minutes before kickoff. Five-minute scheduled polls trigger model refreshes
+from T−90 through T−50; outside that window they skip the expensive build.
+Each build saves eligible forecasts in `data/ats_lock_candidates.jsonl`. At or
+after T−60 it freezes the latest forecast both generated and observed by the
+cutoff into `data/ats_locks.jsonl`. A delayed run cannot use a newer line or
+forecast, and no lock may be backfilled after kickoff. The saved forecast time,
+cutoff and finalization time are all retained; GitHub cron does not guarantee
+delivery at an exact minute. Missing pre-cutoff forecasts show as unavailable.
+Game cards and the saved-spread-picks download preserve locked handicaps and
+zero-edge skips. Earlier ATS and moneyline records retain their original timing;
+the new capture policy has a separate identity and never rewrites those records.
+
 Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
 penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
 lean is kept. Picks and bets are identical to v1.16's; only those probabilities change. v1.16 keeps

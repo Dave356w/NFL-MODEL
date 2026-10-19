@@ -23,6 +23,10 @@ on:
       timezone: America/New_York
     - cron: '41 * * * *'
       timezone: America/New_York
+    # The plan job gates these polls to T-90..T-50. Full builds refresh
+    # candidates before T-60 and finalize only inputs saved by that cutoff.
+    - cron: '*/5 * * * *'
+      timezone: America/New_York
 
 # One build at a time, queued not cancelled, so overlapping runs cannot
 # interleave ledger commits.

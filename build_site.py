@@ -47,6 +47,7 @@ import matchup
 import nfl_model as m
 import totals
 import fixed_bands
+import ats_locks
 from research import version_report
 from research import ats_forward_shadow
 from research import production_sanity
@@ -868,7 +869,7 @@ def render_index(latest, ledger, built, now=None):
     has_avail = (man.get("recipe") or {}).get("family", "") in m.AVAIL_FAMILIES
     cur = ledger[ledger.revision == rev] if len(ledger) else ledger
     recorded = {r.game_id: r for r in cur.itertuples(index=False)}
-    parts = [head(f"Week {week} projections", f"{season} regular season · Win probabilities and projected spreads. Open a game for matchup details.")]
+    parts = [head(f"Week {week} projections", f"{season} regular season · Spread picks lock 60 minutes before kickoff. Open a game for matchup details.")]
     upcoming = int(board.result.isna().sum()) if 'result' in board else len(board)
     stamp=pd.to_datetime(man.get('generated_utc'),utc=True,errors='coerce')
     local=stamp.tz_convert(PT) if pd.notna(stamp) else None
@@ -880,6 +881,9 @@ def render_index(latest, ledger, built, now=None):
                  + stat("Updated", updated, update_note)
                  + "</div>")
     parts.append(spread_headline(latest, season))
+    if latest.get('ats_locks'):
+        parts.append("<p class='mut small'><a href='ats_locked_picks.csv'>Saved spread picks</a> · "
+                     "Recorded handicaps and selections remain fixed after lock.</p>")
 
     def pending(r):
         ko = m.kickoff_utc(r)
@@ -914,7 +918,7 @@ def render_index(latest, ledger, built, now=None):
                              f"Moneyline result {esc(team)} · {bet.result}</span>")
         else:
             if r["game_id"] in recorded:
-                flags.append("<span class='badge'>Locked</span>")
+                flags.append("<span class='badge'>Moneyline locked</span>")
             elif pending(r):
                 flags.append("<span class='badge warn'>Report pending</span>")
             if not bool(r.get("ready", True)):
@@ -926,7 +930,22 @@ def render_index(latest, ledger, built, now=None):
         hm, am = num(r.get("home_moneyline")), num(r.get("away_moneyline"))
         mk = f"{esc(away)} {ml_text(am)} · {esc(home)} {ml_text(hm)}" if math.isfinite(hm) and math.isfinite(am) else "No line yet"
         ms, ks = num(r.get("fixed_band_spread")), num(r.get("spread_line"))
+        ats_lock = latest.get('ats_locks', {}).get((rev, r['game_id']))
+        ko = m.kickoff_utc(r)
+        cutoff = ats_locks.deadline(ko) if ko is not None else None
+        timed = cutoff is not None and cutoff >= ats_locks.ADOPTED_UTC
+        if ats_lock is not None:
+            ms, ks = num(ats_lock['fixed_band_spread']), num(ats_lock['market_spread'])
         spread_pick, edge = ats_card_pick(ms, ks, home, away)
+        if ats_lock is not None:
+            when = ats_locks.utc(ats_lock['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
+            flags.append(f"<span class='badge'>ATS locked {esc(when)}</span>")
+        elif cutoff is not None and now >= cutoff:
+            spread_pick, edge = 'Unavailable · no saved pre-lock forecast', math.nan
+            flags.append("<span class='badge'>ATS lock unavailable</span>")
+        elif timed:
+            when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
+            flags.append(f"<span class='badge'>ATS provisional · locks {esc(when)}</span>")
         edge_text = f' · {edge:g}-point projected edge' if math.isfinite(edge) and edge > fixed_bands.EPS else ''
         moneyline_pick = pick_text(team, bet.price)
         if team:
@@ -959,8 +978,13 @@ def render_index(latest, ledger, built, now=None):
             ["Market spread", spread_text(ks, False), spread_text(ks, True)]], num_cols=(1, 2))]
         rec = recorded.get(r["game_id"])
         if rec is not None:
-            det.append(f"<p class='mut'>Pick locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
+            det.append(f"<p class='mut'>Moneyline locked {esc(pd.to_datetime(rec.generated_utc, utc=True).tz_convert(PT).strftime('%a %-I:%M %p %Z'))} "
                        f"at {pct(rec.model_wp)} {esc(home)}.</p>")
+        if ats_lock is not None:
+            stamp = ats_lock.get('generated_utc', ats_lock['archived_utc'] if 'archived_utc' in ats_lock else None)
+            forecast = ats_locks.utc(stamp).astimezone(PT).strftime('%a %-I:%M %p %Z')
+            det.append(f"<p class='mut'>Saved ATS selection · forecast {esc(forecast)}. "
+                       "The model spread, market handicap and selection shown above are fixed.</p>")
         t = contrib[contrib.game_id == r["game_id"]] if len(contrib) else contrib
         if len(t):
             t = t[np.isfinite(t["log-odds contribution"]) & t["log-odds contribution"].ne(0)]
@@ -1315,9 +1339,26 @@ def render_all(out_dir, data=DATA, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     built = now.astimezone(PT).strftime("%Y-%m-%d %H:%M %Z")
     latest = load_latest(Path(data) / "latest")
+    if latest is not None:
+        latest['ats_locks'] = ats_locks.display_records(data)
     ledger = load_ledger(data)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    if latest is not None and latest['ats_locks']:
+        locked_rows = []
+        for row in latest['ats_locks'].values():
+            side = row['selected_side']
+            locked_rows.append(dict(game_id=row['game_id'], season=row['season'],
+                home=row['home'], away=row['away'], kickoff_utc=row['kickoff_utc'],
+                forecast_utc=row['generated_utc'], lock_at_utc=row['lock_at_utc'],
+                timing_policy='earlier archive' if row.get('legacy_lock') else '60 minutes before kickoff',
+                model_spread=row['fixed_band_spread'], market_spread=row['market_spread'],
+                selected_side=side, selected_team=row[side] if side else '',
+                handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None,
+                skip_reason=row['skip_reason']))
+        pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
+    else:
+        (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
     if latest is not None and 'fixed_band_ledger' in latest:
         exports = {'fixed_band_ledger.csv': latest['fixed_band_ledger'],
                    'fixed_band_summary.csv': fixed_bands.summary(latest['fixed_band_ledger']),
@@ -1364,6 +1405,7 @@ def published_report(data):
         if source.exists():
             parts.append(f"\n\n{'=' * 78}\n{title} (from data/latest/{name})\n{'=' * 78}\n\n{source.read_text()}")
     parts.append('\n\nAppendix C: current production sanity checks\n\n' + production_sanity.report(data))
+    parts.append('\n\nATS 60-minute capture policy\n\n' + ats_locks.report(data))
     calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
     if calibration.exists():
         parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())
@@ -1379,6 +1421,7 @@ def main(argv=None):
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
+        print(f"ATS timed capture: {ats_locks.record(DATA)}")
         kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
