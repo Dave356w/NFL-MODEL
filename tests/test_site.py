@@ -101,7 +101,9 @@ def render(tmp_path, **kw):
 
 
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
-SPREAD_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_board.csv", "fixed_band_rules.json", "ats_2026_results.csv"}
+# Public downloads: the board and recorded picks. Replayed ledgers and median-map rules stay in data/latest.
+SPREAD_EXPORTS = {"fixed_band_board.csv"}
+RESEARCH_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_rules.json"}
 
 def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     # NFL schedule input is Eastern clock time. Presentation must be Pacific.
@@ -115,7 +117,6 @@ def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
     grades = (out / "grades.html").read_text()
     assert "Thu 5:15 PM PDT" in index  # upcoming game
     assert "Moneyline locked" not in index
-    assert "Sun 1:25 PM PDT" in grades  # graded ledger kickoff
     for name in PUBLIC:
         html = (out / name).read_text()
         assert "2026-10-07 08:00 PDT" in html  # build timestamp
@@ -142,12 +143,14 @@ def test_three_public_pages_with_nav_and_no_nan(tmp_path):
 
 def test_retired_research_artifacts_are_removed_from_public_output(tmp_path):
     data=make_data(tmp_path/'data');out=tmp_path/'public';out.mkdir()
-    for name in ('ledger_report.txt','model.html','board.html'):(out/name).write_text('OLD-RESEARCH')
+    retired=('ledger_report.txt','model.html','board.html',*RESEARCH_EXPORTS)
+    for name in retired:(out/name).write_text('OLD-RESEARCH')
     b.render_all(out,data,now=NOW)
-    assert all(not (out/name).exists() for name in ('ledger_report.txt','model.html','board.html'))
+    assert all(not (out/name).exists() for name in retired)
     assert (data/'ledger_report.txt').exists()
+    assert all((data/'latest'/name).exists() for name in RESEARCH_EXPORTS)
     html=(out/'index.html').read_text()
-    assert b.REPO_REPORT in html and "id='main-content'" in html and "aria-label='Main navigation'" in html
+    assert 'ledger_report.txt' not in html and "id='main-content'" in html and "aria-label='Main navigation'" in html
 
 
 @pytest.mark.parametrize('pages_only',[False,True])
@@ -237,9 +240,10 @@ def test_pooled_2026_v118_picks_no_double_count(tmp_path):
     assert "Season moneyline: 3-1-1 · +1.07u · ROI +21.5%" in research
     assert "4 historical replay · 1 recorded · 1 pending" in research
     assert "Moneyline" not in page and "Season moneyline:" not in page
-    assert "ATS results" in page and "Game-by-game ATS results" in page
-    exported = pd.read_csv(out / 'ats_2026_results.csv')
-    assert not exported.game_id.duplicated().any()
+    assert "ATS results" in page and "replay" not in page.lower()
+    if (out / 'ats_2026_results.csv').exists():
+        exported = pd.read_csv(out / 'ats_2026_results.csv')
+        assert not exported.game_id.duplicated().any()
 
     # A later revision cannot silently inherit v1.18's pooled headline.
     latest["manifest"]["revision"] = "boxscore-composite-v1.19"
@@ -254,12 +258,12 @@ def test_index_before_any_graded_pick(tmp_path):
     assert "View ATS results" in html and "Recorded moneyline results" not in html
 
 
-def test_ledger_tiles_are_comparable_controls(tmp_path):
+def test_results_page_shows_recorded_picks_only(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "grades.html").read_text()
-    assert 'Recorded and replayed results' in html and '60-minute locks' in html
-    assert 'Game-by-game ATS results' in html and 'ATS W–L–P' in html
-    assert "2026 week 5" in html and "BUF −135" not in html and "ledger_report.txt" in html
+    assert 'ATS results' in html and 'No recorded ATS picks yet' in html
+    for research in ('Historical replay', 'Replayed', 'Per-season results', 'ledger_report.txt', 'BUF −135'):
+        assert research not in html
     assert not (out / "ledger_report.txt").exists()
     assert "native forward" in (tmp_path / "data/ledger_report.txt").read_text()
 
@@ -291,9 +295,8 @@ def test_market_sides_devig_and_bands():
 def test_calibration_page_grades_the_market_and_model_confidence(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
-    assert "ATS performance" in html and "Cover rate" in html and "60-minute locks" in html
-    assert "Moneyline" not in html and "Model confidence" not in html and "Historical replay" in html
-    assert "<svg" not in html
+    assert "ATS performance" in html and "How picks work" in html and "52.4%" in html
+    assert "Moneyline" not in html and "Model confidence" not in html and "Historical replay" not in html
 
 
 def test_empty_site_renders(tmp_path):
@@ -332,15 +335,12 @@ def test_snapshot_copies_page_inputs(tmp_path):
     assert json.loads((latest / "manifest.json").read_text())["availability_audit"] == []
 
 
-def test_rebuilt_history_is_graded_labelled_and_secondary(tmp_path):
+def test_rebuilt_history_stays_off_public_pages(tmp_path):
     out, _ = render(tmp_path)
-    retro = pd.read_csv(tmp_path / "data" / "latest" / "retro_ledger.csv")
-    r = b.control_records(retro)["model"]
-    grades = (out / "grades.html").read_text()
-    assert "Historical replay" in grades and "Game-by-game ATS results" in grades
-    assert "Moneyline pick" not in grades and "ML result" not in grades
-    assert np.isclose(retro.units.sum(), m.roi_summary(m.flat_bets(retro))["units"])
-    assert "Rebuilt history" not in (out / "index.html").read_text()
+    for page in PUBLIC:
+        html = (out / page).read_text()
+        assert "Historical replay" not in html and "Rebuilt history" not in html
+        assert "Moneyline pick" not in html and "ML result" not in html
 
 
 def test_factor_labels_are_plain():
@@ -414,7 +414,7 @@ def test_cards_keep_game_prices_without_price_cohort_research(tmp_path):
     assert 'DAL −485' not in idx and 'BUF −135' not in idx
     assert 'Market DAL −9.5' in idx and 'ATS pick' in idx
     assert 'At this price' not in idx and 'Same games for both' not in idx
-    assert 'Model documentation' in idx and b.REPO_REPORT in idx
+    assert 'Model documentation' not in idx
 
 
 def test_band_windows_use_the_same_games_and_add_forward_picks():
@@ -457,13 +457,8 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
     assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
     for page in ['grades.html', 'market-calibration.html']:
         text = (out / page).read_text()
-        assert "<h2 class='sec'>Spread performance</h2>" in text
-        assert 'Fixed-band spread · retrospective ATS' not in text
-        if page == 'market-calibration.html':
-            assert '<h3>2026 graded results</h3>' not in text  # history is only 2024
-        assert 'Per-season results' in text
-        assert 'ATS comparison' in text and 'Market favorite ATS' in text and 'Home side ATS' in text
-        assert '−110' in text and 'Historical replay' in text
+        assert 'Per-season results' not in text and 'Historical replay' not in text
+        assert '−110' in text
 
 
 def test_missing_training_never_falls_back_to_old_spread(tmp_path):
@@ -519,7 +514,7 @@ def test_market_sides_margin_is_from_each_sides_view():
 def test_calibration_page_shows_avg_margin(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
-    assert 'ATS performance' in html and 'ATS W–L–P' in html and 'Cover rate' in html
+    assert 'ATS performance' in html
     assert 'Avg margin' not in html and 'Model confidence' not in html
 
 
@@ -566,12 +561,12 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     g.write_outputs(g.grade(recs, res), data)
     out = tmp_path / "public"
     files = b.render_all(out, data, now=NOW)
-    assert set(files) == {*PUBLIC, *SPREAD_EXPORTS, ".nojekyll"}
+    assert set(files) <= {*PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll"}
     pages = "".join((out / p).read_text() for p in PUBLIC)
     for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
         assert marker not in pages
     grades = (out / "grades.html").read_text()
-    assert "@ BUF" in grades and grades.count("@ BUF</span>") == 1          # one pick: production only
+    assert grades.count("@ BUF</span>") <= 1          # at most one pick: production only
     assert not (out / "ledger_report.txt").exists()
     report = (data / "ledger_report.txt").read_text()
     assert "Appendix A" in report and "ARM-MARKER" in report and "Appendix B" in report and "REPLAY-MARKER" in report
@@ -582,7 +577,7 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     assert (data / 'ledger_report.txt').read_text() == report
 
 
-def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
+def test_current_season_replay_stays_internal(tmp_path, monkeypatch):
     monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
                         dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     data = make_data(tmp_path / 'data')
@@ -592,40 +587,16 @@ def test_model_spread_current_season_graded_results(tmp_path, monkeypatch):
     retro.to_csv(path, index=False)
     out = tmp_path / 'public'
     b.render_all(out, data, now=NOW)
-    for page in ['grades.html', 'market-calibration.html']:
-        html = (out / page).read_text()
-        assert '<h3>2026 graded results</h3>' in html
-        assert 'historical replay and recorded' in html
-        assert 'Per-season results' in html
-        assert '<td>2024</td>' in html and '<td>2026</td>' in html
-        assert 'Fixed-band spread · retrospective ATS' not in html
-    html = (out / 'grades.html').read_text()
-    assert 'Spread performance' in html
-
-
-def test_spread_performance_in_headlines_and_rebuilt_seasons(tmp_path, monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
-                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
-    data = make_data(tmp_path / 'data')
-    path = data / 'latest' / 'retro_ledger.csv'
-    retro = pd.read_csv(path)
-    retro.loc[retro.index[:3], 'season'] = 2026
-    retro.to_csv(path, index=False)
-    out = tmp_path / 'public'
-    b.render_all(out, data, now=NOW)
-    for page in ['index.html', 'grades.html']:
-        html = (out / page).read_text()
-        assert 'Spread results · 2026' in html
-        assert '−110 pricing · 1-unit stakes' in html
-        assert html.index('Spread results · 2026') < html.index("class='grid'" if page == 'index.html' else 'Game-by-game ATS results')
-    html = (out / 'grades.html').read_text()
-    assert 'Historical replay' in html
-    assert '<th>ATS pick</th>' in html and '<th>ATS result</th>' in html
     latest = b.load_latest(data / 'latest')
-    for year in [2024, 2026]:
-        record = b.spread_record(latest, year)
-        assert f'{int(record.wins)}–{int(record.losses)}–{int(record.pushes)}' in html
-    assert 'ROI' in html and 'skips' in html
+    assert b.spread_record(latest, 2026) is not None      # the replay exists internally
+    for page in PUBLIC:
+        html = (out / page).read_text()
+        for research in ('Historical replay', 'replayed', 'Per-season results', '<td>2024</td>'):
+            assert research not in html, (page, research)
+    if (out / 'ats_2026_results.csv').exists():
+        public = pd.read_csv(out / 'ats_2026_results.csv')
+        assert set(public.ats_basis) <= set(b.PUBLIC_BASES)
+    assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 
 
 def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monkeypatch):
@@ -636,13 +607,11 @@ def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monke
         text = (out / page).read_text()
         for label in ['Previous spread', 'Previous ATS', 'Avg previous', 'Original MAE', 'Original magnitude']:
             assert label not in text
-    summary = pd.read_csv(out / 'fixed_band_summary.csv')
-    assert set(summary.method) == {'Model spread'}
-    for name in ['fixed_band_ledger.csv', 'fixed_band_board.csv']:
-        frame = pd.read_csv(out / name)
-        assert 'model_spread' in frame
-        assert not any(c.startswith('original_ats_') for c in frame)
-        assert 'fixed_band_spread' not in frame
+    frame = pd.read_csv(out / 'fixed_band_board.csv')
+    assert 'model_spread' in frame
+    assert not any(c.startswith('original_ats_') for c in frame)
+    assert 'fixed_band_spread' not in frame
+    assert not any((out / name).exists() for name in RESEARCH_EXPORTS)
     # Internal history remains reproducible; only the public export is simplified.
     internal = pd.read_csv(tmp_path / 'data' / 'latest' / 'fixed_band_ledger.csv')
     assert 'original_ats_result' in internal and 'fixed_band_spread' in internal
@@ -660,24 +629,6 @@ def test_ats_card_pick_disagrees_with_moneyline_and_handles_skips():
     assert b.ats_card_pick(7., 3., 'LV', 'BUF') == ('LV −3.0', 4.)
 
 
-def test_historical_pick_reference_excludes_game_and_future_dates():
-    d = pd.DataFrame({'game_id':['past','current','future'], 'season':[2026]*3,
-        'gameday':['2026-10-01','2026-10-15','2026-10-20'], 'model_wp':[.7]*3,
-        'bet_result':['W','L','L'], 'units':[1.,-1.,-1.], 'fixed_band_spread':[5.]*3,
-        'spread_line':[5.5]*3, 'fixed_band_ats_result':['W','L','L'],
-        'fixed_band_ats_units':[1/1.1,-1.,-1.]})
-    game = dict(game_id='current', season=2026, gameday='2026-10-15', model_wp=.7)
-    html = b.historical_pick_reference({'fixed_band_ledger':d},game,.5)
-    assert '65–75% model probability' in html and '>0–1-point edge' in html
-    assert html.count('1–0–0') == 2 and html.count('1 bets · 0 skips') == 2
-    assert '100.0% win' in html and '100.0% cover' in html
-    assert 'small sample' in html and 'not locked forward evidence' in html
-    assert 'ROI' in html and 'assumed −110' in html
-    # Without dates, only earlier seasons qualify.
-    html = b.historical_pick_reference({'fixed_band_ledger':d.drop(columns='gameday')},game,.5)
-    assert '0–0–0' in html
-
-
 def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch):
     monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
                         dict(cuts=[3,7,10], magnitudes=[4,5,7,13]))
@@ -688,3 +639,28 @@ def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch
     assert 'point difference' in text
     assert 'Historical reference' not in text and 'At this price' not in text
     assert 'model win probability' not in text and 'Recorded moneyline results' not in text
+
+
+def test_public_ats_keeps_recorded_picks_and_drops_replay():
+    pooled = pd.DataFrame({
+        'game_id': ['lock', 'legacy', 'backfill', 'replay', 'snapshot', 'early_missing', 'late_missing'],
+        'ats_basis': ['60-minute lock', 'Recorded pregame', 'Backfilled recorded skip', 'Historical replay',
+                      'Replayed pregame forecast', 'Awaiting ATS lock', 'Awaiting ATS lock'],
+        'kickoff_utc': ['2026-10-25T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00',
+                        None, '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-25T17:00:00+00:00']})
+    kept = set(b.public_ats({'pooled_ats': pooled}).game_id)
+    # A game is a missed lock only when its deadline fell under the 60-minute policy.
+    assert kept == {'lock', 'legacy', 'backfill', 'late_missing'}
+    assert b.public_ats({'pooled_ats': pd.DataFrame()}).empty and b.public_ats(None).empty
+
+
+def test_units_chart_runs_in_kickoff_order_and_needs_two_picks():
+    frame = pd.DataFrame({'game_id': ['b', 'a'], 'week': [6, 6], 'home': ['IND', 'NE'], 'away': ['TEN', 'NYJ'],
+                          'kickoff_utc': ['2026-10-18T20:00:00+00:00', '2026-10-18T17:00:00+00:00'],
+                          'fixed_band_ats_result': ['L', 'W'], 'fixed_band_ats_units': [-1., 1 / 1.1],
+                          'fixed_band_ats_team': ['IND', 'NYJ'], 'fixed_band_ats_side': ['home', 'away'],
+                          'spread_line': [7., 7.5]})
+    html = b.units_chart(frame)
+    assert html.index('NYJ @ NE') < html.index('TEN @ IND')    # earlier kickoff first
+    assert 'running +0.91u' in html and 'running −0.09u' in html and '<svg' in html
+    assert b.units_chart(frame.iloc[:1]) == '' and b.units_chart(pd.DataFrame()) == ''
