@@ -12,6 +12,35 @@ import pandas as pd
 import ats_locks
 import fixed_bands
 import nfl_model as m
+from schedule_gate import kickoff as scheduled_kickoff
+
+
+def historical_before_adoption(row):
+    """Permit replay only when its T-60 deadline is known to predate adoption.
+
+    Older replay exports have a game date without a kickoff time. Keep such a
+    game only if every possible kickoff on that Eastern date has an earlier
+    deadline; an ambiguous adoption-day or missing date cannot authorize replay.
+    """
+    try:
+        ko = ats_locks.utc(row.get('kickoff_utc'))
+    except (ValueError, TypeError):
+        ko = None
+    if ko is not None:
+        return ats_locks.deadline(ko) < ats_locks.ADOPTED_UTC
+    ko = scheduled_kickoff(row)
+    if ko is not None:
+        return ats_locks.deadline(ko) < ats_locks.ADOPTED_UTC
+    value = row.get('gameday')
+    if not isinstance(value, str):
+        return False
+    day = pd.to_datetime(value, format='%Y-%m-%d', errors='coerce')
+    if pd.isna(day):
+        return False
+    next_midnight = (pd.Timestamp(day.date()) + pd.Timedelta(days=1)).tz_localize('America/New_York')
+    # Actual kickoffs on this date precede next midnight, so equality of this
+    # upper bound still proves their deadlines are strictly before adoption.
+    return ats_locks.deadline(next_midnight.to_pydatetime()) <= ats_locks.ADOPTED_UTC
 
 
 def build(latest, ledger):
@@ -24,7 +53,11 @@ def build(latest, ledger):
         for r in history.loc[history.season.eq(2026)].to_dict('records'):
             if r['game_id'] in rows:
                 raise ValueError('duplicate historical ATS game')
-            rows[r['game_id']] = dict(r, ats_basis='Historical replay')
+            row = dict(r, ats_basis='Historical replay')
+            if not historical_before_adoption(r):
+                row.update(spread_line=np.nan, fixed_band_spread=np.nan,
+                           ats_basis='Awaiting ATS lock')
+            rows[r['game_id']] = row
     # Actual scores may come from a newer board than the graded ledger. Only
     # outcomes are taken from the board, never postgame probabilities or lines.
     outcomes = {}
@@ -97,9 +130,11 @@ def summary(frame):
     w, l, p, s = [int(r.eq(k).sum()) for k in 'WLPS']
     bets = w + l + p
     units = w / 1.1 - l
+    returns = np.array([1 / 1.1] * w + [-1.] * l + [0.] * p)
     status = frame.get('ats_status', pd.Series(dtype=str))
     return dict(wins=w, losses=l, pushes=p, skips=s, bets=bets, selected=bets,
                 opportunities=bets+s, units=units, roi=units/bets if bets else np.nan,
+                roi_se=float(returns.std(ddof=1)/np.sqrt(bets)) if bets > 1 else np.nan,
                 cover_rate=w/(w+l) if w+l else np.nan,
                 pending=int(status.eq('pending').sum()), unavailable=int(status.eq('unavailable').sum()))
 

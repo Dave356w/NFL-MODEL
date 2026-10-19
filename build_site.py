@@ -60,6 +60,7 @@ PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
 SITE_NAME = "NFL ATS"
+PUBLIC_CSV_EXPORTS = {'ats_2026_results.csv', 'ats_locked_picks.csv', 'fixed_band_board.csv'}
 
 # run-folder file -> data/latest file
 SNAPSHOT = {
@@ -219,7 +220,7 @@ CSS = r"""
 :root{
   --bg:#f4f6f9; --surface:#ffffff; --surface-2:#f0f3f7; --ink:#13202f;
   --muted:#4d5d6e; --faint:#647384; --line:#dce3ea; --line-2:#e9eef3;
-  --accent:9,120,94; --accent-tx:6,102,79;
+  --accent:9,120,94; --accent-tx:6,102,79; --accent-on:#ffffff;
   --warm:198,84,44; --cool:52,116,168; --lean:176,124,16;
   --warm-tx:164,69,36; --cool-tx:46,103,149; --lean-tx:130,92,12;
   --good:25,121,62; --bad:184,60,40;
@@ -231,7 +232,7 @@ CSS = r"""
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0c141d; --surface:#141e29; --surface-2:#18232f; --ink:#e6eef6;
   --muted:#a0b1c2; --faint:#8a9cb0; --line:#243241; --line-2:#1d2936;
-  --accent:61,192,151; --accent-tx:110,218,184;
+  --accent:61,192,151; --accent-tx:110,218,184; --accent-on:#0c141d;
   --warm:236,122,72; --cool:96,158,208; --lean:244,196,96;
   --warm-tx:240,140,98; --cool-tx:120,176,222; --lean-tx:244,196,96;
   --good:88,194,125; --bad:239,127,98;
@@ -242,7 +243,7 @@ html[data-theme="dark"] .logo.lt{display:none}html[data-theme="dark"] .logo.dk{d
 html[data-theme="dark"]{
   --bg:#0c141d; --surface:#141e29; --surface-2:#18232f; --ink:#e6eef6;
   --muted:#a0b1c2; --faint:#8a9cb0; --line:#243241; --line-2:#1d2936;
-  --accent:61,192,151; --accent-tx:110,218,184;
+  --accent:61,192,151; --accent-tx:110,218,184; --accent-on:#0c141d;
   --warm:236,122,72; --cool:96,158,208; --lean:244,196,96;
   --warm-tx:240,140,98; --cool-tx:120,176,222; --lean-tx:244,196,96;
   --good:88,194,125; --bad:239,127,98;
@@ -350,7 +351,7 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .g-team .nm small{font:600 11.5px/1 var(--mono);color:var(--faint);margin-left:6px}
 .g-team .ln{font:600 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
 .g-team .sc{font:800 18px/1 var(--mono);min-width:28px;text-align:right;font-variant-numeric:tabular-nums}
-.g-team.picked .nm::after{content:"PICK";font:800 9.5px/1 var(--sans);letter-spacing:.08em;color:#fff;
+.g-team.picked .nm::after{content:"PICK";font:800 9.5px/1 var(--sans);letter-spacing:.08em;color:var(--accent-on);
   background:rgb(var(--accent));border-radius:4px;padding:3px 5px;margin-left:8px;vertical-align:2px}
 .chip{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:var(--r-pill);
   background:var(--surface-2);font:800 11px/1 var(--mono);position:relative}
@@ -857,6 +858,22 @@ def ats_card_state(latest, row, now):
     home, away = row['home'], row['away']
     ms, line = num(row.get('fixed_band_spread')), num(row.get('spread_line'))
     saved = latest.get('ats_locks', {}).get((rev, row['game_id']))
+    completed = None
+    display_row = dict(row)
+    pool = public_ats(latest)
+    if len(pool):
+        matches = pool.loc[pool.game_id.eq(row['game_id'])]
+        if len(matches) > 1:
+            raise ValueError('Duplicate public ATS game')
+        if len(matches):
+            candidate = matches.iloc[0]
+            if candidate.ats_status == 'graded' and math.isfinite(num(candidate.get('result'))):
+                display_row.update({name: candidate.get(name) for name in ('result', 'home_score', 'away_score')})
+                if (saved is None and candidate.ats_basis in {'Historical replay', 'Replayed pregame forecast'}
+                        and candidate.fixed_band_ats_result in {'W', 'L', 'P', 'S'}
+                        and math.isfinite(num(candidate.fixed_band_spread))
+                        and math.isfinite(num(candidate.spread_line))):
+                    completed = candidate
     ko = m.kickoff_utc(row)
     cutoff = ats_locks.deadline(ko) if ko is not None else None
     source, status, note = 'Provisional', 'provisional', ''
@@ -866,8 +883,12 @@ def ats_card_state(latest, row, now):
         source = 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock'
         when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
         note = f'ATS locked {when}'
+    elif completed is not None:
+        # The season pool already owns this completed selection. Never use a
+        # refreshed postgame line/probability to recreate the public result.
+        ms, line = num(completed.fixed_band_spread), num(completed.spread_line)
+        status, source, note = 'graded', completed.ats_basis, 'Final ATS result'
     elif cutoff is not None and now >= cutoff:
-        # Replays are research and stay off the public card.
         status, source, note = 'unavailable', 'No saved ATS selection', 'ATS lock unavailable'
     elif cutoff is not None:
         when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
@@ -881,14 +902,17 @@ def ats_card_state(latest, row, now):
     if status == 'unavailable':
         pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
     grade, units = '', math.nan
-    if status == 'locked' and math.isfinite(num(row.get('result'))):
+    if completed is not None:
+        grade, units = completed.fixed_band_ats_result, num(completed.fixed_band_ats_units)
+    elif status == 'locked' and math.isfinite(num(display_row.get('result'))):
         grades, returns = fixed_bands.grade(pd.DataFrame({
-            'spread_line': [line], 'result': [num(row['result'])]}), [ms])
+            'spread_line': [line], 'result': [num(display_row['result'])]}), [ms])
         grade, units = grades[0], returns[0]
     chosen = fixed_bands.pick(ms, line) if math.isfinite(ms-line) else 0.
     side = '' if status == 'unavailable' or chosen == 0 else ('home' if chosen > 0 else 'away')
     return dict(model_spread=ms, spread_line=line, pick=pick, gap=gap, status=status,
                 source=source, note=note, saved=saved, result=grade, units=units,
+                display_row=display_row,
                 selected_side=side, selected_team=row[side] if side else '',
                 handicap=(-line if side == 'home' else line) if side else math.nan)
 
@@ -916,7 +940,9 @@ def render_index(latest, ledger, built, now=None):
         return (has_avail and pd.isna(row.get('result')) and ko is not None and ko > now
                 and not m.injury_reports_ready(row, ko, now))
 
-    rows = board.to_dict('records')
+    raw_rows = board.to_dict('records')
+    states = {r['game_id']: ats_card_state(latest, r, now) for r in raw_rows}
+    rows = [states[r['game_id']]['display_row'] for r in raw_rows]
     count = sum(pending(r) for r in rows)
     if count:
         parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {count} "
@@ -933,7 +959,7 @@ def render_index(latest, ledger, built, now=None):
     cards = []
     for row in rows:
         home, away = row['home'], row['away']
-        state = ats_card_state(latest, row, now)
+        state = states[row['game_id']]
         ms, line = state['model_spread'], state['spread_line']
         final = pd.notna(row.get('result'))
         if final:
@@ -988,6 +1014,8 @@ def render_index(latest, ledger, built, now=None):
                           "The model spread, market handicap and selection shown above are fixed.</p>")
         elif state['status'] == 'unavailable':
             detail.append("<p class='mut'>No pick was saved before this game's lock time, so it is not graded.</p>")
+        elif state['status'] == 'graded':
+            detail.append("<p class='mut'>The ATS selection and listed handicap match the season results.</p>")
         if has_avail:
             detail.append(f"<h3>Quarterbacks</h3><p class='mut'>{esc(away)} {_qb(row, 'away')} · {esc(home)} {_qb(row, 'home')}</p>")
             detail.append(report_notes_html(latest.get('report_notes'), (away, home), int(row['week'])))
@@ -1120,6 +1148,11 @@ def units_text(u):
     return "—" if not math.isfinite(u) else f"{u:+.2f}u".replace("-", "−")
 
 
+def roi_uncertainty(se):
+    se = num(se)
+    return f'± {100 * se:.1f} pp SE' if math.isfinite(se) else 'SE unavailable'
+
+
 def record_tiles(frame, label):
     """Record, cover rate against break-even, units and ROI for the season pool."""
     if frame is None or frame.empty:
@@ -1136,7 +1169,7 @@ def record_tiles(frame, label):
              stat('Cover rate', pct(rate, 1), f"{meter}Break-even {pct(BREAK_EVEN, 1)} · pushes excluded",
                   '' if not math.isfinite(rate) else 'good' if rate > BREAK_EVEN else 'bad'),
              stat('Units', units_text(r['units']), 'Flat 1 unit per pick at −110', tone(r['units'])),
-             stat('ROI', roi_short(r['roi']), 'Per unit staked · pushes included', tone(r['roi']))]
+             stat('ROI', roi_short(r['roi']), f"{roi_uncertainty(r['roi_se'])} · per unit staked · pushes included", tone(r['roi']))]
     return f"<div class='gr-summary'>{''.join(tiles)}</div>"
 
 
@@ -1232,8 +1265,9 @@ def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple base
         wins, losses, pushes = [int((results == x).sum()) for x in ['W', 'L', 'P']]
         if len(d):
             rate = f'{100 * wins / (wins + losses):.1f}%' if wins + losses else '—'
+            se = float(returns.std(ddof=1) / math.sqrt(len(returns))) if len(returns) > 1 else math.nan
             tiles.append(stat(label, f'{wins}–{losses}–{pushes}',
-                              f'{rate} covered · {returns.sum():+.2f}u · ROI {roi_short(returns.mean())}',
+                              f'{rate} covered · {returns.sum():+.2f}u · ROI {roi_short(returns.mean())} · {roi_uncertainty(se)}',
                               'model' if label == 'Model ATS' else ''))
         else:
             tiles.append(stat(label, '—', 'No compared games yet'))
@@ -1295,7 +1329,8 @@ def weekly_table(frame):
     for week, group in frame.groupby('week', sort=True):
         v = season_ats.summary(group)
         rows.append([f'Week {int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}', pct(v['cover_rate'], 1),
-                     str(v['skips']), str(v['pending']), units_text(v['units']) if v['bets'] else '—', roi_short(v['roi'])])
+                     str(v['skips']), str(v['pending']), units_text(v['units']) if v['bets'] else '—',
+                     f"{roi_short(v['roi'])}<div class='mut small'>{roi_uncertainty(v['roi_se'])}</div>"])
     return ("<h2 class='sec'>By week</h2>" +
             table(['Week', 'ATS W–L–P', 'Cover rate', 'Skips', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
 
@@ -1375,15 +1410,13 @@ def render_all(out_dir, data=DATA, now=None):
     if latest is not None and latest['ats_locks']:
         locked_rows = []
         for row in latest['ats_locks'].values():
-            side = row['selected_side']
+            side = ats_locks.select(row['fixed_band_spread'], row['market_spread'], True)
             locked_rows.append(dict(game_id=row['game_id'], season=row['season'],
                 home=row['home'], away=row['away'], kickoff_utc=row['kickoff_utc'],
                 forecast_utc=row['generated_utc'], lock_at_utc=row['lock_at_utc'],
-                timing_policy='earlier archive' if row.get('legacy_lock') else '60 minutes before kickoff',
                 model_spread=row['fixed_band_spread'], market_spread=row['market_spread'],
                 selected_side=side, selected_team=row[side] if side else '',
-                handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None,
-                skip_reason=row['skip_reason'], backfilled_favorite=ats_locks.backfilled(row)))
+                handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None))
         pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
     else:
         (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
@@ -1395,10 +1428,11 @@ def render_all(out_dir, data=DATA, now=None):
         latest['board'].to_csv(Path(data) / 'latest' / 'fixed_band_board.csv', index=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(
             json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False))
+    if latest is not None and len(latest['board']):
         public_rows = []
         for row in latest['board'].to_dict('records'):
             state = ats_card_state(latest, row, now)
-            item = {k: row.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
+            item = {k: state['display_row'].get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
                     'gameday', 'gametime', 'away_score', 'home_score', 'result')}
             item.update(model_spread=state['model_spread'], spread_line=state['spread_line'],
                 ats_status=state['status'],
@@ -1406,6 +1440,8 @@ def render_all(out_dir, data=DATA, now=None):
                 handicap=state['handicap'], ats_result=state['result'], ats_units=state['units'])
             public_rows.append(item)
         pd.DataFrame(public_rows).to_csv(out / 'fixed_band_board.csv', index=False)
+    else:
+        (out / 'fixed_band_board.csv').unlink(missing_ok=True)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built)}
@@ -1418,6 +1454,11 @@ def render_all(out_dir, data=DATA, now=None):
     for retired in ('ledger_report.txt', 'model.html', 'board.html', 'fixed_band_ledger.csv',
                     'fixed_band_summary.csv', 'fixed_band_rules.json'):
         (out / retired).unlink(missing_ok=True)
+    # Root CSVs are generated public exports. Reused/pages-only output must not
+    # retain an old private-probability download; unrelated assets stay intact.
+    for obsolete in out.glob('*.csv'):
+        if obsolete.name not in PUBLIC_CSV_EXPORTS:
+            obsolete.unlink()
     (out / ".nojekyll").write_text("")
     return sorted(p.name for p in out.iterdir())
 

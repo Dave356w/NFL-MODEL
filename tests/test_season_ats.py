@@ -16,11 +16,11 @@ import season_ats as s
 class SeasonATS(unittest.TestCase):
     def fixture(self):
         history = pd.DataFrame([
-            dict(game_id='h', season=2026, week=5, home='IND', away='TEN',
+            dict(game_id='h', season=2026, week=5, home='IND', away='TEN', gameday='2026-10-11',
                  fixed_band_spread=7., spread_line=6.5, result=7.),
-            dict(game_id='overlap', season=2026, week=6, home='IND', away='TEN',
+            dict(game_id='overlap', season=2026, week=6, home='IND', away='TEN', gameday='2026-10-18',
                  fixed_band_spread=4., spread_line=6.5, result=-6.),
-            dict(game_id='pending', season=2026, week=7, home='IND', away='TEN',
+            dict(game_id='pending', season=2026, week=7, home='IND', away='TEN', gameday='2026-10-25',
                  fixed_band_spread=4., spread_line=6.5, result=7.)])
         native = pd.DataFrame([
             dict(game_id='overlap', season=2026, week=6, revision=m.REVISION, home='IND', away='TEN',
@@ -61,6 +61,57 @@ class SeasonATS(unittest.TestCase):
         self.assertEqual(row.ats_status,'unavailable')
         self.assertEqual(row.fixed_band_ats_result,'')
         self.assertTrue(np.isnan(row.fixed_band_spread))
+
+    def test_missing_post_adoption_snapshot_does_not_turn_history_into_a_bet(self):
+        latest, _ = self.fixture()
+        latest['fixed_band_ledger'] = latest['fixed_band_ledger'].query("game_id=='pending'").assign(
+            kickoff_utc='2026-10-25T17:00:00Z', home_score=24., away_score=17.)
+        latest['ats_locks'] = {}
+        pool = s.build(latest, pd.DataFrame())
+        row = pool.iloc[0]
+        self.assertEqual((row.game_id, row.ats_status, row.ats_basis),
+                         ('pending', 'unavailable', 'Awaiting ATS lock'))
+        self.assertEqual((row.result, row.home_score, row.away_score), (7., 24., 17.))
+        self.assertEqual((row.fixed_band_ats_result, row.fixed_band_ats_side), ('', ''))
+        self.assertTrue(np.isnan(row.fixed_band_ats_units))
+        self.assertTrue(np.isnan(row.spread_line))
+        self.assertTrue(np.isnan(row.fixed_band_spread))
+        self.assertEqual((s.summary(pool)['bets'], s.summary(pool)['unavailable']), (0, 1))
+
+    def test_historical_timing_requires_a_provably_pre_adoption_deadline(self):
+        boundary = ats_locks.ADOPTED_UTC + dt.timedelta(hours=1)
+        cases = [
+            ({'kickoff_utc': (boundary-dt.timedelta(seconds=1)).isoformat()}, True),
+            ({'kickoff_utc': boundary.isoformat()}, False),
+            ({'kickoff_utc': '2026-10-25T17:00:00Z', 'gameday': '2026-10-11'}, False),
+            ({'gameday': '2026-10-18', 'gametime': '23:59'}, True),
+            ({'gameday': '2026-10-19', 'gametime': '13:00'}, False),
+            ({'gameday': '2026-10-18'}, True),
+            ({'gameday': '2026-10-19'}, False),
+            ({'gameday': '2026-10-25'}, False),
+            ({'gameday': 'invalid'}, False),
+            ({'gameday': 0}, False),
+            ({'kickoff_utc': '2026-10-19'}, False),
+            ({'kickoff_utc': '2026-10-19T13:00:00'}, False),
+            ({'kickoff_utc': 0}, False),
+            ({}, False),
+        ]
+        for timing, eligible in cases:
+            with self.subTest(timing=timing):
+                self.assertEqual(s.historical_before_adoption(timing), eligible)
+
+    def test_saved_lock_overrides_post_adoption_history_without_native_snapshot(self):
+        latest, _ = self.fixture()
+        latest['fixed_band_ledger'] = latest['fixed_band_ledger'].query("game_id=='pending'")
+        saved = dict(latest['ats_locks'][(m.REVISION, 'overlap')], game_id='pending', week=7,
+                     kickoff_utc='2026-10-25T17:00:00Z', fixed_band_spread=3., market_spread=2.5,
+                     selected_side='home', skip_reason=None, legacy_lock=False,
+                     policy_version=ats_locks.POLICY_VERSION)
+        latest['ats_locks'] = {(m.REVISION, 'pending'): saved}
+        row = s.build(latest, pd.DataFrame()).iloc[0]
+        self.assertEqual((row.ats_basis, row.ats_status, row.fixed_band_ats_result),
+                         ('60-minute lock', 'graded', 'W'))
+        self.assertEqual((row.spread_line, row.fixed_band_ats_handicap), (2.5, -2.5))
 
     def test_pre_adoption_unregistered_snapshot_is_explicit_replay(self):
         latest,native=self.fixture()
@@ -126,6 +177,18 @@ class SeasonATS(unittest.TestCase):
         self.assertAlmostEqual(total['roi'],(1/1.1-2)/4)
         for key in ['wins','losses','pushes','skips','bets','opportunities','units','pending','unavailable']:
             self.assertAlmostEqual(sum(s.summary(g)[key] for _,g in pool.groupby('week')),total[key])
+
+    def test_roi_standard_error_counts_push_stakes_and_excludes_skips_and_pending(self):
+        frame = pd.DataFrame(dict(fixed_band_ats_result=['W', 'L', 'P', 'S', ''],
+                                  ats_status=['graded'] * 4 + ['pending']))
+        result = s.summary(frame)
+        realized_returns = np.array([1 / 1.1, -1., 0.])
+        self.assertEqual((result['bets'], result['skips'], result['pending']), (3, 1, 1))
+        self.assertAlmostEqual(result['roi'], realized_returns.mean())
+        self.assertAlmostEqual(result['roi_se'], realized_returns.std(ddof=1)/np.sqrt(3))
+        for grades in [[], ['W'], ['P']]:
+            with self.subTest(grades=grades):
+                self.assertTrue(np.isnan(s.summary(pd.DataFrame({'fixed_band_ats_result': grades}))['roi_se']))
 
     def test_duplicate_ledger_uses_first_snapshot_not_later_probability(self):
         latest,native=self.fixture();latest['ats_locks']={}

@@ -16,6 +16,7 @@ from scipy.special import ndtri
 
 import fixed_bands
 import nfl_model as m
+import ats_locks
 
 CUTS = [3., 7., 10.]
 EPS = 1e-10
@@ -82,11 +83,28 @@ def record(grades):
 
 def inspect(data='data'):
     data = Path(data); latest = data/'latest'
+    checks = {}
+    # Primary ATS capture is independent of historical exports. A standalone
+    # sanity check must reject corrupt timed-lock evidence even on an otherwise
+    # empty data directory; validation never rewrites either append-only store.
+    try:
+        inventory = ats_locks.validate_store(data)
+        timed = ats_locks.read(data / ats_locks.LOCKS)
+        capture = dict(policy=ats_locks.POLICY_VERSION, candidates=inventory['candidates'],
+                       timed_locks=inventory['locks'],
+                       original_selections=sum(bool(r.get('selected_side')) for r in timed),
+                       original_skips=sum(not r.get('selected_side') for r in timed),
+                       backfilled_skips=sum(ats_locks.backfilled(r) for r in timed))
+        checks['primary_ats_store_integrity'] = True
+    except (ValueError, KeyError, TypeError, OverflowError, OSError) as exc:
+        capture = dict(policy=ats_locks.POLICY_VERSION, error=str(exc))
+        checks['primary_ats_store_integrity'] = False
     history_path = latest/'retro_ledger.csv'
     if not history_path.exists():
-        return dict(checks={}, rules=[], historical=[], native={}, ats_archive={}, status='No historical inputs yet')
+        return dict(checks=checks, rules=[], historical=[], native={}, ats_archive={}, ats_capture=capture,
+                    status='No historical inputs yet' if all(checks.values()) else 'FAIL')
     d = pd.read_csv(history_path)
-    checks = {'unique_historical_games': not d.game_id.duplicated().any()}
+    checks['unique_historical_games'] = not d.game_id.duplicated().any()
     ml_grades,ml_units=independent_moneyline(d)
     if 'bet_result' in d:
         checks['historical_moneyline_outcomes']=bool(np.array_equal(d.bet_result.fillna('').to_numpy(),ml_grades))
@@ -196,7 +214,10 @@ def inspect(data='data'):
             complete = set(g.loc[g.revision.eq(m.REVISION) & g.status.isin(['graded','tie']),'game_id'])
         archive = dict(policy=fixed_bands.POLICY_VERSION,snapshots=len(rows),completed=sum(r['game_id'] in complete for r in rows))
         archive['pending'] = archive['snapshots']-archive['completed']
-    return dict(checks=checks,rules=rules,historical=historical,native=native,ats_archive=archive,
+        archive['original_selections'] = sum(bool(r.get('selected_side')) for r in rows)
+        archive['original_skips'] = len(rows)-archive['original_selections']
+        archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
+    return dict(checks=checks,rules=rules,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
                 export_selection=export_rule if exported.exists() else None,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
@@ -204,7 +225,7 @@ def inspect(data='data'):
 def report(data='data'):
     audit = inspect(data)
     lines = ['Production sanity check: v1.18 and fixed-band median ATS',f"Status: {audit['status']}",
-             'Basis: historical replay, native moneyline snapshots, and median-policy ATS archives remain separate.',
+             'Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.',
              'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.',
              'Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite '
              '(a pick\'em line skips) before push grading.',
@@ -231,8 +252,11 @@ def report(data='data'):
                          f"favorite {baseline['units']:+.2f}u, ROI {100*baseline['roi']:+.2f}%")
         lines.append(f"    Binary proper scores n={r['scored_games']}: log loss {r['log_loss']:.6f}, "
                      f"market {r['market_log_loss']:.6f}; Brier {r['brier']:.6f}; tied finals excluded from binary scoring.")
-    lines += ['',f"Native {m.REVISION} moneyline: {json.dumps(audit['native'],sort_keys=True)}",
-              f"Native median ATS archive: {json.dumps(audit['ats_archive'],sort_keys=True)}",
+    lines += ['',f"Legacy native {m.REVISION} moneyline: {json.dumps(audit['native'],sort_keys=True)}",
+              f"Earlier median ATS archive (development history): {json.dumps(audit['ats_archive'],sort_keys=True)}",
+              f"Primary 60-minute ATS capture: {json.dumps(audit['ats_capture'],sort_keys=True)}",
+              'Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; '
+              'retrospectively backfilled favorite bets are excluded from forward evidence.',
               'The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.',
               'Never backfill median ATS locks for games that finished before adoption.',
               'The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.',
