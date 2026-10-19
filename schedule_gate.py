@@ -1,6 +1,7 @@
 """Decide whether a scheduled workflow run should do the full model build.
 
-GitHub cron is static, so build.yml polls hourly and this script gates the
+GitHub cron is static, so build.yml polls hourly, plus every five minutes
+near the ATS cutoff, and this script gates the
 expensive run (play-by-play reconstruction, weekly refits) against the live
 NFL schedule. Stdlib only, so the plan job needs no pip install.
 
@@ -35,6 +36,9 @@ from zoneinfo import ZoneInfo
 ET = ZoneInfo("America/New_York")
 SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 DAILY_CRON = "13 6 * * *"
+ATS_CRON = "*/5 * * * *"
+ATS_REFRESH_MINUTES = 90
+ATS_FINALIZE_MINUTES = 50
 LEDGER_WINDOW_HOURS = 30
 FINAL_REFRESH_MINUTES = 150
 MIN_MINUTES_BEFORE = 15
@@ -102,6 +106,18 @@ def season_of(now):
     return d.year if d.month >= 8 else d.year - 1
 
 
+def ats_due_games(games, now):
+    """Frequent refreshes around T−60, independently of early moneyline locks."""
+    due = []
+    for game in games:
+        if game.get('game_type') != 'REG' or (game.get('result') or '').strip():
+            continue
+        ko = kickoff(game)
+        if ko is not None and ATS_FINALIZE_MINUTES <= (ko - now).total_seconds() / 60 <= ATS_REFRESH_MINUTES:
+            due.append((game['game_id'], '60-minute ATS lock refresh'))
+    return due
+
+
 def decision(event_name, event_schedule, now=None, games=None, recorded=None):
     now = now or datetime.now(timezone.utc)
     season = season_of(now)
@@ -111,6 +127,10 @@ def decision(event_name, event_schedule, now=None, games=None, recorded=None):
         return True, season, "daily grading and refresh pass"
     try:
         games = fetch_games() if games is None else games
+        if event_schedule == ATS_CRON:
+            due = ats_due_games(games, now)
+            return bool(due), season, ('; '.join(f'{gid}: {why}' for gid, why in due[:6])
+                                       if due else 'outside the ATS lock refresh window')
         recorded = recorded_games(current_revision()) if recorded is None else recorded
         due = due_games(games, now, recorded)
     except Exception as exc:  # noqa: BLE001 -- fail open, see module docstring

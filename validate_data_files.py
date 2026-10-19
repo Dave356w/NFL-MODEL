@@ -196,6 +196,10 @@ def validate_data_dir(data_dir="data"):
     if h5.exists():
         validate_h5(h5)
         paths.append(h5)
+    import ats_locks
+    ats_locks.validate_store(data_dir)
+    paths.extend(data_dir / name for name in (ats_locks.CANDIDATES, ats_locks.LOCKS)
+                 if (data_dir / name).exists())
     return paths
 
 

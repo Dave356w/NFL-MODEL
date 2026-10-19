@@ -20,6 +20,7 @@ import pandas as pd
 from scipy.special import ndtri
 
 import fixed_bands
+from ats_locks import ADOPTED_UTC
 from research import ats_cover_probability as cp
 
 REVISION = "boxscore-composite-v1.18"
@@ -68,7 +69,7 @@ def possible_locks(data: Path, now: dt.datetime) -> list[dict]:
         generated, kickoff = utc(r["generated_utc"]), utc(r["kickoff_utc"])
         # Both guards matter: no retroactive declaration of a historical quote.
         age = (now - generated).total_seconds() / 3600.
-        if generated < START_UTC or not 0 <= age <= MAX_CAPTURE_AGE_HOURS:
+        if generated < START_UTC or generated >= ADOPTED_UTC or not 0 <= age <= MAX_CAPTURE_AGE_HOURS:
             continue
         if now >= kickoff or generated >= kickoff:
             continue
