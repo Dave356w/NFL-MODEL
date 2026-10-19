@@ -6,6 +6,14 @@ import pytest
 import nfl_model as m
 
 
+@pytest.fixture(autouse=True)
+def legacy_v118_identity():
+    """This conditional-offset band predates the two-stage market baseline."""
+    with m.revision_identity('boxscore-composite-v1.18',
+                             dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY)):
+        yield
+
+
 def fixture(n=300, seed=3):
     rng = np.random.default_rng(seed)
     names = m.feature_names(m.PRODUCT_RECIPE['family'])+list(m.PRODUCT_CONTEXT_NAMES)

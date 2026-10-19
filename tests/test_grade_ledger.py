@@ -105,6 +105,32 @@ def test_model_spread_and_ats_diagnostic():
     assert g.summary(out)["roi"]["bets"] == 6
 
 
+def test_continuous_policy_uses_saved_revision_and_exact_favorite_tie_rule():
+    from scipy.special import ndtr
+    # Same saved probability/line: legacy skip, new home favorite bet.
+    even = float(ndtr(3 / g.m.MARKET_SIGMA))
+    near = float(ndtr((3 + 1e-7) / g.m.MARKET_SIGMA))
+    away = float(ndtr(-3 / g.m.MARKET_SIGMA))
+    rows = [rec('a', even, .6, exp='legacy', rev='boxscore-composite-v1.18'),
+            rec('b', .7, .6, exp='legacy', rev='boxscore-composite-v1.18'),
+            rec('a', even, .6, exp='new', rev='boxscore-composite-v1.19'),
+            rec('b', near, .6, rev='boxscore-composite-v1.19'),
+            rec('c', away, .4, rev='boxscore-composite-v1.19', sp=-3.),
+            rec('d', .5, .5, rev='boxscore-composite-v1.19', sp=0.)]
+    out = g.grade(rows, RESULTS).set_index(['experiment','game_id'])
+    assert tuple(out.loc[('legacy','a'), ['ats_side','ats_result']]) == ('','')
+    assert tuple(out.loc[('new','a'), ['ats_side','ats_result']]) == ('home','W')
+    assert tuple(out.loc[('e','b'), ['ats_side','ats_result']]) == ('home','L')
+    assert tuple(out.loc[('e','c'), ['ats_side','ats_result']]) == ('away','L')
+    assert tuple(out.loc[('e','d'), ['ats_side','ats_result']]) == ('','S')
+    text = g.report_text(out.reset_index())
+    assert 'Continuous ATS policy at the original first-snapshot spread' in text
+    assert 'separate from the native production T-60 ATS locks' in text
+    assert 'Older revisions retain their diagnostic grading' in text
+    assert 'no-vig moneylines for v1.16-v1.19' in text
+    assert 'fitted spread/total forecast offset is separate from this benchmark' in text
+
+
 def test_no_ats_lines_before_any_decided_game():
     out = g.grade([rec("d", .6, .6)], RESULTS)
     assert out.loc[0, "ats_result"] == "" and "Diagnostic, not the goal metric" not in g.report_text(out)

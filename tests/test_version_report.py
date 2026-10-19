@@ -42,3 +42,22 @@ def test_selection_benchmark_section_reports_the_committed_adjustment(tmp_path):
     assert 'not forward evidence' in lines and 'v1.16 beats it by' in lines and 'Reality Check p' in lines
     assert 'p-values are optimistic' in lines
     assert v.selection_lines(tmp_path/'missing.json')==['The selection-adjusted benchmark has not been committed.']
+
+
+def test_market_context_promotion_is_not_described_as_legacy_penalty(monkeypatch):
+    monkeypatch.setattr(v.m,'REVISION','boxscore-composite-v1.19')
+    monkeypatch.setattr(v.m,'PRODUCT_RECIPE',dict(architecture='market_spread_total'))
+    monkeypatch.setattr(v.m,'config_signature',lambda:('new-signature',{}))
+    text='\n'.join(v.production_lines())
+    assert 'all 29 football inputs' in text and 'continuous ATS spread' in text
+    assert 'Original pregame forecasts and older revisions remain unchanged' in text
+    assert 'favorite-confidence penalty' not in text
+
+
+def test_legacy_penalty_description_retains_its_own_identity(monkeypatch):
+    monkeypatch.setattr(v.m,'REVISION','boxscore-composite-v1.18')
+    monkeypatch.setattr(v.m,'PRODUCT_RECIPE',dict(architecture='market_product_1sd',favorite_penalty=.2))
+    monkeypatch.setattr(v.m,'config_signature',lambda:('old-signature',{}))
+    text='\n'.join(v.production_lines())
+    assert 'favorite-confidence penalty' in text and '**boxscore-composite-v1.18**' in text
+    assert '29 football inputs' not in text

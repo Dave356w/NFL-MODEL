@@ -10,13 +10,19 @@ Public presentation (owner decision 2026-10-19 UTC) is ATS-only: picks, frozen
 handicaps, results, cover rates, units and ROI. Probability/moneyline calculations
 and the original archives remain internal and in repository research reports.
 Do not publish moneyline picks, win-probability values or moneyline CSV columns.
-This presentation change does not change v1.18, the median map or lock timing.
+The current model is v1.19 (owner decision 2026-10-19): a spread/total market
+winner baseline plus all 29 football inputs, converted to a continuous spread.
+There is no median mapping or favorite-confidence penalty in this revision.
 The public 2026 headline, weekly/game results, running units, same-game controls
-and season CSV pool replayed and recorded results, one row per game (owner
-request 2026-10-19). Saved ATS selections take priority over replay. Keep source
+and season CSV use the current revision, one row per game (owner request
+2026-10-19). Rebuild all completed historical games with v1.19, including games
+after the earlier median-policy adoption. These are retrospective forecasts,
+not newly recorded bets. Only saved v1.19 ATS selections take priority over
+v1.19 replay; never substitute older-revision locks. Keep source
 tracking in backend reporting only, without source labels or breakdowns on the
 public pages or season CSV; the pooled total is descriptive.
-Earlier seasons and detailed research stay in repository reports.
+Show earlier seasons in the annual ATS performance table and history download;
+detailed research stays in repository reports.
 
 ## Sources of truth
 
@@ -53,21 +59,18 @@ the denominator), cover rate excluding pushes, n, the break-even cover rate of 5
 and the same-row always-favorite and always-home baselines. Per-band records
 are descriptive, not per-game cover probabilities. Spread point error is a
 secondary diagnostic. ROI is reported, not optimized: recipe selection and
-coefficient fitting stay on log loss, and the median map stays fitted to
-prior-season margins, unless the owner decides otherwise. That would be a new
-`REVISION` or ATS policy version.
-
-The open ATS question is whether the median map beats the raw model spread
-(`raw_spread` against `market_spread` in the same lock). Compare both on the
-same locked games; the owner reviews at 100 decided locks. Each lock already
-saves both inputs, so this comparison needs no new capture.
+coefficient fitting stay on log loss. v1.19 adopts the previously tested full
+spread/total correction by explicit owner choice, after exposed development.
+Its point ROI advantage is unresolved and requires fresh validation at actual
+quotes. The former median-versus-raw comparison remains legacy research.
 
 **Zero edge takes the market favorite** (owner decision 2026-10-19; lock policy
-v2). Only a pick'em line with a zero mapped spread skips. It applies
+v2). Only a pick'em line with a zero projected spread skips. It applies
 retrospectively. By owner decision (2026-10-19), saved zero-edge skips are
 backfilled as favorite bets in grading and display, tracked as **Backfilled
 recorded skip** in backend reporting and kept out of forward evidence. The saved files are never
-rewritten; this exception covers only that grading rule.
+rewritten. v1.19 also has an explicitly authorized retrospective rebuild of
+derived picks/results, under its own revision and continuous ATS policy.
 
 **Moneyline is legacy research.** Its reports keep the flat 1u ROI basis in
 `MODEL.md`: units, ROI ± SE, n, the market-correct null (negative by the hold,

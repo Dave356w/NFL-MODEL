@@ -37,10 +37,12 @@ def test_independent_median_uses_losses_ties_and_only_prior_seasons():
     assert s.median_rule(pd.concat([d,tied]),2023)['magnitudes']==[1.5,3.,5.,7.]
 
 
-def test_current_production_snapshot_passes_independent_audit():
+def test_committed_exports_pass_independent_audit_under_their_saved_identity():
     data=Path(__file__).resolve().parents[1]/'data'
     audit=s.inspect(data)
     assert audit['status']=='PASS' and all(audit['checks'].values())
+    assert audit['historical_revision']==json.loads((data/'latest/manifest.json').read_text())['revision']
+    assert audit['export_mode']=='median'  # old exports stay valid before the first v1.19 build
     assert audit['ats_capture']['candidates'] >= audit['ats_capture']['timed_locks']
     archive=audit['ats_archive']
     assert archive['original_selections']+archive['original_skips']==archive['snapshots']
@@ -67,10 +69,10 @@ def _timed_store(data, original_skip=False):
     a=s.ats_locks
     wp=float(ndtr(8./12.37))
     legacy=next(policy for policy,favorite in a.POLICIES.items() if not favorite)
-    row=dict(revision=s.m.REVISION, game_id='2026_07_TEN_IND', season=2026,
+    row=dict(revision='boxscore-composite-v1.18', game_id='2026_07_TEN_IND', season=2026,
         generated_utc='2026-10-25T15:58:00+00:00', observed_utc='2026-10-25T15:59:00+00:00',
         kickoff_utc='2026-10-25T17:00:00+00:00', lock_at_utc='2026-10-25T16:00:00+00:00',
-        policy_version=legacy if original_skip else a.POLICY_VERSION, lock_lead_minutes=60,
+        policy_version=legacy if original_skip else a.MEDIAN_POLICY_VERSION, lock_lead_minutes=60,
         fixed_rule=dict(training_max_season=2025,cuts=[3.,7.,10.],magnitudes=[3.,4.,7.,14.]),
         model_wp=wp, raw_spread=float(s.m.implied_spread([wp])[0]),
         market_spread=7. if original_skip else 6.5, fixed_band_spread=7.,
@@ -93,10 +95,69 @@ def test_primary_capture_inventory_keeps_saved_skips_separate_and_read_only(tmp_
     assert (capture['candidates'],capture['timed_locks'])==(1,1)
     assert capture['original_selections']==int(not original_skip)
     assert capture['original_skips']==capture['backfilled_skips']==int(original_skip)
+    assert capture['by_revision_policy']==[dict(revision='boxscore-composite-v1.18',
+        policy=json.loads((tmp_path/s.ats_locks.LOCKS).read_text())['policy_version'], timed_locks=1)]
+    assert capture['current_revision_locks']==int(s.m.REVISION=='boxscore-composite-v1.18')
     report=s.report(tmp_path)
     assert 'Primary 60-minute ATS capture' in report
     assert 'backfilled favorite bets are excluded from forward evidence' in report
     assert [p.read_bytes() for p in paths]==before
+
+
+def _continuous_exports(data):
+    """Small raw replay where a median map cannot be fit or silently substituted."""
+    from scipy.special import ndtr
+    latest=data/'latest';latest.mkdir()
+    spreads=np.array([3.,-3.,0.,4.])
+    d=pd.DataFrame(dict(game_id=list('abcd'),season=[2026]*4,week=[6]*4,
+        model_wp=ndtr(spreads/12.37),market_wp=[.6,.4,.5,.6],
+        spread_line=[3.,-3.,0.,3.],result=[7.,-7.,0.,3.],
+        home_moneyline=[-120.]*4,away_moneyline=[100.]*4))
+    d['home won']=[1.,0.,.5,1.]
+    d.to_csv(latest/'retro_ledger.csv',index=False)
+    (latest/'manifest.json').write_text(json.dumps(dict(revision='boxscore-composite-v1.19',
+        recipe=dict(architecture='market_spread_total'))))
+    saved=d.assign(fixed_band_spread=spreads,selection_version=s.fixed_bands.SELECTION_VERSION,
+        fixed_band_ats_result=['W','W','S','P'])
+    saved.to_csv(latest/'fixed_band_ledger.csv',index=False)
+    (latest/'fixed_band_rules.json').write_text('[]')
+    return latest
+
+
+def test_new_raw_replay_needs_no_medians_and_is_checked_independently(tmp_path):
+    latest=_continuous_exports(tmp_path)
+    before={p.name:p.read_bytes() for p in latest.iterdir()}
+    audit=s.inspect(tmp_path)
+    assert audit['status']=='PASS' and audit['export_mode']=='continuous'
+    assert audit['rules']==[] and audit['checks']['exported_continuous_predictions']
+    total=next(r for r in audit['historical'] if r['season']=='All')
+    assert (total['wins'],total['losses'],total['pushes'],total['skips'])==(2,0,1,1)
+    assert 'continuous margin = 12.37' in s.report(tmp_path)
+    assert before=={p.name:p.read_bytes() for p in latest.iterdir()}
+    (latest/'fixed_band_rules.json').write_text('[{"season":2026}]')
+    assert s.inspect(tmp_path)['checks']['continuous_export_has_no_median_maps'] is False
+
+
+def test_new_raw_replay_rejects_a_median_value_in_compatibility_export(tmp_path):
+    latest=_continuous_exports(tmp_path)
+    saved=pd.read_csv(latest/'fixed_band_ledger.csv');saved.loc[0,'fixed_band_spread']=7.
+    saved.to_csv(latest/'fixed_band_ledger.csv',index=False)
+    audit=s.inspect(tmp_path)
+    assert audit['status']=='FAIL' and not audit['checks']['exported_continuous_predictions']
+
+
+def test_legacy_archive_completion_uses_original_revision_after_promotion(monkeypatch):
+    data=Path(__file__).resolve().parents[1]/'data'
+    monkeypatch.setattr(s.m,'REVISION','boxscore-composite-v1.19')
+    audit=s.inspect(data)
+    rows=[r for r in s.ats_locks.read(data/'ats_forward_shadow.jsonl')
+          if r.get('policy_version')==s.fixed_bands.POLICY_VERSION]
+    graded=pd.read_csv(data/'forward_ledger.csv')
+    completed=set(graded.loc[graded.status.isin(['graded','tie']),['revision','game_id']]
+        .itertuples(index=False,name=None))
+    expected=sum((r['revision'],r['game_id']) in completed for r in rows)
+    assert expected>0 and audit['ats_archive']['completed']==expected
+    assert audit['native']['snapshots']==0  # old forecasts do not become v1.19 evidence
 
 
 @pytest.mark.parametrize('with_history',[False,True])

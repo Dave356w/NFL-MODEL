@@ -19,6 +19,10 @@ def fixture():
     for name in m.feature_names(m.LEGACY_PRODUCT_RECIPE['family'])+list(m.PRODUCT_CONTEXT_NAMES):
         train[name]=rng.normal(size=n)
     train['site']=1.
+    # Append market inputs after the legacy random draws, preserving old exact
+    # coefficient fixtures while making this shared frame valid for v1.19.
+    train['spread_line']=np.linspace(-10.,10.,n)
+    train['total_line']=44.+np.sin(np.arange(n)) * 5.
     test=train.iloc[:4].copy();test['season']=2023;test['week']=1
     test['game_id']=['a','b','c','d'];test['home']='H';test['away']='A'
     return train,test
@@ -76,11 +80,18 @@ def test_owner_recipe_does_not_reselect_from_historical_outcomes():
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
     o['home won']=1-o['home won']
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
-    assert m.REVISION=='boxscore-composite-v1.18'
+    assert m.REVISION=='boxscore-composite-v1.19'
     assert m.config_signature()[1]['production_recipe']==m.PRODUCT_RECIPE
 
 
-def test_replay_preserves_original_snapshot_and_uses_snapshot_quotes(tmp_path,monkeypatch):
+@pytest.fixture
+def legacy_v118_identity():
+    with m.revision_identity('boxscore-composite-v1.18',
+                             dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY)):
+        yield
+
+
+def test_replay_preserves_original_snapshot_and_uses_snapshot_quotes(tmp_path,monkeypatch,legacy_v118_identity):
     train,test=fixture();test=test.iloc[:1].copy()
     test['q']=.8
     frame=pd.concat([train,test],ignore_index=True)
@@ -103,7 +114,7 @@ def test_replay_preserves_original_snapshot_and_uses_snapshot_quotes(tmp_path,mo
     assert replay.model_wp.iloc[0]==pytest.approx(expected)
 
 
-def test_native_capture_requires_forecast_and_saves_replay_inputs(tmp_path,monkeypatch):
+def test_native_capture_requires_forecast_and_saves_replay_inputs(tmp_path,monkeypatch,legacy_v118_identity):
     import datetime as dt
     train,board=fixture();fit=m.fit_composite(train,m.LEGACY_PRODUCT_RECIPE,2023,1)
     board=board.iloc[:2].copy()

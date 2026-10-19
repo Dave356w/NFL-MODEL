@@ -50,6 +50,7 @@ import totals
 import fixed_bands
 import ats_locks
 import season_ats
+import ats_policy
 from research import version_report
 from research import ats_forward_shadow
 from research import production_sanity
@@ -60,7 +61,7 @@ PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
 SITE_NAME = "NFL ATS"
-PUBLIC_CSV_EXPORTS = {'ats_2026_results.csv', 'ats_locked_picks.csv', 'fixed_band_board.csv'}
+PUBLIC_CSV_EXPORTS = {'ats_2026_results.csv', 'ats_history_results.csv', 'ats_locked_picks.csv', 'fixed_band_board.csv'}
 
 # run-folder file -> data/latest file
 SNAPSHOT = {
@@ -205,13 +206,21 @@ def load_latest(latest=LATEST):
         p = latest / name
         out[name[:-4]] = read_csv_or_empty(p)
     out["board_html"] = (latest / "board.html").exists()
-    fixed_bands.prepare(out)
+    ats_policy.prepare(out)
     return out
 
 
 def load_ledger(data=DATA):
     p = Path(data) / grade_ledger.GRADED.name
     return pd.read_csv(p) if p.exists() else pd.DataFrame(columns=grade_ledger.COLUMNS)
+
+
+def active_ats_locks(latest, data):
+    """Only decisions for the displayed model can enter its public surfaces."""
+    revision = (latest or {}).get('manifest', {}).get('revision')
+    current = ats_policy.is_continuous(latest)
+    return {key: row for key, row in ats_locks.display_records(data).items()
+            if key[0] == revision and (not current or row.get('selection_method') == ats_policy.CONTINUOUS_METHOD)}
 
 
 # ---------------------------------------------------------------- page shell
@@ -461,7 +470,7 @@ def font_face_css(assets=ASSETS):
     return "".join(out)
 
 
-def html_document(body, title, current, built, scripts=""):
+def html_document(body, title, current, built, scripts="", revision=None):
     nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''}>{label}</a>"
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
@@ -470,7 +479,7 @@ def html_document(body, title, current, built, scripts=""):
             "<meta name='color-scheme' content='light dark'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
             f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
-            f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
+            f"<span class='brand-version'>{esc((revision or m.REVISION).rsplit('-', 1)[-1])}</span></a>"
             f"<nav class='nav' aria-label='Main navigation'>{nav}</nav>"
             f"<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme' title='Toggle theme'>{THEME_ICON}</button></header>"
             f"<main id='main-content'>{body}</main>"
@@ -605,8 +614,9 @@ def spread_record(latest, season=None):
     d = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
     if d.empty:
         return None
-    s = fixed_bands.summary(d)
-    r = s[(s.method == 'Fixed bands') & (s.season == ('All' if season is None else str(season)))]
+    s = ats_policy.summary(latest)
+    method = 'Continuous spread' if ats_policy.is_continuous(latest) else 'Fixed bands'
+    r = s[(s.method == method) & (s.season == ('All' if season is None else str(season)))]
     return r.iloc[0] if len(r) and r.iloc[0].games else None
 
 
@@ -869,7 +879,7 @@ def ats_card_state(latest, row, now):
             candidate = matches.iloc[0]
             if candidate.ats_status == 'graded' and math.isfinite(num(candidate.get('result'))):
                 display_row.update({name: candidate.get(name) for name in ('result', 'home_score', 'away_score')})
-                if (saved is None and candidate.ats_basis in {'Historical replay', 'Replayed pregame forecast'}
+                if (saved is None and candidate.ats_basis in {'Historical replay', 'Replayed pregame forecast', 'Retrospective v1.19'}
                         and candidate.fixed_band_ats_result in {'W', 'L', 'P', 'S'}
                         and math.isfinite(num(candidate.fixed_band_spread))
                         and math.isfinite(num(candidate.spread_line))):
@@ -878,7 +888,8 @@ def ats_card_state(latest, row, now):
     cutoff = ats_locks.deadline(ko) if ko is not None else None
     source, status, note = 'Provisional', 'provisional', ''
     if saved is not None:
-        ms, line = num(saved['fixed_band_spread']), num(saved['market_spread'])
+        ms = num(saved.get('model_spread', saved.get('raw_spread'))) if ats_policy.is_continuous(latest) else num(saved['fixed_band_spread'])
+        line = num(saved['market_spread'])
         status = 'locked'
         source = 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock'
         when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
@@ -921,7 +932,8 @@ def render_index(latest, ledger, built, now=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     if latest is None or latest['board'].empty:
         return html_document(head('ATS picks', 'No model run has been published yet; the first build writes this page.'),
-                             f'{SITE_NAME} picks', 'index.html', built)
+                             f'{SITE_NAME} picks', 'index.html', built,
+                             revision=(latest or {}).get('manifest', {}).get('revision'))
     man, board = latest['manifest'], latest['board']
     season, week = int(man['season']), int(man['week'])
     has_avail = (man.get('recipe') or {}).get('family', '') in m.AVAIL_FAMILIES
@@ -984,7 +996,10 @@ def render_index(latest, ledger, built, now=None):
             expected, usual = row.get(f'{side}_qb_expected'), row.get(f'{side}_qb_usual')
             if isinstance(expected, str) and isinstance(usual, str) and expected != usual:
                 flags.append(f"<span class='badge warn'>{esc(row[side])} QB: {esc(expected)}</span>")
-        edge = (f"<span class='edge'>{state['gap']:g}-point difference from market</span>"
+        gap_text = (f"{state['gap']:.1f}" if ats_policy.is_continuous(latest) else f"{state['gap']:g}")
+        if ats_policy.is_continuous(latest) and 0 < state['gap'] < .05:
+            gap_text = '<0.1'
+        edge = (f"<span class='edge'>{esc(gap_text)}-point difference from market</span>"
                 if math.isfinite(state['gap']) and state['gap'] > fixed_bands.EPS else '')
         pick = (f"<div class='pick-lines'><span class='kind'>ATS pick</span>"
                 f"<span class='pk{'' if state['selected_side'] else ' na'}'>{state['pick']}</span>{edge}</div>")
@@ -1028,7 +1043,8 @@ def render_index(latest, ledger, built, now=None):
     parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
                  f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
                  "<p><a href='grades.html'>View ATS results →</a></p>")
-    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS)
+    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS,
+                         revision=man.get('revision'))
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1130,7 +1146,7 @@ def pooled_2026_v118_header(latest, ledger):
 
 # Every public season surface uses the same deduplicated pool. Provenance stays
 # in season_ats and the repository report rather than the customer interface.
-PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', '60-minute lock',
+PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', 'Retrospective v1.19', '60-minute lock',
                 'Recorded pregame', 'Backfilled recorded skip', 'Awaiting ATS lock'}
 BREAK_EVEN = 110 / 210
 
@@ -1219,6 +1235,8 @@ def downloads(latest):
     links = []
     if len(public_ats(latest)):
         links.append("<a href='ats_2026_results.csv'>2026 per-game results (CSV)</a>")
+    if len(public_ats_history(latest)):
+        links.append("<a href='ats_history_results.csv'>All season results (CSV)</a>")
     if (latest or {}).get('ats_locks'):
         links.append("<a href='ats_locked_picks.csv'>Saved spread picks (CSV)</a>")
     if (latest or {}).get('board') is not None and len(latest['board']):
@@ -1236,7 +1254,8 @@ def render_grades(ledger, latest, built):
         parts.append(record_tiles(public_ats(latest), f'{season} record'))
         parts.append(render_ats_games(latest))
         parts.append(downloads(latest))
-    return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
+    return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built,
+                         revision=(latest or {}).get('manifest', {}).get('revision'))
 
 
 def pooled_basis_text(frame):
@@ -1344,6 +1363,41 @@ HOW_IT_WORKS = (
                       "Break-even is a 52.4% cover rate."),
 )
 
+CONTINUOUS_HOW_IT_WORKS = (
+    ("Project the spread", "The model starts with the market spread and total, then uses each team’s recent performance "
+                           "and available players to project a continuous point spread."),
+    *HOW_IT_WORKS[1:],
+)
+
+
+def public_ats_history(latest):
+    """Current-formula results, with the current season's effective picks once."""
+    if not ats_policy.is_continuous(latest):
+        return pd.DataFrame()
+    history = (latest or {}).get('ats_ledger', pd.DataFrame()).copy()
+    pool = public_ats(latest)
+    if len(pool):
+        season = int(latest['manifest']['season'])
+        history = (pd.concat([history.loc[history.season.ne(season)], pool], ignore_index=True)
+                   if len(history) else pool.copy())
+    return history.sort_values(['season', 'week', 'game_id'], kind='stable').reset_index(drop=True) if len(history) else history
+
+
+def historical_ats_table(latest):
+    history = public_ats_history(latest)
+    if history.empty:
+        return ''
+    rows = []
+    for season, group in history.groupby('season', sort=True):
+        result = season_ats.summary(group)
+        rows.append([str(int(season)), f'{result["wins"]}–{result["losses"]}–{result["pushes"]}',
+                     str(result['bets']), pct(result['cover_rate'], 1), units_text(result['units']),
+                     f'{roi_short(result["roi"])}<div class="mut small">{roi_uncertainty(result["roi_se"])}</div>'])
+    return ("<h2 class='sec'>By season</h2>" +
+            table(['Season', 'ATS W–L–P', 'Bets', 'Cover rate', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5)) +
+            "<p class='mut small'>Past seasons use the current formula with earlier-week information. "
+            "The formula was chosen after historical research; these results are not a fresh validation.</p>")
+
 
 def market_sides(df):
     """One row per side of every priced, decided game: its moneyline, no-vig implied probability and result,
@@ -1380,9 +1434,12 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
+        parts.append(historical_ats_table(latest))
+    instructions = CONTINUOUS_HOW_IT_WORKS if ats_policy.is_continuous(latest) else HOW_IT_WORKS
     parts.append("<h2 class='sec'>How picks work</h2><ol class='steps'>" +
-                 ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
-    return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
+                 ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in instructions) + "</ol>")
+    return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built,
+                         revision=(latest or {}).get('manifest', {}).get('revision'))
 
 # ---------------------------------------------------------------- driver
 
@@ -1391,40 +1448,47 @@ def render_all(out_dir, data=DATA, now=None):
     built = now.astimezone(PT).strftime("%Y-%m-%d %H:%M %Z")
     latest = load_latest(Path(data) / "latest")
     if latest is not None:
-        latest['ats_locks'] = ats_locks.display_records(data)
+        latest['ats_locks'] = active_ats_locks(latest, data)
     ledger = load_ledger(data)
     if latest is not None:
         latest['pooled_ats'] = season_ats.build(latest, ledger)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     season_results = public_ats(latest)
+    fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_status',
+              'gameday', 'kickoff_utc', 'fixed_band_spread',
+              'spread_line', 'home_score', 'away_score', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
+              'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units']
     if len(season_results):
-        fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_status',
-                  'gameday', 'kickoff_utc', 'fixed_band_spread',
-                  'spread_line', 'home_score', 'away_score', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
-                  'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units']
         season_results.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
             out / 'ats_2026_results.csv', index=False)
     else:
         (out / 'ats_2026_results.csv').unlink(missing_ok=True)
+    history = public_ats_history(latest)
+    if len(history):
+        history.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
+            out / 'ats_history_results.csv', index=False)
+    else:
+        (out / 'ats_history_results.csv').unlink(missing_ok=True)
     if latest is not None and latest['ats_locks']:
         locked_rows = []
         for row in latest['ats_locks'].values():
-            side = ats_locks.select(row['fixed_band_spread'], row['market_spread'], True)
+            projected = row.get('model_spread', row.get('raw_spread')) if ats_policy.is_continuous(latest) else row['fixed_band_spread']
+            side = ats_locks.select(projected, row['market_spread'], True)
             locked_rows.append(dict(game_id=row['game_id'], season=row['season'],
                 home=row['home'], away=row['away'], kickoff_utc=row['kickoff_utc'],
                 forecast_utc=row['generated_utc'], lock_at_utc=row['lock_at_utc'],
-                model_spread=row['fixed_band_spread'], market_spread=row['market_spread'],
+                model_spread=projected, market_spread=row['market_spread'],
                 selected_side=side, selected_team=row[side] if side else '',
                 handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None))
         pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
     else:
         (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
-    if latest is not None and 'fixed_band_ledger' in latest:
+    if latest is not None and len(latest.get('fixed_band_ledger', pd.DataFrame())):
         # The replayed ledger, per-season summary and median-map rules are research: data/latest only.
         (Path(data) / 'latest' / 'fixed_band_ledger.csv').parent.mkdir(parents=True, exist_ok=True)
         latest['fixed_band_ledger'].to_csv(Path(data) / 'latest' / 'fixed_band_ledger.csv', index=False)
-        fixed_bands.summary(latest['fixed_band_ledger']).to_csv(Path(data) / 'latest' / 'fixed_band_summary.csv', index=False)
+        ats_policy.summary(latest).to_csv(Path(data) / 'latest' / 'fixed_band_summary.csv', index=False)
         latest['board'].to_csv(Path(data) / 'latest' / 'fixed_band_board.csv', index=False)
         (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(
             json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False))
@@ -1481,7 +1545,7 @@ def published_report(data):
     parts.append('\n\nATS 60-minute capture policy\n\n' + ats_locks.report(data))
     latest = load_latest(data / 'latest')
     if latest is not None:
-        latest['ats_locks'] = ats_locks.display_records(data)
+        latest['ats_locks'] = active_ats_locks(latest, data)
         parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(season_ats.build(latest, load_ledger(data))))
     calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
     if calibration.exists():

@@ -1,0 +1,52 @@
+{
+  "revision": "boxscore-composite-v1.19",
+  "config_signature": "65ce7908e222fab2d296836ce722e23e336a1643f4f0458c82462b78f5e871b2",
+  "recipe": {
+    "family": "rates_core_avail_cs_peaks_nosacks",
+    "half_life": 8.0,
+    "ridge": 0.1,
+    "architecture": "market_spread_total",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0,
+    "market_ridge": 0.01
+  },
+  "generated_utc": "2026-10-19T19:19:16.104054+00:00",
+  "source": "current nflverse inputs, 2019-2026",
+  "rebuild_basis": "reconstructed prior-week forecasts; no new historical native captures",
+  "price": "flat 1u risk at assumed -110 each side",
+  "current": {
+    "wins": 38,
+    "losses": 48,
+    "pushes": 6,
+    "skips": 0,
+    "bets": 92,
+    "selected": 92,
+    "opportunities": 92,
+    "units": -13.45454545454546,
+    "roi": -0.14624505928853762,
+    "roi_se": 0.09617462137912607,
+    "cover_rate": 0.4418604651162791,
+    "pending": 1,
+    "unavailable": 0
+  },
+  "historical_completed": 1451,
+  "history_export_rows": 1452,
+  "old_protected_files": 16,
+  "old_archive_prefixes_preserved": true,
+  "tracked_generated_data_unchanged": true,
+  "source_sha256": {
+    "run_manifest.json": "5a779481fc62a483b4fc478d6633fca2ae3aad3355cf49e30bb46cf141ffdef6",
+    "pregame_features_half_life_8.csv": "737bbaa63f549921e78f6c91d6cc30ba7a3773d8294eddf74f37a8eb390932bc",
+    "pregame_features_half_life_16.csv": "661aeb2fd027428cce8ce5fb0b7515e99bf0718e16a7a98efc65b1c30e484b74",
+    "current_season_predictions.csv": "35b27d95447b58a557bfb66533fa0b2222b334e6dc4119e12e61c22f1b61d50d",
+    "retro_ledger.csv": "1c7599c657d34f96cd56aaf53e708cd67dde7bebbd1860897a84d0868101fc41"
+  },
+  "public_history_sha256": "d4897b774f07b83bcc7b27df2bffa581373b500fe4d16f800a80ab2ea9d04890",
+  "package_versions": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "nflreadpy": "0.1.5",
+    "pyarrow": "26.0.0"
+  }
+}

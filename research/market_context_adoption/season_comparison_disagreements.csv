@@ -1,0 +1,3 @@
+segment,games,challenger_wins,challenger_losses,challenger_pushes,challenger_units,challenger_roi,production_wins,production_losses,production_pushes,production_units,production_roi
+same_picks,489,276,200,13,50.909090909090935,0.10410857036623913,276,200,13,50.909090909090935,0.10410857036623913
+different_picks,327,167,154,6,-2.1818181818181666,-0.006672226855713047,154,167,6,-26.999999999999986,-0.0825688073394495

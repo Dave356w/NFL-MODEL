@@ -1,0 +1,38 @@
+[
+  {
+    "week": 1,
+    "games": 16,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.544819569574088e-07
+  },
+  {
+    "week": 2,
+    "games": 16,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.857371794786403e-07
+  },
+  {
+    "week": 3,
+    "games": 16,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.5196133391378623e-07
+  },
+  {
+    "week": 4,
+    "games": 16,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.973209081771124e-07
+  },
+  {
+    "week": 5,
+    "games": 15,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.980677528743094e-07
+  },
+  {
+    "week": 6,
+    "games": 14,
+    "recipe": "rates_core_avail_cs_peaks_nosacks_h8_r0.1_market_spread_total_i0.1_m0.01",
+    "max_saved_probability_rounding": 4.549916203799853e-07
+  }
+]

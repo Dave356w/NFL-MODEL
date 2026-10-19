@@ -4,8 +4,18 @@ import hashlib
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import pytest
 import nfl_model as m
 from test_product_production import fixture
+
+
+@pytest.fixture(autouse=True)
+def legacy_v118_identity(monkeypatch):
+    """Keep restoration-era replay/identity checks under their original recipe."""
+    monkeypatch.setattr(m, 'OUTPUT_NAME', 'nfl_boxscore_output_v1_18')
+    with m.revision_identity('boxscore-composite-v1.18',
+                             dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY)):
+        yield
 
 
 def test_restored_configuration_matches_original_frozen_recipe():

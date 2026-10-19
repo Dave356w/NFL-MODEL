@@ -16,6 +16,18 @@ import nfl_model as m
 NOW = dt.datetime(2026, 10, 7, 15, tzinfo=dt.timezone.utc)  # Wednesday
 
 
+@pytest.fixture(autouse=True)
+def legacy_export_identity():
+    """Existing synthetic exports exercise their saved median-era identity.
+
+    New market-baseline exports are covered separately; a source-code promotion
+    must not reinterpret old manifests, cards, locks or historical maps.
+    """
+    with m.revision_identity('boxscore-composite-v1.18',
+                             dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY)):
+        yield
+
+
 def make_data(root, with_ledger=True):
     rng = np.random.default_rng(1)
     latest = root / "latest"

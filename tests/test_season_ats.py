@@ -14,6 +14,13 @@ import season_ats as s
 
 
 class SeasonATS(unittest.TestCase):
+    def setUp(self):
+        # Existing cases preserve the original median-era precedence contract.
+        legacy = m.revision_identity('boxscore-composite-v1.18',
+            dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY))
+        legacy.__enter__()
+        self.addCleanup(legacy.__exit__, None, None, None)
+
     def fixture(self):
         history = pd.DataFrame([
             dict(game_id='h', season=2026, week=5, home='IND', away='TEN', gameday='2026-10-11',

@@ -1,10 +1,68 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.18), newest first; this page describes what the code
+version history (v1 to v1.19), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.18`
+## The current model: `boxscore-composite-v1.19`
+
+**Owner adoption, 2026-10-19.** The previously tested
+`spread_total::group:full::g1` raw variant replaces v1.18 and its median ATS
+mapping. New revision, output name (`nfl_boxscore_output_v1_19`), config
+signature and continuous-spread ATS policy. This decision follows exposed
+historical development; a reliable incremental edge remains unresolved.
+
+Before every target week, use ready, decisive games from strictly earlier
+weeks, with finite moneyline eligibility, passing contexts, spread and total.
+Production profiles begin in 2019 and retrospective evaluation begins in 2021.
+Weights decay as `2^(-age/38)` with age measured in 19-week seasons, then
+normalize to sum to one. Neither fitting stage selects on ROI.
+
+1. Fit a market home-win logistic baseline on `[1, s, t, s*t]`, where
+   `s = signed_home_market_margin / 7` and `t = (total_line - 44) / 7`.
+   Fit weighted log loss plus ridge with coefficient penalty `0.01 / ESS`,
+   where `ESS = 1 / sum(weight^2)`.
+2. Hold the baseline coefficients fixed and jointly fit all **29 football
+   inputs** as additive log-odds corrections: site; seven offense and seven
+   allowed rates; QB delta and six unit-absence differences; prior maximum
+   lead and deficit; passing product and four signed 1 SD passing contexts.
+   Use h8 main profiles and h16 passing profiles. Scale by training weighted
+   standard deviation without centering; unavailable main inputs are neutral
+   zero. Penalties are 0.1, except site 0.01. Apply the full fitted correction
+   (`gamma=1`), with no v1.18 favorite penalty.
+3. Convert the resulting probability to a continuous projected home margin:
+   `12.37 * ndtri(clip(p, .005, .995))`. Choose home ATS when this margin
+   exceeds the market home margin, and away when it is smaller. A zero edge
+   within 1e-10 takes the market favorite; a pick'em zero edge skips.
+
+Moneylines retain eligibility and comparator roles but no longer supply the
+forecast offset. Both market-stage and football-stage coefficients, scaling,
+training cutoffs and spread/total inputs are saved in new native snapshots.
+The old conditional probability band is unavailable for this two-stage model;
+it would omit baseline estimation uncertainty. v1.19 does not relabel its
+coefficients as a v1.16 shadow fit.
+
+**Retrospective update and public results.** Rebuild all historical and
+current-season picks with v1.19, including completed games after the former
+median-policy adoption. These are reconstructed forecasts, not native forward
+captures. Public results use one row per game, with only same-revision v1.19
+locks overriding replay. Original JSONL archives, old frozen recipes and old
+ATS locks are never rewritten. Source tracking stays in backend reports;
+public pages and downloads show ATS data only. Annual ATS performance and
+all-season game data accompany the 2026 overview.
+
+The current policy is `raw-spread-ats-t60-favtie-2026-10-19-v1`, adopted at
+2026-10-19 19:09:27 UTC. It retains the T−60 generated-and-observed cutoff,
+injury-report gating and pre-kickoff finalization. There is no median-map
+requirement. Older policies remain valid for their archived rows. Compatibility
+filenames and columns containing `fixed_band` carry the continuous value for
+v1.19; `fixed_band_rules.json` is empty. See
+[the adoption record](research/MARKET_CONTEXT_ADOPTION.md).
+
+## Archived v1.18: `boxscore-composite-v1.18`
+
+The v1.18 and v1.16 descriptions below document the superseded models and
+their original evidence; they are retained for reproducibility.
 
 **v1.16 with the favorite-confidence penalty (owner decision 2026-10-13).** New `REVISION`,
 `OUTPUT_NAME` (`nfl_boxscore_output_v1_18`) and config signature. Same features, fit and
@@ -32,7 +90,7 @@ of sample and +0.0023 ± 0.0017 on 2021–25 (both exposed; λ chosen on 2021–
 2026 weeks 1–5 and +0.147 on 13 native games. It still trails the market. No profit claim follows:
 ROI is identical to v1.16 by construction.
 
-## v1.16: the shared base model
+## Archived v1.16: the shared base model
 
 **Production restored (2026-10-12).** Owner-directed return to the exact original
 market-offset **Product + 1 SD** recipe: raw main h8, passing h16, fixed no-vig
@@ -247,13 +305,13 @@ are not independent games. The native JSONL is never replaced or backfilled.
 **Owner decision 2026-10-19.** The model is judged by ATS results. After the
 hold, break-even prices and variance, moneyline betting does not look
 profitable, so moneyline results are legacy research (next section). The
-v1.18 probability engine, its log-loss fitting and the median map are
-unchanged.
+current v1.19 engine fits log loss and uses its continuous spread directly.
+The older v1.18 median-policy history is described below for reproducibility.
 
-Every locked game gets 1u at an assumed −110 on the side its mapped spread
-takes against the market line. When the mapped spread equals the line, the bet
+Every locked game gets 1u at an assumed −110 on the side its model spread
+takes against the market line. When the model spread equals the line, the bet
 is the market favorite (see "Zero edge takes the favorite" below). Only a
-pick'em line with a zero mapped spread skips. A win pays +0.9091u and a loss
+pick'em line with a zero projected spread skips. A win pays +0.9091u and a loss
 costs 1u. A push returns the stake and stays in ROI's denominator. A skip is
 not a bet. Each ATS result is reported with:
 
@@ -271,7 +329,7 @@ Spread point error (MAE) is a secondary diagnostic. On 2023–26 walk-forward
 games the mapped spread, the raw spread and the market line have the same
 error (9.74–9.76 points).
 
-**Open question: median map vs raw spread.** On 2023–26 walk-forward games,
+**Legacy research question: median map vs raw spread.** On 2023–26 walk-forward games,
 picks from the median map covered 54.1% (n=761) and picks from the raw spread
 covered 51.1% (n=870). The difference is about 3 points ± 2.5. It is
 unresolved, and the map was adopted with this history in view. Every
@@ -435,9 +493,9 @@ a −2.4% null (2023–25, exposed: 42 picks, +34.2% ± 17.0); the slice was pro
 both were seen. At 11–16 picks a season it needs several seasons: no verdict before 10
 bets, falsified at n ≥ 50 with ROI at or below the null.
 
-### Favorite-confidence penalty (v1.16.2 reporting; production from v1.18)
+### Archived favorite-confidence penalty (v1.16.2 reporting; v1.18 production)
 
-v1.18 makes this the production forecast (see the top of this page); `retro_ledger.csv` no longer
+v1.18 made this the production forecast; its `retro_ledger.csv` no longer
 carries `model_wp_fp`, because its `model_wp` is already penalized. As first added in v1.16.2:
 where v1.16 backs the market favorite more strongly than the no-vig price q, `model_wp_fp` keeps
 `FAVORITE_PENALTY` (0.2) of its log-odds departure from q; everywhere else it equals `model_wp`.
@@ -557,7 +615,10 @@ Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
 walk-forward grid.
 
-### Median-MOV displayed spread (2026-10-17)
+### Archived median-MOV displayed spread (2026-10-17)
+
+This section and the following median-policy sections describe v1.18. They
+were superseded by the v1.19 continuous-spread policy on 2026-10-19.
 
 The site's **Model spread** uses a prior-season median signed MOV calibration
 in `fixed_bands.py`, replacing the earlier ATS W-L optimized values. The

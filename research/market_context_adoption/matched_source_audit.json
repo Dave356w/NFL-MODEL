@@ -1,0 +1,557 @@
+{
+  "basis": "same-source exposed retrospective reconstruction; no native or fresh evidence",
+  "pricing": "assumed equal -110, 1u risk; wins +1/1.1, losses -1, pushes0; zero edge takes favorite",
+  "source_run": "/workspace/nfl-performance-audit/v119-rebuild-runs/2026_week6_20261019T191916104054Z",
+  "legacy_recipe": {
+    "family": "rates_core_avail_cs_peaks_nosacks",
+    "half_life": 8.0,
+    "ridge": 0.1,
+    "architecture": "market_product_1sd",
+    "interaction_ridge": 0.1,
+    "pass_half_life": 16.0,
+    "favorite_penalty": 0.2
+  },
+  "median_training": "annual prior 2021+ OOF forecasts; signed margins including losses/ties",
+  "all_coefficient_cutoffs_prior": true,
+  "records": [
+    {
+      "period": "2023-25",
+      "policy": "v118_raw",
+      "opportunities": 816,
+      "wins": 409,
+      "losses": 388,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": -16.181818181818176,
+      "roi": -0.019830659536541884,
+      "roi_se": 0.03303340720873184,
+      "cover_rate": 0.5131744040150564,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023-25",
+      "policy": "v118_median",
+      "opportunities": 816,
+      "wins": 430,
+      "losses": 367,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": 23.909090909090914,
+      "roi": 0.029300356506238866,
+      "roi_se": 0.032941688050994414,
+      "cover_rate": 0.5395232120451694,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023-25",
+      "policy": "v119_raw",
+      "opportunities": 816,
+      "wins": 443,
+      "losses": 354,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": 48.727272727272734,
+      "roi": 0.05971479500891266,
+      "roi_se": 0.03283961539808277,
+      "cover_rate": 0.5558343789209536,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023-25",
+      "policy": "favorite",
+      "opportunities": 816,
+      "wins": 411,
+      "losses": 386,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": -12.36363636363636,
+      "roi": -0.015151515151515147,
+      "roi_se": 0.03302854673840519,
+      "cover_rate": 0.5156838143036386,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023-25",
+      "policy": "home_control",
+      "opportunities": 816,
+      "wins": 400,
+      "losses": 397,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": -33.36363636363635,
+      "roi": -0.040886809269162196,
+      "roi_se": 0.03304521168820253,
+      "cover_rate": 0.5018820577164367,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2026",
+      "policy": "v118_raw",
+      "opportunities": 92,
+      "wins": 42,
+      "losses": 44,
+      "pushes": 6,
+      "skips": 0,
+      "bets": 92,
+      "units": -5.818181818181817,
+      "roi": -0.06324110671936757,
+      "roi_se": 0.0967352865537765,
+      "cover_rate": 0.4883720930232558,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2026",
+      "policy": "v118_median",
+      "opportunities": 92,
+      "wins": 50,
+      "losses": 36,
+      "pushes": 6,
+      "skips": 0,
+      "bets": 92,
+      "units": 9.454545454545451,
+      "roi": 0.1027667984189723,
+      "roi_se": 0.09549747827430131,
+      "cover_rate": 0.5813953488372093,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2026",
+      "policy": "v119_raw",
+      "opportunities": 92,
+      "wins": 38,
+      "losses": 48,
+      "pushes": 6,
+      "skips": 0,
+      "bets": 92,
+      "units": -13.454545454545453,
+      "roi": -0.14624505928853754,
+      "roi_se": 0.0961746213791261,
+      "cover_rate": 0.4418604651162791,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2026",
+      "policy": "favorite",
+      "opportunities": 92,
+      "wins": 39,
+      "losses": 47,
+      "pushes": 6,
+      "skips": 0,
+      "bets": 92,
+      "units": -11.545454545454545,
+      "roi": -0.12549407114624506,
+      "roi_se": 0.09638875963667662,
+      "cover_rate": 0.45348837209302323,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2026",
+      "policy": "home_control",
+      "opportunities": 92,
+      "wins": 39,
+      "losses": 47,
+      "pushes": 6,
+      "skips": 0,
+      "bets": 92,
+      "units": -11.545454545454545,
+      "roi": -0.12549407114624506,
+      "roi_se": 0.09638875963667662,
+      "cover_rate": 0.45348837209302323,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023",
+      "policy": "v118_raw",
+      "opportunities": 272,
+      "wins": 125,
+      "losses": 133,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": -19.36363636363636,
+      "roi": -0.07118983957219249,
+      "roi_se": 0.05645437943914571,
+      "cover_rate": 0.4844961240310077,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023",
+      "policy": "v118_median",
+      "opportunities": 272,
+      "wins": 136,
+      "losses": 122,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 1.6363636363636367,
+      "roi": 0.006016042780748665,
+      "roi_se": 0.05638940648888875,
+      "cover_rate": 0.5271317829457365,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023",
+      "policy": "v119_raw",
+      "opportunities": 272,
+      "wins": 142,
+      "losses": 116,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 13.09090909090909,
+      "roi": 0.0481283422459893,
+      "roi_se": 0.0561891843958682,
+      "cover_rate": 0.5503875968992248,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023",
+      "policy": "favorite",
+      "opportunities": 272,
+      "wins": 137,
+      "losses": 121,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 3.5454545454545476,
+      "roi": 0.013034759358288779,
+      "roi_se": 0.056364148865781304,
+      "cover_rate": 0.5310077519379846,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2023",
+      "policy": "home_control",
+      "opportunities": 272,
+      "wins": 128,
+      "losses": 130,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": -13.636363636363635,
+      "roi": -0.050133689839572185,
+      "roi_se": 0.05647530520478812,
+      "cover_rate": 0.49612403100775193,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2024",
+      "policy": "v118_raw",
+      "opportunities": 272,
+      "wins": 137,
+      "losses": 131,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": -6.454545454545452,
+      "roi": -0.023729946524064162,
+      "roi_se": 0.05754241441082273,
+      "cover_rate": 0.5111940298507462,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2024",
+      "policy": "v118_median",
+      "opportunities": 272,
+      "wins": 142,
+      "losses": 126,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 3.0909090909090917,
+      "roi": 0.011363636363636367,
+      "roi_se": 0.057453967938887185,
+      "cover_rate": 0.5298507462686567,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2024",
+      "policy": "v119_raw",
+      "opportunities": 272,
+      "wins": 146,
+      "losses": 122,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 10.727272727272727,
+      "roi": 0.03943850267379679,
+      "roi_se": 0.0573260632885345,
+      "cover_rate": 0.5447761194029851,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2024",
+      "policy": "favorite",
+      "opportunities": 272,
+      "wins": 143,
+      "losses": 125,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 5.000000000000002,
+      "roi": 0.018382352941176478,
+      "roi_se": 0.0574267668166056,
+      "cover_rate": 0.5335820895522388,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2024",
+      "policy": "home_control",
+      "opportunities": 272,
+      "wins": 137,
+      "losses": 131,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": -6.454545454545455,
+      "roi": -0.023729946524064172,
+      "roi_se": 0.05754241441082273,
+      "cover_rate": 0.5111940298507462,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2025",
+      "policy": "v118_raw",
+      "opportunities": 272,
+      "wins": 147,
+      "losses": 124,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": 9.636363636363637,
+      "roi": 0.03542780748663102,
+      "roi_se": 0.05766914232995839,
+      "cover_rate": 0.5424354243542435,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2025",
+      "policy": "v118_median",
+      "opportunities": 272,
+      "wins": 152,
+      "losses": 119,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": 19.18181818181818,
+      "roi": 0.07052139037433154,
+      "roi_se": 0.05744769355579744,
+      "cover_rate": 0.5608856088560885,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2025",
+      "policy": "v119_raw",
+      "opportunities": 272,
+      "wins": 155,
+      "losses": 116,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": 24.909090909090914,
+      "roi": 0.09157754010695189,
+      "roi_se": 0.05727634141033557,
+      "cover_rate": 0.5719557195571956,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2025",
+      "policy": "favorite",
+      "opportunities": 272,
+      "wins": 131,
+      "losses": 140,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": -20.909090909090907,
+      "roi": -0.07687165775401068,
+      "roi_se": 0.0578465888114201,
+      "cover_rate": 0.4833948339483395,
+      "break_even_cover_rate": 0.5238095238095238
+    },
+    {
+      "period": "2025",
+      "policy": "home_control",
+      "opportunities": 272,
+      "wins": 135,
+      "losses": 136,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": -13.27272727272727,
+      "roi": -0.048796791443850254,
+      "roi_se": 0.057877705660562766,
+      "cover_rate": 0.4981549815498155,
+      "break_even_cover_rate": 0.5238095238095238
+    }
+  ],
+  "paired_comparisons": {
+    "2023-25": {
+      "games": 816,
+      "week_clusters": 54,
+      "new_minus_old_units": 24.81818181818182,
+      "new_minus_old_roi": 0.0304144385026738,
+      "paired_roi_ci95": [
+        -0.04037139586160109,
+        0.10256723716381416
+      ],
+      "side_flips": 327
+    },
+    "2026": {
+      "games": 92,
+      "week_clusters": 6,
+      "new_minus_old_units": -22.909090909090914,
+      "new_minus_old_roi": -0.24901185770750994,
+      "paired_roi_ci95": [
+        -0.4090909090909091,
+        -0.07954545454545454
+      ],
+      "side_flips": 39
+    }
+  },
+  "median_rules": [
+    {
+      "season": 2023,
+      "training_max_season": 2022,
+      "training_games": 543,
+      "training_band_counts": [
+        197,
+        184,
+        100,
+        62
+      ],
+      "cuts": [
+        3.0,
+        7.0,
+        10.0
+      ],
+      "magnitudes": [
+        2.0,
+        3.0,
+        6.5,
+        14.5
+      ],
+      "method": "median_signed_mov",
+      "policy_version": "median-mov-ats-2026-10-17-v1",
+      "includes_tied_finals": true
+    },
+    {
+      "season": 2024,
+      "training_max_season": 2023,
+      "training_games": 815,
+      "training_band_counts": [
+        310,
+        280,
+        133,
+        92
+      ],
+      "cuts": [
+        3.0,
+        7.0,
+        10.0
+      ],
+      "magnitudes": [
+        3.0,
+        3.0,
+        7.0,
+        14.0
+      ],
+      "method": "median_signed_mov",
+      "policy_version": "median-mov-ats-2026-10-17-v1",
+      "includes_tied_finals": true
+    },
+    {
+      "season": 2025,
+      "training_max_season": 2024,
+      "training_games": 1087,
+      "training_band_counts": [
+        407,
+        388,
+        178,
+        114
+      ],
+      "cuts": [
+        3.0,
+        7.0,
+        10.0
+      ],
+      "magnitudes": [
+        3.0,
+        4.0,
+        6.5,
+        14.0
+      ],
+      "method": "median_signed_mov",
+      "policy_version": "median-mov-ats-2026-10-17-v1",
+      "includes_tied_finals": true
+    },
+    {
+      "season": 2026,
+      "training_max_season": 2025,
+      "training_games": 1359,
+      "training_band_counts": [
+        497,
+        478,
+        228,
+        156
+      ],
+      "cuts": [
+        3.0,
+        7.0,
+        10.0
+      ],
+      "magnitudes": [
+        3.0,
+        4.0,
+        7.0,
+        14.0
+      ],
+      "method": "median_signed_mov",
+      "policy_version": "median-mov-ats-2026-10-17-v1",
+      "includes_tied_finals": true
+    }
+  ],
+  "proper_scores": [
+    {
+      "period": "2023-25",
+      "model": "v118",
+      "binary_games": 815,
+      "winner_log_loss": 0.6064142659118834,
+      "brier": 0.2094729869582837
+    },
+    {
+      "period": "2023-25",
+      "model": "v119",
+      "binary_games": 815,
+      "winner_log_loss": 0.6045221575321461,
+      "brier": 0.20871461609568517
+    },
+    {
+      "period": "2026",
+      "model": "v118",
+      "binary_games": 91,
+      "winner_log_loss": 0.6809610842316561,
+      "brier": 0.24258465784802533
+    },
+    {
+      "period": "2026",
+      "model": "v119",
+      "binary_games": 91,
+      "winner_log_loss": 0.7016068014012776,
+      "brier": 0.2479213831296139
+    }
+  ],
+  "hashes": {
+    "/workspace/nfl-performance-audit/v119-rebuild-runs/2026_week6_20261019T191916104054Z/pregame_features_half_life_8.csv": "737bbaa63f549921e78f6c91d6cc30ba7a3773d8294eddf74f37a8eb390932bc",
+    "/workspace/nfl-performance-audit/v119-rebuild-runs/2026_week6_20261019T191916104054Z/candidate_walk_forward_predictions.csv": "a495d86ede84385517e039cbdc6179a99192924dbb86e47a30cff291e248500b",
+    "/workspace/nfl-performance-audit/v119-rebuild-runs/2026_week6_20261019T191916104054Z/current_season_predictions.csv": "35b27d95447b58a557bfb66533fa0b2222b334e6dc4119e12e61c22f1b61d50d",
+    "/workspace/nfl-market-update/nfl_model.py": "44c93e83986d5b1f1b3e46c332ee7628d52f17c05e8a6146f646d815b59256da",
+    "/workspace/nfl-market-update/fixed_bands.py": "5f54ef4094757e25877a101e4aaf7b6f49e3c4ca8b37b8398b8ae8b93ffe3229",
+    "/workspace/nfl-performance-audit/v119-incumbent-comparison/compare.py": "31ff0b80b55eb99e120a0b452fe909f5d0f778dac536e203e9c6539388914c1a"
+  }
+}

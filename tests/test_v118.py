@@ -10,6 +10,15 @@ from test_product_production import fixture
 ASOF = dt.datetime(2023, 9, 9, tzinfo=dt.timezone.utc)
 
 
+@pytest.fixture(autouse=True)
+def legacy_v118_identity(monkeypatch):
+    """These are frozen v1.18 contracts, independent of current production."""
+    monkeypatch.setattr(m, 'SHADOW_LOCK', True)
+    with m.revision_identity('boxscore-composite-v1.18',
+                             dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY)):
+        yield
+
+
 def lockable(train, board, fit):
     board = board.copy()
     board['result'] = np.nan; board['gameday'] = '2023-09-10'; board['gametime'] = '13:00'

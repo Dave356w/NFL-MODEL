@@ -1,0 +1,13 @@
+{
+  "basis": "Exposed historical policy comparison; 2021+ prior-season production median calibration; flat1u at assumed\u2212110; no nativeforward claim",
+  "bootstrap_reps": 4000,
+  "bootstrap_seed": 20261019,
+  "source_sha256": {
+    "games.csv": "8285e88a767e4e7490493a0bdf4475c57ff27b43931be6e92d13701b0ecfd5c7",
+    "predictions.npz": "ff8fefffc39e452e818cec547fead0e96612995ff096d91e36948de7965a844a",
+    "frozen_inputs.csv.gz": "96f5f4186b181f58d8577a5adc6667b5583068d1053b385c2a29ae67d8764a7a",
+    "annual_scores.csv": "c655bccc99c4d92a7aea7bbc81c80762945e41207c238174ab99116f8194dff8"
+  },
+  "production_policy": "production||incumbent_v118||median_own",
+  "challenger": "production||spread_total::group:full::g1||raw"
+}

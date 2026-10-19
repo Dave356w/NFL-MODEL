@@ -61,7 +61,11 @@ H1_MIN_GAP = .17
 # research/PREREGISTRATION.md, addendum 2026-10-15: H9 (moneyline vs spread disagreement), one row per
 # game from the first production snapshot (v1.18 on; prices only, so a model change does not end it).
 # Append-only: add every new production REVISION here, never remove one (a test checks m.REVISION).
-H9_PRODUCTION = ("boxscore-composite-v1.18",)
+H9_PRODUCTION = ("boxscore-composite-v1.18", "boxscore-composite-v1.19")
+# Saved revisions determine settlement semantics; promoting a model never changes
+# the legacy continuous-spread diagnostic attached to older native snapshots.
+CONTINUOUS_ATS_REVISIONS = ("boxscore-composite-v1.19",)
+ATS_EPS = 1e-10
 H9_FROM = (2026, 6)
 H9_T = 0.11133        # 75th percentile of |dis| on 2013-2026, outcome-free (research/ML_SPREAD_2006_12.md)
 H9_CLIP = 1e-4
@@ -142,18 +146,29 @@ def grade(records, results, kalshi=None, ladder=None, h4=None):
 
 
 def ats(g):
-    """Diagnostic, not the goal metric (v1.12.1): the model-implied spread, its gap to
-    the snapshot spread_line (positive = model likes home more), the side that gap
-    takes against the snapshot spread, and W/L/P against that spread once final."""
+    """Convert each original forecast at its original line, preserving its policy.
+
+    v1.19 uses the continuous ATS policy, including a favorite bet on zero edge.
+    Older revisions retain the original diagnostic's zero-edge skips. These are
+    first-snapshot grades; native T-60 ATS decisions live in the separate store.
+    """
     sp = m.implied_spread(g.model_wp)
     line = pd.to_numeric(g.spread_line, errors="coerce").to_numpy(float)
     gap = sp - line
     side = np.where(~np.isfinite(gap) | np.isclose(np.nan_to_num(gap), 0), "",
                     np.where(gap > 0, "home", "away"))
+    current = g.get('revision', pd.Series('', index=g.index)).isin(CONTINUOUS_ATS_REVISIONS).to_numpy()
+    valid = current & np.isfinite(gap)
+    direction = np.where(abs(gap) <= ATS_EPS, line, gap)
+    side[valid] = np.where(direction[valid] > 0, 'home', np.where(direction[valid] < 0, 'away', ''))
     cover = pd.to_numeric(g.result, errors="coerce").to_numpy(float) - line  # home margin over the line
     res = np.where((side == "") | ~np.isfinite(cover), "",
                    np.where(np.isclose(np.nan_to_num(cover), 0), "P",
                             np.where((cover > 0) == (side == "home"), "W", "L")))
+    selected = valid & (side != '') & np.isfinite(cover)
+    res[selected] = np.where(abs(cover[selected]) <= ATS_EPS, 'P',
+                            np.where((cover[selected] > 0) == (side[selected] == 'home'), 'W', 'L'))
+    res[valid & (side == '')] = 'S'
     return sp, gap, side, res
 
 
@@ -403,8 +418,13 @@ def ats_summary(g, min_gap=0.):
     b = g[(g.ats_result != "") & (g.spread_gap.abs() >= min_gap)]
     w, l = int((b.ats_result == "W").sum()), int((b.ats_result == "L").sum())
     lo, hi = m.wilson(w, w + l)
-    return {"wins": w, "losses": l, "pushes": int((b.ats_result == "P").sum()),
-            "win_pct": w / (w + l) if w + l else np.nan, "lo": lo, "hi": hi}
+    p = int((b.ats_result == 'P').sum())
+    units = np.array([1/1.1]*w + [-1.]*l + [0.]*p)
+    return {"wins": w, "losses": l, "pushes": p,
+            "win_pct": w / (w + l) if w + l else np.nan, "lo": lo, "hi": hi,
+            'bets': len(units), 'units': float(units.sum()),
+            'roi': float(units.mean()) if len(units) else np.nan,
+            'roi_se': float(units.std(ddof=1)/np.sqrt(len(units))) if len(units)>1 else np.nan}
 
 
 def roi(g):
@@ -650,8 +670,8 @@ def report_text(g, now=None, h5=None):
     lines = [f"NFL forward ledger report -- {now.strftime('%Y-%m-%d %H:%M UTC')}",
              "Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).",
              "Basis: native forward observations only; no reconstructed or backfilled rows.",
-             "Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).",
-             "Log loss/Brier market: the probability saved in each original snapshot; no-vig moneylines for v1.16/v1.17, spread-derived for earlier revisions.",
+             "Moneylines: 1u flat on the model's side at the saved snapshot price (not necessarily the close); secondary for the continuous ATS model.",
+             "Log loss/Brier market: the benchmark probability saved in each original snapshot; no-vig moneylines for v1.16-v1.19, spread-derived for earlier revisions. v1.19's fitted spread/total forecast offset is separate from this benchmark.",
              ""]
     if g.empty:
         return "\n".join(lines + ["No snapshots recorded yet."]) + "\n"
@@ -661,7 +681,8 @@ def report_text(g, now=None, h5=None):
                      f"{sm['pending']} pending, {sm['ties']} ties")
         r = sm["roi"]
         if r["bets"]:
-            lines += [f"  HEADLINE flat 1u, model's side at the snapshot moneyline: {r['wins']}-{r['losses']}-{r['pushes']}, "
+            label = 'SECONDARY' if rev in CONTINUOUS_ATS_REVISIONS else 'HEADLINE'
+            lines += [f"  {label} flat 1u, model's side at the snapshot moneyline: {r['wins']}-{r['losses']}-{r['pushes']}, "
                       f"{r['units']:+.2f}u, ROI {100 * r['roi']:+.1f}% +/- {100 * r['roi_se']:.1f} (1 SE)",
                       f"    win {100 * r['win_pct']:.1f}% vs no-vig q {100 * r['mean_q']:.1f}% (excess {r['excess_pp']:+.1f}pp); "
                       f"market-correct null ROI {100 * r['null_roi']:+.1f}%",
@@ -682,14 +703,22 @@ def report_text(g, now=None, h5=None):
             lines.append("  No graded bets with a saved moneyline yet.")
         decided = part.ats_result.isin(["W", "L"]).sum()
         if decided:
-            lines.append(f"  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread "
-                         f"(break-even at -110: {100 * ATS_BREAKEVEN:.1f}%)")
-            lines.append("    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.")
+            if rev in CONTINUOUS_ATS_REVISIONS:
+                lines.append(f"  Continuous ATS policy at the original first-snapshot spread "
+                             f"(break-even at -110: {100 * ATS_BREAKEVEN:.1f}%)")
+                lines.append("    These first-snapshot grades are separate from the native production T-60 ATS locks; zero edge takes the market favorite.")
+            else:
+                lines.append(f"  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread "
+                             f"(break-even at -110: {100 * ATS_BREAKEVEN:.1f}%)")
+                lines.append("    Older revisions retain their diagnostic grading; see the repository production sanity appendix for the active ATS policy.")
             for lab, gap in (("all games", 0.), (f"|gap| >= {ATS_GAP_POINTS:g} pts", ATS_GAP_POINTS)):
                 a = ats_summary(part, gap)
                 if a["wins"] + a["losses"]:
                     lines.append(f"    {lab:>15}  {a['wins']}-{a['losses']}-{a['pushes']}  "
                                  f"cover {100 * a['win_pct']:.1f}% (Wilson 95% {100 * a['lo']:.1f}-{100 * a['hi']:.1f})")
+                    if rev in CONTINUOUS_ATS_REVISIONS:
+                        lines.append(f"      flat 1u at assumed -110: {a['units']:+.2f}u, ROI {100*a['roi']:+.2f}% "
+                                     f"+/- {100*a['roi_se']:.2f}pp (1 SE); pushes included in {a['bets']} stakes")
                 else:
                     lines.append(f"    {lab:>15}  no decided games")
         ks = kalshi_summary(part, "kalshi_units", "kalshi_fav_units")

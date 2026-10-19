@@ -1,111 +1,79 @@
 # NFL ATS
 
 NFL against-the-spread picks and results, built and published as a static site
-by GitHub Actions. Public pages show ATS selections, projected and market
-spreads, lock status, cover rates, units and ROI. Win probabilities and moneyline
-research stay internal to the model and repository reports.
-
-**Public goal: flat 1-unit ATS results.** The signed difference between the
-projected home margin and market margin chooses the ATS side. Matching lines
-take the market favorite (pick'em lines skip); pushes return the stake. Returns assume −110, with cover rates excluding
-pushes and ROI including pushed stakes. Recorded and replayed results remain
-identified separately. Picks freeze at the 60-minute pregame cutoff.
-
-The v1.18 probability engine and prior-season median spread mapping are
-unchanged. Original moneyline snapshots and research scoring remain available
-in the repository, including their original pricing and capture times; the
-public interface and public CSVs contain ATS data only.
+by GitHub Actions. Public pages and CSVs show ATS selections, projected and
+market spreads, lock status, cover rates, units and ROI. Win probabilities and
+moneyline research remain internal.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
-**ATS timing (adopted 2026-10-19 UTC):** spread picks remain provisional until
-60 minutes before kickoff. Five-minute scheduled polls trigger model refreshes
-from T−90 through T−50; outside that window they skip the expensive build.
-Each build saves eligible forecasts in `data/ats_lock_candidates.jsonl`. At or
-after T−60 it freezes the latest forecast both generated and observed by the
-cutoff into `data/ats_locks.jsonl`. A delayed run cannot use a newer line or
-forecast, and no lock may be backfilled after kickoff. The saved forecast time,
-cutoff and finalization time are all retained; GitHub cron does not guarantee
-delivery at an exact minute. Missing pre-cutoff forecasts show as unavailable.
-Game cards and the saved-spread-picks download preserve locked handicaps and
-selections. Zero-edge skips saved before the favorite rule are backfilled as
-favorite bets in results, labelled separately; the saved download keeps the
-original skip and flags `backfilled_favorite`. Earlier ATS and moneyline records retain their original timing;
-the new capture policy has a separate identity and never rewrites those records.
+Current model (owner decision 2026-10-19): **`boxscore-composite-v1.19`**.
+It first fits a market-based home-win forecast from the offered spread, total
+and their interaction. It then corrects that baseline using **all 29 football
+inputs**, jointly fitted with ridge shrinkage. Both stages fit before each week
+using earlier weeks only. There is no favorite-confidence penalty.
 
-The **2026 ATS season overview** pools historical replay and recorded selections,
-one row per game. Saved ATS picks and skips override replay. A pre-adoption game
-without an ATS archive can be replayed at its original pregame forecast and line;
-it is labeled replay, not recorded ATS evidence. Missing post-adoption locks are
-not reconstructed from early moneyline records. All three pages' headline
-records, weekly and game results, running-units chart,
-same-game ATS controls and `ats_2026_results.csv` use this deduplicated view.
-Source tracking and breakdowns remain in the backend report; the public pages
-and season CSV present the combined results without source labels.
-Pricing is assumed −110 with 1-unit stakes.
+The model converts its corrected win forecast into a continuous projected home
+margin: `12.37 × inverse_normal(clamp(p, 0.005, 0.995))`. Its difference from the
+market home margin chooses the ATS side. No median or fixed-band mapping is
+applied. A zero edge within 1e-10 takes the market favorite; a zero edge at a
+pick'em line skips. Returns assume flat 1u risk at −110: a win pays +0.9091u,
+a loss costs 1u and a push returns the stake. Cover rates exclude pushes;
+ROI includes pushed stakes.
 
-Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
-penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
-lean is kept. Picks and bets are identical to v1.16's; only those probabilities change. v1.16 keeps
-locking as a shadow for its pre-registered tests, reported in the ledger report only.
-v1.16 is the owner-fixed **Product + 1 SD**
-market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
-defense, availability and prior lead/deficit profiles provide additive corrections;
-raw h16 pass profiles provide the shared product and four signed 1 SD contexts.
-Both penalties are fixed at 0.1; coefficients refit before every week using earlier
-weeks only. Missing market quotes produce no forecast. Original pregame snapshots
-remain unchanged; retrospective replay at their original quotes is separately labelled.
-Adoption follows exposed historical development, with reliable profit superiority
-still unresolved.
+**Retrospective update.** Historical picks, results and performance are rebuilt
+with v1.19. The 2026 overview, weekly/game results, running units and season
+CSV use one current-revision row per game. Completed games without v1.19 locks
+are retrospective forecasts, including games after the older policy's adoption.
+Only a saved v1.19 lock overrides this replay. Earlier revisions' snapshots,
+frozen recipes and ATS locks retain their original bytes and grading identity.
+Source distinctions remain in repository reports. The Performance page also
+shows all available seasons and an ATS history download.
 
-The displayed **Model spread** uses prior-season median signed margins in four
-fixed groups (2026: **3/4/7/14** points for original spread magnitudes below 3,
-3–7, 7–10, and 10+). Losses are negative and tied finals count as zero. Results and
-calibration pages show season-by-season retrospective ATS results at assumed
-−110, including pushes and skips, with downloadable per-game data. Each mapping
-uses earlier seasons only; these are exposed historical comparisons. Win
-probabilities and moneyline picks retain the v1.18 recipe. See `fixed_bands.py`
-and the fixed-band section in `MODEL.md` for the full rule and grading basis.
+**ATS timing:** picks remain provisional until kickoff minus 60 minutes.
+Five-minute scheduled polls trigger refreshes from T−90 through T−50. Each
+build saves eligible forecasts in `data/ats_lock_candidates.jsonl`; at or after
+T−60 it freezes the latest forecast both generated and observed by the cutoff
+into `data/ats_locks.jsonl`. A delayed run cannot use post-cutoff inputs or
+backfill a lock after kickoff. GitHub cron delivery can be delayed. The new
+continuous-spread policy has its own identity; legacy median-policy records
+continue to validate against their original rules.
+
+The owner selected the previously tested `spread_total::group:full::g1` raw
+variant after reviewing historical comparisons. In the frozen 2023–25 research
+cohort it returned **+48.73u / 5.97% ROI** versus v1.18's median-policy
+**+23.91u / 2.93%** on the same 816 games. These are exposed development results;
+the paired improvement interval includes zero. Fresh performance at actual
+quotes is needed before claiming an established edge. Updated source data can
+change reconstructed results; the frozen comparison and a full rebuild have
+different input vintages. See [the adoption record](research/MARKET_CONTEXT_ADOPTION.md).
 
 | Page | For |
 |---|---|
-| [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
-| [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Pooled 2026 ATS results by week and game, with downloads |
-| [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Pooled 2026 ATS record, running units and same-game spread baselines |
+| [Projections](https://dave356w.github.io/NFL-MODEL/) | Current games, continuous model and market spreads, ATS picks and lock status |
+| [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Current-season ATS results by week and game, with downloads |
+| [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Current-season running units, same-game baselines and annual ATS performance |
 
-The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
-held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research
-arm are in [`data/ledger_report.txt`](data/ledger_report.txt) and `data/latest/`.
-Each page build consolidates the version comparison, snapshot replay, independent
-production checks and frozen WP-calibration research into the **repository** report.
-The website links to that report as documentation; it does not publish research
-pages or a separate `ledger_report.txt` download. Short historical-replay and
-recorded-forecast labels remain on the customer pages so their evidence bases stay clear.
+| Where to look | For |
+|---|---|
+| [MODEL.md](MODEL.md) | Exact production fitting, features, selection and historical policy descriptions |
+| [CLAUDE.md](CLAUDE.md) | Evidence standards, archive protection, versioning and required validation |
+| [data/ledger_report.txt](data/ledger_report.txt) | Regenerated forward grading and research appendices |
 
-The median ATS archive has its own policy identity and source hashes. The native
-ledger's older continuous-spread diagnostic is explicitly labelled as such; it
-is not the median-MOV ATS record. Run the read-only check with:
+Run the independent read-only production check with:
 
 ```bash
 python -m research.production_sanity
 ```
 
-The win-probability calibration comparison remains research only. Both seven-band
-empirical rates and monotone calibration were tested on v1.16 and v1.18 using
-strictly earlier-season calibration; no replacement qualified. Reproduce it with
-`python -m research.wp_probability_calibration`; see the
-[protocol](research/WP_PROBABILITY_CALIBRATION.md) and
-[results](research/wp_probability_calibration_results/REPORT.md).
-
-| Where to look | For |
-|---|---|
-| [`MODEL.md`](MODEL.md) | What the model does today and how the pipeline fits together. The full version history is the docstring at the top of `nfl_model.py`. |
-| [`CLAUDE.md`](CLAUDE.md) | Working standards: evidence ladder, ledger protection, versioning, validation before a PR. |
-| [`data/ledger_report.txt`](data/ledger_report.txt) | Latest graded forward results (regenerated every build). |
+The v1.16/v1.18 probability-calibration comparison remains archived research;
+no calibration replacement qualified. Its [protocol](research/WP_PROBABILITY_CALIBRATION.md)
+and [report](research/wp_probability_calibration_results/REPORT.md) retain their
+original experiment identities.
 
 ## Production qualification research
 
-Production now uses the owner-adopted fixed **market-offset Product + 1 SD** recipe (raw h8 main, raw h16 pass contexts, both penalties 0.1). Adoption follows exposed historical development; reliable profit superiority remains unresolved. Original snapshots are preserved, with a separately labelled retrospective replay at their own quotes. See [MODEL.md](MODEL.md).
+The archived qualification experiments below concern earlier model revisions. Current production is the owner-adopted v1.19 spread/total baseline with the full 29-input correction; see [MODEL.md](MODEL.md). Historical development does not establish a durable betting edge.
 
 
 The goal is a reliable out-of-sample advantage over the market. The current

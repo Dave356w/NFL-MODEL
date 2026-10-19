@@ -1,4 +1,13 @@
-"""NFL box-score composite W/L model — v1.18 (v1.16 with the favorite-confidence penalty).
+"""NFL box-score composite W/L model — v1.19 (spread/total market baseline plus full features).
+
+v1.19 (owner decision 2026-10-19; new revision, output and recipe identity):
+promote the research full spread_total/g1/raw variant. Before every week, fit a
+four-term logistic market baseline from strictly prior binary games using spread,
+centered total and their interaction; freeze that baseline and fit the same 29
+v1.18 inputs as an additive logit correction. No favorite-confidence penalty.
+The baseline and correction coefficients are serialized together. Continuous
+spread remains 12.37 * Phi^-1(p); legacy recipes and archives retain their math.
+The v1.16 shadow writer is disabled for this new two-stage coefficient fit.
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
@@ -467,11 +476,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.18'
+REVISION='boxscore-composite-v1.19'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_18'  # v1.18: favorite-penalized v1.16 (new experiment)
+OUTPUT_NAME='nfl_boxscore_output_v1_19'
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -502,7 +511,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.19 spread/total market baseline plus full features, no favorite penalty (2026-10-19); earlier revisions retained as archives'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1688,16 +1697,17 @@ def checked_optimize(obj,p):
 PRODUCT_CONTEXT_NAMES=('pass_product','pass_1sd_pp','pass_1sd_pn','pass_1sd_np','pass_1sd_nn')
 LEGACY_PRODUCT_RECIPE={'family':'rates_core_avail_cs_peaks_nosacks','half_life':8.,'ridge':.1,
                 'architecture':'market_product_1sd','interaction_ridge':.1,'pass_half_life':16.}
+LEGACY_V118_RECIPE=dict(LEGACY_PRODUCT_RECIPE,favorite_penalty=FAVORITE_PENALTY)
 PASS_TOTAL_RECIPE={**LEGACY_PRODUCT_RECIPE,'architecture':'market_pass_predicted_total',
  'target_first_season':2020,'target_mean_ridge':.1,'target_selection':'prior_season_integer_bin_nll',
  'target_rules':['market_relationships','resid_h4_k4','resid_h4_k12','resid_h16_k4','resid_h16_k12'],
  'total_reference_points':45.,'target_unit_points':10.}
-PRODUCT_RECIPE=dict(LEGACY_PRODUCT_RECIPE,favorite_penalty=FAVORITE_PENALTY)  # v1.18
+PRODUCT_RECIPE=dict(LEGACY_PRODUCT_RECIPE,architecture='market_spread_total',market_ridge=.01)
 # v1.18 shadow lock: v1.16 (same fit, no penalty) keeps locking under its original identity for the
 # pre-registered H1/H2/H6 sample and the penalty's forward verdict; reported in ledger_report.txt only.
 SHADOW_REVISION='boxscore-composite-v1.16'
 SHADOW_RECIPE=dict(LEGACY_PRODUCT_RECIPE)
-SHADOW_LOCK=True
+SHADOW_LOCK=False  # v1.19 coefficients cannot be relabelled as a v1.16 shadow fit.
 
 
 def pass_contexts(f):
@@ -1907,6 +1917,11 @@ def prepare_product_features(features,schedules):
         raise ValueError('Pass/main profile alignment mismatch')
     desc,audit=pass_contexts(features[16.])
     f=attach_moneylines(features[8.],schedules)
+    if PRODUCT_RECIPE.get('architecture')=='market_spread_total':
+        if 'total_line' not in schedules: raise ValueError('Spread-total production requires offered total_line')
+        f=f.drop(columns=['total_line'],errors='ignore').merge(
+            schedules[['game_id','total_line']],on='game_id',how='left',validate='one_to_one',sort=False)
+        if f.game_id.tolist()!=features[16.].game_id.tolist(): raise ValueError('Market total/profile alignment mismatch')
     f['q']=market_ml_wp(f)
     # The headline market comparator must be the actual market input.
     f['market_wp']=f.q
@@ -1916,16 +1931,42 @@ def prepare_product_features(features,schedules):
     return audit
 
 
+MARKET_CONTEXT_NAMES=('intercept','spread_7','total_centered_7','spread_total_product')
+
+
+def market_context_design(frame):
+    """The frozen research design, using the signed home winning-margin line."""
+    s=frame.spread_line.to_numpy(float)/7.; t=(frame.total_line.to_numpy(float)-44.)/7.
+    x=np.column_stack([np.ones(len(frame)),s,t,s*t])
+    if not np.isfinite(x).all(): raise ValueError('Finite spread and total required for market baseline')
+    return x
+
+
+def fit_market_context_objective(x,y,w,base,penalty):
+    """Match the independent research's checked high-precision ridge objective."""
+    def objective(beta):
+        eta=base+x@beta
+        return float(w@(np.logaddexp(0,eta)-y*eta)+.5*np.sum(penalty*beta*beta)),x.T@(w*(expit(eta)-y))+penalty*beta
+    opt=minimize(objective,np.zeros(x.shape[1]),jac=True,method='L-BFGS-B',
+        options={'gtol':1e-9,'ftol':1e-14,'maxiter':1500,'maxls':100})
+    if not np.isfinite(opt.fun) or not np.isfinite(opt.x).all() or np.max(abs(objective(opt.x)[1]))>2e-6:
+        raise RuntimeError(f'Market-context fit failed: {opt.message}')
+    return opt.x
+
+
 def fit_composite(train,recipe,year,week,baseline=False):
     t=train[train['home won'].isin([0.,1.])&train.ready].copy()
     stack=not baseline and recipe.get('architecture')=='market_pass_predicted_total'
-    offset=not baseline and recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total')
+    context=not baseline and recipe.get('architecture')=='market_spread_total'
+    offset=not baseline and recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total','market_spread_total')
     if stack:
         cols=feature_names(recipe['family'])+list(PRODUCT_CONTEXT_NAMES)+list(PASS_TOTAL_NAMES)
         t=t[np.isfinite(t[cols]).all(axis=1)].copy()
         validate_market_target_oof(t)
     if offset:
         t=t[np.isfinite(t.q)&np.isfinite(t[list(PRODUCT_CONTEXT_NAMES)]).all(axis=1)].copy()
+    if context:
+        t=t[np.isfinite(t[['spread_line','total_line']]).all(axis=1)].copy()
     if len(t)<MIN_TRAIN_GAMES: raise ValueError(f'Only {len(t)} eligible labeled games; need {MIN_TRAIN_GAMES}')
     if not before(t,year,week).all(): raise ValueError('Training includes current/future week')
     names=['site'] if baseline else feature_names(recipe['family'])
@@ -1946,18 +1987,30 @@ def fit_composite(train,recipe,year,week,baseline=False):
     penalty=np.full(len(names),lam); penalty[0]*=.1
     if offset: penalty[len(feature_names(recipe['family'])):]=float(recipe['interaction_ridge'])
     base=logit(np.clip(t.q.to_numpy(),1e-5,1-1e-5)) if offset else np.zeros(len(t))
+    market_baseline=None
+    if context:
+        market_x=market_context_design(t); effective=1/np.sum(weights*weights)
+        market_penalty=float(recipe['market_ridge'])/effective
+        market_beta=fit_market_context_objective(market_x,y,weights,np.zeros(len(t)),np.full(4,market_penalty))
+        base=market_x@market_beta
+        market_baseline={'names':list(MARKET_CONTEXT_NAMES),'beta':market_beta.tolist(),
+            'spread_scale':7.,'total_center':44.,'total_scale':7.,'ridge_per_coefficient':market_penalty,
+            'training_games':len(t),'training_max_season':int(t.season.max()),
+            'training_max_week':int(t.loc[t.season==t.season.max(),'week'].max())}
     def obj(beta):
         eta=base+Z@beta
         loss=np.sum(weights*(np.logaddexp(0,eta)-y*eta))+.5*np.sum(penalty*beta*beta)
         grad=Z.T@(weights*(expit(eta)-y))+penalty*beta
         return loss,grad
-    beta=checked_optimize(obj,len(names))
-    return {'names':names,'scale':scale.tolist(),'beta':beta.tolist(),'recipe':recipe,'market_offset':offset,
+    beta=fit_market_context_objective(Z,y,weights,base,penalty) if context else checked_optimize(obj,len(names))
+    fitted={'names':names,'scale':scale.tolist(),'beta':beta.tolist(),'recipe':recipe,'market_offset':offset,
             'fit_season':int(year),'fit_week':int(week),'training_games':len(t),
             'training_max_season':int(t.season.max()),
             'training_max_week_in_latest_season':int(t.loc[t.season==t.season.max(),'week'].max()),
             'effective_training_games':float(1/np.sum(weights*weights)),
             'training_missing_fractions':dict(zip(names,missing.mean(axis=0).tolist()))}
+    if market_baseline is not None: fitted['market_baseline']=market_baseline
+    return fitted
 
 
 def apply_fit(df,fit,contributions=False,raw=False):
@@ -1968,8 +2021,20 @@ def apply_fit(df,fit,contributions=False,raw=False):
     parts=x*np.asarray(fit['beta'])
     score=parts.sum(axis=1)
     if fit.get('market_offset'):
-        score=score+logit(np.clip(df.q.to_numpy(float),1e-5,1-1e-5))
         valid=np.isfinite(df.q.to_numpy(float))&np.isfinite(df[list(PRODUCT_CONTEXT_NAMES)].to_numpy(float)).all(axis=1)
+        if fit.get('recipe',{}).get('architecture')=='market_spread_total':
+            baseline=fit.get('market_baseline')
+            if (not baseline or baseline.get('names')!=list(MARKET_CONTEXT_NAMES)
+                    or [baseline.get(k) for k in ('spread_scale','total_center','total_scale')]!=[7.,44.,7.]
+                    or np.asarray(baseline.get('beta',[])).shape!=(4,)
+                    or not np.isfinite(np.asarray(baseline.get('beta',[]),float)).all()):
+                raise ValueError('Missing or incompatible serialized market baseline')
+            market_valid=np.isfinite(df[['spread_line','total_line']].to_numpy(float)).all(axis=1)
+            base=np.full(len(df),np.nan)
+            base[market_valid]=market_context_design(df.loc[market_valid])@np.asarray(baseline['beta'])
+            score=score+base; valid &= market_valid
+        else:
+            score=score+logit(np.clip(df.q.to_numpy(float),1e-5,1-1e-5))
         if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
             valid &= np.isfinite(df[list(PASS_TOTAL_NAMES)]).all(axis=1)
             validate_market_target_oof(df.loc[valid])
@@ -1992,6 +2057,10 @@ def offset_band(train,fit,rows,level=BAND_LEVEL):
     so the range understates total uncertainty (research/monte_carlo_results). Rebuilds the
     fit's own training rows and returns NaN unless they match the fit exactly."""
     nan=np.full(len(rows),np.nan)
+    if fit.get('recipe',{}).get('architecture')=='market_spread_total':
+        # The old interval conditions on a fixed moneyline offset and excludes
+        # first-stage uncertainty. It is not a valid two-stage production band.
+        return nan,nan,nan
     if not fit.get('market_offset'): return nan,nan,nan
     recipe=fit['recipe']; year,week=fit['fit_season'],fit['fit_week']
     t=train[train['home won'].isin([0.,1.])&train.ready&before(train,year,week)]
@@ -2021,6 +2090,7 @@ def offset_band(train,fit,rows,level=BAND_LEVEL):
 
 def recipe_key(r):
     key=f'{r["family"]}_h{r["half_life"]:g}_r{r["ridge"]:g}'
+    if r.get('architecture')=='market_spread_total':return key+f'_market_spread_total_i{r["interaction_ridge"]:g}_m{r["market_ridge"]:g}'
     if r.get('architecture')=='market_pass_predicted_total':return key+f'_market_pass_predicted_total_i{r["interaction_ridge"]:g}'
     if r.get('architecture')=='market_product_1sd':
         key+=f'_market_product_1sd_i{r["interaction_ridge"]:g}'
@@ -2125,7 +2195,7 @@ def bootstrap_ci(delta):
 
 
 def scorecard(df):
-    product=any(('market_product_1sd' in str(c) or 'market_pass_predicted_total' in str(c)) for c in df.columns) or ('recipe' in df and df.recipe.astype(str).str.contains('market_product_1sd|market_pass_predicted_total',regex=True).any())
+    product=any(any(a in str(c) for a in ('market_product_1sd','market_pass_predicted_total','market_spread_total')) for c in df.columns) or ('recipe' in df and df.recipe.astype(str).str.contains('market_product_1sd|market_pass_predicted_total|market_spread_total',regex=True).any())
     market='no-vig moneyline market' if product else 'raw spread-derived market'
     cols={'box-score composite':'model_wp',market:'market_wp','home-field baseline':'homefield_wp'}
     s=df[df['home won'].isin([0.,1.])].replace([np.inf,-np.inf],np.nan).dropna(subset=list(cols.values()))
@@ -2314,7 +2384,7 @@ def disagreement_table(df,by=None):
 
 
 def implied_spread(p):
-    """Model-implied home spread in points (v1.12.1, reporting only): the inverse of
+    """Continuous model home spread used by the active ATS policy: the inverse of
     the spread-to-WP comparator, MARKET_SIGMA * Phi^-1(p), same sign as spread_line
     (positive = home favored). Clipped to [.005,.995] (about +/-31.9 points); NaN stays NaN."""
     p=pd.to_numeric(pd.Series(p),errors='coerce').to_numpy(float)
@@ -2343,7 +2413,8 @@ def retrospective_ledger(oof,gw,recipe,schedules,season,cur):
     with the backtest seasons: reconstructed hindsight, never forward evidence."""
     key='p__'+recipe_key(recipe)
     a=oof[RETRO_COLS+[key]].rename(columns={key:'model_wp'}).assign(basis='backtest (recipe chosen on these seasons)')
-    b=gw.loc[(gw.season==season)&(gw.week<cur)&gw.result.notna(),RETRO_COLS+['model_wp']].assign(basis='current season walk-forward')
+    current=(gw.week<=cur) if recipe.get('architecture')=='market_spread_total' else (gw.week<cur)
+    b=gw.loc[(gw.season==season)&current&gw.result.notna(),RETRO_COLS+['model_wp']].assign(basis='current season walk-forward')
     r=pd.concat([a,b],ignore_index=True)
     r=attach_moneylines(r,schedules)
     extra=[c for c in ('home_score','away_score','gameday') if c in schedules]
@@ -2599,7 +2670,8 @@ def current_predictions(features,recipe,year,through_week):
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
-        te['model_wp_v116']=apply_fit(te,fit,raw=True)  # v1.18 shadow lock; equals model_wp without a penalty
+        if recipe.get('architecture')!='market_spread_total':
+            te['model_wp_v116']=apply_fit(te,fit,raw=True)  # only legacy fits can support the legacy shadow
         try: te['offset_se'],te['model_wp_lo'],te['model_wp_hi']=offset_band(tr,fit,te)
         except (ValueError,np.linalg.LinAlgError) as e:  # reporting only: never costs a forecast
             print(f'  Note: week {week} probability range unavailable ({e})')
@@ -2636,9 +2708,10 @@ def contribution_table(board,fit):
                          'direction':'home' if parts[i,j]>0 else 'away' if parts[i,j]<0 else 'neutral'})
     if fit.get('market_offset'):
         for r in board.to_dict('records'):
-            value=float(logit(np.clip(r['q'],1e-5,1-1e-5)))
+            context=fit.get('recipe',{}).get('architecture')=='market_spread_total'
+            value=float((market_context_design(pd.DataFrame([r]))@np.asarray(fit['market_baseline']['beta']))[0]) if context else float(logit(np.clip(r['q'],1e-5,1-1e-5)))
             rows.append({'game_id':r['game_id'],'game':r['away']+'@'+r['home'],
-                         'feature':'market_log_odds','home-minus-away input':r['q'],
+                         'feature':'market_context_log_odds' if context else 'market_log_odds','home-minus-away input':float(expit(value)) if context else r['q'],
                          'log-odds contribution':value,
                          'direction':'home' if value>0 else 'away' if value<0 else 'neutral'})
     return pd.DataFrame(rows)
@@ -2677,6 +2750,12 @@ def config_signature():
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         cfg['evaluation_ties']='graded as pushes; excluded from binary fitting/scoring'
         cfg['market_targets']={'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'}
+    if PRODUCT_RECIPE.get('architecture')=='market_spread_total':
+        cfg['pass_contexts']['market']='prior-week fitted spread/total logistic baseline, held fixed during feature fitting'
+        cfg['market_baseline']={'names':MARKET_CONTEXT_NAMES,'spread_scale':7.,'total_center':44.,'total_scale':7.,
+            'ridge':'market_ridge divided by training Kish effective size','feature_gamma':1.,
+            'eligibility':'binary ready finite q/pass contexts/spread/total; entire forecast week excluded',
+            'uncertainty':'legacy moneyline-offset interval unsupported for two-stage fit'}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -2814,6 +2893,9 @@ def record_forward(board,fit,recipe_record,asof=None):
             record['market_no_vig_wp']=float(r['q'])
             record['model_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in fit['names']}
             record['pass_context_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in ('pass_ho','pass_ad','pass_ao','pass_hd')}
+            if fit.get('recipe',{}).get('architecture')=='market_spread_total':
+                record['total_line']=float(r['total_line'])
+                record['market_context_inputs']={name:float(r[name]) for name in ('spread_line','total_line')}
             if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
                 record['market_target_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in ('total_line','margin_line','market_cover_q','market_over_q','margin__selected__mean','total__selected__mean','stage1_through_season','stage1_through_week')}
                 record['market_target_prices']={name:float(r[name]) if np.isfinite(r.get(name,np.nan)) else None for name in ('home_spread_odds','away_spread_odds','over_odds','under_odds')}
@@ -2842,6 +2924,7 @@ def grade_forward(records,schedules):
 
 # Board rendering.
 def feature_label(name):
+    if name=='market_context_log_odds': return 'Fitted spread/total market baseline'
     if name=='market_log_odds': return 'Market baseline'
     if name=='pass_product': return 'Pass matchup product'
     if name.startswith('pass_1sd_'): return 'Pass matchup 1 SD context '+name[-2:].upper()
@@ -2987,7 +3070,7 @@ def html_board(board,fit,outer_card,recipe_record,generated,season_card=None,wee
     out+=[f'<h1>Week {", ".join(map(str,weeks))} win probabilities</h1>',
           f'<p class="mut">{esc(seasons[0]) if seasons else ""} season. Generated {esc(generated)}. '
           f'Recipe {esc(recipe_key(recipe))}: {esc(fam)} features, {recipe["half_life"]:g}-game team half-life, ridge {recipe["ridge"]:g}, '+
-          (f'owner-fixed after historical development through {recipe_record["selection_max_season"]}. ' if recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total') else f'chosen from seasons through {recipe_record["selection_max_season"]}. ')+
+          (f'owner-fixed after historical development through {recipe_record["selection_max_season"]}. ' if recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total','market_spread_total') else f'chosen from seasons through {recipe_record["selection_max_season"]}. ')+
           'Coefficients refit each week on earlier games only.</p>',
           '<div class="key"><span><i class="sw" style="background:var(--away)"></i>Away</span>'
           '<span><i class="sw" style="background:var(--home)"></i>Home</span>'
@@ -3124,6 +3207,8 @@ def walk_forward_product(features,last_historical_season):
     valid=(f.season>=BACKTEST_FIRST_SEASON)&(f.season<=last_historical_season)&f['home won'].isin([0.,.5,1.])&f.ready&np.isfinite(f.q)&np.isfinite(f[list(PRODUCT_CONTEXT_NAMES)]).all(axis=1)
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         valid &= np.isfinite(f[list(PASS_TOTAL_NAMES)]).all(axis=1)
+    if PRODUCT_RECIPE.get('architecture')=='market_spread_total':
+        valid &= np.isfinite(f[['spread_line','total_line']]).all(axis=1)
     out=f.loc[valid,['game_id','season','week','home','away','home won','market_wp','result','spread_line','home_moneyline','away_moneyline']].copy()
     col='p__'+recipe_key(PRODUCT_RECIPE)
     out[col]=np.nan; out['homefield_wp']=np.nan
@@ -3157,11 +3242,20 @@ def regrade_product_ledger(features,schedules,outdir):
             fits[key]=fit_composite(features[8.][before(features[8.],year,week)],PRODUCT_RECIPE,year,week)
         for col in ('home_moneyline','away_moneyline'): te[col]=record.get(col,np.nan)
         te['q']=market_ml_wp(te)
+        captured_context=False
+        if PRODUCT_RECIPE.get('architecture')=='market_spread_total':
+            quoted=record.get('market_context_inputs',{})
+            source_total=record.get('total_line',record.get('market_target_inputs',{}).get('total_line'))
+            source_spread=record.get('spread_line')
+            for name,value in (('spread_line',quoted.get('spread_line',source_spread)),
+                               ('total_line',quoted.get('total_line',source_total))):
+                if value is not None and np.isfinite(value): te[name]=float(value)
+            captured_context=all(name in quoted and np.isfinite(quoted[name]) for name in ('spread_line','total_line'))
         if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
             te['margin_line']=record.get('spread_line',te.margin_line.iloc[0])
         target_quotes=record.get('market_target_inputs',{})
         captured_targets=all(np.isfinite(target_quotes.get(name,np.nan)) for name in ('total_line','market_cover_q','market_over_q'))
-        if captured_targets:
+        if captured_targets and PRODUCT_RECIPE.get('architecture')!='market_spread_total':
             for name in ('total_line','market_cover_q','market_over_q'):te[name]=target_quotes[name]
         if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':te=replay_market_targets(te,features,year,week)
         probability=float(apply_fit(te,fits[key])[0])
@@ -3170,10 +3264,14 @@ def regrade_product_ledger(features,schedules,outdir):
             'original_generated_utc':record['generated_utc'],'game_id':game,'season':year,'week':week,
             'home':record['home'],'away':record['away'],'original_model_wp':record['model_wp'],
             'model_wp':probability,'market_wp':float(te.q.iloc[0]),
+            **({'spread_line':float(te.spread_line.iloc[0]),'total_line':float(te.total_line.iloc[0])} if PRODUCT_RECIPE.get('architecture')=='market_spread_total' else {}),
             'home_moneyline':record.get('home_moneyline'),'away_moneyline':record.get('away_moneyline'),
             'result':result,'home won':won(result),'revision':REVISION,
-            'basis':('retrospective reconstructed features at original moneylines; v1.16 does not use total/cover/over prices; not forward evidence' if PRODUCT_RECIPE.get('architecture')=='market_product_1sd' else 'retrospective reconstructed features at original captured market quotes; not forward evidence' if captured_targets else 'retrospective reconstructed features at original moneyline/spread quotes; schedule total/cover/over capture times unknown; not forward evidence')})
+            'basis':(('retrospective replay at captured spread/total inputs; not forward evidence' if captured_context else
+                      'retrospective replay using available original spread and reconstructed historical total where not captured; not forward evidence') if PRODUCT_RECIPE.get('architecture')=='market_spread_total' else
+                     'retrospective reconstructed features at original moneylines; v1.16 does not use total/cover/over prices; not forward evidence' if PRODUCT_RECIPE.get('architecture')=='market_product_1sd' else 'retrospective reconstructed features at original captured market quotes; not forward evidence' if captured_targets else 'retrospective reconstructed features at original moneyline/spread quotes; schedule total/cover/over capture times unknown; not forward evidence')})
     columns=['original_experiment','original_revision','original_generated_utc','game_id','season','week','home','away','original_model_wp','model_wp','market_wp','home_moneyline','away_moneyline','result','home won','revision','basis']
+    if PRODUCT_RECIPE.get('architecture')=='market_spread_total': columns+=['spread_line','total_line']
     replay=pd.DataFrame(rows,columns=columns)
     bets=flat_bets(replay)
     for col in ('side','price','result','units','null_ev'): replay['bet_'+col]=bets[col]
@@ -3289,7 +3387,7 @@ def apply_env_config(env=None):
 def profile_half_lives(mode):
     """Runtime-only optimization; model config/recipe identity is unchanged."""
     if mode=='full': return TEAM_HALF_LIVES
-    if (mode=='production' and PRODUCT_RECIPE.get('architecture') in ('market_product_1sd','market_pass_predicted_total')
+    if (mode=='production' and PRODUCT_RECIPE.get('architecture') in ('market_product_1sd','market_pass_predicted_total','market_spread_total')
             and profile_family(PRODUCT_RECIPE['family'])=='rates_core'):
         return tuple(sorted({float(PRODUCT_RECIPE['half_life']),float(PRODUCT_RECIPE['pass_half_life'])}))
     raise ValueError('NFL_PROFILE_MODE must be full, or production with a supported fixed recipe')
@@ -3462,7 +3560,8 @@ def main():
     for wk,prior_board in gw.groupby('week'):
         prior_board=prior_board.copy();prior_board['model_spread']=implied_spread(prior_board.model_wp)
         save(prior_board,f'week{int(wk)}_board.csv')
-    save(roi_table(gw[gw.week<cur]),'season_roi.csv')
+    completed_current=((gw.week<=cur) if recipe.get('architecture')=='market_spread_total' else (gw.week<cur))&gw.result.notna()
+    save(roi_table(gw[completed_current]),'season_roi.csv')
     retro=retrospective_ledger(oof,gw,recipe,schedules,season,cur); save(retro,'retro_ledger.csv')
     save(roi_table(retro,by='season'),'retro_roi_by_season.csv'); save(roi_table(retro),'retro_roi_bands.csv')
     sel_window=attach_moneylines(oof[oof.season<season],schedules)
@@ -3472,13 +3571,13 @@ def main():
           f'{t.units:+.2f}u, ROI {100*t.roi:+.1f}% +/- {100*t.roi_se:.1f}')
     season_card=scorecard(gw); save(season_card,'season_scorecard.csv')
     rcols=['season','week','home won','model_wp','market_wp','result','spread_line']
-    rec_hist=pd.concat([outer[rcols],gw.loc[(gw.week<cur)&gw.result.notna(),rcols]],ignore_index=True)
+    rec_hist=pd.concat([outer[rcols],gw.loc[completed_current,rcols]],ignore_index=True)
     recs=band_records(rec_hist); save(recs,'band_records.csv')
     rec_label=records_source_label(rec_hist,season,cur)
     print(f'Realized pick records in matched bands ({rec_label}):')
     display(band_records_wide(recs))
     board=gw[gw.week==cur].copy()
-    board['model_spread']=implied_spread(board.model_wp)  # reporting only; not written to the ledger
+    board['model_spread']=implied_spread(board.model_wp)  # continuous input to the active ATS policy
     save(board,f'week{cur}_board.csv')
     week_card=scorecard(board); save(week_card,'week_scorecard.csv')
     weights=coefficient_table(fit); save(weights,'current_composite_weights.csv')

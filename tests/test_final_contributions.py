@@ -22,15 +22,19 @@ def test_contributions_reconstruct_final_forecast_for_both_favorites_and_disagre
     np.testing.assert_array_equal(raw[:, 0], frame.site)    # raw research attribution stays raw
 
 
-def test_native_snapshot_explanations_reconstruct_penalized_probabilities():
+@pytest.mark.parametrize('revision', ['boxscore-composite-v1.16', 'boxscore-composite-v1.18'])
+def test_native_snapshot_explanations_reconstruct_their_saved_probabilities(revision):
     from pathlib import Path
     import json
     root = Path(__file__).resolve().parents[1]
     # Native snapshots carry the actual fit and inputs, independent of regenerated exports.
     rows = [json.loads(x) for x in (root/'data/forward_predictions.jsonl').read_text().splitlines()]
-    row = next(r for r in rows if r['revision'] == 'boxscore-composite-v1.16')
+    row = next(r for r in rows if r['revision'] == revision)
     board = pd.DataFrame([{**row['model_inputs'], 'q': row['market_no_vig_wp'],
                            'game_id': row['game_id'], 'home': row['home'], 'away': row['away']}])
-    fit = dict(row['coefficient_fit'], recipe=m.PRODUCT_RECIPE)
-    total = m.contribution_table(board, fit)['log-odds contribution'].sum()
-    assert m.expit(total) == pytest.approx(m.apply_fit(board, fit)[0], abs=1e-12)
+    fit = dict(row['coefficient_fit'], recipe=row['recipe'])
+    # Attribution follows the snapshot's recipe, never current production's.
+    with m.revision_identity(revision, row['recipe']):
+        total = m.contribution_table(board, fit)['log-odds contribution'].sum()
+        assert m.expit(total) == pytest.approx(m.apply_fit(board, fit)[0], abs=1e-12)
+        assert m.expit(total) == pytest.approx(row['model_wp'], abs=1e-12)

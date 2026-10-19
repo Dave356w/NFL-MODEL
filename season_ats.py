@@ -46,6 +46,8 @@ def historical_before_adoption(row):
 def build(latest, ledger):
     if latest is None:
         return pd.DataFrame()
+    if ats_locks.continuous_manifest(latest.get('manifest', {})):
+        return continuous_build(latest, ledger)
     revision = latest.get('manifest', {}).get('revision', m.REVISION)
     history = latest.get('fixed_band_ledger', pd.DataFrame())
     rows = {}
@@ -125,6 +127,95 @@ def build(latest, ledger):
     return frame.sort_values(['week', 'game_id'], kind='stable').reset_index(drop=True)
 
 
+def continuous_build(latest, ledger):
+    """Owner-authorized v1.19 replay, separate from genuine new-policy locks.
+
+    Only rebuilt new-revision retro forecasts supply reconstructed selections.
+    Other revisions and the live board can supply outcomes, never replacement
+    predictors or handicaps. Pending games continue to require an actual T-60
+    decision. No archive is written by this reporting view.
+    """
+    revision = latest['manifest']['revision']
+    history = latest.get('retro_ledger', pd.DataFrame())
+    if len(history) and 'revision' in history:
+        if not history.revision.eq(revision).all():
+            raise ValueError('v1.19 retrospective history must be rebuilt for its own revision')
+    rows = {}
+    if len(history):
+        for r in history.loc[history.season.eq(2026)].to_dict('records'):
+            if r['game_id'] in rows:
+                raise ValueError('duplicate historical ATS game')
+            # The rebuilt retro file is the authorized forecast source. Do not
+            # use old locks, first moneyline snapshots, or refreshed board inputs.
+            wp = pd.to_numeric(r.get('model_wp'), errors='coerce')
+            value = float(m.implied_spread([wp])[0]) if np.isfinite(wp) and 0 < wp < 1 else pd.to_numeric(r.get('model_spread'), errors='coerce')
+            rows[r['game_id']] = dict(r, revision=revision, model_spread=value,
+                raw_spread=value, ats_spread=value, fixed_band_spread=value,
+                selection_method='continuous_spread', policy_version=ats_locks.POLICY_VERSION,
+                ats_basis='Retrospective v1.19')
+    outcomes = {}
+    for frame in (history, ledger, latest.get('board', pd.DataFrame())):
+        if not len(frame) or 'result' not in frame:
+            continue
+        for r in frame.to_dict('records'):
+            if np.isfinite(pd.to_numeric(r.get('result'), errors='coerce')):
+                outcomes[r['game_id']] = {name:r.get(name) for name in ('result','home_score','away_score')}
+    native = pd.DataFrame()
+    if len(ledger) and {'revision','season'} <= set(ledger):
+        native = ledger.loc[ledger.revision.eq(revision) & ledger.season.eq(2026)].copy()
+        native = native.sort_values('generated_utc', kind='stable').drop_duplicates('game_id', keep='first')
+    for r in native.to_dict('records'):
+        if r['game_id'] not in rows:
+            rows[r['game_id']] = {name:r.get(name) for name in ('game_id','season','week','home','away',
+                'kickoff_utc','generated_utc','result','home_score','away_score')}
+            rows[r['game_id']].update(revision=revision, spread_line=np.nan, model_spread=np.nan,
+                raw_spread=np.nan, ats_spread=np.nan, fixed_band_spread=np.nan,
+                selection_method='continuous_spread', ats_basis='Awaiting ATS lock')
+    for game, row in rows.items():
+        row.update(outcomes.get(game, {}))
+        if not np.isfinite(pd.to_numeric(row.get('result'), errors='coerce')):
+            row.update(spread_line=np.nan, ats_spread=np.nan, fixed_band_spread=np.nan,
+                       ats_basis='Awaiting ATS lock')
+    # A real same-revision timed lock takes precedence, even over authorized
+    # replay. Legacy revision archives never enter the new model's selections.
+    for (rev, game), saved in latest.get('ats_locks', {}).items():
+        if rev != revision or int(saved['season']) != 2026:
+            continue
+        if saved.get('policy_version') != ats_locks.POLICY_VERSION or saved.get('selection_method') != 'continuous_spread' or saved.get('legacy_lock'):
+            raise ValueError('v1.19 saved selection requires its genuine continuous ATS policy')
+        value = saved['raw_spread']
+        rows[game] = dict(game_id=game, revision=revision, season=2026, week=int(saved['week']),
+            home=saved['home'], away=saved['away'], kickoff_utc=saved['kickoff_utc'],
+            generated_utc=saved['generated_utc'], lock_at_utc=saved['lock_at_utc'],
+            model_wp=saved['model_wp'], model_spread=value, raw_spread=value,
+            ats_spread=value, spread_line=saved['market_spread'], fixed_band_spread=value,
+            selection_method='continuous_spread', policy_version=saved['policy_version'],
+            ats_basis='60-minute lock')
+        rows[game].update(outcomes.get(game, {}))
+    if not rows:
+        return pd.DataFrame()
+    frame = pd.DataFrame(rows.values())
+    for name in ('result','spread_line','fixed_band_spread'):
+        if name not in frame:
+            frame[name] = np.nan
+        frame[name] = pd.to_numeric(frame[name], errors='coerce')
+    grades, units = fixed_bands.grade(frame, frame.fixed_band_spread)
+    complete = np.isfinite(frame.result)
+    frame['fixed_band_ats_result'] = np.where(complete, grades, '')
+    frame['fixed_band_ats_units'] = np.where(complete, units, np.nan)
+    frame['ats_status'] = np.where(~complete, 'pending',
+        np.where(np.isin(frame.fixed_band_ats_result, list('WLPS')), 'graded', 'unavailable'))
+    side = fixed_bands.pick(frame.fixed_band_spread, frame.spread_line)
+    frame['fixed_band_ats_side'] = np.where(side > 0, 'home', np.where(side < 0, 'away', ''))
+    side = frame.fixed_band_ats_side
+    frame['fixed_band_ats_team'] = np.where(side.eq('home'), frame.home, np.where(side.eq('away'), frame.away, ''))
+    frame['fixed_band_ats_handicap'] = np.where(side.eq('home'), -frame.spread_line,
+                                               np.where(side.eq('away'), frame.spread_line, np.nan))
+    for suffix in ('result','units','side','team','handicap'):
+        frame['ats_'+suffix] = frame['fixed_band_ats_'+suffix]
+    return frame.sort_values(['week','game_id'], kind='stable').reset_index(drop=True)
+
+
 def summary(frame):
     r = frame.get('fixed_band_ats_result', pd.Series(dtype=str))
     w, l, p, s = [int(r.eq(k).sum()) for k in 'WLPS']
@@ -146,6 +237,13 @@ def report(frame):
              'Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.',
              f"Record {r['wins']}-{r['losses']}-{r['pushes']}, {r['skips']} skips, {r['pending']} pending, "
              f"{r['unavailable']} unavailable; {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}% at proxy -110."]
+    if 'selection_method' in frame and frame.selection_method.eq('continuous_spread').any():
+        lines[1:3] = [
+            'v1.19 uses its continuous market-context model spread without a median map.',
+            'Owner-authorized retrospective v1.19 regrading includes completed pre/post-adoption games; '
+            'these rows are not native forward evidence.',
+            'Only genuine same-v1.19 T-60 locks override the rebuilt retrospective selection; '
+            'pending games without a lock remain unselected. Earlier archives retain their bytes.']
     if len(frame):
         for basis, g in frame.groupby('ats_basis', sort=True):
             v = summary(g)

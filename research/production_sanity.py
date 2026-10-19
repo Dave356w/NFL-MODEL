@@ -1,4 +1,4 @@
-"""Read-only, independent checks of v1.18 and the production median ATS map.
+"""Read-only checks of stored model exports and immutable ATS evidence.
 
 No snapshots, recipes, probabilities, or grading policies are changed. The report
 is regenerated from current data by build_site and stays in the repository.
@@ -20,6 +20,21 @@ import ats_locks
 
 CUTS = [3., 7., 10.]
 EPS = 1e-10
+CONTINUOUS_REVISION = 'boxscore-composite-v1.19'
+
+
+def exported_identity(latest):
+    """Use the export's identity, even before the first build of a new revision.
+
+    Data committed before v1.19 has a median map. Changing the imported model
+    must not reinterpret or relabel those existing files as a new forecast.
+    """
+    path = Path(latest)/'manifest.json'
+    manifest = json.loads(path.read_text()) if path.exists() else {}
+    revision = manifest.get('revision', 'boxscore-composite-v1.18')
+    continuous = (manifest.get('recipe', {}).get('architecture') == 'market_spread_total'
+                  or revision == CONTINUOUS_REVISION)
+    return revision, 'continuous' if continuous else 'median'
 
 
 def median_rule(history, year):
@@ -95,13 +110,20 @@ def inspect(data='data'):
                        original_selections=sum(bool(r.get('selected_side')) for r in timed),
                        original_skips=sum(not r.get('selected_side') for r in timed),
                        backfilled_skips=sum(ats_locks.backfilled(r) for r in timed))
+        capture['by_revision_policy'] = [dict(revision=revision, policy=policy,
+            timed_locks=sum(r.get('revision')==revision and r.get('policy_version')==policy for r in timed))
+            for revision, policy in sorted({(r.get('revision', ''),r.get('policy_version', '')) for r in timed})]
+        capture['current_revision'] = m.REVISION
+        capture['current_revision_locks'] = sum(r.get('revision')==m.REVISION for r in timed)
         checks['primary_ats_store_integrity'] = True
     except (ValueError, KeyError, TypeError, OverflowError, OSError) as exc:
         capture = dict(policy=ats_locks.POLICY_VERSION, error=str(exc))
         checks['primary_ats_store_integrity'] = False
     history_path = latest/'retro_ledger.csv'
+    historical_revision, export_mode = exported_identity(latest)
     if not history_path.exists():
         return dict(checks=checks, rules=[], historical=[], native={}, ats_archive={}, ats_capture=capture,
+                    historical_revision=historical_revision, export_mode=export_mode,
                     status='No historical inputs yet' if all(checks.values()) else 'FAIL')
     d = pd.read_csv(history_path)
     checks['unique_historical_games'] = not d.game_id.duplicated().any()
@@ -111,42 +133,49 @@ def inspect(data='data'):
         checks['historical_moneyline_returns']=bool(np.allclose(d.units,ml_units,atol=1e-10,equal_nan=True))
     d['model_spread'] = 12.37*ndtri(np.clip(d.model_wp.to_numpy(), .005, .995))
     predicted = np.full(len(d), np.nan); rules = []
-    for year in sorted(d.season.unique()):
-        rule = median_rule(d, year)
-        if rule is None:
-            continue
-        rules.append(rule)
-        mask = d.season.eq(year).to_numpy(); x = d.loc[mask, 'model_spread'].to_numpy()
-        predicted[mask] = np.sign(x)*np.array(rule['magnitudes'])[np.searchsorted(CUTS, abs(x), side='right')]
-        production = fixed_bands.fit(d, year)
-        checks[f'{int(year)}_prior_only_medians'] = bool(production and
-            production['magnitudes'] == rule['magnitudes'] and
-            production['training_band_counts'] == rule['training_band_counts'] and
-            production['training_max_season'] < year)
+    if export_mode == 'continuous':
+        predicted[:] = d.model_spread.to_numpy()
+    else:
+        for year in sorted(d.season.unique()):
+            rule = median_rule(d, year)
+            if rule is None:
+                continue
+            rules.append(rule)
+            mask = d.season.eq(year).to_numpy(); x = d.loc[mask, 'model_spread'].to_numpy()
+            predicted[mask] = np.sign(x)*np.array(rule['magnitudes'])[np.searchsorted(CUTS, abs(x), side='right')]
+            production = fixed_bands.fit(d, year)
+            checks[f'{int(year)}_prior_only_medians'] = bool(production and
+                production['magnitudes'] == rule['magnitudes'] and
+                production['training_band_counts'] == rule['training_band_counts'] and
+                production['training_max_season'] < year)
     grades = independent_grades(predicted, d.spread_line, d.result)
     exported = latest/'fixed_band_ledger.csv'
     if exported.exists():
         saved = pd.read_csv(exported).set_index('game_id').reindex(d.game_id)
-        checks['exported_median_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
+        checks['exported_'+export_mode+'_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
         # Each export is checked against the selection rule it declares; an export
         # written before the 2026-10-19 rule has no column and used the zero-edge skip.
         declared = saved.get('selection_version', pd.Series(dtype=object)).dropna().unique().tolist()
         export_rule = declared[0] if declared else 'zero-edge skip (before 2026-10-19)'
         checks['exported_selection_rule_known'] = (len(declared) <= 1 and
+            (bool(declared) or export_mode != 'continuous') and
             export_rule in (fixed_bands.SELECTION_VERSION, 'zero-edge skip (before 2026-10-19)'))
-        expected = grades if declared else independent_grades(predicted, d.spread_line, d.result, False)
+        expected = grades if declared or export_mode == 'continuous' else independent_grades(predicted, d.spread_line, d.result, False)
         checks['exported_ats_grades'] = bool(np.array_equal(saved.fixed_band_ats_result.fillna('').to_numpy(), expected))
     production_grades, _ = fixed_bands.grade(d, predicted)
     checks['production_grading_matches_independent'] = bool(np.array_equal(grades, production_grades))
     saved_rules=latest/'fixed_band_rules.json'
     if saved_rules.exists():
         raw_rules=json.loads(saved_rules.read_text())
-        required={'season','training_max_season','training_games','training_band_counts','cuts','magnitudes'}
-        schema=isinstance(raw_rules,list) and all(isinstance(r,dict) and required.issubset(r) for r in raw_rules)
-        checks['exported_rule_schema']=schema
-        stored={r['season']:r for r in raw_rules if isinstance(r,dict) and 'season' in r} if isinstance(raw_rules,list) else {}
-        checks['exported_prior_season_maps']=all(r['season'] in stored and
-            all(stored[r['season']].get(k)==v for k,v in r.items()) for r in rules)
+        if export_mode == 'continuous':
+            checks['continuous_export_has_no_median_maps'] = raw_rules == []
+        else:
+            required={'season','training_max_season','training_games','training_band_counts','cuts','magnitudes'}
+            schema=isinstance(raw_rules,list) and all(isinstance(r,dict) and required.issubset(r) for r in raw_rules)
+            checks['exported_rule_schema']=schema
+            stored={r['season']:r for r in raw_rules if isinstance(r,dict) and 'season' in r} if isinstance(raw_rules,list) else {}
+            checks['exported_prior_season_maps']=all(r['season'] in stored and
+                all(stored[r['season']].get(k)==v for k,v in r.items()) for r in rules)
     historical = []
     eligible = np.isin(grades, list('WLPS'))
     for label, mask in [('All', eligible)] + [(str(int(y)), eligible & d.season.eq(y).to_numpy()) for y in sorted(d.season.unique())]:
@@ -211,22 +240,27 @@ def inspect(data='data'):
         checks['median_archive_prior_season_fit'] = all(r['fixed_rule']['training_max_season'] < r['season'] for r in rows)
         complete = set()
         if graded_path.exists():
-            complete = set(g.loc[g.revision.eq(m.REVISION) & g.status.isin(['graded','tie']),'game_id'])
-        archive = dict(policy=fixed_bands.POLICY_VERSION,snapshots=len(rows),completed=sum(r['game_id'] in complete for r in rows))
+            complete = set(g.loc[g.status.isin(['graded','tie']),['revision','game_id']].itertuples(index=False,name=None))
+        archive = dict(policy=fixed_bands.POLICY_VERSION,snapshots=len(rows),completed=sum((r['revision'],r['game_id']) in complete for r in rows))
         archive['pending'] = archive['snapshots']-archive['completed']
         archive['original_selections'] = sum(bool(r.get('selected_side')) for r in rows)
         archive['original_skips'] = len(rows)-archive['original_selections']
         archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
     return dict(checks=checks,rules=rules,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
+                historical_revision=historical_revision, export_mode=export_mode,
                 export_selection=export_rule if exported.exists() else None,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
 
 def report(data='data'):
     audit = inspect(data)
-    lines = ['Production sanity check: v1.18 and fixed-band median ATS',f"Status: {audit['status']}",
+    mode = audit['export_mode']
+    policy = 'continuous spread ATS' if mode == 'continuous' else 'fixed-band median ATS'
+    lines = [f"Production sanity check: stored {audit['historical_revision']} and {policy}",f"Status: {audit['status']}",
+             f'Active model revision: {m.REVISION}; stored historical exports retain their own revision.',
              'Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.',
-             'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.',
+             ('ATS: continuous margin = 12.37 * inverse-normal(win probability); no median map.' if mode == 'continuous' else
+              'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.'),
              'Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite '
              '(a pick\'em line skips) before push grading.',
              'Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.',
@@ -234,15 +268,17 @@ def report(data='data'):
     for name, ok in audit['checks'].items():lines.append(f"  {'PASS' if ok else 'FAIL'} {name}")
     if audit.get('export_selection'):
         lines.append(f"  Exported ATS selection rule: {audit['export_selection']}")
-    lines += ['', 'Prior-season maps (training excludes the forecast season):']
-    for r in audit['rules']:
-        lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")
-    lines += ['', 'Historical replay: median ATS versus moneyline on identical game opportunities:']
+    if mode == 'median':
+        lines += ['', 'Prior-season maps (training excludes the forecast season):']
+        for r in audit['rules']:
+            lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")
+    lines += ['', f'Historical replay: {policy} versus moneyline on identical game opportunities:']
     for r in audit['historical']:
         ml = r['moneyline']; baseline = r['favorite']
         se=f" +/- {100*r['roi_se']:.2f}pp (1 SE)" if r['roi_se'] is not None else ''
+        roi_text=f"{100*r['roi']:+.2f}%" if r['roi'] is not None else 'unavailable'
         lines.append(f"  {r['season']}: ATS {r['wins']}-{r['losses']}-{r['pushes']}, {r['skips']} skips, "
-                     f"{r['selected']}/{r['opportunities']} selected, {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}%{se}")
+                     f"{r['selected']}/{r['opportunities']} selected, {r['units']:+.2f}u, ROI {roi_text}{se}")
         lines.append(f"    ML {ml['wins']}-{ml['losses']}-{ml['pushes']}, {ml['units']:+.2f}u, ROI {100*ml['roi']:+.2f}% "
                      f"+/- {100*ml['roi_se']:.2f}pp (1 SE); market-correct null {100*ml['null_roi']:+.2f}%")
         if baseline:
@@ -252,15 +288,15 @@ def report(data='data'):
                          f"favorite {baseline['units']:+.2f}u, ROI {100*baseline['roi']:+.2f}%")
         lines.append(f"    Binary proper scores n={r['scored_games']}: log loss {r['log_loss']:.6f}, "
                      f"market {r['market_log_loss']:.6f}; Brier {r['brier']:.6f}; tied finals excluded from binary scoring.")
-    lines += ['',f"Legacy native {m.REVISION} moneyline: {json.dumps(audit['native'],sort_keys=True)}",
+    lines += ['',f"Original {m.REVISION} snapshots and secondary moneyline grades: {json.dumps(audit['native'],sort_keys=True)}",
               f"Earlier median ATS archive (development history): {json.dumps(audit['ats_archive'],sort_keys=True)}",
-              f"Primary 60-minute ATS capture: {json.dumps(audit['ats_capture'],sort_keys=True)}",
+              f"Primary 60-minute ATS capture (all revisions, with separate inventory): {json.dumps(audit['ats_capture'],sort_keys=True)}",
               'Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; '
               'retrospectively backfilled favorite bets are excluded from forward evidence.',
-              'The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.',
-              'Never backfill median ATS locks for games that finished before adoption.',
-              'The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.',
-              'Median ATS history currently ends at the last week present in retro_ledger.csv, not necessarily the newest completed board game.',
+              'Older revisions keep their original continuous-spread diagnostics and median archives; no new model identity is attached to them.',
+              'Never backfill native ATS locks for games that finished before adoption.',
+              'Retrospectively updated forecasts are historical reconstructions and remain separate from original recorded decisions.',
+              'Historical exports end at the last week present in retro_ledger.csv, not necessarily the newest completed board game.',
               'Historical development and selection are exposed; an unresolved comparison is not forward evidence of superiority.', '']
     return '\n'.join(lines)
 

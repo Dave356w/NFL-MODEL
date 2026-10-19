@@ -20,10 +20,17 @@ import os
 from pathlib import Path
 from statistics import NormalDist
 
-POLICY_VERSION = 'median-mov-ats-t60-favtie-2026-10-19-v2'
+MEDIAN_POLICY_VERSION = 'median-mov-ats-t60-favtie-2026-10-19-v2'
+POLICY_VERSION = 'raw-spread-ats-t60-favtie-2026-10-19-v1'
+CONTINUOUS_REVISION = 'boxscore-composite-v1.19'
 # Policy version -> whether a zero edge takes the market favorite.
-POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, POLICY_VERSION: True}
+POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, MEDIAN_POLICY_VERSION: True, POLICY_VERSION: True}
 ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T05:05:26+00:00')
+CONTINUOUS_ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T19:09:27+00:00')
+POLICY_METHODS = {version: ('continuous_spread' if version == POLICY_VERSION else 'median_signed_mov')
+                  for version in POLICIES}
+POLICY_ADOPTIONS = {version: (CONTINUOUS_ADOPTED_UTC if version == POLICY_VERSION else ADOPTED_UTC)
+                    for version in POLICIES}
 LEAD_MINUTES = 60
 CANDIDATES = 'ats_lock_candidates.jsonl'
 LOCKS = 'ats_locks.jsonl'
@@ -68,6 +75,8 @@ def key(row):
 
 def backfilled(row):
     """A saved zero-edge skip that grading now treats as a favorite bet."""
+    if row.get('policy_version') == POLICY_VERSION:
+        return False
     line, mapped = row.get('market_spread'), row.get('fixed_band_spread')
     return (not row.get('selected_side') and line is not None and mapped is not None
             and select(float(mapped), float(line), True) != '')
@@ -78,6 +87,14 @@ def select(mapped, line, favorite):
     if abs(edge) <= EPS:
         edge = line if favorite else 0.
     return 'home' if edge > EPS else 'away' if edge < -EPS else ''
+
+
+def continuous_manifest(manifest):
+    """Require both the new revision and its declared market-context recipe."""
+    active = manifest.get('revision') == CONTINUOUS_REVISION
+    if active and (manifest.get('recipe') or {}).get('architecture') != 'market_spread_total':
+        raise ValueError('v1.19 requires its market_spread_total recipe')
+    return active
 
 
 def validate_store(data='data'):
@@ -97,13 +114,11 @@ def validate_store(data='data'):
         seen.add(identity)
         cutoff = deadline(row['kickoff_utc'])
         generated, observed = utc(row['generated_utc']), utc(row['observed_utc'])
-        if not ADOPTED_UTC <= generated <= observed <= cutoff or cutoff != utc(row['lock_at_utc']):
-            raise ValueError('ATS candidate is outside the pre-lock cutoff')
         if row['policy_version'] not in POLICIES or row['lock_lead_minutes'] != LEAD_MINUTES:
             raise ValueError('ATS candidate timing policy mismatch')
-        rule = row['fixed_rule']
-        if rule['training_max_season'] >= row['season']:
-            raise ValueError('ATS rule uses the forecast season')
+        policy = row['policy_version']
+        if not POLICY_ADOPTIONS[policy] <= generated <= observed <= cutoff or cutoff != utc(row['lock_at_utc']):
+            raise ValueError('ATS candidate is outside the pre-lock cutoff')
         wp, line = float(row['model_wp']), float(row['market_spread'])
         if not 0 < wp < 1 or not math.isfinite(line):
             raise ValueError('ATS candidate has invalid probability or line')
@@ -111,9 +126,26 @@ def validate_store(data='data'):
         x = float(row['raw_spread'])
         if not math.isfinite(x) or abs(x - reference) > EPS:
             raise ValueError('ATS raw spread does not match its saved probability')
-        band = sum(abs(x) >= cut for cut in rule['cuts'])
-        mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
-        side = select(mapped, line, POLICIES[row['policy_version']])
+        if POLICY_METHODS[policy] == 'continuous_spread':
+            if row['revision'] != CONTINUOUS_REVISION or row.get('selection_method') != 'continuous_spread':
+                raise ValueError('Continuous ATS policy requires the v1.19 revision and method')
+            if row.get('fixed_rule') is not None or not math.isfinite(float(row.get('model_spread', math.nan))):
+                raise ValueError('Continuous ATS policy cannot use a fitted median rule')
+            if abs(float(row['model_spread']) - x) > EPS:
+                raise ValueError('Continuous model spread differs from its saved raw spread')
+            effective = float(row['fixed_band_spread'])
+            if not math.isfinite(effective) or abs(effective - x) > EPS:
+                raise ValueError('Continuous ATS spread differs from its saved raw spread')
+            mapped = x
+        else:
+            if row['revision'] == CONTINUOUS_REVISION:
+                raise ValueError('v1.19 cannot use a legacy median ATS policy')
+            rule = row['fixed_rule']
+            if rule['training_max_season'] >= row['season']:
+                raise ValueError('ATS rule uses the forecast season')
+            band = sum(abs(x) >= cut for cut in rule['cuts'])
+            mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
+        side = select(mapped, line, POLICIES[policy])
         if abs(mapped - row['fixed_band_spread']) > EPS or side != row['selected_side']:
             raise ValueError('ATS candidate does not match the saved map and line')
         if row['skip_reason'] != ('zero_edge' if not side else None):
@@ -153,12 +185,19 @@ def record(data='data', now=None):
     latest = data / 'latest'
     added = []
     scheduled = {}
+    active_revision = None
     if (latest / 'manifest.json').exists() and (latest / 'board.csv').exists():
         manifest = json.loads((latest / 'manifest.json').read_text())
+        continuous = continuous_manifest(manifest)
+        active_revision = manifest['revision']
+        policy = POLICY_VERSION if continuous else MEDIAN_POLICY_VERSION
+        adopted = POLICY_ADOPTIONS[policy]
         generated = utc(manifest['generated_utc'])
         rule_path = latest / 'fixed_band_rules.json'
         # The build can derive rules before render_all has exported them.
-        if rule_path.exists():
+        if continuous:
+            rules = []
+        elif rule_path.exists():
             rules = json.loads(rule_path.read_text())
         elif (latest / 'retro_ledger.csv').exists():
             import pandas as pd
@@ -180,7 +219,7 @@ def record(data='data', now=None):
                 cutoff = deadline(ko)
                 identity = (manifest['revision'], raw['game_id'])
                 candidate_id = (*identity, generated.isoformat())
-                if identity in locked or candidate_id in seen or not ADOPTED_UTC <= generated <= now <= cutoff:
+                if identity in locked or candidate_id in seen or not adopted <= generated <= now <= cutoff:
                     continue
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
@@ -189,24 +228,32 @@ def record(data='data', now=None):
                 except (KeyError, TypeError, ValueError):
                     continue
                 rule = rules.get(int(raw['season']))
-                if not rule or rule['training_max_season'] >= int(raw['season']) or not 0 < wp < 1 or not math.isfinite(line):
+                if not 0 < wp < 1 or not math.isfinite(line):
                     continue
-                if rule.get('method') != 'median_signed_mov':
-                    raise ValueError('ATS lock requires the production median-MOV rule')
+                if not continuous:
+                    if not rule or rule['training_max_season'] >= int(raw['season']):
+                        continue
+                    if rule.get('method') != 'median_signed_mov':
+                        raise ValueError('ATS lock requires the production median-MOV rule')
                 # Use the production conversion, including its exact floating-
                 # point behavior at 3/7/10, rather than a second inverse CDF.
                 x = float(m.implied_spread([wp])[0])
-                band = sum(abs(x) >= cut for cut in rule['cuts'])
-                mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
-                side = select(mapped, line, POLICIES[POLICY_VERSION])
+                if continuous:
+                    mapped = x
+                else:
+                    band = sum(abs(x) >= cut for cut in rule['cuts'])
+                    mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
+                side = select(mapped, line, POLICIES[policy])
                 row = dict(revision=manifest['revision'], game_id=raw['game_id'],
                            season=int(raw['season']), week=int(raw['week']), home=raw['home'], away=raw['away'],
                            generated_utc=generated.isoformat(), observed_utc=now.isoformat(), kickoff_utc=ko.isoformat(),
-                           lock_at_utc=cutoff.isoformat(), lock_lead_minutes=LEAD_MINUTES, policy_version=POLICY_VERSION,
+                           lock_at_utc=cutoff.isoformat(), lock_lead_minutes=LEAD_MINUTES, policy_version=policy,
                            model_wp=wp, raw_spread=x, market_spread=line, fixed_band_spread=float(mapped),
                            selected_side=side, skip_reason='zero_edge' if not side else None,
                            fixed_rule=rule, config_signature=manifest.get('config_signature'),
                            quote_basis='source quote has no independent capture timestamp')
+                if continuous:
+                    row.update(selection_method='continuous_spread', model_spread=x)
                 row['candidate_sha256'] = digest(row)
                 added.append(row)
                 seen.add(candidate_id)
@@ -214,6 +261,8 @@ def record(data='data', now=None):
     candidates.extend(added)
     grouped = {}
     for row in candidates:
+        if active_revision is not None and row['revision'] != active_revision:
+            continue
         scheduled_ko = scheduled.get(key(row), utc(row['kickoff_utc']))
         if (key(row) not in locked and scheduled_ko == utc(row['kickoff_utc'])
                 and utc(row['lock_at_utc']) <= now < scheduled_ko):
@@ -245,8 +294,10 @@ def display_records(data='data'):
 def report(data='data'):
     info = validate_store(data)
     lines = ['ATS capture: latest saved forecast at or before kickoff minus 60 minutes.',
-             f'Policy: {POLICY_VERSION}; adopted {ADOPTED_UTC.isoformat()}.',
-             'A zero edge takes the market favorite; a pick\'em line with a zero mapped spread skips. '
+             f'Policy: {POLICY_VERSION}; adopted {CONTINUOUS_ADOPTED_UTC.isoformat()}.',
+             'v1.19 selects from its continuous model spread without a fitted median map. '
+             'Legacy median candidates and locks retain their original validation policy and bytes.',
+             'A zero edge takes the market favorite; a pick\'em line with a zero projected spread skips. '
              'Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills '
              'them as favorite bets, labelled separately.',
              'Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.',

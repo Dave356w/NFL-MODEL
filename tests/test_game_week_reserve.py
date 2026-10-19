@@ -115,7 +115,7 @@ def test_card_notes_show_the_game_week_reserve_list():
 
 
 def test_new_experiment_identity():
-    assert m.REVISION=='boxscore-composite-v1.18' and m.OUTPUT_NAME=='nfl_boxscore_output_v1_18'
+    assert m.REVISION=='boxscore-composite-v1.19' and m.OUTPUT_NAME=='nfl_boxscore_output_v1_19'
     sig,cfg=m.config_signature()
     assert cfg['avail']['game_week_reserve']['enabled'] is True
     old=m.GAME_WEEK_RESERVE; m.GAME_WEEK_RESERVE=False

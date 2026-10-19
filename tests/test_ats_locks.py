@@ -22,6 +22,11 @@ CUTOFF = KO - dt.timedelta(hours=1)
 
 class TimedATS(unittest.TestCase):
     def setUp(self):
+        # These cases reproduce the saved median-era policy and its old skips.
+        legacy = m.revision_identity('boxscore-composite-v1.18',
+            dict(m.LEGACY_PRODUCT_RECIPE, favorite_penalty=m.FAVORITE_PENALTY))
+        legacy.__enter__()
+        self.addCleanup(legacy.__exit__, None, None, None)
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.data = Path(self.tmp.name)
@@ -97,7 +102,7 @@ class TimedATS(unittest.TestCase):
         # The saved zero edge (7 against 7) takes the market favorite.
         self.assertEqual(saved['selected_side'], 'home')
         self.assertIsNone(saved['skip_reason'])
-        self.assertEqual(saved['policy_version'], a.POLICY_VERSION)
+        self.assertEqual(saved['policy_version'], a.MEDIAN_POLICY_VERSION)
         self.assertEqual(len(a.read(self.data / a.CANDIDATES)), 1)
 
     def test_old_generated_timestamp_first_observed_after_cutoff_is_rejected(self):
@@ -194,13 +199,13 @@ class TimedATS(unittest.TestCase):
 
     def test_saved_v1_skip_validates_unchanged_and_displays_as_backfilled_favorite(self):
         v1 = 'median-mov-ats-t60-2026-10-19-v1'
-        current = a.POLICY_VERSION
+        current = a.MEDIAN_POLICY_VERSION
         self.board(CUTOFF)
-        a.POLICY_VERSION = v1
+        a.MEDIAN_POLICY_VERSION = v1
         try:
             a.record(self.data, CUTOFF)
         finally:
-            a.POLICY_VERSION = current
+            a.MEDIAN_POLICY_VERSION = current
         saved = self.locks()[0]
         self.assertEqual((saved['policy_version'], saved['selected_side'], saved['skip_reason']),
                          (v1, '', 'zero_edge'))

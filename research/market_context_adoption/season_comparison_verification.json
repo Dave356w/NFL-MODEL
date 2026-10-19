@@ -1,0 +1,404 @@
+{
+  "challenger_path": "production||spread_total::group:full::g1||raw",
+  "production_path": "production||incumbent_v118||median_own",
+  "basis": "Exposed 2023\u201325 chronological development; selected historical challenger, not fresh validation",
+  "price": "assumed -110 each side; flat 1u risk, pushes retained in ROI stakes",
+  "same_rows_verified": true,
+  "all_games_selected": true,
+  "no_market_pickems": true,
+  "bootstrap": {
+    "replicates": 4000,
+    "seed": 20261019,
+    "method": "paired whole weeks within each season",
+    "interval": "ordinary percentile 95%; conditional on archived paths; excludes search/refit uncertainty"
+  },
+  "source_sha256": {
+    "games.csv": "8285e88a767e4e7490493a0bdf4475c57ff27b43931be6e92d13701b0ecfd5c7",
+    "predictions.npz": "ff8fefffc39e452e818cec547fead0e96612995ff096d91e36948de7965a844a",
+    "scores.csv": "192c888a5a0353ef59786c0801a51747a8647d5bbeab95cd06c958130702886c",
+    "annual_scores.csv": "c655bccc99c4d92a7aea7bbc81c80762945e41207c238174ab99116f8194dff8"
+  },
+  "results": [
+    {
+      "season": 2023,
+      "policy": "challenger_raw_full",
+      "games": 272,
+      "wins": 142,
+      "losses": 116,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 13.09090909090909,
+      "roi": 0.0481283422459893,
+      "roi_se": 0.0561891843958682,
+      "cover_rate": 0.5503875968992248,
+      "market_null_roi": -0.043114973262032084,
+      "roi_ci95": [
+        -0.06094874601528593,
+        0.15251471375066883
+      ]
+    },
+    {
+      "season": 2023,
+      "policy": "current_production_median",
+      "games": 272,
+      "wins": 136,
+      "losses": 122,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 1.6363636363636367,
+      "roi": 0.006016042780748665,
+      "roi_se": 0.05638940648888875,
+      "cover_rate": 0.5271317829457365,
+      "market_null_roi": -0.043114973262032084,
+      "roi_ci95": [
+        -0.08793468696117485,
+        0.10854839454378244
+      ]
+    },
+    {
+      "season": 2023,
+      "policy": "same_row_always_favorite",
+      "games": 272,
+      "wins": 137,
+      "losses": 121,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": 3.5454545454545476,
+      "roi": 0.013034759358288779,
+      "roi_se": 0.056364148865781304,
+      "cover_rate": 0.5310077519379846,
+      "market_null_roi": -0.043114973262032084,
+      "roi_ci95": [
+        -0.10341448174806937,
+        0.1261326869691622
+      ]
+    },
+    {
+      "season": 2023,
+      "policy": "same_row_always_home",
+      "games": 272,
+      "wins": 128,
+      "losses": 130,
+      "pushes": 14,
+      "skips": 0,
+      "bets": 272,
+      "units": -13.636363636363635,
+      "roi": -0.050133689839572185,
+      "roi_se": 0.05647530520478812,
+      "cover_rate": 0.49612403100775193,
+      "market_null_roi": -0.043114973262032084,
+      "roi_ci95": [
+        -0.16173419174936435,
+        0.05389866712235134
+      ]
+    },
+    {
+      "season": 2024,
+      "policy": "challenger_raw_full",
+      "games": 272,
+      "wins": 146,
+      "losses": 122,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 10.727272727272727,
+      "roi": 0.03943850267379679,
+      "roi_se": 0.0573260632885345,
+      "cover_rate": 0.5447761194029851,
+      "market_null_roi": -0.04478609625668449,
+      "roi_ci95": [
+        -0.06618420264985231,
+        0.15555289390211668
+      ]
+    },
+    {
+      "season": 2024,
+      "policy": "current_production_median",
+      "games": 272,
+      "wins": 142,
+      "losses": 126,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 3.0909090909090917,
+      "roi": 0.011363636363636367,
+      "roi_se": 0.057453967938887185,
+      "cover_rate": 0.5298507462686567,
+      "market_null_roi": -0.04478609625668449,
+      "roi_ci95": [
+        -0.10795454545454544,
+        0.12110036246407754
+      ]
+    },
+    {
+      "season": 2024,
+      "policy": "same_row_always_favorite",
+      "games": 272,
+      "wins": 143,
+      "losses": 125,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": 5.000000000000002,
+      "roi": 0.018382352941176478,
+      "roi_se": 0.0574267668166056,
+      "cover_rate": 0.5335820895522388,
+      "market_null_roi": -0.04478609625668449,
+      "roi_ci95": [
+        -0.12154793735676085,
+        0.15173796791443847
+      ]
+    },
+    {
+      "season": 2024,
+      "policy": "same_row_always_home",
+      "games": 272,
+      "wins": 137,
+      "losses": 131,
+      "pushes": 4,
+      "skips": 0,
+      "bets": 272,
+      "units": -6.454545454545455,
+      "roi": -0.023729946524064172,
+      "roi_se": 0.05754241441082273,
+      "cover_rate": 0.5111940298507462,
+      "market_null_roi": -0.04478609625668449,
+      "roi_ci95": [
+        -0.141126871276346,
+        0.08216041279218178
+      ]
+    },
+    {
+      "season": 2025,
+      "policy": "challenger_raw_full",
+      "games": 272,
+      "wins": 155,
+      "losses": 116,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": 24.909090909090914,
+      "roi": 0.09157754010695189,
+      "roi_se": 0.05727634141033557,
+      "cover_rate": 0.5719557195571956,
+      "market_null_roi": -0.045287433155080214,
+      "roi_ci95": [
+        -0.02171072787074887,
+        0.20683547736945995
+      ]
+    },
+    {
+      "season": 2025,
+      "policy": "current_production_median",
+      "games": 272,
+      "wins": 152,
+      "losses": 119,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": 19.18181818181818,
+      "roi": 0.07052139037433154,
+      "roi_se": 0.05744769355579744,
+      "cover_rate": 0.5608856088560885,
+      "market_null_roi": -0.045287433155080214,
+      "roi_ci95": [
+        -0.045293388429752036,
+        0.1854282901214309
+      ]
+    },
+    {
+      "season": 2025,
+      "policy": "same_row_always_favorite",
+      "games": 272,
+      "wins": 131,
+      "losses": 140,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": -20.909090909090907,
+      "roi": -0.07687165775401068,
+      "roi_se": 0.0578465888114201,
+      "cover_rate": 0.4833948339483395,
+      "market_null_roi": -0.045287433155080214,
+      "roi_ci95": [
+        -0.17385534173855338,
+        0.03878201649663561
+      ]
+    },
+    {
+      "season": 2025,
+      "policy": "same_row_always_home",
+      "games": 272,
+      "wins": 135,
+      "losses": 136,
+      "pushes": 1,
+      "skips": 0,
+      "bets": 272,
+      "units": -13.27272727272727,
+      "roi": -0.048796791443850254,
+      "roi_se": 0.057877705660562766,
+      "cover_rate": 0.4981549815498155,
+      "market_null_roi": -0.045287433155080214,
+      "roi_ci95": [
+        -0.16220394868876806,
+        0.06327006327006328
+      ]
+    },
+    {
+      "season": "2023\u201325",
+      "policy": "challenger_raw_full",
+      "games": 816,
+      "wins": 443,
+      "losses": 354,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": 48.727272727272734,
+      "roi": 0.05971479500891266,
+      "roi_se": 0.03283961539808277,
+      "cover_rate": 0.5558343789209536,
+      "market_null_roi": -0.04439616755793226,
+      "roi_ci95": [
+        -0.0058513955791183545,
+        0.12364689331559454
+      ]
+    },
+    {
+      "season": "2023\u201325",
+      "policy": "current_production_median",
+      "games": 816,
+      "wins": 430,
+      "losses": 367,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": 23.909090909090914,
+      "roi": 0.029300356506238866,
+      "roi_se": 0.032941688050994414,
+      "cover_rate": 0.5395232120451694,
+      "market_null_roi": -0.04439616755793226,
+      "roi_ci95": [
+        -0.03465545571756193,
+        0.0922605478038917
+      ]
+    },
+    {
+      "season": "2023\u201325",
+      "policy": "same_row_always_favorite",
+      "games": 816,
+      "wins": 411,
+      "losses": 386,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": -12.36363636363636,
+      "roi": -0.015151515151515147,
+      "roi_se": 0.03302854673840519,
+      "cover_rate": 0.5156838143036386,
+      "market_null_roi": -0.04439616755793226,
+      "roi_ci95": [
+        -0.08331588908641967,
+        0.05331485141267753
+      ]
+    },
+    {
+      "season": "2023\u201325",
+      "policy": "same_row_always_home",
+      "games": 816,
+      "wins": 400,
+      "losses": 397,
+      "pushes": 19,
+      "skips": 0,
+      "bets": 816,
+      "units": -33.36363636363635,
+      "roi": -0.040886809269162196,
+      "roi_se": 0.03304521168820253,
+      "cover_rate": 0.5018820577164367,
+      "market_null_roi": -0.04439616755793226,
+      "roi_ci95": [
+        -0.10371951904708392,
+        0.02146514770826662
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "season": 2023,
+      "games": 272,
+      "week_clusters": 18,
+      "paired_roi_gain": 0.04211229946524064,
+      "paired_roi_gain_pp": 4.211229946524064,
+      "paired_roi_gain_ci95": [
+        -0.08580183861082737,
+        0.15851657367902855
+      ],
+      "paired_roi_gain_ci95_pp": [
+        -8.580183861082737,
+        15.851657367902854
+      ],
+      "units_gain": 11.454545454545453,
+      "side_flips": 115,
+      "units_gain_on_flips": 11.454545454545453
+    },
+    {
+      "season": 2024,
+      "games": 272,
+      "week_clusters": 18,
+      "paired_roi_gain": 0.028074866310160422,
+      "paired_roi_gain_pp": 2.807486631016042,
+      "paired_roi_gain_ci95": [
+        -0.11107438016528925,
+        0.1742030779439539
+      ],
+      "paired_roi_gain_ci95_pp": [
+        -11.107438016528926,
+        17.42030779439539
+      ],
+      "units_gain": 7.636363636363638,
+      "side_flips": 111,
+      "units_gain_on_flips": 7.636363636363638
+    },
+    {
+      "season": 2025,
+      "games": 272,
+      "week_clusters": 18,
+      "paired_roi_gain": 0.02105614973262035,
+      "paired_roi_gain_pp": 2.105614973262035,
+      "paired_roi_gain_ci95": [
+        -0.08648835808912078,
+        0.12823452959919507
+      ],
+      "paired_roi_gain_ci95_pp": [
+        -8.648835808912079,
+        12.823452959919507
+      ],
+      "units_gain": 5.727272727272729,
+      "side_flips": 101,
+      "units_gain_on_flips": 5.727272727272726
+    },
+    {
+      "season": "2023\u201325",
+      "games": 816,
+      "week_clusters": 54,
+      "paired_roi_gain": 0.030414438502673797,
+      "paired_roi_gain_pp": 3.0414438502673797,
+      "paired_roi_gain_ci95": [
+        -0.04165415630265586,
+        0.10134680134680132
+      ],
+      "paired_roi_gain_ci95_pp": [
+        -4.165415630265587,
+        10.134680134680133
+      ],
+      "units_gain": 24.81818181818182,
+      "side_flips": 327,
+      "units_gain_on_flips": 24.81818181818182
+    }
+  ],
+  "older_seasons": "The configured current median policy uses calibration_floor=2021 and requires two prior seasons plus minimum band support. It has no valid maps in 2015\u201322. Saved primary paths cover 2023\u201325 only; older raw forecasts or extended-history maps cannot be labeled current-production median performance.",
+  "records_match_saved_annual_and_overall_metrics": true,
+  "units_match_independent_win_payout_minus_losses": true
+}

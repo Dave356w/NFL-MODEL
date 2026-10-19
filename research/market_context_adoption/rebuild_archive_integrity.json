@@ -1,0 +1,130 @@
+{
+  "ats_forward_shadow.jsonl": {
+    "bytes": 20107,
+    "sha256": "a268ca74bcb1445f408c7a714107c8553628f2a9761c302735d98b1dcc6f842d",
+    "kind": "append-only",
+    "after_bytes": 20107,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.13.json": {
+    "bytes": 22310,
+    "sha256": "b3baedeaa4360dcf7ee4ea6e1d5a4da21a357ec2a06695439f3fbe0bd8087bb3",
+    "kind": "immutable-recipe",
+    "after_bytes": 22310,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.18.json": {
+    "bytes": 15627,
+    "sha256": "4df27b991bbc2e8019f00c0d212d0bb16a6b4ae1dcb5ba1c84ffa1ec2305b73b",
+    "kind": "immutable-recipe",
+    "after_bytes": 15627,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.14.json": {
+    "bytes": 24095,
+    "sha256": "b33671918b3dc985a0e9890c413e8d22397e9567ad3b32f332c6e2df4745f3e8",
+    "kind": "immutable-recipe",
+    "after_bytes": 24095,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.15.json": {
+    "bytes": 24330,
+    "sha256": "dcb2d9ff964aa052fdebaea1b77232cb3af27d8e5196f42ecc3a1c66296fac82",
+    "kind": "immutable-recipe",
+    "after_bytes": 24330,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "h4_terms.jsonl": {
+    "bytes": 7533,
+    "sha256": "f0fbb9b593840abe9f1767f5afded454a22771a6d37afe1bde7c51a87b052e4b",
+    "kind": "append-only",
+    "after_bytes": 7533,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026.json": {
+    "bytes": 18868,
+    "sha256": "f3ba9d1a5f901b4b8ebcf88686bfb53e5bd79bc6ac542d356b5df1fac114d5ad",
+    "kind": "immutable-recipe",
+    "after_bytes": 18868,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.12.json": {
+    "bytes": 21220,
+    "sha256": "5dd88be543a782bfb2b3a7946511674cb8f327d6c32125c8c4715bc2ed30cf6f",
+    "kind": "immutable-recipe",
+    "after_bytes": 21220,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.16.json": {
+    "bytes": 15497,
+    "sha256": "2668153c0199c26d890dcc6cd14856ac2e78066bbfd3beae6d2059171b1e56e4",
+    "kind": "immutable-recipe",
+    "after_bytes": 15497,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "ats_lock_candidates.jsonl": {
+    "bytes": 11008,
+    "sha256": "c561b51dee9b9928d5a99d95f1ffc25a49754bfc858620c5a3dcf0f7c7dfb916",
+    "kind": "append-only",
+    "after_bytes": 11916,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "forward_predictions.jsonl": {
+    "bytes": 605082,
+    "sha256": "eae400a70c6a0fd13b09cab22e98a6c7b0601a28e6ede66422fedd7ad5ee6754",
+    "kind": "append-only",
+    "after_bytes": 611816,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.10.json": {
+    "bytes": 20319,
+    "sha256": "af5a9e952f3e8085f918f52fcb8fe4002a77a8571c52ef50d0801789999fe8a6",
+    "kind": "immutable-recipe",
+    "after_bytes": 20319,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "h5_totals.jsonl": {
+    "bytes": 8459,
+    "sha256": "22dee47937387f62d5aef5f1c050a1772cb61db248a40a34b185034b1d0495f3",
+    "kind": "append-only",
+    "after_bytes": 8459,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.17.json": {
+    "bytes": 18056,
+    "sha256": "f81584de43c6ca5c61325c751c6bb7bb463fc7ddb761273e6ce01086c10f0901",
+    "kind": "immutable-recipe",
+    "after_bytes": 18056,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "kalshi_snapshots.jsonl": {
+    "bytes": 132694,
+    "sha256": "1628b178094a59de3e90437232cce779f5ebe762fe555ae2c7d9a40370968662",
+    "kind": "append-only",
+    "after_bytes": 132694,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  },
+  "frozen_recipe_2026_boxscore-composite-v1.11.json": {
+    "bytes": 20907,
+    "sha256": "a56b02ab7e046c7048e03bb4b783fa1178df8d39fb20fdf0ce3d249535be6a6b",
+    "kind": "immutable-recipe",
+    "after_bytes": 20907,
+    "prefix_preserved": true,
+    "tracked_unchanged": true
+  }
+}

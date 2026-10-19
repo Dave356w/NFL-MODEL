@@ -107,6 +107,27 @@ def markdown_table(frame,identity):
     return '\n'.join(lines)
 
 
+def production_lines():
+    """Describe the current recipe without relabeling any archived study."""
+    if m.PRODUCT_RECIPE.get('architecture') == 'market_spread_total':
+        description = ('spread/total logistic market baseline with all 29 football inputs '
+                       'fitted as a full additive log-odds correction; continuous ATS spread, without median bands.')
+        decision = ('Owner-directed promotion on 2026-10-19 after exposed development. '
+                    'Original pregame forecasts and older revisions remain unchanged; retrospective replacements are reconstructions.')
+    elif m.REVISION == 'boxscore-composite-v1.16':
+        description = 'exact original Product + 1 SD recipe.'
+        decision = 'Owner-directed restoration on 2026-10-12.'
+    elif m.REVISION == 'boxscore-composite-v1.18':
+        description = ('the v1.16 recipe with the favorite-confidence penalty '
+                       f'(lambda {m.FAVORITE_PENALTY:g}); v1.16 continues as a shadow lock for its pre-registered tests.')
+        decision = 'Owner decision 2026-10-13.'
+    else:
+        description = f"recipe architecture {m.PRODUCT_RECIPE.get('architecture', 'unspecified')}."
+        decision = 'Native revisions and historical study identities are reported separately.'
+    return [f'Current production: **{m.REVISION}**, {description}',
+            f'Configuration: `{m.config_signature()[0]}`. {decision}']
+
+
 def run(data,out):
     data,out=Path(data),Path(out);out.mkdir(parents=True,exist_ok=True)
     ledger=pd.read_csv(data/'forward_ledger.csv')
@@ -114,12 +135,7 @@ def run(data,out):
     for name,frame in [('historical',historical),('archived',archived),('native',native)]:
         frame.to_csv(out/f'version_{name}.csv',index=False)
     lines=['# Production restoration and all competing-model results','',
-           *([f'Current production: **{m.REVISION}**, exact original Product + 1 SD recipe.',
-              f'Configuration: `{m.config_signature()[0]}`. Owner-directed restoration on 2026-10-12.']
-             if m.REVISION=='boxscore-composite-v1.16' else
-             [f'Current production: **{m.REVISION}**, the v1.16 recipe with the favorite-confidence penalty '
-              f'(lambda {m.FAVORITE_PENALTY:g}); v1.16 continues as a shadow lock for its pre-registered tests.',
-              f'Configuration: `{m.config_signature()[0]}`. Owner decision 2026-10-13.']),
+           *production_lines(),
            'Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.',
            '', '## Native forward results', '',
            'Each experiment contains one original pregame forecast per game. Different revisions can overlap and have different lock quotes; do not pool them. Ties push; binary scores exclude ties. Pending games remain ungraded.', '',
@@ -129,9 +145,9 @@ def run(data,out):
            'Exposed 2023–2025 chronological development. Compare arms within each study; cohorts differ (811 versus 812 bets), warm-up training histories differ, and the label production in the older qualification/context studies describes the pre-v1.16 model. Repeated control rows are not independent evidence.', '',
            markdown_table(historical,'Study and arm'), '', '## Selection-adjusted benchmark', '',
            *selection_lines(), '', '## Interpretation', '',
-           'v1.17 has the highest tested historical return among the recent fixed challengers, but its paired advantage over v1.16 remains unresolved (98.75% ROI-difference interval −0.27 to +4.89 percentage points). v1.16 has better historical binary scores than v1.17. The extra passing-by-total interaction beats the additive market-target challenger on returns through one changed historical pick. Shrinkage and bounded variants do not establish replacement superiority.',
+           'Within the older studies listed here, v1.17 has the highest tested historical return among their fixed challengers, but its paired advantage over v1.16 remains unresolved (98.75% ROI-difference interval −0.27 to +4.89 percentage points). v1.16 has better historical binary scores than v1.17. The extra passing-by-total interaction beats the additive market-target challenger on returns through one changed historical pick. These studies do not evaluate the later v1.19 market-spread/total promotion.',
            'Historical intervals condition on exposed model development and omit design-selection uncertainty. ROI ± SE is one standard error, not a confidence interval. Native results are small-sample descriptive evidence. Source reports retain paired week-cluster intervals and annual comparisons.',
-           'The restored production is not qualified as reliably profitable. Retrospective snapshot grades are reported separately from native outcomes, and repeated snapshots are never counted as independent games.','']
+           'The current production is not qualified as reliably profitable. Retrospective snapshot grades are reported separately from native outcomes, and repeated snapshots are never counted as independent games.','']
     (out/'version_report.md').write_text('\n'.join(lines))
     return historical,archived,native
 
