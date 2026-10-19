@@ -2,7 +2,9 @@
 
 This is a reporting view, never an append to either forecast archive. Earlier
 unregistered ATS decisions can be reconstructed from pre-adoption moneyline
-snapshots, but are explicitly replay, not native ATS evidence.
+snapshots, but are explicitly replay, not native ATS evidence. A zero edge takes
+the market favorite everywhere; saved zero-edge skips are backfilled as favorite
+bets (owner decision 2026-10-19) under their own basis label.
 """
 import numpy as np
 import pandas as pd
@@ -63,7 +65,8 @@ def build(latest, ledger):
             generated_utc=saved['generated_utc'], lock_at_utc=saved['lock_at_utc'],
             model_wp=saved['model_wp'], spread_line=saved['market_spread'],
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
-            ats_basis='Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
+            ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
+            else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
     if not rows:
         return pd.DataFrame()
     for game, row in rows.items():
@@ -80,9 +83,8 @@ def build(latest, ledger):
     frame['fixed_band_ats_units'] = np.where(complete, units, np.nan)
     frame['ats_status'] = np.where(~complete, 'pending',
         np.where(np.isin(frame.fixed_band_ats_result, list('WLPS')), 'graded', 'unavailable'))
-    edge = frame.fixed_band_spread - frame.spread_line
-    frame['fixed_band_ats_side'] = np.where(~np.isfinite(edge) | (abs(edge) <= fixed_bands.EPS), '',
-                                           np.where(edge > 0, 'home', 'away'))
+    side = fixed_bands.pick(frame.fixed_band_spread, frame.spread_line)
+    frame['fixed_band_ats_side'] = np.where(side > 0, 'home', np.where(side < 0, 'away', ''))
     side = frame.fixed_band_ats_side
     frame['fixed_band_ats_team'] = np.where(side.eq('home'), frame.home, np.where(side.eq('away'), frame.away, ''))
     frame['fixed_band_ats_handicap'] = np.where(side.eq('home'), -frame.spread_line,

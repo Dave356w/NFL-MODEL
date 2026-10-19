@@ -3,6 +3,11 @@
 Candidates are observed and persisted before the cutoff. A delayed build may
 finalize the latest eligible candidate, but never use post-cutoff inputs or
 backfill a game after kickoff. Earlier moneyline and ATS archives stay intact.
+
+v2 (owner decision 2026-10-19): a zero edge takes the market favorite. Rows saved
+under v1 keep their bytes and validate against v1's skip; grading and display
+backfill those saved skips as favorite bets (owner decision 2026-10-19), labelled
+separately from recorded selections.
 """
 from __future__ import annotations
 
@@ -15,7 +20,9 @@ import os
 from pathlib import Path
 from statistics import NormalDist
 
-POLICY_VERSION = 'median-mov-ats-t60-2026-10-19-v1'
+POLICY_VERSION = 'median-mov-ats-t60-favtie-2026-10-19-v2'
+# Policy version -> whether a zero edge takes the market favorite.
+POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, POLICY_VERSION: True}
 ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T05:05:26+00:00')
 LEAD_MINUTES = 60
 CANDIDATES = 'ats_lock_candidates.jsonl'
@@ -59,6 +66,20 @@ def key(row):
     return row['revision'], row['game_id']
 
 
+def backfilled(row):
+    """A saved zero-edge skip that grading now treats as a favorite bet."""
+    line, mapped = row.get('market_spread'), row.get('fixed_band_spread')
+    return (not row.get('selected_side') and line is not None and mapped is not None
+            and select(float(mapped), float(line), True) != '')
+
+
+def select(mapped, line, favorite):
+    edge = mapped - line
+    if abs(edge) <= EPS:
+        edge = line if favorite else 0.
+    return 'home' if edge > EPS else 'away' if edge < -EPS else ''
+
+
 def validate_store(data='data'):
     """Stdlib-only validation, also used before the workflow commits data/."""
     data = Path(data)
@@ -78,7 +99,7 @@ def validate_store(data='data'):
         generated, observed = utc(row['generated_utc']), utc(row['observed_utc'])
         if not ADOPTED_UTC <= generated <= observed <= cutoff or cutoff != utc(row['lock_at_utc']):
             raise ValueError('ATS candidate is outside the pre-lock cutoff')
-        if row['policy_version'] != POLICY_VERSION or row['lock_lead_minutes'] != LEAD_MINUTES:
+        if row['policy_version'] not in POLICIES or row['lock_lead_minutes'] != LEAD_MINUTES:
             raise ValueError('ATS candidate timing policy mismatch')
         rule = row['fixed_rule']
         if rule['training_max_season'] >= row['season']:
@@ -92,8 +113,7 @@ def validate_store(data='data'):
             raise ValueError('ATS raw spread does not match its saved probability')
         band = sum(abs(x) >= cut for cut in rule['cuts'])
         mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
-        edge = mapped - line
-        side = 'home' if edge > EPS else 'away' if edge < -EPS else ''
+        side = select(mapped, line, POLICIES[row['policy_version']])
         if abs(mapped - row['fixed_band_spread']) > EPS or side != row['selected_side']:
             raise ValueError('ATS candidate does not match the saved map and line')
         if row['skip_reason'] != ('zero_edge' if not side else None):
@@ -178,8 +198,7 @@ def record(data='data', now=None):
                 x = float(m.implied_spread([wp])[0])
                 band = sum(abs(x) >= cut for cut in rule['cuts'])
                 mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
-                edge = mapped - line
-                side = 'home' if edge > EPS else 'away' if edge < -EPS else ''
+                side = select(mapped, line, POLICIES[POLICY_VERSION])
                 row = dict(revision=manifest['revision'], game_id=raw['game_id'],
                            season=int(raw['season']), week=int(raw['week']), home=raw['home'], away=raw['away'],
                            generated_utc=generated.isoformat(), observed_utc=now.isoformat(), kickoff_utc=ko.isoformat(),
@@ -227,6 +246,9 @@ def report(data='data'):
     info = validate_store(data)
     lines = ['ATS capture: latest saved forecast at or before kickoff minus 60 minutes.',
              f'Policy: {POLICY_VERSION}; adopted {ADOPTED_UTC.isoformat()}.',
+             'A zero edge takes the market favorite; a pick\'em line with a zero mapped spread skips. '
+             'Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills '
+             'them as favorite bets, labelled separately.',
              'Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.',
              'Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.',
              'Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.',

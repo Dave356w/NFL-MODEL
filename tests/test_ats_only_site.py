@@ -58,13 +58,13 @@ class ATSOnlySite(unittest.TestCase):
                 self.assertNotRegex(text,r'\bnan\b|\bNaN\b|\bNone\b')
                 self.assertNotIn("class='probbar'",raw)
 
-    def test_cards_preserve_skips_and_do_not_display_a_refreshed_winner(self):
+    def test_cards_backfill_saved_skips_at_the_saved_line_not_a_refreshed_winner(self):
         html=(self.out/'index.html').read_text()
         card=next(c for c in html.split("<details class='card'>")[1:] if 'Titans' in c.split('</summary>')[0])
         summary=card.split('</summary>')[0]
-        self.assertIn('No bet · zero projected edge',summary)
-        self.assertIn('Market IND −7.0',summary)
-        self.assertIn('ATS result · Skip',summary)
+        self.assertIn('IND −7.0',summary)
+        self.assertIn('skip backfilled as favorite',summary)
+        self.assertIn('ATS result · L',summary)
         self.assertNotIn('TEN +6.5',summary)
 
     def test_public_exports_exclude_moneyline_and_probability_fields(self):
@@ -82,9 +82,13 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(row.ats_status,'locked')
         self.assertEqual(row.model_spread,7.)
         self.assertEqual(row.spread_line,7.)
-        self.assertEqual(row.selected_team,'')
-        self.assertEqual(row.ats_result,'S')
-        self.assertEqual(float(row.ats_units),0.)
+        self.assertEqual(row.selected_team,'IND')
+        self.assertEqual(row.ats_result,'L')
+        self.assertEqual(float(row.ats_units),-1.)
+        saved=pd.read_csv(self.out/'ats_locked_picks.csv',keep_default_na=False).set_index('game_id')
+        # The saved-picks download keeps the original skip and flags the backfill.
+        self.assertEqual(saved.loc['2026_06_TEN_IND'].skip_reason,'zero_edge')
+        self.assertEqual(str(saved.loc['2026_06_TEN_IND'].backfilled_favorite),'True')
 
     def test_results_show_sources_and_each_game_once(self):
         html=(self.out/'grades.html').read_text()
@@ -92,6 +96,7 @@ class ATSOnlySite(unittest.TestCase):
         self.assertIn('60-minute locks',html)
         self.assertIn('Historical replay',html)
         self.assertIn('Replayed pregame forecasts',html)
+        self.assertIn('Recorded skips backfilled as favorite bets',html)
         self.assertIn('Game-by-game ATS results',html)
         self.assertEqual(html.count("data-game-id='2026_06_TEN_IND'"),1)
         week=self.pool[self.pool.week.eq(6)].fixed_band_ats_result

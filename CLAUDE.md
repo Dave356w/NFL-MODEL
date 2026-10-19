@@ -56,6 +56,13 @@ The open ATS question is whether the median map beats the raw model spread
 same locked games; the owner reviews at 100 decided locks. Each lock already
 saves both inputs, so this comparison needs no new capture.
 
+**Zero edge takes the market favorite** (owner decision 2026-10-19; lock policy
+v2). Only a pick'em line with a zero mapped spread skips. It applies
+retrospectively. By owner decision (2026-10-19), saved zero-edge skips are
+backfilled as favorite bets in grading and display, labelled **Backfilled
+recorded skip** and kept out of forward evidence. The saved files are never
+rewritten; this exception covers only that grading rule.
+
 **Moneyline is legacy research.** Its reports keep the flat 1u ROI basis in
 `MODEL.md`: units, ROI ± SE, n, the market-correct null (negative by the hold,
 not zero) and the same-row market-favorite baseline.

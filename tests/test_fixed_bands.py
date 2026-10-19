@@ -33,9 +33,27 @@ def test_signed_boundaries_missing_and_pickem():
 def test_grading_skip_before_push_tied_final_and_pending():
     d = pd.DataFrame({'spread_line': [3., 3., -3., 0., 3., np.nan],
                       'result': [3., 3., 0., 0., np.nan, 7.]})
-    r, u = f.grade(d, [3., 4., -2., 1., 4., 4.])
+    # The earlier rule skips a zero edge before push grading.
+    r, u = f.grade(d, [3., 4., -2., 1., 4., 4.], favorite_on_tie=False)
     assert list(r) == ['S', 'P', 'W', 'P', '', '']
     np.testing.assert_allclose(u, [0, 0, 1/1.1, 0, np.nan, np.nan], equal_nan=True)
+    # Production: the zero edge is a favorite bet, so the tied final is a push.
+    r, u = f.grade(d, [3., 4., -2., 1., 4., 4.])
+    assert list(r) == ['P', 'P', 'W', 'P', '', '']
+
+
+def test_zero_edge_takes_the_market_favorite_and_pickem_still_skips():
+    d = pd.DataFrame({'spread_line': [3., -7., 7., -3., 0., 0.],
+                      'result': [10., -10., 0., 0., 5., 5.]})
+    prediction = [3., -7., 7. + 1e-11, -3., 0., 1.]
+    np.testing.assert_array_equal(f.pick(prediction, d.spread_line), [1., -1., 1., -1., 0., 1.])
+    r, u = f.grade(d, prediction)
+    assert list(r) == ['W', 'W', 'L', 'L', 'S', 'W']
+    np.testing.assert_allclose(u, [1/1.1, 1/1.1, -1, -1, 0, 1/1.1])
+    # Saved decisions under the earlier rule keep their skips, row by row.
+    r, _ = f.grade(d, prediction, [False, True, False, True, True, True])
+    assert list(r) == ['S', 'W', 'S', 'L', 'S', 'W']
+    assert np.isnan(f.pick([np.nan], [3.])).all()
 
 
 def test_summary_excludes_unavailable_and_skipped_stakes():
@@ -78,9 +96,10 @@ def test_no_feasible_coverage_returns_no_map():
 def test_strict_zero_edge_and_explicit_selection_denominator():
     d = pd.DataFrame({'spread_line': [3., 3., 3.],
                       'result': [4., 4., 4.]})
-    result, units = f.grade(d, [3., 3. + 1e-11, 3. + 1e-8])
+    result, units = f.grade(d, [3., 3. + 1e-11, 3. + 1e-8], favorite_on_tie=False)
     assert list(result) == ['S', 'S', 'W']
     assert list(units[:2]) == [0., 0.]
+    assert list(f.grade(d, [3., 3. + 1e-11, 3. + 1e-8])[0]) == ['W', 'W', 'W']
     row = pd.DataFrame({'season': [2026] * 3, 'fixed_band_spread': [3., 3., 4.],
                         'result': [4.] * 3, 'spread_line': [3.] * 3,
                         'original_ats_result': ['S', 'S', 'W'],
@@ -164,10 +183,14 @@ def test_production_median_reproduces_tested_maps_and_895_game_replay():
         if year == 2026:
             assert rule['training_games'] == 1359
         g = d[d.season == year]
-        grades, units = f.grade(g, f.apply(g.model_spread, rule))
-        scored.extend(zip(grades, units))
+        mapped = f.apply(g.model_spread, rule)
+        scored.extend(zip(*f.grade(g, mapped), *f.grade(g, mapped, favorite_on_tie=False)))
     # This fixture snapshot stops at W5; later bot-updated snapshots may add rows.
     if len(scored) == 895:
-        grades = [a for a, _ in scored]
-        assert [grades.count(k) for k in ('W', 'L', 'P', 'S')] == [412, 349, 13, 121]
-        assert np.isclose(sum(u for _, u in scored), 25.545454545454547)
+        legacy = [r[2] for r in scored]
+        assert [legacy.count(k) for k in ('W', 'L', 'P', 'S')] == [412, 349, 13, 121]
+        assert np.isclose(sum(r[3] for r in scored), 25.545454545454547)
+        # Production: the 121 former skips become favorite bets (61-48-12).
+        grades = [r[0] for r in scored]
+        assert [grades.count(k) for k in ('W', 'L', 'P', 'S')] == [473, 397, 25, 0]
+        assert np.isclose(sum(r[1] for r in scored), 33.)

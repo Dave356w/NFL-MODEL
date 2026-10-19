@@ -38,18 +38,21 @@ def median_rule(history, year):
                 cuts=list(CUTS), magnitudes=[float(np.median(signed[band == k])) for k in range(4)])
 
 
-def independent_grades(predicted, lines, margins):
+def independent_grades(predicted, lines, margins, favorite_on_tie=True):
+    """A matching line takes the market favorite (2026-10-19 rule) unless the
+    line is a pick'em or the legacy skip rule is requested."""
     predicted, lines, margins = [np.asarray(v, float) for v in (predicted, lines, margins)]
     out = np.full(len(predicted), '', dtype='<U1')
     valid = np.isfinite(predicted) & np.isfinite(lines)
-    skipped = valid & (abs(predicted-lines) <= EPS)
+    tie = valid & (abs(predicted-lines) <= EPS)
+    direction = np.where(tie, lines if favorite_on_tie else 0., predicted-lines)
+    skipped = valid & (direction == 0)
     out[skipped] = 'S'
     played = valid & ~skipped & np.isfinite(margins)
     pushed = played & (abs(margins-lines) <= EPS)
     out[pushed] = 'P'
     decided = played & ~pushed
-    out[decided] = np.where((predicted[decided]-lines[decided]) *
-                            (margins[decided]-lines[decided]) > 0, 'W', 'L')
+    out[decided] = np.where(direction[decided]*(margins[decided]-lines[decided]) > 0, 'W', 'L')
     return out
 
 
@@ -107,7 +110,14 @@ def inspect(data='data'):
     if exported.exists():
         saved = pd.read_csv(exported).set_index('game_id').reindex(d.game_id)
         checks['exported_median_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
-        checks['exported_ats_grades'] = bool(np.array_equal(saved.fixed_band_ats_result.fillna('').to_numpy(), grades))
+        # Each export is checked against the selection rule it declares; an export
+        # written before the 2026-10-19 rule has no column and used the zero-edge skip.
+        declared = saved.get('selection_version', pd.Series(dtype=object)).dropna().unique().tolist()
+        export_rule = declared[0] if declared else 'zero-edge skip (before 2026-10-19)'
+        checks['exported_selection_rule_known'] = (len(declared) <= 1 and
+            export_rule in (fixed_bands.SELECTION_VERSION, 'zero-edge skip (before 2026-10-19)'))
+        expected = grades if declared else independent_grades(predicted, d.spread_line, d.result, False)
+        checks['exported_ats_grades'] = bool(np.array_equal(saved.fixed_band_ats_result.fillna('').to_numpy(), expected))
     production_grades, _ = fixed_bands.grade(d, predicted)
     checks['production_grading_matches_independent'] = bool(np.array_equal(grades, production_grades))
     saved_rules=latest/'fixed_band_rules.json'
@@ -187,6 +197,7 @@ def inspect(data='data'):
         archive = dict(policy=fixed_bands.POLICY_VERSION,snapshots=len(rows),completed=sum(r['game_id'] in complete for r in rows))
         archive['pending'] = archive['snapshots']-archive['completed']
     return dict(checks=checks,rules=rules,historical=historical,native=native,ats_archive=archive,
+                export_selection=export_rule if exported.exists() else None,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
 
@@ -195,10 +206,13 @@ def report(data='data'):
     lines = ['Production sanity check: v1.18 and fixed-band median ATS',f"Status: {audit['status']}",
              'Basis: historical replay, native moneyline snapshots, and median-policy ATS archives remain separate.',
              'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.',
-             'Grading: forecast-minus-market chooses side; equality within 1e-10 skips before push grading.',
+             'Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite '
+             '(a pick\'em line skips) before push grading.',
              'Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.',
              'Source prices have no independent quote timestamp; historical ATS returns are proxy reconstructions.', '']
     for name, ok in audit['checks'].items():lines.append(f"  {'PASS' if ok else 'FAIL'} {name}")
+    if audit.get('export_selection'):
+        lines.append(f"  Exported ATS selection rule: {audit['export_selection']}")
     lines += ['', 'Prior-season maps (training excludes the forecast season):']
     for r in audit['rules']:
         lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")

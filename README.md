@@ -7,7 +7,7 @@ research stay internal to the model and repository reports.
 
 **Public goal: flat 1-unit ATS results.** The signed difference between the
 projected home margin and market margin chooses the ATS side. Matching lines
-skip; pushes return the stake. Returns assume −110, with cover rates excluding
+take the market favorite (pick'em lines skip); pushes return the stake. Returns assume −110, with cover rates excluding
 pushes and ROI including pushed stakes. Recorded and replayed results remain
 identified separately. Picks freeze at the 60-minute pregame cutoff.
 
@@ -28,7 +28,9 @@ forecast, and no lock may be backfilled after kickoff. The saved forecast time,
 cutoff and finalization time are all retained; GitHub cron does not guarantee
 delivery at an exact minute. Missing pre-cutoff forecasts show as unavailable.
 Game cards and the saved-spread-picks download preserve locked handicaps and
-zero-edge skips. Earlier ATS and moneyline records retain their original timing;
+selections. Zero-edge skips saved before the favorite rule are backfilled as
+favorite bets in results, labelled separately; the saved download keeps the
+original skip and flags `backfilled_favorite`. Earlier ATS and moneyline records retain their original timing;
 the new capture policy has a separate identity and never rewrites those records.
 
 The **2026 ATS season overview** pools historical replay and recorded selections,
