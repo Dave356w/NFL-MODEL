@@ -37,9 +37,12 @@ The **2026 ATS season overview** pools historical replay and recorded selections
 one row per game. Saved ATS picks and skips override replay. A pre-adoption game
 without an ATS archive can be replayed at its original pregame forecast and line;
 it is labeled replay, not recorded ATS evidence. Missing post-adoption locks are
-not reconstructed from early moneyline records. The headline, weekly results,
+not reconstructed from early moneyline records. All three pages' headline
+records, weekly and game results, running-units chart,
 same-game ATS controls and `ats_2026_results.csv` use this deduplicated view.
-Pricing is assumed −110 with 1-unit stakes; the download identifies each source.
+Source tracking and breakdowns remain in the backend report; the public pages
+and season CSV present the combined results without source labels.
+Pricing is assumed −110 with 1-unit stakes.
 
 Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
 penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
@@ -67,8 +70,8 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 | Page | For |
 |---|---|
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
-| [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Recorded forecasts, season moneyline results, and separately labelled historical replay with median ATS results |
-| [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Forecast confidence, market outcomes and spread performance |
+| [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Pooled 2026 ATS results by week and game, with downloads |
+| [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Pooled 2026 ATS record, running units and same-game spread baselines |
 
 The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
 held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research

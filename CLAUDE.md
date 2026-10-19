@@ -11,6 +11,12 @@ handicaps, results, cover rates, units and ROI. Probability/moneyline calculatio
 and the original archives remain internal and in repository research reports.
 Do not publish moneyline picks, win-probability values or moneyline CSV columns.
 This presentation change does not change v1.18, the median map or lock timing.
+The public 2026 headline, weekly/game results, running units, same-game controls
+and season CSV pool replayed and recorded results, one row per game (owner
+request 2026-10-19). Saved ATS selections take priority over replay. Keep source
+tracking in backend reporting only, without source labels or breakdowns on the
+public pages or season CSV; the pooled total is descriptive.
+Earlier seasons and detailed research stay in repository reports.
 
 ## Sources of truth
 
@@ -59,8 +65,8 @@ saves both inputs, so this comparison needs no new capture.
 **Zero edge takes the market favorite** (owner decision 2026-10-19; lock policy
 v2). Only a pick'em line with a zero mapped spread skips. It applies
 retrospectively. By owner decision (2026-10-19), saved zero-edge skips are
-backfilled as favorite bets in grading and display, labelled **Backfilled
-recorded skip** and kept out of forward evidence. The saved files are never
+backfilled as favorite bets in grading and display, tracked as **Backfilled
+recorded skip** in backend reporting and kept out of forward evidence. The saved files are never
 rewritten; this exception covers only that grading rule.
 
 **Moneyline is legacy research.** Its reports keep the flat 1u ROI basis in

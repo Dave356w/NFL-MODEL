@@ -63,7 +63,7 @@ class ATSOnlySite(unittest.TestCase):
         card=next(c for c in html.split("<details class='card")[1:] if 'Titans' in c.split('</summary>')[0])
         summary=card.split('</summary>')[0]
         self.assertIn('IND −7.0',summary)
-        self.assertIn('skip backfilled as favorite',summary)
+        self.assertNotIn('backfilled',summary)
         self.assertIn('ATS result · L',summary)
         self.assertNotIn('TEN +6.5',summary)
 
@@ -90,23 +90,40 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(saved.loc['2026_06_TEN_IND'].skip_reason,'zero_edge')
         self.assertEqual(str(saved.loc['2026_06_TEN_IND'].backfilled_favorite),'True')
 
-    def test_results_show_recorded_sources_and_each_game_once(self):
+    def test_results_pool_each_game_once_and_keep_sources_internal(self):
         html=(self.out/'grades.html').read_text()
-        self.assertIn('Earlier recorded picks',html)
-        self.assertIn('60-minute locks',html)
-        self.assertIn('Recorded skips backfilled as favorite bets',html)
         self.assertIn('Game-by-game ATS results',html)
         self.assertIn('Break-even 52.4%',html)
         self.assertRegex(self.visible(html),r'(Sun|Sat|Thu|Mon) \d{1,2}:\d{2} [AP]M PDT')  # Pacific kickoffs
-        for research in ('Historical replay','Replayed pregame forecasts','replayed'):
-            self.assertNotIn(research,html)
+        for page in ('index.html','grades.html','market-calibration.html'):
+            text=self.visible((self.out/page).read_text())
+            for source in ('Pick sources','Season replay','Pregame forecast replay','Historical replay',
+                           'Earlier recorded picks','Recorded skips backfilled','backfilled','replayed','Source'):
+                self.assertNotIn(source,text)
+        report=(self.data/'ledger_report.txt').read_text()
+        self.assertIn('Historical replay:',report)
+        self.assertIn('Recorded pregame:',report)
+        for game in self.pool.game_id:
+            self.assertEqual(html.count(f"data-game-id='{game}'"),1)
         self.assertEqual(html.count("data-game-id='2026_06_TEN_IND'"),1)
         week=self.pool[self.pool.week.eq(6)].fixed_band_ats_result
         record='–'.join(str(int(week.eq(k).sum())) for k in 'WLP')
         self.assertIn(f'2026 week 6 · {record} · {int(week.eq("S").sum())} skips',html)
 
-    def test_public_results_export_is_recorded_only(self):
-        self.assertTrue(set(self.pool.ats_basis) <= set(b.PUBLIC_BASES))
+    def test_public_results_export_matches_the_full_season_pool(self):
+        latest=b.load_latest(self.data/'latest')
+        latest['ats_locks']=b.ats_locks.display_records(self.data)
+        expected=b.season_ats.build(latest,b.load_ledger(self.data))
+        self.assertEqual(set(self.pool.game_id),set(expected.game_id))
+        self.assertNotIn('ats_basis',self.pool.columns)
+        self.assertTrue({'Historical replay','Replayed pregame forecast','Recorded pregame'} <= set(expected.ats_basis))
+        pd.testing.assert_series_equal(self.pool.set_index('game_id').fixed_band_ats_result,
+            expected.set_index('game_id').fixed_band_ats_result,check_names=False)
+        grades=self.pool.fixed_band_ats_result
+        if len(grades[grades.isin(list('WLP'))])==92:
+            self.assertEqual(tuple(int(grades.eq(k).sum()) for k in 'WLP'),(49,37,6))
+        weekly=sum(b.season_ats.summary(g)['units'] for _,g in self.pool.groupby('week'))
+        self.assertAlmostEqual(weekly,b.season_ats.summary(expected)['units'])
         self.assertFalse(self.pool.game_id.duplicated().any())
         for name in ('fixed_band_ledger.csv','fixed_band_summary.csv','fixed_band_rules.json'):
             self.assertFalse((self.out/name).exists())

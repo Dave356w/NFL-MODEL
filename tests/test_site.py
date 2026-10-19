@@ -131,7 +131,7 @@ def visible_text(html):
 
 def test_three_public_pages_with_nav_and_no_nan(tmp_path):
     out, files = render(tmp_path)
-    assert set(PUBLIC) | SPREAD_EXPORTS | {".nojekyll"} == set(files)
+    assert set(PUBLIC) | SPREAD_EXPORTS | {"ats_2026_results.csv", ".nojekyll"} == set(files)
     assert "model.html" not in files and "board.html" not in files
     for name in PUBLIC:
         html = (out / name).read_text()
@@ -258,10 +258,11 @@ def test_index_before_any_graded_pick(tmp_path):
     assert "View ATS results" in html and "Recorded moneyline results" not in html
 
 
-def test_results_page_shows_recorded_picks_only(tmp_path):
+def test_results_page_keeps_unavailable_games_without_research_details(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "grades.html").read_text()
-    assert 'ATS results' in html and 'No recorded ATS picks yet' in html
+    assert 'ATS results' in html and 'Game-by-game ATS results' in html
+    assert 'Unavailable' in html
     for research in ('Historical replay', 'Replayed', 'Per-season results', 'ledger_report.txt', 'BUF −135'):
         assert research not in html
     assert not (out / "ledger_report.txt").exists()
@@ -577,7 +578,7 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     assert (data / 'ledger_report.txt').read_text() == report
 
 
-def test_current_season_replay_stays_internal(tmp_path, monkeypatch):
+def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_path, monkeypatch):
     monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
                         dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     data = make_data(tmp_path / 'data')
@@ -588,14 +589,25 @@ def test_current_season_replay_stays_internal(tmp_path, monkeypatch):
     out = tmp_path / 'public'
     b.render_all(out, data, now=NOW)
     latest = b.load_latest(data / 'latest')
-    assert b.spread_record(latest, 2026) is not None      # the replay exists internally
+    assert b.spread_record(latest, 2026) is not None
+    public = pd.read_csv(out / 'ats_2026_results.csv')
+    assert set(public.season) == {2026}
+    assert 'ats_basis' not in public.columns
+    assert 'Historical replay:' in (data / 'ledger_report.txt').read_text()
+    assert not public.game_id.duplicated().any()
+    stats = b.season_ats.summary(public)
+    record = f"{stats['wins']}–{stats['losses']}–{stats['pushes']}"
     for page in PUBLIC:
         html = (out / page).read_text()
-        for research in ('Historical replay', 'replayed', 'Per-season results', '<td>2024</td>'):
+        assert record in html
+        assert 'replayed' not in html and '<th>Source</th>' not in html
+        for research in ('Per-season results', '<td>2024</td>'):
             assert research not in html, (page, research)
-    if (out / 'ats_2026_results.csv').exists():
-        public = pd.read_csv(out / 'ats_2026_results.csv')
-        assert set(public.ats_basis) <= set(b.PUBLIC_BASES)
+    grades = (out / 'grades.html').read_text()
+    for game in public.game_id:
+        assert grades.count(f"data-game-id='{game}'") == 1
+    performance = (out / 'market-calibration.html').read_text()
+    assert f"Pick {stats['bets']}" in performance
     assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 
 
@@ -641,7 +653,7 @@ def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch
     assert 'model win probability' not in text and 'Recorded moneyline results' not in text
 
 
-def test_public_ats_keeps_recorded_picks_and_drops_replay():
+def test_public_ats_keeps_all_season_sources_and_missing_locks():
     pooled = pd.DataFrame({
         'game_id': ['lock', 'legacy', 'backfill', 'replay', 'snapshot', 'early_missing', 'late_missing'],
         'ats_basis': ['60-minute lock', 'Recorded pregame', 'Backfilled recorded skip', 'Historical replay',
@@ -649,8 +661,8 @@ def test_public_ats_keeps_recorded_picks_and_drops_replay():
         'kickoff_utc': ['2026-10-25T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00',
                         None, '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-25T17:00:00+00:00']})
     kept = set(b.public_ats({'pooled_ats': pooled}).game_id)
-    # A game is a missed lock only when its deadline fell under the 60-minute policy.
-    assert kept == {'lock', 'legacy', 'backfill', 'late_missing'}
+    # Missing locks remain visible without a graded pick; no source is dropped.
+    assert kept == set(pooled.game_id)
     assert b.public_ats({'pooled_ats': pd.DataFrame()}).empty and b.public_ats(None).empty
 
 
@@ -664,3 +676,16 @@ def test_units_chart_runs_in_kickoff_order_and_needs_two_picks():
     assert html.index('NYJ @ NE') < html.index('TEN @ IND')    # earlier kickoff first
     assert 'running +0.91u' in html and 'running −0.09u' in html and '<svg' in html
     assert b.units_chart(frame.iloc[:1]) == '' and b.units_chart(pd.DataFrame()) == ''
+
+
+def test_units_chart_orders_early_replay_before_later_recorded_games():
+    frame = pd.DataFrame([
+        dict(game_id='recorded',week=6,home='IND',away='TEN',kickoff_utc='2026-10-18T17:00:00Z',
+             fixed_band_ats_result='L',fixed_band_ats_units=-1.),
+        dict(game_id='a_replay',week=1,home='NE',away='NYJ',gameday='2026-09-14',
+             fixed_band_ats_result='L',fixed_band_ats_units=-1.),
+        dict(game_id='z_replay',week=1,home='LAC',away='ARI',gameday='2026-09-13',
+             fixed_band_ats_result='W',fixed_band_ats_units=1/1.1)])
+    html=b.units_chart(frame)
+    assert html.index('ARI @ LAC') < html.index('NYJ @ NE') < html.index('TEN @ IND')
+    assert 'running −1.09u' in html and 'Pick 3' in html
