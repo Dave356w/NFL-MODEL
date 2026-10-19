@@ -5,12 +5,13 @@ grade the forward ledger, and render static pages into public/.
     python build_site.py               # full build (what build.yml runs)
     python build_site.py --pages-only  # re-render from committed data/ only
 
-Pages (public: the production model only; W-L, win % and ROI. Standard errors, log loss, model
-internals, earlier revisions, the v1.16 shadow lock and every research arm stay in
-the repository's data/ledger_report.txt and data/latest/)
-  index.html               this week's games: model vs market, pick, biggest factors, injury reports
-  grades.html              locked picks graded, beside always-favorite and always-home; rebuilt history
-  market-calibration.html  ATS performance and same-game spread controls (legacy URL)
+Pages (public: recorded ATS picks only; record, cover rate, units, ROI and same-game
+baselines. Historical and current-season replays, the median-map rules, standard errors,
+log loss, model internals, earlier revisions and every research arm stay in the
+repository's data/ledger_report.txt and data/latest/)
+  index.html               this week's games: model vs market spread, pick, lock status, injury reports
+  grades.html              recorded picks graded game by game, by source, with downloads
+  market-calibration.html  ATS performance: running units, same-game baselines, by week (legacy URL)
 
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
@@ -59,7 +60,6 @@ PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
 SITE_NAME = "NFL ATS"
-REPO_REPORT = "https://github.com/Dave356w/NFL-MODEL/blob/main/data/ledger_report.txt"
 
 # run-folder file -> data/latest file
 SNAPSHOT = {
@@ -217,149 +217,215 @@ def load_ledger(data=DATA):
 
 CSS = r"""
 :root{
-  --bg:#f3f5f7; --surface:#ffffff; --surface-2:#eef1f4; --ink:#161b20;
-  --muted:#4f5a65; --faint:#636e7b; --line:#dde3e8; --line-2:#eceff2;
+  --bg:#f4f6f9; --surface:#ffffff; --surface-2:#f0f3f7; --ink:#13202f;
+  --muted:#4d5d6e; --faint:#647384; --line:#dce3ea; --line-2:#e9eef3;
+  --accent:9,120,94; --accent-tx:6,102,79;
   --warm:198,84,44; --cool:52,116,168; --lean:176,124,16;
   --warm-tx:164,69,36; --cool-tx:46,103,149; --lean-tx:130,92,12;
-  --good:29,122,60; --bad:180,68,42;
+  --good:25,121,62; --bad:184,60,40;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
   --sans:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  --shadow:0 1px 2px rgba(16,18,29,.05),0 10px 26px -20px rgba(16,18,29,.28);
-  --r:6px; --r-s:3px; --r-pill:999px;
+  --shadow:0 1px 2px rgba(19,32,47,.04),0 6px 20px -12px rgba(19,32,47,.18);
+  --r:14px; --r-s:6px; --r-pill:999px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1418; --surface:#171d24; --surface-2:#131920; --ink:#e7ecef;
-  --muted:#96a2ad; --faint:#7f8b97; --line:#242e38; --line-2:#1c242c;
+  --bg:#0c141d; --surface:#141e29; --surface-2:#18232f; --ink:#e6eef6;
+  --muted:#a0b1c2; --faint:#8a9cb0; --line:#243241; --line-2:#1d2936;
+  --accent:61,192,151; --accent-tx:110,218,184;
   --warm:236,122,72; --cool:96,158,208; --lean:244,196,96;
-  --warm-tx:236,122,72; --cool-tx:96,158,208; --lean-tx:244,196,96;
+  --warm-tx:240,140,98; --cool-tx:120,176,222; --lean-tx:244,196,96;
   --good:88,194,125; --bad:239,127,98;
-  --shadow:0 1px 2px rgba(0,0,0,.45),0 14px 32px -22px rgba(0,0,0,.8);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
 }
 :root:not([data-theme="light"]) .logo.lt{display:none}:root:not([data-theme="light"]) .logo.dk{display:block}}
 html[data-theme="dark"] .logo.lt{display:none}html[data-theme="dark"] .logo.dk{display:block}
 html[data-theme="dark"]{
-  --bg:#0f1418; --surface:#171d24; --surface-2:#131920; --ink:#e7ecef;
-  --muted:#96a2ad; --faint:#7f8b97; --line:#242e38; --line-2:#1c242c;
+  --bg:#0c141d; --surface:#141e29; --surface-2:#18232f; --ink:#e6eef6;
+  --muted:#a0b1c2; --faint:#8a9cb0; --line:#243241; --line-2:#1d2936;
+  --accent:61,192,151; --accent-tx:110,218,184;
   --warm:236,122,72; --cool:96,158,208; --lean:244,196,96;
-  --warm-tx:236,122,72; --cool-tx:96,158,208; --lean-tx:244,196,96;
+  --warm-tx:240,140,98; --cool-tx:120,176,222; --lean-tx:244,196,96;
   --good:88,194,125; --bad:239,127,98;
-  --shadow:0 1px 2px rgba(0,0,0,.45),0 14px 32px -22px rgba(0,0,0,.8);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -18px rgba(0,0,0,.8);
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 var(--sans);
-  -webkit-font-smoothing:antialiased;padding:20px 16px 60px}
-.mx-wrap{max-width:1060px;margin:0 auto}
-a{color:rgb(var(--lean-tx))}
-.topbar{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
-  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
-.brand{font:800 18px/1 var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink);text-decoration:none}
-.theme{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--muted);
-  font:600 14px/1 var(--sans);padding:7px 11px;border-radius:var(--r);cursor:pointer}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);
+  -webkit-font-smoothing:antialiased;padding:0 16px 56px}
+.mx-wrap{max-width:1120px;margin:0 auto}
+a{color:rgb(var(--accent-tx))}
+.skip-link{position:absolute;left:16px;top:-80px;padding:10px 14px;background:var(--surface);
+  border-radius:var(--r-s);z-index:10}
+.skip-link:focus{top:10px}
+:focus-visible{outline:3px solid rgb(var(--accent));outline-offset:3px}
+/* header */
+.topbar{display:flex;align-items:center;gap:16px;padding:18px 0;margin-bottom:22px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:800 19px/1 var(--sans);letter-spacing:-.02em;
+  color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;
+  background:rgb(var(--accent));color:#fff;font:800 12px/1 var(--sans);letter-spacing:.03em}
+.brand-version{font:600 11px/1 var(--mono);color:var(--muted);border:1px solid var(--line);padding:4px 6px;border-radius:6px}
+.nav{display:flex;gap:4px;margin-left:auto;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.nav a{padding:8px 16px;border-radius:8px;color:var(--muted);text-decoration:none;font:650 14px/1.2 var(--sans);white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--surface-2)}
+.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
+.theme{appearance:none;display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line);
+  background:var(--surface);color:var(--muted);border-radius:10px;cursor:pointer;padding:0}
 .theme:hover{color:var(--ink)}
-.nav{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 16px;font:600 14px/1.3 var(--sans)}
-.nav a{color:var(--muted);text-decoration:none;padding-bottom:3px;border-bottom:2px solid transparent}
-.nav a:hover{color:var(--ink)}
-.nav a[aria-current="page"]{color:var(--ink);border-bottom-color:rgb(var(--lean))}
-.gr-head{margin:4px 2px 14px}
-.gr-h1{font:800 26px/1.1 var(--sans);margin:0 0 6px}
-.gr-lead{color:var(--muted);font-size:14.5px;max-width:78ch}
-.stamp{font-family:var(--mono);font-size:13px}
-.gr-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:0 0 12px}
-.gr-stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;box-shadow:var(--shadow)}
-.gr-stat .l{font:650 12px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
-.gr-stat .v{font:800 24px/1.15 var(--mono);margin:5px 0 3px;font-variant-numeric:tabular-nums}
-.gr-stat .v.model{color:rgb(var(--cool-tx))}.gr-stat .v.good{color:rgb(var(--good))}.gr-stat .v.bad{color:rgb(var(--bad))}
-.gr-stat .s{font:500 12.5px/1.35 var(--mono);color:var(--muted)}
-.gr-note{background:var(--surface-2);border:1px solid var(--line-2);border-radius:var(--r);
-  padding:10px 13px;margin:0 0 14px;font-size:13.5px;color:var(--muted);max-width:none}
+.theme svg{width:18px;height:18px}
+.theme .moon{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme .sun{display:none}:root:not([data-theme="light"]) .theme .moon{display:block}}
+html[data-theme="dark"] .theme .sun{display:none}html[data-theme="dark"] .theme .moon{display:block}
+/* page heading */
+.gr-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin:6px 0 22px}
+.eyebrow{font:700 12px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--accent-tx));margin-bottom:8px}
+.gr-h1{font:800 34px/1.08 var(--sans);letter-spacing:-.035em;margin:0 0 8px}
+.gr-lead{color:var(--muted);font-size:15px;line-height:1.6;max-width:68ch}
+.stamp{font-family:var(--mono);font-size:12.5px}
+/* tiles */
+.gr-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:0 0 18px}
+.gr-stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);min-width:0}
+.gr-stat .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.gr-stat .v{font:800 28px/1.1 var(--mono);letter-spacing:-.02em;margin:8px 0 6px;font-variant-numeric:tabular-nums}
+.gr-stat .v.model{color:rgb(var(--accent-tx))}.gr-stat .v.good{color:rgb(var(--good))}.gr-stat .v.bad{color:rgb(var(--bad))}
+.gr-stat .s{font:500 13px/1.45 var(--sans);color:var(--muted)}
+.meter{position:relative;height:6px;border-radius:var(--r-pill);background:var(--line-2);margin:10px 0 6px;overflow:visible}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r-pill);background:rgb(var(--accent))}
+.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);border-radius:1px}
+.gr-note{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;
+  padding:12px 15px;margin:0 0 16px;font-size:14px;line-height:1.6;color:var(--muted)}
 .gr-note b{color:var(--ink)}
-.flag-note{border-left:3px solid rgb(var(--lean));background:rgba(var(--lean),.08)}
-h2.sec{font:800 15px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;margin:26px 2px 9px}
+.flag-note{border-left:3px solid rgb(var(--lean));background:rgba(var(--lean),.09)}
+h2.sec{font:800 19px/1.25 var(--sans);letter-spacing:-.02em;margin:36px 0 12px}
+h3{font:750 15px/1.3 var(--sans);margin:22px 0 10px}
+.sec-lead{color:var(--muted);font-size:14px;margin:-4px 0 14px;max-width:72ch}
+/* tables */
 .gr-tablewrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
   box-shadow:var(--shadow);overflow-x:auto;margin-bottom:12px}
 table.gr{width:100%;border-collapse:collapse;font-size:14px}
-table.gr th{font:650 11.5px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);
-  text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
-table.gr td{padding:8px 10px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+table.gr th{font:700 11.5px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);
+  text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+table.gr td{padding:11px 14px;border-bottom:1px solid var(--line-2);vertical-align:middle}
 table.gr tr:last-child td{border-bottom:0}
+table.gr tbody tr:hover{background:var(--surface-2)}
 table.gr .n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.mut{color:var(--muted)}
-.badge{display:inline-block;font:700 11px/1 var(--sans);letter-spacing:.05em;text-transform:uppercase;
-  padding:4px 6px;border-radius:var(--r-s);border:1px solid var(--line);color:var(--muted);white-space:nowrap}
-.badge.w{color:rgb(var(--good));border-color:rgba(var(--good),.4);background:rgba(var(--good),.08)}
-.badge.l{color:rgb(var(--bad));border-color:rgba(var(--bad),.4);background:rgba(var(--bad),.08)}
-.badge.lean{color:rgb(var(--lean-tx));border-color:rgba(var(--lean),.5);background:rgba(var(--lean),.12)}
-.badge.warn{color:rgb(var(--warm-tx));border-color:rgba(var(--warm),.45);background:rgba(var(--warm),.08)}
+.mut{color:var(--muted)}.small{font-size:13px;line-height:1.55}
+.pos-tx{color:rgb(var(--good))}.neg-tx{color:rgb(var(--bad))}
+.badge{display:inline-flex;align-items:center;gap:5px;font:700 11px/1 var(--sans);letter-spacing:.04em;text-transform:uppercase;
+  padding:5px 8px;border-radius:var(--r-pill);border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:var(--surface)}
+.badge.w{color:rgb(var(--good));border-color:rgba(var(--good),.4);background:rgba(var(--good),.09)}
+.badge.l{color:rgb(var(--bad));border-color:rgba(var(--bad),.4);background:rgba(var(--bad),.09)}
+.badge.lean,.badge.lock{color:rgb(var(--accent-tx));border-color:rgba(var(--accent),.45);background:rgba(var(--accent),.09)}
+.badge.warn{color:rgb(var(--warm-tx));border-color:rgba(var(--warm),.45);background:rgba(var(--warm),.09)}
+.badge .u{text-transform:none}
+.badge.live::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
 .team-code{font:800 13px/1 var(--mono);letter-spacing:.02em}
-/* scoreboard */
-.grid{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
-  border-radius:var(--r);box-shadow:var(--shadow);overflow:clip}
-.card + .card{border-top:1px solid var(--line)}
-.game-summary{position:relative;display:block;padding:13px 40px 12px 16px;list-style:none;cursor:pointer}
+/* filters */
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:26px 0 12px}
+.toolbar h2.sec{margin:0}
+.seg{display:inline-flex;gap:3px;padding:3px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--muted);font:650 13px/1 var(--sans);
+  padding:8px 12px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.seg .ct{font-family:var(--mono);color:var(--faint);margin-left:4px}
+/* game cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:clip}
+.card.picked-card{border-color:rgba(var(--accent),.35)}
+.game-summary{display:block;padding:14px 16px 14px;list-style:none;cursor:pointer}
 .game-summary::-webkit-details-marker{display:none}
 .game-summary::marker{content:""}
 .game-summary:hover{background:var(--surface-2)}
-.card[open]>.game-summary{background:var(--surface-2);border-bottom:1px solid var(--line-2)}
-.teams{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.7fr) minmax(0,1fr);align-items:center;gap:12px}
-.side{display:flex;align-items:center;gap:10px;min-width:0}
-.side.home{justify-content:flex-end;text-align:right}
-.chip{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:var(--r-pill);
-  border:1px solid var(--line);background:var(--surface-2);font:800 13px/1 var(--mono);position:relative}
-.chip .logo{position:absolute;inset:5px;width:32px;height:32px;object-fit:contain}
+.card[open]>.game-summary{border-bottom:1px solid var(--line-2)}
+.g-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.g-meta .when{font:600 12.5px/1.2 var(--sans);color:var(--muted)}
+.g-teams{display:flex;flex-direction:column;gap:4px}
+.g-team{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;align-items:center;gap:10px;
+  padding:6px 8px;margin:0 -8px;border-radius:9px}
+.g-team.picked{background:rgba(var(--accent),.09)}
+.g-team .nm{font:700 16px/1.2 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.g-team .nm small{font:600 11.5px/1 var(--mono);color:var(--faint);margin-left:6px}
+.g-team .ln{font:600 13px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.g-team .sc{font:800 18px/1 var(--mono);min-width:28px;text-align:right;font-variant-numeric:tabular-nums}
+.g-team.picked .nm::after{content:"PICK";font:800 9.5px/1 var(--sans);letter-spacing:.08em;color:#fff;
+  background:rgb(var(--accent));border-radius:4px;padding:3px 5px;margin-left:8px;vertical-align:2px}
+.chip{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:var(--r-pill);
+  background:var(--surface-2);font:800 11px/1 var(--mono);position:relative}
+.chip .logo{position:absolute;inset:3px;width:28px;height:28px;object-fit:contain}
 .chip .logo.dk{display:none}
+.chip.has-logo{background:transparent}
 .chip.has-logo span{visibility:hidden}
-.club{min-width:0}
-.club .nm{font:750 16.5px/1.15 var(--sans);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.club .wp{font:800 22px/1.1 var(--mono);font-variant-numeric:tabular-nums}
-.club .wp.fav{color:rgb(var(--lean-tx))}
-.mid{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
-.mid .t{font:800 15px/1 var(--mono)}
-.mid .mk{font:600 12.5px/1.2 var(--mono);color:var(--muted)}
-.mid .mk span{white-space:nowrap}
-.chev{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--faint);font:800 18px/1 var(--sans)}
-.card[open] .chev{transform:translateY(-50%) rotate(180deg);color:var(--ink)}
-.flags{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:9px}
-.pick-lines{display:grid;grid-template-columns:85px 1fr;gap:5px 10px;margin-top:12px;font-size:13px;text-align:left}
-.pick-lines .kind{color:var(--muted);font-weight:600}
-.probbar{display:flex;height:8px;border-radius:var(--r-s);overflow:hidden;margin:10px 0 2px;background:var(--line-2)}
-.probbar i{display:block;height:100%}
-.probbar .a{background:rgb(var(--warm))}.probbar .h{background:rgb(var(--cool))}
-.detail{padding:12px 16px 16px}
-.detail h3{font:750 13px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:14px 0 6px}
-.detail p{margin:6px 0;font-size:14px;max-width:78ch}
-.cbar{position:relative;height:10px;background:var(--line-2);border-radius:var(--r-s)}
-.cbar i{position:absolute;top:0;bottom:0;border-radius:var(--r-s)}
-.cbar i.pos{background:rgb(var(--cool))}.cbar i.neg{background:rgb(var(--warm))}
-.cbar::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:var(--faint)}
-.factor-name{font-weight:650;line-height:1.3}
-.factor-note{color:var(--muted);font-size:12px;line-height:1.4;margin-top:3px}
-.factor-impact{min-width:96px;max-width:145px;margin-left:auto}
-.factor-toward{font:650 12px/1.3 var(--sans);text-align:right;margin-bottom:7px;white-space:nowrap}
-.factor-toward.pos{color:rgb(var(--cool-tx))}.factor-toward.neg{color:rgb(var(--warm-tx))}
-.factor-impact .cbar{height:6px}
-.fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin:0 0 8px}
-.fold>summary{cursor:pointer;list-style:none;padding:10px 13px;font:700 14px/1.3 var(--sans);display:flex;gap:8px}
+.pick-lines{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;
+  margin-top:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.pick-lines .kind{font:700 11px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);width:100%}
+.pick-lines .pk{font:800 20px/1.2 var(--mono);letter-spacing:-.01em}
+.pick-lines .pk.na{font:600 14px/1.4 var(--sans);color:var(--muted)}
+.pick-lines .edge{font:600 12.5px/1.3 var(--sans);color:var(--muted)}
+.mk{font:500 12.5px/1.5 var(--mono);color:var(--muted);margin-top:6px}
+.mk span{white-space:nowrap}
+.flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.g-note{font:500 12px/1.4 var(--sans);color:var(--faint);margin-top:8px}
+.detail{padding:14px 16px 18px}
+.detail h3{font:750 12px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin:16px 0 8px}
+.detail p{margin:8px 0;font-size:13.5px}
+.detail .gr-tablewrap{box-shadow:none}
+.detail table.gr{font-size:13px}.detail table.gr td,.detail table.gr th{padding:8px 11px}
+/* folds */
+.fold{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin:0 0 10px;overflow:clip}
+.fold>summary{cursor:pointer;list-style:none;padding:14px 16px;font:700 14.5px/1.3 var(--sans);display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
 .fold>summary::-webkit-details-marker{display:none}
-.fold>summary::before{content:"▸";color:var(--faint)}.fold[open]>summary::before{content:"▾"}
-.fold .rt{margin-left:auto;font-family:var(--mono)}
+.fold>summary::before{content:"▸";color:var(--faint);transition:transform .15s}
+.fold[open]>summary::before{transform:rotate(90deg)}
+.fold>summary:hover{background:var(--surface-2)}
+.fold .rt{margin-left:auto;font:600 13px/1 var(--mono);color:var(--muted)}
 .fold .gr-tablewrap{box-shadow:none;border-width:1px 0 0;border-radius:0;margin:0}
-.record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px;margin-top:10px;font-size:14px}
-.record .l{font:650 12px/1.2 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:4px}
-.record .go{text-align:right;font:600 14px/1 var(--sans);margin-top:6px}
-.small{font-size:13px}
-.detail .gr-summary.band{grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:0 0 4px}
-.detail .band .gr-stat{box-shadow:none;padding:8px 10px}.detail .band .gr-stat .v{font-size:19px}
-.up{color:rgb(var(--cool-tx));font-weight:700}.dn{color:rgb(var(--warm-tx));font-weight:700}
-.foot{margin-top:28px;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);padding-top:10px}
-@media (max-width:640px){
-  .teams{grid-template-columns:minmax(0,1fr) 92px minmax(0,1fr);gap:6px}
-  .chip{display:none}
-  .club .nm{font-size:14px}.club .wp{font-size:19px}
-  table.gr{font-size:13px}
+.record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin:0 0 16px;font-size:14px}
+.record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+/* chart */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px 10px;margin:0 0 12px}
+.chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.chart-head .t{font:700 14px/1.3 var(--sans)}.chart-head .v{font:800 18px/1 var(--mono)}
+.chart svg{display:block;width:100%;height:auto;margin-top:8px;overflow:visible}
+.chart .grid-ln{stroke:var(--line-2);stroke-width:1}
+.chart .zero{stroke:var(--faint);stroke-width:1;stroke-dasharray:3 3}
+.chart .ln{fill:none;stroke:rgb(var(--accent));stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.chart .area{fill:rgba(var(--accent),.08)}
+.chart .ax{fill:var(--faint);font:500 13px var(--mono)}
+.chart .pt{fill:rgb(var(--accent));stroke:var(--surface);stroke-width:2}
+.chart .hit{fill:transparent;cursor:default}
+.chart .hit:hover+.pt{r:6}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 12px;padding:0;list-style:none;counter-reset:s}
+.steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);
+  font-size:14px;line-height:1.55;color:var(--muted);counter-increment:s}
+.steps li b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:rgba(var(--accent),.12);color:rgb(var(--accent-tx));font:800 13px/1 var(--mono);margin-bottom:10px}
+.downloads{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.downloads a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;
+  background:var(--surface);color:var(--ink);text-decoration:none;font:600 13px/1 var(--sans)}
+.downloads a:hover{border-color:rgb(var(--accent))}
+.downloads a::before{content:"↓";color:rgb(var(--accent-tx));font-weight:800}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:22px;color:var(--muted);text-align:center}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 18px;margin-top:44px;padding-top:16px;
+  border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;line-height:1.6}
+.foot a{color:var(--muted)}
+@media (max-width:720px){
+  .topbar{flex-wrap:wrap;gap:12px;padding:14px 0;margin-bottom:16px}
+  .nav{order:3;width:100%;margin-left:0}.nav a{flex:1;text-align:center;padding:9px 6px}
+  .theme{margin-left:auto}.brand-version{display:none}
+  .gr-h1{font-size:28px}
+  .gr-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .gr-stat{padding:13px 13px}.gr-stat .v{font-size:22px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  table.gr{font-size:13px}table.gr th,table.gr td{padding:9px 10px;white-space:nowrap}
+  .detail table.gr td{white-space:normal}
+  .fold .rt{margin-left:0;width:100%}
 }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
 
 THEME_JS = """<script>(function(){var k='nfl-theme',r=document.documentElement;
@@ -367,60 +433,19 @@ try{var s=localStorage.getItem(k);if(s)r.setAttribute('data-theme',s);}catch(e){
 window.toggleTheme=function(){var d=r.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
 var n=d==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.setItem(k,n);}catch(e){}};})();</script>"""
 
+# Show/hide game cards by state; without script every card stays visible.
+FILTER_JS = """<script>(function(){var bar=document.querySelector('.seg[data-filter]');if(!bar)return;
+bar.hidden=false;bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+var f=b.getAttribute('data-show');bar.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+document.querySelectorAll('.card[data-state]').forEach(function(c){c.hidden=f!=='all'&&c.getAttribute('data-state')!==f;});});})();</script>"""
+
+THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
+              "<circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
+              "<svg class='moon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
+              "<path d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'/></svg>")
+
 PAGES = (("index.html", "Picks"), ("grades.html", "Results"),
          ("market-calibration.html", "Performance"))
-
-# Customer-facing presentation. Calculation and archival code remain independent.
-CSS += r"""
-:root{--bg:#f4f7fa;--ink:#14263c;--muted:#52677c;--faint:#627589;
- --lean:9,125,97;--lean-tx:7,107,83;--r:14px;--r-s:6px;
- --shadow:0 3px 16px -8px rgba(20,38,60,.16)}
-body{padding:26px 24px 54px}.mx-wrap{max-width:1180px}
-.topbar{align-items:center;border-bottom:0;margin-bottom:22px;padding:0}
-.brand{display:flex;align-items:center;gap:12px;font-size:20px;letter-spacing:-.03em;text-transform:none}
-.brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
- background:rgb(var(--lean));color:white;font:800 13px/1 var(--sans);letter-spacing:.02em}
-.brand-version{font:600 11px/1 var(--mono);color:var(--muted);border:1px solid var(--line);padding:5px 7px;border-radius:6px}
-.nav{gap:5px;margin-bottom:30px;padding:5px;background:var(--surface);border:1px solid var(--line);
- border-radius:12px;width:fit-content;max-width:100%;overflow-x:auto;flex-wrap:nowrap}
-.nav a{padding:10px 18px;border:0;border-radius:8px;white-space:nowrap}
-.nav a[aria-current="page"]{background:var(--ink);color:var(--surface)}
-.gr-head{margin:0 0 22px}.gr-h1{font-size:32px;letter-spacing:-.04em;margin-bottom:9px}
-.gr-lead{font-size:15px;line-height:1.6}.gr-summary{gap:14px;margin-bottom:20px}
-.gr-stat{padding:19px 20px}.gr-stat .l{font-size:11px;letter-spacing:.07em}
-.gr-stat .v{font-size:27px;margin:9px 0 6px}.gr-stat .s{font-family:var(--sans);font-size:13px}
-.gr-note{padding:13px 16px;line-height:1.6;border-radius:10px}
-h2.sec{font-size:16px;letter-spacing:-.015em;text-transform:none;margin:32px 0 14px}
-h3{font-size:14px}.record{padding:15px 18px;margin-bottom:18px;margin-top:0}
-.record .l{margin-bottom:8px}.record .mono{font-size:13px;line-height:1.65}
-.grid{border-radius:16px}.game-summary{padding:22px 45px 18px 22px}
-.teams{grid-template-columns:minmax(0,1fr) minmax(190px,.9fr) minmax(0,1fr);gap:18px}
-.chip{width:48px;height:48px;border:0;background:transparent}
-.chip .logo{width:38px;height:38px}.club .nm{font-size:17px}.club .wp{font-size:28px;margin-top:5px}
-.mid .t{font:650 12px/1.4 var(--sans);color:var(--muted)}.mid .mk{font-size:11px;line-height:1.6}
-.probbar{height:4px;margin-top:17px}.pick-lines{grid-template-columns:78px 1fr;font-size:12px;line-height:1.5;margin-top:14px}
-.detail{padding:20px 22px 24px}.detail .gr-tablewrap{box-shadow:none}.detail h3{letter-spacing:.04em}
-table.gr th{padding:13px 15px}table.gr td{padding:12px 15px}
-table.gr tbody tr:hover{background:var(--surface-2)}
-.fold>summary{padding:16px 18px}.fold .rt{font-size:12px}.flags{justify-content:flex-start}
-.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;line-height:1.6;padding-top:18px;margin-top:36px}
-.foot a{color:var(--muted)}.skip-link{position:absolute;left:16px;top:-80px;padding:10px;background:var(--surface);z-index:10}
-.skip-link:focus{top:10px}:focus-visible{outline:3px solid rgb(var(--lean));outline-offset:4px}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1724;--ink:#e7f0f8;--muted:#a2b3c5;--faint:#8fa2b7;--lean:61,192,151;--lean-tx:110,218,184}}
-html[data-theme="dark"]{--bg:#0d1724;--ink:#e7f0f8;--muted:#a2b3c5;--faint:#8fa2b7;--lean:61,192,151;--lean-tx:110,218,184}
-@media(max-width:640px){body{padding:18px 12px 34px}.topbar{margin-bottom:16px}.brand{font-size:18px;gap:8px}
- .brand-mark{width:32px;height:32px}.brand-version{display:none}.nav{width:100%;margin-bottom:24px}
- .nav a{flex:1;text-align:center;padding:10px 12px}.gr-h1{font-size:28px}
- .gr-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.gr-stat{padding:13px 12px}.gr-stat .v{font-size:22px}
- .teams{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);gap:8px}
- .game-summary{padding:17px 29px 16px 14px}.club .nm{font-size:13px}.club .wp{font-size:23px}
- .mid .mk{font-size:10px}.mid .t{font-size:11px}.chev{right:10px}.detail{padding:15px 12px}
- table.gr th,table.gr td{padding:10px 11px}.pick-lines{grid-template-columns:68px 1fr;font-size:11.5px}
- .record .mono{font-family:var(--sans)}.fold>summary{flex-wrap:wrap}.fold .rt{margin-left:0}
- .week-summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
- .week-summary .gr-stat{padding:12px 9px}.week-summary .l{font-size:10px}.week-summary .s{font-size:11px}
-}
-"""
 
 
 def font_face_css(assets=ASSETS):
@@ -435,23 +460,28 @@ def font_face_css(assets=ASSETS):
     return "".join(out)
 
 
-def html_document(body, title, current, built):
+def html_document(body, title, current, built, scripts=""):
     nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''}>{label}</a>"
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
-            f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, projected spreads, locked handicaps and season results'>"
+            f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, locked handicaps and season results'>"
+            "<meta name='color-scheme' content='light dark'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
-            f"<div class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
+            f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
             f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
-            "<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme'>Theme</button></div>"
-            f"<nav class='nav' aria-label='Main navigation'>{nav}</nav><main id='main-content'>{body}</main>"
+            f"<nav class='nav' aria-label='Main navigation'>{nav}</nav>"
+            f"<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme' title='Toggle theme'>{THEME_ICON}</button></header>"
+            f"<main id='main-content'>{body}</main>"
             f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span></span>"
-            f"<a href='{REPO_REPORT}'>Model documentation</a></footer></div></body></html>")
+            "<span>Flat 1-unit stakes at −110. For information only; past results do not guarantee future results.</span>"
+            f"</footer></div>{scripts}</body></html>")
 
 
-def head(title, lead):
-    return f"<div class='gr-head'><h1 class='gr-h1'>{esc(title)}</h1><div class='gr-lead'>{lead}</div></div>"
+def head(title, lead, eyebrow="", aside=""):
+    top = f"<div class='eyebrow'>{esc(eyebrow)}</div>" if eyebrow else ""
+    return (f"<div class='gr-head'><div>{top}<h1 class='gr-h1'>{esc(title)}</h1>"
+            f"<div class='gr-lead'>{lead}</div></div>{aside}</div>")
 
 
 def stat(label, value, sub="", tone=""):
@@ -821,54 +851,6 @@ def ats_card_pick(spread, market, home, away, favorite_on_tie=True):
     return f'{esc(team)} {spread_text(market, side > 0)}', abs(spread - market)
 
 
-def historical_pick_reference(latest, game, edge):
-    d = latest.get('fixed_band_ledger', pd.DataFrame()).copy()
-    if d.empty:
-        return ''
-    # Completed earlier dates only; never use this game's outcome or later games.
-    day = pd.to_datetime(game.get('gameday'), errors='coerce', utc=True)
-    if pd.notna(day) and 'gameday' in d:
-        d = d[pd.to_datetime(d.gameday, errors='coerce', utc=True) < day]
-    else:
-        d = d[d.season < int(game['season'])]
-    d = d[d.game_id != game['game_id']]
-    rows = []
-    def record(label, results, units, accuracy, price_note):
-        w, l, p, s = [int((results == x).sum()) for x in ('W', 'L', 'P', 'S')]
-        n = w + l + p
-        rate = f'{100*w/(w+l):.1f}% {accuracy}' if w+l else '—'
-        roi = roi_short(float(units.sum()) / n) if n else '—'
-        sample = f'{n} bets · {s} skips' + (' · small sample' if w+l < 100 else '')
-        return [label, f'{w}–{l}–{p}', rate, f'{roi} · {price_note}', sample]
-    p = num(game.get('model_wp'))
-    if math.isfinite(p) and not math.isclose(p, .5):
-        confidence = max(p, 1-p)
-        cuts = np.array([.50, .55, .65, .75, .85, 1.000001])
-        i = min(int(np.searchsorted(cuts, confidence, side='right')-1), len(cuts)-2)
-        c = np.maximum(d.model_wp, 1-d.model_wp)
-        g = d[(c >= cuts[i]) & (c < cuts[i+1]) & d.bet_result.isin(['W','L','P'])]
-        rows.append(record(f'Moneyline · {cuts[i]*100:.0f}–{min(cuts[i+1],1)*100:.0f}% model probability',
-                           g.bet_result, g.units, 'win', 'recorded moneylines'))
-    if math.isfinite(edge):
-        e = (d.fixed_band_spread-d.spread_line).abs()
-        if edge <= fixed_bands.EPS:
-            g = d[(e <= fixed_bands.EPS) & d.fixed_band_spread.notna()]
-            label = 'Spread · zero edge (no bet)'
-        else:
-            cuts = [0.,1.,3.,7.,math.inf]
-            i = next(i for i in range(4) if edge <= cuts[i+1]+fixed_bands.EPS)
-            g = d[(e > cuts[i]+fixed_bands.EPS) & (e <= cuts[i+1]+fixed_bands.EPS)]
-            label = f'Spread · >{cuts[i]:g}–{cuts[i+1]:g}-point edge' if math.isfinite(cuts[i+1]) else 'Spread · >7-point edge'
-        rows.append(record(label, g.fixed_band_ats_result, g.fixed_band_ats_units, 'cover', 'assumed −110'))
-    if not rows:
-        return ''
-    return ("<h3>Historical reference · reconstructed</h3>" +
-            table(['Similar picks', 'W–L–P', 'Accuracy', 'ROI', 'Sample'], rows, num_cols=(1,2,3,4)) +
-            "<p class='mut small'>Earlier completed games only, excluding this game and later dates. "
-            "Win and cover rates exclude pushes and skips; ROI includes pushed stakes. "
-            "Records are reconstructed, not locked forward evidence or this game's cover probability. "
-            "A zero edge skips; other edge bands contain bets, so their skip count is zero.</p>")
-
 def ats_card_state(latest, row, now):
     """One ATS-only display state shared by cards and the board download."""
     rev = latest['manifest']['revision']
@@ -885,15 +867,8 @@ def ats_card_state(latest, row, now):
         when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
         note = f'ATS locked {when}'
     elif cutoff is not None and now >= cutoff:
-        status, source = 'unavailable', 'No saved ATS selection'
-        pooled = latest.get('pooled_ats', pd.DataFrame())
-        past = pooled[pooled.game_id.eq(row['game_id'])] if len(pooled) else pd.DataFrame()
-        if len(past) and past.iloc[0].ats_status == 'graded':
-            replay = past.iloc[0]
-            ms, line = num(replay.fixed_band_spread), num(replay.spread_line)
-            status, source, note = 'replay', replay.ats_basis, 'Replayed pick'
-        else:
-            note = 'ATS lock unavailable'
+        # Replays are research and stay off the public card.
+        status, source, note = 'unavailable', 'No saved ATS selection', 'ATS lock unavailable'
     elif cutoff is not None:
         when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
         note = f'ATS provisional · locks {when}'
@@ -906,7 +881,7 @@ def ats_card_state(latest, row, now):
     if status == 'unavailable':
         pick, gap = 'Unavailable · no saved pre-lock forecast', math.nan
     grade, units = '', math.nan
-    if status in ('locked', 'replay') and math.isfinite(num(row.get('result'))):
+    if status == 'locked' and math.isfinite(num(row.get('result'))):
         grades, returns = fixed_bands.grade(pd.DataFrame({
             'spread_line': [line], 'result': [num(row['result'])]}), [ms])
         grade, units = grades[0], returns[0]
@@ -926,20 +901,15 @@ def render_index(latest, ledger, built, now=None):
     man, board = latest['manifest'], latest['board']
     season, week = int(man['season']), int(man['week'])
     has_avail = (man.get('recipe') or {}).get('family', '') in m.AVAIL_FAMILIES
-    parts = [head(f'Week {week} ATS picks',
-                  f'{season} regular season · Picks lock 60 minutes before kickoff. Open a game for spread and injury details.')]
-    upcoming = int(board.result.isna().sum()) if 'result' in board else len(board)
     stamp = pd.to_datetime(man.get('generated_utc'), utc=True, errors='coerce')
     local = stamp.tz_convert(PT) if pd.notna(stamp) else None
-    parts.append("<div class='gr-summary week-summary'>"
-        + stat('Upcoming', str(upcoming), 'games on the schedule')
-        + stat('Completed', str(len(board)-upcoming), 'games this week')
-        + stat('Updated', local.strftime('%-I:%M') if local is not None else '—',
-               local.strftime('%p %Z · %b %-d') if local is not None else 'Awaiting forecast') + '</div>')
-    parts.append(spread_headline(latest, season))
-    if latest.get('ats_locks'):
-        parts.append("<p class='mut small'><a href='ats_locked_picks.csv'>Saved spread picks</a> · "
-                     "Recorded handicaps and selections remain fixed after lock.</p>")
+    updated = (f"<div class='record'><div class='l'>Forecast updated</div><div class='mono'>"
+               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</div></div>" if local is not None else '')
+    parts = [head(f'Week {week} picks',
+                  'Against-the-spread picks from the model’s projected spread. Each pick locks 60 minutes '
+                  'before kickoff. Open a game for spreads, quarterbacks and injury reports.',
+                  f'{season} regular season', updated)]
+    parts.append(record_tiles(public_ats(latest), f'{season} record'))
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -953,59 +923,84 @@ def render_index(latest, ledger, built, now=None):
                      f"game{'s' if count != 1 else ''} yet, so {'those numbers' if count != 1 else 'that number'} can still move.</div>")
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
     rows.sort(key=lambda r: (pd.notna(r.get('result')), m.kickoff_utc(r) or far, str(r['game_id'])))
+    finals = sum(pd.notna(r.get('result')) for r in rows)
+    seg = "".join(f"<button type='button' data-show='{k}' aria-pressed='{'true' if k == 'all' else 'false'}'>"
+                  f"{label}<span class='ct'>{n}</span></button>"
+                  for k, label, n in (('all', 'All', len(rows)), ('upcoming', 'Upcoming', len(rows) - finals),
+                                      ('final', 'Final', finals)))
+    parts.append(f"<div class='toolbar'><h2 class='sec'>This week’s games</h2>"
+                 f"<div class='seg' data-filter role='group' aria-label='Filter games' hidden>{seg}</div></div>")
     cards = []
     for row in rows:
         home, away = row['home'], row['away']
         state = ats_card_state(latest, row, now)
         ms, line = state['model_spread'], state['spread_line']
+        final = pd.notna(row.get('result'))
+        if final:
+            status = f"<span class='badge'>Final {score_text(row.get('away_score'), row.get('home_score'))}</span>"
+        elif state['status'] == 'locked':
+            status = "<span class='badge lock'>Locked</span>"
+        elif state['status'] == 'unavailable':
+            status = "<span class='badge'>No pick</span>"
+        else:
+            status = "<span class='badge live'>Not locked</span>"
         flags = []
-        if pd.notna(row.get('result')):
-            flags.append(f"<span class='badge'>Final {score_text(row.get('away_score'), row.get('home_score'))}</span>")
-        elif pending(row):
-            flags.append("<span class='badge warn'>Report pending</span>")
-        if not bool(row.get('ready', True)):
-            flags.append("<span class='badge'>Limited history</span>")
-        flags.append(f"<span class='badge'>{esc(state['note'])}</span>")
         if state['result']:
             result = 'Skip' if state['result'] == 'S' else state['result']
             tone = 'w' if state['result'] == 'W' else 'l' if state['result'] == 'L' else ''
-            flags.append(f"<span class='badge {tone}'>ATS result · {esc(result)}</span>")
+            units = f" · <span class='u'>{units_text(state['units'])}</span>" if math.isfinite(state['units']) else ''
+            flags.append(f"<span class='badge {tone}'>ATS result · {esc(result)}{units}</span>")
+        if pending(row):
+            flags.append("<span class='badge warn'>Report pending</span>")
+        if not bool(row.get('ready', True)):
+            flags.append("<span class='badge'>Limited history</span>")
         for side in ('away', 'home'):
             expected, usual = row.get(f'{side}_qb_expected'), row.get(f'{side}_qb_usual')
             if isinstance(expected, str) and isinstance(usual, str) and expected != usual:
                 flags.append(f"<span class='badge warn'>{esc(row[side])} QB: {esc(expected)}</span>")
-        difference = f" · {state['gap']:g}-point difference" if math.isfinite(state['gap']) and state['gap'] > fixed_bands.EPS else ''
+        edge = (f"<span class='edge'>{state['gap']:g}-point difference from market</span>"
+                if math.isfinite(state['gap']) and state['gap'] > fixed_bands.EPS else '')
         pick = (f"<div class='pick-lines'><span class='kind'>ATS pick</span>"
-                f"<span>{state['pick']}{difference}</span></div>")
+                f"<span class='pk{'' if state['selected_side'] else ' na'}'>{state['pick']}</span>{edge}</div>")
         spreads = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
                    + (f" · <span>Market {favorite_spread_text(line, home, away)}</span>" if math.isfinite(line) else ''))
 
-        def club(code, cls):
+        def team(code, side):
             chip = f"<div class='chip'><span>{esc(code)}</span>{logo_html(code)}</div>"
-            name = f"<div class='club'><div class='nm'>{esc(TEAM_NAMES.get(code, code))}</div></div>"
-            return f"<div class='side {cls}'>{chip + name if cls == 'away' else name + chip}</div>"
+            score = num(row.get(f'{side}_score'))
+            sc = f"<span class='sc'>{int(score)}</span>" if final and math.isfinite(score) else "<span></span>"
+            picked = ' picked' if state['selected_side'] == side else ''
+            return (f"<div class='g-team{picked}'>{chip}<span class='nm'>{esc(TEAM_NAMES.get(code, code))}"
+                    f"<small>{'@ ' if side == 'home' else ''}{esc(code)}</small></span>"
+                    f"<span class='ln'>{spread_text(line, side == 'home')}</span>{sc}</div>")
 
-        summary = (f"<summary class='game-summary'><div class='teams'>{club(away, 'away')}"
-                   f"<div class='mid'><div class='t'>{esc(kickoff_text(row))}</div><div class='mk sp'>{spreads}</div></div>"
-                   f"{club(home, 'home')}</div>{pick}<div class='flags'>{''.join(flags)}</div><span class='chev'>⌄</span></summary>")
-        detail = ["<div class='detail'>", table(['', esc(away), esc(home)], [
+        summary = (f"<summary class='game-summary'><div class='g-meta'><span class='when'>{esc(kickoff_text(row))}</span>{status}</div>"
+                   f"<div class='g-teams'>{team(away, 'away')}{team(home, 'home')}</div>{pick}"
+                   f"<div class='mk sp'>{spreads}</div>"
+                   f"{f'<div class=flags>{chr(32).join(flags)}</div>' if flags else ''}"
+                   f"<div class='g-note'>{esc(state['note'])}</div></summary>")
+        detail = ["<div class='detail'><h3>Spreads</h3>", table(['', esc(away), esc(home)], [
             ['Model spread', spread_text(ms, False), spread_text(ms, True)],
             ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]
         if state['saved'] is not None:
             forecast = ats_locks.utc(state['saved']['generated_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
             detail.append(f"<p class='mut'>Saved ATS selection · forecast {esc(forecast)}. "
                           "The model spread, market handicap and selection shown above are fixed.</p>")
-        elif state['status'] == 'replay':
-            detail.append("<p class='mut'>Historical replay of the saved pregame forecast. This is not a recorded ATS pick.</p>")
+        elif state['status'] == 'unavailable':
+            detail.append("<p class='mut'>No pick was saved before this game's lock time, so it is not graded.</p>")
         if has_avail:
-            detail.append(f"<p class='mut'>Projected QBs: {esc(away)} {_qb(row, 'away')} · {esc(home)} {_qb(row, 'home')}</p>")
+            detail.append(f"<h3>Quarterbacks</h3><p class='mut'>{esc(away)} {_qb(row, 'away')} · {esc(home)} {_qb(row, 'home')}</p>")
             detail.append(report_notes_html(latest.get('report_notes'), (away, home), int(row['week'])))
         detail.append('</div>')
-        cards.append(f"<details class='card'>{summary}{''.join(detail)}</details>")
+        tone = ' picked-card' if state['selected_side'] else ''
+        cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'>"
+                     f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    parts.append("<p class='mut small'>The point difference compares the projected spread with the market handicap. "
-                 "<a href='grades.html'>View ATS results →</a></p>")
-    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built)
+    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if latest.get('ats_locks') else ''
+    parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
+                 f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
+                 "<p><a href='grades.html'>View ATS results →</a></p>")
+    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS)
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1105,132 +1100,137 @@ def pooled_2026_v118_header(latest, ledger):
     return "".join(parts)
 
 
-def render_ats_basis(latest):
+# Public pages show recorded ATS picks only. Historical and current-season replays
+# are research bases and stay in data/ledger_report.txt and data/latest/.
+PUBLIC_BASES = {'60-minute lock': '60-minute locks', 'Recorded pregame': 'Earlier recorded picks',
+                'Backfilled recorded skip': 'Recorded skips backfilled as favorite bets',
+                'Awaiting ATS lock': 'Awaiting lock'}
+BREAK_EVEN = 110 / 210
+
+
+def public_ats(latest):
+    """Recorded 2026 ATS rows (saved picks, backfilled skips, games awaiting a lock); no replay."""
     pooled = (latest or {}).get('pooled_ats', pd.DataFrame())
-    parts = ["<h2 class='sec'>Recorded and replayed results</h2>"]
-    if pooled.empty:
+    if pooled is None or pooled.empty or 'ats_basis' not in pooled:
+        return pd.DataFrame()
+    keep = pooled.ats_basis.isin(list(PUBLIC_BASES))
+    # A game without a saved pick counts only under the 60-minute policy; earlier games were never locked.
+    ko = pd.to_datetime(pooled.get('kickoff_utc'), utc=True, errors='coerce')
+    policy = ko - pd.Timedelta(minutes=ats_locks.LEAD_MINUTES) >= pd.Timestamp(ats_locks.ADOPTED_UTC)
+    keep &= ~pooled.ats_basis.eq('Awaiting ATS lock') | policy.fillna(False).to_numpy()
+    return pooled[keep].reset_index(drop=True)
+
+
+def units_text(u):
+    u = num(u)
+    return "—" if not math.isfinite(u) else f"{u:+.2f}u".replace("-", "−")
+
+
+def record_tiles(frame, label):
+    """Record, cover rate against break-even, units and ROI for recorded picks."""
+    if frame is None or frame.empty:
+        return "<div class='empty'>No recorded ATS picks yet. Results appear here once locked picks are graded.</div>"
+    r = season_ats.summary(frame)
+    tone = lambda x: '' if not math.isfinite(num(x)) or num(x) == 0 else 'good' if num(x) > 0 else 'bad'
+    rate = num(r['cover_rate'])
+    meter = ''
+    if math.isfinite(rate):
+        meter = (f"<div class='meter' role='img' aria-label='Cover rate {pct(rate, 1)}, break-even {pct(BREAK_EVEN, 1)}'>"
+                 f"<i style='width:{100 * rate:.1f}%'></i><b style='left:{100 * BREAK_EVEN:.1f}%'></b></div>")
+    pending = f" · {r['pending']} pending" if r['pending'] else ''
+    tiles = [stat(label, f"{r['wins']}–{r['losses']}–{r['pushes']}", f"W–L–P · {r['bets']} bets{pending}"),
+             stat('Cover rate', pct(rate, 1), f"{meter}Break-even {pct(BREAK_EVEN, 1)} · pushes excluded",
+                  '' if not math.isfinite(rate) else 'good' if rate > BREAK_EVEN else 'bad'),
+             stat('Units', units_text(r['units']), 'Flat 1 unit per pick at −110', tone(r['units'])),
+             stat('ROI', roi_short(r['roi']), 'Per unit staked · pushes included', tone(r['roi']))]
+    return f"<div class='gr-summary'>{''.join(tiles)}</div>"
+
+
+def render_ats_basis(latest):
+    frame = public_ats(latest)
+    parts = ["<h2 class='sec'>Pick sources</h2>"]
+    if frame.empty:
         return ''.join(parts) + "<p class='mut'>No recorded ATS picks yet.</p>"
-    labels = [('Recorded pregame', 'Earlier recorded picks'), ('60-minute lock', '60-minute locks'),
-              ('Historical replay', 'Historical replay'), ('Replayed pregame forecast', 'Replayed pregame forecasts'),
-              ('Backfilled recorded skip', 'Recorded skips backfilled as favorite bets')]
     rows = []
-    for basis, label in labels:
-        group = pooled[pooled.ats_basis.eq(basis)]
+    for basis, label in PUBLIC_BASES.items():
+        group = frame[frame.ats_basis.eq(basis)]
         if group.empty and basis != '60-minute lock':
             continue
         r = season_ats.summary(group)
-        rate = pct(r['cover_rate'], 1)
         record = f'{r["wins"]}–{r["losses"]}–{r["pushes"]}' if r['opportunities'] else '—'
-        rows.append([label, record, rate, str(r['skips']), str(r['pending']),
-                     f'{r["units"]:+.2f}', roi_short(r['roi'])])
+        rows.append([label, record, pct(r['cover_rate'], 1), str(r['skips']), str(r['pending']),
+                     units_text(r['units']) if r['bets'] else '—', roi_short(r['roi'])])
     parts.append(table(['Source', 'ATS W–L–P', 'Cover rate', 'Skips', 'Pending', 'Units', 'ROI'],
                        rows, num_cols=(1, 2, 3, 4, 5, 6)))
-    parts.append("<p class='mut small'>Recorded picks use saved pregame handicaps. Earlier recordings retain their "
-                 "original capture times; the 60-minute record starts with the new lock policy. "
-                 "Replay is shown separately and is identified in the per-game download. "
-                 "Backfilled rows were recorded as skips and are graded as favorite bets after the result; "
-                 "they are not recorded picks.</p>")
+    parts.append("<p class='mut small'>Every pick uses its saved pregame handicap. Earlier recorded picks keep their "
+                 "original capture times; the 60-minute record starts with the current lock policy. Backfilled rows were "
+                 "saved as skips and are graded as bets on the market favorite; they are labelled separately.</p>")
     return ''.join(parts)
+
+
+def game_rows(group):
+    rows = []
+    for r in group.sort_values(['kickoff_utc', 'game_id'] if 'kickoff_utc' in group else 'game_id').to_dict('records'):
+        grade = r.get('fixed_band_ats_result', '')
+        side, team = r.get('fixed_band_ats_side', ''), r.get('fixed_band_ats_team', '')
+        if grade == 'S':
+            pick, badge = 'Skip', "<span class='badge'>Skip</span>"
+        elif isinstance(team, str) and team:
+            pick = f'<b>{esc(team)} {spread_text(num(r.get("spread_line")), side == "home")}</b>'
+            badge = result_badge(grade) if grade else "<span class='badge'>Pending</span>"
+        else:
+            pick = 'Awaiting lock' if r.get('ats_status') == 'pending' else 'No saved pick'
+            badge = f"<span class='badge'>{esc(str(r.get('ats_status', 'unavailable')).title())}</span>"
+        final = score_text(r.get('away_score'), r.get('home_score')) if math.isfinite(num(r.get('result'))) else 'Pending'
+        units = num(r.get('fixed_band_ats_units'))
+        tone = 'pos-tx' if units > 0 else 'neg-tx' if units < 0 else ''
+        ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
+        when = f"<div class='mut small'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</div>" if pd.notna(ko) else ''
+        rows.append([f"<span class='team-code' data-game-id='{esc(r['game_id'])}'>{esc(r['away'])} @ {esc(r['home'])}</span>{when}",
+                     pick, favorite_spread_text(r.get('fixed_band_spread'), r['home'], r['away']), final, badge,
+                     f"<span class='{tone}'>{units_text(units)}</span>" if math.isfinite(units) else '—',
+                     esc(PUBLIC_BASES.get(r.get('ats_basis'), r.get('ats_basis', '')))])
+    return rows
 
 
 def render_ats_games(latest):
-    if latest is None:
+    games = public_ats(latest)
+    if games.empty:
         return ''
-    pooled = latest.get('pooled_ats', pd.DataFrame())
-    history = latest.get('fixed_band_ledger', pd.DataFrame())
-    frames = [pooled] if len(pooled) else []
-    if len(history):
-        historical = history[~history.season.eq(2026)].copy() if len(pooled) else history.copy()
-        historical = historical[historical.fixed_band_ats_result.isin(['W', 'L', 'P', 'S'])]
-        if len(historical):
-            historical['ats_basis'] = 'Historical replay'
-            historical['ats_status'] = np.where(historical.result.notna(), 'graded', 'pending')
-            frames.append(historical)
-    if not frames:
-        return "<p class='mut'>No game results yet.</p>"
-    games = pd.concat(frames, ignore_index=True, sort=False)
     parts = ["<h2 class='sec'>Game-by-game ATS results</h2>"]
     groups = list(games.groupby(['season', 'week'], sort=True))
     for i, ((season, week), group) in enumerate(reversed(groups)):
-        rows = []
-        for r in group.sort_values('game_id').to_dict('records'):
-            grade = r.get('fixed_band_ats_result', '')
-            side, team = r.get('fixed_band_ats_side', ''), r.get('fixed_band_ats_team', '')
-            if grade == 'S':
-                pick, badge = 'Skip', "<span class='badge'>Skip</span>"
-            elif team:
-                pick = f'{esc(team)} {spread_text(num(r.get("spread_line")), side == "home")}'
-                badge = result_badge(grade) if grade else "<span class='badge'>Pending</span>"
-            else:
-                pick = 'Awaiting lock' if r.get('ats_status') == 'pending' else 'Unavailable'
-                badge = f"<span class='badge'>{esc(r.get('ats_status', 'unavailable').title())}</span>"
-            final = score_text(r.get('away_score'), r.get('home_score')) if math.isfinite(num(r.get('result'))) else 'Pending'
-            units = num(r.get('fixed_band_ats_units'))
-            ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
-            when = f" <span class='mut'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</span>" if pd.notna(ko) else ''
-            rows.append([f"<span class='team-code' data-game-id='{esc(r['game_id'])}'>{esc(r['away'])} @ {esc(r['home'])}</span>{when}",
-                         pick, final, badge, f'{units:+.2f}' if math.isfinite(units) else '—',
-                         esc(r.get('ats_basis', 'Historical replay'))])
         stats = season_ats.summary(group)
-        label = f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]} · {stats["skips"]} skips'
-        parts.append(folded(label, table(['Game', 'ATS pick', 'Final', 'ATS result', 'Units', 'Source'],
-                                         rows, num_cols=(2, 4)), i == 0))
+        label = (f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]} · {stats["skips"]} skips'
+                 f"<span class='rt'>{units_text(stats['units']) if stats['bets'] else '—'}</span>")
+        parts.append(folded(label, table(['Game', 'ATS pick', 'Model', 'Final', 'Result', 'Units', 'Source'],
+                                         game_rows(group), num_cols=(3, 5)), i == 0))
     return ''.join(parts)
 
 
+def downloads(latest):
+    links = []
+    if len(public_ats(latest)):
+        links.append("<a href='ats_2026_results.csv'>2026 per-game results (CSV)</a>")
+    if (latest or {}).get('ats_locks'):
+        links.append("<a href='ats_locked_picks.csv'>Saved spread picks (CSV)</a>")
+    if (latest or {}).get('board') is not None and len(latest['board']):
+        links.append("<a href='fixed_band_board.csv'>This week’s board (CSV)</a>")
+    return f"<h2 class='sec'>Downloads</h2><div class='downloads'>{''.join(links)}</div>" if links else ''
+
+
 def render_grades(ledger, latest, built):
-    parts = [head('ATS results', 'Season records, cover rates and returns at −110 with 1-unit stakes. '
-                  'Pushes return the stake; matching projected and market lines are skipped.')]
+    season = int(latest['manifest']['season']) if latest is not None else None
+    parts = [head('ATS results', 'Every recorded pick, graded against its saved handicap. Returns use −110 pricing '
+                  'and 1-unit stakes; pushes return the stake.', f'{season} season' if season else '')]
     if latest is None:
         parts.append("<p class='mut'>No picks locked yet.</p>")
     else:
-        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
-        parts.append(render_ats_basis(latest))
-        parts.append(render_fixed_bands(latest))
+        parts.append(record_tiles(public_ats(latest), f'{season} record'))
         parts.append(render_ats_games(latest))
+        parts.append(render_ats_basis(latest))
+        parts.append(downloads(latest))
     return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
-
-def render_retro(latest):
-    """The current model replayed on past seasons: hindsight, labelled as such."""
-    retro = latest.get("retro_ledger")
-    if retro is None or retro.empty:
-        return ""
-    seasons = sorted(int(x) for x in retro.season.unique())
-    out = ["<h2 class='sec'>Historical replay</h2>",
-           f"<div class='gr-note'>Results calculated with the current model for {seasons[0]}–{seasons[-1]}. "
-           "Recorded forecasts are shown separately above.</div>"]
-    played = retro[pd.to_numeric(retro["home won"], errors="coerce").isin([0., .5, 1.])]
-    controls=control_records(played)
-    compared=(controls or {}).get('model',{}).get('bets',0)
-    out.append(control_tiles(controls, "Compared games", str(compared), f"{seasons[0]}–{seasons[-1]}"))
-    out.append("<p class='mut small'>Benchmarks use games with a priced model selection and a market favorite.</p>")
-    out.append(spread_headline(latest))
-    for yr in reversed(seasons):
-        g = retro[retro.season == yr].sort_values(["week", "game_id"], ascending=[False, True])
-        units = g.units.dropna()
-        rows = [[f"<span class='mono'>W{int(x.week)}</span>", f"<span class='team-code'>{esc(x.away)} @ {esc(x.home)}</span>",
-                 pick_text(x.bet_team, x.bet_price), score_text(getattr(x, "away_score", math.nan), getattr(x, "home_score", math.nan)),
-                 result_badge(x.bet_result if isinstance(x.bet_result, str) else "")] for x in g.itertuples(index=False)]
-        w, l = int((g.bet_result == "W").sum()), int((g.bet_result == "L").sum())
-        summ = (f"{yr} · {w}-{l} <span class='rt'>ROI {roi_short(units.mean())}</span>" if len(units) else f"{yr} · no priced picks")
-        spread = spread_record(latest, yr)
-        if spread is not None:
-            summ += f"<br><span class='mut'>Model spread · {spread_record_text(spread)}</span>"
-        spread_data = latest.get('fixed_band_ledger', pd.DataFrame())
-        lookup = ({r.game_id: r for r in spread_data[spread_data.season == yr].itertuples(index=False)}
-                  if len(spread_data) else {})
-        for cells, game in zip(rows, g.itertuples(index=False)):
-            sr = lookup.get(game.game_id)
-            if sr is not None and math.isfinite(num(sr.fixed_band_spread)):
-                pick = (f'{esc(sr.fixed_band_ats_team)} {spread_text(sr.spread_line, sr.fixed_band_ats_side == "home")}'
-                        if sr.fixed_band_ats_team else 'Skip')
-                result = 'Skip' if sr.fixed_band_ats_result == 'S' else result_badge(sr.fixed_band_ats_result)
-                cells.extend([pick, result, f'{sr.fixed_band_ats_units:+.2f}'])
-            else:
-                cells.extend(['—', '—', '—'])
-        out.append(folded(summ, table(["Week", "Game", "Moneyline pick", "Final", "ML result",
-                                       "Spread pick", "ATS result", "ATS units"], rows, num_cols=(3, 7))))
-    return "".join(out)
 
 
 def pooled_basis_text(frame):
@@ -1246,7 +1246,7 @@ def pooled_basis_text(frame):
     return text
 
 
-def ats_comparison_tiles(frame, basis='Historical replay', title='ATS comparison'):
+def ats_comparison_tiles(frame, basis='Recorded picks', title='Model vs simple baselines'):
     """Compare ATS sides on identical selected, completed, non-pick'em games."""
     d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
                   & np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
@@ -1264,80 +1264,75 @@ def ats_comparison_tiles(frame, basis='Historical replay', title='ATS comparison
                               'model' if label == 'Model ATS' else ''))
         else:
             tiles.append(stat(label, '—', 'No compared games yet'))
-    totals_note = ('The season total above includes pick’em games.' if basis == '2026 season total'
-                   else 'All-season totals below include pick’em games.')
-    return (f"<h3>{esc(title)}</h3><div class='gr-summary'>" + ''.join(tiles) + "</div>"
-            "<p class='mut small'>Same completed games with a model ATS selection and a market favorite. "
+    return (f"<h2 class='sec'>{esc(title)}</h2><div class='gr-summary'>" + ''.join(tiles) + "</div>"
+            "<p class='mut small'>Same completed games with a model ATS selection and a market favorite: the model’s pick, "
+            "always taking the market favorite, and always taking the home side. "
             "Model skips and market pick’em games are excluded from all three records. "
-            f"Cover rates exclude pushes; ROI includes pushes. {totals_note}</p>")
+            "Cover rates exclude pushes; ROI includes pushes.</p>")
 
 
-def render_fixed_bands(latest, details=False):
-    d = latest.get('fixed_band_ledger', pd.DataFrame())
-    pooled = latest.get('pooled_ats', pd.DataFrame())
-    if d.empty and pooled.empty:
+def nice_step(span, ticks=4):
+    raw = max(span, 1e-9) / ticks
+    mag = 10 ** math.floor(math.log10(raw))
+    return next(s * mag for s in (1, 2, 2.5, 5, 10) if s * mag >= raw)
+
+
+def units_chart(frame):
+    """Running units over graded recorded picks, in kickoff order; one series, hover titles per pick."""
+    if frame is None or frame.empty:
         return ''
-    eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()] if len(d) else d
-    current_season = int(latest['manifest']['season'])
-    out = ["<h2 class='sec'>Spread performance</h2>"]
-    if len(pooled) and season_ats.summary(pooled)['opportunities']:
-        r = season_ats.summary(pooled)
-        out.append("<h3>2026 graded results</h3><p class='mut small'>Season total: historical replay and recorded "
-                   "ATS selections, with one result per game. Saved selections replace replay, including skips. "
-                   f"{esc(pooled_basis_text(pooled))}. Returns use −110 pricing and 1-unit stakes.</p>")
-        out.append(table(['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI'],
-            [['2026', f'{r["wins"]}–{r["losses"]}–{r["pushes"]}', str(r['skips']),
-              f'{r["units"]:+.2f}', roi_short(r['roi'])]], num_cols=(1, 2, 3, 4)))
-        out.append(ats_comparison_tiles(pooled, '2026 season total', '2026 ATS comparison'))
-        weeks = []
-        for week, group in pooled.groupby('week', sort=True):
-            v = season_ats.summary(group)
-            weeks.append([f'W{int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}',
-                          str(v['skips']), str(v['pending']), f'{v["units"]:+.2f}', roi_short(v['roi'])])
-        out.append(folded('2026 · by week', table(['Week', 'ATS W–L–P', 'Skips', 'Pending', 'Units', 'ROI'],
-                                                weeks, num_cols=(1, 2, 3, 4, 5)), True))
-        out.append("<p class='mut small'><a href='ats_2026_results.csv'>2026 per-game ATS results</a>. "
-                   "The download identifies replayed and recorded selections. A model spread equal to the line "
-                   "takes the market favorite. Earlier recorded skips are backfilled as favorite bets and shown separately. "
-                   "Cover rates exclude pushes; ROI includes pushed stakes and excludes skips.</p>")
-    out.append("<h3>Historical replay</h3><div class='gr-note'>Returns use −110 pricing and fixed 1-unit stakes. "
-               "A model spread equal to the market line takes the market favorite. Pushes return the stake.</div>")
-    if eligible.empty:
-        return ''.join(out) + "<p class='mut'>Historical spread results will appear when enough games are available.</p>"
-    out.append(ats_comparison_tiles(eligible, title='Historical ATS comparison'))
-    results = fixed_bands.summary(d).query("method == 'Fixed bands'")
-    def result_rows(frame):
-        return [[esc('All seasons' if r.season == 'All' else r.season),
-                 f'{r.wins}–{r.losses}–{r.pushes}', str(r.skips), f'{r.units:+.2f}', roi_short(r.roi)]
-                for r in frame.itertuples(index=False)]
-    headers = ['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
-    current = results[results.season == str(current_season)]
-    if len(current) and pooled.empty:
-        last_week=int(eligible.loc[eligible.season==current_season,'week'].max())
-        out.append(f"<h3>{current_season} graded results</h3>"
-                   f"<p class='mut small'>Historical replay of completed games this season, through week {last_week}.</p>")
-        out.append(table(headers, result_rows(current), num_cols=(1, 2, 3, 4)))
-    out.append("<h3>Per-season results · historical replay</h3>")
-    out.append(table(headers, result_rows(results), num_cols=(1, 2, 3, 4)))
-    out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
-               "<a href='fixed_band_summary.csv'>Season results</a>. "
-               "Win and cover rates exclude pushes; ROI includes pushed stakes and excludes skipped games.</p>")
-    if details:
-        for year, g in eligible.groupby('season', sort=False):
-            rows = []
-            for r in g.sort_values(['week', 'game_id'], ascending=False).itertuples(index=False):
-                rows.append([f'W{int(r.week)} · {esc(r.away)} @ {esc(r.home)}',
-                             favorite_spread_text(r.fixed_band_spread, r.home, r.away),
-                             favorite_spread_text(r.spread_line, r.home, r.away),
-                             (f'{esc(r.fixed_band_ats_team)} {spread_text(r.spread_line, r.fixed_band_ats_side == "home")}'
-                              if r.fixed_band_ats_team else 'Skip'),
-                             'Skip' if r.fixed_band_ats_result == 'S' else result_badge(r.fixed_band_ats_result),
-                             f'{r.fixed_band_ats_units:+.2f}'])
-            label = 'graded results' if int(year) == current_season else 'retrospective results'
-            out.append(folded(f'{int(year)} · model spread · {label}',
-                             table(['Game', 'Model spread', 'Market', 'ATS pick', 'ATS result', 'Units'], rows),
-                             int(year) == current_season))
-    return ''.join(out)
+    g = frame[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])].copy()
+    if len(g) < 2:
+        return ''
+    g['_ko'] = pd.to_datetime(g.get('kickoff_utc'), utc=True, errors='coerce')
+    g = g.sort_values(['_ko', 'game_id'], na_position='last')
+    run = np.concatenate([[0.], np.cumsum(g.fixed_band_ats_units.astype(float).to_numpy())])
+    W, H, L, R, T, B = 1000, 240, 40, 12, 12, 26
+    step = nice_step(max(run.max(), 0) - min(run.min(), 0))
+    lo, hi = math.floor(min(run.min(), 0) / step) * step, math.ceil(max(run.max(), 0) / step) * step
+    hi = hi if hi > lo else lo + step
+    x = lambda i: L + (W - L - R) * i / (len(run) - 1)
+    y = lambda v: T + (H - T - B) * (hi - v) / (hi - lo)
+    out = [f"<svg viewBox='0 0 {W} {H}' role='img' aria-label='Running units after each graded pick, ending at {units_text(run[-1])}'>"]
+    v = lo
+    while v <= hi + 1e-9:
+        out.append(f"<line class='{'zero' if abs(v) < 1e-9 else 'grid-ln'}' x1='{L}' x2='{W - R}' y1='{y(v):.1f}' y2='{y(v):.1f}'/>"
+                   f"<text class='ax' x='{L - 8}' y='{y(v) + 4:.1f}' text-anchor='end'>{'0' if abs(v) < 1e-9 else f'{v:+g}'.replace('-', '−')}</text>")
+        v += step
+    pts = ' '.join(f'{x(i):.1f},{y(u):.1f}' for i, u in enumerate(run))
+    out.append(f"<polygon class='area' points='{x(0):.1f},{y(0):.1f} {pts} {x(len(run) - 1):.1f},{y(0):.1f}'/>")
+    out.append(f"<polyline class='ln' points='{pts}'/>")
+    for i, r in enumerate(g.to_dict('records'), start=1):
+        pick = f"{r.get('fixed_band_ats_team', '')} {spread_text(num(r.get('spread_line')), r.get('fixed_band_ats_side') == 'home')}"
+        tip = (f"Week {int(r['week'])} · {r['away']} @ {r['home']} · {pick} · {r['fixed_band_ats_result']} "
+               f"{units_text(r['fixed_band_ats_units'])} · running {units_text(run[i])}")
+        out.append(f"<g><circle class='hit' cx='{x(i):.1f}' cy='{y(run[i]):.1f}' r='11'><title>{esc(tip)}</title></circle>"
+                   f"<circle class='pt' cx='{x(i):.1f}' cy='{y(run[i]):.1f}' r='4'/></g>")
+    out.append(f"<text class='ax' x='{L}' y='{H - 6}'>Start</text>"
+               f"<text class='ax' x='{W - R}' y='{H - 6}' text-anchor='end'>Pick {len(run) - 1}</text></svg>")
+    tone = 'pos-tx' if run[-1] > 0 else 'neg-tx' if run[-1] < 0 else ''
+    return (f"<div class='chart'><div class='chart-head'><span class='t'>Running units · graded recorded picks</span>"
+            f"<span class='v {tone}'>{units_text(run[-1])}</span></div>{''.join(out)}</div>")
+
+
+def weekly_table(frame):
+    rows = []
+    for week, group in frame.groupby('week', sort=True):
+        v = season_ats.summary(group)
+        rows.append([f'Week {int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}', pct(v['cover_rate'], 1),
+                     str(v['skips']), str(v['pending']), units_text(v['units']) if v['bets'] else '—', roi_short(v['roi'])])
+    return ("<h2 class='sec'>By week</h2>" +
+            table(['Week', 'ATS W–L–P', 'Cover rate', 'Skips', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
+
+
+HOW_IT_WORKS = (
+    ("Project the spread", "The model turns each team’s recent box-score profile into a projected point spread."),
+    ("Compare with the market", "The pick is the side the projection favors against the market handicap. "
+                                "A projection equal to the line takes the market favorite."),
+    ("Lock before kickoff", "The latest forecast 60 minutes before kickoff is saved. The handicap and pick never change after that."),
+    ("Grade at −110", "Each pick is a flat 1-unit bet at −110. A win returns 0.91u, a loss costs 1u, a push returns the stake. "
+                      "Break-even is a 52.4% cover rate."),
+)
 
 
 def market_sides(df):
@@ -1363,14 +1358,21 @@ def market_sides(df):
 
 def render_calibration(latest, ledger, built):
     # Keep the existing URL working while replacing its old probability view.
-    parts = [head('ATS performance', 'Compare ATS cover rates and returns on the same games. '
-                  'Results use −110 pricing and 1-unit stakes.')]
-    if latest is None:
+    season = int(latest['manifest']['season']) if latest is not None else None
+    parts = [head('ATS performance', 'How the recorded picks are doing against the spread, beside simple '
+                  'baselines on the same games. Results use −110 pricing and 1-unit stakes.',
+                  f'{season} season' if season else '')]
+    frame = public_ats(latest)
+    if latest is None or frame.empty:
         parts.append("<p class='mut'>No ATS results yet.</p>")
     else:
-        parts.append(spread_headline(latest, int(latest['manifest']['season'])))
+        parts.append(record_tiles(frame, f'{season} record'))
+        parts.append(units_chart(frame))
+        parts.append(ats_comparison_tiles(frame))
+        parts.append(weekly_table(frame))
         parts.append(render_ats_basis(latest))
-        parts.append(render_fixed_bands(latest))
+    parts.append("<h2 class='sec'>How picks work</h2><ol class='steps'>" +
+                 ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 
 # ---------------------------------------------------------------- driver
@@ -1386,13 +1388,13 @@ def render_all(out_dir, data=DATA, now=None):
         latest['pooled_ats'] = season_ats.build(latest, ledger)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
-    if latest is not None and len(latest['pooled_ats']):
-        pooled = latest['pooled_ats']
+    recorded = public_ats(latest)
+    if len(recorded):
         fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_basis', 'ats_status',
                   'generated_utc', 'lock_at_utc', 'policy_version', 'fixed_band_spread',
                   'spread_line', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
                   'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units']
-        pooled.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
+        recorded.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
             out / 'ats_2026_results.csv', index=False)
     else:
         (out / 'ats_2026_results.csv').unlink(missing_ok=True)
@@ -1412,36 +1414,24 @@ def render_all(out_dir, data=DATA, now=None):
     else:
         (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
     if latest is not None and 'fixed_band_ledger' in latest:
-        exports = {'fixed_band_ledger.csv': latest['fixed_band_ledger'],
-                   'fixed_band_summary.csv': fixed_bands.summary(latest['fixed_band_ledger']),
-                   'fixed_band_board.csv': latest['board']}
-        for name, frame in exports.items():
-            frame.to_csv(Path(data) / 'latest' / name, index=False)
-            if name == 'fixed_band_summary.csv':
-                public = frame[frame.method == 'Fixed bands'].assign(method='Model spread')
-            elif name == 'fixed_band_board.csv':
-                public_rows = []
-                for row in frame.to_dict('records'):
-                    state = ats_card_state(latest, row, now)
-                    item = {k: row.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
-                            'gameday', 'gametime', 'away_score', 'home_score', 'result')}
-                    item.update(model_spread=state['model_spread'], spread_line=state['spread_line'],
-                        ats_status=state['status'], ats_source=state['source'],
-                        selected_side=state['selected_side'], selected_team=state['selected_team'],
-                        handicap=state['handicap'], ats_result=state['result'], ats_units=state['units'])
-                    public_rows.append(item)
-                public = pd.DataFrame(public_rows)
-            else:
-                fields = ['game_id', 'season', 'week', 'home', 'away', 'gameday', 'away_score', 'home_score',
-                          'result', 'spread_line', 'fixed_band_spread', 'fixed_band_ats_side',
-                          'fixed_band_ats_team', 'fixed_band_ats_handicap', 'fixed_band_ats_result',
-                          'fixed_band_ats_units']
-                public = frame.reindex(columns=fields)
-                public = public.rename(columns={'fixed_band_spread': 'model_spread'})
-            public.to_csv(out / name, index=False)
-        rules = json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False)
-        (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(rules)
-        (out / 'fixed_band_rules.json').write_text(rules)
+        # The replayed ledger, per-season summary and median-map rules are research: data/latest only.
+        (Path(data) / 'latest' / 'fixed_band_ledger.csv').parent.mkdir(parents=True, exist_ok=True)
+        latest['fixed_band_ledger'].to_csv(Path(data) / 'latest' / 'fixed_band_ledger.csv', index=False)
+        fixed_bands.summary(latest['fixed_band_ledger']).to_csv(Path(data) / 'latest' / 'fixed_band_summary.csv', index=False)
+        latest['board'].to_csv(Path(data) / 'latest' / 'fixed_band_board.csv', index=False)
+        (Path(data) / 'latest' / 'fixed_band_rules.json').write_text(
+            json.dumps(latest['fixed_band_rules'], indent=2, allow_nan=False))
+        public_rows = []
+        for row in latest['board'].to_dict('records'):
+            state = ats_card_state(latest, row, now)
+            item = {k: row.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
+                    'gameday', 'gametime', 'away_score', 'home_score', 'result')}
+            item.update(model_spread=state['model_spread'], spread_line=state['spread_line'],
+                ats_status=state['status'], ats_source=state['source'],
+                selected_side=state['selected_side'], selected_team=state['selected_team'],
+                handicap=state['handicap'], ats_result=state['result'], ats_units=state['units'])
+            public_rows.append(item)
+        pd.DataFrame(public_rows).to_csv(out / 'fixed_band_board.csv', index=False)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built)}
@@ -1451,7 +1441,8 @@ def render_all(out_dir, data=DATA, now=None):
     report_path = Path(data) / 'ledger_report.txt'
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(published_report(Path(data)), encoding='utf-8')
-    for retired in ('ledger_report.txt', 'model.html', 'board.html'):
+    for retired in ('ledger_report.txt', 'model.html', 'board.html', 'fixed_band_ledger.csv',
+                    'fixed_band_summary.csv', 'fixed_band_rules.json'):
         (out / retired).unlink(missing_ok=True)
     (out / ".nojekyll").write_text("")
     return sorted(p.name for p in out.iterdir())

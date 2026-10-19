@@ -60,7 +60,7 @@ class ATSOnlySite(unittest.TestCase):
 
     def test_cards_backfill_saved_skips_at_the_saved_line_not_a_refreshed_winner(self):
         html=(self.out/'index.html').read_text()
-        card=next(c for c in html.split("<details class='card'>")[1:] if 'Titans' in c.split('</summary>')[0])
+        card=next(c for c in html.split("<details class='card")[1:] if 'Titans' in c.split('</summary>')[0])
         summary=card.split('</summary>')[0]
         self.assertIn('IND −7.0',summary)
         self.assertIn('skip backfilled as favorite',summary)
@@ -90,18 +90,27 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(saved.loc['2026_06_TEN_IND'].skip_reason,'zero_edge')
         self.assertEqual(str(saved.loc['2026_06_TEN_IND'].backfilled_favorite),'True')
 
-    def test_results_show_sources_and_each_game_once(self):
+    def test_results_show_recorded_sources_and_each_game_once(self):
         html=(self.out/'grades.html').read_text()
         self.assertIn('Earlier recorded picks',html)
         self.assertIn('60-minute locks',html)
-        self.assertIn('Historical replay',html)
-        self.assertIn('Replayed pregame forecasts',html)
         self.assertIn('Recorded skips backfilled as favorite bets',html)
         self.assertIn('Game-by-game ATS results',html)
+        self.assertIn('Break-even 52.4%',html)
+        self.assertRegex(self.visible(html),r'(Sun|Sat|Thu|Mon) \d{1,2}:\d{2} [AP]M PDT')  # Pacific kickoffs
+        for research in ('Historical replay','Replayed pregame forecasts','replayed'):
+            self.assertNotIn(research,html)
         self.assertEqual(html.count("data-game-id='2026_06_TEN_IND'"),1)
         week=self.pool[self.pool.week.eq(6)].fixed_band_ats_result
         record='–'.join(str(int(week.eq(k).sum())) for k in 'WLP')
         self.assertIn(f'2026 week 6 · {record} · {int(week.eq("S").sum())} skips',html)
+
+    def test_public_results_export_is_recorded_only(self):
+        self.assertTrue(set(self.pool.ats_basis) <= set(b.PUBLIC_BASES))
+        self.assertFalse(self.pool.game_id.duplicated().any())
+        for name in ('fixed_band_ledger.csv','fixed_band_summary.csv','fixed_band_rules.json'):
+            self.assertFalse((self.out/name).exists())
+            self.assertTrue((self.data/'latest'/name).exists())
 
     def test_performance_has_ats_controls_and_cover_rates(self):
         html=(self.out/'market-calibration.html').read_text()
@@ -109,8 +118,10 @@ class ATSOnlySite(unittest.TestCase):
         wins=int(common.fixed_band_ats_result.eq('W').sum())
         losses=int(common.fixed_band_ats_result.eq('L').sum())
         rate=f'{100*wins/(wins+losses):.1f}%'
-        for text in ('ATS performance','Model ATS','Market favorite ATS','Home side ATS','Cover rate',rate):
+        for text in ('ATS performance','Model ATS','Market favorite ATS','Home side ATS','Cover rate',rate,
+                     'Running units','How picks work'):
             self.assertIn(text,html)
+        self.assertIn('<svg',html)
 
     def test_render_keeps_forecast_archives_and_internal_probabilities(self):
         for name,before in self.before.items():
