@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-19 13:54 UTC
+NFL forward ledger report -- 2026-10-19 15:07 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -484,7 +484,7 @@ Production sanity check: v1.18 and fixed-band median ATS
 Status: PASS
 Basis: historical replay, native moneyline snapshots, and median-policy ATS archives remain separate.
 ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.
-Grading: forecast-minus-market chooses side; equality within 1e-10 skips before push grading.
+Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite (a pick'em line skips) before push grading.
 Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.
 Source prices have no independent quote timestamp; historical ATS returns are proxy reconstructions.
 
@@ -496,6 +496,7 @@ Source prices have no independent quote timestamp; historical ATS returns are pr
   PASS 2025_prior_only_medians
   PASS 2026_prior_only_medians
   PASS exported_median_predictions
+  PASS exported_selection_rule_known
   PASS exported_ats_grades
   PASS production_grading_matches_independent
   PASS exported_rule_schema
@@ -509,6 +510,7 @@ Source prices have no independent quote timestamp; historical ATS returns are pr
   PASS median_archive_before_kickoff
   PASS median_archive_unique_games
   PASS median_archive_prior_season_fit
+  Exported ATS selection rule: favorite-on-zero-edge-2026-10-19-v1
 
 Prior-season maps (training excludes the forecast season):
   2023: [2.0, 3.0, 6.5, 14.5]; prior n=543, band counts=[197, 184, 100, 62], through 2022
@@ -517,23 +519,23 @@ Prior-season maps (training excludes the forecast season):
   2026: [3.0, 4.0, 7.0, 14.0]; prior n=1359, band counts=[497, 478, 228, 156], through 2025
 
 Historical replay: median ATS versus moneyline on identical game opportunities:
-  All: ATS 412-349-13, 121 skips, 774/895 selected, +25.55u, ROI +3.30% +/- 3.39pp (1 SE)
+  All: ATS 473-397-25, 0 skips, 895/895 selected, +33.00u, ROI +3.69% +/- 3.14pp (1 SE)
     ML 616-277-2, +24.02u, ROI +2.68% +/- 2.42pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=891 (excludes market pick'ems for both): model +24.21u, ROI +2.72%; favorite -3.52u, ROI -0.40%
     Binary proper scores n=893: log loss 0.612146, market 0.611800; Brier 0.212009; tied finals excluded from binary scoring.
-  2023: ATS 124-112-9, 27 skips, 245/272 selected, +0.73u, ROI +0.30% +/- 5.99pp (1 SE)
+  2023: ATS 136-122-14, 0 skips, 272/272 selected, +1.64u, ROI +0.60% +/- 5.64pp (1 SE)
     ML 185-87-0, +8.35u, ROI +3.07% +/- 4.53pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=270 (excludes market pick'ems for both): model +8.44u, ROI +3.12%; favorite +4.12u, ROI +1.53%
     Binary proper scores n=272: log loss 0.630622, market 0.627349; Brier 0.220167; tied finals excluded from binary scoring.
-  2024: ATS 110-104-1, 57 skips, 215/272 selected, -4.00u, ROI -1.86% +/- 6.51pp (1 SE)
+  2024: ATS 142-126-4, 0 skips, 272/272 selected, +3.09u, ROI +1.14% +/- 5.75pp (1 SE)
     ML 198-74-0, +23.47u, ROI +8.63% +/- 4.22pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=271 (excludes market pick'ems for both): model +24.47u, ROI +9.03%; favorite +14.11u, ROI +5.21%
     Binary proper scores n=272: log loss 0.585169, market 0.587489; Brier 0.199123; tied finals excluded from binary scoring.
-  2025: ATS 141-107-1, 23 skips, 249/272 selected, +21.18u, ROI +8.51% +/- 5.99pp (1 SE)
+  2025: ATS 152-119-1, 0 skips, 272/272 selected, +19.18u, ROI +7.05% +/- 5.74pp (1 SE)
     ML 184-87-1, -2.94u, ROI -1.08% +/- 4.35pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=271 (excludes market pick'ems for both): model -3.85u, ROI -1.42%; favorite -18.05u, ROI -6.66%
     Binary proper scores n=271: log loss 0.603441, market 0.609383; Brier 0.209128; tied finals excluded from binary scoring.
-  2026: ATS 37-26-2, 14 skips, 65/79 selected, +7.64u, ROI +11.75% +/- 11.57pp (1 SE)
+  2026: ATS 43-30-6, 0 skips, 79/79 selected, +9.09u, ROI +11.51% +/- 10.23pp (1 SE)
     ML 49-29-1, -4.85u, ROI -6.14% +/- 8.35pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=79 (excludes market pick'ems for both): model -4.85u, ROI -6.14%; favorite -3.70u, ROI -4.69%
     Binary proper scores n=78: log loss 0.672035, market 0.650754; Brier 0.238503; tied finals excluded from binary scoring.
@@ -550,22 +552,24 @@ Historical development and selection are exposed; an unresolved comparison is no
 ATS 60-minute capture policy
 
 ATS capture: latest saved forecast at or before kickoff minus 60 minutes.
-Policy: median-mov-ats-t60-2026-10-19-v1; adopted 2026-10-19T05:05:26+00:00.
+Policy: median-mov-ats-t60-favtie-2026-10-19-v2; adopted 2026-10-19T05:05:26+00:00.
+A zero edge takes the market favorite; a pick'em line with a zero mapped spread skips. Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills them as favorite bets, labelled separately.
 Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
 Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 4 saved candidates, 0 timed locks.
+Store validation: PASS; 5 saved candidates, 0 timed locks.
 
 2026 pooled ATS results
 
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 43-31-2, 16 skips, 1 pending, 0 unavailable; +8.09u, ROI +10.65% at proxy -110.
+Record 49-37-6, 0 skips, 1 pending, 0 unavailable; +7.55u, ROI +8.20% at proxy -110.
   Awaiting ATS lock: 0-0-0, 0 skips, 1 pending, 0 unavailable; +0.00u
-  Historical replay: 37-26-2, 14 skips, 0 pending, 0 unavailable; +7.64u
-  Recorded pregame: 6-4-0, 2 skips, 0 pending, 0 unavailable; +1.45u
+  Backfilled recorded skip: 0-2-0, 0 skips, 0 pending, 0 unavailable; -2.00u
+  Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +9.09u
+  Recorded pregame: 6-4-0, 0 skips, 0 pending, 0 unavailable; +1.45u
   Replayed pregame forecast: 0-1-0, 0 skips, 0 pending, 0 unavailable; -1.00u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
 
