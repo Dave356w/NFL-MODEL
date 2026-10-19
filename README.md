@@ -24,6 +24,14 @@ Game cards and the saved-spread-picks download preserve locked handicaps and
 zero-edge skips. Earlier ATS and moneyline records retain their original timing;
 the new capture policy has a separate identity and never rewrites those records.
 
+The **2026 ATS season overview** pools historical replay and recorded selections,
+one row per game. Saved ATS picks and skips override replay. A pre-adoption game
+without an ATS archive can be replayed at its original pregame forecast and line;
+it is labeled replay, not recorded ATS evidence. Missing post-adoption locks are
+not reconstructed from early moneyline records. The headline, weekly results,
+same-game ATS controls and `ats_2026_results.csv` use this deduplicated view.
+Pricing is assumed −110 with 1-unit stakes; the download identifies each source.
+
 Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
 penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
 lean is kept. Picks and bets are identical to v1.16's; only those probabilities change. v1.16 keeps

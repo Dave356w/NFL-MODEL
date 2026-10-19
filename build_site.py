@@ -48,6 +48,7 @@ import nfl_model as m
 import totals
 import fixed_bands
 import ats_locks
+import season_ats
 from research import version_report
 from research import ats_forward_shadow
 from research import production_sanity
@@ -584,6 +585,15 @@ def spread_record_text(r):
 
 
 def spread_headline(latest, season=None):
+    pooled = (latest or {}).get('pooled_ats', pd.DataFrame())
+    if season == 2026 and len(pooled):
+        record = season_ats.summary(pooled)
+        if record['opportunities']:
+            r = pd.Series(record)
+            basis = pooled_basis_text(pooled)
+            return (f"<div class='record'><div class='l'>Spread results · 2026</div>"
+                    f"<div class='mono'>{spread_record_text(r)}<div class='mut small'>"
+                    f"Season total · {esc(basis)} · −110 pricing · 1-unit stakes</div></div></div>")
     r = spread_record(latest, season)
     label = f'Spread results · {season}' if season is not None else 'Spread results · historical replay'
     text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
@@ -1194,12 +1204,23 @@ def render_retro(latest):
     return "".join(out)
 
 
-def ats_comparison_tiles(frame):
+def pooled_basis_text(frame):
+    graded = frame[frame.ats_status.eq('graded')]
+    replay = int(graded.ats_basis.isin(['Historical replay', 'Replayed pregame forecast']).sum())
+    recorded = len(graded) - replay
+    r = season_ats.summary(frame)
+    text = f'{replay} replayed · {recorded} recorded · {r["pending"]} pending'
+    if r['unavailable']:
+        text += f' · {r["unavailable"]} unavailable'
+    return text
+
+
+def ats_comparison_tiles(frame, basis='Historical replay', title='ATS comparison'):
     """Compare ATS sides on identical selected, completed, non-pick'em games."""
     d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
                   & np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
                   & np.isfinite(frame.result) & np.isfinite(frame.fixed_band_spread)]
-    tiles = [stat('Compared games', str(len(d)), 'Historical replay · same games')]
+    tiles = [stat('Compared games', str(len(d)), f'{basis} · same games')]
     for label, prediction in [('Model ATS', d.fixed_band_spread),
                               ('Market favorite ATS', d.spread_line + np.sign(d.spread_line)),
                               ('Home side ATS', d.spread_line + 1)]:
@@ -1212,24 +1233,46 @@ def ats_comparison_tiles(frame):
                               'model' if label == 'Model ATS' else ''))
         else:
             tiles.append(stat(label, '—', 'No compared games yet'))
-    return ("<h3>ATS comparison</h3><div class='gr-summary'>" + ''.join(tiles) + "</div>"
+    totals_note = ('The season total above includes pick’em games.' if basis == '2026 season total'
+                   else 'All-season totals below include pick’em games.')
+    return (f"<h3>{esc(title)}</h3><div class='gr-summary'>" + ''.join(tiles) + "</div>"
             "<p class='mut small'>Same completed games with a model ATS selection and a market favorite. "
             "Model skips and market pick’em games are excluded from all three records. "
-            "Cover rates exclude pushes; ROI includes pushes. All-season totals below include pick’em games.</p>")
+            f"Cover rates exclude pushes; ROI includes pushes. {totals_note}</p>")
 
 
 def render_fixed_bands(latest, details=False):
     d = latest.get('fixed_band_ledger', pd.DataFrame())
-    if d.empty:
+    pooled = latest.get('pooled_ats', pd.DataFrame())
+    if d.empty and pooled.empty:
         return ''
-    eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()]
+    eligible = d[d.fixed_band_spread.notna() & d.result.notna() & d.spread_line.notna()] if len(d) else d
     current_season = int(latest['manifest']['season'])
-    out = ["<h2 class='sec'>Spread performance</h2>",
-           "<div class='gr-note'>Historical replay · Returns use −110 pricing and fixed 1-unit stakes. "
-           "Matching model and market lines are skipped. Pushes return the stake.</div>"]
+    out = ["<h2 class='sec'>Spread performance</h2>"]
+    if len(pooled):
+        r = season_ats.summary(pooled)
+        out.append("<h3>2026 graded results</h3><p class='mut small'>Season total: historical replay and recorded "
+                   "ATS selections, with one result per game. Saved selections replace replay, including skips. "
+                   f"{esc(pooled_basis_text(pooled))}. Returns use −110 pricing and 1-unit stakes.</p>")
+        out.append(table(['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI'],
+            [['2026', f'{r["wins"]}–{r["losses"]}–{r["pushes"]}', str(r['skips']),
+              f'{r["units"]:+.2f}', roi_short(r['roi'])]], num_cols=(1, 2, 3, 4)))
+        out.append(ats_comparison_tiles(pooled, '2026 season total', '2026 ATS comparison'))
+        weeks = []
+        for week, group in pooled.groupby('week', sort=True):
+            v = season_ats.summary(group)
+            weeks.append([f'W{int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}',
+                          str(v['skips']), str(v['pending']), f'{v["units"]:+.2f}', roi_short(v['roi'])])
+        out.append(folded('2026 · by week', table(['Week', 'ATS W–L–P', 'Skips', 'Pending', 'Units', 'ROI'],
+                                                weeks, num_cols=(1, 2, 3, 4, 5)), True))
+        out.append("<p class='mut small'><a href='ats_2026_results.csv'>2026 per-game ATS results</a>. "
+                   "The download identifies replayed and recorded selections. Matching lines are skips; "
+                   "cover rates exclude pushes; ROI includes pushed stakes and excludes skips.</p>")
+    out.append("<h3>Historical replay</h3><div class='gr-note'>Returns use −110 pricing and fixed 1-unit stakes. "
+               "Matching model and market lines are skipped. Pushes return the stake.</div>")
     if eligible.empty:
-        return ''.join(out) + "<p class='mut'>Spread results will appear when enough historical games are available.</p>"
-    out.append(ats_comparison_tiles(eligible))
+        return ''.join(out) + "<p class='mut'>Historical spread results will appear when enough games are available.</p>"
+    out.append(ats_comparison_tiles(eligible, title='Historical ATS comparison'))
     results = fixed_bands.summary(d).query("method == 'Fixed bands'")
     def result_rows(frame):
         return [[esc('All seasons' if r.season == 'All' else r.season),
@@ -1237,12 +1280,12 @@ def render_fixed_bands(latest, details=False):
                 for r in frame.itertuples(index=False)]
     headers = ['Season', 'ATS W–L–P', 'Skips', 'Units', 'ROI']
     current = results[results.season == str(current_season)]
-    if len(current):
+    if len(current) and pooled.empty:
         last_week=int(eligible.loc[eligible.season==current_season,'week'].max())
         out.append(f"<h3>{current_season} graded results</h3>"
                    f"<p class='mut small'>Historical replay of completed games this season, through week {last_week}.</p>")
         out.append(table(headers, result_rows(current), num_cols=(1, 2, 3, 4)))
-    out.append("<h3>Per-season results</h3>")
+    out.append("<h3>Per-season results · historical replay</h3>")
     out.append(table(headers, result_rows(results), num_cols=(1, 2, 3, 4)))
     out.append("<p class='mut small'><a href='fixed_band_ledger.csv'>Per-game ATS data</a> · "
                "<a href='fixed_band_summary.csv'>Season results</a>. "
@@ -1342,8 +1385,20 @@ def render_all(out_dir, data=DATA, now=None):
     if latest is not None:
         latest['ats_locks'] = ats_locks.display_records(data)
     ledger = load_ledger(data)
+    if latest is not None:
+        latest['pooled_ats'] = season_ats.build(latest, ledger)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
+    if latest is not None and len(latest['pooled_ats']):
+        pooled = latest['pooled_ats']
+        fields = ['game_id', 'season', 'week', 'home', 'away', 'ats_basis', 'ats_status',
+                  'generated_utc', 'lock_at_utc', 'policy_version', 'fixed_band_spread',
+                  'spread_line', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
+                  'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units']
+        pooled.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(
+            out / 'ats_2026_results.csv', index=False)
+    else:
+        (out / 'ats_2026_results.csv').unlink(missing_ok=True)
     if latest is not None and latest['ats_locks']:
         locked_rows = []
         for row in latest['ats_locks'].values():
@@ -1406,6 +1461,10 @@ def published_report(data):
             parts.append(f"\n\n{'=' * 78}\n{title} (from data/latest/{name})\n{'=' * 78}\n\n{source.read_text()}")
     parts.append('\n\nAppendix C: current production sanity checks\n\n' + production_sanity.report(data))
     parts.append('\n\nATS 60-minute capture policy\n\n' + ats_locks.report(data))
+    latest = load_latest(data / 'latest')
+    if latest is not None:
+        latest['ats_locks'] = ats_locks.display_records(data)
+        parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(season_ats.build(latest, load_ledger(data))))
     calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
     if calibration.exists():
         parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())
