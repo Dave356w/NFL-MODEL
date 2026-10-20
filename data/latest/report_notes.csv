@@ -34,6 +34,7 @@ CHI,00-0039071,Tyrique Stevenson,CB,DB,0.07127659574468086,6.0,Questionable,Hip,
 CIN,00-0036410,Tee Higgins,WR,WRTE,0.20059880239520958,5.0,Questionable,Groin,not on a week-7 report yet,0.0,none
 CIN,00-0036900,Ja'Marr Chase,WR,WRTE,0.18263473053892215,5.0,Questionable,Concussion,not on a week-7 report yet,0.0,none
 CIN,00-0037193,Bryan Cook,S,DB,0.1271186440677966,5.0,Questionable,Ankle,not on a week-7 report yet,0.0,none
+CIN,00-0034613,Tanner Hudson,TE,WRTE,0.06287425149700598,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
 CIN,00-0034446,Jalen Davis,DB,DB,0.060092449922958396,,,,Reserve/Injured (IR) on wk 5 roster,1.0,none
 CLE,00-0040579,Carson Schwesinger,LB,LB,0.5045703839122486,6.0,Questionable,Ankle,not on a week-7 report yet,0.0,none
 CLE,00-0040784,Quinshon Judkins,RB,RB,0.3825503355704698,6.0,Questionable,Ankle,not on a week-7 report yet,0.0,none
@@ -49,6 +50,7 @@ DEN,00-0038552,Riley Moss,CB,DB,0.09715475364330327,6.0,Questionable,Ribs,not on
 DEN,00-0036874,Pat Surtain II,CB,DB,0.0798056904927134,6.0,Out,Ankle,not on a week-7 report yet,0.0,none
 DEN,00-0040134,Pat Bryant,WR,WRTE,0.07244897959183673,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
 DET,00-0040672,Tyleik Williams,DT,DL,0.14074717636837533,5.0,Questionable,Foot,not on a week-7 report yet,0.0,none
+DET,00-0035707,Devin White,LB,LB,0.06550802139037433,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
 DET,00-0035637,Rock Ya-Sin,CB,DB,0.06540583136327817,5.0,Out,Hamstring,not on a week-7 report yet,0.0,none
 GB,00-0041470,Brandon Cisse,CB,DB,0.18188512518409425,6.0,Questionable,Hip,not on a week-7 report yet,0.0,none
 GB,00-0039850,Edgerrin Cooper,LB,LB,0.15714285714285714,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
@@ -83,6 +85,7 @@ MIN,00-0035249,Josh Oliver,TE,WRTE,0.05664263645726056,,,,Reserve/Injured (IR) o
 NE,00-0040734,TreVeyon Henderson,RB,RB,0.24842767295597484,6.0,Questionable,Ankle,not on a week-7 report yet,0.0,none
 NE,00-0036813,Christian Elliss,LB,LB,0.23774765380604795,6.0,Questionable,Chest,not on a week-7 report yet,0.0,none
 NE,00-0040699,Will Campbell,T,OL,0.16330785267546907,6.0,Questionable,Knee,not on a week-7 report yet,0.0,none
+NE,00-0037816,Romeo Doubs,WR,WRTE,0.1495766698024459,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
 NE,00-0040716,Craig Woodson,S,DB,0.1484375,6.0,Questionable,Shoulder,not on a week-7 report yet,0.0,none
 NE,00-0034778,Carlton Davis III,CB,DB,0.09809027777777778,6.0,Out,Neck,not on a week-7 report yet,0.0,none
 NE,00-0036187,Reggie Gilliam,RB,RB,0.07861635220125786,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
@@ -120,14 +123,12 @@ PIT,00-0036139,Rico Dowdle,RB,RB,0.07368421052631578,6.0,Questionable,Toe,not on
 PIT,00-0039739,Roman Wilson,WR,WRTE,0.06111111111111111,6.0,Out,Finger,Reserve/Injured (IR) on wk 6 roster,1.0,none
 SEA,00-0038922,Drake Thomas,LB,LB,0.1678986272439282,6.0,Out,Ankle,not on a week-7 report yet,0.0,none
 SEA,00-0041512,Jadarian Price,RB,RB,0.06168831168831169,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
-SF,00-0034982,Dre Greenlaw,LB,LB,0.296474358974359,,,,Reserve/Non-football illness on wk 6 roster,1.0,none
-SF,00-0035719,Deebo Samuel Sr.,WR,WRTE,0.16725559481743227,6.0,Out,Hamstring,not on a week-7 report yet,0.0,none
-SF,00-0031408,Mike Evans,WR,WRTE,0.14487632508833923,6.0,Questionable,Ribs,not on a week-7 report yet,0.0,none
-SF,00-0040185,Marques Sigle,S,DB,0.1376075058639562,6.0,Out,Ankle,not on a week-7 report yet,0.0,none
-SF,00-0040152,Upton Stout,CB,DB,0.12118842845973417,6.0,Questionable,Shoulder,not on a week-7 report yet,0.0,none
-SF,00-0041557,Gracen Halton,DT,DL,0.10891089108910891,6.0,Questionable,Quadricep,not on a week-7 report yet,0.0,none
-SF,00-0036844,Garret Wallow,LB,LB,0.0673076923076923,6.0,Out,Hamstring,not on a week-7 report yet,0.0,none
-SF,00-0034854,KhaDarel Hodge,WR,WRTE,0.05889281507656066,,,,not on wk 6 roster (left team),1.0,none
+SF,00-0034982,Dre Greenlaw,LB,LB,0.22256568778979907,,,,Reserve/Non-football illness on wk 6 roster,1.0,none
+SF,00-0031408,Mike Evans,WR,WRTE,0.13761467889908258,6.0,Questionable,Ribs,not on a week-7 report yet,0.0,none
+SF,00-0035719,Deebo Samuel Sr.,WR,WRTE,0.12729357798165136,6.0,Out,Hamstring,not on a week-7 report yet,0.0,none
+SF,00-0040152,Upton Stout,CB,DB,0.11296436694465505,6.0,Questionable,Shoulder,not on a week-7 report yet,0.0,none
+SF,00-0041557,Gracen Halton,DT,DL,0.0994718309859155,6.0,Questionable,Quadricep,not on a week-7 report yet,0.0,none
+SF,00-0040185,Marques Sigle,S,DB,0.0887035633055345,6.0,Out,Ankle,not on a week-7 report yet,0.0,none
 TB,00-0034855,Baker Mayfield,QB,QB,0.23381294964028776,6.0,Out,Thumb,not on a week-7 report yet,0.0,none
 TB,00-0041502,Josiah Trotter,LB,LB,0.18146718146718147,6.0,Questionable,Knee,not on a week-7 report yet,0.0,none
 TB,00-0036411,Antoine Winfield Jr.,S,DB,0.09636517328825021,6.0,Out,Rib,not on a week-7 report yet,0.0,none
