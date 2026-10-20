@@ -61,7 +61,8 @@ jobs:
     needs: plan
     if: needs.plan.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 75
+    # 75 for the build plus up to 90 holding for an ATS cutoff (ats_wait.py).
+    timeout-minutes: 180
     steps:
       # Latest main when the job STARTS (not the queued trigger commit), so a
       # run that waited in site-build builds on the ledger the previous run
@@ -104,6 +105,7 @@ jobs:
       # and renders public/. A model failure exits non-zero before any page
       # is written: no artifact, no deploy, last good site stays live.
       - name: Run model and build site
+        id: build
         env:
           NFL_STATE_DIR: data
           NFL_CACHE_DIR: .nfl_cache
@@ -125,7 +127,38 @@ jobs:
           python validate_data_files.py
           python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
 
+      # GitHub drops and delays scheduled runs, so polls cannot be trusted to
+      # land between T-60 and kickoff. A run that finishes within 90 minutes
+      # of a cutoff with a saved candidate stays alive (still holding
+      # site-build), refreshes once shortly before it, then finalizes at the
+      # cutoff and commits. It finalizes only candidates saved by the cutoff.
+      - name: Hold for the 60-minute ATS cutoff
+        if: ${{ !cancelled() }}
+        timeout-minutes: 100
+        # A failed hold must not block deploying the build it follows; the
+        # next step still commits whatever it wrote.
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NFL_STATE_DIR: data
+          NFL_CACHE_DIR: .nfl_cache
+          NFL_OUTPUT_ROOT: runs
+          NFL_SEASON: ${{ github.event.inputs.season }}
+          NFL_WEEK: ${{ github.event.inputs.week }}
+          OUT_DIR: public
+        run: python ats_wait.py
+
+      # Safety net: commit anything the hold step wrote before failing.
+      - name: Commit ATS locks
+        if: ${{ !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python validate_data_files.py
+          python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
+
       - name: Upload Pages artifact
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
