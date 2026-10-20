@@ -2,6 +2,7 @@
 import csv
 import datetime as dt
 import json
+import subprocess
 from pathlib import Path
 from statistics import NormalDist
 
@@ -181,9 +182,56 @@ def test_checkout_only_moves_after_a_successful_commit(monkeypatch):
     monkeypatch.setattr(w, 'run', run)
     fail = False
     w.commit('ledger')
-    assert calls == ['validate_data_files.py', 'commit_data.py', 'git fetch', 'git reset']
+    assert calls == ['validate_data_files.py', 'commit_data.py', 'git fetch', 'git diff', 'git reset']
     calls.clear()
     fail = True
     with pytest.raises(w.subprocess.CalledProcessError):
         w.commit('ledger')
     assert calls == ['validate_data_files.py', 'commit_data.py']
+
+
+def git(cwd, *args):
+    return subprocess.run(['git', *args], cwd=cwd, check=True, capture_output=True, text=True).stdout.strip()
+
+
+@pytest.fixture
+def stale_checkout(tmp_path, monkeypatch):
+    """A job checkout one commit behind main, as after the build's own commit step."""
+    remote, job, bot = tmp_path / 'remote.git', tmp_path / 'job', tmp_path / 'bot'
+    git(tmp_path, 'init', '-q', '--bare', '-b', 'main', str(remote))
+    git(tmp_path, 'clone', '-q', str(remote), str(bot))
+    git(bot, 'config', 'user.email', 't@t'), git(bot, 'config', 'user.name', 't')
+    (bot / 'data').mkdir()
+    (bot / 'data/ledger.jsonl').write_text('a\n')
+    git(bot, 'add', '.'), git(bot, 'commit', '-qm', 'base'), git(bot, 'push', '-q', 'origin', 'main')
+    git(tmp_path, 'clone', '-q', str(remote), str(job))
+    (bot / 'data/ledger.jsonl').write_text('a\nb\n')  # what the build's commit step landed
+    git(bot, 'commit', '-qam', 'ledger'), git(bot, 'push', '-q', 'origin', 'main')
+    (job / 'data/ledger.jsonl').write_text('a\nb\n')  # the job's working tree after that commit
+    monkeypatch.chdir(job)
+    return job, bot
+
+
+def test_sync_moves_a_stale_checkout_when_data_matches_main(stale_checkout):
+    job, bot = stale_checkout
+    assert git(job, 'status', '--porcelain', 'data')  # the bug: committed data looks uncommitted
+    assert w.sync() is True
+    assert git(job, 'rev-parse', 'HEAD') == git(bot, 'rev-parse', 'HEAD')
+    assert git(job, 'status', '--porcelain', 'data') == ''
+
+
+def test_sync_keeps_uncommitted_data(stale_checkout):
+    job, bot = stale_checkout
+    (job / 'data/ledger.jsonl').write_text('a\nb\nlock\n')  # a lock row the hold never committed
+    before = git(job, 'rev-parse', 'HEAD')
+    assert w.sync() is False
+    assert git(job, 'rev-parse', 'HEAD') == before
+    assert (job / 'data/ledger.jsonl').read_text() == 'a\nb\nlock\n'
+
+
+def test_sync_survives_an_unreachable_remote(stale_checkout):
+    job, bot = stale_checkout
+    git(job, 'remote', 'set-url', 'origin', str(job.parent / 'missing.git'))
+    before = git(job, 'rev-parse', 'HEAD')
+    assert w.sync() is False
+    assert git(job, 'rev-parse', 'HEAD') == before

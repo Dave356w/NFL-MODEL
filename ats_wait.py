@@ -71,17 +71,30 @@ def run(*cmd, check=True):
     return subprocess.run(cmd, check=check).returncode
 
 
-def commit(message):
-    """Commit data/ and move the checkout to the new tip.
+def sync():
+    """Move the checkout to main's tip when that loses nothing in data/.
 
-    commit_data.py pins its first attempt to the checked-out HEAD, so a second
-    commit from a stale checkout would read this job's own first commit as a
-    clashing write. Only reset after a successful commit: nothing is lost.
+    commit_data.py pins its first attempt to the checked-out HEAD. After any
+    earlier commit in this job (including the build's own commit step), a
+    stale checkout reads that commit as a clashing write and falls back to an
+    unverified push. Reset only when data/ already matches the tip; otherwise
+    keep the checkout and let commit_data's clash check decide.
     """
+    if run('git', 'fetch', '--quiet', 'origin', 'main', check=False) != 0:
+        print('sync: fetch failed; keeping the checkout', flush=True)
+        return False
+    if run('git', 'diff', '--quiet', 'FETCH_HEAD', '--', 'data', check=False) != 0:
+        print('sync: data/ differs from main; keeping the checkout', flush=True)
+        return False
+    run('git', 'reset', '--quiet', '--hard', 'FETCH_HEAD')
+    return True
+
+
+def commit(message):
+    """Commit data/, then move the checkout to the new tip. Never resets after a failed commit."""
     run(sys.executable, 'validate_data_files.py')
     run(sys.executable, 'commit_data.py', '--branch', 'main', '--message', message)
-    run('git', 'fetch', '--quiet', 'origin', 'main')
-    run('git', 'reset', '--quiet', '--hard', 'FETCH_HEAD')
+    sync()
 
 
 def stamp(now):
@@ -105,7 +118,11 @@ def finalize_locks():
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--max-wait-minutes', type=float, default=MAX_WAIT_MINUTES)
+    ap.add_argument('--sync-only', action='store_true', help='only move the checkout to main (see sync)')
     args = ap.parse_args(argv)
+    sync()
+    if args.sync_only:
+        return 0
     clock = lambda: dt.datetime.now(dt.timezone.utc)  # noqa: E731
     horizon = clock() + dt.timedelta(minutes=args.max_wait_minutes)
     due = pending(DATA, clock(), horizon)
