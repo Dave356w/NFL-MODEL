@@ -244,6 +244,22 @@ class SeasonATS(unittest.TestCase):
         s.build(latest,b.load_ledger(data))
         self.assertEqual(saved,latest['ats_locks'])
 
+    def test_recovered_candidate_grades_once_and_keeps_backend_source(self):
+        latest, native = self.fixture()
+        saved = latest['ats_locks'][(m.REVISION, 'overlap')]
+        saved.update(selected_side='away', fixed_band_spread=7., market_spread=7.5,
+                     recovered_after_kickoff=True, finalized_utc='2026-10-20T04:00:00+00:00')
+        pool = s.build(latest, native)
+        row = pool.set_index('game_id').loc['overlap']
+        self.assertEqual((row.ats_basis, row.ats_status, row.fixed_band_ats_result),
+                         ('Recovered saved forecast', 'graded', 'W'))
+        self.assertEqual(row.fixed_band_ats_team, 'TEN')
+        self.assertAlmostEqual(row.fixed_band_ats_units, 1/1.1)
+        self.assertEqual(pool.game_id.nunique(), len(pool))
+        self.assertIn('Recovered saved forecast: 1-0-0', s.report(pool))
+        latest['pooled_ats'] = pool
+        self.assertEqual(b.public_ats(latest).set_index('game_id').loc['overlap'].fixed_band_ats_result, 'W')
+
 
 if __name__=='__main__':
     unittest.main()

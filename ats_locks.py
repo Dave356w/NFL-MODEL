@@ -1,8 +1,10 @@
 """Immutable ATS decisions at kickoff minus 60 minutes.
 
 Candidates are observed and persisted before the cutoff. A delayed build may
-finalize the latest eligible candidate, but never use post-cutoff inputs or
-backfill a game after kickoff. Earlier moneyline and ATS archives stay intact.
+finalize the latest eligible candidate, but never use post-cutoff inputs.
+Delayed finalization can recover an existing candidate for 48 hours after
+kickoff, explicitly labelled separately from pregame finalizations.
+Earlier moneyline and ATS archives stay intact.
 
 v2 (owner decision 2026-10-19): a zero edge takes the market favorite. Rows saved
 under v1 keep their bytes and validate against v1's skip; grading and display
@@ -25,6 +27,8 @@ POLICY_VERSION = 'median-mov-ats-t60-favtie-2026-10-19-v2'
 POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, POLICY_VERSION: True}
 ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T05:05:26+00:00')
 LEAD_MINUTES = 60
+FINALIZATION_GRACE_HOURS = 48
+RECOVERY_POLICY = 'saved-candidate-recovery-2026-10-20-v1'
 CANDIDATES = 'ats_lock_candidates.jsonl'
 LOCKS = 'ats_locks.jsonl'
 EPS = 1e-10
@@ -129,8 +133,11 @@ def validate_store(data='data'):
         if candidate is None or any(row.get(k) != v for k, v in candidate.items()):
             raise ValueError('ATS lock differs from its saved candidate')
         cutoff, finalized, kickoff = utc(row['lock_at_utc']), utc(row['finalized_utc']), utc(row['kickoff_utc'])
-        if not cutoff <= finalized < kickoff:
-            raise ValueError('ATS lock finalized outside the pregame lock window')
+        recovered = finalized >= kickoff
+        if (not cutoff <= finalized <= kickoff + dt.timedelta(hours=FINALIZATION_GRACE_HOURS)
+                or row.get('recovered_after_kickoff', False) != recovered
+                or (recovered and row.get('finalization_policy_version') != RECOVERY_POLICY)):
+            raise ValueError('ATS lock finalized outside the allowed window or missing recovery metadata')
         eligible = [c for c in candidates if key(c) == key(row)
                     and c['kickoff_utc'] == row['kickoff_utc']]
         newest = max(eligible, key=lambda c: (utc(c['generated_utc']), utc(c['observed_utc'])))
@@ -140,7 +147,7 @@ def validate_store(data='data'):
 
 
 def record(data='data', now=None):
-    """Save refreshes before T−60; freeze their latest eligible decision after it."""
+    """Save refreshes before T−60; finalize only already-persisted candidates."""
     import nfl_model as m
     from schedule_gate import kickoff
 
@@ -216,14 +223,17 @@ def record(data='data', now=None):
     for row in candidates:
         scheduled_ko = scheduled.get(key(row), utc(row['kickoff_utc']))
         if (key(row) not in locked and scheduled_ko == utc(row['kickoff_utc'])
-                and utc(row['lock_at_utc']) <= now < scheduled_ko):
+                and utc(row['lock_at_utc']) <= now <= scheduled_ko + dt.timedelta(hours=FINALIZATION_GRACE_HOURS)):
             grouped.setdefault(key(row), []).append(row)
     frozen = []
     for rows in grouped.values():
         # Do not change a lock if a provider later moves kickoff. Each decision
         # contains the kickoff and deadline known when its candidate was saved.
         row = max(rows, key=lambda r: (utc(r['generated_utc']), utc(r['observed_utc'])))
-        frozen.append(dict(row, finalized_utc=now.isoformat()))
+        lock = dict(row, finalized_utc=now.isoformat())
+        if now >= utc(row['kickoff_utc']):
+            lock.update(recovered_after_kickoff=True, finalization_policy_version=RECOVERY_POLICY)
+        frozen.append(lock)
     append(data / LOCKS, frozen)
     validate_store(data)
     return {'candidates': len(added), 'locks': len(frozen)}
@@ -251,11 +261,15 @@ def report(data='data'):
              'them as favorite bets, labelled separately.',
              'Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.',
              'Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.',
-             'Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.',
+             f'An already-saved candidate may be finalized up to {FINALIZATION_GRACE_HOURS} hours after kickoff '
+             f'under {RECOVERY_POLICY}; its actual finalization time and recovery flag are retained.',
+             'Recovered saved forecasts are reported separately from pregame-finalized locks. '
+             'Missing pre-cutoff candidates are never reconstructed.',
              'The moneyline ledger and earlier ATS shadow archive retain their original timing and records.',
-             f'Store validation: PASS; {info["candidates"]} saved candidates, {info["locks"]} timed locks.']
+             f'Store validation: PASS; {info["candidates"]} saved candidates, {info["locks"]} finalized saved decisions.']
     for row in read(Path(data) / LOCKS):
         lag = (utc(row['lock_at_utc']) - utc(row['generated_utc'])).total_seconds() / 60
         lines.append(f'{row["game_id"]}: {row["selected_side"] or "skip"}; cutoff {row["lock_at_utc"]}; '
-                     f'forecast {row["generated_utc"]} ({lag:.1f} min before cutoff); finalized {row["finalized_utc"]}')
+                     f'forecast {row["generated_utc"]} ({lag:.1f} min before cutoff); finalized {row["finalized_utc"]}; '
+                     f'{"recovered saved forecast" if row.get("recovered_after_kickoff") else "pregame finalization"}')
     return '\n'.join(lines)

@@ -91,7 +91,8 @@ def inspect(data='data'):
         inventory = ats_locks.validate_store(data)
         timed = ats_locks.read(data / ats_locks.LOCKS)
         capture = dict(policy=ats_locks.POLICY_VERSION, candidates=inventory['candidates'],
-                       timed_locks=inventory['locks'],
+                       timed_locks=sum(not r.get('recovered_after_kickoff') for r in timed),
+                       recovered_saved_forecasts=sum(bool(r.get('recovered_after_kickoff')) for r in timed),
                        original_selections=sum(bool(r.get('selected_side')) for r in timed),
                        original_skips=sum(not r.get('selected_side') for r in timed),
                        backfilled_skips=sum(ats_locks.backfilled(r) for r in timed))
@@ -257,6 +258,8 @@ def report(data='data'):
               f"Primary 60-minute ATS capture: {json.dumps(audit['ats_capture'],sort_keys=True)}",
               'Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; '
               'retrospectively backfilled favorite bets are excluded from forward evidence.',
+              'Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; '
+              'they are reported separately from pregame-finalized forward locks.',
               'The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.',
               'Never backfill median ATS locks for games that finished before adoption.',
               'The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.',

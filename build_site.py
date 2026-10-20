@@ -880,7 +880,8 @@ def ats_card_state(latest, row, now):
     if saved is not None:
         ms, line = num(saved['fixed_band_spread']), num(saved['market_spread'])
         status = 'locked'
-        source = 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock'
+        source = ('Recovered saved forecast' if saved.get('recovered_after_kickoff')
+                  else 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock')
         when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
         note = f'ATS locked {when}'
     elif completed is not None:
@@ -1131,7 +1132,7 @@ def pooled_2026_v118_header(latest, ledger):
 # Every public season surface uses the same deduplicated pool. Provenance stays
 # in season_ats and the repository report rather than the customer interface.
 PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', '60-minute lock',
-                'Recorded pregame', 'Backfilled recorded skip', 'Awaiting ATS lock'}
+                'Recorded pregame', 'Recovered saved forecast', 'Backfilled recorded skip', 'Awaiting ATS lock'}
 BREAK_EVEN = 110 / 210
 
 
@@ -1495,6 +1496,9 @@ def main(argv=None):
     ap.add_argument("--out", default=os.environ.get("OUT_DIR", "public"))
     args = ap.parse_args(argv)
     if not args.pages_only:
+        # Finalize persisted inputs before the expensive model refresh. Even a
+        # later model failure must not strand an eligible pre-cutoff candidate.
+        print(f"ATS saved capture: {ats_locks.record(DATA)}")
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"snapshot: {season} week {week} -> {LATEST}")
