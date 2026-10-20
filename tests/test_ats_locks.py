@@ -115,12 +115,56 @@ class TimedATS(unittest.TestCase):
         a.record(self.data, CUTOFF + dt.timedelta(minutes=6))
         self.assertEqual(before, [p.read_bytes() for p in paths])
 
-    def test_no_finalization_at_or_after_kickoff(self):
+    def test_recovery_uses_latest_saved_candidate_and_preserves_original_bytes(self):
+        first = CUTOFF - dt.timedelta(minutes=20)
+        latest = CUTOFF - dt.timedelta(minutes=2)
+        self.board(first)
+        a.record(self.data, first)
+        self.board(latest, spread_line=7.5)
+        a.record(self.data, latest)
+        before = (self.data / a.CANDIDATES).read_bytes()
+        # Completed-board data must not replace the saved line or selection.
+        self.board(KO + dt.timedelta(hours=4), model_wp=.9, spread_line=3., result=6)
+        now = KO + dt.timedelta(hours=12)
+        self.assertEqual(a.record(self.data, now), {'candidates': 0, 'locks': 1})
+        saved = self.locks()[0]
+        self.assertEqual((saved['generated_utc'], saved['market_spread'], saved['selected_side']),
+                         (latest.isoformat(), 7.5, 'away'))
+        self.assertEqual(saved['finalized_utc'], now.isoformat())
+        self.assertTrue(saved['recovered_after_kickoff'])
+        self.assertEqual(saved['finalization_policy_version'], a.RECOVERY_POLICY)
+        self.assertEqual((self.data / a.CANDIDATES).read_bytes(), before)
+        locked = (self.data / a.LOCKS).read_bytes()
+        a.record(self.data, now + dt.timedelta(minutes=5))
+        self.assertEqual((self.data / a.LOCKS).read_bytes(), locked)
+        self.assertIn('recovered saved forecast', a.report(self.data))
+
+    def test_recovery_window_includes_kickoff_and_48_hours_but_not_later(self):
+        for hours, seconds, allowed in [(0, 0, True), (48, 0, True), (48, 1, False)]:
+            with self.subTest(hours=hours, seconds=seconds):
+                for name in (a.CANDIDATES, a.LOCKS):
+                    (self.data / name).unlink(missing_ok=True)
+                self.board(CUTOFF - dt.timedelta(minutes=2))
+                a.record(self.data, CUTOFF - dt.timedelta(minutes=2))
+                a.record(self.data, KO + dt.timedelta(hours=hours, seconds=seconds))
+                self.assertEqual(len(self.locks()), int(allowed))
+
+    def test_recovered_lock_requires_truthful_metadata_and_actual_finalization_time(self):
         self.board(CUTOFF - dt.timedelta(minutes=2))
         a.record(self.data, CUTOFF - dt.timedelta(minutes=2))
-        a.record(self.data, KO)
-        a.record(self.data, KO + dt.timedelta(minutes=5))
-        self.assertEqual(self.locks(), [])
+        a.record(self.data, KO + dt.timedelta(hours=4))
+        saved = self.locks()[0]
+        for changes in ({'recovered_after_kickoff': False}, {'finalization_policy_version': None},
+                        {'finalized_utc': (KO+dt.timedelta(hours=49)).isoformat()}):
+            with self.subTest(changes=changes):
+                (self.data / a.LOCKS).write_text(json.dumps(dict(saved, **changes))+'\n')
+                with self.assertRaisesRegex(ValueError, 'allowed window'):
+                    a.validate_store(self.data)
+
+    def test_recovery_cannot_create_a_candidate_after_cutoff(self):
+        self.board(CUTOFF - dt.timedelta(minutes=2))
+        self.assertEqual(a.record(self.data, KO + dt.timedelta(hours=4)),
+                         {'candidates': 0, 'locks': 0})
 
     def test_missing_line_or_unreported_or_completed_games_do_not_capture(self):
         for changes in ({'spread_line': ''}, {'model_wp': ''}, {'ready': False},
@@ -275,7 +319,8 @@ class TimedATS(unittest.TestCase):
 
     def test_fast_poll_is_limited_to_ats_window_even_without_moneyline_locks(self):
         game = dict(game_id='g', gameday='2026-10-25', gametime='13:00', game_type='REG', result='')
-        for minutes, due in [(91,False),(90,True),(61,True),(60,True),(50,True),(49,False),(300,False)]:
+        for minutes, due in [(121,False),(120,True),(91,True),(61,True),(60,True),
+                             (50,True),(49,True),(15,True),(14,False),(300,False)]:
             with self.subTest(minutes=minutes):
                 now = KO-dt.timedelta(minutes=minutes)
                 result = sg.decision('schedule', sg.ATS_CRON, now, games=[game], recorded=set())

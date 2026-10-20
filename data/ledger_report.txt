@@ -543,8 +543,9 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
 
 Legacy native boxscore-composite-v1.18 moneyline: {"graded": 14, "moneyline": {"bets": 13, "losses": 6, "pushes": 0, "roi": -0.208693, "units": -2.713009, "wins": 7}, "pending": 0, "snapshots": 14, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 13, "original_selections": 11, "original_skips": 2, "pending": 0, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
-Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 11, "original_selections": 0, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "timed_locks": 0}
+Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 11, "original_selections": 1, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 0}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
+Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
 Never backfill median ATS locks for games that finished before adoption.
 The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.
@@ -559,20 +560,22 @@ Policy: median-mov-ats-t60-favtie-2026-10-19-v2; adopted 2026-10-19T05:05:26+00:
 A zero edge takes the market favorite; a pick'em line with a zero mapped spread skips. Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills them as favorite bets, labelled separately.
 Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.
 Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.
-Finalization may occur after the cutoff, but must be before kickoff. Missed games are never backfilled.
+An already-saved candidate may be finalized up to 48 hours after kickoff under saved-candidate-recovery-2026-10-20-v1; its actual finalization time and recovery flag are retained.
+Recovered saved forecasts are reported separately from pregame-finalized locks. Missing pre-cutoff candidates are never reconstructed.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 11 saved candidates, 0 timed locks.
+Store validation: PASS; 11 saved candidates, 1 finalized saved decisions.
+2026_06_WAS_SF: away; cutoff 2026-10-19T23:15:00+00:00; forecast 2026-10-19T22:37:22.310305+00:00 (37.6 min before cutoff); finalized 2026-10-20T03:51:43.518926+00:00; recovered saved forecast
 
 2026 pooled ATS results
 
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 49-37-6, 0 skips, 0 pending, 1 unavailable; +7.55u, ROI +8.20% at proxy -110.
-  Awaiting ATS lock: 0-0-0, 0 skips, 0 pending, 1 unavailable; +0.00u
+Record 50-37-6, 0 skips, 0 pending, 0 unavailable; +8.45u, ROI +9.09% at proxy -110.
   Backfilled recorded skip: 0-2-0, 0 skips, 0 pending, 0 unavailable; -2.00u
   Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +9.09u
   Recorded pregame: 6-4-0, 0 skips, 0 pending, 0 unavailable; +1.45u
+  Recovered saved forecast: 1-0-0, 0 skips, 0 pending, 0 unavailable; +0.91u
   Replayed pregame forecast: 0-1-0, 0 skips, 0 pending, 0 unavailable; -1.00u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
 

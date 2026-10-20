@@ -98,7 +98,10 @@ def build(latest, ledger):
             generated_utc=saved['generated_utc'], lock_at_utc=saved['lock_at_utc'],
             model_wp=saved['model_wp'], spread_line=saved['market_spread'],
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
+            finalized_utc=saved.get('finalized_utc'),
+            recovered_after_kickoff=saved.get('recovered_after_kickoff', False),
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
+            else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
             else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
     if not rows:
         return pd.DataFrame()

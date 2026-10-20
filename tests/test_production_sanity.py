@@ -99,6 +99,18 @@ def test_primary_capture_inventory_keeps_saved_skips_separate_and_read_only(tmp_
     assert [p.read_bytes() for p in paths]==before
 
 
+def test_recovered_saved_forecast_is_not_counted_as_a_pregame_finalization(tmp_path):
+    a=s.ats_locks
+    lock=_timed_store(tmp_path)
+    lock.update(finalized_utc='2026-10-25T21:00:00+00:00', recovered_after_kickoff=True,
+                finalization_policy_version=a.RECOVERY_POLICY)
+    (tmp_path/a.LOCKS).write_text(json.dumps(lock)+'\n')
+    audit=s.inspect(tmp_path)
+    assert audit['checks']['primary_ats_store_integrity']
+    capture=audit['ats_capture']
+    assert (capture['timed_locks'],capture['recovered_saved_forecasts'])==(0,1)
+
+
 @pytest.mark.parametrize('with_history',[False,True])
 def test_corrupt_primary_lock_fails_standalone_sanity_with_or_without_history(tmp_path,with_history):
     lock=_timed_store(tmp_path)

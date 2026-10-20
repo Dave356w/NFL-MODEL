@@ -20,11 +20,16 @@ public interface and public CSVs contain ATS data only.
 
 **ATS timing (adopted 2026-10-19 UTC):** spread picks remain provisional until
 60 minutes before kickoff. Five-minute scheduled polls trigger model refreshes
-from T−90 through T−50; outside that window they skip the expensive build.
+from T−120 through T−15; outside that window they skip the expensive build.
 Each build saves eligible forecasts in `data/ats_lock_candidates.jsonl`. At or
 after T−60 it freezes the latest forecast both generated and observed by the
 cutoff into `data/ats_locks.jsonl`. A delayed run cannot use a newer line or
-forecast, and no lock may be backfilled after kickoff. The saved forecast time,
+forecast. Delayed finalization may recover an already-persisted candidate up to
+48 hours after kickoff; it cannot create a forecast from post-cutoff inputs.
+The backend labels these rows `Recovered saved forecast`, separately from
+pregame-finalized forward locks, and retains the recovery policy and actual
+finalization time. Each full build also finalizes saved candidates before running
+the model. The saved forecast time,
 cutoff and finalization time are all retained; GitHub cron does not guarantee
 delivery at an exact minute. Missing pre-cutoff forecasts show as unavailable.
 Game cards and the saved-spread-picks download preserve locked handicaps and
