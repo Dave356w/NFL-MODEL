@@ -148,12 +148,15 @@ jobs:
           OUT_DIR: public
         run: python ats_wait.py
 
-      # Safety net: commit anything the hold step wrote before failing.
+      # Safety net: commit anything the hold step wrote before failing. Sync
+      # first so the signed commit is pinned to main's tip, not this job's
+      # stale checkout (the sync never discards uncommitted data/).
       - name: Commit ATS locks
         if: ${{ !cancelled() }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
+          python ats_wait.py --sync-only
           python validate_data_files.py
           python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
 
