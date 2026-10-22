@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-22 22:22 UTC
+NFL forward ledger report -- 2026-10-22 23:06 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -545,7 +545,7 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
 
 Legacy native boxscore-composite-v1.18 moneyline: {"graded": 14, "moneyline": {"bets": 13, "losses": 6, "pushes": 0, "roi": -0.208693, "units": -2.713009, "wins": 7}, "pending": 1, "snapshots": 15, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 13, "original_selections": 11, "original_skips": 2, "pending": 0, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
-Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 14, "original_selections": 1, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 0}
+Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 15, "original_selections": 1, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 0}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
@@ -565,7 +565,7 @@ Both generated and observed timestamps must be at or before the cutoff. No post-
 An already-saved candidate may be finalized up to 48 hours after kickoff under saved-candidate-recovery-2026-10-20-v1; its actual finalization time and recovery flag are retained.
 Recovered saved forecasts are reported separately from pregame-finalized locks. Missing pre-cutoff candidates are never reconstructed.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 14 saved candidates, 1 finalized saved decisions.
+Store validation: PASS; 15 saved candidates, 1 finalized saved decisions.
 2026_06_WAS_SF: away; cutoff 2026-10-19T23:15:00+00:00; forecast 2026-10-19T22:37:22.310305+00:00 (37.6 min before cutoff); finalized 2026-10-20T03:51:43.518926+00:00; recovered saved forecast
 
 2026 pooled ATS results
