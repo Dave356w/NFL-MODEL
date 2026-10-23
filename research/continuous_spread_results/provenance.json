@@ -1,0 +1,14 @@
+{
+  "sources": {
+    "data/latest/fixed_band_ledger.csv": "21fcad346fc3887c560abe0db6fbe48ec7fa3e1f8fd7046719e4219df4f3ad9b",
+    "data/latest/board.csv": "35afdfc613a8227e09a189f3d2da7de6af7e6c471d18ba6a10eeeaeafa1419ae",
+    "research/continuous_spread.py": "27194e74ec8f67e49b7cc8f39e439f15b93b925e9191448298a3fe17f8c57aa3",
+    "fixed_bands.py": "b568588a09b9f3d3f354ea17f5dd9962ff8817f4631f29c60a6b34fc4db44683",
+    "research/CONTINUOUS_SPREAD.md": "a4ecedf5316cd51037c0c2f3ac55e2752311f1e1764d4dc0a13aa0c8d24b9d5d"
+  },
+  "scope": "research only; no production or ledger writes",
+  "latest_evaluation": [
+    2026,
+    5
+  ]
+}
