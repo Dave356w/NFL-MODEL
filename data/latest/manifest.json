@@ -1,7 +1,7 @@
 {
   "revision": "boxscore-composite-v1.18",
   "diagnostics": "v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week's own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection",
-  "generated_utc": "2026-10-24T11:34:42.348709+00:00",
+  "generated_utc": "2026-10-24T14:00:01.951852+00:00",
   "season": 2026,
   "week": 7,
   "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
@@ -53,11 +53,11 @@
     {
       "source": "roster_status_codes",
       "counts": {
-        "ACT": 190124,
-        "DEV": 56760,
+        "ACT": 190121,
+        "DEV": 56759,
         "RES": 37570,
         "INA": 23857,
-        "CUT": 17765,
+        "CUT": 17769,
         "RET": 2148,
         "NWT": 604,
         "PUP": 321,
@@ -91,7 +91,7 @@
       "qb_depth_chart_missing": 0,
       "qb_depth_chart_no_available_qb": 0,
       "qb_questionable_blend": 140,
-      "game_week_reserve_added": 5327,
+      "game_week_reserve_added": 5331,
       "injury_report_final": 3854,
       "injury_report_practice_only": 96,
       "injury_report_none": 6,
