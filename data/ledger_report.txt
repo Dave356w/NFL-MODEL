@@ -571,7 +571,7 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
 
 Legacy native boxscore-composite-v1.18 moneyline: {"graded": 16, "moneyline": {"bets": 15, "losses": 6, "pushes": 0, "roi": -0.09670426666666665, "units": -1.4505639999999997, "wins": 9}, "pending": 12, "snapshots": 28, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 13, "original_selections": 11, "original_skips": 2, "pending": 0, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
-Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 193, "original_selections": 11, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 10}
+Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 193, "original_selections": 13, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 12}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
 The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.
@@ -591,7 +591,7 @@ Both generated and observed timestamps must be at or before the cutoff. No post-
 An already-saved candidate may be finalized up to 48 hours after kickoff under saved-candidate-recovery-2026-10-20-v1; its actual finalization time and recovery flag are retained.
 Recovered saved forecasts are reported separately from pregame-finalized locks. Missing pre-cutoff candidates are never reconstructed.
 The moneyline ledger and earlier ATS shadow archive retain their original timing and records.
-Store validation: PASS; 193 saved candidates, 11 finalized saved decisions.
+Store validation: PASS; 193 saved candidates, 13 finalized saved decisions.
 2026_06_WAS_SF: away; cutoff 2026-10-19T23:15:00+00:00; forecast 2026-10-19T22:37:22.310305+00:00 (37.6 min before cutoff); finalized 2026-10-20T03:51:43.518926+00:00; recovered saved forecast
 2026_07_NE_CHI: home; cutoff 2026-10-22T23:15:00+00:00; forecast 2026-10-22T23:05:01.030213+00:00 (10.0 min before cutoff); finalized 2026-10-22T23:15:20.608230+00:00; pregame finalization
 2026_07_PIT_NO: away; cutoff 2026-10-25T12:30:00+00:00; forecast 2026-10-25T12:20:01.080729+00:00 (10.0 min before cutoff); finalized 2026-10-25T12:30:20.628458+00:00; pregame finalization
@@ -603,6 +603,8 @@ Store validation: PASS; 193 saved candidates, 11 finalized saved decisions.
 2026_07_TB_CAR: home; cutoff 2026-10-25T16:00:00+00:00; forecast 2026-10-25T15:50:00.602417+00:00 (10.0 min before cutoff); finalized 2026-10-25T16:00:20.365029+00:00; pregame finalization
 2026_07_CIN_BAL: away; cutoff 2026-10-25T16:00:00+00:00; forecast 2026-10-25T15:50:00.602417+00:00 (10.0 min before cutoff); finalized 2026-10-25T16:00:20.365029+00:00; pregame finalization
 2026_07_DEN_ARI: home; cutoff 2026-10-25T19:05:00+00:00; forecast 2026-10-25T18:55:01.125315+00:00 (10.0 min before cutoff); finalized 2026-10-25T19:05:20.640590+00:00; pregame finalization
+2026_07_GB_DET: away; cutoff 2026-10-25T19:25:00+00:00; forecast 2026-10-25T19:15:01.073917+00:00 (10.0 min before cutoff); finalized 2026-10-25T19:25:20.000173+00:00; pregame finalization
+2026_07_LA_LV: home; cutoff 2026-10-25T19:25:00+00:00; forecast 2026-10-25T19:15:01.073917+00:00 (10.0 min before cutoff); finalized 2026-10-25T19:25:20.000173+00:00; pregame finalization
 
 2026 pooled ATS results
 
@@ -610,8 +612,8 @@ Store validation: PASS; 193 saved candidates, 11 finalized saved decisions.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
 Record 52-37-6, 0 skips, 12 pending, 0 unavailable; +10.27u, ROI +10.81% at proxy -110.
-  60-minute lock: 2-0-0, 0 skips, 8 pending, 0 unavailable; +1.82u
-  Awaiting ATS lock: 0-0-0, 0 skips, 4 pending, 0 unavailable; +0.00u
+  60-minute lock: 2-0-0, 0 skips, 10 pending, 0 unavailable; +1.82u
+  Awaiting ATS lock: 0-0-0, 0 skips, 2 pending, 0 unavailable; +0.00u
   Backfilled recorded skip: 0-2-0, 0 skips, 0 pending, 0 unavailable; -2.00u
   Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +9.09u
   Recorded pregame: 6-4-0, 0 skips, 0 pending, 0 unavailable; +1.45u
