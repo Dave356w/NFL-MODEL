@@ -148,6 +148,35 @@ def test_unpriced_cohort_has_no_profit_or_roi_even_when_losses_known():
     assert np.isnan(summary['units']) and np.isnan(summary['roi'])
 
 
+def test_explicit_minus110_pool_includes_all_missing_wins_losses_and_pushes():
+    frame = pd.DataFrame([dict(game_id='missing', spread_line=3., fixed_band_ats_side='home',
+        fixed_band_ats_result=grade, fixed_band_ats_units=proxy)
+        for grade, proxy in [('W', 10/11), ('L', -1.), ('P', 0.)]])
+    out = s.price(frame, [], assume_unmatched=True)
+    result = s.summary(out)
+    assert out.ats_price.tolist() == [-110.] * 3
+    assert set(out.ats_price_basis) == {'assumed_minus110'}
+    assert set(out.ats_match_status) == {'missing_quote'}
+    assert result['priced_bets'] == result['assumed_prices'] == 3
+    assert result['quoted_bets'] == result['unpriced'] == 0
+    assert result['units'] == pytest.approx(10/11-1)
+    assert result['roi'] == pytest.approx((10/11-1)/3)
+    assert out.ats_home_odds.isna().all()  # no invented provider price for baselines
+    assert out.ats_cumulative_units.iloc[-1] == pytest.approx(result['units'])
+
+
+def test_pooled_price_fallback_never_replaces_a_matched_espn_price():
+    frame = pd.DataFrame([dict(game_id=game, spread_line=3., fixed_band_ats_side='home',
+        fixed_band_ats_result='W', fixed_band_ats_units=10/11)
+        for game in ['2026_07_TEN_IND', 'missing']])
+    out = s.price(frame, [evidence()], assume_unmatched=True)
+    result = s.summary(out)
+    assert out.ats_price.tolist() == [-125., -110.]
+    assert result['closing_estimates'] == result['assumed_prices'] == 1
+    assert result['units'] == pytest.approx(.8 + 10/11)
+    assert result['roi'] == pytest.approx((.8 + 10/11)/2)
+
+
 def test_espn_final_score_cannot_create_selection():
     latest = dict(manifest={'revision': 'test'}, espn_archive=[evidence()])
     out = s.build(latest, pd.DataFrame())

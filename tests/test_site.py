@@ -618,10 +618,9 @@ def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_pat
     for game in public.game_id:
         assert grades.count(f"data-game-id='{game}'") == 1
     performance = (out / 'market-calibration.html').read_text()
-    # Unpriced picks cannot enter the running profit chart.
-    assert stats['priced_bets'] == 0
-    assert 'Unpriced picks stay in the W–L–P record' in performance
-    assert '<polyline' not in performance
+    assert stats['priced_bets'] == stats['assumed_prices'] == 3
+    assert 'assumed −110 in pooled units and ROI' in performance
+    assert f"Pick {stats['bets']}" in performance
     assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 
 

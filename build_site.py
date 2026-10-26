@@ -477,7 +477,7 @@ def html_document(body, title, current, built, scripts=""):
             f"<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme' title='Toggle theme'>{THEME_ICON}</button></header>"
             f"<main id='main-content'>{body}</main>"
             f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span></span>"
-            "<span>Flat 1-unit stakes. ESPN prices matched to the listed handicap; closing estimates are labelled.</span>"
+            "<span>Flat 1-unit stakes. ESPN prices and assumed −110 prices are labelled; returns are estimates.</span>"
             f"</footer></div>{scripts}</body></html>")
 
 
@@ -626,7 +626,7 @@ def spread_headline(latest, season=None):
             basis = pooled_basis_text(pooled)
             return (f"<div class='record'><div class='l'>Spread results · 2026</div>"
                     f"<div class='mono'>{spread_record_text(r)}<div class='mut small'>"
-                    f"Season total · {esc(basis)} · matched ESPN pricing · 1-unit stakes</div></div></div>")
+                    f"Season total · {esc(basis)} · ESPN prices + labelled −110 assumptions · 1-unit stakes</div></div></div>")
     r = spread_record(latest, season)
     label = f'Spread results · {season}' if season is not None else 'Spread results · historical replay'
     text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
@@ -1030,7 +1030,8 @@ def render_index(latest, ledger, built, now=None):
         elif state['status'] == 'graded':
             detail.append("<p class='mut'>The ATS selection and listed handicap match the season results.</p>")
         if state['status'] in ('locked', 'graded'):
-            label = 'Closing estimate' if state.get('ats_price_basis') == 'closing_estimate' else 'Pre-lock price'
+            label = {'closing_estimate': 'Closing estimate', 'assumed_minus110': 'Assumed −110'}.get(
+                state.get('ats_price_basis'), 'Pre-lock price')
             detail.append(f"<p class='mut'>Spread odds {ml_text(state.get('ats_price'))} · "
                           f"{label if math.isfinite(num(state.get('ats_price'))) else 'Unpriced; excluded from ROI'}.</p>")
         if has_avail:
@@ -1185,10 +1186,10 @@ def record_tiles(frame, label):
     tiles = [stat(label, f"{r['wins']}–{r['losses']}–{r['pushes']}", f"W–L–P · {r['bets']} bets{pending}"),
              stat('Cover rate', pct(rate, 1), f"{meter}−110 reference {pct(BREAK_EVEN, 1)} · pushes excluded",
                   '' if not math.isfinite(rate) else 'good' if rate > BREAK_EVEN else 'bad'),
-             stat('Estimated units' if r['closing_estimates'] else 'Units', units_text(r['units']),
-                  f"{r['priced_bets']} priced 1-unit stakes", tone(r['units'])),
-             stat('Estimated ROI' if r['closing_estimates'] else 'ROI', roi_short(r['roi']),
-                  f"{roi_uncertainty(r['roi_se'])} · priced stakes · pushes included", tone(r['roi']))]
+             stat('Estimated units' if r['closing_estimates']+r['assumed_prices'] else 'Units', units_text(r['units']),
+                  f"{r['priced_bets']} 1-unit stakes", tone(r['units'])),
+             stat('Estimated ROI' if r['closing_estimates']+r['assumed_prices'] else 'ROI', roi_short(r['roi']),
+                  f"{roi_uncertainty(r['roi_se'])} · pooled stakes · pushes included", tone(r['roi']))]
     return f"<div class='gr-summary'>{''.join(tiles)}</div>" + pricing_note(frame)
 
 
@@ -1197,9 +1198,9 @@ def pricing_note(frame):
         return "<p class='mut small'>−110 reference pricing.</p>"
     r = season_ats.summary(frame)
     return (f"<p class='gr-note'>ESPN pricing: <b>{r['prelock_prices']} pre-lock</b> · "
-            f"<b>{r['closing_estimates']} closing estimates</b> · <b>{r['unpriced']} unpriced</b>. "
+            f"<b>{r['closing_estimates']} closing estimates</b> · <b>{r['assumed_prices']} assumed −110</b>. "
             "Prices must match the saved side and handicap. Closing estimates could differ from lock-time prices. "
-            "Unpriced picks stay in the W–L–P record and are excluded from units and ROI. "
+            "Picks without a matching ESPN price are included at an assumed −110 in pooled units and ROI. "
             "The 52.4% break-even marker is a −110 reference; actual thresholds vary with price.</p>")
 
 
@@ -1220,7 +1221,7 @@ def game_rows(group):
         units = num(r.get('fixed_band_ats_units'))
         price = ml_text(r.get('ats_price'))
         price_label = {'captured_prelock': 'Pre-lock', 'historical_prelock': 'Historical pre-lock',
-                       'closing_estimate': 'Closing estimate'}.get(r.get('ats_price_basis'), 'Unpriced')
+                       'closing_estimate': 'Closing estimate', 'assumed_minus110': 'Assumed −110'}.get(r.get('ats_price_basis'), 'Unpriced')
         tone = 'pos-tx' if units > 0 else 'neg-tx' if units < 0 else ''
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
         when = f"<div class='mut small'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</div>" if pd.notna(ko) else ''
@@ -1262,8 +1263,8 @@ def downloads(latest):
 
 def render_grades(ledger, latest, built):
     season = int(latest['manifest']['season']) if latest is not None else None
-    parts = [head('ATS results', 'All 2026 season results. Returns use matched ESPN spread prices '
-                  'and 1-unit stakes; pushes return the stake.', f'{season} season' if season else '')]
+    parts = [head('ATS results', 'All 2026 season results. Estimated returns use ESPN spread prices '
+                  'where matched and assumed −110 otherwise, with 1-unit stakes.', f'{season} season' if season else '')]
     if latest is None:
         parts.append("<p class='mut'>No picks locked yet.</p>")
     else:
@@ -1372,10 +1373,10 @@ def weekly_table(frame):
     for week, group in frame.groupby('week', sort=True):
         v = season_ats.summary(group)
         rows.append([f'Week {int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}', pct(v['cover_rate'], 1),
-                     f"{v['priced_bets']} / {v['bets']}", str(v['pending']), units_text(v['units']) if v['bets'] else '—',
+                     f"{v['quoted_bets']} / {v['assumed_prices']}", str(v['pending']), units_text(v['units']) if v['bets'] else '—',
                      f"{roi_short(v['roi'])}<div class='mut small'>{roi_uncertainty(v['roi_se'])}</div>"])
     return ("<h2 class='sec'>By week</h2>" +
-            table(['Week', 'ATS W–L–P', 'Cover rate', 'Priced / bets', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
+            table(['Week', 'ATS W–L–P', 'Cover rate', 'ESPN / assumed', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
 
 
 HOW_IT_WORKS = (
@@ -1384,7 +1385,7 @@ HOW_IT_WORKS = (
                                 "A projection equal to the line takes the market favorite."),
     ("Lock before kickoff", "The latest forecast 60 minutes before kickoff is saved. The handicap and pick never change after that."),
     ("Grade at the matched price", "Each priced pick risks 1 unit. A win pays the selected side’s spread odds; a loss costs 1u, "
-                      "a push returns the stake. Exact-handicap historical closes are labelled estimates; unpriced picks are excluded from ROI."),
+                      "a push returns the stake. Historical closes are labelled estimates; missing prices use a labelled −110 assumption in pooled returns."),
 )
 
 
@@ -1413,7 +1414,7 @@ def render_calibration(latest, ledger, built):
     # Keep the existing URL working while replacing its old probability view.
     season = int(latest['manifest']['season']) if latest is not None else None
     parts = [head('ATS performance', 'How all 2026 season picks are doing against the spread, beside simple '
-                  'baselines on the same games. Returns use matched ESPN prices and 1-unit stakes.',
+                  'baselines on the same games. Pooled returns use ESPN prices where matched and assumed −110 otherwise.',
                   f'{season} season' if season else '')]
     frame = public_ats(latest)
     if latest is None or frame.empty:
@@ -1447,7 +1448,7 @@ def render_all(out_dir, data=DATA, now=None):
                   'gameday', 'kickoff_utc', 'fixed_band_spread',
                   'spread_line', 'home_score', 'away_score', 'result', 'fixed_band_ats_side', 'fixed_band_ats_team',
                   'fixed_band_ats_handicap', 'fixed_band_ats_result', 'fixed_band_ats_units',
-                  'ats_price', 'ats_price_basis', 'ats_book', 'ats_quote_utc', 'ats_quote_age_minutes',
+                  'ats_price', 'ats_price_basis', 'ats_match_status', 'ats_book', 'ats_quote_utc', 'ats_quote_age_minutes',
                   'ats_quote_url', 'ats_evidence_sha256', 'ats_priced_stake', 'ats_cumulative_units',
                   'ats_home_odds', 'ats_away_odds']
         season_results.reindex(columns=fields).rename(columns={'fixed_band_spread': 'model_spread'}).to_csv(

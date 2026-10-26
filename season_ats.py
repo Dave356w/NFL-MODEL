@@ -144,11 +144,11 @@ def build(latest, ledger):
     frame['_time'] = frame['_time'].fillna(pd.to_datetime(frame.get('gameday', pd.Series(index=frame.index, dtype=str)), utc=True, errors='coerce'))
     frame = frame.sort_values(['week', '_time', 'game_id'], kind='stable').drop(columns='_time').reset_index(drop=True)
     if 'espn_archive' in latest:
-        frame = price(frame, latest['espn_archive'])
+        frame = price(frame, latest['espn_archive'], assume_unmatched=True)
     return frame
 
 
-def price(frame, evidence):
+def price(frame, evidence, assume_unmatched=False):
     """Keep W/L/P and saved handicaps; replace proxy returns with matched prices."""
     frame = frame.copy()
     offers = espn_spreads.quotes(evidence)
@@ -156,6 +156,11 @@ def price(frame, evidence):
     for row in frame.to_dict('records'):
         info = espn_spreads.match(row, offers)
         info.pop('espn_quote', None)
+        info['ats_match_status'] = info['ats_price_basis']
+        if (assume_unmatched and 'ats_price' not in info
+                and row.get('fixed_band_ats_side') in ('home', 'away')
+                and espn_spreads.number(row.get('spread_line')) is not None):
+            info.update(ats_price=-110., ats_price_basis='assumed_minus110')
         priced.append(info)
     prices = pd.DataFrame(priced, index=frame.index)
     for name in ('ats_price', 'ats_home_odds', 'ats_away_odds'):
@@ -185,16 +190,19 @@ def summary(frame):
         units = float(returns.sum()) if priced_bets else np.nan
         prelock = int((eligible & frame.ats_price_basis.isin(['captured_prelock', 'historical_prelock'])).sum())
         estimates = int((eligible & frame.ats_price_basis.eq('closing_estimate')).sum())
+        assumed = int((eligible & frame.ats_price_basis.eq('assumed_minus110')).sum())
     else:
         # Legacy research callers without a quote archive retain their explicit
         # -110 reference. Public builds always load an archive, even if empty.
         units = w / 1.1 - l
         returns = np.array([1 / 1.1] * w + [-1.] * l + [0.] * p)
         priced_bets, prelock, estimates = bets, 0, 0
+        assumed = 0
     status = frame.get('ats_status', pd.Series(dtype=str))
     return dict(wins=w, losses=l, pushes=p, skips=s, bets=bets, selected=bets,
                 opportunities=bets+s, units=units, roi=units/priced_bets if priced_bets else np.nan,
                 priced_bets=priced_bets, prelock_prices=prelock, closing_estimates=estimates,
+                assumed_prices=assumed, quoted_bets=prelock+estimates,
                 unpriced=bets-priced_bets,
                 roi_se=float(returns.std(ddof=1)/np.sqrt(priced_bets)) if priced_bets > 1 else np.nan,
                 cover_rate=w/(w+l) if w+l else np.nan,
@@ -209,8 +217,10 @@ def report(frame):
              f"Record {r['wins']}-{r['losses']}-{r['pushes']}, {r['skips']} skips, {r['pending']} pending, "
              f"{r['unavailable']} unavailable; {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}%.",
              (f"ESPN exact-handicap pricing: {r['prelock_prices']} pre-lock, {r['closing_estimates']} closing estimates, "
-              f"{r['unpriced']} unpriced; ROI denominator {r['priced_bets']} priced 1u stakes (pushes included). "
-              "Closing estimates are not verified lock-time returns; missing or mismatched prices are excluded."
+              f"{r['assumed_prices']} assumed -110, {r['unpriced']} unpriced; "
+              f"ROI denominator {r['priced_bets']} 1u stakes (pushes included). "
+              "Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. "
+              "Closing estimates and assumed prices are not verified lock-time returns."
               if 'ats_price_basis' in frame else 'Legacy reference: proxy -110 pricing.')]
     if len(frame):
         for basis, g in frame.groupby('ats_basis', sort=True):

@@ -15,24 +15,32 @@ archives are unchanged. ESPN final scores update outcomes only.
 
 | Cohort | W–L–P | Stakes | Units | ROI |
 | --- | --- | ---: | ---: | ---: |
-| All completed selections | 58–42–6 | 106 | — | — |
+| Pooled completed selections | 58–42–6 | 106 | +10.561626 | +9.963798% |
 | Exact-handicap closing estimates | 49–33–4 | 86 | +11.379808 | +13.232335% |
-| Unpriced selections | 9–9–2 | 20 | — | — |
+| Assumed −110 selections | 9–9–2 | 20 | −0.818182 | −4.090909% |
 | Verified historical pre-lock prices | 0–0–0 | 0 | — | — |
 
-These are estimated returns on a priced subset, not verified lock-time profit
-for all 106 picks. On the same 86 games, the old flat −110 reference is +11.545455u
+The main total pools 86 exact-handicap ESPN closing estimates with 20 explicit
+−110 assumptions (owner decision 2026-10-26). It is an estimate, not verified
+lock-time profit for all 106 picks. On the same 86 games, the old flat −110 reference is +11.545455u
 (13.424947% ROI). The full 106-game −110 reference is +10.727273u (10.119940% ROI).
 
-| Week | Full W–L–P | Priced / completed | Estimated units | Estimated ROI |
+The 86 matched closing prices have a median of −112 and a mean payout of
+0.902579u per winning 1u stake, equivalent to −110.793645. A −110 assumption
+pays 0.909091u, so it is slightly generous relative to that average. Applying
+the observed average payout to the 20 missing-price picks instead gives
++10.503018u and 9.908507% ROI. This is a sensitivity estimate, not evidence of
+the missing picks' actual prices.
+
+| Week | Full W–L–P | ESPN / assumed −110 | Pooled units | Pooled ROI |
 | --- | --- | --- | ---: | ---: |
-| 1 | 10–5–1 | 15 / 16 | +3.16 | +21.07% |
-| 2 | 11–5–0 | 14 / 16 | +3.04 | +21.70% |
-| 3 | 9–5–2 | 14 / 16 | +5.15 | +36.76% |
-| 4 | 6–8–2 | 12 / 16 | -5.39 | -44.90% |
-| 5 | 7–7–1 | 10 / 15 | +3.46 | +34.56% |
-| 6 | 7–7–0 | 9 / 14 | +0.48 | +5.38% |
-| 7 | 8–5–0 | 12 / 13 | +1.48 | +12.35% |
+| 1 | 10–5–1 | 15 / 1 | +4.07 | +25.44% |
+| 2 | 11–5–0 | 14 / 2 | +4.86 | +30.35% |
+| 3 | 9–5–2 | 14 / 2 | +3.15 | +19.67% |
+| 4 | 6–8–2 | 12 / 4 | -2.66 | -16.63% |
+| 5 | 7–7–1 | 10 / 5 | -0.54 | -3.63% |
+| 6 | 7–7–0 | 9 / 5 | -0.70 | -4.98% |
+| 7 | 8–5–0 | 12 / 1 | +2.39 | +18.40% |
 
 ## Evidence and matching
 
@@ -48,7 +56,9 @@ Pricing priority:
 2. The latest eligible timestamped movement or locally received pre-lock current
    quote per provider, when its selected-side handicap matches the saved pick.
 3. An exact-handicap final close, explicitly labelled `closing_estimate`.
-4. Unpriced. No −110 substitute, moneyline substitute, or unmatched-line price.
+4. A reporting-only −110 assumption, explicitly labelled `assumed_minus110`,
+   when no exact quote matches. The original match failure is retained as
+   `ats_match_status`. No moneyline or different-handicap quote is substituted.
 
 A known line move prevents resurrecting an older matching quote from that book.
 The CSV retains quote age for recovered pre-lock quotes. Historical replay rows
@@ -56,10 +66,13 @@ without an original lock timestamp cannot be assigned an invented T−60 lock.
 
 Each priced bet risks 1u: winning −120 returns 100/120u, winning +105 returns
 1.05u, a loss costs 1u and a push returns the stake. ROI divides net profit by
-the number of **priced** W/L/P stakes. Unpriced wins, losses and pushes all stay
-in the full ATS record and all stay out of priced profit and its denominator.
+all completed W/L/P stakes, including those with assumed −110 prices and pushes.
+Matched prices always take precedence over assumptions. The strict matched-only
+calculation remains available to research callers; assumptions never enter the
+immutable quote archive or candidate hashes.
 The chart, weekly table, cards, baselines and CSVs share these calculations.
-Baselines additionally require valid prices for both sides of the same line.
+Baselines use their own same-game matched subset, requiring ESPN prices for
+both sides of the same line; their compared-game count is displayed.
 
 ## Future locks
 
