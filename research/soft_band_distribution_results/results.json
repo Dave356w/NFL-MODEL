@@ -1,0 +1,3980 @@
+{
+  "policy": "SB1-neighbor-empirical-bands-2026-10-26-v1",
+  "status": "development gate failed; do not promote",
+  "production_changed": false,
+  "independent_validation": false,
+  "fitted_target_seasons": [
+    2023,
+    2024,
+    2025,
+    2026
+  ],
+  "source_fit_max_seasons": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "bases": {
+    "2023-25": {
+      "games": 816,
+      "decisive": 797,
+      "paired_games": 816,
+      "scores": {
+        "soft_cover_ll": 0.6945930805733238,
+        "hard_cover_ll": 0.6972540400772476,
+        "fair_cover_ll": 0.6931471805599453,
+        "market_cover_ll": 0.6935876383065412,
+        "soft_cover_brier": 0.2505373237396065,
+        "hard_cover_brier": 0.2518010207728754,
+        "market_cover_brier": 0.25022003963520717,
+        "soft_event_ll": 0.7622021162797518,
+        "hard_event_ll": 0.765197263697798,
+        "soft_crps": 7.075314501289725,
+        "hard_crps": 7.10104464536825,
+        "soft_mae": 9.717524509803921,
+        "hard_mae": 9.76531862745098,
+        "soft_cover_ll_paired": 0.6945930805733238,
+        "hard_cover_ll_paired": 0.6972540400772476
+      },
+      "zero_probability_events": {
+        "soft": 0,
+        "hard": 0
+      },
+      "gains": {
+        "soft_vs_hard_cover": {
+          "n": 797,
+          "gain": 0.0026609595039235653,
+          "interval": [
+            -0.002104811905360655,
+            0.007281434118656068
+          ],
+          "confidence": 0.975,
+          "clusters": 54
+        },
+        "soft_vs_market_cover": {
+          "n": 797,
+          "gain": -0.001005442266782651,
+          "interval": [
+            -0.011545092102423857,
+            0.009597117970355633
+          ],
+          "confidence": 0.975,
+          "clusters": 54
+        },
+        "soft_vs_fair_cover": {
+          "n": 797,
+          "gain": -0.0014459000133785636,
+          "interval": [
+            -0.010802569333738452,
+            0.007871110477155554
+          ],
+          "confidence": 0.95,
+          "clusters": 54
+        },
+        "soft_vs_hard_crps": {
+          "n": 816,
+          "gain": 0.02573014407852477,
+          "interval": [
+            -0.0038831334949141535,
+            0.05522701613620611
+          ],
+          "confidence": 0.95,
+          "clusters": 54
+        }
+      },
+      "policy_gains": {
+        "assumed110": {
+          "n": 816,
+          "gain": -0.007352941176470591,
+          "interval": [
+            -0.04089880680064826,
+            0.026073885953403937
+          ],
+          "confidence": 0.95,
+          "clusters": 54
+        },
+        "paired": {
+          "n": 816,
+          "gain": -0.003072522380849532,
+          "interval": [
+            -0.03499602198080035,
+            0.030222181306184922
+          ],
+          "confidence": 0.95,
+          "clusters": 54
+        }
+      },
+      "scenarios": {
+        "assumed110": {
+          "soft_ev": {
+            "games": 816,
+            "bets": 509,
+            "passes": 307,
+            "wins": 260,
+            "losses": 239,
+            "pushes": 10,
+            "units": -2.6363636363636385,
+            "roi": -0.0051794963386319025,
+            "units_per_opportunity": -0.003230837789661314,
+            "roi_se": 0.04189588268839791,
+            "roi_ci95": [
+              -0.08555510239197767,
+              0.07704698669710862
+            ],
+            "cover_rate": 0.5210420841683366,
+            "expected_units": 32.84406335500857,
+            "mean_predicted_selected_conditional": 0.5582212711300008,
+            "selected_calibration_gap": 0.03717918696166411,
+            "same_selected_controls": {
+              "median": {
+                "units": 8.818181818181824,
+                "roi": 0.017324522236113603,
+                "policy_minus_control_units": -11.454545454545455,
+                "policy_minus_control_roi_ci95": [
+                  -0.0653041876626327,
+                  0.02161542567560966
+                ]
+              },
+              "raw": {
+                "units": -21.72727272727272,
+                "roi": -0.0426861939632077,
+                "policy_minus_control_units": 19.090909090909093,
+                "policy_minus_control_roi_ci95": [
+                  -0.0784584813123626,
+                  0.15488869037885458
+                ]
+              },
+              "favorite": {
+                "units": -2.6363636363636367,
+                "roi": -0.005179496338631899,
+                "policy_minus_control_units": -3.552713678800501e-15,
+                "policy_minus_control_roi_ci95": [
+                  -0.11469901373180895,
+                  0.11908410691421246
+                ]
+              },
+              "home": {
+                "units": -4.545454545454545,
+                "roi": -0.008930166101089479,
+                "policy_minus_control_units": 1.9090909090909038,
+                "policy_minus_control_roi_ci95": [
+                  -0.10712433182373064,
+                  0.11593934703067828
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 816,
+            "bets": 574,
+            "passes": 242,
+            "wins": 293,
+            "losses": 263,
+            "pushes": 18,
+            "units": 3.3636363636363615,
+            "roi": 0.00585999366487171,
+            "units_per_opportunity": 0.004122103386809269,
+            "roi_se": 0.03918933692232483,
+            "roi_ci95": [
+              -0.05906737854658078,
+              0.07153188134192416
+            ],
+            "cover_rate": 0.5269784172661871,
+            "expected_units": 45.618150399534514,
+            "mean_predicted_selected_conditional": 0.5665946806387364,
+            "selected_calibration_gap": 0.03961626337254931,
+            "same_selected_controls": {
+              "median": {
+                "units": 16.727272727272723,
+                "roi": 0.029141590117199866,
+                "policy_minus_control_units": -13.363636363636363,
+                "policy_minus_control_roi_ci95": [
+                  -0.05206611570247935,
+                  0.00678185047634426
+                ]
+              },
+              "raw": {
+                "units": -17.636363636363633,
+                "roi": -0.030725372188786817,
+                "policy_minus_control_units": 21.000000000000007,
+                "policy_minus_control_roi_ci95": [
+                  -0.06254053394316253,
+                  0.13122030830882575
+                ]
+              },
+              "favorite": {
+                "units": 11.000000000000002,
+                "roi": 0.019163763066202093,
+                "policy_minus_control_units": -7.63636363636364,
+                "policy_minus_control_roi_ci95": [
+                  -0.11866469011376227,
+                  0.09156226434567784
+                ]
+              },
+              "home": {
+                "units": -6.181818181818182,
+                "roi": -0.010769718086791258,
+                "policy_minus_control_units": 9.545454545454545,
+                "policy_minus_control_roi_ci95": [
+                  -0.07954545454545453,
+                  0.1099476439790576
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 430,
+            "losses": 367,
+            "pushes": 19,
+            "units": 23.909090909090914,
+            "roi": 0.029300356506238866,
+            "units_per_opportunity": 0.029300356506238866,
+            "roi_se": 0.032941688050994414,
+            "roi_ci95": [
+              -0.0351522224704043,
+              0.09385357144773154
+            ],
+            "cover_rate": 0.5395232120451694,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.909090909090914,
+                "roi": 0.029300356506238866,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -16.181818181818176,
+                "roi": -0.019830659536541884,
+                "policy_minus_control_units": 40.09090909090909,
+                "policy_minus_control_roi_ci95": [
+                  -0.037480236409405406,
+                  0.13687779128935992
+                ]
+              },
+              "favorite": {
+                "units": -12.36363636363636,
+                "roi": -0.015151515151515147,
+                "policy_minus_control_units": 36.27272727272728,
+                "policy_minus_control_roi_ci95": [
+                  -0.04931382954111672,
+                  0.1373656120302461
+                ]
+              },
+              "home": {
+                "units": -33.36363636363635,
+                "roi": -0.040886809269162196,
+                "policy_minus_control_units": 57.27272727272728,
+                "policy_minus_control_roi_ci95": [
+                  -0.006925569614121241,
+                  0.1463085739970783
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 409,
+            "losses": 388,
+            "pushes": 19,
+            "units": -16.181818181818176,
+            "roi": -0.019830659536541884,
+            "units_per_opportunity": -0.019830659536541884,
+            "roi_se": 0.03303340720873184,
+            "roi_ci95": [
+              -0.08689553937610693,
+              0.04344089906285799
+            ],
+            "cover_rate": 0.5131744040150564,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.909090909090914,
+                "roi": 0.029300356506238866,
+                "policy_minus_control_units": -40.09090909090909,
+                "policy_minus_control_roi_ci95": [
+                  -0.13687779128936003,
+                  0.03748023640940539
+                ]
+              },
+              "raw": {
+                "units": -16.181818181818176,
+                "roi": -0.019830659536541884,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -12.36363636363636,
+                "roi": -0.015151515151515147,
+                "policy_minus_control_units": -3.818181818181813,
+                "policy_minus_control_roi_ci95": [
+                  -0.11160826114184325,
+                  0.09627938148503738
+                ]
+              },
+              "home": {
+                "units": -33.36363636363635,
+                "roi": -0.040886809269162196,
+                "policy_minus_control_units": 17.181818181818187,
+                "policy_minus_control_roi_ci95": [
+                  -0.07217736055166732,
+                  0.10956045787952874
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 411,
+            "losses": 386,
+            "pushes": 19,
+            "units": -12.36363636363636,
+            "roi": -0.015151515151515147,
+            "units_per_opportunity": -0.015151515151515147,
+            "roi_se": 0.03302854673840519,
+            "roi_ci95": [
+              -0.08527562320253403,
+              0.05602923264311814
+            ],
+            "cover_rate": 0.5156838143036386,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.909090909090914,
+                "roi": 0.029300356506238866,
+                "policy_minus_control_units": -36.27272727272728,
+                "policy_minus_control_roi_ci95": [
+                  -0.13736561203024616,
+                  0.0493138295411167
+                ]
+              },
+              "raw": {
+                "units": -16.181818181818176,
+                "roi": -0.019830659536541884,
+                "policy_minus_control_units": 3.818181818181813,
+                "policy_minus_control_roi_ci95": [
+                  -0.09627938148503742,
+                  0.11160826114184315
+                ]
+              },
+              "favorite": {
+                "units": -12.36363636363636,
+                "roi": -0.015151515151515147,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -33.36363636363635,
+                "roi": -0.040886809269162196,
+                "policy_minus_control_units": 20.999999999999996,
+                "policy_minus_control_roi_ci95": [
+                  -0.05574498494206524,
+                  0.11009819445262835
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 400,
+            "losses": 397,
+            "pushes": 19,
+            "units": -33.36363636363635,
+            "roi": -0.040886809269162196,
+            "units_per_opportunity": -0.040886809269162196,
+            "roi_se": 0.03304521168820253,
+            "roi_ci95": [
+              -0.10420046961494109,
+              0.022955108010801036
+            ],
+            "cover_rate": 0.5018820577164367,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.909090909090914,
+                "roi": 0.029300356506238866,
+                "policy_minus_control_units": -57.27272727272728,
+                "policy_minus_control_roi_ci95": [
+                  -0.1463085739970783,
+                  0.006925569614121239
+                ]
+              },
+              "raw": {
+                "units": -16.181818181818176,
+                "roi": -0.019830659536541884,
+                "policy_minus_control_units": -17.181818181818187,
+                "policy_minus_control_roi_ci95": [
+                  -0.1095604578795288,
+                  0.07217736055166726
+                ]
+              },
+              "favorite": {
+                "units": -12.36363636363636,
+                "roi": -0.015151515151515147,
+                "policy_minus_control_units": -20.999999999999996,
+                "policy_minus_control_roi_ci95": [
+                  -0.11009819445262839,
+                  0.055744984942065166
+                ]
+              },
+              "home": {
+                "units": -33.36363636363635,
+                "roi": -0.040886809269162196,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        },
+        "paired": {
+          "soft_ev": {
+            "games": 816,
+            "bets": 495,
+            "passes": 321,
+            "wins": 256,
+            "losses": 229,
+            "pushes": 10,
+            "units": 4.386906974289449,
+            "roi": 0.008862438331897876,
+            "units_per_opportunity": 0.005376111488099808,
+            "roi_se": 0.04252282874883898,
+            "roi_ci95": [
+              -0.07549225867229273,
+              0.09369931387017492
+            ],
+            "cover_rate": 0.5278350515463918,
+            "expected_units": 32.053137905039904,
+            "mean_predicted_selected_conditional": 0.5576095301124799,
+            "selected_calibration_gap": 0.02977447856608817,
+            "same_selected_controls": {
+              "median": {
+                "units": 6.838039846246806,
+                "roi": 0.01381422191160971,
+                "policy_minus_control_units": -2.4511328719573555,
+                "policy_minus_control_roi_ci95": [
+                  -0.04891271789955346,
+                  0.04052148412659123
+                ]
+              },
+              "raw": {
+                "units": -14.856820972514058,
+                "roi": -0.030013779742452642,
+                "policy_minus_control_units": 19.2437279468035,
+                "policy_minus_control_roi_ci95": [
+                  -0.061911816636047785,
+                  0.13678106448908692
+                ]
+              },
+              "favorite": {
+                "units": -2.262412715009706,
+                "roi": -0.004570530737393346,
+                "policy_minus_control_units": 6.649319689299162,
+                "policy_minus_control_roi_ci95": [
+                  -0.10323177023795527,
+                  0.1288483132745161
+                ]
+              },
+              "home": {
+                "units": -5.09168546830387,
+                "roi": -0.010286233269300749,
+                "policy_minus_control_units": 9.478592442593328,
+                "policy_minus_control_roi_ci95": [
+                  -0.08686128544912788,
+                  0.1244962111652917
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 816,
+            "bets": 550,
+            "passes": 266,
+            "wins": 283,
+            "losses": 252,
+            "pushes": 15,
+            "units": 6.894085237062666,
+            "roi": 0.012534700431023029,
+            "units_per_opportunity": 0.008448633868949345,
+            "roi_se": 0.04025231652909344,
+            "roi_ci95": [
+              -0.06319774902598689,
+              0.08853997582621187
+            ],
+            "cover_rate": 0.5289719626168224,
+            "expected_units": 45.728763070195455,
+            "mean_predicted_selected_conditional": 0.5668046895544865,
+            "selected_calibration_gap": 0.03783272693766404,
+            "same_selected_controls": {
+              "median": {
+                "units": 10.316236877837834,
+                "roi": 0.018756794323341517,
+                "policy_minus_control_units": -3.422151640775172,
+                "policy_minus_control_roi_ci95": [
+                  -0.0347663880681369,
+                  0.020503176774271804
+                ]
+              },
+              "raw": {
+                "units": -10.105843956014207,
+                "roi": -0.018374261738207647,
+                "policy_minus_control_units": 16.999929193076873,
+                "policy_minus_control_roi_ci95": [
+                  -0.07871496389563638,
+                  0.13708603554746795
+                ]
+              },
+              "favorite": {
+                "units": -11.015281029113604,
+                "roi": -0.020027783689297463,
+                "policy_minus_control_units": 17.909366266176278,
+                "policy_minus_control_roi_ci95": [
+                  -0.08362050409789377,
+                  0.1443889397302113
+                ]
+              },
+              "home": {
+                "units": -24.911779930092816,
+                "roi": -0.045294145327441485,
+                "policy_minus_control_units": 31.80586516715549,
+                "policy_minus_control_roi_ci95": [
+                  -0.037209935673801556,
+                  0.14690907506620843
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 430,
+            "losses": 367,
+            "pushes": 19,
+            "units": 23.03882773816982,
+            "roi": 0.02823385752226694,
+            "units_per_opportunity": 0.02823385752226694,
+            "roi_se": 0.032924556883497824,
+            "roi_ci95": [
+              -0.036076064200406134,
+              0.09293033422933537
+            ],
+            "cover_rate": 0.5395232120451694,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.03882773816982,
+                "roi": 0.02823385752226694,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -17.76278174523558,
+                "roi": -0.02176811488386713,
+                "policy_minus_control_units": 40.80160948340541,
+                "policy_minus_control_roi_ci95": [
+                  -0.03660109474614801,
+                  0.13789918983796937
+                ]
+              },
+              "favorite": {
+                "units": -13.55459230831738,
+                "roi": -0.016611019985683064,
+                "policy_minus_control_units": 36.59342004648721,
+                "policy_minus_control_roi_ci95": [
+                  -0.04886173023582651,
+                  0.13701425952708485
+                ]
+              },
+              "home": {
+                "units": -32.74270010805361,
+                "roi": -0.040125857975555894,
+                "policy_minus_control_units": 55.78152784622344,
+                "policy_minus_control_roi_ci95": [
+                  -0.007926867127840381,
+                  0.14480934152591293
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 409,
+            "losses": 388,
+            "pushes": 19,
+            "units": -17.76278174523558,
+            "roi": -0.02176811488386713,
+            "units_per_opportunity": -0.02176811488386713,
+            "roi_se": 0.03298263805280919,
+            "roi_ci95": [
+              -0.08904251408702957,
+              0.041100948258218375
+            ],
+            "cover_rate": 0.5131744040150564,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.03882773816982,
+                "roi": 0.02823385752226694,
+                "policy_minus_control_units": -40.80160948340541,
+                "policy_minus_control_roi_ci95": [
+                  -0.13789918983796948,
+                  0.036601094746148
+                ]
+              },
+              "raw": {
+                "units": -17.76278174523558,
+                "roi": -0.02176811488386713,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -13.55459230831738,
+                "roi": -0.016611019985683064,
+                "policy_minus_control_units": -4.2081894369182,
+                "policy_minus_control_roi_ci95": [
+                  -0.1118840624105261,
+                  0.09547707082708881
+                ]
+              },
+              "home": {
+                "units": -32.74270010805361,
+                "roi": -0.040125857975555894,
+                "policy_minus_control_units": 14.97991836281803,
+                "policy_minus_control_roi_ci95": [
+                  -0.07513490124274778,
+                  0.10761729577936871
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 411,
+            "losses": 386,
+            "pushes": 19,
+            "units": -13.55459230831738,
+            "roi": -0.016611019985683064,
+            "units_per_opportunity": -0.016611019985683064,
+            "roi_se": 0.032995017051723835,
+            "roi_ci95": [
+              -0.08621321904333926,
+              0.054062434343435085
+            ],
+            "cover_rate": 0.5156838143036386,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.03882773816982,
+                "roi": 0.02823385752226694,
+                "policy_minus_control_units": -36.59342004648721,
+                "policy_minus_control_roi_ci95": [
+                  -0.13701425952708488,
+                  0.048861730235826496
+                ]
+              },
+              "raw": {
+                "units": -17.76278174523558,
+                "roi": -0.02176811488386713,
+                "policy_minus_control_units": 4.2081894369182,
+                "policy_minus_control_roi_ci95": [
+                  -0.09547707082708884,
+                  0.11188406241052608
+                ]
+              },
+              "favorite": {
+                "units": -13.55459230831738,
+                "roi": -0.016611019985683064,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -32.74270010805361,
+                "roi": -0.040125857975555894,
+                "policy_minus_control_units": 19.188107799736237,
+                "policy_minus_control_roi_ci95": [
+                  -0.05756673359865919,
+                  0.1084731183444782
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 816,
+            "bets": 816,
+            "passes": 0,
+            "wins": 400,
+            "losses": 397,
+            "pushes": 19,
+            "units": -32.74270010805361,
+            "roi": -0.040125857975555894,
+            "units_per_opportunity": -0.040125857975555894,
+            "roi_se": 0.03308883790420945,
+            "roi_ci95": [
+              -0.10340351859223691,
+              0.02400529387374541
+            ],
+            "cover_rate": 0.5018820577164367,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 23.03882773816982,
+                "roi": 0.02823385752226694,
+                "policy_minus_control_units": -55.78152784622344,
+                "policy_minus_control_roi_ci95": [
+                  -0.144809341525913,
+                  0.007926867127840367
+                ]
+              },
+              "raw": {
+                "units": -17.76278174523558,
+                "roi": -0.02176811488386713,
+                "policy_minus_control_units": -14.97991836281803,
+                "policy_minus_control_roi_ci95": [
+                  -0.10761729577936872,
+                  0.07513490124274765
+                ]
+              },
+              "favorite": {
+                "units": -13.55459230831738,
+                "roi": -0.016611019985683064,
+                "policy_minus_control_units": -19.188107799736237,
+                "policy_minus_control_roi_ci95": [
+                  -0.10847311834447827,
+                  0.05756673359865912
+                ]
+              },
+              "home": {
+                "units": -32.74270010805361,
+                "roi": -0.040125857975555894,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "2026 diagnostic": {
+      "games": 106,
+      "decisive": 100,
+      "paired_games": 86,
+      "scores": {
+        "soft_cover_ll": 0.7015344291369737,
+        "hard_cover_ll": 0.6974314304129196,
+        "fair_cover_ll": 0.6931471805599452,
+        "market_cover_ll": 0.6940803881975222,
+        "soft_cover_brier": 0.25279448050834036,
+        "hard_cover_brier": 0.2509560451232995,
+        "market_cover_brier": 0.25046549159731496,
+        "soft_event_ll": 0.8372901681054454,
+        "hard_event_ll": 0.8340800729832992,
+        "soft_crps": 6.892614057538149,
+        "hard_crps": 6.8692777739400555,
+        "soft_mae": 9.358490566037736,
+        "hard_mae": 9.330188679245284,
+        "soft_cover_ll_paired": 0.7012005128771712,
+        "hard_cover_ll_paired": 0.6933566045483427
+      },
+      "zero_probability_events": {
+        "soft": 0,
+        "hard": 0
+      },
+      "gains": {
+        "soft_vs_hard_cover": {
+          "n": 100,
+          "gain": -0.004102998724054224,
+          "interval": [
+            -0.011640864598921004,
+            0.0048696773421910925
+          ],
+          "confidence": 0.975,
+          "clusters": 7
+        },
+        "soft_vs_market_cover": {
+          "n": 82,
+          "gain": -0.007120124679648928,
+          "interval": [
+            -0.05194768325472901,
+            0.03079829248762045
+          ],
+          "confidence": 0.975,
+          "clusters": 7
+        },
+        "soft_vs_fair_cover": {
+          "n": 100,
+          "gain": -0.008387248577028545,
+          "interval": [
+            -0.03761467520704447,
+            0.021478671084689073
+          ],
+          "confidence": 0.95,
+          "clusters": 7
+        },
+        "soft_vs_hard_crps": {
+          "n": 106,
+          "gain": -0.023336283598093175,
+          "interval": [
+            -0.10282017812977426,
+            0.06153762245073274
+          ],
+          "confidence": 0.95,
+          "clusters": 7
+        }
+      },
+      "policy_gains": {
+        "assumed110": {
+          "n": 106,
+          "gain": 0.018010291595197257,
+          "interval": [
+            -0.046753246753246755,
+            0.08225108225108226
+          ],
+          "confidence": 0.95,
+          "clusters": 7
+        },
+        "paired": {
+          "n": 86,
+          "gain": -0.028509370268723154,
+          "interval": [
+            -0.15914006504373085,
+            0.06632659965297368
+          ],
+          "confidence": 0.95,
+          "clusters": 7
+        }
+      },
+      "scenarios": {
+        "assumed110": {
+          "soft_ev": {
+            "games": 106,
+            "bets": 58,
+            "passes": 48,
+            "wins": 30,
+            "losses": 26,
+            "pushes": 2,
+            "units": 1.2727272727272725,
+            "roi": 0.021943573667711595,
+            "units_per_opportunity": 0.012006861063464831,
+            "roi_se": 0.12391752746546017,
+            "roi_ci95": [
+              -0.21818181818181817,
+              0.36195286195286197
+            ],
+            "cover_rate": 0.5357142857142857,
+            "expected_units": 4.518933143843682,
+            "mean_predicted_selected_conditional": 0.5663332877365348,
+            "selected_calibration_gap": 0.030619002022249098,
+            "same_selected_controls": {
+              "median": {
+                "units": 6.999999999999999,
+                "roi": 0.12068965517241378,
+                "policy_minus_control_units": -5.7272727272727275,
+                "policy_minus_control_roi_ci95": [
+                  -0.2521573251942286,
+                  0.09545454545454546
+                ]
+              },
+              "raw": {
+                "units": 1.2727272727272725,
+                "roi": 0.021943573667711595,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.2620320855614973,
+                  0.22650231124807396
+                ]
+              },
+              "favorite": {
+                "units": -8.272727272727273,
+                "roi": -0.14263322884012541,
+                "policy_minus_control_units": 9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.11471212121212125,
+                  0.5139860139860141
+                ]
+              },
+              "home": {
+                "units": -14.000000000000002,
+                "roi": -0.24137931034482762,
+                "policy_minus_control_units": 15.272727272727273,
+                "policy_minus_control_roi_ci95": [
+                  -0.06818181818181819,
+                  0.6717171717171717
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 106,
+            "bets": 59,
+            "passes": 47,
+            "wins": 29,
+            "losses": 27,
+            "pushes": 3,
+            "units": -0.6363636363636364,
+            "roi": -0.01078582434514638,
+            "units_per_opportunity": -0.006003430531732427,
+            "roi_se": 0.12203236873390351,
+            "roi_ci95": [
+              -0.2772150830919776,
+              0.28
+            ],
+            "cover_rate": 0.5178571428571429,
+            "expected_units": 5.8788087048002176,
+            "mean_predicted_selected_conditional": 0.5780920024133754,
+            "selected_calibration_gap": 0.060234859556232534,
+            "same_selected_controls": {
+              "median": {
+                "units": 8.909090909090908,
+                "roi": 0.15100154083204928,
+                "policy_minus_control_units": -9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.38181818181818183,
+                  0.1218568665377176
+                ]
+              },
+              "raw": {
+                "units": -6.363636363636363,
+                "roi": -0.10785824345146379,
+                "policy_minus_control_units": 5.7272727272727275,
+                "policy_minus_control_roi_ci95": [
+                  -0.04242424242424243,
+                  0.20700985761226728
+                ]
+              },
+              "favorite": {
+                "units": -0.6363636363636366,
+                "roi": -0.010785824345146383,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.2982954545454546,
+                  0.42424242424242425
+                ]
+              },
+              "home": {
+                "units": -19.727272727272727,
+                "roi": -0.33436055469953774,
+                "policy_minus_control_units": 19.090909090909093,
+                "policy_minus_control_roi_ci95": [
+                  0.032357473035439135,
+                  0.690522243713733
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 106,
+            "bets": 106,
+            "passes": 0,
+            "wins": 58,
+            "losses": 42,
+            "pushes": 6,
+            "units": 10.727272727272728,
+            "roi": 0.1012006861063465,
+            "units_per_opportunity": 0.1012006861063465,
+            "roi_se": 0.08934637210440274,
+            "roi_ci95": [
+              -0.024959256429844687,
+              0.2213804713804714
+            ],
+            "cover_rate": 0.58,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 10.727272727272728,
+                "roi": 0.1012006861063465,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 21.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.0867768595041322,
+                  0.45454545454545453
+                ]
+              },
+              "favorite": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 21.0,
+                "policy_minus_control_roi_ci95": [
+                  0.10906518010291595,
+                  0.28977272727272724
+                ]
+              },
+              "home": {
+                "units": -19.818181818181817,
+                "roi": -0.1869639794168096,
+                "policy_minus_control_units": 30.545454545454543,
+                "policy_minus_control_roi_ci95": [
+                  0.12489379779099406,
+                  0.45364536453645365
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 106,
+            "bets": 106,
+            "passes": 0,
+            "wins": 47,
+            "losses": 53,
+            "pushes": 6,
+            "units": -10.272727272727273,
+            "roi": -0.09691252144082334,
+            "units_per_opportunity": -0.09691252144082334,
+            "roi_se": 0.09034595547984828,
+            "roi_ci95": [
+              -0.3333333333333333,
+              0.1543739279588336
+            ],
+            "cover_rate": 0.47,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 10.727272727272728,
+                "roi": 0.1012006861063465,
+                "policy_minus_control_units": -21.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.45454545454545453,
+                  0.0867768595041322
+                ]
+              },
+              "raw": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.30963495963495974,
+                  0.3241852487135506
+                ]
+              },
+              "home": {
+                "units": -19.818181818181817,
+                "roi": -0.1869639794168096,
+                "policy_minus_control_units": 9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.156198347107438,
+                  0.32418524871355064
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 106,
+            "bets": 106,
+            "passes": 0,
+            "wins": 47,
+            "losses": 53,
+            "pushes": 6,
+            "units": -10.272727272727273,
+            "roi": -0.09691252144082334,
+            "units_per_opportunity": -0.09691252144082334,
+            "roi_se": 0.09034595547984828,
+            "roi_ci95": [
+              -0.21885603608904583,
+              0.018518518518518504
+            ],
+            "cover_rate": 0.47,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 10.727272727272728,
+                "roi": 0.1012006861063465,
+                "policy_minus_control_units": -21.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.28977272727272724,
+                  -0.10906518010291634
+                ]
+              },
+              "raw": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.3241852487135506,
+                  0.30963495963495896
+                ]
+              },
+              "favorite": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -19.818181818181817,
+                "roi": -0.1869639794168096,
+                "policy_minus_control_units": 9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.13884297520661157,
+                  0.3181818181818182
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 106,
+            "bets": 106,
+            "passes": 0,
+            "wins": 42,
+            "losses": 58,
+            "pushes": 6,
+            "units": -19.818181818181817,
+            "roi": -0.1869639794168096,
+            "units_per_opportunity": -0.1869639794168096,
+            "roi_se": 0.08942536813331524,
+            "roi_ci95": [
+              -0.3609625668449198,
+              -0.008103354978355183
+            ],
+            "cover_rate": 0.42,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 10.727272727272728,
+                "roi": 0.1012006861063465,
+                "policy_minus_control_units": -30.545454545454543,
+                "policy_minus_control_roi_ci95": [
+                  -0.45364536453645365,
+                  -0.12489379779099406
+                ]
+              },
+              "raw": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": -9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.32418524871355064,
+                  0.156198347107438
+                ]
+              },
+              "favorite": {
+                "units": -10.272727272727273,
+                "roi": -0.09691252144082334,
+                "policy_minus_control_units": -9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.3181818181818182,
+                  0.13884297520661157
+                ]
+              },
+              "home": {
+                "units": -19.818181818181817,
+                "roi": -0.1869639794168096,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        },
+        "paired": {
+          "soft_ev": {
+            "games": 86,
+            "bets": 47,
+            "passes": 39,
+            "wins": 23,
+            "losses": 22,
+            "pushes": 2,
+            "units": -0.6458114662016006,
+            "roi": -0.013740669493651075,
+            "units_per_opportunity": -0.007509435653506988,
+            "roi_se": 0.1391971652999976,
+            "roi_ci95": [
+              -0.3019741042867778,
+              0.3267433159518395
+            ],
+            "cover_rate": 0.5111111111111111,
+            "expected_units": 3.9001303911193483,
+            "mean_predicted_selected_conditional": 0.5686202828682202,
+            "selected_calibration_gap": 0.05750917175710912,
+            "same_selected_controls": {
+              "median": {
+                "units": 6.716269621192678,
+                "roi": 0.14289935364239742,
+                "policy_minus_control_units": -7.362081087394278,
+                "policy_minus_control_roi_ci95": [
+                  -0.3277372311086386,
+                  0.04871303325409605
+                ]
+              },
+              "raw": {
+                "units": 1.007340132602173,
+                "roi": 0.021432768778769637,
+                "policy_minus_control_units": -1.6531515988037726,
+                "policy_minus_control_roi_ci95": [
+                  -0.2594401761802657,
+                  0.1573517206446849
+                ]
+              },
+              "favorite": {
+                "units": -10.290561585836631,
+                "roi": -0.21894811884758789,
+                "policy_minus_control_units": 9.64475011963503,
+                "policy_minus_control_roi_ci95": [
+                  -0.1190928211425106,
+                  0.6105615607855019
+                ]
+              },
+              "home": {
+                "units": -14.144962596369245,
+                "roi": -0.3009566509865797,
+                "policy_minus_control_units": 13.499151130167645,
+                "policy_minus_control_roi_ci95": [
+                  -0.00848777888865916,
+                  0.6689904109623129
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 86,
+            "bets": 50,
+            "passes": 36,
+            "wins": 26,
+            "losses": 22,
+            "pushes": 2,
+            "units": 1.805994376908591,
+            "roi": 0.03611988753817182,
+            "units_per_opportunity": 0.020999934615216185,
+            "roi_se": 0.13372087143172712,
+            "roi_ci95": [
+              -0.1473445397287398,
+              0.273804400712443
+            ],
+            "cover_rate": 0.5416666666666666,
+            "expected_units": 5.032768960704771,
+            "mean_predicted_selected_conditional": 0.5777731857166312,
+            "selected_calibration_gap": 0.036106519049964536,
+            "same_selected_controls": {
+              "median": {
+                "units": 5.534746703487003,
+                "roi": 0.11069493406974006,
+                "policy_minus_control_units": -3.7287523265784137,
+                "policy_minus_control_roi_ci95": [
+                  -0.2595926800472255,
+                  0.14814814814814817
+                ]
+              },
+              "raw": {
+                "units": 1.524201556611716,
+                "roi": 0.03048403113223432,
+                "policy_minus_control_units": 0.2817928202968736,
+                "policy_minus_control_roi_ci95": [
+                  -0.23125328515356972,
+                  0.19423131571469168
+                ]
+              },
+              "favorite": {
+                "units": -5.845001409598921,
+                "roi": -0.11690002819197842,
+                "policy_minus_control_units": 7.6509957865075116,
+                "policy_minus_control_roi_ci95": [
+                  -0.120215678836834,
+                  0.4500617676991982
+                ]
+              },
+              "home": {
+                "units": -17.42516692555706,
+                "roi": -0.34850333851114124,
+                "policy_minus_control_units": 19.23116130246565,
+                "policy_minus_control_roi_ci95": [
+                  0.10144171509224831,
+                  0.7444383273731099
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 86,
+            "bets": 86,
+            "passes": 0,
+            "wins": 49,
+            "losses": 33,
+            "pushes": 4,
+            "units": 11.379808205306492,
+            "roi": 0.1323233512244941,
+            "units_per_opportunity": 0.1323233512244941,
+            "roi_se": 0.09910625053146967,
+            "roi_ci95": [
+              -0.0725360617742251,
+              0.2840535417001209
+            ],
+            "cover_rate": 0.5975609756097561,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 11.379808205306492,
+                "roi": 0.1323233512244941,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -5.667355983162045,
+                "roi": -0.06589948817630285,
+                "policy_minus_control_units": 17.047164188468535,
+                "policy_minus_control_roi_ci95": [
+                  -0.17993305858476774,
+                  0.5102585652059213
+                ]
+              },
+              "favorite": {
+                "units": -7.503416970578528,
+                "roi": -0.0872490345416108,
+                "policy_minus_control_units": 18.88322517588502,
+                "policy_minus_control_roi_ci95": [
+                  0.06133671568731124,
+                  0.3868542998212065
+                ]
+              },
+              "home": {
+                "units": -18.866567617347883,
+                "roi": -0.21937869322497539,
+                "policy_minus_control_units": 30.246375822654375,
+                "policy_minus_control_roi_ci95": [
+                  0.15130897902255172,
+                  0.5351484732473104
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 86,
+            "bets": 86,
+            "passes": 0,
+            "wins": 40,
+            "losses": 42,
+            "pushes": 4,
+            "units": -5.667355983162045,
+            "roi": -0.06589948817630285,
+            "units_per_opportunity": -0.06589948817630285,
+            "roi_se": 0.10111103932571389,
+            "roi_ci95": [
+              -0.27818576755433094,
+              0.15411700307437246
+            ],
+            "cover_rate": 0.4878048780487805,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 11.379808205306492,
+                "roi": 0.1323233512244941,
+                "policy_minus_control_units": -17.047164188468535,
+                "policy_minus_control_roi_ci95": [
+                  -0.5102585652059213,
+                  0.17993305858476774
+                ]
+              },
+              "raw": {
+                "units": -5.667355983162045,
+                "roi": -0.06589948817630285,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -7.503416970578528,
+                "roi": -0.0872490345416108,
+                "policy_minus_control_units": 1.8360609874164853,
+                "policy_minus_control_roi_ci95": [
+                  -0.31567675192162753,
+                  0.36941222963208137
+                ]
+              },
+              "home": {
+                "units": -18.866567617347883,
+                "roi": -0.21937869322497539,
+                "policy_minus_control_units": 13.199211634185843,
+                "policy_minus_control_roi_ci95": [
+                  -0.10029040586454367,
+                  0.41266657141125285
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 86,
+            "bets": 86,
+            "passes": 0,
+            "wins": 39,
+            "losses": 43,
+            "pushes": 4,
+            "units": -7.503416970578528,
+            "roi": -0.0872490345416108,
+            "units_per_opportunity": -0.0872490345416108,
+            "roi_se": 0.10111068513661399,
+            "roi_ci95": [
+              -0.2274735211994655,
+              0.043445527930568176
+            ],
+            "cover_rate": 0.47560975609756095,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 11.379808205306492,
+                "roi": 0.1323233512244941,
+                "policy_minus_control_units": -18.88322517588502,
+                "policy_minus_control_roi_ci95": [
+                  -0.3868542998212065,
+                  -0.06133671568731124
+                ]
+              },
+              "raw": {
+                "units": -5.667355983162045,
+                "roi": -0.06589948817630285,
+                "policy_minus_control_units": -1.8360609874164853,
+                "policy_minus_control_roi_ci95": [
+                  -0.3694122296320816,
+                  0.3156767519216274
+                ]
+              },
+              "favorite": {
+                "units": -7.503416970578528,
+                "roi": -0.0872490345416108,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -18.866567617347883,
+                "roi": -0.21937869322497539,
+                "policy_minus_control_units": 11.363150646769357,
+                "policy_minus_control_roi_ci95": [
+                  -0.13140849843005756,
+                  0.40167950409961894
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 86,
+            "bets": 86,
+            "passes": 0,
+            "wins": 33,
+            "losses": 49,
+            "pushes": 4,
+            "units": -18.866567617347883,
+            "roi": -0.21937869322497539,
+            "units_per_opportunity": -0.21937869322497539,
+            "roi_se": 0.09953617455126054,
+            "roi_ci95": [
+              -0.3964096330815015,
+              -0.021790023387360007
+            ],
+            "cover_rate": 0.4024390243902439,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 11.379808205306492,
+                "roi": 0.1323233512244941,
+                "policy_minus_control_units": -30.246375822654375,
+                "policy_minus_control_roi_ci95": [
+                  -0.5351484732473104,
+                  -0.15130897902255175
+                ]
+              },
+              "raw": {
+                "units": -5.667355983162045,
+                "roi": -0.06589948817630285,
+                "policy_minus_control_units": -13.199211634185843,
+                "policy_minus_control_roi_ci95": [
+                  -0.4126665714112531,
+                  0.10029040586454367
+                ]
+              },
+              "favorite": {
+                "units": -7.503416970578528,
+                "roi": -0.0872490345416108,
+                "policy_minus_control_units": -11.363150646769357,
+                "policy_minus_control_roi_ci95": [
+                  -0.40167950409961894,
+                  0.13140849843005672
+                ]
+              },
+              "home": {
+                "units": -18.866567617347883,
+                "roi": -0.21937869322497539,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "2023": {
+      "games": 272,
+      "decisive": 258,
+      "paired_games": 272,
+      "scores": {
+        "soft_cover_ll": 0.7032467000895434,
+        "hard_cover_ll": 0.7023796853592013,
+        "fair_cover_ll": 0.6931471805599453,
+        "market_cover_ll": 0.6931483711346281,
+        "soft_cover_brier": 0.2546658302034195,
+        "hard_cover_brier": 0.25410852488453384,
+        "market_cover_brier": 0.2500004625992449,
+        "soft_event_ll": 0.830944827115702,
+        "hard_event_ll": 0.8305176342785971,
+        "soft_crps": 7.366997535452356,
+        "hard_crps": 7.379587097027238,
+        "soft_mae": 9.931985294117647,
+        "hard_mae": 9.994485294117647,
+        "soft_cover_ll_paired": 0.7032467000895434,
+        "hard_cover_ll_paired": 0.7023796853592013
+      },
+      "zero_probability_events": {
+        "soft": 0,
+        "hard": 0
+      },
+      "gains": {
+        "soft_vs_hard_cover": {
+          "n": 258,
+          "gain": -0.0008670147303420274,
+          "interval": [
+            -0.008599454109560036,
+            0.007300282608401762
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_market_cover": {
+          "n": 258,
+          "gain": -0.010098328954915336,
+          "interval": [
+            -0.030403585309741927,
+            0.005583359250163554
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_fair_cover": {
+          "n": 258,
+          "gain": -0.010099519529598028,
+          "interval": [
+            -0.027623404260988665,
+            0.004501462118618055
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "soft_vs_hard_crps": {
+          "n": 272,
+          "gain": 0.012589561574883092,
+          "interval": [
+            -0.037462005843155836,
+            0.06539528874454781
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "policy_gains": {
+        "assumed110": {
+          "n": 272,
+          "gain": -0.021390374331550804,
+          "interval": [
+            -0.05720400142114846,
+            0.01758596697996413
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "paired": {
+          "n": 272,
+          "gain": -0.02065967905284514,
+          "interval": [
+            -0.07440631926486203,
+            0.03476570244391299
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "scenarios": {
+        "assumed110": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 177,
+            "passes": 95,
+            "wins": 80,
+            "losses": 90,
+            "pushes": 7,
+            "units": -17.272727272727273,
+            "roi": -0.09758602978941962,
+            "units_per_opportunity": -0.06350267379679143,
+            "roi_se": 0.0704081681614297,
+            "roi_ci95": [
+              -0.21473375413030588,
+              0.019696969696969678
+            ],
+            "cover_rate": 0.47058823529411764,
+            "expected_units": 11.287415497543243,
+            "mean_predicted_selected_conditional": 0.5575993979153214,
+            "selected_calibration_gap": 0.08701116262120379,
+            "same_selected_controls": {
+              "median": {
+                "units": -13.454545454545457,
+                "roi": -0.07601438109912688,
+                "policy_minus_control_units": -3.8181818181818183,
+                "policy_minus_control_roi_ci95": [
+                  -0.09313271233008773,
+                  0.04290091930541369
+                ]
+              },
+              "raw": {
+                "units": -9.636363636363637,
+                "roi": -0.054442732408834106,
+                "policy_minus_control_units": -7.636363636363636,
+                "policy_minus_control_roi_ci95": [
+                  -0.2412617554858934,
+                  0.15048350247064432
+                ]
+              },
+              "favorite": {
+                "units": 9.454545454545453,
+                "roi": 0.053415511042629676,
+                "policy_minus_control_units": -26.72727272727273,
+                "policy_minus_control_roi_ci95": [
+                  -0.3393939393939394,
+                  0.05785123966942153
+                ]
+              },
+              "home": {
+                "units": -5.818181818181817,
+                "roi": -0.03287108371854134,
+                "policy_minus_control_units": -11.454545454545457,
+                "policy_minus_control_roi_ci95": [
+                  -0.26332288401253917,
+                  0.125
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 202,
+            "passes": 70,
+            "wins": 93,
+            "losses": 96,
+            "pushes": 13,
+            "units": -11.454545454545453,
+            "roi": -0.0567056705670567,
+            "units_per_opportunity": -0.042112299465240643,
+            "roi_se": 0.06512615336941588,
+            "roi_ci95": [
+              -0.1519704900744018,
+              0.038516289744737954
+            ],
+            "cover_rate": 0.49206349206349204,
+            "expected_units": 15.871150474638384,
+            "mean_predicted_selected_conditional": 0.5663464776878857,
+            "selected_calibration_gap": 0.07428298562439367,
+            "same_selected_controls": {
+              "median": {
+                "units": -11.454545454545453,
+                "roi": -0.0567056705670567,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -11.45454545454545,
+                "roi": -0.05670567056705668,
+                "policy_minus_control_units": 1.7763568394002505e-15,
+                "policy_minus_control_roi_ci95": [
+                  -0.1620971269296741,
+                  0.16927899686520378
+                ]
+              },
+              "favorite": {
+                "units": 5.7272727272727275,
+                "roi": 0.028352835283528353,
+                "policy_minus_control_units": -17.181818181818187,
+                "policy_minus_control_roi_ci95": [
+                  -0.23863636363636365,
+                  0.0714777428201904
+                ]
+              },
+              "home": {
+                "units": -7.636363636363635,
+                "roi": -0.0378037803780378,
+                "policy_minus_control_units": -3.8181818181818183,
+                "policy_minus_control_roi_ci95": [
+                  -0.18060902948402946,
+                  0.14685314685314685
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 136,
+            "losses": 122,
+            "pushes": 14,
+            "units": 1.6363636363636367,
+            "roi": 0.006016042780748665,
+            "units_per_opportunity": 0.006016042780748665,
+            "roi_se": 0.05638940648888875,
+            "roi_ci95": [
+              -0.09328367949154467,
+              0.10611858111245236
+            ],
+            "cover_rate": 0.5271317829457365,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.6363636363636367,
+                "roi": 0.006016042780748665,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -19.36363636363636,
+                "roi": -0.07118983957219249,
+                "policy_minus_control_units": 21.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.05742168457163492,
+                  0.22589424782172862
+                ]
+              },
+              "favorite": {
+                "units": 3.5454545454545476,
+                "roi": 0.013034759358288779,
+                "policy_minus_control_units": -1.90909090909091,
+                "policy_minus_control_roi_ci95": [
+                  -0.17107894823552672,
+                  0.15967008138767558
+                ]
+              },
+              "home": {
+                "units": -13.636363636363635,
+                "roi": -0.050133689839572185,
+                "policy_minus_control_units": 15.272727272727277,
+                "policy_minus_control_roi_ci95": [
+                  -0.0691699604743083,
+                  0.1937799043062201
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 125,
+            "losses": 133,
+            "pushes": 14,
+            "units": -19.36363636363636,
+            "roi": -0.07118983957219249,
+            "units_per_opportunity": -0.07118983957219249,
+            "roi_se": 0.05645437943914571,
+            "roi_ci95": [
+              -0.1994686025584902,
+              0.055090974700640054
+            ],
+            "cover_rate": 0.4844961240310077,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.6363636363636367,
+                "roi": 0.006016042780748665,
+                "policy_minus_control_units": -21.0,
+                "policy_minus_control_roi_ci95": [
+                  -0.22589424782172876,
+                  0.057421684571634844
+                ]
+              },
+              "raw": {
+                "units": -19.36363636363636,
+                "roi": -0.07118983957219249,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": 3.5454545454545476,
+                "roi": 0.013034759358288779,
+                "policy_minus_control_units": -22.909090909090914,
+                "policy_minus_control_roi_ci95": [
+                  -0.283596837944664,
+                  0.10607046299425467
+                ]
+              },
+              "home": {
+                "units": -13.636363636363635,
+                "roi": -0.050133689839572185,
+                "policy_minus_control_units": -5.727272727272729,
+                "policy_minus_control_roi_ci95": [
+                  -0.17855321462952214,
+                  0.13484285231497126
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 121,
+            "pushes": 14,
+            "units": 3.5454545454545476,
+            "roi": 0.013034759358288779,
+            "units_per_opportunity": 0.013034759358288779,
+            "roi_se": 0.056364148865781304,
+            "roi_ci95": [
+              -0.09852188668573045,
+              0.12854158708938115
+            ],
+            "cover_rate": 0.5310077519379846,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.6363636363636367,
+                "roi": 0.006016042780748665,
+                "policy_minus_control_units": 1.90909090909091,
+                "policy_minus_control_roi_ci95": [
+                  -0.1596700813876756,
+                  0.17107894823552652
+                ]
+              },
+              "raw": {
+                "units": -19.36363636363636,
+                "roi": -0.07118983957219249,
+                "policy_minus_control_units": 22.909090909090914,
+                "policy_minus_control_roi_ci95": [
+                  -0.10607046299425481,
+                  0.283596837944664
+                ]
+              },
+              "favorite": {
+                "units": 3.5454545454545476,
+                "roi": 0.013034759358288779,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -13.636363636363635,
+                "roi": -0.050133689839572185,
+                "policy_minus_control_units": 17.181818181818187,
+                "policy_minus_control_roi_ci95": [
+                  -0.07779228855721396,
+                  0.2060170045781557
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 128,
+            "losses": 130,
+            "pushes": 14,
+            "units": -13.636363636363635,
+            "roi": -0.050133689839572185,
+            "units_per_opportunity": -0.050133689839572185,
+            "roi_se": 0.05647530520478812,
+            "roi_ci95": [
+              -0.15826243937557805,
+              0.05233271063700833
+            ],
+            "cover_rate": 0.49612403100775193,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.6363636363636367,
+                "roi": 0.006016042780748665,
+                "policy_minus_control_units": -15.272727272727277,
+                "policy_minus_control_roi_ci95": [
+                  -0.1937799043062201,
+                  0.0691699604743083
+                ]
+              },
+              "raw": {
+                "units": -19.36363636363636,
+                "roi": -0.07118983957219249,
+                "policy_minus_control_units": 5.727272727272729,
+                "policy_minus_control_roi_ci95": [
+                  -0.13484285231497126,
+                  0.17855321462952206
+                ]
+              },
+              "favorite": {
+                "units": 3.5454545454545476,
+                "roi": 0.013034759358288779,
+                "policy_minus_control_units": -17.181818181818187,
+                "policy_minus_control_roi_ci95": [
+                  -0.2060170045781557,
+                  0.07779228855721375
+                ]
+              },
+              "home": {
+                "units": -13.636363636363635,
+                "roi": -0.050133689839572185,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        },
+        "paired": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 176,
+            "passes": 96,
+            "wins": 81,
+            "losses": 88,
+            "pushes": 7,
+            "units": -14.01873419101084,
+            "roi": -0.07965189881256159,
+            "units_per_opportunity": -0.051539463937539845,
+            "roi_se": 0.07083540933790894,
+            "roi_ci95": [
+              -0.196421356040921,
+              0.032309011826195624
+            ],
+            "cover_rate": 0.47928994082840237,
+            "expected_units": 11.266331705515299,
+            "mean_predicted_selected_conditional": 0.5567221268045306,
+            "selected_calibration_gap": 0.07743218597612822,
+            "same_selected_controls": {
+              "median": {
+                "units": -12.45371885681392,
+                "roi": -0.07075976623189727,
+                "policy_minus_control_units": -1.56501533419692,
+                "policy_minus_control_roi_ci95": [
+                  -0.07844732707157705,
+                  0.05174829464938913
+                ]
+              },
+              "raw": {
+                "units": -7.169505083469714,
+                "roi": -0.040735824337896104,
+                "policy_minus_control_units": -6.849229107541127,
+                "policy_minus_control_roi_ci95": [
+                  -0.23282437377324464,
+                  0.14684944079583714
+                ]
+              },
+              "favorite": {
+                "units": 10.539190212994455,
+                "roi": 0.05988176257383213,
+                "policy_minus_control_units": -24.55792440400529,
+                "policy_minus_control_roi_ci95": [
+                  -0.32024442917063123,
+                  0.05424972992397253
+                ]
+              },
+              "home": {
+                "units": -4.632712429247174,
+                "roi": -0.026322229711631673,
+                "policy_minus_control_units": -9.386021761763665,
+                "policy_minus_control_roi_ci95": [
+                  -0.22241879419714206,
+                  0.11160879853518767
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 193,
+            "passes": 79,
+            "wins": 91,
+            "losses": 92,
+            "pushes": 10,
+            "units": -8.39930148863696,
+            "roi": -0.04351969683231585,
+            "units_per_opportunity": -0.030879784884694693,
+            "roi_se": 0.0674450165550909,
+            "roi_ci95": [
+              -0.156828958726351,
+              0.07361234625784042
+            ],
+            "cover_rate": 0.4972677595628415,
+            "expected_units": 15.97107655978463,
+            "mean_predicted_selected_conditional": 0.5659637570766606,
+            "selected_calibration_gap": 0.06869599751381905,
+            "same_selected_controls": {
+              "median": {
+                "units": -8.39930148863696,
+                "roi": -0.04351969683231585,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -11.453308677810385,
+                "roi": -0.05934356827881029,
+                "policy_minus_control_units": 3.054007189173431,
+                "policy_minus_control_roi_ci95": [
+                  -0.17699245589840798,
+                  0.21591413807059065
+                ]
+              },
+              "favorite": {
+                "units": -1.9244237169496154,
+                "roi": -0.009971107341707853,
+                "policy_minus_control_units": -6.474877771687341,
+                "policy_minus_control_roi_ci95": [
+                  -0.208523264579823,
+                  0.14865106994522295
+                ]
+              },
+              "home": {
+                "units": -12.81079857255721,
+                "roi": -0.06637719467646223,
+                "policy_minus_control_units": 4.411497083920248,
+                "policy_minus_control_roi_ci95": [
+                  -0.15941012467851517,
+                  0.20847032993703057
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 136,
+            "losses": 122,
+            "pushes": 14,
+            "units": 1.792529354446648,
+            "roi": 0.0065901814501715,
+            "units_per_opportunity": 0.0065901814501715,
+            "roi_se": 0.056444511891175476,
+            "roi_ci95": [
+              -0.09291099639799096,
+              0.10701052872135988
+            ],
+            "cover_rate": 0.5271317829457365,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.792529354446648,
+                "roi": 0.0065901814501715,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -19.9953907257878,
+                "roi": -0.07351246590363161,
+                "policy_minus_control_units": 21.787920080234443,
+                "policy_minus_control_roi_ci95": [
+                  -0.05543938645378202,
+                  0.2291983246813457
+                ]
+              },
+              "favorite": {
+                "units": 3.0060726522359036,
+                "roi": 0.011051737692043763,
+                "policy_minus_control_units": -1.2135432977892542,
+                "policy_minus_control_roi_ci95": [
+                  -0.16624017730827717,
+                  0.1597740758355535
+                ]
+              },
+              "home": {
+                "units": -13.457761446822088,
+                "roi": -0.04947706414272827,
+                "policy_minus_control_units": 15.25029080126874,
+                "policy_minus_control_roi_ci95": [
+                  -0.06931377608746972,
+                  0.19439258079271657
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 125,
+            "losses": 133,
+            "pushes": 14,
+            "units": -19.9953907257878,
+            "roi": -0.07351246590363161,
+            "units_per_opportunity": -0.07351246590363161,
+            "roi_se": 0.0563253167253988,
+            "roi_ci95": [
+              -0.20131159741778748,
+              0.05313023146486437
+            ],
+            "cover_rate": 0.4844961240310077,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.792529354446648,
+                "roi": 0.0065901814501715,
+                "policy_minus_control_units": -21.787920080234443,
+                "policy_minus_control_roi_ci95": [
+                  -0.22919832468134585,
+                  0.055439386453781964
+                ]
+              },
+              "raw": {
+                "units": -19.9953907257878,
+                "roi": -0.07351246590363161,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": 3.0060726522359036,
+                "roi": 0.011051737692043763,
+                "policy_minus_control_units": -23.0014633780237,
+                "policy_minus_control_roi_ci95": [
+                  -0.2814566357236281,
+                  0.10364711530474516
+                ]
+              },
+              "home": {
+                "units": -13.457761446822088,
+                "roi": -0.04947706414272827,
+                "policy_minus_control_units": -6.537629278965704,
+                "policy_minus_control_roi_ci95": [
+                  -0.181185237618221,
+                  0.13185928803399932
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 121,
+            "pushes": 14,
+            "units": 3.0060726522359036,
+            "roi": 0.011051737692043763,
+            "units_per_opportunity": 0.011051737692043763,
+            "roi_se": 0.056273440708331714,
+            "roi_ci95": [
+              -0.09975842287161908,
+              0.12627939814048955
+            ],
+            "cover_rate": 0.5310077519379846,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.792529354446648,
+                "roi": 0.0065901814501715,
+                "policy_minus_control_units": 1.2135432977892542,
+                "policy_minus_control_roi_ci95": [
+                  -0.1597740758355535,
+                  0.166240177308277
+                ]
+              },
+              "raw": {
+                "units": -19.9953907257878,
+                "roi": -0.07351246590363161,
+                "policy_minus_control_units": 23.0014633780237,
+                "policy_minus_control_roi_ci95": [
+                  -0.10364711530474523,
+                  0.2814566357236281
+                ]
+              },
+              "favorite": {
+                "units": 3.0060726522359036,
+                "roi": 0.011051737692043763,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -13.457761446822088,
+                "roi": -0.04947706414272827,
+                "policy_minus_control_units": 16.46383409905799,
+                "policy_minus_control_roi_ci95": [
+                  -0.08000729103374445,
+                  0.2023740196833395
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 128,
+            "losses": 130,
+            "pushes": 14,
+            "units": -13.457761446822088,
+            "roi": -0.04947706414272827,
+            "units_per_opportunity": -0.04947706414272827,
+            "roi_se": 0.0565420910771735,
+            "roi_ci95": [
+              -0.15811541875806892,
+              0.053009968869491976
+            ],
+            "cover_rate": 0.49612403100775193,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.792529354446648,
+                "roi": 0.0065901814501715,
+                "policy_minus_control_units": -15.25029080126874,
+                "policy_minus_control_roi_ci95": [
+                  -0.19439258079271665,
+                  0.06931377608746972
+                ]
+              },
+              "raw": {
+                "units": -19.9953907257878,
+                "roi": -0.07351246590363161,
+                "policy_minus_control_units": 6.537629278965704,
+                "policy_minus_control_roi_ci95": [
+                  -0.13185928803399938,
+                  0.181185237618221
+                ]
+              },
+              "favorite": {
+                "units": 3.0060726522359036,
+                "roi": 0.011051737692043763,
+                "policy_minus_control_units": -16.46383409905799,
+                "policy_minus_control_roi_ci95": [
+                  -0.20237401968333968,
+                  0.08000729103374428
+                ]
+              },
+              "home": {
+                "units": -13.457761446822088,
+                "roi": -0.04947706414272827,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "2024": {
+      "games": 272,
+      "decisive": 268,
+      "paired_games": 272,
+      "scores": {
+        "soft_cover_ll": 0.6981154599682868,
+        "hard_cover_ll": 0.7008464272487247,
+        "fair_cover_ll": 0.6931471805599454,
+        "market_cover_ll": 0.6952918193457776,
+        "soft_cover_brier": 0.25224601097708,
+        "hard_cover_brier": 0.253585106152804,
+        "market_cover_brier": 0.2510718394824248,
+        "soft_event_ll": 0.7506943823375485,
+        "hard_event_ll": 0.7544610331552913,
+        "soft_crps": 6.995420487571618,
+        "hard_crps": 6.99473085076653,
+        "soft_mae": 9.599264705882353,
+        "hard_mae": 9.625,
+        "soft_cover_ll_paired": 0.6981154599682868,
+        "hard_cover_ll_paired": 0.7008464272487247
+      },
+      "zero_probability_events": {
+        "soft": 0,
+        "hard": 0
+      },
+      "gains": {
+        "soft_vs_hard_cover": {
+          "n": 268,
+          "gain": 0.00273096728043783,
+          "interval": [
+            -0.00417616539233654,
+            0.00998561338315097
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_market_cover": {
+          "n": 268,
+          "gain": -0.002823640622509222,
+          "interval": [
+            -0.018725080599559997,
+            0.012751949890663463
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_fair_cover": {
+          "n": 268,
+          "gain": -0.0049682794083415775,
+          "interval": [
+            -0.019603425954194047,
+            0.009627927071133423
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "soft_vs_hard_crps": {
+          "n": 272,
+          "gain": -0.0006896368050884893,
+          "interval": [
+            -0.04491612520276509,
+            0.04328251566504297
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "policy_gains": {
+        "assumed110": {
+          "n": 272,
+          "gain": 0.028409090909090908,
+          "interval": [
+            -0.045943392231385695,
+            0.10346966012633448
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "paired": {
+          "n": 272,
+          "gain": 0.0007843575820909778,
+          "interval": [
+            -0.05558219371311099,
+            0.06017484394436331
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "scenarios": {
+        "assumed110": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 160,
+            "passes": 112,
+            "wins": 82,
+            "losses": 76,
+            "pushes": 2,
+            "units": -1.4545454545454541,
+            "roi": -0.009090909090909089,
+            "units_per_opportunity": -0.005347593582887709,
+            "roi_se": 0.07517154697150438,
+            "roi_ci95": [
+              -0.15810393619758167,
+              0.14034478305785114
+            ],
+            "cover_rate": 0.5189873417721519,
+            "expected_units": 9.434307030706854,
+            "mean_predicted_selected_conditional": 0.5556065391799907,
+            "selected_calibration_gap": 0.03661919740783881,
+            "same_selected_controls": {
+              "median": {
+                "units": 4.272727272727275,
+                "roi": 0.02670454545454547,
+                "policy_minus_control_units": -5.727272727272728,
+                "policy_minus_control_roi_ci95": [
+                  -0.12727272727272726,
+                  0.05892255892255893
+                ]
+              },
+              "raw": {
+                "units": -12.909090909090912,
+                "roi": -0.0806818181818182,
+                "policy_minus_control_units": 11.454545454545457,
+                "policy_minus_control_roi_ci95": [
+                  -0.14141414141414144,
+                  0.2964696370822849
+                ]
+              },
+              "favorite": {
+                "units": 4.272727272727274,
+                "roi": 0.026704545454545463,
+                "policy_minus_control_units": -5.727272727272732,
+                "policy_minus_control_roi_ci95": [
+                  -0.2781456953642384,
+                  0.19966082392552964
+                ]
+              },
+              "home": {
+                "units": 0.4545454545454568,
+                "roi": 0.002840909090909105,
+                "policy_minus_control_units": -1.9090909090909083,
+                "policy_minus_control_roi_ci95": [
+                  -0.2272802528597231,
+                  0.21065830721003137
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 185,
+            "passes": 87,
+            "wins": 90,
+            "losses": 91,
+            "pushes": 4,
+            "units": -9.181818181818182,
+            "roi": -0.04963144963144963,
+            "units_per_opportunity": -0.033756684491978606,
+            "roi_se": 0.06960617314768551,
+            "roi_ci95": [
+              -0.1676545533803598,
+              0.06713383838383837
+            ],
+            "cover_rate": 0.4972375690607735,
+            "expected_units": 14.58090320950917,
+            "mean_predicted_selected_conditional": 0.5664667330676298,
+            "selected_calibration_gap": 0.06922916400685636,
+            "same_selected_controls": {
+              "median": {
+                "units": 4.181818181818182,
+                "roi": 0.022604422604422605,
+                "policy_minus_control_units": -13.363636363636365,
+                "policy_minus_control_roi_ci95": [
+                  -0.16247582205029015,
+                  0.020312192927109257
+                ]
+              },
+              "raw": {
+                "units": -5.36363636363636,
+                "roi": -0.02899262899262897,
+                "policy_minus_control_units": -3.81818181818182,
+                "policy_minus_control_roi_ci95": [
+                  -0.18440082644628097,
+                  0.1399333650642551
+                ]
+              },
+              "favorite": {
+                "units": 25.18181818181818,
+                "roi": 0.1361179361179361,
+                "policy_minus_control_units": -34.36363636363637,
+                "policy_minus_control_roi_ci95": [
+                  -0.40366156126482206,
+                  0.02967885215496934
+                ]
+              },
+              "home": {
+                "units": 4.181818181818179,
+                "roi": 0.02260442260442259,
+                "policy_minus_control_units": -13.363636363636363,
+                "policy_minus_control_roi_ci95": [
+                  -0.21451525072888272,
+                  0.053929121725731895
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 142,
+            "losses": 126,
+            "pushes": 4,
+            "units": 3.0909090909090917,
+            "roi": 0.011363636363636367,
+            "units_per_opportunity": 0.011363636363636367,
+            "roi_se": 0.057453967938887185,
+            "roi_ci95": [
+              -0.10936606094997357,
+              0.12165481607775795
+            ],
+            "cover_rate": 0.5298507462686567,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.0909090909090917,
+                "roi": 0.011363636363636367,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -6.454545454545452,
+                "roi": -0.023729946524064162,
+                "policy_minus_control_units": 9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.14906474628917302,
+                  0.22377622377622378
+                ]
+              },
+              "favorite": {
+                "units": 5.000000000000002,
+                "roi": 0.018382352941176478,
+                "policy_minus_control_units": -1.90909090909091,
+                "policy_minus_control_roi_ci95": [
+                  -0.1943801652892562,
+                  0.16844919786096255
+                ]
+              },
+              "home": {
+                "units": -6.454545454545455,
+                "roi": -0.023729946524064172,
+                "policy_minus_control_units": 9.54545454545455,
+                "policy_minus_control_roi_ci95": [
+                  -0.07807419685956835,
+                  0.15071770334928228
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 131,
+            "pushes": 4,
+            "units": -6.454545454545452,
+            "roi": -0.023729946524064162,
+            "units_per_opportunity": -0.023729946524064162,
+            "roi_se": 0.05754241441082273,
+            "roi_ci95": [
+              -0.15644022424578752,
+              0.09395065900642106
+            ],
+            "cover_rate": 0.5111940298507462,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.0909090909090917,
+                "roi": 0.011363636363636367,
+                "policy_minus_control_units": -9.545454545454547,
+                "policy_minus_control_roi_ci95": [
+                  -0.22377622377622378,
+                  0.1490647462891726
+                ]
+              },
+              "raw": {
+                "units": -6.454545454545452,
+                "roi": -0.023729946524064162,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": 5.000000000000002,
+                "roi": 0.018382352941176478,
+                "policy_minus_control_units": -11.454545454545457,
+                "policy_minus_control_roi_ci95": [
+                  -0.22711207806325437,
+                  0.14300306435137897
+                ]
+              },
+              "home": {
+                "units": -6.454545454545455,
+                "roi": -0.023729946524064172,
+                "policy_minus_control_units": 8.881784197001252e-16,
+                "policy_minus_control_roi_ci95": [
+                  -0.1798418972332016,
+                  0.17171128620259835
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 143,
+            "losses": 125,
+            "pushes": 4,
+            "units": 5.000000000000002,
+            "roi": 0.018382352941176478,
+            "units_per_opportunity": 0.018382352941176478,
+            "roi_se": 0.0574267668166056,
+            "roi_ci95": [
+              -0.12326048511274068,
+              0.1479559986587797
+            ],
+            "cover_rate": 0.5335820895522388,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.0909090909090917,
+                "roi": 0.011363636363636367,
+                "policy_minus_control_units": 1.90909090909091,
+                "policy_minus_control_roi_ci95": [
+                  -0.16844919786096255,
+                  0.1943801652892562
+                ]
+              },
+              "raw": {
+                "units": -6.454545454545452,
+                "roi": -0.023729946524064162,
+                "policy_minus_control_units": 11.454545454545457,
+                "policy_minus_control_roi_ci95": [
+                  -0.14300306435137897,
+                  0.22711207806325426
+                ]
+              },
+              "favorite": {
+                "units": 5.000000000000002,
+                "roi": 0.018382352941176478,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -6.454545454545455,
+                "roi": -0.023729946524064172,
+                "policy_minus_control_units": 11.454545454545453,
+                "policy_minus_control_roi_ci95": [
+                  -0.12316715542521993,
+                  0.22082767978290366
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 131,
+            "pushes": 4,
+            "units": -6.454545454545455,
+            "roi": -0.023729946524064172,
+            "units_per_opportunity": -0.023729946524064172,
+            "roi_se": 0.05754241441082273,
+            "roi_ci95": [
+              -0.13157024793388428,
+              0.08267531499265132
+            ],
+            "cover_rate": 0.5111940298507462,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.0909090909090917,
+                "roi": 0.011363636363636367,
+                "policy_minus_control_units": -9.54545454545455,
+                "policy_minus_control_roi_ci95": [
+                  -0.15071770334928228,
+                  0.07807419685956823
+                ]
+              },
+              "raw": {
+                "units": -6.454545454545452,
+                "roi": -0.023729946524064162,
+                "policy_minus_control_units": -8.881784197001252e-16,
+                "policy_minus_control_roi_ci95": [
+                  -0.1717112862025988,
+                  0.1798418972332016
+                ]
+              },
+              "favorite": {
+                "units": 5.000000000000002,
+                "roi": 0.018382352941176478,
+                "policy_minus_control_units": -11.454545454545453,
+                "policy_minus_control_roi_ci95": [
+                  -0.22082767978290366,
+                  0.12316715542521993
+                ]
+              },
+              "home": {
+                "units": -6.454545454545455,
+                "roi": -0.023729946524064172,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        },
+        "paired": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 151,
+            "passes": 121,
+            "wins": 78,
+            "losses": 71,
+            "pushes": 2,
+            "units": 0.22286991212822294,
+            "roi": 0.0014759596829683637,
+            "units_per_opportunity": 0.0008193746769419993,
+            "roi_se": 0.07751944071910223,
+            "roi_ci95": [
+              -0.1570300781963829,
+              0.15156019987745153
+            ],
+            "cover_rate": 0.5234899328859061,
+            "expected_units": 9.16089737738,
+            "mean_predicted_selected_conditional": 0.5555592185634795,
+            "selected_calibration_gap": 0.03206928567757339,
+            "same_selected_controls": {
+              "median": {
+                "units": 5.6529178228536665,
+                "roi": 0.03743654187320309,
+                "policy_minus_control_units": -5.430047910725444,
+                "policy_minus_control_roi_ci95": [
+                  -0.12896763403392425,
+                  0.07067691462158202
+                ]
+              },
+              "raw": {
+                "units": -8.07357558522542,
+                "roi": -0.0534673879816253,
+                "policy_minus_control_units": 8.296445497353641,
+                "policy_minus_control_roi_ci95": [
+                  -0.10399245194912031,
+                  0.20644470152664837
+                ]
+              },
+              "favorite": {
+                "units": 3.277507977354092,
+                "roi": 0.02170535084340458,
+                "policy_minus_control_units": -3.0546380652258667,
+                "policy_minus_control_roi_ci95": [
+                  -0.2609057663005872,
+                  0.2087030790211538
+                ]
+              },
+              "home": {
+                "units": 6.020675332056407,
+                "roi": 0.03987202206659872,
+                "policy_minus_control_units": -5.797805419928179,
+                "policy_minus_control_roi_ci95": [
+                  -0.22387463470362262,
+                  0.16529670555176393
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 174,
+            "passes": 98,
+            "wins": 89,
+            "losses": 81,
+            "pushes": 4,
+            "units": 0.009524649799478091,
+            "roi": 5.473936666366719e-05,
+            "units_per_opportunity": 3.501709485102566e-05,
+            "roi_se": 0.07171780151084844,
+            "roi_ci95": [
+              -0.13361999112460501,
+              0.120442793429675
+            ],
+            "cover_rate": 0.5235294117647059,
+            "expected_units": 14.476225831163212,
+            "mean_predicted_selected_conditional": 0.5682689415992228,
+            "selected_calibration_gap": 0.0447395298345169,
+            "same_selected_controls": {
+              "median": {
+                "units": 1.7146534460647018,
+                "roi": 0.009854330149797136,
+                "policy_minus_control_units": -1.7051287962652237,
+                "policy_minus_control_roi_ci95": [
+                  -0.09857760640212895,
+                  0.06048183213252332
+                ]
+              },
+              "raw": {
+                "units": 1.2126199580977097,
+                "roi": 0.006969080218952354,
+                "policy_minus_control_units": -1.2030953082982299,
+                "policy_minus_control_roi_ci95": [
+                  -0.18485655497159556,
+                  0.16574373473489767
+                ]
+              },
+              "favorite": {
+                "units": 16.38894349809111,
+                "roi": 0.09418933044879947,
+                "policy_minus_control_units": -16.379418848291632,
+                "policy_minus_control_roi_ci95": [
+                  -0.3321807869045452,
+                  0.1253128745334339
+                ]
+              },
+              "home": {
+                "units": 2.0404836945757676,
+                "roi": 0.011726917784918205,
+                "policy_minus_control_units": -2.0309590447762904,
+                "policy_minus_control_roi_ci95": [
+                  -0.13292638241043142,
+                  0.10544423335197074
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 142,
+            "losses": 126,
+            "pushes": 4,
+            "units": 3.1191907178263847,
+            "roi": 0.011467612933185238,
+            "units_per_opportunity": 0.011467612933185238,
+            "roi_se": 0.05748517274818332,
+            "roi_ci95": [
+              -0.10969056556438878,
+              0.12233896411702799
+            ],
+            "cover_rate": 0.5298507462686567,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.1191907178263847,
+                "roi": 0.011467612933185238,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -6.607938651745223,
+                "roi": -0.024293892102004496,
+                "policy_minus_control_units": 9.727129369571612,
+                "policy_minus_control_roi_ci95": [
+                  -0.14908906714390144,
+                  0.22342238606042075
+                ]
+              },
+              "favorite": {
+                "units": 4.731183232242066,
+                "roi": 0.01739405600088995,
+                "policy_minus_control_units": -1.6119925144156788,
+                "policy_minus_control_roi_ci95": [
+                  -0.19310974378550944,
+                  0.16991469873221196
+                ]
+              },
+              "home": {
+                "units": -5.584900666384473,
+                "roi": -0.02053272303817821,
+                "policy_minus_control_units": 8.704091384210859,
+                "policy_minus_control_roi_ci95": [
+                  -0.08282696021452814,
+                  0.14786864999436589
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 131,
+            "pushes": 4,
+            "units": -6.607938651745223,
+            "roi": -0.024293892102004496,
+            "units_per_opportunity": -0.024293892102004496,
+            "roi_se": 0.057529369954303876,
+            "roi_ci95": [
+              -0.15673901040997182,
+              0.09417578244932001
+            ],
+            "cover_rate": 0.5111940298507462,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.1191907178263847,
+                "roi": 0.011467612933185238,
+                "policy_minus_control_units": -9.727129369571612,
+                "policy_minus_control_roi_ci95": [
+                  -0.2234223860604208,
+                  0.14908906714390138
+                ]
+              },
+              "raw": {
+                "units": -6.607938651745223,
+                "roi": -0.024293892102004496,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": 4.731183232242066,
+                "roi": 0.01739405600088995,
+                "policy_minus_control_units": -11.339121883987287,
+                "policy_minus_control_roi_ci95": [
+                  -0.22650899119917628,
+                  0.1444168149002072
+                ]
+              },
+              "home": {
+                "units": -5.584900666384473,
+                "roi": -0.02053272303817821,
+                "policy_minus_control_units": -1.0230379853607428,
+                "policy_minus_control_roi_ci95": [
+                  -0.18499868851728732,
+                  0.16880604537918453
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 143,
+            "losses": 125,
+            "pushes": 4,
+            "units": 4.731183232242066,
+            "roi": 0.01739405600088995,
+            "units_per_opportunity": 0.01739405600088995,
+            "roi_se": 0.05739542699652674,
+            "roi_ci95": [
+              -0.12413405536064043,
+              0.14701518901301153
+            ],
+            "cover_rate": 0.5335820895522388,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.1191907178263847,
+                "roi": 0.011467612933185238,
+                "policy_minus_control_units": 1.6119925144156788,
+                "policy_minus_control_roi_ci95": [
+                  -0.16991469873221196,
+                  0.19310974378550935
+                ]
+              },
+              "raw": {
+                "units": -6.607938651745223,
+                "roi": -0.024293892102004496,
+                "policy_minus_control_units": 11.339121883987287,
+                "policy_minus_control_roi_ci95": [
+                  -0.14441681490020727,
+                  0.226508991199176
+                ]
+              },
+              "favorite": {
+                "units": 4.731183232242066,
+                "roi": 0.01739405600088995,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -5.584900666384473,
+                "roi": -0.02053272303817821,
+                "policy_minus_control_units": 10.316083898626541,
+                "policy_minus_control_roi_ci95": [
+                  -0.12771822095517893,
+                  0.21685624970938808
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 137,
+            "losses": 131,
+            "pushes": 4,
+            "units": -5.584900666384473,
+            "roi": -0.02053272303817821,
+            "units_per_opportunity": -0.02053272303817821,
+            "roi_se": 0.05775687879670292,
+            "roi_ci95": [
+              -0.13014879440611923,
+              0.08649052387597066
+            ],
+            "cover_rate": 0.5111940298507462,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 3.1191907178263847,
+                "roi": 0.011467612933185238,
+                "policy_minus_control_units": -8.704091384210859,
+                "policy_minus_control_roi_ci95": [
+                  -0.1478686499943659,
+                  0.08282696021452803
+                ]
+              },
+              "raw": {
+                "units": -6.607938651745223,
+                "roi": -0.024293892102004496,
+                "policy_minus_control_units": 1.0230379853607428,
+                "policy_minus_control_roi_ci95": [
+                  -0.16880604537918453,
+                  0.18499868851728712
+                ]
+              },
+              "favorite": {
+                "units": 4.731183232242066,
+                "roi": 0.01739405600088995,
+                "policy_minus_control_units": -10.316083898626541,
+                "policy_minus_control_roi_ci95": [
+                  -0.2168562497093882,
+                  0.12771822095517893
+                ]
+              },
+              "home": {
+                "units": -5.584900666384473,
+                "roi": -0.02053272303817821,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "2025": {
+      "games": 272,
+      "decisive": 271,
+      "paired_games": 272,
+      "scores": {
+        "soft_cover_ll": 0.6828711930713507,
+        "hard_cover_ll": 0.6888216554104577,
+        "fair_cover_ll": 0.6931471805599453,
+        "market_cover_ll": 0.6923205180550218,
+        "soft_cover_brier": 0.24491709183072613,
+        "hard_cover_brier": 0.24783987338310162,
+        "market_cover_brier": 0.24958671312680836,
+        "soft_event_ll": 0.704967139386005,
+        "hard_event_ll": 0.7106131236595051,
+        "soft_crps": 6.863525480845202,
+        "hard_crps": 6.928815988310982,
+        "soft_mae": 9.621323529411764,
+        "hard_mae": 9.676470588235293,
+        "soft_cover_ll_paired": 0.6828711930713507,
+        "hard_cover_ll_paired": 0.6888216554104577
+      },
+      "zero_probability_events": {
+        "soft": 0,
+        "hard": 0
+      },
+      "gains": {
+        "soft_vs_hard_cover": {
+          "n": 271,
+          "gain": 0.00595046233910696,
+          "interval": [
+            -0.00325115841092573,
+            0.014930835218286302
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_market_cover": {
+          "n": 271,
+          "gain": 0.009449324983671051,
+          "interval": [
+            -0.0107331468276812,
+            0.03084656021081491
+          ],
+          "confidence": 0.975,
+          "clusters": 18
+        },
+        "soft_vs_fair_cover": {
+          "n": 271,
+          "gain": 0.010275987488594533,
+          "interval": [
+            -0.006851432233374802,
+            0.02791724419076619
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "soft_vs_hard_crps": {
+          "n": 272,
+          "gain": 0.06529050746577972,
+          "interval": [
+            0.009260619193654831,
+            0.12270200777138597
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "policy_gains": {
+        "assumed110": {
+          "n": 272,
+          "gain": -0.029077540106951873,
+          "interval": [
+            -0.08584028012466674,
+            0.0267379679144385
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        },
+        "paired": {
+          "n": 272,
+          "gain": 0.01065775432820557,
+          "interval": [
+            -0.04713368004134651,
+            0.07039759903583735
+          ],
+          "confidence": 0.95,
+          "clusters": 18
+        }
+      },
+      "scenarios": {
+        "assumed110": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 172,
+            "passes": 100,
+            "wins": 98,
+            "losses": 73,
+            "pushes": 1,
+            "units": 16.09090909090909,
+            "roi": 0.09355179704016912,
+            "units_per_opportunity": 0.05915775401069518,
+            "roi_se": 0.07200344571341787,
+            "roi_ci95": [
+              -0.056889577271719345,
+              0.2511566377422755
+            ],
+            "cover_rate": 0.5730994152046783,
+            "expected_units": 12.122340826758473,
+            "mean_predicted_selected_conditional": 0.5612554588177029,
+            "selected_calibration_gap": -0.01184395638697544,
+            "same_selected_controls": {
+              "median": {
+                "units": 18.000000000000004,
+                "roi": 0.1046511627906977,
+                "policy_minus_control_units": -1.9090909090909092,
+                "policy_minus_control_roi_ci95": [
+                  -0.07814992025518341,
+                  0.04772727272727273
+                ]
+              },
+              "raw": {
+                "units": 0.8181818181818206,
+                "roi": 0.004756871035940817,
+                "policy_minus_control_units": 15.272727272727275,
+                "policy_minus_control_roi_ci95": [
+                  -0.10606060606060604,
+                  0.2727272727272728
+                ]
+              },
+              "favorite": {
+                "units": -16.36363636363636,
+                "roi": -0.09513742071881605,
+                "policy_minus_control_units": 32.45454545454545,
+                "policy_minus_control_roi_ci95": [
+                  0.012155990866482388,
+                  0.35
+                ]
+              },
+              "home": {
+                "units": 0.8181818181818192,
+                "roi": 0.0047568710359408095,
+                "policy_minus_control_units": 15.272727272727277,
+                "policy_minus_control_roi_ci95": [
+                  -0.07862125431129957,
+                  0.25528541226215645
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 187,
+            "passes": 85,
+            "wins": 110,
+            "losses": 76,
+            "pushes": 1,
+            "units": 24.000000000000004,
+            "roi": 0.12834224598930483,
+            "units_per_opportunity": 0.08823529411764706,
+            "roi_se": 0.06863062466384795,
+            "roi_ci95": [
+              0.006953848895224508,
+              0.25464064731080427
+            ],
+            "cover_rate": 0.5913978494623656,
+            "expected_units": 15.166096715386965,
+            "mean_predicted_selected_conditional": 0.566971394983258,
+            "selected_calibration_gap": -0.02442645447910763,
+            "same_selected_controls": {
+              "median": {
+                "units": 24.000000000000004,
+                "roi": 0.12834224598930483,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": -0.818181818181817,
+                "roi": -0.004375303840544476,
+                "policy_minus_control_units": 24.818181818181824,
+                "policy_minus_control_roi_ci95": [
+                  -0.03389423076923078,
+                  0.2898619704902427
+                ]
+              },
+              "favorite": {
+                "units": -19.909090909090907,
+                "roi": -0.1064657267865824,
+                "policy_minus_control_units": 43.90909090909091,
+                "policy_minus_control_roi_ci95": [
+                  0.07223587223587226,
+                  0.39567571732093276
+                ]
+              },
+              "home": {
+                "units": -2.7272727272727284,
+                "roi": -0.01458434613514828,
+                "policy_minus_control_units": 26.727272727272727,
+                "policy_minus_control_roi_ci95": [
+                  -0.0389813311688312,
+                  0.3234023339816615
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 152,
+            "losses": 119,
+            "pushes": 1,
+            "units": 19.18181818181818,
+            "roi": 0.07052139037433154,
+            "units_per_opportunity": 0.07052139037433154,
+            "roi_se": 0.05744769355579744,
+            "roi_ci95": [
+              -0.05185425685425687,
+              0.1881393241794699
+            ],
+            "cover_rate": 0.5608856088560885,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 19.18181818181818,
+                "roi": 0.07052139037433154,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": 9.636363636363637,
+                "roi": 0.03542780748663102,
+                "policy_minus_control_units": 9.545454545454541,
+                "policy_minus_control_roi_ci95": [
+                  -0.0909090909090909,
+                  0.1538602941176469
+                ]
+              },
+              "favorite": {
+                "units": -20.909090909090907,
+                "roi": -0.07687165775401068,
+                "policy_minus_control_units": 40.09090909090909,
+                "policy_minus_control_roi_ci95": [
+                  3.454950250532102e-18,
+                  0.2657342657342658
+                ]
+              },
+              "home": {
+                "units": -13.27272727272727,
+                "roi": -0.048796791443850254,
+                "policy_minus_control_units": 32.45454545454546,
+                "policy_minus_control_roi_ci95": [
+                  -0.03458498023715415,
+                  0.27272727272727276
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 147,
+            "losses": 124,
+            "pushes": 1,
+            "units": 9.636363636363637,
+            "roi": 0.03542780748663102,
+            "units_per_opportunity": 0.03542780748663102,
+            "roi_se": 0.05766914232995839,
+            "roi_ci95": [
+              -0.04177807486631018,
+              0.10961601575319986
+            ],
+            "cover_rate": 0.5424354243542435,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 19.18181818181818,
+                "roi": 0.07052139037433154,
+                "policy_minus_control_units": -9.545454545454541,
+                "policy_minus_control_roi_ci95": [
+                  -0.1538602941176471,
+                  0.0909090909090909
+                ]
+              },
+              "raw": {
+                "units": 9.636363636363637,
+                "roi": 0.03542780748663102,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -20.909090909090907,
+                "roi": -0.07687165775401068,
+                "policy_minus_control_units": 30.545454545454554,
+                "policy_minus_control_roi_ci95": [
+                  -0.02777112867225675,
+                  0.24722040549378682
+                ]
+              },
+              "home": {
+                "units": -13.27272727272727,
+                "roi": -0.048796791443850254,
+                "policy_minus_control_units": 22.909090909090914,
+                "policy_minus_control_roi_ci95": [
+                  -0.06203384298169263,
+                  0.2377365087742446
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 131,
+            "losses": 140,
+            "pushes": 1,
+            "units": -20.909090909090907,
+            "roi": -0.07687165775401068,
+            "units_per_opportunity": -0.07687165775401068,
+            "roi_se": 0.0578465888114201,
+            "roi_ci95": [
+              -0.1787193006393264,
+              0.03425871361839736
+            ],
+            "cover_rate": 0.4833948339483395,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 19.18181818181818,
+                "roi": 0.07052139037433154,
+                "policy_minus_control_units": -40.09090909090909,
+                "policy_minus_control_roi_ci95": [
+                  -0.2657342657342658,
+                  -3.4549502505321165e-18
+                ]
+              },
+              "raw": {
+                "units": 9.636363636363637,
+                "roi": 0.03542780748663102,
+                "policy_minus_control_units": -30.545454545454554,
+                "policy_minus_control_roi_ci95": [
+                  -0.24722040549378682,
+                  0.02777112867225671
+                ]
+              },
+              "favorite": {
+                "units": -20.909090909090907,
+                "roi": -0.07687165775401068,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -13.27272727272727,
+                "roi": -0.048796791443850254,
+                "policy_minus_control_units": -7.636363636363637,
+                "policy_minus_control_roi_ci95": [
+                  -0.13485543093925442,
+                  0.08548168249660787
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 135,
+            "losses": 136,
+            "pushes": 1,
+            "units": -13.27272727272727,
+            "roi": -0.048796791443850254,
+            "units_per_opportunity": -0.048796791443850254,
+            "roi_se": 0.057877705660562766,
+            "roi_ci95": [
+              -0.1594301221166893,
+              0.05831395975565917
+            ],
+            "cover_rate": 0.4981549815498155,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 19.18181818181818,
+                "roi": 0.07052139037433154,
+                "policy_minus_control_units": -32.45454545454546,
+                "policy_minus_control_roi_ci95": [
+                  -0.27272727272727276,
+                  0.03458498023715415
+                ]
+              },
+              "raw": {
+                "units": 9.636363636363637,
+                "roi": 0.03542780748663102,
+                "policy_minus_control_units": -22.909090909090914,
+                "policy_minus_control_roi_ci95": [
+                  -0.2377365087742446,
+                  0.062033842981692545
+                ]
+              },
+              "favorite": {
+                "units": -20.909090909090907,
+                "roi": -0.07687165775401068,
+                "policy_minus_control_units": 7.636363636363637,
+                "policy_minus_control_roi_ci95": [
+                  -0.08548168249660787,
+                  0.13485543093925423
+                ]
+              },
+              "home": {
+                "units": -13.27272727272727,
+                "roi": -0.048796791443850254,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        },
+        "paired": {
+          "soft_ev": {
+            "games": 272,
+            "bets": 168,
+            "passes": 104,
+            "wins": 97,
+            "losses": 70,
+            "pushes": 1,
+            "units": 18.182771253172064,
+            "roi": 0.10823078126888133,
+            "units_per_opportunity": 0.06684842372489727,
+            "roi_se": 0.0727424534131259,
+            "roi_ci95": [
+              -0.06381047012902498,
+              0.27784350562705273
+            ],
+            "cover_rate": 0.5808383233532934,
+            "expected_units": 11.625908822144611,
+            "mean_predicted_selected_conditional": 0.5603368808899919,
+            "selected_calibration_gap": -0.020501442463301545,
+            "same_selected_controls": {
+              "median": {
+                "units": 13.638840880207052,
+                "roi": 0.08118357666789912,
+                "policy_minus_control_units": 4.543930372965008,
+                "policy_minus_control_roi_ci95": [
+                  -0.04044599400566168,
+                  0.10186525292062164
+                ]
+              },
+              "raw": {
+                "units": 0.38625969618107314,
+                "roi": 0.0022991648582206736,
+                "policy_minus_control_units": 17.79651155699099,
+                "policy_minus_control_roi_ci95": [
+                  -0.053161819833899594,
+                  0.2551186842649477
+                ]
+              },
+              "favorite": {
+                "units": -16.079110905358252,
+                "roi": -0.0957089934842753,
+                "policy_minus_control_units": 34.26188215853031,
+                "policy_minus_control_roi_ci95": [
+                  0.021079947016635753,
+                  0.3710342698283666
+                ]
+              },
+              "home": {
+                "units": -6.479648371113107,
+                "roi": -0.038569335542339926,
+                "policy_minus_control_units": 24.66241962428517,
+                "policy_minus_control_roi_ci95": [
+                  -0.04613336805944417,
+                  0.3195006154257547
+                ]
+              }
+            }
+          },
+          "hard_ev": {
+            "games": 272,
+            "bets": 183,
+            "passes": 89,
+            "wins": 103,
+            "losses": 79,
+            "pushes": 1,
+            "units": 15.283862075900146,
+            "roi": 0.08351837199945435,
+            "units_per_opportunity": 0.05619066939669171,
+            "roi_se": 0.0702333315335079,
+            "roi_ci95": [
+              -0.0693579713853103,
+              0.22355847704472304
+            ],
+            "cover_rate": 0.5659340659340659,
+            "expected_units": 15.281460679247616,
+            "mean_predicted_selected_conditional": 0.5662825345865576,
+            "selected_calibration_gap": 0.000348468652491718,
+            "same_selected_controls": {
+              "median": {
+                "units": 17.000884920410094,
+                "roi": 0.09290101049404423,
+                "policy_minus_control_units": -1.7170228445099482,
+                "policy_minus_control_roi_ci95": [
+                  -0.0415135877284348,
+                  0.02414298574336534
+                ]
+              },
+              "raw": {
+                "units": 0.13484476369847354,
+                "roi": 0.0007368566322320958,
+                "policy_minus_control_units": 15.149017312201671,
+                "policy_minus_control_roi_ci95": [
+                  -0.09711010917854178,
+                  0.25186786624278495
+                ]
+              },
+              "favorite": {
+                "units": -25.4798008102551,
+                "roi": -0.13923388420904426,
+                "policy_minus_control_units": 40.763662886155245,
+                "policy_minus_control_roi_ci95": [
+                  0.02679794281578574,
+                  0.39776326629381437
+                ]
+              },
+              "home": {
+                "units": -14.141465052111375,
+                "roi": -0.07727576531208402,
+                "policy_minus_control_units": 29.425327128011517,
+                "policy_minus_control_roi_ci95": [
+                  -0.0073806112812852395,
+                  0.30904285209674914
+                ]
+              }
+            }
+          },
+          "median": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 152,
+            "losses": 119,
+            "pushes": 1,
+            "units": 18.127107665896787,
+            "roi": 0.06664377818344407,
+            "units_per_opportunity": 0.06664377818344407,
+            "roi_se": 0.057284384521825965,
+            "roi_ci95": [
+              -0.0549405585799508,
+              0.18526891924883435
+            ],
+            "cover_rate": 0.5608856088560885,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 18.127107665896787,
+                "roi": 0.06664377818344407,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "raw": {
+                "units": 8.840547632297433,
+                "roi": 0.03250201335403468,
+                "policy_minus_control_units": 9.286560033599347,
+                "policy_minus_control_roi_ci95": [
+                  -0.09108386404970352,
+                  0.1533980780742708
+                ]
+              },
+              "favorite": {
+                "units": -21.29184819279535,
+                "roi": -0.0782788536499829,
+                "policy_minus_control_units": 39.41895585869214,
+                "policy_minus_control_roi_ci95": [
+                  -0.001981786613077827,
+                  0.2635644167446938
+                ]
+              },
+              "home": {
+                "units": -13.700037994847047,
+                "roi": -0.0503677867457612,
+                "policy_minus_control_units": 31.827145660743838,
+                "policy_minus_control_roi_ci95": [
+                  -0.03626306533820169,
+                  0.2710527566985527
+                ]
+              }
+            }
+          },
+          "raw": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 147,
+            "losses": 124,
+            "pushes": 1,
+            "units": 8.840547632297433,
+            "roi": 0.03250201335403468,
+            "units_per_opportunity": 0.03250201335403468,
+            "roi_se": 0.05754853377777221,
+            "roi_ci95": [
+              -0.04439444156838088,
+              0.10715566256391686
+            ],
+            "cover_rate": 0.5424354243542435,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 18.127107665896787,
+                "roi": 0.06664377818344407,
+                "policy_minus_control_units": -9.286560033599347,
+                "policy_minus_control_roi_ci95": [
+                  -0.15339807807427092,
+                  0.09108386404970335
+                ]
+              },
+              "raw": {
+                "units": 8.840547632297433,
+                "roi": 0.03250201335403468,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "favorite": {
+                "units": -21.29184819279535,
+                "roi": -0.0782788536499829,
+                "policy_minus_control_units": 30.132395825092782,
+                "policy_minus_control_roi_ci95": [
+                  -0.028610348306310398,
+                  0.24431434204032532
+                ]
+              },
+              "home": {
+                "units": -13.700037994847047,
+                "roi": -0.0503677867457612,
+                "policy_minus_control_units": 22.54058562714448,
+                "policy_minus_control_roi_ci95": [
+                  -0.06175040135939779,
+                  0.23469798978437695
+                ]
+              }
+            }
+          },
+          "favorite": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 131,
+            "losses": 140,
+            "pushes": 1,
+            "units": -21.29184819279535,
+            "roi": -0.0782788536499829,
+            "units_per_opportunity": -0.0782788536499829,
+            "roi_se": 0.05779346853410414,
+            "roi_ci95": [
+              -0.18072468468674935,
+              0.03409943042279335
+            ],
+            "cover_rate": 0.4833948339483395,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 18.127107665896787,
+                "roi": 0.06664377818344407,
+                "policy_minus_control_units": -39.41895585869214,
+                "policy_minus_control_roi_ci95": [
+                  -0.26356441674469383,
+                  0.001981786613077703
+                ]
+              },
+              "raw": {
+                "units": 8.840547632297433,
+                "roi": 0.03250201335403468,
+                "policy_minus_control_units": -30.132395825092782,
+                "policy_minus_control_roi_ci95": [
+                  -0.24431434204032532,
+                  0.028610348306310315
+                ]
+              },
+              "favorite": {
+                "units": -21.29184819279535,
+                "roi": -0.0782788536499829,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "home": {
+                "units": -13.700037994847047,
+                "roi": -0.0503677867457612,
+                "policy_minus_control_units": -7.5918101979483055,
+                "policy_minus_control_roi_ci95": [
+                  -0.13510824357657622,
+                  0.08748866647092111
+                ]
+              }
+            }
+          },
+          "home": {
+            "games": 272,
+            "bets": 272,
+            "passes": 0,
+            "wins": 135,
+            "losses": 136,
+            "pushes": 1,
+            "units": -13.700037994847047,
+            "roi": -0.0503677867457612,
+            "units_per_opportunity": -0.0503677867457612,
+            "roi_se": 0.05781946041070877,
+            "roi_ci95": [
+              -0.1627126072124963,
+              0.05772729605957897
+            ],
+            "cover_rate": 0.4981549815498155,
+            "expected_units": null,
+            "mean_predicted_selected_conditional": null,
+            "selected_calibration_gap": null,
+            "same_selected_controls": {
+              "median": {
+                "units": 18.127107665896787,
+                "roi": 0.06664377818344407,
+                "policy_minus_control_units": -31.827145660743838,
+                "policy_minus_control_roi_ci95": [
+                  -0.2710527566985528,
+                  0.03626306533820167
+                ]
+              },
+              "raw": {
+                "units": 8.840547632297433,
+                "roi": 0.03250201335403468,
+                "policy_minus_control_units": -22.54058562714448,
+                "policy_minus_control_roi_ci95": [
+                  -0.23469798978437703,
+                  0.06175040135939779
+                ]
+              },
+              "favorite": {
+                "units": -21.29184819279535,
+                "roi": -0.0782788536499829,
+                "policy_minus_control_units": 7.5918101979483055,
+                "policy_minus_control_roi_ci95": [
+                  -0.08748866647092113,
+                  0.13510824357657622
+                ]
+              },
+              "home": {
+                "units": -13.700037994847047,
+                "roi": -0.0503677867457612,
+                "policy_minus_control_units": 0.0,
+                "policy_minus_control_roi_ci95": [
+                  0.0,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

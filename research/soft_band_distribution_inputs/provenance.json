@@ -1,0 +1,24 @@
+{
+  "policy": "SB1-neighbor-empirical-bands-2026-10-26-v1",
+  "model_revision": "boxscore-composite-v1.18",
+  "model_config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
+  "production_generated_utc": "2026-10-26T18:43:06.801172+00:00",
+  "exposure": "All historical data and 2026 diagnostic are exposed development, not forward validation.",
+  "source_hashes": {
+    "data/latest/retro_ledger.csv": "21c94e859c4b06344dd43390012a5c19082605dcf3ba21eca6cd414367fb13cf",
+    "data/latest/board.csv": "0330e516a03188c253374770046d8b2501cbeb56882ad3875df016c36803942f",
+    "data/latest/manifest.json": "9d61ad65778aaeaa3a934a4125428e7912dec05f479e1a18e828cd255dc281f3",
+    "data/forward_ledger.csv": "ef8ae7675d2418632bcc3f8d3aa5218f4e7236f667dab92149e18b987dd198cf",
+    "data/ats_locks.jsonl": "fee3b8e4d1b614ba375847cb5134b0d2f18d482fe143dc59c9d9bd9850d5ca69",
+    "data/ats_forward_shadow.jsonl": "a268ca74bcb1445f408c7a714107c8553628f2a9761c302735d98b1dcc6f842d",
+    "data/espn_spreads.jsonl": "773cbfbad3ca945364b4dd823a42cb360614a905a1a6e79d1411f68f6b927662",
+    "research/margin_total_results/frozen_feature_prices.csv.gz": "91788712d42c61195124951b3dda62b32c65e42499700ebeb41dbe9115c6abd2",
+    "nfl_model.py": "6d7b27f61dfbb2d77a2aa7ef7dfdec0f6b751bd361bbb453769166e5f7bf3cbf",
+    "fixed_bands.py": "5f54ef4094757e25877a101e4aaf7b6f49e3c4ca8b37b8398b8ae8b93ffe3229"
+  },
+  "frozen_input_sha256": "5e35957de7ed0412c2471cb65cf65592fe6d27da8244f67990f447f75a5bdf86",
+  "games": 1465,
+  "paired_prices": 1445,
+  "historical_quote_times_verified": false,
+  "production_modified": false
+}
