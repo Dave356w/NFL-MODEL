@@ -89,7 +89,8 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(row.spread_line,7.)
         self.assertEqual(row.selected_team,'IND')
         self.assertEqual(row.ats_result,'L')
-        self.assertEqual(float(row.ats_units),-1.)
+        expected=self.pool.set_index('game_id').loc['2026_06_TEN_IND']
+        self.assertEqual(str(row.ats_units),str(expected.fixed_band_ats_units))
         saved=pd.read_csv(self.out/'ats_locked_picks.csv',keep_default_na=False).set_index('game_id')
         # Public downloads use the effective displayed favorite; originals and
         # source/backfill flags remain in the unchanged backend archive.
@@ -109,7 +110,7 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(shown.selected_team,expected.fixed_band_ats_team)
         self.assertEqual(shown.selected_side,expected.fixed_band_ats_side)
         self.assertEqual(shown.ats_result,expected.fixed_band_ats_result)
-        self.assertEqual(float(shown.ats_units),float(expected.fixed_band_ats_units))
+        self.assertEqual(str(shown.ats_units),str(expected.fixed_band_ats_units))
         self.assertEqual(float(shown.home_score),float(expected.home_score))
         self.assertEqual(float(shown.away_score),float(expected.away_score))
         self.assertEqual(float(shown.result),float(expected.result))
@@ -127,7 +128,7 @@ class ATSOnlySite(unittest.TestCase):
     def test_results_pool_each_game_once_and_keep_sources_internal(self):
         html=(self.out/'grades.html').read_text()
         self.assertIn('Game-by-game ATS results',html)
-        self.assertIn('Break-even 52.4%',html)
+        self.assertIn('−110 reference 52.4%',html)
         self.assertRegex(self.visible(html),r'(Sun|Sat|Thu|Mon) \d{1,2}:\d{2} [AP]M PDT')  # Pacific kickoffs
         for page in ('index.html','grades.html','market-calibration.html'):
             text=self.visible((self.out/page).read_text())
