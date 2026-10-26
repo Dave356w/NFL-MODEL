@@ -198,6 +198,8 @@ def validate_data_dir(data_dir="data"):
         paths.append(h5)
     import ats_locks
     ats_locks.validate_store(data_dir)
+    import espn_spreads
+    espn_spreads.validate(data_dir)
     paths.extend(data_dir / name for name in (ats_locks.CANDIDATES, ats_locks.LOCKS)
                  if (data_dir / name).exists())
     return paths

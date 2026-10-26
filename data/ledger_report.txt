@@ -612,13 +612,14 @@ Store validation: PASS; 202 saved candidates, 14 finalized saved decisions.
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 58-42-6, 0 skips, 1 pending, 0 unavailable; +10.73u, ROI +10.12% at proxy -110.
-  60-minute lock: 8-5-0, 0 skips, 0 pending, 0 unavailable; +2.27u
-  Awaiting ATS lock: 0-0-0, 0 skips, 1 pending, 0 unavailable; +0.00u
+Record 58-42-6, 0 skips, 1 pending, 0 unavailable; +10.56u, ROI +9.96%.
+ESPN exact-handicap pricing: 0 pre-lock, 86 closing estimates, 20 assumed -110, 0 unpriced; ROI denominator 106 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
+  60-minute lock: 8-5-0, 0 skips, 0 pending, 0 unavailable; +2.39u
+  Awaiting ATS lock: 0-0-0, 0 skips, 1 pending, 0 unavailable; +nanu
   Backfilled recorded skip: 0-2-0, 0 skips, 0 pending, 0 unavailable; -2.00u
-  Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +9.09u
+  Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +8.87u
   Recorded pregame: 6-4-0, 0 skips, 0 pending, 0 unavailable; +1.45u
-  Recovered saved forecast: 1-0-0, 0 skips, 0 pending, 0 unavailable; +0.91u
+  Recovered saved forecast: 1-0-0, 0 skips, 0 pending, 0 unavailable; +0.85u
   Replayed pregame forecast: 0-1-0, 0 skips, 0 pending, 0 unavailable; -1.00u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
 

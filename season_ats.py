@@ -12,6 +12,7 @@ import pandas as pd
 import ats_locks
 import fixed_bands
 import nfl_model as m
+import espn_spreads
 from schedule_gate import kickoff as scheduled_kickoff
 
 
@@ -97,12 +98,25 @@ def build(latest, ledger):
             home=saved['home'], away=saved['away'], kickoff_utc=saved['kickoff_utc'],
             generated_utc=saved['generated_utc'], lock_at_utc=saved['lock_at_utc'],
             model_wp=saved['model_wp'], spread_line=saved['market_spread'],
+            espn_quote=saved.get('espn_quote'),
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
             finalized_utc=saved.get('finalized_utc'),
             recovered_after_kickoff=saved.get('recovered_after_kickoff', False),
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
             else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
             else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
+    # ESPN supplies final scores only. It cannot create or change a decision.
+    # Completed games without a model row remain visible as unavailable.
+    for event in latest.get('espn_archive', []):
+        if event['season'] != 2026 or not event['completed']:
+            continue
+        game = event['game_id']
+        rows.setdefault(game, dict(game_id=game, season=2026, week=event['week'],
+            home=event['home'], away=event['away'], spread_line=np.nan,
+            fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock'))
+        rows[game].setdefault('kickoff_utc', event['kickoff_utc'])
+        outcomes[game] = dict(home_score=event['home_score'], away_score=event['away_score'],
+                              result=event['home_score'] - event['away_score'])
     if not rows:
         return pd.DataFrame()
     for game, row in rows.items():
@@ -125,19 +139,72 @@ def build(latest, ledger):
     frame['fixed_band_ats_team'] = np.where(side.eq('home'), frame.home, np.where(side.eq('away'), frame.away, ''))
     frame['fixed_band_ats_handicap'] = np.where(side.eq('home'), -frame.spread_line,
                                                np.where(side.eq('away'), frame.spread_line, np.nan))
-    return frame.sort_values(['week', 'game_id'], kind='stable').reset_index(drop=True)
+    frame = frame.sort_values(['week', 'game_id'], kind='stable').reset_index(drop=True)
+    frame['_time'] = pd.to_datetime(frame.get('kickoff_utc', pd.Series(index=frame.index, dtype=str)), utc=True, errors='coerce')
+    frame['_time'] = frame['_time'].fillna(pd.to_datetime(frame.get('gameday', pd.Series(index=frame.index, dtype=str)), utc=True, errors='coerce'))
+    frame = frame.sort_values(['week', '_time', 'game_id'], kind='stable').drop(columns='_time').reset_index(drop=True)
+    if 'espn_archive' in latest:
+        frame = price(frame, latest['espn_archive'], assume_unmatched=True)
+    return frame
+
+
+def price(frame, evidence, assume_unmatched=False):
+    """Keep W/L/P and saved handicaps; replace proxy returns with matched prices."""
+    frame = frame.copy()
+    offers = espn_spreads.quotes(evidence)
+    priced = []
+    for row in frame.to_dict('records'):
+        info = espn_spreads.match(row, offers)
+        info.pop('espn_quote', None)
+        info['ats_match_status'] = info['ats_price_basis']
+        if (assume_unmatched and 'ats_price' not in info
+                and row.get('fixed_band_ats_side') in ('home', 'away')
+                and espn_spreads.number(row.get('spread_line')) is not None):
+            info.update(ats_price=-110., ats_price_basis='assumed_minus110')
+        priced.append(info)
+    prices = pd.DataFrame(priced, index=frame.index)
+    for name in ('ats_price', 'ats_home_odds', 'ats_away_odds'):
+        if name not in prices:
+            prices[name] = np.nan
+    frame = frame.drop(columns=[c for c in prices if c in frame]).join(prices)
+    frame['proxy_ats_units'] = frame.fixed_band_ats_units
+    grade = frame.fixed_band_ats_result
+    payout = frame.ats_price.map(espn_spreads.profit)
+    frame['fixed_band_ats_units'] = np.where(grade.eq('W'), payout,
+        np.where(grade.eq('L'), -1., np.where(grade.isin(['P', 'S']), 0., np.nan)))
+    frame.loc[grade.isin(['W', 'L', 'P']) & frame.ats_price.isna(), 'fixed_band_ats_units'] = np.nan
+    frame['ats_priced_stake'] = (grade.isin(['W', 'L', 'P']) & frame.ats_price.notna()).astype(int)
+    frame['ats_cumulative_units'] = frame.fixed_band_ats_units.fillna(0).cumsum()
+    return frame
 
 
 def summary(frame):
     r = frame.get('fixed_band_ats_result', pd.Series(dtype=str))
     w, l, p, s = [int(r.eq(k).sum()) for k in 'WLPS']
     bets = w + l + p
-    units = w / 1.1 - l
-    returns = np.array([1 / 1.1] * w + [-1.] * l + [0.] * p)
+    if 'ats_price_basis' in frame:
+        numeric_units = pd.to_numeric(frame.fixed_band_ats_units, errors='coerce')
+        eligible = r.isin(list('WLP')) & numeric_units.notna()
+        returns = numeric_units.loc[eligible].to_numpy(float)
+        priced_bets = len(returns)
+        units = float(returns.sum()) if priced_bets else np.nan
+        prelock = int((eligible & frame.ats_price_basis.isin(['captured_prelock', 'historical_prelock'])).sum())
+        estimates = int((eligible & frame.ats_price_basis.eq('closing_estimate')).sum())
+        assumed = int((eligible & frame.ats_price_basis.eq('assumed_minus110')).sum())
+    else:
+        # Legacy research callers without a quote archive retain their explicit
+        # -110 reference. Public builds always load an archive, even if empty.
+        units = w / 1.1 - l
+        returns = np.array([1 / 1.1] * w + [-1.] * l + [0.] * p)
+        priced_bets, prelock, estimates = bets, 0, 0
+        assumed = 0
     status = frame.get('ats_status', pd.Series(dtype=str))
     return dict(wins=w, losses=l, pushes=p, skips=s, bets=bets, selected=bets,
-                opportunities=bets+s, units=units, roi=units/bets if bets else np.nan,
-                roi_se=float(returns.std(ddof=1)/np.sqrt(bets)) if bets > 1 else np.nan,
+                opportunities=bets+s, units=units, roi=units/priced_bets if priced_bets else np.nan,
+                priced_bets=priced_bets, prelock_prices=prelock, closing_estimates=estimates,
+                assumed_prices=assumed, quoted_bets=prelock+estimates,
+                unpriced=bets-priced_bets,
+                roi_se=float(returns.std(ddof=1)/np.sqrt(priced_bets)) if priced_bets > 1 else np.nan,
                 cover_rate=w/(w+l) if w+l else np.nan,
                 pending=int(status.eq('pending').sum()), unavailable=int(status.eq('unavailable').sum()))
 
@@ -148,7 +215,13 @@ def report(frame):
              'Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.',
              'Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.',
              f"Record {r['wins']}-{r['losses']}-{r['pushes']}, {r['skips']} skips, {r['pending']} pending, "
-             f"{r['unavailable']} unavailable; {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}% at proxy -110."]
+             f"{r['unavailable']} unavailable; {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}%.",
+             (f"ESPN exact-handicap pricing: {r['prelock_prices']} pre-lock, {r['closing_estimates']} closing estimates, "
+              f"{r['assumed_prices']} assumed -110, {r['unpriced']} unpriced; "
+              f"ROI denominator {r['priced_bets']} 1u stakes (pushes included). "
+              "Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. "
+              "Closing estimates and assumed prices are not verified lock-time returns."
+              if 'ats_price_basis' in frame else 'Legacy reference: proxy -110 pricing.')]
     if len(frame):
         for basis, g in frame.groupby('ats_basis', sort=True):
             v = summary(g)

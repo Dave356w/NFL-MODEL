@@ -66,6 +66,35 @@ class TimedATS(unittest.TestCase):
         a.record(self.data, now)
         self.assertEqual(self.locks(), [])
 
+    def test_future_candidate_freezes_received_espn_side_prices_with_its_hash(self):
+        import espn_spreads as e
+        stamp = (CUTOFF-dt.timedelta(minutes=1)).isoformat()
+        offer = lambda handicap, price: dict(pointSpread={'american': str(handicap)},
+                                              spread={'american': str(price)})
+        evidence = dict(game_id=self.raw['game_id'], season=2026, week=7, home='IND', away='TEN',
+            event_id='test', completed=False, captured_utc=stamp, kickoff_utc=KO.isoformat(),
+            odds_url='https://example.test/odds', movements=[], odds_pages=[{'items': [dict(
+                provider={'id':'100','name':'Draft Kings'},
+                homeTeamOdds={'current':offer(-7, -118)}, awayTeamOdds={'current':offer(7, -102)})]}])
+        evidence['evidence_sha256'] = a.digest(evidence)
+        a.append(self.data/e.STORE, [evidence])
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        saved = self.locks()[0]
+        self.assertEqual(saved['espn_quote']['home_odds'], -118.)
+        self.assertEqual(saved['espn_quote']['away_odds'], -102.)
+        self.assertEqual(saved['espn_quote_status'], 'captured_prelock')
+        before = (self.data/a.LOCKS).read_bytes()
+        a.record(self.data, CUTOFF+dt.timedelta(minutes=1))
+        self.assertEqual((self.data/a.LOCKS).read_bytes(), before)
+        # Rehashing a candidate cannot authorize a quote received after lock.
+        candidate = a.read(self.data/a.CANDIDATES)[0]
+        candidate['espn_quote']['captured_utc'] = (CUTOFF+dt.timedelta(seconds=1)).isoformat()
+        candidate['candidate_sha256'] = a.digest({k:v for k,v in candidate.items() if k!='candidate_sha256'})
+        (self.data/a.CANDIDATES).write_text(json.dumps(candidate)+'\n')
+        with self.assertRaisesRegex(ValueError, 'exact pre-lock quote'):
+            a.validate_store(self.data)
+
     def test_band_boundaries_use_the_identical_production_conversion(self):
         import fixed_bands
         from scipy.special import ndtr

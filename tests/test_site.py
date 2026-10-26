@@ -166,6 +166,7 @@ def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_
     data=tmp_path/'data';data.mkdir();latest=data/'latest';latest.mkdir()
     monkeypatch.setattr(b,'DATA',data);monkeypatch.setattr(b,'LATEST',latest)
     monkeypatch.setattr(b,'run_model',lambda:tmp_path/'run')
+    monkeypatch.setattr(b.espn_spreads, 'safe_refresh', lambda *a, **k: None)
     monkeypatch.setattr(b,'snapshot',lambda _: (2026,6))
     monkeypatch.setattr(b.kalshi,'safe_record',lambda *_:None)
     monkeypatch.setattr(b.matchup,'safe_record',lambda *_:None)
@@ -617,6 +618,8 @@ def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_pat
     for game in public.game_id:
         assert grades.count(f"data-game-id='{game}'") == 1
     performance = (out / 'market-calibration.html').read_text()
+    assert stats['priced_bets'] == stats['assumed_prices'] == 3
+    assert 'assumed −110 in pooled units and ROI' in performance
     assert f"Pick {stats['bets']}" in performance
     assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 

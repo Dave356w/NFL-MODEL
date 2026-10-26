@@ -122,6 +122,12 @@ def validate_store(data='data'):
             raise ValueError('ATS candidate does not match the saved map and line')
         if row['skip_reason'] != ('zero_edge' if not side else None):
             raise ValueError('ATS candidate skip reason mismatch')
+        if row.get('espn_quote') is not None:
+            import espn_spreads
+            q = row['espn_quote']
+            if (q['game_id'] != row['game_id'] or utc(q['captured_utc']) > observed
+                    or espn_spreads.match(row, [q], allow_close=False).get('espn_quote') != q):
+                raise ValueError('ATS candidate ESPN price is not an exact pre-lock quote')
         by_hash[h] = row
     locks = read(data / LOCKS)
     seen = set()
@@ -214,6 +220,9 @@ def record(data='data', now=None):
                            selected_side=side, skip_reason='zero_edge' if not side else None,
                            fixed_rule=rule, config_signature=manifest.get('config_signature'),
                            quote_basis='source quote has no independent capture timestamp')
+                import espn_spreads
+                row['espn_quote'] = espn_spreads.candidate_quote(row, data)
+                row['espn_quote_status'] = 'captured_prelock' if row['espn_quote'] else 'no_matching_prelock_price'
                 row['candidate_sha256'] = digest(row)
                 added.append(row)
                 seen.add(candidate_id)
