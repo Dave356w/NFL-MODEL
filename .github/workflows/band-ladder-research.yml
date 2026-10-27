@@ -1,0 +1,70 @@
+name: Research H10/H11 band distributions vs the Kalshi ladder
+
+# Pre-registered H10 (hard bands) and H11 (soft bands, fresh games only); see
+# research/PREREGISTRATION.md. Read-only: pull requests reproduce the committed
+# results; the weekly run scores the latest graded ledger on main and reports it
+# in the job summary and an artifact. It never commits, and the build is untouched.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Tuesday afternoon UTC, after Monday night games are graded into the ledger.
+    - cron: '37 19 * * 2'
+  pull_request:
+    paths:
+      - 'research/band_ladder_score.py'
+      - 'research/band_ladder_results/**'
+      - 'research/soft_band_ladder_score.py'
+      - 'research/soft_band_ladder_inputs/**'
+      - 'research/soft_band_ladder_results/**'
+      - 'research/soft_band_distributions.py'
+      - 'research/soft_band_distribution_inputs/**'
+      - 'research/check_replay.py'
+      - 'tests/test_band_ladder_score.py'
+      - 'tests/test_soft_band_ladder_score.py'
+      - '.github/workflows/band-ladder-research.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - name: Verify orientation, capture join, scoring and verdict rules
+        run: python -m pytest tests/test_band_ladder_score.py tests/test_soft_band_ladder_score.py -q
+      - name: Reproduce the committed results
+        if: github.event_name == 'pull_request'
+        run: |
+          python research/check_replay.py research/band_ladder_results -- python -m research.band_ladder_score
+          python research/check_replay.py research/soft_band_ladder_results -- python -m research.soft_band_ladder_score
+      - name: Score the current ledger
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m research.band_ladder_score > /dev/null
+          python -m research.soft_band_ladder_score > /dev/null
+          {
+            echo "Ledger: \`data/forward_ledger.csv\` at ${GITHUB_SHA::7}"
+            echo
+            cat research/band_ladder_results/REPORT.md
+            echo
+            cat research/soft_band_ladder_results/REPORT.md
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: band-ladder-research
+          path: |
+            research/band_ladder_results/
+            research/soft_band_ladder_results/
+          if-no-files-found: error

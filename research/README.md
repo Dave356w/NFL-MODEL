@@ -22,6 +22,9 @@ no bets; the verdict waits for 100 graded v1.18 games. Protocol: H10 in
 repeats H10 with SB1's soft PMFs, scored only on games not yet seen when it was
 registered (the 28 exposed games are frozen in `soft_band_ladder_inputs/`). Run
 `python -m research.soft_band_ladder_score`.
+Both run weekly (Tuesday) in `.github/workflows/band-ladder-research.yml` on the
+latest graded ledger; the scores appear in that run's job summary and artifact,
+not as commits.
 
 ## Joint-score distribution research - October 16, 2026
 
