@@ -12,6 +12,12 @@ including paired historical prices and a separate assumed -110 scenario, stay
 research-only; the development gate does not authorize production promotion.
 See the [fixed protocol](SOFT_BAND_DISTRIBUTIONS.md).
 
+[H10: band margin distributions vs the Kalshi spread ladder](band_ladder_results/REPORT.md)
+scores the production bands' hard prior-season margin PMFs against Kalshi mids on
+every captured "wins by over X.5" rung (log loss, game-weighted). Prediction only,
+no bets; the verdict waits for 100 graded v1.18 games. Protocol: H10 in
+[PREREGISTRATION.md](PREREGISTRATION.md). Run `python -m research.band_ladder_score`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a
