@@ -111,11 +111,13 @@ def development_rungs(quotes, games):
                 continue
             r = base.loc[q.game_id]
             hard, _ = sb.forecast(float(r.raw_spread), fit, soft=False)
+            soft, _ = sb.forecast(float(r.raw_spread), fit, soft=True)
             home = q.kalshi_favorite == r.home
             margin = r.result if home else -r.result
             rows.append(dict(game_id=q.game_id, week=int(r.week), team=q.kalshi_favorite, strike=q.kalshi_strike,
                              kalshi=(q.kalshi_yes_bid + q.kalshi_yes_ask) / 2,
-                             band=over(hard, home, q.kalshi_strike), y=float(margin > q.kalshi_strike)))
+                             band=over(hard, home, q.kalshi_strike), soft=over(soft, home, q.kalshi_strike),
+                             y=float(margin > q.kalshi_strike)))
     return pd.DataFrame(rows)
 
 

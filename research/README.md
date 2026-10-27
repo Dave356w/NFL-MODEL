@@ -18,6 +18,11 @@ every captured "wins by over X.5" rung (log loss, game-weighted). Prediction onl
 no bets; the verdict waits for 100 graded v1.18 games. Protocol: H10 in
 [PREREGISTRATION.md](PREREGISTRATION.md). Run `python -m research.band_ladder_score`.
 
+[H11: soft band distributions vs the Kalshi spread ladder](soft_band_ladder_results/REPORT.md)
+repeats H10 with SB1's soft PMFs, scored only on games not yet seen when it was
+registered (the 28 exposed games are frozen in `soft_band_ladder_inputs/`). Run
+`python -m research.soft_band_ladder_score`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a
