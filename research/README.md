@@ -26,6 +26,11 @@ Both run weekly (Tuesday) in `.github/workflows/band-ladder-research.yml` on the
 latest graded ledger; the scores appear in that run's job summary and artifact,
 not as commits.
 
+[H12: fade the band-capped team ATS residual, 2013-2018](h12_results/REPORT.md)
+is one pre-registered out-of-period check of a pattern found in an exploratory scan
+of 2006-12 and 2019-25. Exposed seasons, assumed -110; not forward evidence. Inputs
+are frozen in `h12_inputs/`. Run `python -m research.h12_capped_residual`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a
