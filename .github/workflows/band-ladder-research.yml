@@ -1,6 +1,7 @@
-name: Research H10/H11 band distributions vs the Kalshi ladder
+name: Research H10/H11 Kalshi ladder and H13 residual shadow
 
-# Pre-registered H10 (hard bands) and H11 (soft bands, fresh games only); see
+# Pre-registered H10 (hard bands), H11 (soft bands, fresh games only) and H13
+# (H12's capped-residual fade as a shadow on the ATS locks); see
 # research/PREREGISTRATION.md. Read-only: pull requests reproduce the committed
 # results; the weekly run scores the latest graded ledger on main and reports it
 # in the job summary and an artifact. It never commits, and the build is untouched.
@@ -22,6 +23,10 @@ on:
       - 'research/check_replay.py'
       - 'tests/test_band_ladder_score.py'
       - 'tests/test_soft_band_ladder_score.py'
+      - 'research/h12_capped_residual.py'
+      - 'research/h13_shadow.py'
+      - 'research/h13_results/**'
+      - 'tests/test_h13_shadow.py'
       - '.github/workflows/band-ladder-research.yml'
 
 permissions:
@@ -42,23 +47,27 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
       - name: Verify orientation, capture join, scoring and verdict rules
-        run: python -m pytest tests/test_band_ladder_score.py tests/test_soft_band_ladder_score.py -q
+        run: python -m pytest tests/test_band_ladder_score.py tests/test_soft_band_ladder_score.py tests/test_h13_shadow.py -q
       - name: Reproduce the committed results
         if: github.event_name == 'pull_request'
         run: |
           python research/check_replay.py research/band_ladder_results -- python -m research.band_ladder_score
           python research/check_replay.py research/soft_band_ladder_results -- python -m research.soft_band_ladder_score
+          python research/check_replay.py research/h13_results -- python -m research.h13_shadow
       - name: Score the current ledger
         if: github.event_name != 'pull_request'
         run: |
           python -m research.band_ladder_score > /dev/null
           python -m research.soft_band_ladder_score > /dev/null
+          python -m research.h13_shadow > /dev/null
           {
             echo "Ledger: \`data/forward_ledger.csv\` at ${GITHUB_SHA::7}"
             echo
             cat research/band_ladder_results/REPORT.md
             echo
             cat research/soft_band_ladder_results/REPORT.md
+            echo
+            cat research/h13_results/REPORT.md
           } >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
@@ -67,4 +76,5 @@ jobs:
           path: |
             research/band_ladder_results/
             research/soft_band_ladder_results/
+            research/h13_results/
           if-no-files-found: error

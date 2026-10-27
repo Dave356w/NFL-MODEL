@@ -31,6 +31,11 @@ is one pre-registered out-of-period check of a pattern found in an exploratory s
 of 2006-12 and 2019-25. Exposed seasons, assumed -110; not forward evidence. Inputs
 are frozen in `h12_inputs/`. Run `python -m research.h12_capped_residual`.
 
+[H13: H12's fade as a forward shadow on the ATS locks](h13_results/REPORT.md)
+records the rule beside v1.18 locks from 2026-10-28 (never bet), with a 2026
+replay diagnostic. It runs weekly in `band-ladder-research.yml`.
+Run `python -m research.h13_shadow`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a
