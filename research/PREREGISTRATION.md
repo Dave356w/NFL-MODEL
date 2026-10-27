@@ -620,3 +620,45 @@ with SE; the same rule at N = 4 and 16.
 A point-estimate gate: a replication is weak evidence; the cover-rate interval is reported with it.
 
 *Multiplicity.* H1–H12 are now registered. H12 was selected from a scan of 24 correlated cells.
+
+**2026-10-28, owner request ("register the H12 forward shadow on the locks; 2026 H12 replay"),
+committed and pushed before any H13 code exists or any 2026 H12 signal is computed. New
+hypothesis H13 (H12's fade rule as a reporting-only forward shadow on the ATS locks). H1–H12 are
+unchanged.**
+
+*Source.* H12 replicated by its point-estimate gate on 2013–2018 (`research/h12_results/`:
+225-196-17, cover 53.4% [48.7, 58.2], ROI +2.0% ± 4.5 on 438 bets; same-row favorite 49.0%).
+That is weak evidence on exposed seasons. H13 never bets and changes no lock, pick or page.
+
+*Rule (H12's, unchanged).* Capped residual: final margin − nflverse `spread_line`, capped to the
+2026 median-map magnitude for |spread_line|'s band (3/4/7/14). Signal: mean of a team's last 8
+capped residuals from **strictly earlier weeks**, home − away (x). Shadow bet when |x| ≥ 2.51:
+away if x > 0, home if x < 0. Histories come from completed regular-season games in
+`data/latest/fixed_band_ledger.csv` (2024 onward), across seasons; franchise codes as listed.
+
+*Forward sample (primary).* Every `boxscore-composite-v1.18` lock in `data/ats_locks.jsonl` with
+`lock_at_utc` ≥ **2026-10-28T00:00:00Z**, finalized before kickoff. The shadow is graded against
+that lock's `market_spread` at assumed −110 (pushes 0, in the ROI denominator). Locks recovered
+after kickoff are reported separately. Because the signal uses only completed earlier-week
+results and the saved lock line, it is computed when the report runs; no new capture is needed.
+
+*Report.* W-L-P, cover rate excluding pushes with Wilson 95%, units, ROI ± SE, n, the 52.4%
+break-even, and on the same rows: the production median-map pick, always favorite and always home.
+
+*Decision* (at the first report with ≥ 300 shadow bets, then final):
+- **Supported**: ROI − 2 SE > 0.
+- **Falsified**: cover rate ≤ 52.4%.
+- Otherwise **unresolved**. Earlier reports are interim with no verdict.
+Supported would justify only an owner decision on a new ATS policy version, never automatic use.
+
+*Power, stated now.* About 31% of games qualify, roughly 80–85 shadow bets a season, so n = 300
+arrives around the end of the 2029 season. At H12's +2% ROI the SE at n = 300 is about 5.6 points,
+so **support is unlikely even if the effect is real**; a true 53.4% cover rate would still be
+falsified about a third of the time. The realistic outcomes are falsified or unresolved.
+
+*2026 replay (diagnostic, basis 3, never decisive).* The same rule on every completed 2026
+regular-season game, graded against nflverse `spread_line`, with the same-row baselines. 2026 is
+a current-season, exposed period. It is reported beside H13 and never pooled with it.
+
+*Multiplicity.* H1–H13 are now registered. H13 continues H12; it is not independent of the scan
+that produced H12.
