@@ -2,8 +2,10 @@
 
 GitHub drops and delays scheduled runs, so the five-minute poll cannot be
 trusted to land between T−60 and kickoff (2026-10-19: no build ran from 22:38
-to 00:33 UTC and WAS-SF was only recovered after kickoff). Instead, a build
-that finishes within MAX_WAIT_MINUTES of a cutoff for an already-saved,
+to 00:33 UTC and WAS-SF was only recovered after kickoff; 2026-10-26: no
+build between 21:49 and 23:39 UTC, so DAL-PHI locked 25 minutes late from a
+4.5-hour-old forecast). Instead, a build that finishes within MAX_WAIT_MINUTES
+(150) of a cutoff for an already-saved,
 unlocked candidate stays alive until that cutoff:
 
   * if the newest saved candidate for the cutoff is older than the refresh
@@ -29,7 +31,7 @@ from pathlib import Path
 import ats_locks
 
 DATA = Path('data')
-MAX_WAIT_MINUTES = 90
+MAX_WAIT_MINUTES = 150
 REFRESH_LEAD_MINUTES = 10
 SETTLE_SECONDS = 20
 
