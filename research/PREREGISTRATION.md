@@ -486,3 +486,58 @@ now uses t(G − 1) critical values, where G is the number of season-weeks, in p
 
 It was chosen from the simulation alone, before any verdict point. See the second 2026-10-15
 addendum in `research/FAVORITE_PENALTY.md`.
+
+**2026-10-27, owner request ("pre-register option 3 and run it"), committed and pushed before
+any H10 score exists. New hypothesis H10 (band margin distributions vs the Kalshi spread
+ladder). H1–H9 and the favorite-penalty rule are unchanged.**
+
+*Source.* Owner proposal 2026-10-27: alt-line suggestions so the ATS bet aligns with the band's
+margin distribution rather than flipping on a half-point hook. An alt-line chooser would price
+rungs from the production band's empirical margins. This test asks first whether those margins
+predict "team wins by over X.5" better than Kalshi's own prices. It places no bets. SB1
+(`research/SOFT_BAND_DISTRIBUTIONS.md`, 2026-10-26) found the same distributions no better
+than the paired sportsbook price at the main line; H10 extends the question to whole ladders.
+
+*Already seen when this was written.* Aggregate forward moneyline/ATS records, H3 ladder bets
+and the Kalshi alt-line rule in `data/ledger_report.txt`; SB1's results; ladder quote widths and
+rung counts (outcome-free). No rung-level comparison of band probabilities with Kalshi mids
+against outcomes has been computed.
+
+*Forecast (fixed).* SB1's hard empirical band PMFs (`research/soft_band_distributions.py`,
+`fit_prior` on its frozen `games.csv`, seasons strictly before the target season). For 2026 this is
+exactly the production median map's training sample: 2021–2025, 1,359 games, band counts
+497/478/228/156, medians 3/4/7/14. Raw spread = `nfl_model.implied_spread(model_wp)`; band by
+|raw| with cuts 3/7/10; the PMF of the actual margin signed toward the raw winner. A rung's
+probability is the PMF mass on that team's margin > strike. No refit while H10 runs.
+
+*Primary sample (forward).* Every graded `boxscore-composite-v1.18` row in
+`data/forward_ledger.csv` (first pregame snapshot per game) with a Kalshi capture, joined exactly
+as `grade_ledger.kalshi_grades` does (first capture at or after `generated_utc`, else the last
+earlier one; the count of earlier ones is reported). Every rung on both teams' ladders with
+strike ≤ 17.5 (H3's cap) and a valid quote, 0 < bid ≤ ask < 1 and ask − bid ≤ 0.05. Game-winner
+markets are excluded. Kalshi probability = (bid + ask) / 2, no further normalization.
+
+*Score.* Binary log loss per rung; both probabilities clipped to [0.005, 0.995] (Kalshi's
+half-tick floor). Per game, the mean over its rungs of Kalshi loss − band loss (positive = band
+better). **Primary statistic: the mean of the per-game gains**, games weighted equally, SE = SD
+across games / √n.
+
+*Decision* (on the primary sample, at the first run after it reaches 100 graded games, then final):
+- **Supported**: gain − 2 SE > 0 with n ≥ 100 games. Only then would option 1 or 2 (an alt-line
+  chooser on the map's side) be worth a separate pre-registration.
+- **Falsified**: n ≥ 100 games and gain ≤ 0. The band distributions then give no basis for
+  choosing among Kalshi rungs; options 1 and 2 are not built.
+- Otherwise **unresolved**. Earlier runs are interim readings with no verdict.
+
+*Secondary, reported, never decisive.* (a) SB1's soft PMFs on the same rungs; (b) H3's frozen
+moneyline reference (`kalshi.ladder_probability` at the row's no-vig moneyline) on the same rungs;
+(c) the near-line subset, rungs with |strike − that team's sportsbook line margin| ≤ 4; (d) the
+`boxscore-composite-v1.16` forward rows, overlapping games and not independent; (e) a development
+cohort, exposed and not forward: `data/kalshi_historical/kalshi_quotes.csv` 2025–2026 main-spread
+rung (favorite over the strike, mid of yes bid/ask, captured two hours pregame) scored with SB1's
+`games.csv` raw spread and the fit for that season. Per-rung pooled numbers are descriptive.
+
+*Power, stated now.* About 14 v1.18 games a week carry a Kalshi ladder, so n = 100 arrives around
+2026 week 13. Rungs within a game are strongly correlated; the game is the unit.
+
+*Multiplicity.* H1–H10 are now registered. H10 is a prediction test with no betting rule.
