@@ -1535,7 +1535,9 @@ def published_report(data):
     latest = load_latest(data / 'latest')
     if latest is not None:
         latest['ats_locks'] = ats_locks.display_records(data)
-        parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(season_ats.build(latest, load_ledger(data))))
+        pool = season_ats.build(latest, load_ledger(data))
+        parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(pool))
+        parts.append('\n\nATS same-row baselines\n\n' + season_ats.lock_baselines(latest, pool))
     calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
     if calibration.exists():
         parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())

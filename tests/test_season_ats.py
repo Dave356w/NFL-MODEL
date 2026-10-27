@@ -263,3 +263,92 @@ class SeasonATS(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+
+class LockBaselines(unittest.TestCase):
+    RULE = dict(season=2026, training_max_season=2025, cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.])
+
+    def lock(self, game, line, mapped, raw, rule=None):
+        return dict(game_id=game, revision=m.REVISION, season=2026, week=8, home='IND', away='TEN',
+                    model_wp=.6, market_spread=line, fixed_band_spread=mapped, raw_spread=raw,
+                    fixed_rule=rule or self.RULE, selected_side='home', skip_reason=None,
+                    policy_version=ats_locks.POLICY_VERSION, generated_utc='2026-10-25T15:50:00Z',
+                    kickoff_utc='2026-10-25T17:00:00Z', lock_at_utc='2026-10-25T16:00:00Z',
+                    finalized_utc='2026-10-25T16:00:20Z')
+
+    def latest(self, locks):
+        return dict(manifest={'season': 2026, 'revision': m.REVISION}, fixed_band_rules=[self.RULE],
+                    ats_locks={(m.REVISION, r['game_id']): r for r in locks}, board=pd.DataFrame())
+
+    def pool(self, rows):
+        return pd.DataFrame(rows, columns=['game_id', 'season', 'spread_line', 'fixed_band_spread',
+                                           'result', 'ats_basis'])
+
+    def test_line_only_map_differs_only_where_the_model_crosses_a_band(self):
+        # Line 5.5 alone maps to 4 (take the dog). A model at 8 maps to 7 (take the
+        # favorite): the model changed the side. At 4.5 both maps give 4 and agree.
+        sides = s.baseline_sides([7., 4.], [5.5, 5.5], [8., 4.5], [4., 4.])
+        self.assertEqual(list(sides['Median map (production)']), [1., -1.])
+        self.assertEqual(list(sides['Line-only map']), [-1., -1.])
+        self.assertEqual(list(sides['Raw model spread']), [1., -1.])
+        self.assertEqual(list(sides['Always favorite']), [1., 1.])
+        self.assertEqual(list(sides['Always home']), [1., 1.])
+
+    def test_pickem_line_skips_line_only_and_favorite_but_not_home(self):
+        sides = s.baseline_sides([3.], [0.], [1.], [0.])
+        self.assertEqual(sides['Line-only map'][0], 0.)
+        self.assertEqual(sides['Always favorite'][0], 0.)
+        self.assertEqual(sides['Always home'][0], 1.)
+        record = s.flat_record(sides['Line-only map'], [4.])
+        self.assertEqual((record['bets'], record['skips']), (0, 1))
+
+    def test_flat_record_counts_pushes_in_the_roi_denominator(self):
+        record = s.flat_record([1., 1., -1., 1.], [3., 0., 2., np.nan])
+        self.assertEqual((record['wins'], record['losses'], record['pushes'], record['bets']), (1, 1, 1, 3))
+        self.assertAlmostEqual(record['units'], 1 / 1.1 - 1)
+        self.assertAlmostEqual(record['roi'], (1 / 1.1 - 1) / 3)
+        self.assertEqual(record['cover_rate'], .5)
+
+    def test_report_grades_only_timed_locks_with_their_saved_rule(self):
+        # The saved rule maps a 5.5 line to 6, so the line-only map takes the favorite;
+        # the current rule would map it to 4 and take the dog.
+        saved_rule = dict(self.RULE, magnitudes=[3., 6., 7., 14.])
+        locks = [self.lock('a', 5.5, 7., 8., saved_rule), self.lock('pend', 3., 3., 2.)]
+        pool = self.pool([
+            ('a', 2026, 5.5, 7., 10., '60-minute lock'),
+            ('pend', 2026, 3., 3., np.nan, '60-minute lock'),
+            ('hist', 2026, 5.5, 4., -10., 'Historical replay'),
+            ('back', 2026, 7., 7., -10., 'Backfilled recorded skip')])
+        text = s.lock_baselines(self.latest(locks), pool)
+        block = text.split('Recovered saved forecast')[0]
+        self.assertIn('60-minute lock, ' + m.REVISION + ': 1 graded, 1 pending', block)
+        self.assertIn('Median map (production)  1-0-0', block)
+        self.assertIn('Line-only map            1-0-0', block)
+        self.assertIn('sides differ on 0 of 1', block)
+        self.assertIn('Recovered saved forecast, ' + m.REVISION + ': 0 graded, 0 pending', text)
+
+    def test_report_paired_difference_when_the_model_changes_the_side(self):
+        locks = [self.lock('a', 5.5, 7., 8.)]
+        pool = self.pool([('a', 2026, 5.5, 7., 10., '60-minute lock')])
+        text = s.lock_baselines(self.latest(locks), pool)
+        self.assertIn('Line-only map            0-1-0', text)
+        self.assertIn('median map minus line-only map: sides differ on 1 of 1; +1.91u', text)
+        self.assertIn('median map minus raw model spread: sides differ on 0 of 1; +0.00u', text)
+
+    def test_development_history_uses_each_seasons_prior_rule(self):
+        latest = self.latest([])
+        latest['fixed_band_rules'] = [self.RULE, dict(self.RULE, season=2025, magnitudes=[3., 6., 7., 14.])]
+        latest['fixed_band_ledger'] = pd.DataFrame([
+            dict(game_id='x', season=2025, spread_line=5.5, fixed_band_spread=6., model_spread=5., result=10.),
+            dict(game_id='y', season=2026, spread_line=5.5, fixed_band_spread=4., model_spread=5., result=10.)])
+        text = s.lock_baselines(latest, self.pool([]))
+        history = text.split('Development history')[1]
+        # 2025's rule maps the line to 6 (favorite, win); 2026's maps it to 4 (dog, loss).
+        self.assertIn('2025-2026, 2 graded', history)
+        self.assertIn('Line-only map            1-1-0', history)
+        self.assertIn('sides differ on 0 of 2', history)
+
+    def test_published_report_includes_the_baselines_section(self):
+        text = b.published_report(Path(__file__).resolve().parents[1] / 'data')
+        self.assertIn('ATS same-row baselines', text)
+        self.assertIn('Median map minus line-only is what the model adds', text)

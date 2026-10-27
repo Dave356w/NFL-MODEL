@@ -279,6 +279,15 @@ unresolved, and the map was adopted with this history in view. Every
 so the raw-spread pick can be graded on the same locked games without new
 capture or backfill. The owner reviews the comparison at 100 decided locks.
 
+The repository report (`data/ledger_report.txt`, "ATS same-row baselines")
+grades the locks for the map, the raw spread, a line-only map, always-favorite
+and always-home, all at assumed −110 on the same rows. The line-only map passes
+the market line through the same frozen median map with no model input. The
+map's paired difference from it is what the model adds beyond the line's own
+band. In the development replay most map picks equal line-only picks, and the
+line-only map alone breaks even. This is backend reporting only; picks, the
+map and lock timing are unchanged.
+
 ## Legacy research: flat 1u ROI at the moneyline
 
 Moneyline research is judged by flat-stake betting results. Every game it decides

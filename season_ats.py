@@ -5,6 +5,10 @@ unregistered ATS decisions can be reconstructed from pre-adoption moneyline
 snapshots, but are explicitly replay, not native ATS evidence. A zero edge takes
 the market favorite everywhere; saved zero-edge skips are backfilled as favorite
 bets (owner decision 2026-10-19) under their own basis label.
+
+Backend reporting also grades the timed locks against same-row controls. The
+line-only map runs the market line through the same frozen median map, so the
+production map's difference from it is what the model adds beyond the line.
 """
 import numpy as np
 import pandas as pd
@@ -228,4 +232,114 @@ def report(frame):
             lines.append(f"  {basis}: {v['wins']}-{v['losses']}-{v['pushes']}, {v['skips']} skips, "
                          f"{v['pending']} pending, {v['unavailable']} unavailable; {v['units']:+.2f}u")
     lines.append('This mixed-basis season total is descriptive, not a pooled native-forward claim.')
+    return '\n'.join(lines)
+
+
+TIMED_BASES = ('60-minute lock', 'Recovered saved forecast')
+BASELINES = ('Median map (production)', 'Raw model spread', 'Line-only map',
+             'Always favorite', 'Always home')
+
+
+def baseline_sides(mapped, line, raw, line_mapped):
+    """Same-row sides (+1 home, -1 away, 0 skip): the production map and its controls.
+
+    line_mapped is the market line passed through the same median map. Every
+    rule takes the favorite on a zero edge; a pick'em line skips for both maps.
+    """
+    line = np.asarray(line, float)
+    return {'Median map (production)': fixed_bands.pick(mapped, line),
+            'Raw model spread': fixed_bands.pick(raw, line),
+            'Line-only map': fixed_bands.pick(line_mapped, line),
+            'Always favorite': np.where(np.isfinite(line), np.sign(line), np.nan),
+            'Always home': np.where(np.isfinite(line), 1., np.nan)}
+
+
+def flat_returns(side, margin):
+    """Per-row 1u returns at assumed -110: NaN ungraded, 0 for skips and pushes."""
+    side, margin = np.asarray(side, float), np.asarray(margin, float)
+    edge = side * margin
+    out = np.where(edge > fixed_bands.EPS, 1 / 1.1, np.where(edge < -fixed_bands.EPS, -1., 0.))
+    return np.where(np.isfinite(side) & np.isfinite(margin), out, np.nan)
+
+
+def flat_record(side, margin):
+    side, margin = np.asarray(side, float), np.asarray(margin, float)
+    ret = flat_returns(side, margin)
+    graded = np.isfinite(ret)
+    bet = graded & (side != 0)
+    r = ret[bet]
+    w, l = int((r > 0).sum()), int((r < 0).sum())
+    n = len(r)
+    units = float(r.sum())
+    return dict(wins=w, losses=l, pushes=n - w - l, skips=int((graded & (side == 0)).sum()),
+                bets=n, units=units, roi=units / n if n else np.nan,
+                roi_se=float(r.std(ddof=1) / np.sqrt(n)) if n > 1 else np.nan,
+                cover_rate=w / (w + l) if w + l else np.nan)
+
+
+def _pct(x):
+    return 'n/a' if not np.isfinite(x) else f'{100 * x:+.1f}%'
+
+
+def _baseline_lines(sides, margin):
+    lines = []
+    for name in BASELINES:
+        v = flat_record(sides[name], margin)
+        se = f" +/- {100 * v['roi_se']:.1f}" if np.isfinite(v['roi_se']) else ''
+        cover = 'n/a' if not np.isfinite(v['cover_rate']) else f"{100 * v['cover_rate']:.1f}%"
+        lines.append(f"  {name:24s} {v['wins']}-{v['losses']}-{v['pushes']}, {v['skips']} skips, "
+                     f"{v['units']:+.2f}u, ROI {_pct(v['roi'])}{se}, cover {cover}")
+    production = flat_returns(sides[BASELINES[0]], margin)
+    for control in ('Line-only map', 'Raw model spread'):
+        other = flat_returns(sides[control], margin)
+        ok = np.isfinite(production) & np.isfinite(other)
+        diff = production[ok] - other[ok]
+        differ = int((sides[BASELINES[0]][ok] != sides[control][ok]).sum())
+        se = f" +/- {diff.std(ddof=1) / np.sqrt(len(diff)):.3f}" if len(diff) > 1 else ''
+        mean = f'{diff.mean():+.3f}' if len(diff) else 'n/a'
+        lines.append(f"  Paired, median map minus {control.lower()}: sides differ on {differ} of {len(diff)}; "
+                     f"{diff.sum():+.2f}u (per game {mean}{se}, 1 SE)")
+    return lines
+
+
+def lock_baselines(latest, frame):
+    """Timed locks graded beside same-row controls; backend reporting only."""
+    revision = (latest or {}).get('manifest', {}).get('revision', m.REVISION)
+    locks = (latest or {}).get('ats_locks', {})
+    rules = {r['season']: r for r in (latest or {}).get('fixed_band_rules', []) if 'season' in r}
+    lines = ['ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; '
+             'break-even cover 52.4%).',
+             'Line-only map: the market line through the same frozen median map, without model input. '
+             'Median map minus line-only is what the model adds beyond the line\'s own band.',
+             'Per-arm records are descriptive; the map-versus-raw review is at 100 decided locks.']
+    for basis in TIMED_BASES:
+        g = frame.loc[frame.ats_basis.eq(basis)] if len(frame) and 'ats_basis' in frame else frame.iloc[0:0]
+        rows = []
+        for r in g.to_dict('records'):
+            saved = locks.get((revision, r['game_id']), {})
+            rule = saved.get('fixed_rule') or rules.get(int(r['season']))
+            rows.append(dict(mapped=r['fixed_band_spread'], line=r['spread_line'], result=r['result'],
+                             raw=pd.to_numeric(saved.get('raw_spread'), errors='coerce'),
+                             line_mapped=float(fixed_bands.apply([r['spread_line']], rule)[0])))
+        d = pd.DataFrame(rows, columns=['mapped', 'line', 'result', 'raw', 'line_mapped'])
+        decided = d.loc[np.isfinite(d.result.astype(float))]
+        lines.append(f'{basis}, {revision}: {len(decided)} graded, {len(d) - len(decided)} pending'
+                     + (' (reported separately from pregame-finalized locks)' if basis != TIMED_BASES[0] else ''))
+        if len(decided):
+            sides = baseline_sides(decided.mapped, decided.line, decided.raw, decided.line_mapped)
+            lines += _baseline_lines(sides, (decided.result - decided.line).to_numpy(float))
+    history = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
+    if len(history) and 'model_spread' in history:
+        h = history.loc[history.fixed_band_spread.notna() & history.spread_line.notna()
+                        & history.result.notna() & history.season.isin(list(rules))]
+        if len(h):
+            line_mapped = np.full(len(h), np.nan)
+            for year, rule in rules.items():
+                mask = (h.season == year).to_numpy()
+                line_mapped[mask] = fixed_bands.apply(h.spread_line.to_numpy(float)[mask], rule)
+            lines.append(f'Development history (replay, not forward evidence; backtest seasons share the recipe '
+                         f'selection, the current season is walk-forward): '
+                         f'{int(h.season.min())}-{int(h.season.max())}, {len(h)} graded')
+            sides = baseline_sides(h.fixed_band_spread, h.spread_line, h.model_spread, line_mapped)
+            lines += _baseline_lines(sides, (h.result - h.spread_line).to_numpy(float))
     return '\n'.join(lines)
