@@ -7,13 +7,13 @@ Summary uses the earliest original snapshot per game, globally and within each o
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     43        1    26      15       1 -1.139357 -0.027128 0.116501        -0.041029       -0.178883     -0.004363            41  0.697139         0.684219 0.249229      0.241577
+        All unique games     43        0    27      15       1 -0.680642 -0.015829 0.114319        -0.041027        0.279833      0.006663            42  0.689877         0.677913 0.245800      0.238619
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.579691         1.567153 0.630375      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.622113         1.609438 0.644037      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.663882         1.651078 0.657068      0.653118
-boxscore-composite-v1.16     42        1    26      14       1 -0.139357 -0.003399 0.116875        -0.041048        0.821117      0.020528            40  0.675075         0.662146 0.239700      0.231960
+boxscore-composite-v1.16     42        0    27      14       1  0.319358  0.007604 0.114588        -0.041045        1.279833      0.031215            41  0.668174         0.656224 0.236420      0.229164
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.622306         0.574300 0.217136      0.194824
-boxscore-composite-v1.18     28        1    17      10       0 -0.514298 -0.019048 0.150822        -0.041160        0.446176      0.017161            27  0.701900         0.705839 0.251288      0.250550
+boxscore-composite-v1.18     28        0    18      10       0 -0.055582 -0.001985 0.146334        -0.041151        0.904892      0.033515            28  0.690836         0.695608 0.246072      0.245792
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.793961          L  -1.000000
@@ -99,7 +99,7 @@ boxscore-composite-v1.16 2026_07_NYG_HOU           0.768406  0.768406          L
 boxscore-composite-v1.16  2026_07_PIT_NO           0.472369  0.472369          W   0.617284
 boxscore-composite-v1.16  2026_07_SF_ATL           0.429264  0.429264          L  -1.000000
 boxscore-composite-v1.16  2026_07_TB_CAR           0.557605  0.557605          L  -1.000000
-boxscore-composite-v1.18 2026_07_DAL_PHI           0.324386  0.324386                   NaN
-boxscore-composite-v1.16 2026_07_DAL_PHI           0.257275  0.324386                   NaN
+boxscore-composite-v1.18 2026_07_DAL_PHI           0.324386  0.324386          W   0.458716
+boxscore-composite-v1.16 2026_07_DAL_PHI           0.257275  0.324386          W   0.458716
 boxscore-composite-v1.18 2026_07_CIN_BAL           0.418454  0.418454          W   0.675676
 boxscore-composite-v1.16 2026_07_CIN_BAL           0.381171  0.418454          W   0.675676

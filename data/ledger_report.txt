@@ -1,87 +1,87 @@
-NFL forward ledger report -- 2026-10-26 23:42 UTC
+NFL forward ledger report -- 2026-10-27 15:11 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
 Log loss/Brier market: the probability saved in each original snapshot; no-vig moneylines for v1.16/v1.17, spread-derived for earlier revisions.
 
-== boxscore-composite-v1.18: 28 snapshots, 27 graded, 1 pending, 0 ties
-  HEADLINE flat 1u, model's side at the snapshot moneyline: 16-10-0, -1.42u, ROI -5.5% +/- 15.2 (1 SE)
-    win 61.5% vs no-vig q 63.8% (excess -2.2pp); market-correct null ROI -4.1%
-    same rows, market favorite every game: +0.45u, ROI +1.7%
+== boxscore-composite-v1.18: 28 snapshots, 28 graded, 0 pending, 0 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 17-10-0, -0.96u, ROI -3.6% +/- 14.8 (1 SE)
+    win 63.0% vs no-vig q 63.9% (excess -0.9pp); market-correct null ROI -4.1%
+    same rows, market favorite every game: +0.90u, ROI +3.4%
   Model vs favorite, games where they pick different sides (all other bets are identical): n=1, model -1.00u (ROI -100.0%) vs favorite +0.87u (ROI +87.0%); difference -1.87u
   ROI by the picked side's price band (model):
             ≤ −250  n=7    4-3-0    -1.93u  ROI  -27.6%  q 77.5%
-      −249 to −175  n=5    4-1-0    +1.00u  ROI  +19.9%  q 64.5%
+      −249 to −175  n=6    5-1-0    +1.46u  ROI  +24.3%  q 64.7%
       −174 to −130  n=12   7-5-0    -0.34u  ROI   -2.8%  q 57.7%
       −129 to −100  n=2    1-1-0    -0.15u  ROI   -7.6%  q 50.3%
-         All games  n=26   16-10-0    -1.42u  ROI   -5.5%  q 63.8%
+         All games  n=27   17-10-0    -0.96u  ROI   -3.6%  q 63.9%
   Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
     This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
-          all games  11-15-1  cover 42.3% (Wilson 95% 25.5-61.1)
+          all games  12-15-1  cover 44.4% (Wilson 95% 27.6-62.7)
      |gap| >= 3 pts  no decided games
-  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 17-10, -0.49u, ROI -1.8% +/- 15.5
-    Kalshi-correct null -3.3%; same rows, Kalshi favorite -0.57u, ROI -2.1%; capture lag after lock median 0.0h, max 0.0h
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 18-10, -0.04u, ROI -0.2% +/- 15.0
+    Kalshi-correct null -3.3%; same rows, Kalshi favorite -0.12u, ROI -0.4%; capture lag after lock median 0.0h, max 0.0h
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 11-7, +0.83u, ROI +4.6% +/- 20.9
     same rows, favorite at its Kalshi game-winner ask: -0.21u, ROI -1.2%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 2-6, -1.92u, ROI -24.0% +/- 53.8
     Kalshi-mid null -8.3% on the same bets; 8 games qualified so far
   Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
-    model's side, n=27: the no-vig price moved +0.07 pts +/- 0.26 on average (positive = toward the model's side); on its underdog picks (n=1) -0.65 pts
-    line move vs the model's departure from the lock price: slope -0.035 +/- 0.073 (positive = the market moved toward the model)
-  Scored rows (graded, market present): 27
-  Model picks  17-10 (.630)
-  Market picks 17-9 (.654)
-  Log loss  model 0.7019  market 0.7058  gain +0.0039 +/- 0.0170 (1 SE; positive = model better)
-  Brier     model 0.2513  market 0.2506
+    model's side, n=28: the no-vig price moved +0.09 pts +/- 0.25 on average (positive = toward the model's side); on its underdog picks (n=1) -0.65 pts
+    line move vs the model's departure from the lock price: slope -0.034 +/- 0.072 (positive = the market moved toward the model)
+  Scored rows (graded, market present): 28
+  Model picks  18-10 (.643)
+  Market picks 18-9 (.667)
+  Log loss  model 0.6908  market 0.6956  gain +0.0048 +/- 0.0164 (1 SE; positive = model better)
+  Brier     model 0.2461  market 0.2458
   Pick records by confidence band (model | market):
        50-55%        5-1 (.833) |      3-0 (1.000)
        55-60%        6-5 (.545) |       6-5 (.545)
        60-65%        1-1 (.500) |      2-0 (1.000)
-       65-70%       2-0 (1.000) |       2-1 (.667)
+       65-70%       3-0 (1.000) |       3-1 (.750)
        70-75%        1-1 (.500) |       2-1 (.667)
        75-80%        2-1 (.667) |       2-1 (.667)
          80%+        0-1 (.000) |       0-1 (.000)
-    All picks      17-10 (.630) |      17-9 (.654)
+    All picks      18-10 (.643) |      18-9 (.667)
 
-== boxscore-composite-v1.16: 42 snapshots, 40 graded, 1 pending, 1 ties
-  HEADLINE flat 1u, model's side at the snapshot moneyline: 25-14-1, -1.05u, ROI -2.6% +/- 11.8 (1 SE)
-    win 64.1% vs no-vig q 63.6% (excess +0.4pp); market-correct null ROI -4.1%
-    same rows, market favorite every game: +0.82u, ROI +2.1%
+== boxscore-composite-v1.16: 42 snapshots, 41 graded, 0 pending, 1 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 26-14-1, -0.59u, ROI -1.4% +/- 11.5 (1 SE)
+    win 65.0% vs no-vig q 63.6% (excess +1.3pp); market-correct null ROI -4.1%
+    same rows, market favorite every game: +1.28u, ROI +3.1%
   Model vs favorite, games where they pick different sides (all other bets are identical): n=1, model -1.00u (ROI -100.0%) vs favorite +0.87u (ROI +87.0%); difference -1.87u
   ROI by the picked side's price band (model):
             ≤ −250  n=11   8-3-0    -0.72u  ROI   -6.5%  q 76.1%
-      −249 to −175  n=9    6-3-0    +0.04u  ROI   +0.4%  q 63.5%
+      −249 to −175  n=10   7-3-0    +0.50u  ROI   +5.0%  q 63.7%
       −174 to −130  n=17   10-6-1    +0.78u  ROI   +4.6%  q 57.7%
       −129 to −100  n=3    1-2-0    -1.15u  ROI  -38.4%  q 51.3%
-         All games  n=40   25-14-1    -1.05u  ROI   -2.6%  q 63.6%
+         All games  n=41   26-14-1    -0.59u  ROI   -1.4%  q 63.6%
   Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
     This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
-          all games  16-23-2  cover 41.0% (Wilson 95% 27.1-56.6)
-     |gap| >= 3 pts  0-3-0  cover 0.0% (Wilson 95% 0.0-56.2)
-  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 26-14, -0.28u, ROI -0.7% +/- 12.0
-    Kalshi-correct null -3.3%; same rows, Kalshi favorite -0.36u, ROI -0.9%; capture lag after lock median 0.0h, max 0.0h
+          all games  17-23-2  cover 42.5% (Wilson 95% 28.5-57.8)
+     |gap| >= 3 pts  1-3-0  cover 25.0% (Wilson 95% 4.6-69.9)
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 27-14, +0.17u, ROI +0.4% +/- 11.8
+    Kalshi-correct null -3.2%; same rows, Kalshi favorite +0.09u, ROI +0.2%; capture lag after lock median 0.0h, max 0.0h
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 14-8, +1.84u, ROI +8.3% +/- 18.5
     same rows, favorite at its Kalshi game-winner ask: +1.24u, ROI +5.6%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 4-8, +1.01u, ROI +8.4% +/- 49.7
     Kalshi-mid null -7.8% on the same bets; 12 games qualified so far
   Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
-    model's side, n=41: the no-vig price moved +0.10 pts +/- 0.20 on average (positive = toward the model's side); on its underdog picks (n=1) -0.65 pts
-    line move vs the model's departure from the lock price: slope +0.003 +/- 0.024 (positive = the market moved toward the model)
-  Scored rows (graded, market present): 40
-  Model picks  26-14 (.650)
-  Market picks 26-13 (.667)
-  Log loss  model 0.7167  market 0.6621  gain -0.0545 +/- 0.0498 (1 SE; positive = model better)
-  Brier     model 0.2504  market 0.2320
-  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6751 vs model 0.7167, gain +0.0416 +/- 0.0406 (1 SE; n=40, 16 probabilities changed); bets unchanged; week-cluster SE 0.0508 over 3 weeks; interim reading, not a verdict (judged only at the January checkpoints): no verdict before 200 graded games
+    model's side, n=42: the no-vig price moved +0.12 pts +/- 0.20 on average (positive = toward the model's side); on its underdog picks (n=1) -0.65 pts
+    line move vs the model's departure from the lock price: slope +0.005 +/- 0.023 (positive = the market moved toward the model)
+  Scored rows (graded, market present): 41
+  Model picks  27-14 (.659)
+  Market picks 27-13 (.675)
+  Log loss  model 0.7064  market 0.6562  gain -0.0502 +/- 0.0487 (1 SE; positive = model better)
+  Brier     model 0.2459  market 0.2292
+  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6682 vs model 0.7064, gain +0.0383 +/- 0.0397 (1 SE; n=41, 17 probabilities changed); bets unchanged; week-cluster SE 0.0509 over 3 weeks; interim reading, not a verdict (judged only at the January checkpoints): no verdict before 200 graded games
   Pick records by confidence band (model | market):
        50-55%        7-2 (.778) |       3-1 (.750)
        55-60%        5-4 (.556) |       9-6 (.600)
        60-65%        5-2 (.714) |       4-2 (.667)
-       65-70%        2-1 (.667) |       3-1 (.750)
-       70-75%        3-2 (.600) |       3-1 (.750)
+       65-70%        2-1 (.667) |       4-1 (.800)
+       70-75%        4-2 (.667) |       3-1 (.750)
        75-80%        3-1 (.750) |       4-1 (.800)
          80%+        1-2 (.333) |       0-1 (.000)
-    All picks      26-14 (.650) |     26-13 (.667)
+    All picks      27-14 (.659) |     27-13 (.675)
 
 == boxscore-composite-v1.17: 14 snapshots, 13 graded, 0 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 8-5-1, -1.34u, ROI -9.6% +/- 19.3 (1 SE)
@@ -222,17 +222,17 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
     All picks        0-1 (.000) |       0-1 (.000)
 
 == Pre-registered H4 (all revisions, one row per game): pass-matchup term vs the margin beyond the spread
-  n=41 graded games, partial r +0.043 [-0.201, +0.308] (95%): unresolved
+  n=42 graded games, partial r +0.069 [-0.184, +0.319] (95%): unresolved
 
 == Pre-registered H1/H2/H6 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addenda 2026-10-13 in research/PREREGISTRATION.md)
   H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 28 priced rows; verdict: no qualifying graded rows
-  H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=27 +0.0129; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no late-season rows
-  H2 secondary, flat 1u ROI: weeks 5-13 n=27 -1.9% +/- 15.1 (null -4.1%, favorite +1.7%); weeks 14-18 n=0
+  H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=28 +0.0168; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no late-season rows
+  H2 secondary, flat 1u ROI: weeks 5-13 n=28 -0.2% +/- 14.6 (null -4.1%, favorite +3.4%); weeks 14-18 n=0
   H6, the model backs the market underdog (its side's no-vig q < 0.5): 1 graded bets of 28 priced rows; 0-1-0, -1.00u, ROI -100.0%, null -4.5%, same-row favorite +87.0%, log-loss gain vs q -0.1095; verdict: no verdict before 10 graded bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H9 (one row per game, first production snapshot from 2026 week 6; prices only): moneyline vs spread disagreement
-  28 games with lock prices, 27 graded binary; b needs 30 graded games over 10 weeks; verdict: no verdict before 300 graded binary games
+  28 games with lock prices, 28 graded binary; b needs 30 graded games over 10 weeks; verdict: no verdict before 300 graded binary games
   Rule, |dis| >= 0.11133, 1u on the side the spread favors more: 9 graded bets, 5-4-0, +2.10u, ROI +23.3% +/- 43.6; null -4.2%; same rows, favorite +2.79u; verdict: no verdict before 100 bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
@@ -267,9 +267,9 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
 | boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
 | boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
-| boxscore-composite-v1.16 | 42 | 25-14-1 | -1.05 | -2.62% ± 11.75 | +0.82 | -4.09% | 0.716670 | 0.662146 |
+| boxscore-composite-v1.16 | 42 | 26-14-1 | -0.59 | -1.44% ± 11.52 | +1.28 | -4.09% | 0.706444 | 0.656224 |
 | boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
-| boxscore-composite-v1.18 | 28 | 16-10-0 | -1.42 | -5.47% ± 15.23 | +0.45 | -4.10% | 0.701900 | 0.705839 |
+| boxscore-composite-v1.18 | 28 | 17-10-0 | -0.96 | -3.57% ± 14.78 | +0.90 | -4.10% | 0.690836 | 0.695608 |
 
 ## Frozen archived-input counterfactuals
 
@@ -408,13 +408,13 @@ Summary uses the earliest original snapshot per game, globally and within each o
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     43        1    26      15       1 -1.139357 -0.027128 0.116501        -0.041029       -0.178883     -0.004363            41  0.697139         0.684219 0.249229      0.241577
+        All unique games     43        0    27      15       1 -0.680642 -0.015829 0.114319        -0.041027        0.279833      0.006663            42  0.689877         0.677913 0.245800      0.238619
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.579691         1.567153 0.630375      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.622113         1.609438 0.644037      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.663882         1.651078 0.657068      0.653118
-boxscore-composite-v1.16     42        1    26      14       1 -0.139357 -0.003399 0.116875        -0.041048        0.821117      0.020528            40  0.675075         0.662146 0.239700      0.231960
+boxscore-composite-v1.16     42        0    27      14       1  0.319358  0.007604 0.114588        -0.041045        1.279833      0.031215            41  0.668174         0.656224 0.236420      0.229164
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.622306         0.574300 0.217136      0.194824
-boxscore-composite-v1.18     28        1    17      10       0 -0.514298 -0.019048 0.150822        -0.041160        0.446176      0.017161            27  0.701900         0.705839 0.251288      0.250550
+boxscore-composite-v1.18     28        0    18      10       0 -0.055582 -0.001985 0.146334        -0.041151        0.904892      0.033515            28  0.690836         0.695608 0.246072      0.245792
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.793961          L  -1.000000
@@ -500,8 +500,8 @@ boxscore-composite-v1.16 2026_07_NYG_HOU           0.768406  0.768406          L
 boxscore-composite-v1.16  2026_07_PIT_NO           0.472369  0.472369          W   0.617284
 boxscore-composite-v1.16  2026_07_SF_ATL           0.429264  0.429264          L  -1.000000
 boxscore-composite-v1.16  2026_07_TB_CAR           0.557605  0.557605          L  -1.000000
-boxscore-composite-v1.18 2026_07_DAL_PHI           0.324386  0.324386                   NaN
-boxscore-composite-v1.16 2026_07_DAL_PHI           0.257275  0.324386                   NaN
+boxscore-composite-v1.18 2026_07_DAL_PHI           0.324386  0.324386          W   0.458716
+boxscore-composite-v1.16 2026_07_DAL_PHI           0.257275  0.324386          W   0.458716
 boxscore-composite-v1.18 2026_07_CIN_BAL           0.418454  0.418454          W   0.675676
 boxscore-composite-v1.16 2026_07_CIN_BAL           0.381171  0.418454          W   0.675676
 
@@ -548,10 +548,10 @@ Prior-season maps (training excludes the forecast season):
   2026: [3.0, 4.0, 7.0, 14.0]; prior n=1359, band counts=[497, 478, 228, 156], through 2025
 
 Historical replay: median ATS versus moneyline on identical game opportunities:
-  All: ATS 481-403-25, 0 skips, 909/909 selected, +34.27u, ROI +3.77% +/- 3.11pp (1 SE)
-    ML 624-283-2, +22.41u, ROI +2.47% +/- 2.40pp (1 SE); market-correct null -4.10%
-    Common-row ML/favorite control n=905 (excludes market pick'ems for both): model +22.59u, ROI +2.50%; favorite -7.17u, ROI -0.79%
-    Binary proper scores n=907: log loss 0.613509, market 0.613486; Brier 0.212621; tied finals excluded from binary scoring.
+  All: ATS 489-409-25, 0 skips, 923/923 selected, +35.55u, ROI +3.85% +/- 3.09pp (1 SE)
+    ML 634-287-2, +23.94u, ROI +2.59% +/- 2.38pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=919 (excludes market pick'ems for both): model +24.12u, ROI +2.62%; favorite -5.64u, ROI -0.61%
+    Binary proper scores n=921: log loss 0.614366, market 0.614231; Brier 0.212979; tied finals excluded from binary scoring.
   2023: ATS 136-122-14, 0 skips, 272/272 selected, +1.64u, ROI +0.60% +/- 5.64pp (1 SE)
     ML 185-87-0, +8.35u, ROI +3.07% +/- 4.53pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=270 (excludes market pick'ems for both): model +8.44u, ROI +3.12%; favorite +4.12u, ROI +1.53%
@@ -564,12 +564,12 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
     ML 184-87-1, -2.94u, ROI -1.08% +/- 4.35pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=271 (excludes market pick'ems for both): model -3.85u, ROI -1.42%; favorite -18.05u, ROI -6.66%
     Binary proper scores n=271: log loss 0.603441, market 0.609383; Brier 0.209128; tied finals excluded from binary scoring.
-  2026: ATS 51-36-6, 0 skips, 93/93 selected, +10.36u, ROI +11.14% +/- 9.49pp (1 SE)
-    ML 57-35-1, -6.47u, ROI -6.95% +/- 7.79pp (1 SE); market-correct null -4.10%
-    Common-row ML/favorite control n=93 (excludes market pick'ems for both): model -6.47u, ROI -6.95%; favorite -7.35u, ROI -7.90%
-    Binary proper scores n=92: log loss 0.676355, market 0.661446; Brier 0.240507; tied finals excluded from binary scoring.
+  2026: ATS 59-42-6, 0 skips, 107/107 selected, +11.64u, ROI +10.88% +/- 8.88pp (1 SE)
+    ML 67-39-1, -4.94u, ROI -4.61% +/- 7.23pp (1 SE); market-correct null -4.10%
+    Common-row ML/favorite control n=107 (excludes market pick'ems for both): model -4.94u, ROI -4.61%; favorite -5.82u, ROI -5.44%
+    Binary proper scores n=106: log loss 0.675505, market 0.661588; Brier 0.239934; tied finals excluded from binary scoring.
 
-Legacy native boxscore-composite-v1.18 moneyline: {"graded": 27, "moneyline": {"bets": 26, "losses": 10, "pushes": 0, "roi": -0.05474557692307691, "units": -1.4233849999999997, "wins": 16}, "pending": 1, "snapshots": 28, "ties": 0}
+Legacy native boxscore-composite-v1.18 moneyline: {"graded": 28, "moneyline": {"bets": 27, "losses": 10, "pushes": 0, "roi": -0.03572848148148146, "units": -0.9646689999999993, "wins": 17}, "pending": 0, "snapshots": 28, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 13, "original_selections": 11, "original_skips": 2, "pending": 0, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
 Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 203, "original_selections": 15, "original_skips": 0, "policy": "median-mov-ats-t60-favtie-2026-10-19-v2", "recovered_saved_forecasts": 1, "timed_locks": 14}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
@@ -613,9 +613,9 @@ Store validation: PASS; 203 saved candidates, 15 finalized saved decisions.
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 58-42-6, 0 skips, 1 pending, 0 unavailable; +10.56u, ROI +9.96%.
-ESPN exact-handicap pricing: 0 pre-lock, 86 closing estimates, 20 assumed -110, 0 unpriced; ROI denominator 106 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
-  60-minute lock: 8-5-0, 0 skips, 1 pending, 0 unavailable; +2.39u
+Record 58-43-6, 0 skips, 0 pending, 0 unavailable; +9.56u, ROI +8.94%.
+ESPN exact-handicap pricing: 1 pre-lock, 86 closing estimates, 20 assumed -110, 0 unpriced; ROI denominator 107 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
+  60-minute lock: 8-6-0, 0 skips, 0 pending, 0 unavailable; +1.39u
   Backfilled recorded skip: 0-2-0, 0 skips, 0 pending, 0 unavailable; -2.00u
   Historical replay: 43-30-6, 0 skips, 0 pending, 0 unavailable; +8.87u
   Recorded pregame: 6-4-0, 0 skips, 0 pending, 0 unavailable; +1.45u
