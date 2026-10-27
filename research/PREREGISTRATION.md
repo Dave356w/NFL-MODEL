@@ -575,3 +575,48 @@ paired on the primary games (per-game mean of hard loss − soft loss); (c) the 
 
 *Multiplicity.* H10 and H11 test two forecasts on largely the same future rungs, and H11 was
 chosen after H10's interim reading. Read a single 2 SE result with H1–H11 in mind.
+
+**2026-10-27 (later the same day), owner request ("set up H12 and run it on 2013–2018"),
+committed and pushed before the 2013–2018 schedule is downloaded. New hypothesis H12 (fade the
+band-capped team ATS residual). H1–H11 are unchanged.**
+
+*Source and exposure.* An exploratory scan on 2006–12 and 2019–25 (exposed; done in chat on
+2026-10-27, not committed) found that rolling team residuals (final margin − spread) are priced by
+the market. Capped at the band's median number, they lean toward **fading** in cover terms:
+about −0.04 to −0.05 cover units per SD of the signal (z ≈ −2 in 2006–12, −1.6 to −1.8 in
+2019–25 at N = 4 and 8). The cell below was chosen from 24 correlated cells after that was seen.
+2013–2018 spreads and results have been used by other repo tests (for example
+`OUT_OF_SAMPLE_2017_2020.md` and the 2013–2020 feature packs), but never for team ATS residuals or
+cover-by-history. This is an out-of-period check on exposed seasons, not forward evidence.
+
+*Data (fixed).* nflverse `games.csv` (`research/ladder_pricing.py` GAMES_URL), downloaded once
+after this commit, regular-season games 2013–2018 frozen with source and frozen SHA-256 in
+`research/h12_inputs/`. Team histories are seeded with the 2012 regular season from the frozen
+`research/ml_spread_inputs/games_2006_2012.csv` (history only, never scored). Franchise codes
+continue across moves: STL → LA, SD → LAC (OAK stays OAK through 2018). Playoff games are excluded
+from histories and scoring. Games without a spread or result are skipped.
+
+*Signal (fixed).* For a game with spread s (positive = home favored) and home margin m, the home
+residual is t = m − s, capped to ±c where c is the 2026 production median-map magnitude for |s|'s
+band: 3 (|s| < 3), 4 (3–<7), 7 (7–<10), 14 (10+). The away team records −t with the same cap. A
+team's signal is the mean of its last **8** capped residuals (across seasons; both teams need 8).
+x = home signal − away signal.
+
+*Rule (fixed).* Bet when |x| ≥ **2.51** points: the sample SD of x on 2019–25 with the same
+definition (n = 1,739; about 31% of games pass). Take the **away** side if x > 0 and the **home**
+side if x < 0, against the spread at assumed −110. Pushes return 0 and stay in the ROI denominator.
+
+*Report.* W-L-P, cover rate excluding pushes with Wilson 95%, units, ROI ± SE, n, the 52.4%
+break-even, the same-row always-favorite and always-home records, and per season. Secondary,
+never decisive: the slope of the cover outcome (±1, pushes 0) on x / 2.51 over all scored games,
+with SE; the same rule at N = 4 and 16.
+
+*Decision* (one run, n ≥ 150 bets required):
+- **Replicates**: cover rate > 52.4% **and** above the same-row always-favorite cover rate. Only
+  then would a reporting-only forward shadow on the 60-minute locks be registered (as its own
+  hypothesis), not adoption.
+- **Falsified**: either condition fails. The idea is dropped.
+- Fewer than 150 bets: inconclusive, dropped as untestable on this period.
+A point-estimate gate: a replication is weak evidence; the cover-rate interval is reported with it.
+
+*Multiplicity.* H1–H12 are now registered. H12 was selected from a scan of 24 correlated cells.
