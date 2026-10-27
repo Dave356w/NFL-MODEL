@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-10-27 17:38 UTC
+NFL forward ledger report -- 2026-10-27 17:42 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -622,6 +622,36 @@ ESPN exact-handicap pricing: 1 pre-lock, 86 closing estimates, 20 assumed -110, 
   Recovered saved forecast: 1-0-0, 0 skips, 0 pending, 0 unavailable; +0.85u
   Replayed pregame forecast: 0-1-0, 0 skips, 0 pending, 0 unavailable; -1.00u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
+
+ATS same-row baselines
+
+ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; break-even cover 52.4%).
+Line-only map: the market line through the same frozen median map, without model input. Median map minus line-only is what the model adds beyond the line's own band.
+Per-arm records are descriptive; the map-versus-raw review is at 100 decided locks.
+60-minute lock, boxscore-composite-v1.18: 14 graded, 0 pending
+  Median map (production)  8-6-0, 0 skips, +1.27u, ROI +9.1% +/- 26.2, cover 57.1%
+  Raw model spread         6-8-0, 0 skips, -2.55u, ROI -18.2% +/- 26.2, cover 42.9%
+  Line-only map            7-7-0, 0 skips, -0.64u, ROI -4.5% +/- 26.5, cover 50.0%
+  Always favorite          8-6-0, 0 skips, +1.27u, ROI +9.1% +/- 26.2, cover 57.1%
+  Always home              3-11-0, 0 skips, -8.27u, ROI -59.1% +/- 21.7, cover 21.4%
+  Paired, median map minus line-only map: sides differ on 3 of 14; +1.91u (per game +0.136 +/- 0.242, 1 SE)
+  Paired, median map minus raw model spread: sides differ on 10 of 14; +3.82u (per game +0.273 +/- 0.441, 1 SE)
+Recovered saved forecast, boxscore-composite-v1.18: 1 graded, 0 pending (reported separately from pregame-finalized locks)
+  Median map (production)  1-0-0, 0 skips, +0.91u, ROI +90.9%, cover 100.0%
+  Raw model spread         0-1-0, 0 skips, -1.00u, ROI -100.0%, cover 0.0%
+  Line-only map            1-0-0, 0 skips, +0.91u, ROI +90.9%, cover 100.0%
+  Always favorite          0-1-0, 0 skips, -1.00u, ROI -100.0%, cover 0.0%
+  Always home              0-1-0, 0 skips, -1.00u, ROI -100.0%, cover 0.0%
+  Paired, median map minus line-only map: sides differ on 0 of 1; +0.00u (per game +0.000, 1 SE)
+  Paired, median map minus raw model spread: sides differ on 1 of 1; +1.91u (per game +1.909, 1 SE)
+Development history (replay, not forward evidence; backtest seasons share the recipe selection, the current season is walk-forward): 2023-2026, 923 graded
+  Median map (production)  489-409-25, 0 skips, +35.55u, ROI +3.9% +/- 3.1, cover 54.5%
+  Raw model spread         458-440-25, 0 skips, -23.64u, ROI -2.6% +/- 3.1, cover 51.0%
+  Line-only map            470-428-25, 0 skips, -0.73u, ROI -0.1% +/- 3.1, cover 52.3%
+  Always favorite          458-440-25, 0 skips, -23.64u, ROI -2.6% +/- 3.1, cover 51.0%
+  Always home              442-456-25, 0 skips, -54.18u, ROI -5.9% +/- 3.1, cover 49.2%
+  Paired, median map minus line-only map: sides differ on 145 of 923; +36.27u (per game +0.039 +/- 0.025, 1 SE)
+  Paired, median map minus raw model spread: sides differ on 453 of 923; +59.18u (per game +0.064 +/- 0.044, 1 SE)
 
 Appendix D: win-probability calibration theory (frozen research)
 
