@@ -4,6 +4,14 @@ Research-only scripts and experiment records. Some import `nfl_model.py` and
 change settings inside their own process; the joint-score track below is
 standalone. They never write `data/`, the frozen recipe or the forward ledger.
 
+[Soft neighboring-band empirical distributions](soft_band_distribution_results/REPORT.md)
+tests one fixed interpolation of the production bands' complete prior-season
+margin distributions. It preserves observed margin atoms and derives line-specific
+cover/push probabilities. Forecast-score and price-aware decision comparisons,
+including paired historical prices and a separate assumed -110 scenario, stay
+research-only; the development gate does not authorize production promotion.
+See the [fixed protocol](SOFT_BAND_DISTRIBUTIONS.md).
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a

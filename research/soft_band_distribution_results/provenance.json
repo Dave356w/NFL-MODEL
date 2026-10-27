@@ -1,0 +1,12 @@
+{
+  "policy": "SB1-neighbor-empirical-bands-2026-10-26-v1",
+  "bootstrap_repeats": 6000,
+  "bootstrap_seed": 20261026,
+  "protocol_sha256": "eee9cd9659f3943380f796a83ee89effb6738ba5613750f687fc1ec64ec5dbee",
+  "code_sha256": "ba03da7548568a5f202a8b0100787b5438696fd00f1d0aec606e1202139ad915",
+  "frozen_input_sha256": "5e35957de7ed0412c2471cb65cf65592fe6d27da8244f67990f447f75a5bdf86",
+  "production_changed": false,
+  "independent_validation": false,
+  "price_search": false,
+  "assumption": "Uniform -110 and exact paired archived offers are distinct retrospective scenarios."
+}
