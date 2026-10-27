@@ -1,7 +1,7 @@
 """Decide whether a scheduled workflow run should do the full model build.
 
 GitHub cron is static, so build.yml polls hourly, plus every five minutes
-near the ATS cutoff, and this script gates the
+from T−180 to T−15 for the ATS cutoff, and this script gates the
 expensive run (play-by-play reconstruction, weekly refits) against the live
 NFL schedule. Stdlib only, so the plan job needs no pip install.
 
@@ -37,7 +37,10 @@ ET = ZoneInfo("America/New_York")
 SCHEDULE_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
 DAILY_CRON = "13 6 * * *"
 ATS_CRON = "*/5 * * * *"
-ATS_REFRESH_MINUTES = 120
+# GitHub delivered ~0.5 scheduled runs per hour in October 2026 (median gap
+# 102 minutes). A delivered poll this far ahead still builds, and the hold in
+# ats_wait.py carries it to the T−60 cutoff.
+ATS_REFRESH_MINUTES = 180
 ATS_FINALIZE_MINUTES = 15
 LEDGER_WINDOW_HOURS = 30
 FINAL_REFRESH_MINUTES = 150

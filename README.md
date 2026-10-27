@@ -20,7 +20,7 @@ public interface and public CSVs contain ATS data only.
 
 **ATS timing (adopted 2026-10-19 UTC):** spread picks remain provisional until
 60 minutes before kickoff. Five-minute scheduled polls trigger model refreshes
-from T−120 through T−15; outside that window they skip the expensive build.
+from T−180 through T−15; outside that window they skip the expensive build.
 Each build saves eligible forecasts in `data/ats_lock_candidates.jsonl`. At or
 after T−60 it freezes the latest forecast both generated and observed by the
 cutoff into `data/ats_locks.jsonl`. A delayed run cannot use a newer line or
@@ -32,7 +32,7 @@ finalization time. Each full build also finalizes saved candidates before runnin
 the model. The saved forecast time,
 cutoff and finalization time are all retained; GitHub cron does not guarantee
 delivery at an exact minute, and in practice drops many polls. So a build that
-finishes within 90 minutes of a cutoff with a saved candidate stays running
+finishes within 150 minutes of a cutoff with a saved candidate stays running
 (`ats_wait.py`): it refreshes once 10 minutes before the cutoff if its newest
 candidate is older than that, then finalizes at the cutoff and commits. It uses
 the same rule, so it can only lock a candidate saved by the cutoff. Missing

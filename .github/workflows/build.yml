@@ -23,7 +23,7 @@ on:
       timezone: America/New_York
     - cron: '41 * * * *'
       timezone: America/New_York
-    # The plan job gates these polls to T-120..T-15. Full builds refresh
+    # The plan job gates these polls to T-180..T-15. Full builds refresh
     # candidates before T-60 and finalize only inputs saved by that cutoff.
     - cron: '*/5 * * * *'
       timezone: America/New_York
@@ -61,8 +61,9 @@ jobs:
     needs: plan
     if: needs.plan.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    # 75 for the build plus up to 90 holding for an ATS cutoff (ats_wait.py).
-    timeout-minutes: 180
+    # 75 for the build plus up to 180 for the ATS hold step (ats_wait.py: 150
+    # waiting, then the last refresh, finalization and commit).
+    timeout-minutes: 270
     steps:
       # Latest main when the job STARTS (not the queued trigger commit), so a
       # run that waited in site-build builds on the ledger the previous run
@@ -128,13 +129,13 @@ jobs:
           python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
 
       # GitHub drops and delays scheduled runs, so polls cannot be trusted to
-      # land between T-60 and kickoff. A run that finishes within 90 minutes
+      # land between T-60 and kickoff. A run that finishes within 150 minutes
       # of a cutoff with a saved candidate stays alive (still holding
       # site-build), refreshes once shortly before it, then finalizes at the
       # cutoff and commits. It finalizes only candidates saved by the cutoff.
       - name: Hold for the 60-minute ATS cutoff
         if: ${{ !cancelled() }}
-        timeout-minutes: 100
+        timeout-minutes: 180
         # A failed hold must not block deploying the build it follows; the
         # next step still commits whatever it wrote.
         continue-on-error: true

@@ -167,7 +167,42 @@ def test_workflow_holds_after_committing_and_still_deploys():
     hold = build.split('Hold for the 60-minute ATS cutoff', 1)[1].split('- name:', 1)[0]
     assert 'continue-on-error: true' in hold and 'GITHUB_TOKEN' in hold and '!cancelled()' in hold
     timeout = int(build.split('timeout-minutes: ', 1)[1].split()[0])
-    assert timeout >= 75 + w.MAX_WAIT_MINUTES
+    hold_timeout = int(hold.split('timeout-minutes: ', 1)[1].split()[0])
+    # The hold step needs room after the last cutoff to refresh pages and commit.
+    assert hold_timeout >= w.MAX_WAIT_MINUTES + 20
+    assert timeout >= 75 + hold_timeout
+
+
+def test_default_hold_reaches_a_cutoff_150_minutes_out_and_no_further(tmp_path):
+    now = CUTOFF - dt.timedelta(minutes=140)
+    horizon = now + dt.timedelta(minutes=w.MAX_WAIT_MINUTES)
+    candidate(tmp_path, now - dt.timedelta(minutes=5))
+    candidate(tmp_path, now, game_id='beyond', lock=now + dt.timedelta(minutes=151))
+    assert w.pending(tmp_path, now, horizon) == {CUTOFF: now - dt.timedelta(minutes=5)}
+
+
+def test_monday_style_early_build_holds_refreshes_and_finalizes_at_the_cutoff(tmp_path):
+    # A build finishing 86 minutes before the cutoff (as a 21:49 UTC Monday poll
+    # would have) refreshes once at T-70 and finalizes just after T-60.
+    clock = Clock(CUTOFF - dt.timedelta(minutes=86))
+    candidate(tmp_path, clock.now - dt.timedelta(minutes=10))
+    times = []
+
+    def refresh():
+        times.append(('refresh', clock.now))
+        candidate(tmp_path, clock.now)
+        return 0
+
+    def finalize():
+        times.append(('finalize', clock.now))
+        a.append(tmp_path / a.LOCKS, [dict(revision=m.REVISION, game_id='g1')])
+        return {'locks': 1}
+
+    steps = w.hold(tmp_path, clock.now + dt.timedelta(minutes=w.MAX_WAIT_MINUTES), refresh, finalize,
+                   clock, clock.sleep)
+    assert [s[0] for s in steps] == ['refresh', 'finalize']
+    assert times[0][1] == CUTOFF - dt.timedelta(minutes=w.REFRESH_LEAD_MINUTES)
+    assert CUTOFF < times[1][1] <= CUTOFF + dt.timedelta(seconds=w.SETTLE_SECONDS)
 
 
 def test_checkout_only_moves_after_a_successful_commit(monkeypatch):

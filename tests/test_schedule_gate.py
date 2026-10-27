@@ -66,3 +66,26 @@ def test_build_workflow_carries_the_gate_crons():
     assert "python schedule_gate.py" in text and "python build_site.py" in text
     # the commit step must survive a failed render so a written snapshot is kept
     assert "if: ${{ !cancelled() }}" in text
+
+
+def ko_et(now, minutes):
+    return (now + timedelta(minutes=minutes)).astimezone(sg.ET).strftime("%Y-%m-%dT%H:%M")
+
+
+def test_ats_poll_window_runs_from_t_minus_180_to_t_minus_15():
+    for minutes, due in [(181, False), (180, True), (146, True), (120, True), (15, True), (14, False)]:
+        got = sg.ats_due_games([game("g", ko_et(NOW, minutes))], NOW)
+        assert bool(got) is due, minutes
+    assert sg.ats_due_games([game("g", ko_et(NOW, 100), result="7")], NOW) == []
+
+
+def test_monday_2026_10_26_delivery_at_21_49_utc_now_builds():
+    # DAL at PHI kicked off 20:15 ET (00:15 UTC). The only scheduled delivery
+    # before the 23:15 UTC cutoff came at 21:49 UTC, 146 minutes out, and the
+    # old T-120 gate skipped it.
+    poll = datetime(2026, 10, 26, 21, 49, tzinfo=timezone.utc)
+    games = [game("2026_07_DAL_PHI", "2026-10-26T20:15")]
+    run, _, reason = sg.decision("schedule", sg.ATS_CRON, poll, games=games)
+    assert run and "2026_07_DAL_PHI" in reason
+    early = datetime(2026, 10, 26, 21, 10, tzinfo=timezone.utc)  # 185 minutes out
+    assert not sg.decision("schedule", sg.ATS_CRON, early, games=games)[0]
