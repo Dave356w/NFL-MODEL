@@ -621,7 +621,7 @@ A point-estimate gate: a replication is weak evidence; the cover-rate interval i
 
 *Multiplicity.* H1–H12 are now registered. H12 was selected from a scan of 24 correlated cells.
 
-**2026-10-28, owner request ("register the H12 forward shadow on the locks; 2026 H12 replay"),
+**2026-10-27 (committed 23:54 UTC), owner request ("register the H12 forward shadow on the locks; 2026 H12 replay"),
 committed and pushed before any H13 code exists or any 2026 H12 signal is computed. New
 hypothesis H13 (H12's fade rule as a reporting-only forward shadow on the ATS locks). H1–H12 are
 unchanged.**
