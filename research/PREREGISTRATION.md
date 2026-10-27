@@ -541,3 +541,37 @@ rung (favorite over the strike, mid of yes bid/ask, captured two hours pregame) 
 2026 week 13. Rungs within a game are strongly correlated; the game is the unit.
 
 *Multiplicity.* H1–H10 are now registered. H10 is a prediction test with no betting rule.
+
+**2026-10-27 (later the same day), owner request ("run the soft band version as a separate
+test"), committed and pushed before any H11 code exists. New hypothesis H11 (soft band margin
+distributions vs the Kalshi spread ladder). H1–H10 are unchanged.**
+
+*Source and exposure.* H10's first run reported the soft PMF as secondary (a): +0.0065 ± 0.0085
+(1 SE) on 28 v1.18 games, against −0.0023 ± 0.0101 for H10's hard PMF. H11 was requested after
+that was seen, so those 28 games are exposed. They are frozen in
+`research/soft_band_ladder_inputs/exposed_games.txt` and **excluded from H11's primary sample**.
+
+*Forecast (fixed).* SB1's soft neighboring-band PMFs: the same 2021–2025 fit as H10, linear
+weights between adjacent band anchors (each band's prior-sample median |raw spread|), nearest
+endpoint outside them (`soft_band_distributions.forecast(raw, fit, soft=True)`). No refit.
+
+*Primary sample.* H10's primary definition (graded v1.18 forward rows with a Kalshi capture, the
+ledger's capture join, rungs with strike ≤ 17.5 and a valid quote) minus the exposed games.
+
+*Score.* H10's: binary log loss per rung, probabilities clipped to [0.005, 0.995], per-game mean
+of Kalshi loss − soft loss, games weighted equally, SE across games.
+
+*Decision* (first run with ≥ 100 primary games, then final):
+- **Supported**: gain − 2 SE > 0. Only then is an alt-line chooser priced from the soft PMFs worth
+  a separate pre-registration.
+- **Falsified**: gain ≤ 0.
+- Otherwise **unresolved**. Earlier runs are interim with no verdict.
+
+*Secondary, never decisive.* (a) the 28 exposed games, reported as exposed; (b) soft − hard
+paired on the primary games (per-game mean of hard loss − soft loss); (c) the near-line subset
+(|strike − team line| ≤ 4); (d) the 2025–26 development cohort (H10 (e)) with soft PMFs.
+
+*Power, stated now.* About 14 v1.18 games a week; n = 100 fresh games around 2026 week 15.
+
+*Multiplicity.* H10 and H11 test two forecasts on largely the same future rungs, and H11 was
+chosen after H10's interim reading. Read a single 2 SE result with H1–H11 in mind.
