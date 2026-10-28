@@ -486,3 +486,179 @@ now uses t(G − 1) critical values, where G is the number of season-weeks, in p
 
 It was chosen from the simulation alone, before any verdict point. See the second 2026-10-15
 addendum in `research/FAVORITE_PENALTY.md`.
+
+**2026-10-27, owner request ("pre-register option 3 and run it"), committed and pushed before
+any H10 score exists. New hypothesis H10 (band margin distributions vs the Kalshi spread
+ladder). H1–H9 and the favorite-penalty rule are unchanged.**
+
+*Source.* Owner proposal 2026-10-27: alt-line suggestions so the ATS bet aligns with the band's
+margin distribution rather than flipping on a half-point hook. An alt-line chooser would price
+rungs from the production band's empirical margins. This test asks first whether those margins
+predict "team wins by over X.5" better than Kalshi's own prices. It places no bets. SB1
+(`research/SOFT_BAND_DISTRIBUTIONS.md`, 2026-10-26) found the same distributions no better
+than the paired sportsbook price at the main line; H10 extends the question to whole ladders.
+
+*Already seen when this was written.* Aggregate forward moneyline/ATS records, H3 ladder bets
+and the Kalshi alt-line rule in `data/ledger_report.txt`; SB1's results; ladder quote widths and
+rung counts (outcome-free). No rung-level comparison of band probabilities with Kalshi mids
+against outcomes has been computed.
+
+*Forecast (fixed).* SB1's hard empirical band PMFs (`research/soft_band_distributions.py`,
+`fit_prior` on its frozen `games.csv`, seasons strictly before the target season). For 2026 this is
+exactly the production median map's training sample: 2021–2025, 1,359 games, band counts
+497/478/228/156, medians 3/4/7/14. Raw spread = `nfl_model.implied_spread(model_wp)`; band by
+|raw| with cuts 3/7/10; the PMF of the actual margin signed toward the raw winner. A rung's
+probability is the PMF mass on that team's margin > strike. No refit while H10 runs.
+
+*Primary sample (forward).* Every graded `boxscore-composite-v1.18` row in
+`data/forward_ledger.csv` (first pregame snapshot per game) with a Kalshi capture, joined exactly
+as `grade_ledger.kalshi_grades` does (first capture at or after `generated_utc`, else the last
+earlier one; the count of earlier ones is reported). Every rung on both teams' ladders with
+strike ≤ 17.5 (H3's cap) and a valid quote, 0 < bid ≤ ask < 1 and ask − bid ≤ 0.05. Game-winner
+markets are excluded. Kalshi probability = (bid + ask) / 2, no further normalization.
+
+*Score.* Binary log loss per rung; both probabilities clipped to [0.005, 0.995] (Kalshi's
+half-tick floor). Per game, the mean over its rungs of Kalshi loss − band loss (positive = band
+better). **Primary statistic: the mean of the per-game gains**, games weighted equally, SE = SD
+across games / √n.
+
+*Decision* (on the primary sample, at the first run after it reaches 100 graded games, then final):
+- **Supported**: gain − 2 SE > 0 with n ≥ 100 games. Only then would option 1 or 2 (an alt-line
+  chooser on the map's side) be worth a separate pre-registration.
+- **Falsified**: n ≥ 100 games and gain ≤ 0. The band distributions then give no basis for
+  choosing among Kalshi rungs; options 1 and 2 are not built.
+- Otherwise **unresolved**. Earlier runs are interim readings with no verdict.
+
+*Secondary, reported, never decisive.* (a) SB1's soft PMFs on the same rungs; (b) H3's frozen
+moneyline reference (`kalshi.ladder_probability` at the row's no-vig moneyline) on the same rungs;
+(c) the near-line subset, rungs with |strike − that team's sportsbook line margin| ≤ 4; (d) the
+`boxscore-composite-v1.16` forward rows, overlapping games and not independent; (e) a development
+cohort, exposed and not forward: `data/kalshi_historical/kalshi_quotes.csv` 2025–2026 main-spread
+rung (favorite over the strike, mid of yes bid/ask, captured two hours pregame) scored with SB1's
+`games.csv` raw spread and the fit for that season. Per-rung pooled numbers are descriptive.
+
+*Power, stated now.* About 14 v1.18 games a week carry a Kalshi ladder, so n = 100 arrives around
+2026 week 13. Rungs within a game are strongly correlated; the game is the unit.
+
+*Multiplicity.* H1–H10 are now registered. H10 is a prediction test with no betting rule.
+
+**2026-10-27 (later the same day), owner request ("run the soft band version as a separate
+test"), committed and pushed before any H11 code exists. New hypothesis H11 (soft band margin
+distributions vs the Kalshi spread ladder). H1–H10 are unchanged.**
+
+*Source and exposure.* H10's first run reported the soft PMF as secondary (a): +0.0065 ± 0.0085
+(1 SE) on 28 v1.18 games, against −0.0023 ± 0.0101 for H10's hard PMF. H11 was requested after
+that was seen, so those 28 games are exposed. They are frozen in
+`research/soft_band_ladder_inputs/exposed_games.txt` and **excluded from H11's primary sample**.
+
+*Forecast (fixed).* SB1's soft neighboring-band PMFs: the same 2021–2025 fit as H10, linear
+weights between adjacent band anchors (each band's prior-sample median |raw spread|), nearest
+endpoint outside them (`soft_band_distributions.forecast(raw, fit, soft=True)`). No refit.
+
+*Primary sample.* H10's primary definition (graded v1.18 forward rows with a Kalshi capture, the
+ledger's capture join, rungs with strike ≤ 17.5 and a valid quote) minus the exposed games.
+
+*Score.* H10's: binary log loss per rung, probabilities clipped to [0.005, 0.995], per-game mean
+of Kalshi loss − soft loss, games weighted equally, SE across games.
+
+*Decision* (first run with ≥ 100 primary games, then final):
+- **Supported**: gain − 2 SE > 0. Only then is an alt-line chooser priced from the soft PMFs worth
+  a separate pre-registration.
+- **Falsified**: gain ≤ 0.
+- Otherwise **unresolved**. Earlier runs are interim with no verdict.
+
+*Secondary, never decisive.* (a) the 28 exposed games, reported as exposed; (b) soft − hard
+paired on the primary games (per-game mean of hard loss − soft loss); (c) the near-line subset
+(|strike − team line| ≤ 4); (d) the 2025–26 development cohort (H10 (e)) with soft PMFs.
+
+*Power, stated now.* About 14 v1.18 games a week; n = 100 fresh games around 2026 week 15.
+
+*Multiplicity.* H10 and H11 test two forecasts on largely the same future rungs, and H11 was
+chosen after H10's interim reading. Read a single 2 SE result with H1–H11 in mind.
+
+**2026-10-27 (later the same day), owner request ("set up H12 and run it on 2013–2018"),
+committed and pushed before the 2013–2018 schedule is downloaded. New hypothesis H12 (fade the
+band-capped team ATS residual). H1–H11 are unchanged.**
+
+*Source and exposure.* An exploratory scan on 2006–12 and 2019–25 (exposed; done in chat on
+2026-10-27, not committed) found that rolling team residuals (final margin − spread) are priced by
+the market. Capped at the band's median number, they lean toward **fading** in cover terms:
+about −0.04 to −0.05 cover units per SD of the signal (z ≈ −2 in 2006–12, −1.6 to −1.8 in
+2019–25 at N = 4 and 8). The cell below was chosen from 24 correlated cells after that was seen.
+2013–2018 spreads and results have been used by other repo tests (for example
+`OUT_OF_SAMPLE_2017_2020.md` and the 2013–2020 feature packs), but never for team ATS residuals or
+cover-by-history. This is an out-of-period check on exposed seasons, not forward evidence.
+
+*Data (fixed).* nflverse `games.csv` (`research/ladder_pricing.py` GAMES_URL), downloaded once
+after this commit, regular-season games 2013–2018 frozen with source and frozen SHA-256 in
+`research/h12_inputs/`. Team histories are seeded with the 2012 regular season from the frozen
+`research/ml_spread_inputs/games_2006_2012.csv` (history only, never scored). Franchise codes
+continue across moves: STL → LA, SD → LAC (OAK stays OAK through 2018). Playoff games are excluded
+from histories and scoring. Games without a spread or result are skipped.
+
+*Signal (fixed).* For a game with spread s (positive = home favored) and home margin m, the home
+residual is t = m − s, capped to ±c where c is the 2026 production median-map magnitude for |s|'s
+band: 3 (|s| < 3), 4 (3–<7), 7 (7–<10), 14 (10+). The away team records −t with the same cap. A
+team's signal is the mean of its last **8** capped residuals (across seasons; both teams need 8).
+x = home signal − away signal.
+
+*Rule (fixed).* Bet when |x| ≥ **2.51** points: the sample SD of x on 2019–25 with the same
+definition (n = 1,739; about 31% of games pass). Take the **away** side if x > 0 and the **home**
+side if x < 0, against the spread at assumed −110. Pushes return 0 and stay in the ROI denominator.
+
+*Report.* W-L-P, cover rate excluding pushes with Wilson 95%, units, ROI ± SE, n, the 52.4%
+break-even, the same-row always-favorite and always-home records, and per season. Secondary,
+never decisive: the slope of the cover outcome (±1, pushes 0) on x / 2.51 over all scored games,
+with SE; the same rule at N = 4 and 16.
+
+*Decision* (one run, n ≥ 150 bets required):
+- **Replicates**: cover rate > 52.4% **and** above the same-row always-favorite cover rate. Only
+  then would a reporting-only forward shadow on the 60-minute locks be registered (as its own
+  hypothesis), not adoption.
+- **Falsified**: either condition fails. The idea is dropped.
+- Fewer than 150 bets: inconclusive, dropped as untestable on this period.
+A point-estimate gate: a replication is weak evidence; the cover-rate interval is reported with it.
+
+*Multiplicity.* H1–H12 are now registered. H12 was selected from a scan of 24 correlated cells.
+
+**2026-10-27 (committed 23:54 UTC), owner request ("register the H12 forward shadow on the locks; 2026 H12 replay"),
+committed and pushed before any H13 code exists or any 2026 H12 signal is computed. New
+hypothesis H13 (H12's fade rule as a reporting-only forward shadow on the ATS locks). H1–H12 are
+unchanged.**
+
+*Source.* H12 replicated by its point-estimate gate on 2013–2018 (`research/h12_results/`:
+225-196-17, cover 53.4% [48.7, 58.2], ROI +2.0% ± 4.5 on 438 bets; same-row favorite 49.0%).
+That is weak evidence on exposed seasons. H13 never bets and changes no lock, pick or page.
+
+*Rule (H12's, unchanged).* Capped residual: final margin − nflverse `spread_line`, capped to the
+2026 median-map magnitude for |spread_line|'s band (3/4/7/14). Signal: mean of a team's last 8
+capped residuals from **strictly earlier weeks**, home − away (x). Shadow bet when |x| ≥ 2.51:
+away if x > 0, home if x < 0. Histories come from completed regular-season games in
+`data/latest/fixed_band_ledger.csv` (2024 onward), across seasons; franchise codes as listed.
+
+*Forward sample (primary).* Every `boxscore-composite-v1.18` lock in `data/ats_locks.jsonl` with
+`lock_at_utc` ≥ **2026-10-28T00:00:00Z**, finalized before kickoff. The shadow is graded against
+that lock's `market_spread` at assumed −110 (pushes 0, in the ROI denominator). Locks recovered
+after kickoff are reported separately. Because the signal uses only completed earlier-week
+results and the saved lock line, it is computed when the report runs; no new capture is needed.
+
+*Report.* W-L-P, cover rate excluding pushes with Wilson 95%, units, ROI ± SE, n, the 52.4%
+break-even, and on the same rows: the production median-map pick, always favorite and always home.
+
+*Decision* (at the first report with ≥ 300 shadow bets, then final):
+- **Supported**: ROI − 2 SE > 0.
+- **Falsified**: cover rate ≤ 52.4%.
+- Otherwise **unresolved**. Earlier reports are interim with no verdict.
+Supported would justify only an owner decision on a new ATS policy version, never automatic use.
+
+*Power, stated now.* About 31% of games qualify, roughly 80–85 shadow bets a season, so n = 300
+arrives around the end of the 2029 season. At H12's +2% ROI the SE at n = 300 is about 5.6 points,
+so **support is unlikely even if the effect is real**; a true 53.4% cover rate would still be
+falsified about a third of the time. The realistic outcomes are falsified or unresolved.
+
+*2026 replay (diagnostic, basis 3, never decisive).* The same rule on every completed 2026
+regular-season game, graded against nflverse `spread_line`, with the same-row baselines. 2026 is
+a current-season, exposed period. It is reported beside H13 and never pooled with it.
+
+*Multiplicity.* H1–H13 are now registered. H13 continues H12; it is not independent of the scan
+that produced H12.

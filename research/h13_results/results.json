@@ -1,0 +1,133 @@
+{
+  "forward": {
+    "shadow": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    },
+    "favorite": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    },
+    "home": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    }
+  },
+  "recovered": {
+    "shadow": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    },
+    "favorite": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    },
+    "home": {
+      "bets": 0,
+      "wins": 0,
+      "losses": 0,
+      "pushes": 0,
+      "cover": NaN,
+      "cover_lo": NaN,
+      "cover_hi": NaN,
+      "units": 0.0,
+      "roi": NaN,
+      "roi_se": NaN
+    }
+  },
+  "replay": {
+    "shadow": {
+      "bets": 42,
+      "wins": 18,
+      "losses": 21,
+      "pushes": 3,
+      "cover": 0.46153846153846156,
+      "cover_lo": 0.3156664723404835,
+      "cover_hi": 0.6143081317826119,
+      "units": -4.636363636363637,
+      "roi": -0.1103896103896104,
+      "roi_se": 0.14330637461356344
+    },
+    "favorite": {
+      "bets": 42,
+      "wins": 17,
+      "losses": 22,
+      "pushes": 3,
+      "cover": 0.4358974358974359,
+      "cover_lo": 0.2930452416170466,
+      "cover_hi": 0.5902457652547789,
+      "units": -6.545454545454545,
+      "roi": -0.15584415584415584,
+      "roi_se": 0.14262658851225027
+    },
+    "home": {
+      "bets": 42,
+      "wins": 17,
+      "losses": 22,
+      "pushes": 3,
+      "cover": 0.4358974358974359,
+      "cover_lo": 0.2930452416170466,
+      "cover_hi": 0.5902457652547789,
+      "units": -6.545454545454546,
+      "roi": -0.15584415584415584,
+      "roi_se": 0.14262658851225027
+    },
+    "production": {
+      "bets": 42,
+      "wins": 25,
+      "losses": 14,
+      "pushes": 3,
+      "cover": 0.6410256410256411,
+      "cover_lo": 0.484178631846895,
+      "cover_hi": 0.772581153035089,
+      "units": 8.727272727272725,
+      "roi": 0.20779220779220772,
+      "roi_se": 0.13811342473986085
+    }
+  },
+  "forward_locks": 0,
+  "forward_pending": 0,
+  "forward_shadow_pending": 0,
+  "replay_games": 107,
+  "verdict": "interim (n = 0 < 300 shadow bets): no verdict"
+}

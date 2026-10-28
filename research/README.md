@@ -12,6 +12,30 @@ including paired historical prices and a separate assumed -110 scenario, stay
 research-only; the development gate does not authorize production promotion.
 See the [fixed protocol](SOFT_BAND_DISTRIBUTIONS.md).
 
+[H10: band margin distributions vs the Kalshi spread ladder](band_ladder_results/REPORT.md)
+scores the production bands' hard prior-season margin PMFs against Kalshi mids on
+every captured "wins by over X.5" rung (log loss, game-weighted). Prediction only,
+no bets; the verdict waits for 100 graded v1.18 games. Protocol: H10 in
+[PREREGISTRATION.md](PREREGISTRATION.md). Run `python -m research.band_ladder_score`.
+
+[H11: soft band distributions vs the Kalshi spread ladder](soft_band_ladder_results/REPORT.md)
+repeats H10 with SB1's soft PMFs, scored only on games not yet seen when it was
+registered (the 28 exposed games are frozen in `soft_band_ladder_inputs/`). Run
+`python -m research.soft_band_ladder_score`.
+Both run weekly (Tuesday) in `.github/workflows/band-ladder-research.yml` on the
+latest graded ledger; the scores appear in that run's job summary and artifact,
+not as commits.
+
+[H12: fade the band-capped team ATS residual, 2013-2018](h12_results/REPORT.md)
+is one pre-registered out-of-period check of a pattern found in an exploratory scan
+of 2006-12 and 2019-25. Exposed seasons, assumed -110; not forward evidence. Inputs
+are frozen in `h12_inputs/`. Run `python -m research.h12_capped_residual`.
+
+[H13: H12's fade as a forward shadow on the ATS locks](h13_results/REPORT.md)
+records the rule beside v1.18 locks from 2026-10-28 (never bet), with a 2026
+replay diagnostic. It runs weekly in `band-ladder-research.yml`.
+Run `python -m research.h13_shadow`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a

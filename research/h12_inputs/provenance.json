@@ -1,0 +1,9 @@
+{
+  "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "downloaded_utc": "2026-10-27T23:47Z",
+  "source_reserialized_sha256": "1e373d45748d005b1e8bd41442d796603b3f58918036aac341f8345610ceaa09",
+  "frozen": "research/h12_inputs/games_2013_2018.csv",
+  "frozen_sha256": "b3760d8b73af2d66e85b25e765aa07e333329259ab15d29357801a9746e58dbf",
+  "rows": 1536,
+  "note": "All 2013-2018 regular-season games, priced or not."
+}
