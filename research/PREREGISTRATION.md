@@ -662,3 +662,44 @@ a current-season, exposed period. It is reported beside H13 and never pooled wit
 
 *Multiplicity.* H1–H13 are now registered. H13 continues H12; it is not independent of the scan
 that produced H12.
+
+**2026-10-28, owner request ("set up the under-3 band test"), committed and pushed before any
+H15 code exists and before any week-8 snapshot is graded. New hypothesis H15 (the model's small
+favorites win more often than the moneyline implies). H1–H14 are unchanged.**
+
+*Source and exposure.* On 2024–25 (exposed; those seasons share v1.18's recipe selection), games
+with a model raw spread under 3 points showed the model's favorite winning 61.2% (n = 98, raw
+< 1.5) and 64.8% (n = 88, raw 1.5–3) against moneyline no-vig 52.8% and 57.2% and model 52.7% and
+57.0%. The SB1 band PMFs, which pool those games, put such favorites near 59–60%. This was seen
+in chat on 2026-10-28 and not committed. 2026 weeks 1–7 have also been seen in aggregate.
+
+*Sample (fixed).* Every graded, decided (non-tie) `boxscore-composite-v1.18` row in
+`data/forward_ledger.csv` (the first pregame snapshot per game) with `generated_utc` ≥
+**2026-10-29T00:00:00Z**, both moneylines present, and |raw spread| < 3, where raw spread =
+`nfl_model.implied_spread(model_wp)` (equivalently 0.404 < model_wp < 0.596). Raw spread exactly 0
+is excluded. The model's favorite is home if model_wp > 0.5, else away.
+
+*Statistic (primary).* For each game, y = 1 if the model's favorite won, and q = that side's no-vig
+moneyline probability from the snapshot's two moneylines (proportional de-vig). **Excess = mean of
+(y − q)**, SE across games. Positive means the model's small favorites beat their moneyline price.
+
+*Decision* (at the first report with n ≥ 150 games; if v1.18 stops producing snapshots first, at
+its last report):
+- **Supported**: excess − 2 SE > 0.
+- **Falsified**: excess ≤ 0.
+- Otherwise **unresolved**. Earlier reports are interim with no verdict.
+Supported would justify only an owner decision on recalibrating small-favorite probabilities in
+research reports. Moneyline stays legacy research (owner decision 2026-10-19); nothing is published.
+
+*Secondary, never decisive.* On the same rows: (a) win log loss and Brier of the moneyline, the
+model, and SB1's soft and hard band PMF win probabilities (ties split, 2026 fit); (b) excess
+against the model's own probability, mean of (y − model's favorite probability); (c) flat 1u on the
+model's favorite at the snapshot moneyline, with the market-correct null and the same-row market
+favorite; (d) the same statistics for 2026 games before the cutoff, exposed and never pooled.
+
+*Power, stated now.* About 9 of 14 weekly games qualify (17 of 28 so far), so n = 150 arrives
+around mid-2027. The per-game SD of y − q is about 0.49, so the SE at n = 150 is about 0.040.
+Support needs an excess above about +0.08: the 2024–25 gap (+0.08 to +0.08) would just reach it,
+anything smaller would not.
+
+*Multiplicity.* H1–H15 are now registered. H15 was chosen after the 2024–25 slice was seen.
