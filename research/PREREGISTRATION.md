@@ -662,3 +662,48 @@ a current-season, exposed period. It is reported beside H13 and never pooled wit
 
 *Multiplicity.* H1–H13 are now registered. H13 continues H12; it is not independent of the scan
 that produced H12.
+
+**2026-10-28, owner request ("set up H14"), committed and pushed before any H14 code exists
+and before any week-8 lock. New hypothesis H14 (soft band vs hard band ATS cover probabilities on
+the same locks). H1–H13 are unchanged.**
+
+*Source.* H11 asks whether SB1's soft band prices Kalshi rungs better than Kalshi. H14 asks the
+ATS question directly: at each lock's own line, does the soft band forecast the cover better than
+the hard band behind the production median map? On the 2026-10-27 week-8 board the soft band
+picked a different side from production on 4 of 14 games. Already seen: SB1's 2023–26 results,
+H10/H11 interim readings, and week-8 board soft/hard probabilities (no week-8 outcomes exist).
+
+*Forecasts (fixed).* SB1's hard and soft PMFs (`research/soft_band_distributions.py`), fit with
+`fit_prior` on its frozen `games.csv` for seasons before 2026 (the production map's 2021–2025
+sample). Input: the lock's saved `raw_spread`. At the lock's `market_spread` L (positive = home
+favored): home cover = mass on home margin > L, away cover = mass < L, push = mass at L. The
+conditional home-cover probability is home / (home + away).
+
+*Sample (primary).* Every `boxscore-composite-v1.18` lock in `data/ats_locks.jsonl` with
+`lock_at_utc` ≥ **2026-10-29T00:00:00Z**, finalized before kickoff, in the 2026 season (regular
+season and playoffs). Locks recovered after kickoff are reported separately. Pushes at the lock
+line are excluded from the score. No new capture is needed.
+
+*Score.* Binary log loss of the conditional home-cover probability against the decided outcome,
+both probabilities clipped to [0.005, 0.995]. Per lock: hard loss − soft loss (positive = soft
+better). **Primary statistic: the mean over locks**, SE across locks.
+
+*Decision* (at the first report with ≥ 100 scored locks; if the 2026 season ends first, at its
+final report):
+- **Supported**: gain − 2 SE > 0. Only then is an owner decision on a soft-band ATS policy
+  version justified; nothing changes automatically.
+- **Falsified**: gain ≤ 0.
+- Otherwise **unresolved**. Earlier reports are interim with no verdict.
+
+*Secondary, never decisive.* (a) Paired ATS units at assumed −110 on locks where the sides
+differ: the production pick versus the soft side (home if home cover > away cover, away if less,
+the market favorite if equal); (b) Brier scores; (c) each forecast's log loss against a constant
+0.5 (the line taken as fair); (d) diagnostics never pooled with H14: the pre-cutoff 2026 locks and
+the 2026 weeks 1–7 replay from `data/latest/fixed_band_ledger.csv` (raw spread from `model_wp`).
+
+*Power, stated now.* About 14 locks a week from week 8, so n = 100 arrives around week 15. SB1's
+2023–25 soft-vs-hard cover gain was about +0.0027 (n = 797, interval crossing zero); per-lock SD is
+roughly 0.03–0.05, so the SE at n = 100 is about 0.004. Support needs a gain several times SB1's;
+the likely outcomes are unresolved or falsified.
+
+*Multiplicity.* H1–H14 are now registered. H14 shares its soft forecast with H11.
