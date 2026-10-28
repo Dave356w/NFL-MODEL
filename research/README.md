@@ -36,6 +36,11 @@ records the rule beside v1.18 locks from 2026-10-28 (never bet), with a 2026
 replay diagnostic. It runs weekly in `band-ladder-research.yml`.
 Run `python -m research.h13_shadow`.
 
+[H15: model small favorites vs the moneyline](h15_results/REPORT.md) asks whether
+v1.18's favorites with |raw spread| < 3 win more often than their no-vig moneyline
+(first pregame snapshots from 2026-10-29; legacy moneyline research, never published).
+Weekly in `small-favorite-research.yml`. Run `python -m research.h15_small_favorites`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a

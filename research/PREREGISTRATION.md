@@ -703,3 +703,8 @@ Support needs an excess above about +0.08: the 2024–25 gap (+0.08 to +0.08) wo
 anything smaller would not.
 
 *Multiplicity.* H1–H15 are now registered. H15 was chosen after the 2024–25 slice was seen.
+
+**2026-10-28 (same day, after the H15 code first ran; no forward H15 row exists yet): H15 text
+corrected.** The power paragraph's "+0.08 to +0.08" should read +0.084 (raw < 1.5) and +0.076
+(raw 1.5–3). The stated per-game SD of 0.49 matches the exposed pre-cutoff 2026 rows (0.488,
+n = 17). The rule, sample, cutoff and statistic are unchanged.

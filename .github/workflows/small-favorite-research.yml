@@ -1,0 +1,60 @@
+name: Research H15 model small favorites vs the moneyline
+
+# Pre-registered H15 (research/PREREGISTRATION.md): do v1.18's small favorites
+# (|raw spread| < 3) win more often than their moneyline implies? Legacy moneyline
+# research, never published. Read-only: pull requests reproduce the committed
+# results; the weekly run scores the current ledger and reports it in the job
+# summary and an artifact. It never commits, and the build is untouched.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Tuesday afternoon UTC, after Monday night games are graded into the ledger.
+    - cron: '41 19 * * 2'
+  pull_request:
+    paths:
+      - 'research/h15_small_favorites.py'
+      - 'research/h15_results/**'
+      - 'research/soft_band_distributions.py'
+      - 'research/soft_band_distribution_inputs/**'
+      - 'research/check_replay.py'
+      - 'tests/test_h15_small_favorites.py'
+      - '.github/workflows/small-favorite-research.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt pytest numpy==2.3.5 pandas==2.2.3 scipy==1.17.0
+      - name: Verify filter, orientation, de-vig and verdict rules
+        run: python -m pytest tests/test_h15_small_favorites.py -q
+      - name: Reproduce the committed results
+        if: github.event_name == 'pull_request'
+        run: python research/check_replay.py research/h15_results -- python -m research.h15_small_favorites
+      - name: Score the current ledger
+        if: github.event_name != 'pull_request'
+        run: |
+          python -m research.h15_small_favorites > /dev/null
+          {
+            echo "Ledger: \`data/forward_ledger.csv\` at ${GITHUB_SHA::7}"
+            echo
+            cat research/h15_results/REPORT.md
+          } >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: small-favorite-research
+          path: research/h15_results/
+          if-no-files-found: error
