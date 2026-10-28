@@ -707,3 +707,9 @@ roughly 0.03–0.05, so the SE at n = 100 is about 0.004. Support needs a gain s
 the likely outcomes are unresolved or falsified.
 
 *Multiplicity.* H1–H14 are now registered. H14 shares its soft forecast with H11.
+
+**2026-10-28 (same day, after the H14 code first ran on exposed diagnostics only): H14 power
+corrected.** The per-lock SD of the hard − soft log loss difference is about 0.062–0.065 (pre-cutoff
+2026 locks, n = 14; 2026 weeks 1–7 replay, n = 101), not 0.03–0.05 as stated. The SE at n = 100 is
+therefore about 0.0063, and support needs a gain above about +0.013. The decision rule, sample,
+cutoff and forecasts are unchanged; no forward H14 lock exists yet.

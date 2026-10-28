@@ -36,6 +36,11 @@ records the rule beside v1.18 locks from 2026-10-28 (never bet), with a 2026
 replay diagnostic. It runs weekly in `band-ladder-research.yml`.
 Run `python -m research.h13_shadow`.
 
+[H14: soft vs hard band ATS cover probabilities](h14_results/REPORT.md) scores both
+SB1 forecasts at each v1.18 lock's own line from 2026-10-29 (conditional cover log loss,
+pushes excluded), with exposed 2026 diagnostics. Weekly in `band-ladder-research.yml`.
+Run `python -m research.h14_soft_vs_hard_ats`.
+
 ## Joint-score distribution research - October 16, 2026
 
 [Future market-benchmarked iterations](FUTURE_MARKET_ITERATIONS.md) defines a

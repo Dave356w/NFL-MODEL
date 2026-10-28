@@ -1,0 +1,67 @@
+{
+  "primary": {
+    "n": 0
+  },
+  "paired": {
+    "n": 0
+  },
+  "recovered": {
+    "n": 0
+  },
+  "early_locks": {
+    "n": 14,
+    "gain": 0.017939391972129255,
+    "se": 0.017263547427949867,
+    "sd": 0.0645942797557109,
+    "hard_loss": 0.7059597608883346,
+    "soft_loss": 0.6880203689162051,
+    "coin_loss": 0.6931471805599453,
+    "hard_brier": 0.25637379101619273,
+    "soft_brier": 0.24743258446509617
+  },
+  "early_paired": {
+    "n": 4,
+    "hard": {
+      "wins": 1,
+      "losses": 3,
+      "pushes": 0,
+      "units": -2.090909090909091
+    },
+    "soft": {
+      "wins": 3,
+      "losses": 1,
+      "pushes": 0,
+      "units": 1.727272727272727
+    }
+  },
+  "replay": {
+    "n": 101,
+    "gain": -0.008712192062044892,
+    "se": 0.006131295016720102,
+    "sd": 0.06161875231443535,
+    "hard_loss": 0.6902981054517668,
+    "soft_loss": 0.6990102975138116,
+    "coin_loss": 0.6931471805599453,
+    "hard_brier": 0.24743732652609324,
+    "soft_brier": 0.2515604546696734
+  },
+  "replay_paired": {
+    "n": 33,
+    "hard": {
+      "wins": 16,
+      "losses": 14,
+      "pushes": 3,
+      "units": 0.545454545454545
+    },
+    "soft": {
+      "wins": 14,
+      "losses": 16,
+      "pushes": 3,
+      "units": -3.2727272727272725
+    }
+  },
+  "forward_locks": 0,
+  "forward_pending": 0,
+  "fit_sha256": "973b38285cdf24208b59e8849b60274bce3f88bef35b5432a68214b26d2e7cb2",
+  "verdict": "interim (n = 0 < 100 scored locks): no verdict"
+}
