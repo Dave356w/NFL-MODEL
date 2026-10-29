@@ -133,17 +133,18 @@ LA,00-0031381,Davante Adams,WR,WRTE,0.15417017691659646,,,,Reserve/Injured (IR) 
 LA,00-0034234,Poona Ford,DL,DL,0.12121212121212122,,,,Reserve/Injured (IR) on wk 7 roster,1.0,practice
 LA,00-0036244,Colby Parkinson,TE,WRTE,0.11710193765796124,,,,practice: Did Not Participate In Practice,0.0,practice
 LA,00-0037191,Trent McDuffie,CB,DB,0.08821453775582216,7.0,Questionable,Groin,practice: Limited Participation in Practice,0.0,practice
-LAC,00-0038553,Daiyan Henley,LB,LB,0.22113502935420742,6.0,Questionable,Knee,not on a week-8 report yet,0.0,none
-LAC,00-0040144,Jamaree Caldwell,DT,DL,0.2109375,6.0,Questionable,Knee,not on a week-8 report yet,0.0,none
-LAC,00-0035125,Alec Ingold,RB,RB,0.1760204081632653,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
-LAC,00-0040727,Tre Harris,WR,WRTE,0.14093264248704662,6.0,Out,Hamstring,not on a week-8 report yet,0.0,none
-LAC,00-0033546,Dalvin Tomlinson,DT,DL,0.09375,6.0,Questionable,Hamstring,not on a week-8 report yet,0.0,none
-LAC,00-0037009,Rashawn Slater,OL,OL,0.09260588657573582,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
-LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.08186528497409326,,,,CUT (A01) on wk 6 roster,1.0,none
-LAC,00-0037241,Trevor Penning,OL,OL,0.08040201005025126,,,,Reserve/Injured (IR) on wk 6 roster,1.0,none
-LAC,00-0039897,Joe Alt,T,OL,0.0681981335247667,6.0,Out,Neck,not on a week-8 report yet,0.0,none
-LAC,00-0040184,KeAndre Lambert-Smith,WR,WRTE,0.061139896373056994,6.0,Questionable,Hamstring,not on a week-8 report yet,0.0,none
-LAC,00-0034790,Derwin James,S,DB,0.05486284289276808,6.0,Out,Hamstring,not on a week-8 report yet,0.0,none
+LAC,00-0038553,Daiyan Henley,LB,LB,0.22113502935420742,6.0,Questionable,Knee,not on the week-8 practice report,0.0,practice
+LAC,00-0040144,Jamaree Caldwell,DT,DL,0.2109375,6.0,Questionable,Knee,not on the week-8 practice report,0.0,practice
+LAC,00-0031040,Khalil Mack,DE,LB,0.17906066536203522,,,,practice: Did Not Participate In Practice,0.0,practice
+LAC,00-0035125,Alec Ingold,RB,RB,0.1760204081632653,,,,Reserve/Injured (IR) on wk 6 roster,1.0,practice
+LAC,00-0040727,Tre Harris,WR,WRTE,0.14093264248704662,6.0,Out,Hamstring,practice: Limited Participation in Practice,0.0,practice
+LAC,00-0033546,Dalvin Tomlinson,DT,DL,0.09375,6.0,Questionable,Hamstring,not on the week-8 practice report,0.0,practice
+LAC,00-0037009,Rashawn Slater,OL,OL,0.09260588657573582,,,,Reserve/Injured (IR) on wk 6 roster,1.0,practice
+LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.08186528497409326,,,,CUT (A01) on wk 6 roster,1.0,practice
+LAC,00-0037241,Trevor Penning,OL,OL,0.08040201005025126,,,,Reserve/Injured (IR) on wk 6 roster,1.0,practice
+LAC,00-0039897,Joe Alt,T,OL,0.0681981335247667,6.0,Out,Neck,not on the week-8 practice report,0.0,practice
+LAC,00-0040184,KeAndre Lambert-Smith,WR,WRTE,0.061139896373056994,6.0,Questionable,Hamstring,not on the week-8 practice report,0.0,practice
+LAC,00-0034790,Derwin James,S,DB,0.05486284289276808,6.0,Out,Hamstring,practice: Did Not Participate In Practice,0.0,practice
 LV,00-0037074,Quay Walker,LB,LB,0.43659711075441415,7.0,Questionable,Chest,practice: Limited Participation in Practice,0.0,practice
 LV,00-0039338,Brock Bowers,TE,WRTE,0.25053763440860216,,,,practice: Limited Participation in Practice,0.0,practice
 LV,00-0039349,DJ Glaze,T,OL,0.198005698005698,,,,practice: Limited Participation in Practice,0.0,practice
@@ -180,17 +181,19 @@ NYJ,00-0041026,David Bailey,DE,DL,0.20093823299452698,,,,practice: Did Not Parti
 NYJ,00-0034782,Harrison Phillips,DT,DL,0.12822517591868648,,,,practice: Did Not Participate In Practice,0.0,practice
 NYJ,00-0039886,T'Vondre Sweat,DT,DL,0.1125879593432369,,,,practice: Did Not Participate In Practice,0.0,practice
 NYJ,00-0036902,Joseph Ossai,DE,DL,0.0617670054730258,7.0,Out,Ankle,practice: Did Not Participate In Practice,0.0,practice
-PHI,00-0037258,Dameon Pierce,RB,RB,0.5968379446640316,,,,Reserve/Injured (IR) on wk 8 roster,1.0,none
-PHI,00-0036389,Jalen Hurts,QB,QB,0.48616600790513836,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
-PHI,00-0039746,Will Shipley,RB,RB,0.16600790513833993,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
-PHI,00-0038393,Dontayvion Wicks,WR,WRTE,0.14682539682539683,7.0,Out,Ankle,not on a week-8 report yet,0.0,none
-PHI,00-0039013,Nolan Smith,LB,LB,0.11467116357504216,7.0,Out,Concussion,not on a week-8 report yet,0.0,none
-PHI,00-0038555,Tank Bigsby,RB,RB,0.11462450592885376,,,,Reserve/Injured (IR) on wk 7 roster,1.0,none
-PHI,00-0039740,Jalyx Hunt,LB,LB,0.10033726812816189,7.0,Questionable,Knee,not on a week-8 report yet,0.0,none
-PHI,00-0036501,Michael Carter II,CB,DB,0.06960716747070986,7.0,Out,Abdomen,not on a week-8 report yet,0.0,none
-PHI,00-0036224,Jonathan Greenard,LB,LB,0.06070826306913996,7.0,Questionable,Ankle,not on a week-8 report yet,0.0,none
-PHI,00-0034844,Saquon Barkley,RB,RB,0.05533596837944664,7.0,Questionable,Hamstring,not on a week-8 report yet,0.0,none
-PHI,00-0037002,Landon Dickerson,G,OL,0.05200945626477541,7.0,Questionable,Knee,"IR, designated to return on wk 7 roster",1.0,none
+PHI,00-0037258,Dameon Pierce,RB,RB,0.5968379446640316,,,,Reserve/Injured (IR) on wk 8 roster,1.0,practice
+PHI,00-0036389,Jalen Hurts,QB,QB,0.48616600790513836,,,,Reserve/Injured (IR) on wk 7 roster,1.0,practice
+PHI,00-0038412,Moro Ojomo,DT,DL,0.24281609195402298,,,,practice: Limited Participation in Practice,0.0,practice
+PHI,00-0040708,Jihaad Campbell,LB,LB,0.1905564924114671,,,,practice: Did Not Participate In Practice,0.0,practice
+PHI,00-0039746,Will Shipley,RB,RB,0.16600790513833993,,,,Reserve/Injured (IR) on wk 7 roster,1.0,practice
+PHI,00-0038393,Dontayvion Wicks,WR,WRTE,0.14682539682539683,7.0,Out,Ankle,practice: Did Not Participate In Practice,0.0,practice
+PHI,00-0039013,Nolan Smith,LB,LB,0.11467116357504216,7.0,Out,Concussion,practice: Limited Participation in Practice,0.0,practice
+PHI,00-0038555,Tank Bigsby,RB,RB,0.11462450592885376,,,,Reserve/Injured (IR) on wk 7 roster,1.0,practice
+PHI,00-0039740,Jalyx Hunt,LB,LB,0.10033726812816189,7.0,Questionable,Knee,practice: Limited Participation in Practice,0.0,practice
+PHI,00-0036501,Michael Carter II,CB,DB,0.06960716747070986,7.0,Out,Abdomen,practice: Limited Participation in Practice,0.0,practice
+PHI,00-0036224,Jonathan Greenard,LB,LB,0.06070826306913996,7.0,Questionable,Ankle,practice: Limited Participation in Practice,0.0,practice
+PHI,00-0034844,Saquon Barkley,RB,RB,0.05533596837944664,7.0,Questionable,Hamstring,practice: Did Not Participate In Practice,0.0,practice
+PHI,00-0037002,Landon Dickerson,G,OL,0.05200945626477541,7.0,Questionable,Knee,"IR, designated to return on wk 7 roster",1.0,practice
 PIT,00-0027969,Cameron Heyward,DT,DL,0.2900505902192243,,,,practice: Did Not Participate In Practice,0.0,practice
 PIT,00-0033055,Jalen Ramsey,CB,DB,0.21336553945249598,,,,practice: Did Not Participate In Practice,0.0,practice
 PIT,00-0038558,Darnell Washington,TE,WRTE,0.1697936210131332,,,,practice: Did Not Participate In Practice,0.0,practice
