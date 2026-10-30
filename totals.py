@@ -9,6 +9,11 @@ underdog (lower no-vig probability) of every recorded game whose total is
 <= H5_MAX_TOTAL, beside the market-correct null and the favorite on the same rows.
 A failure is logged and skipped; it never costs a pregame snapshot.
 
+Since 2026-10-30 each new record also carries the schedule's over/under prices
+(`over_odds`, `under_odds`; null when not posted) for the research totals model
+(research/TOTALS_PACE.md). Earlier records lack them and are never backfilled.
+They are recorded only; nothing is graded on them.
+
 Source (research/PREREGISTRATION.md, H5): 2006-2025 regular seasons, favorites in the
 lowest-total quartile (total <= 41) won 2.8 points less often than their no-vig
 moneyline implied; every underdog there returned +5.8% +/- 4.9 against a -2.5% null.
@@ -37,7 +42,8 @@ def load(path):
 
 
 def fetch_schedule():
-    return pd.read_csv(SCHEDULE_URL, usecols=["game_id", "total_line", "home_moneyline", "away_moneyline"])
+    return pd.read_csv(SCHEDULE_URL, usecols=["game_id", "total_line", "home_moneyline", "away_moneyline",
+                                             "over_odds", "under_odds"])
 
 
 def num(v):
@@ -67,6 +73,7 @@ def record(data_dir=DATA, now=None, get=fetch_schedule):
                     "home": r["home"], "away": r["away"], "kickoff_utc": r["kickoff_utc"],
                     "captured_utc": now.isoformat(), "total_line": num(s.total_line),
                     "home_moneyline": num(s.home_moneyline), "away_moneyline": num(s.away_moneyline),
+                    "over_odds": num(s.get("over_odds")), "under_odds": num(s.get("under_odds")),
                     "source": "nflverse nfldata games.csv at lock"})
     if new:
         with (data_dir / TOTALS.name).open("a", encoding="utf-8") as fh:

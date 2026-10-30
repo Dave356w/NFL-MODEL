@@ -340,6 +340,10 @@ the market-correct null and the favorite on the same rows, with the verdict fixe
 `research/PREREGISTRATION.md`. Independent of the model; nothing here changes the model, the
 recipe or the headline.
 
+Since 2026-10-30 new `data/h5_totals.jsonl` records also carry the schedule's `over_odds` and
+`under_odds` (null when not posted), recorded once with the total for future over/under research
+(`research/TOTALS_PACE.md`). Earlier records are not backfilled; nothing is graded on them.
+
 ### Model-implied spread (reporting only, v1.12.1)
 
 `model_spread = 12.37 × Φ⁻¹(model_wp)`: the inverse of the fixed spread-to-probability map
