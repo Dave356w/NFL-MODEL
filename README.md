@@ -89,7 +89,9 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 The Calibration tab uses completed regular-season weeks only and refreshes in
 the existing site build after a full week's slate is final. It offers an all-years
 view and individual season filters. Market and model WP tables compare implied
-and actual win rates for home, away and both sides. Spread calibration tables
+and actual win rates for home, away and both sides. Market WP bands include
+rounded fair American odds equivalents after removing the bookmaker's margin.
+Spread calibration tables
 group each forecast by its own projected winning margin, from that forecast's
 favorite's perspective. They show average projected MOV, median actual MOV,
 median game-by-game error and counts above, at or below projection. Both use the

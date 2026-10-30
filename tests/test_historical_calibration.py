@@ -70,6 +70,22 @@ def test_probability_boundaries_and_paired_side_uncertainty():
     assert select(complement, 'model_wp', '20–<30%', 'away')['observations'] == 1
 
 
+def test_market_probability_bands_include_rounded_fair_american_odds():
+    assert [c.american_odds(p) for p in c.PROB_CUTS] == [
+        '+400', '+233', '+150', '+100', '−150', '−233', '−400']
+    labels = [c.market_odds_band(i) for i in range(len(c.PROB_LABELS))]
+    assert labels == ['Longer than +400', '≈ +400 to +233', '≈ +233 to +150',
+                      '≈ +150 to +100', '≈ +100 to −150', '≈ −150 to −233',
+                      '≈ −233 to −400', '−400 or shorter']
+    frame = pd.DataFrame([game('a')])
+    market = c.wp_table(c.wp_rows(frame, 'market_wp', 'market_wp'), 'market_wp')
+    model = c.wp_table(c.wp_rows(frame, 'model_wp', 'model_wp'), 'model_wp')
+    assert 'Fair American odds' in market and all(label in market for label in labels)
+    assert 'Fair American odds' not in model and 'cal-odds' not in model
+    html = b.render_historical_calibration(latest([game('a')]), 'test')
+    assert 'Rounded odds ranges are a reading guide' in html
+
+
 def test_margin_calibration_uses_forecast_favorite_and_own_forecast():
     frame = pd.DataFrame([game('dog'),  # ATS pick is away, but model favorite is home
                           game('exact', result=3., line=3., mapped=3.),
