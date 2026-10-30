@@ -230,3 +230,38 @@ faster than the model does.
   excludes zero, and a weight above 0 on (T_r − line).
 
 Run: `python research/totals_residual.py` → `research/totals_pace_results/MEDIAN_RESIDUAL.txt`.
+
+### Addendum B results (run 2026-10-30, after its protocol commit)
+
+Full output: `research/totals_pace_results/MEDIAN_RESIDUAL.txt`. Intervals are 95%
+week-cluster bootstrap. Stage M is 2017–2025, n 1803; the line's RMSE there is 13.254.
+
+| Arm, stage | RMSE | Squared error vs line | LL gain vs no-vig | w on (T_r − line) | Model side, all: ROI (null −3.3%) |
+|---|---|---|---|---|---|
+| BA, M | 13.297 | +1.15 [−0.31, +2.57] | −0.0058 [−0.0091, −0.0025] | +0.11 [−0.37, +0.62] | −5.4% |
+| BR, M | 13.310 | +1.48 [+0.11, +2.88] | −0.0052 [−0.0085, −0.0017] | −0.00 [−0.49, +0.50] | −5.1% |
+| BA, E | 13.325 | +1.68 [−0.98, +4.48] | −0.0004 [−0.0067, +0.0055] | −0.01 | +3.5% [−4.4, +11.4] |
+| BR, E | 13.289 | +0.71 [−1.79, +3.17] | +0.0009 [−0.0049, +0.0066] | +0.30 [−0.43, +1.02] | +1.6% [−4.8, +7.8] |
+
+- **MR (era-relative median sign).** Stage M: 637–636–15, ROI −3.2% [−8.5, +2.0], against a
+  −3.3% null. Stage E: 204–213–2, ROI −5.2%.
+- **Residual coefficients (2026 fit, BR).**
+  - The model's departure from the median gets −0.00 and the drift gap −0.06: both are
+    worthless on top of the median.
+  - Dome +1.2 and retractable roof +1.1 points; division −1.2.
+  - These terms fit consistently: dome +0.8 to +1.6 and division −1.1 to −1.3 across the
+    2017–2026 fits.
+- **2026 to date, diagnostic only.** BR went 21–23 in stage M and 25–39 in stage E. MR went
+  10–17 and 19–22.
+
+**Verdict: fails Addendum B's criteria.**
+
+- **Stage M:** both arms have a resolved negative LL gain and RMSE no better than the line.
+- **Stage E:** both arms are about level with the market, with unresolved intervals and
+  RMSE above the line. A positive ROI in an early-season slice is not evidence: 2026's
+  stage E went 25–39 on BR.
+
+The residual model's only consistent terms are roof and division effects of about one point
+on top of the posted total. Any further test should isolate them: a registered rule on
+those terms alone, falsified by an LL gain at or below zero. The median and the pace model
+contribute nothing beyond the line.
