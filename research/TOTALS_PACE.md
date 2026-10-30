@@ -81,3 +81,64 @@ that first locks the game. Earlier records are never backfilled. The capture is 
 future native over/under evaluation and is graded nowhere.
 
 Run: `python research/totals_pace.py` → `research/totals_pace_results/RESULTS.txt`.
+
+## Results (run 2026-10-30, after the protocol commit)
+
+Full output: `research/totals_pace_results/RESULTS.txt`. Walk-forward predictions:
+`predictions.csv.gz`. Intervals are 95% week-cluster bootstrap.
+
+**Grid.** (h, K, L) = (16, 8, 64), with 2009–2016 T0 RMSE 13.338. All 12 cells fell
+between 13.34 and 13.39.
+
+**Outcomes, 2017–2025, stage M (n 1803).**
+
+| | RMSE |
+|---|---|
+| Schedule line | 13.254 |
+| T1 | 13.630 |
+| T0 | 13.726 |
+| P0 | 13.732 |
+
+Stage E (n 580) is the same: line 13.25, T1 13.68. The context terms do help against
+outcomes. In the 2025 fit, dome added +2.8 points, retractable roof +1.9 and division
+−1.4. None of that closes the gap to the line.
+
+**Against the market, 2017–2025.**
+
+| Arm, stage | Squared error vs line | w on (T − line) | Over/under LL gain vs no-vig | Model side, \|P − q\| ≥ .05: ROI (null) |
+|---|---|---|---|---|
+| T1, M | +10.11 [+6.62, +13.89] | −0.013 [−0.189, +0.160] | −0.0201 [−0.0278, −0.0120] | −2.1% [−7.0, +3.3] (null −3.3%), n 1042 |
+| T0, M | +12.72 [+9.19, +16.41] | −0.131 [−0.302, +0.030] | −0.0206 [−0.0288, −0.0118] | −3.1% [−8.7, +2.3] (null −3.3%), n 1058 |
+| T1, E | +11.39 [+4.73, +18.19] | −0.138 [−0.475, +0.209] | −0.0206 [−0.0334, −0.0087] | −5.2% [−13.7, +3.2] (null −3.2%), n 322 |
+
+For squared error, a positive number means the model is worse than the line.
+
+By season (T1, stage M), the over/under LL gain was negative in all nine seasons. Its
+interval excluded zero in 2020–2022. w was never resolved above zero. All-game ROI was below
+its null in 8 of 9 seasons.
+
+**Verdict under the registered criteria: no demonstrated totals signal at these quotes.**
+The model fails all three conditions:
+
+- its RMSE is worse than the line,
+- its LL gain is resolved negative, and
+- its weight on (T − line) is about 0.
+
+Given the posted total, the model's departures carry no information about the outcome. A
+standalone pace × efficiency model does not reproduce the bookmaker total. This agrees with
+the ridge total in `MARGIN_TOTAL_MODELS.md`.
+
+**Limitations.**
+
+- The schedule quotes have no capture time and are probably near the close. The NBA analogue
+  found its only signal at the open and none at the close, so this test cannot rule out an
+  open-price signal.
+- No weather forecast is used.
+- Historical design exposure means the intervals are not untouched confirmation.
+
+**Next.** Do not register a forward O/U test on this model. The native over/under prices now
+captured in `data/h5_totals.jsonl` are taken at the first lock, earlier than these quotes.
+They allow a later check at that timing if the owner wants one. Re-run this script at that
+point, with the predictions joined to the captured prices. A market-anchored residual model
+(line + small corrections such as dome or wind forecast) is the remaining candidate. It
+would be falsified by w ≤ 0 or an LL gain interval at or below zero, as here.
