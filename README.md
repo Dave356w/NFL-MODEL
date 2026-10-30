@@ -84,21 +84,19 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
 | [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Pooled 2026 ATS results by week and game, with downloads |
 | [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Pooled 2026 ATS record, running units and same-game spread baselines |
-| [Calibration](https://dave356w.github.io/NFL-MODEL/historical-calibration.html) | 2023 onward: market/model implied versus actual WP and ATS results by band, with signed median MOV |
+| [Calibration](https://dave356w.github.io/NFL-MODEL/historical-calibration.html) | 2023 onward: market/model WP calibration with median MOV, plus ATS pick ROI by spread band |
 
 The Calibration tab uses completed regular-season weeks only and refreshes in
 the existing site build after a full week's slate is final. It offers an all-years
 view and individual season filters. Market and model WP tables compare implied
 and actual win rates for home, away and both sides. Market WP bands include
 rounded fair American odds equivalents after removing the bookmaker's margin.
-Spread calibration tables
-group each forecast by its own projected winning margin, from that forecast's
-favorite's perspective. They show average projected MOV, median actual MOV,
-median game-by-game error and counts above, at or below projection. Both use the
-same eligible games; pick'em forecasts and unavailable spreads are excluded.
-Median MOV includes losses and tied finals; WP scoring excludes tied finals.
-ATS picks and betting returns remain on Performance. The download contains
-aggregate bands only.
+The spread tables display ROI by market favorite picks and model ATS picks,
+with bet counts and uncertainty. Each uses its own spread magnitude for bands,
+and both grade against market handicaps at flat 1u and assumed −110. ROI includes
+pushed stakes. Both use the same eligible games; market pick'em lines and missing
+model spreads are excluded. WP median MOV includes losses and tied finals; WP
+scoring excludes tied finals. The download contains aggregate bands only.
 This is historical replay with exposed development seasons, rather than native
 forward performance; Picks, Results and Performance retain their ATS-only views.
 

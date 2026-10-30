@@ -86,45 +86,51 @@ def test_market_probability_bands_include_rounded_fair_american_odds():
     assert 'Rounded odds ranges are a reading guide' in html
 
 
-def test_margin_calibration_uses_forecast_favorite_and_own_forecast():
+def test_roi_grades_actual_ats_picks_at_market_lines_and_counts_pushed_stakes():
     frame = pd.DataFrame([game('dog'),  # ATS pick is away, but model favorite is home
                           game('exact', result=3., line=3., mapped=3.),
                           game('model-away', result=10., line=12., mapped=-4.)])
-    market = c.margin_rows(frame, 'spread_line', 'market_spread')
-    model = c.margin_rows(frame, 'fixed_band_spread', 'model_spread')
-    mr = select(market, 'market_spread', '3–<7 points', 'forecast_favorite')
-    pr = select(model, 'model_spread', '3–<7 points', 'forecast_favorite')
+    market = c.roi_rows(frame, False, 'market_spread')
+    model = c.roi_rows(frame, True, 'model_spread')
+    mr = select(market, 'market_spread', '3–<7 points', 'market_favorite')
+    pr = select(model, 'model_spread', '3–<7 points', 'model_pick')
     assert mr['observations'] == 2
-    assert (mr['above_forecast'], mr['at_forecast'], mr['below_forecast']) == (0, 1, 1)
-    # Model's own 3–<7 band also contains its away favorite in the market's 10+ band.
+    assert (mr['wins'], mr['losses'], mr['pushes']) == (0, 1, 1)
+    assert mr['units'] == -1. and mr['roi'] == -.5 and mr['roi_se_pp'] == 50.
+    # The model's away +12 wins despite losing by 10; the model's own -4 is not
+    # the betting line. This game moves from the market's 10+ to the model's 3–<7.
     assert pr['observations'] == 3
-    assert (pr['above_forecast'], pr['at_forecast'], pr['below_forecast']) == (1, 1, 1)
-    assert pr['median_mov'] == 3.  # median of +6, +3, -10 toward model favorites
-    assert pr['implied_mov'] == pytest.approx(11/3)  # all projections positive
-    assert pr['median_error'] == 0.  # median of +2, 0, -14; not median MOV - mean forecast
-    assert mr['median_error'] == -.25
-    tied = c.margin_rows(pd.DataFrame([game('tie', result=0., line=3., mapped=4.)]),
-                         'fixed_band_spread', 'model_spread')
-    tie = select(tied, 'model_spread', '3–<7 points', 'forecast_favorite')
-    assert tie['below_forecast'] == 1 and tie['median_mov'] == 0. and tie['median_error'] == -4.
+    assert (pr['wins'], pr['losses'], pr['pushes']) == (2, 0, 1)
+    assert pr['units'] == pytest.approx(2/1.1)
+    assert pr['roi'] == pytest.approx((2/1.1)/3)
+    assert pr['roi_se_pp'] == pytest.approx(100/(1.1*3))
+    zero_edge = c.roi_rows(pd.DataFrame([game('favorite', result=10., line=7., mapped=7.)]),
+                           True, 'model_spread')
+    assert select(zero_edge, 'model_spread', '7–<10 points', 'model_pick')['wins'] == 1
+    tied = c.roi_rows(pd.DataFrame([game('tie', result=0., line=3., mapped=4.)]), True, 'model_spread')
+    assert select(tied, 'model_spread', '3–<7 points', 'model_pick')['roi'] == -1.
 
 
-def test_margin_boundaries_exclusions_and_same_game_cohort():
+def test_roi_boundaries_exclusions_and_same_game_cohort():
     frame = pd.DataFrame([game('three', line=3., mapped=-3.),
                           game('seven', line=-7., mapped=-7., result=-10.),
                           game('ten', line=10., mapped=10.),
                           game('missing', mapped=np.nan), game('infinite', line=np.inf),
                           game('market-pickem', line=0.), game('model-pickem', mapped=0.)])
-    for column in ['spread_line', 'fixed_band_spread']:
-        rows = c.margin_rows(frame, column, 'test')
-        seven = select(rows, 'test', '7–<10 points', 'forecast_favorite')
-        assert seven['observations'] == 1 and seven['median_mov'] == 10.
-        assert seven['median_error'] == 3. and seven['above_forecast'] == 1
-        assert select(rows, 'test', '3–<7 points', 'forecast_favorite')['observations'] == 1
-        assert select(rows, 'test', '10+ points', 'forecast_favorite')['observations'] == 1
-        empty = select(rows, 'test', '<3 points', 'forecast_favorite')
-        assert empty['observations'] == 0 and empty['median_error'] is None
-        assert sum(r['observations'] for r in rows) == 3
+    for model, side in [(False, 'market_favorite'), (True, 'model_pick')]:
+        rows = c.roi_rows(frame, model, 'test')
+        seven = select(rows, 'test', '7–<10 points', side)
+        assert seven['observations'] == 1 and seven['roi'] == pytest.approx(1/1.1)
+        assert seven['roi_se_pp'] is None
+        assert select(rows, 'test', '10+ points', side)['observations'] == 1
+        # A zero model projection still selects the market underdog against a
+        # nonzero market line. Only the market pick'em has no baseline favorite.
+        low = select(rows, 'test', '<3 points', side)
+        assert low['observations'] == int(model)
+        if not model:
+            assert low['roi'] is None and low['roi_se_pp'] is None
+        assert sum(r['observations'] for r in rows) == 4
+        assert sum(r['wins']+r['losses']+r['pushes'] for r in rows) == 4
 
 
 def test_history_filters_invalid_probabilities_and_rejects_duplicates():
@@ -140,10 +146,13 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     html = b.render_historical_calibration(source, 'test', pack)
     assert "href='historical-calibration.html' aria-current=\"page\"" in html
     assert 'Market implied vs actual WP' in html and 'Model implied vs actual WP' in html
-    assert 'Market spread vs actual MOV' in html and 'Model spread vs actual MOV' in html
-    assert 'Median forecast error' in html and 'Above / at / below forecast' in html
-    assert 'Avg implied MOV' not in html and '>Units<' not in html and '>ROI<' not in html
-    assert 'Median MOV' in html and 'Median actual MOV' in html
+    assert 'Market spread pick ROI' in html and 'Model spread pick ROI' in html
+    assert 'Median forecast error' not in html and 'Above / at / below forecast' not in html
+    assert 'Avg projected MOV' not in html and 'Median actual MOV' not in html
+    assert '>ATS ROI<' in html and '>Market spread band<' in html and '>Model spread band<' in html
+    assert 'Median MOV' in html and 'Flat 1-unit stakes at assumed −110' in html
+    roi_table = c.roi_table(pack['panels'][0]['rows'], 'market_spread')
+    assert roi_table.count("scope='col'") == 2  # display only the spread band and ROI
     assert "id='cal-season'" in html and "select.addEventListener('change'" in html
     assert all(f"data-cal-season='{year}'" in html for year in ['all', '2023', '2024', '2025', '2026'])
     assert '2026 through Week 7' in html and 'full weekly slate' in html
@@ -152,8 +161,8 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     table = c.export(pack)
     assert len(table) == 5 * (8*3*2 + 4*2)
     assert set(table.view) == {'market_wp', 'model_wp', 'market_spread', 'model_spread'}
-    assert {'median_error', 'above_forecast', 'at_forecast', 'below_forecast'} <= set(table.columns)
-    assert not {'units', 'roi', 'cover_rate'} & set(table.columns)
+    assert {'wins', 'losses', 'pushes', 'units', 'roi', 'roi_se_pp'} <= set(table.columns)
+    assert not {'median_error', 'above_forecast', 'at_forecast', 'below_forecast'} & set(table.columns)
     assert not {'game_id', 'home_moneyline', 'away_moneyline', 'model_wp'} & set(table.columns)
 
 
@@ -173,6 +182,16 @@ def test_committed_history_stops_at_completed_week_and_render_keeps_archives(tmp
     assert all(p['season'] == 'all' or int(p['season']) >= 2023 for p in pack['panels'])
     all_rows = pack['panels'][0]['rows']
     assert sum(r['observations'] for r in all_rows if r['view'] == 'model_wp' and r['side'] == 'both') == 2*pack['panels'][0]['games']
+    frame = c.history(source)
+    eligible = frame.loc[np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
+                         & np.isfinite(frame.fixed_band_spread)]
+    for model, view in [(False, 'market_spread'), (True, 'model_spread')]:
+        rows = [r for r in all_rows if r['view'] == view]
+        prediction = eligible.fixed_band_spread if model else eligible.spread_line
+        _, returns = c.fixed_bands.grade(eligible, prediction)
+        assert sum(r['observations'] for r in rows) == len(eligible)
+        assert sum(r['units'] or 0 for r in rows) == pytest.approx(returns.sum())
+        assert sum((r['roi'] or 0)*r['observations'] for r in rows)/len(eligible) == pytest.approx(returns.mean())
     board = source['board']
     if board.result.isna().any():
         assert pack['coverage'][int(source['manifest']['season'])] < int(source['manifest']['week'])
