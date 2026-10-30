@@ -1,0 +1,122 @@
+Addendum A: model shrunk toward the market-context median (research/totals_median.py). ± 95% week-cluster bootstrap.
+Protocol: research/TOTALS_PACE.md, Addendum A (committed before this run). Schedule quotes, no capture time.
+
+===== T1 shrunk (S1) and median alone (M1)
+  fit for 2017: {'w': 0.131, 'median (final − line) by band': [2.8, 3.0, 0.8, 0.2, 0.5, -1.0, -1.5, 1.0, -1.0, 1.8, 0.5], 'sigma': {'E': 13.03, 'M': 13.21}}
+  fit for 2021: {'w': 0.026, 'median (final − line) by band': [3.0, 2.5, 1.0, 0.0, 0.0, -1.0, -1.2, 0.5, -0.5, 0.8, -1.0], 'sigma': {'E': 13.32, 'M': 13.25}}
+  fit for 2025: {'w': 0.033, 'median (final − line) by band': [-4.0, 1.5, 1.0, 0.5, -0.2, -0.5, -1.0, -0.5, -1.0, 0.5, -1.0], 'sigma': {'E': 13.11, 'M': 13.25}}
+  fit for 2026: {'w': 0.0, 'median (final − line) by band': [-1.5, 1.5, 1.0, 1.0, 0.0, -0.5, -0.5, -0.5, -0.8, 0.5, -1.0], 'sigma': {'E': 13.12, 'M': 13.23}}
+  T1 S1 stage M, 2017–2025
+    n  1803  RMSE line 13.254 model 13.309   model − line sq err +1.46 [+0.25, +2.68]
+    weight on (T − line) -0.225 [-0.835, +0.385]
+    P(over) LL model 0.6954 market 0.6926  gain -0.0027 [-0.0056, +0.0001]  (pushes 18 excluded)
+    model side, all              n  1803 (714 over / 1089 under)  ROI   -5.2% [-9.7, -0.7]  null -3.3%  won 48.7%
+    model side, |P − q| ≥ 0.05   n   187 (72 over / 115 under)  ROI   -4.9% [-18.9, +9.7]  null -3.1%  won 48.1%
+    M1 median sign   n  1565 (620 over / 945 under)  766-783-16  ROI   -4.2% [-9.0, +0.7]  null -3.3%
+  T1 S1 stage E, 2017–2025
+    n   579  RMSE line 13.262 model 13.349   model − line sq err +2.32 [+0.58, +4.04]
+    weight on (T − line) -0.986 [-2.102, +0.158]
+    P(over) LL model 0.6971 market 0.6945  gain -0.0026 [-0.0066, +0.0019]  (pushes 2 excluded)
+    model side, all              n   579 (233 over / 346 under)  ROI   -3.8% [-10.9, +4.1]  null -3.2%  won 49.4%
+    model side, |P − q| ≥ 0.05   n    42 (8 over / 34 under)  ROI   +2.1% [-22.7, +29.6]  null -2.9%  won 51.2%
+    M1 median sign   n   501 (195 over / 306 under)  240-259-2  ROI   -6.9% [-14.4, +1.8]  null -3.2%
+  T1 S1 stage M, 2026 to date (current-season diagnostic, not a verdict)
+    n    44  RMSE line 11.768 model 11.882   model − line sq err +2.72 [-3.00, +6.62]
+    weight on (T − line) -1.843 [-4.318, +3.573]
+    P(over) LL model 0.7045 market 0.6959  gain -0.0085 [-0.0166, -0.0014]  (pushes 0 excluded)
+    model side, all              n    44 (23 over / 21 under)  ROI  -25.5% [-39.1, -4.0]  null -4.5%  won 38.6%
+    M1 median sign   n    36 (16 over / 20 under)  13-23-0  ROI  -30.9% [-42.0, -5.4]  null -4.5%
+  T1 S1 stage E, 2026 to date (current-season diagnostic, not a verdict)
+    n    64  RMSE line 13.596 model 13.702   model − line sq err +2.91 [+0.66, +5.49]
+    weight on (T − line) -2.954 [-6.182, -0.222]
+    P(over) LL model 0.7001 market 0.6926  gain -0.0075 [-0.0118, -0.0022]  (pushes 0 excluded)
+    model side, all              n    64 (23 over / 41 under)  ROI  -12.9% [-28.2, +17.1]  null -4.5%  won 45.3%
+    M1 median sign   n    50 (17 over / 33 under)  22-28-0  ROI  -16.1% [-37.6, +2.9]  null -4.5%
+
+===== T0 shrunk (S1) and median alone (M1)
+  fit for 2017: {'w': 0.164, 'median (final − line) by band': [2.8, 3.0, 0.8, 0.2, 0.5, -1.0, -1.5, 1.0, -1.0, 1.8, 0.5], 'sigma': {'E': 13.03, 'M': 13.2}}
+  fit for 2021: {'w': 0.0, 'median (final − line) by band': [3.0, 2.5, 1.0, 0.0, 0.0, -1.0, -1.2, 0.5, -0.5, 0.8, -1.0], 'sigma': {'E': 13.31, 'M': 13.25}}
+  fit for 2025: {'w': 0.0, 'median (final − line) by band': [-4.0, 1.5, 1.0, 0.5, -0.2, -0.5, -1.0, -0.5, -1.0, 0.5, -1.0], 'sigma': {'E': 13.1, 'M': 13.25}}
+  fit for 2026: {'w': 0.0, 'median (final − line) by band': [-1.5, 1.5, 1.0, 1.0, 0.0, -0.5, -0.5, -0.5, -0.8, 0.5, -1.0], 'sigma': {'E': 13.12, 'M': 13.23}}
+  T0 S1 stage M, 2017–2025
+    n  1803  RMSE line 13.254 model 13.312   model − line sq err +1.53 [+0.27, +2.84]
+    weight on (T − line) -0.251 [-0.865, +0.395]
+    P(over) LL model 0.6953 market 0.6926  gain -0.0027 [-0.0058, +0.0003]  (pushes 18 excluded)
+    model side, all              n  1803 (673 over / 1130 under)  ROI   -4.2% [-8.8, +0.4]  null -3.3%  won 49.2%
+    model side, |P − q| ≥ 0.05   n   173 (61 over / 112 under)  ROI   -3.6% [-16.9, +10.5]  null -2.8%  won 48.5%
+    M1 median sign   n  1565 (620 over / 945 under)  766-783-16  ROI   -4.2% [-9.2, +0.5]  null -3.3%
+  T0 S1 stage E, 2017–2025
+    n   579  RMSE line 13.262 model 13.355   model − line sq err +2.48 [+0.67, +4.25]
+    weight on (T − line) -1.034 [-2.086, +0.070]
+    P(over) LL model 0.6975 market 0.6945  gain -0.0030 [-0.0075, +0.0017]  (pushes 2 excluded)
+    model side, all              n   579 (217 over / 362 under)  ROI   -3.8% [-11.7, +4.2]  null -3.2%  won 49.4%
+    model side, |P − q| ≥ 0.05   n    45 (6 over / 39 under)  ROI   +8.7% [-14.6, +35.7]  null -2.8%  won 54.5%
+    M1 median sign   n   501 (195 over / 306 under)  240-259-2  ROI   -6.9% [-14.9, +1.3]  null -3.2%
+  T0 S1 stage M, 2026 to date (current-season diagnostic, not a verdict)
+    n    44  RMSE line 11.768 model 11.882   model − line sq err +2.72 [-3.00, +6.62]
+    weight on (T − line) -1.843 [-4.318, +3.573]
+    P(over) LL model 0.7045 market 0.6959  gain -0.0085 [-0.0166, -0.0014]  (pushes 0 excluded)
+    model side, all              n    44 (23 over / 21 under)  ROI  -25.5% [-39.2, -4.0]  null -4.5%  won 38.6%
+    M1 median sign   n    36 (16 over / 20 under)  13-23-0  ROI  -30.9% [-42.0, -5.4]  null -4.5%
+  T0 S1 stage E, 2026 to date (current-season diagnostic, not a verdict)
+    n    64  RMSE line 13.596 model 13.702   model − line sq err +2.91 [+0.65, +5.49]
+    weight on (T − line) -2.954 [-6.182, -0.222]
+    P(over) LL model 0.7001 market 0.6926  gain -0.0075 [-0.0118, -0.0017]  (pushes 0 excluded)
+    model side, all              n    64 (23 over / 41 under)  ROI  -12.9% [-28.2, +16.7]  null -4.5%  won 45.3%
+    M1 median sign   n    50 (17 over / 33 under)  22-28-0  ROI  -16.1% [-37.6, +2.9]  null -4.5%
+
+== T1 S1 stage M by season
+  2017
+    n   191  RMSE line 13.893 model 13.937   model − line sq err +1.20 [-3.41, +5.67]
+    weight on (T − line) +0.052 [-1.546, +1.866]
+    P(over) LL model 0.6979 market 0.6926  gain -0.0053 [-0.0153, +0.0048]  (pushes 0 excluded)
+    model side, all              n   191 (112 over / 79 under)  ROI   -3.5% [-15.1, +8.2]  null -2.4%  won 49.2%
+    model side, |P − q| ≥ 0.05   n    22 (15 over / 7 under)  ROI  +27.5% [-8.9, +63.1]  null -2.4%  won 63.6%
+  2018
+    n   191  RMSE line 13.315 model 13.326   model − line sq err +0.31 [-5.47, +6.25]
+    weight on (T − line) +0.393 [-1.681, +2.660]
+    P(over) LL model 0.6902 market 0.6936  gain +0.0034 [-0.0069, +0.0135]  (pushes 3 excluded)
+    model side, all              n   191 (59 over / 132 under)  ROI   +0.4% [-12.9, +13.0]  null -2.6%  won 51.1%
+    model side, |P − q| ≥ 0.05   n    47 (4 over / 43 under)  ROI   +3.5% [-24.0, +28.6]  null -2.6%  won 52.2%
+  2019
+    n   191  RMSE line 13.195 model 13.300   model − line sq err +2.79 [-0.14, +5.99]
+    weight on (T − line) -0.760 [-1.943, +0.569]
+    P(over) LL model 0.6955 market 0.6913  gain -0.0042 [-0.0139, +0.0056]  (pushes 1 excluded)
+    model side, all              n   191 (74 over / 117 under)  ROI   -7.2% [-24.8, +9.5]  null -2.6%  won 47.4%
+    model side, |P − q| ≥ 0.05   n    26 (12 over / 14 under)  ROI  -28.5% [-62.3, +9.0]  null -2.6%  won 36.0%
+  2020
+    n   191  RMSE line 12.905 model 12.984   model − line sq err +2.03 [-0.90, +4.79]
+    weight on (T − line) -0.758 [-2.682, +1.008]
+    P(over) LL model 0.6944 market 0.6951  gain +0.0007 [-0.0050, +0.0068]  (pushes 4 excluded)
+    model side, all              n   191 (49 over / 142 under)  ROI   +2.8% [-8.3, +13.1]  null -2.6%  won 52.4%
+    model side, |P − q| ≥ 0.05   n    12 (1 over / 11 under)  ROI  +58.8% [+36.7, +91.6]  null -2.7%  won 81.8%
+  2021
+    n   208  RMSE line 13.712 model 13.722   model − line sq err +0.28 [-3.18, +3.71]
+    weight on (T − line) +0.291 [-2.192, +3.067]
+    P(over) LL model 0.6908 market 0.6897  gain -0.0012 [-0.0099, +0.0080]  (pushes 3 excluded)
+    model side, all              n   208 (77 over / 131 under)  ROI   -3.8% [-19.6, +12.6]  null -2.7%  won 49.3%
+    model side, |P − q| ≥ 0.05   n     8 (4 over / 4 under)  ROI  -74.6% [-100.0, -13.0]  null -2.6%  won 12.5%
+  2022
+    n   207  RMSE line 13.028 model 13.142   model − line sq err +2.99 [+0.40, +5.54]
+    weight on (T − line) -1.044 [-2.522, +0.325]
+    P(over) LL model 0.6998 market 0.6925  gain -0.0073 [-0.0159, +0.0018]  (pushes 2 excluded)
+    model side, all              n   207 (119 over / 88 under)  ROI   -6.5% [-18.0, +7.1]  null -2.8%  won 47.8%
+    model side, |P − q| ≥ 0.05   n    28 (12 over / 16 under)  ROI  -28.7% [-62.2, +0.3]  null -2.8%  won 35.7%
+  2023
+    n   208  RMSE line 13.332 model 13.356   model − line sq err +0.65 [-2.31, +4.15]
+    weight on (T − line) +0.142 [-1.689, +1.818]
+    P(over) LL model 0.6963 market 0.6934  gain -0.0029 [-0.0089, +0.0027]  (pushes 2 excluded)
+    model side, all              n   208 (105 over / 103 under)  ROI  -10.7% [-21.5, -1.0]  null -4.5%  won 46.6%
+    model side, |P − q| ≥ 0.05   n    12 (10 over / 2 under)  ROI   +4.4% [-70.9, +60.9]  null -4.5%  won 54.5%
+  2024
+    n   208  RMSE line 12.910 model 12.953   model − line sq err +1.12 [-1.23, +3.67]
+    weight on (T − line) -0.090 [-1.668, +1.168]
+    P(over) LL model 0.6945 market 0.6923  gain -0.0023 [-0.0093, +0.0056]  (pushes 3 excluded)
+    model side, all              n   208 (52 over / 156 under)  ROI   -3.0% [-15.7, +13.1]  null -4.5%  won 50.7%
+    model side, |P − q| ≥ 0.05   n    18 (7 over / 11 under)  ROI   -3.5% [-43.7, +35.4]  null -4.5%  won 50.0%
+  2025
+    n   208  RMSE line 12.983 model 13.054   model − line sq err +1.86 [-1.69, +5.88]
+    weight on (T − line) -0.477 [-2.794, +1.330]
+    P(over) LL model 0.6987 market 0.6937  gain -0.0050 [-0.0141, +0.0043]  (pushes 0 excluded)
+    model side, all              n   208 (67 over / 141 under)  ROI  -14.2% [-27.8, -1.0]  null -4.5%  won 44.7%
+    model side, |P − q| ≥ 0.05   n    14 (7 over / 7 under)  ROI  -17.0% [-74.2, +37.8]  null -4.5%  won 42.9%

@@ -167,3 +167,34 @@ whatever this addendum finds.
   above 0.
 
 Run: `python research/totals_median.py` → `research/totals_pace_results/MEDIAN_SHRINK.txt`.
+
+### Addendum A results (run 2026-10-30, after its protocol commit)
+
+Full output: `research/totals_pace_results/MEDIAN_SHRINK.txt`. Intervals are 95% week-cluster
+bootstrap.
+
+- **The fitted weight on the model is near zero.** For T1, w was 0.13 (fit for 2017), 0.03
+  (2021 and 2025) and 0 (2026). For T0 it was 0.16 in 2017 and 0 from 2021. Out of sample,
+  the earlier seasons put almost all the weight on the market median, so T_s ≈ m(line).
+- **S1 with T1, stage M, 2017–2025 (n 1803).**
+
+  | | Value |
+  |---|---|
+  | RMSE: line, shrunk model | 13.254, 13.309 |
+  | Squared error vs line | +1.46 [+0.25, +2.68] (worse) |
+  | Over/under LL gain vs no-vig | −0.0027 [−0.0056, +0.0001] |
+  | w on (T_s − line) | −0.23 [−0.84, +0.39] |
+  | Model side, all games: ROI (null) | −5.2% (−3.3%) |
+  | Model side, \|P − q\| ≥ .05: ROI | −4.9%, n 187 |
+
+  Shrinkage cut the LL loss from −0.020 to −0.003 only by discarding the model. Stage E is
+  the same: LL gain −0.0026 [−0.0066, +0.0019]. T0 is the same.
+- **M1, median sign alone, stage M.** 766–783–16, ROI −4.2% [−9.0, +0.7] against a −3.3%
+  null. Stage E: 240–259–2, ROI −6.9%.
+- **2026 to date, diagnostic only.** w = 0, so S1 = M1. Stage M: 13–23 on M1, LL gain
+  −0.0085. Stage E: 22–28, LL gain −0.0075.
+
+**Verdict: fails Addendum A's criteria, as it failed the main protocol.** The shrunk model
+remains worse than the line in RMSE, has no positive LL gain and no positive weight on
+(T_s − line). The market-context median adds nothing to the posted total: the medians of
+(final − line) by band are −1.5 to +1.5 points and change sign between eras.
