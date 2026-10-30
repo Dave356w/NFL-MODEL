@@ -1,0 +1,99 @@
+Addendum C: per-team residuals vs market implied points (research/totals_team_residual.py). ± 95% week-cluster bootstrap.
+Protocol: research/TOTALS_PACE.md, Addendum C (committed before this run). Schedule quotes, no capture time.
+
+===== C1 within-season
+  grid (h, K) 2009–2016 RMSE (line 13.156): (4, 2): 13.162, (4, 4): 13.162, (4, 8): 13.163, (8, 2): 13.163, (8, 4): 13.163, (8, 8): 13.163, (16, 2): 13.163, (16, 4): 13.163, (16, 8): 13.163  → chosen (4, 2)
+  k by evaluation season: {2017: -0.01, 2018: -0.03, 2019: -0.03, 2020: -0.039, 2021: -0.031, 2022: -0.04, 2023: -0.037, 2024: -0.04, 2025: -0.034, 2026: -0.039}
+  sd of R (2017–2025): 4.92 pts
+  stage M, 2017–2025
+    n  1803  RMSE line 13.254 model 13.252   model − line sq err -0.05 [-0.26, +0.15]
+    weight on (T − line) +1.401 [-2.283, +5.281]
+    P(over) LL model 0.6929 market 0.6926  gain -0.0002 [-0.0012, +0.0008]  (pushes 18 excluded)
+    model side, all              n  1803 (789 over / 1014 under)  ROI   -3.2% [-7.6, +0.9]  null -3.3%  won 49.3%
+  stage E, 2017–2025
+    n   579  RMSE line 13.262 model 13.260   model − line sq err -0.05 [-0.39, +0.33]
+    weight on (T − line) +1.282 [-4.501, +6.984]
+    P(over) LL model 0.6930 market 0.6945  gain +0.0015 [-0.0004, +0.0035]  (pushes 2 excluded)
+    model side, all              n   579 (278 over / 301 under)  ROI   +5.9% [-3.1, +14.9]  null -3.2%  won 53.9%
+  stage M, 2026 to date (current-season diagnostic, not a verdict)
+    n    44  RMSE line 11.768 model 11.751   model − line sq err -0.39 [-1.47, +1.38]
+    weight on (T − line) +6.681 [-25.477, +27.063]
+    P(over) LL model 0.6931 market 0.6959  gain +0.0029 [-0.0049, +0.0125]  (pushes 0 excluded)
+    model side, all              n    44 (23 over / 21 under)  ROI   -6.9% [-42.6, +42.5]  null -4.5%  won 47.7%
+  stage E, 2026 to date (current-season diagnostic, not a verdict)
+    n    64  RMSE line 13.596 model 13.559   model − line sq err -0.99 [-2.31, +0.33]
+    weight on (T − line) +9.698 [-8.231, +17.122]
+    P(over) LL model 0.6915 market 0.6926  gain +0.0011 [-0.0014, +0.0031]  (pushes 0 excluded)
+    model side, all              n    64 (32 over / 32 under)  ROI   -3.3% [-21.4, +14.8]  null -4.5%  won 50.0%
+  == C1 stage M by season
+    2017
+    n   191  RMSE line 13.893 model 13.888   model − line sq err -0.14 [-0.32, +0.02]
+    weight on (T − line) +33.909 [-4.844, +74.914]
+    P(over) LL model 0.6930 market 0.6926  gain -0.0003 [-0.0025, +0.0021]  (pushes 0 excluded)
+    model side, all              n   191 (75 over / 116 under)  ROI   -0.9% [-8.8, +7.2]  null -2.4%  won 49.7%
+    2018
+    n   191  RMSE line 13.315 model 13.311   model − line sq err -0.10 [-0.66, +0.46]
+    weight on (T − line) +2.753 [-9.208, +14.745]
+    P(over) LL model 0.6922 market 0.6936  gain +0.0013 [-0.0016, +0.0038]  (pushes 3 excluded)
+    model side, all              n   191 (78 over / 113 under)  ROI   -3.7% [-12.7, +4.8]  null -2.6%  won 48.4%
+    2019
+    n   191  RMSE line 13.195 model 13.198   model − line sq err +0.08 [-0.28, +0.42]
+    weight on (T − line) -1.422 [-10.409, +7.195]
+    P(over) LL model 0.6929 market 0.6913  gain -0.0017 [-0.0055, +0.0026]  (pushes 1 excluded)
+    model side, all              n   191 (82 over / 109 under)  ROI   -4.1% [-19.6, +13.1]  null -2.6%  won 48.4%
+    2020
+    n   191  RMSE line 12.905 model 12.901   model − line sq err -0.12 [-0.68, +0.39]
+    weight on (T − line) +2.308 [-6.249, +10.375]
+    P(over) LL model 0.6927 market 0.6951  gain +0.0024 [+0.0001, +0.0049]  (pushes 4 excluded)
+    model side, all              n   191 (73 over / 118 under)  ROI   +4.8% [-4.9, +14.7]  null -2.6%  won 52.9%
+    2021
+    n   208  RMSE line 13.712 model 13.705   model − line sq err -0.19 [-0.77, +0.44]
+    weight on (T − line) +5.084 [-10.964, +19.564]
+    P(over) LL model 0.6925 market 0.6897  gain -0.0029 [-0.0065, +0.0009]  (pushes 3 excluded)
+    model side, all              n   208 (116 over / 92 under)  ROI   -5.5% [-22.0, +10.0]  null -2.7%  won 47.8%
+    2022
+    n   207  RMSE line 13.028 model 13.029   model − line sq err +0.04 [-0.70, +0.64]
+    weight on (T − line) +0.001 [-8.136, +8.746]
+    P(over) LL model 0.6932 market 0.6925  gain -0.0008 [-0.0039, +0.0024]  (pushes 2 excluded)
+    model side, all              n   207 (111 over / 96 under)  ROI   -0.9% [-13.2, +11.6]  null -2.8%  won 50.2%
+    2023
+    n   208  RMSE line 13.332 model 13.322   model − line sq err -0.26 [-1.14, +0.56]
+    weight on (T − line) +4.547 [-8.129, +17.605]
+    P(over) LL model 0.6927 market 0.6934  gain +0.0007 [-0.0016, +0.0029]  (pushes 2 excluded)
+    model side, all              n   208 (90 over / 118 under)  ROI   -1.3% [-14.7, +11.4]  null -4.5%  won 51.5%
+    2024
+    n   208  RMSE line 12.910 model 12.921   model − line sq err +0.28 [-0.36, +0.87]
+    weight on (T − line) -3.169 [-11.587, +4.991]
+    P(over) LL model 0.6931 market 0.6923  gain -0.0008 [-0.0025, +0.0007]  (pushes 3 excluded)
+    model side, all              n   208 (77 over / 131 under)  ROI  -11.0% [-22.4, -1.7]  null -4.5%  won 46.3%
+    2025
+    n   208  RMSE line 12.983 model 12.982   model − line sq err -0.01 [-0.60, +0.63]
+    weight on (T − line) +0.641 [-13.119, +11.940]
+    P(over) LL model 0.6933 market 0.6937  gain +0.0004 [-0.0029, +0.0036]  (pushes 0 excluded)
+    model side, all              n   208 (87 over / 121 under)  ROI   -5.7% [-17.5, +5.1]  null -4.5%  won 48.6%
+
+===== C2 carry last season 50%
+  grid (h, K) 2009–2016 RMSE (line 13.156): (4, 2): 13.163, (4, 4): 13.164, (4, 8): 13.165, (8, 2): 13.163, (8, 4): 13.163, (8, 8): 13.163, (16, 2): 13.163, (16, 4): 13.163, (16, 8): 13.163  → chosen (16, 8)
+  k by evaluation season: {2017: 0.072, 2018: 0.01, 2019: -0.005, 2020: -0.015, 2021: -0.006, 2022: -0.033, 2023: -0.045, 2024: -0.048, 2025: -0.036, 2026: -0.027}
+  sd of R (2017–2025): 3.02 pts
+  stage M, 2017–2025
+    n  1803  RMSE line 13.254 model 13.257   model − line sq err +0.09 [-0.04, +0.24]
+    weight on (T − line) -3.236 [-8.405, +2.171]
+    P(over) LL model 0.6933 market 0.6926  gain -0.0007 [-0.0016, +0.0003]  (pushes 18 excluded)
+    model side, all              n  1803 (811 over / 992 under)  ROI   -3.8% [-8.5, +0.8]  null -3.3%  won 49.0%
+  stage E, 2017–2025
+    n   579  RMSE line 13.262 model 13.267   model − line sq err +0.15 [-0.09, +0.47]
+    weight on (T − line) -6.150 [-18.092, +4.535]
+    P(over) LL model 0.6933 market 0.6945  gain +0.0012 [-0.0006, +0.0031]  (pushes 2 excluded)
+    model side, all              n   579 (283 over / 296 under)  ROI   +4.0% [-4.5, +12.4]  null -3.2%  won 52.9%
+  stage M, 2026 to date (current-season diagnostic, not a verdict)
+    n    44  RMSE line 11.768 model 11.766   model − line sq err -0.03 [-0.50, +0.73]
+    weight on (T − line) +2.440 [-48.365, +40.333]
+    P(over) LL model 0.6938 market 0.6959  gain +0.0021 [-0.0070, +0.0089]  (pushes 0 excluded)
+    model side, all              n    44 (22 over / 22 under)  ROI   -2.5% [-34.9, +42.5]  null -4.5%  won 50.0%
+  stage E, 2026 to date (current-season diagnostic, not a verdict)
+    n    64  RMSE line 13.596 model 13.586   model − line sq err -0.28 [-0.68, +0.04]
+    weight on (T − line) +20.859 [-2.963, +43.968]
+    P(over) LL model 0.6928 market 0.6926  gain -0.0002 [-0.0024, +0.0020]  (pushes 0 excluded)
+    model side, all              n    64 (29 over / 35 under)  ROI   -0.0% [-18.1, +14.9]  null -4.5%  won 51.6%
+

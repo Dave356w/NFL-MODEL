@@ -297,3 +297,39 @@ implied points, and does that adjust the O/U line?
   excludes zero, and a weight above 0 on (T_c − line). The weight test here is a test of k.
 
 Run: `python research/totals_team_residual.py` → `research/totals_pace_results/TEAM_RESIDUAL.txt`.
+
+### Addendum C results (run 2026-10-30, after its protocol commit)
+
+Full output: `research/totals_pace_results/TEAM_RESIDUAL.txt`. Intervals are 95%
+week-cluster bootstrap.
+
+- **The selection window already shows nothing.** Every grid cell's 2009–2016 RMSE
+  (13.162–13.165) was worse than the line's (13.156). The chosen cells were C1 (4, 2) and
+  C2 (16, 8).
+- **The fitted k is small and negative.**
+  - C1: k = −0.01 (fit for 2017), then −0.03 to −0.04 for 2018–2026.
+  - C2: from +0.07 to −0.05.
+  - Teams that recently beat their implied points go slightly under next, so the market
+    adjusts at least fully. With sd(R) = 4.9 points (C1), the adjustment k·R has an sd of
+    only about 0.2 points. No game reached |P − q| ≥ 0.05.
+- **C1, stage M, 2017–2025 (n 1803).**
+  - RMSE 13.252 against the line's 13.254. Squared error −0.05 [−0.26, +0.15].
+  - LL gain −0.0002 [−0.0012, +0.0008].
+  - w on (T_c − line): +1.4 [−2.3, +5.3].
+  - Model side, all games: ROI −3.2% against a −3.3% null.
+- **C1, stage E.** LL gain +0.0015 [−0.0004, +0.0035]. Model side ROI +5.9% [−3.1, +14.9].
+  Unresolved.
+- **C2, stage M.** LL gain −0.0007 [−0.0016, +0.0003], ROI −3.8%. Stage E: +0.0012
+  [−0.0006, +0.0031], ROI +4.0%. Unresolved.
+- **2026 to date, diagnostic only.** C1 went 21–23 in stage M and 32–32 in stage E.
+
+**Verdict: fails Addendum C's criteria.**
+
+- No arm's LL gain interval excludes zero.
+- Neither the weight nor k is resolved above zero.
+- The adjusted line is the posted line to within about 0.2 points.
+
+The market already prices each team's scoring relative to its implied points. If anything
+it slightly over-adjusts (k < 0), and by far less than the hold. The early-season (stage E)
+gains are unresolved and point the same way in both arms. A forward test of them would need
+its own registration, not this hindsight slice.
