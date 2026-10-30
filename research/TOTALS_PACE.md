@@ -198,3 +198,35 @@ bootstrap.
 remains worse than the line in RMSE, has no positive LL gain and no positive weight on
 (T_s − line). The market-context median adds nothing to the posted total: the medians of
 (final − line) by band are −1.5 to +1.5 points and change sign between eras.
+
+## Addendum B: median bands with residual adjustments (protocol committed 2026-10-30, before its run)
+
+This is the owner's follow-up question: start from the band median, then add a fitted
+residual correction. It builds on the drift finding: the market tracks the scoring level
+faster than the model does.
+
+- **Medians, rebuilt season by season.** For any game in season s, m = line + the median of
+  (final − line) in the game's band over priced games from 2006 to s − 1. Training rows
+  therefore never use their own season's medians.
+  - **Absolute bands (A):** Addendum A's 2-point bands of the line.
+  - **Era-relative bands (R):** 2-point bands of (line − league), with edges −8, −6, … +8
+    and open tails. League is the to-date level from the main protocol (2 × league points per
+    team over completed weeks this season, with last season counted as 64 team-games).
+- **Residual model.** Regress (final − m) on:
+  - (T1 − m), the pace model's departure from the median;
+  - (league − line), the drift gap;
+  - dome, retractable roof, short weeks, byes, division game, 3-game form and phase, as in
+    the main protocol.
+
+  Ordinary least squares with an intercept, fitted for evaluation season Y on 2009 to Y − 1.
+  T1 is the walk-forward prediction. T_r = m + fitted residual. σ is the residual sd on the
+  training rows, computed separately for stages E and M. P(over) = 1 − Φ((line − T_r)/σ).
+- **Arms.**
+  - **BA:** absolute bands + residual.
+  - **BR:** era-relative bands + residual.
+  - **MR:** era-relative median sign alone (ROI only).
+- **Evaluation and criteria.** Unchanged: stages M and E, 2017–2025, with 2026 to date as a
+  diagnostic only. Pass requires RMSE no worse than the line, an LL gain whose 95% interval
+  excludes zero, and a weight above 0 on (T_r − line).
+
+Run: `python research/totals_residual.py` → `research/totals_pace_results/MEDIAN_RESIDUAL.txt`.
