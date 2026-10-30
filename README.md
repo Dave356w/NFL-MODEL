@@ -89,11 +89,14 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 The Calibration tab uses completed regular-season weeks only and refreshes in
 the existing site build after a full week's slate is final. It offers an all-years
 view and individual season filters. Market and model WP tables compare implied
-and actual win rates for home, away and both sides. ATS tables compare the market
-favorite with the model's ATS selection on identical market-spread bands, at
-assumed −110. Median MOV is signed toward the evaluated side and includes losses
-and tied finals. WP scoring excludes tied finals; ATS cover rates exclude pushes,
-while ROI includes pushed stakes. The download contains aggregate bands only.
+and actual win rates for home, away and both sides. Spread calibration tables
+group each forecast by its own projected winning margin, from that forecast's
+favorite's perspective. They show average projected MOV, median actual MOV,
+median game-by-game error and counts above, at or below projection. Both use the
+same eligible games; pick'em forecasts and unavailable spreads are excluded.
+Median MOV includes losses and tied finals; WP scoring excludes tied finals.
+ATS picks and betting returns remain on Performance. The download contains
+aggregate bands only.
 This is historical replay with exposed development seasons, rather than native
 forward performance; Picks, Results and Performance retain their ATS-only views.
 

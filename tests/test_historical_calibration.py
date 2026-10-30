@@ -70,31 +70,45 @@ def test_probability_boundaries_and_paired_side_uncertainty():
     assert select(complement, 'model_wp', '20–<30%', 'away')['observations'] == 1
 
 
-def test_ats_uses_identical_bands_and_signed_pick_mov_with_pushes():
-    frame = pd.DataFrame([game('dog'),  # home by 6: away +6.5 covers, despite negative MOV
-                          game('push', result=3., line=3., mapped=3.),
-                          game('pickem', line=0., result=10.)])
-    market = c.ats_rows(frame, False, 'market_ats')
-    model = c.ats_rows(frame, True, 'model_ats')
-    mr = select(market, 'market_ats', '3–<7 points', 'selected')
-    pr = select(model, 'model_ats', '3–<7 points', 'selected')
-    assert mr['observations'] == pr['observations'] == 2
-    assert (mr['wins'], mr['losses'], mr['pushes']) == (0, 1, 1)
-    assert (pr['wins'], pr['losses'], pr['pushes']) == (1, 0, 1)
-    assert pr['cover_rate'] == 1. and pr['roi'] == pytest.approx((1/1.1)/2)
-    assert pr['median_mov'] == -1.5  # median of away MOV -6 and home MOV +3
-    assert pr['implied_mov'] == -.5  # mean of away projection -4 and home projection +3
-    assert sum(r['observations'] for r in model) == 2  # pick'em excluded from both views
-    tied = c.ats_rows(pd.DataFrame([game('tie', result=0., line=3., mapped=4.)]), True, 'model_ats')
-    assert select(tied, 'model_ats', '3–<7 points', 'selected')['losses'] == 1
+def test_margin_calibration_uses_forecast_favorite_and_own_forecast():
+    frame = pd.DataFrame([game('dog'),  # ATS pick is away, but model favorite is home
+                          game('exact', result=3., line=3., mapped=3.),
+                          game('model-away', result=10., line=12., mapped=-4.)])
+    market = c.margin_rows(frame, 'spread_line', 'market_spread')
+    model = c.margin_rows(frame, 'fixed_band_spread', 'model_spread')
+    mr = select(market, 'market_spread', '3–<7 points', 'forecast_favorite')
+    pr = select(model, 'model_spread', '3–<7 points', 'forecast_favorite')
+    assert mr['observations'] == 2
+    assert (mr['above_forecast'], mr['at_forecast'], mr['below_forecast']) == (0, 1, 1)
+    # Model's own 3–<7 band also contains its away favorite in the market's 10+ band.
+    assert pr['observations'] == 3
+    assert (pr['above_forecast'], pr['at_forecast'], pr['below_forecast']) == (1, 1, 1)
+    assert pr['median_mov'] == 3.  # median of +6, +3, -10 toward model favorites
+    assert pr['implied_mov'] == pytest.approx(11/3)  # all projections positive
+    assert pr['median_error'] == 0.  # median of +2, 0, -14; not median MOV - mean forecast
+    assert mr['median_error'] == -.25
+    tied = c.margin_rows(pd.DataFrame([game('tie', result=0., line=3., mapped=4.)]),
+                         'fixed_band_spread', 'model_spread')
+    tie = select(tied, 'model_spread', '3–<7 points', 'forecast_favorite')
+    assert tie['below_forecast'] == 1 and tie['median_mov'] == 0. and tie['median_error'] == -4.
 
 
-def test_ats_boundary_7_enters_7_to_10_and_missing_map_is_excluded_for_both():
-    frame = pd.DataFrame([game('seven', line=7.), game('missing', mapped=np.nan)])
-    for model in (True, False):
-        rows = c.ats_rows(frame, model, 'test')
-        assert select(rows, 'test', '7–<10 points', 'selected')['observations'] == 1
-        assert sum(r['observations'] for r in rows) == 1
+def test_margin_boundaries_exclusions_and_same_game_cohort():
+    frame = pd.DataFrame([game('three', line=3., mapped=-3.),
+                          game('seven', line=-7., mapped=-7., result=-10.),
+                          game('ten', line=10., mapped=10.),
+                          game('missing', mapped=np.nan), game('infinite', line=np.inf),
+                          game('market-pickem', line=0.), game('model-pickem', mapped=0.)])
+    for column in ['spread_line', 'fixed_band_spread']:
+        rows = c.margin_rows(frame, column, 'test')
+        seven = select(rows, 'test', '7–<10 points', 'forecast_favorite')
+        assert seven['observations'] == 1 and seven['median_mov'] == 10.
+        assert seven['median_error'] == 3. and seven['above_forecast'] == 1
+        assert select(rows, 'test', '3–<7 points', 'forecast_favorite')['observations'] == 1
+        assert select(rows, 'test', '10+ points', 'forecast_favorite')['observations'] == 1
+        empty = select(rows, 'test', '<3 points', 'forecast_favorite')
+        assert empty['observations'] == 0 and empty['median_error'] is None
+        assert sum(r['observations'] for r in rows) == 3
 
 
 def test_history_filters_invalid_probabilities_and_rejects_duplicates():
@@ -110,7 +124,9 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     html = b.render_historical_calibration(source, 'test', pack)
     assert "href='historical-calibration.html' aria-current=\"page\"" in html
     assert 'Market implied vs actual WP' in html and 'Model implied vs actual WP' in html
-    assert 'Market ATS vs actual' in html and 'Model ATS vs actual' in html
+    assert 'Market spread vs actual MOV' in html and 'Model spread vs actual MOV' in html
+    assert 'Median forecast error' in html and 'Above / at / below forecast' in html
+    assert 'Avg implied MOV' not in html and '>Units<' not in html and '>ROI<' not in html
     assert 'Median MOV' in html and 'Median actual MOV' in html
     assert "id='cal-season'" in html and "select.addEventListener('change'" in html
     assert all(f"data-cal-season='{year}'" in html for year in ['all', '2023', '2024', '2025', '2026'])
@@ -119,7 +135,9 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     assert not re.search(r'\bnan\b|\bNaN\b|\bNone\b', visible)
     table = c.export(pack)
     assert len(table) == 5 * (8*3*2 + 4*2)
-    assert set(table.view) == {'market_wp', 'model_wp', 'market_ats', 'model_ats'}
+    assert set(table.view) == {'market_wp', 'model_wp', 'market_spread', 'model_spread'}
+    assert {'median_error', 'above_forecast', 'at_forecast', 'below_forecast'} <= set(table.columns)
+    assert not {'units', 'roi', 'cover_rate'} & set(table.columns)
     assert not {'game_id', 'home_moneyline', 'away_moneyline', 'model_wp'} & set(table.columns)
 
 
