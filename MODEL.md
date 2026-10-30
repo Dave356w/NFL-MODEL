@@ -25,7 +25,27 @@ the competing-model comparison and snapshot replays are in the repository's
 `data/ledger_report.txt`. Each page build appends `version_report.md`,
 `regraded_ledger_report.md`, the independent production audit and frozen WP
 calibration research there, idempotently. Research is not published as a website
-download. The customer navigation is Projections, Results and Performance.
+download. The customer navigation is Picks, Results, Performance and Calibration.
+
+**Historical Calibration tab (owner request 2026-10-30).** The public
+`historical-calibration.html` adds 2023 through the current season, with all-years
+and individual season views. Only complete regular-season weeks enter; a final
+current board week is included as soon as every game has a final score. The
+existing build refreshes the page and `historical_calibration.csv` automatically.
+The page labels reconstructed historical forecasts and exposed development
+seasons, separately from the live season record. It does not change the recipe,
+confidence penalty, annual median map, selections or forecast archives.
+
+Market/model WP tables use the side's implied probability bands, with home,
+away and both-side observations. Actual and mean implied WP exclude tied finals;
+signed median MOV includes them and includes losses. Standard errors cluster
+paired observations by game. Market/model ATS tables use identical games and
+market-spread-magnitude bands (`<3`, `3–<7`, `7–<10`, `10+`), comparing the market
+favorite and actual model ATS selection. Pick'ems and unavailable mapped spreads
+are excluded from both. Implied MOV is the mean projection signed toward the
+selected side; actual MOV is its signed median. Cover rates exclude pushes and
+flat 1u ROI at assumed −110 includes pushed stakes. The model does not supply an
+implied cover probability. Public downloads contain aggregates, not per-game WP.
 
 Evidence for the penalty (log-loss gain vs v1.16; picks identical): +0.0040 ± 0.0027 on 2017–20 out
 of sample and +0.0023 ± 0.0017 on 2021–25 (both exposed; λ chosen on 2021–25), +0.026 ± 0.025 on

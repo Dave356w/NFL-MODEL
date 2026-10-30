@@ -51,6 +51,7 @@ import fixed_bands
 import ats_locks
 import season_ats
 import espn_spreads
+import historical_calibration
 from research import version_report
 from research import ats_forward_shadow
 from research import production_sanity
@@ -61,7 +62,8 @@ PROJECTIONS = DATA / "projections"
 ASSETS = Path("assets/fonts")
 PT = ZoneInfo("America/Los_Angeles")
 SITE_NAME = "NFL ATS"
-PUBLIC_CSV_EXPORTS = {'ats_2026_results.csv', 'ats_locked_picks.csv', 'fixed_band_board.csv'}
+PUBLIC_CSV_EXPORTS = {'ats_2026_results.csv', 'ats_locked_picks.csv', 'fixed_band_board.csv',
+                      'historical_calibration.csv'}
 
 # run-folder file -> data/latest file
 SNAPSHOT = {
@@ -448,7 +450,8 @@ THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentC
               "<path d='M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z'/></svg>")
 
 PAGES = (("index.html", "Picks"), ("grades.html", "Results"),
-         ("market-calibration.html", "Performance"))
+         ("market-calibration.html", "Performance"),
+         ("historical-calibration.html", "Calibration"))
 
 
 def font_face_css(assets=ASSETS):
@@ -463,14 +466,14 @@ def font_face_css(assets=ASSETS):
     return "".join(out)
 
 
-def html_document(body, title, current, built, scripts=""):
+def html_document(body, title, current, built, scripts="", extra_css=""):
     nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''}>{label}</a>"
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
             f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, locked handicaps and season results'>"
             "<meta name='color-scheme' content='light dark'>"
-            f"{THEME_JS}<style>{font_face_css()}{CSS}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
+            f"{THEME_JS}<style>{font_face_css()}{CSS}{extra_css}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
             f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
             f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
             f"<nav class='nav' aria-label='Main navigation'>{nav}</nav>"
@@ -1429,6 +1432,19 @@ def render_calibration(latest, ledger, built):
                  ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 
+def render_historical_calibration(latest, built, pack=None):
+    pack = historical_calibration.build(latest) if pack is None else pack
+    current = pack['current_season']
+    body = head('Market & model calibration',
+        'Implied win probabilities and projected margins beside what actually happened, '
+        'with signed median margin of victory in every band.',
+        f'2023–{current} · completed weeks')
+    body += historical_calibration.render_body(pack)
+    return html_document(body, f'{SITE_NAME} historical calibration',
+        'historical-calibration.html', built, scripts=historical_calibration.SCRIPT,
+        extra_css=historical_calibration.CSS)
+
+
 # ---------------------------------------------------------------- driver
 
 def render_all(out_dir, data=DATA, now=None):
@@ -1495,9 +1511,12 @@ def render_all(out_dir, data=DATA, now=None):
         pd.DataFrame(public_rows).to_csv(out / 'fixed_band_board.csv', index=False)
     else:
         (out / 'fixed_band_board.csv').unlink(missing_ok=True)
+    calibration_pack = historical_calibration.build(latest)
+    historical_calibration.export(calibration_pack).to_csv(out / 'historical_calibration.csv', index=False)
     pages = {"index.html": render_index(latest, ledger, built, now),
              "grades.html": render_grades(ledger, latest, built),
-             "market-calibration.html": render_calibration(latest, ledger, built)}
+             "market-calibration.html": render_calibration(latest, ledger, built),
+             "historical-calibration.html": render_historical_calibration(latest, built, calibration_pack)}
     for name, html in pages.items():
         (out / name).write_text(html, encoding="utf-8")
     # Repository-only analyst report. Do not publish a second research surface.

@@ -1,9 +1,10 @@
 # NFL ATS
 
 NFL against-the-spread picks and results, built and published as a static site
-by GitHub Actions. Public pages show ATS selections, projected and market
-spreads, lock status, cover rates, units and ROI. Win probabilities and moneyline
-research stay internal to the model and repository reports.
+by GitHub Actions. Picks, Results and Performance show ATS selections, projected
+and market spreads, lock status, cover rates, units and ROI. The historical
+Calibration tab adds aggregate market/model win-probability and spread results
+from 2023 onward. Per-game moneyline forecasts and research stay internal.
 
 **Public goal: flat 1-unit ATS results.** The signed difference between the
 projected home margin and market margin chooses the ATS side. Matching lines
@@ -14,7 +15,8 @@ identified separately. Picks freeze at the 60-minute pregame cutoff.
 The v1.18 probability engine and prior-season median spread mapping are
 unchanged. Original moneyline snapshots and research scoring remain available
 in the repository, including their original pricing and capture times; the
-public interface and public CSVs contain ATS data only.
+Picks, Results and Performance and their public CSVs contain ATS data only;
+the separate historical calibration download contains aggregate bands.
 
 **<https://dave356w.github.io/NFL-MODEL/>**
 
@@ -82,9 +84,22 @@ and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 | [Projections](https://dave356w.github.io/NFL-MODEL/) | This week's games: model vs market, the model's pick, biggest factors, injury reports |
 | [Results](https://dave356w.github.io/NFL-MODEL/grades.html) | Pooled 2026 ATS results by week and game, with downloads |
 | [Performance](https://dave356w.github.io/NFL-MODEL/market-calibration.html) | Pooled 2026 ATS record, running units and same-game spread baselines |
+| [Calibration](https://dave356w.github.io/NFL-MODEL/historical-calibration.html) | 2023 onward: market/model implied versus actual WP and ATS results by band, with signed median MOV |
 
-The public pages show the production model only: W-L, win % and ROI. Standard errors, log loss,
-held-out scorecards, recipe selection, earlier revisions, the v1.16 shadow lock and every research
+The Calibration tab uses completed regular-season weeks only and refreshes in
+the existing site build after a full week's slate is final. It offers an all-years
+view and individual season filters. Market and model WP tables compare implied
+and actual win rates for home, away and both sides. ATS tables compare the market
+favorite with the model's ATS selection on identical market-spread bands, at
+assumed −110. Median MOV is signed toward the evaluated side and includes losses
+and tied finals. WP scoring excludes tied finals; ATS cover rates exclude pushes,
+while ROI includes pushed stakes. The download contains aggregate bands only.
+This is historical replay with exposed development seasons, rather than native
+forward performance; Picks, Results and Performance retain their ATS-only views.
+
+The public pages show the production model only. Historical calibration adds
+band-level WP, signed margins and log loss; held-out scorecards, recipe selection,
+earlier revisions, the v1.16 shadow lock and every research
 arm are in [`data/ledger_report.txt`](data/ledger_report.txt) and `data/latest/`.
 Each page build consolidates the version comparison, snapshot replay, independent
 production checks and frozen WP-calibration research into the **repository** report.
