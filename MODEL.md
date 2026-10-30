@@ -37,7 +37,9 @@ seasons, separately from the live season record. It does not change the recipe,
 confidence penalty, annual median map, selections or forecast archives.
 
 Market/model WP tables use the side's implied probability bands, with home,
-away and both-side observations. Actual and mean implied WP exclude tied finals;
+away and both-side observations. Market bands also show approximate fair American
+odds equivalents; rounded price labels do not change probability-band membership.
+Actual and mean implied WP exclude tied finals;
 signed median MOV includes them and includes losses. Standard errors cluster
 paired observations by game. Market/model spread tables use identical eligible
 games, each forecast's own favorite and its own projected-margin bands (`<3`,

@@ -183,10 +183,25 @@ def percentage(value):
     return number(100*value, suffix='%') if value is not None else '—'
 
 
+def american_odds(probability):
+    """Rounded fair American odds for an interior probability cutoff."""
+    odds = (100 * (1-probability) / probability if probability <= .5
+            else -100 * probability / (1-probability))
+    return number(odds, digits=0, signed=True)
+
+
+def market_odds_band(index):
+    if index == 0:
+        return 'Longer than ' + american_odds(PROB_CUTS[0])
+    if index == len(PROB_LABELS)-1:
+        return american_odds(PROB_CUTS[-1]) + ' or shorter'
+    return '≈ ' + american_odds(PROB_CUTS[index-1]) + ' to ' + american_odds(PROB_CUTS[index])
+
+
 def wp_table(rows, view):
     lookup = {(r['band'], r['side']): r for r in rows if r['view'] == view}
     body = []
-    for band in PROB_LABELS:
+    for index, band in enumerate(PROB_LABELS):
         cells = []
         for side in ['home', 'away', 'both']:
             r = lookup[band, side]
@@ -200,9 +215,12 @@ def wp_table(rows, view):
                 + f"<div class='cal-meta'>n={r['decided']} · {r['ties']} ties</div>"
                 + "<div class='cal-mov'>Median MOV <b>" + number(r['median_mov'], signed=True)
                 + "</b></div></td>")
-        body.append('<tr><th scope="row">' + band + '</th>' + ''.join(cells) + '</tr>')
+        odds = ("<span class='cal-odds'>" + market_odds_band(index) + '</span>'
+                if view == 'market_wp' else '')
+        body.append('<tr><th scope="row">' + band + odds + '</th>' + ''.join(cells) + '</tr>')
+    odds_heading = "<span class='cal-odds'>Fair American odds</span>" if view == 'market_wp' else ''
     return ("<div class='gr-tablewrap'><table class='gr cal-wp'><thead><tr>"
-            "<th scope='col'>Implied WP band</th><th scope='col'>Home side</th>"
+            "<th scope='col'>Implied WP band" + odds_heading + "</th><th scope='col'>Home side</th>"
             "<th scope='col'>Away side</th><th scope='col'>Both sides</th>"
             "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
 
@@ -261,7 +279,11 @@ def render_body(pack):
             ('model_spread', 'Model spread vs actual MOV', 'Model forecasts beside actual results, from the model favorite’s perspective. Grouped by the model’s own mapped spread; its favorite and band can differ from the market’s.')]:
             out.append("<h2 class='sec'>" + title + "</h2><p class='sec-lead'>" + lead + '</p>')
             out.append(wp_table(p['rows'], view) if view.endswith('_wp') else margin_table(p['rows'], view))
-            if view == 'model_wp':
+            if view == 'market_wp':
+                out.append("<p class='mut small'>American odds are approximate fair equivalents after removing the "
+                    "bookmaker’s margin. Rounded odds ranges are a reading guide; the WP cutoffs determine "
+                    "which band a game enters.</p>")
+            elif view == 'model_wp':
                 out.append("<p class='mut small'>WP = win probability. Actual WP and implied WP use decided games only; "
                     "n excludes tied finals. Both sides contains one observation per team. A game can appear in two "
                     "different bands; paired sides stay together when computing the ±1 standard error. "
@@ -291,6 +313,8 @@ CSS = """
 .cal-wp td{vertical-align:top!important}.cal-rate{font:800 23px/1.3 var(--mono);letter-spacing:-.04em}
 .cal-detail{font-size:12px;line-height:1.6;color:var(--muted);margin:5px 0}.cal-gap{display:block}
 .cal-meta{font:500 11px/1.5 var(--mono);color:var(--faint)}
+.cal-odds{display:block;font:500 11px/1.5 var(--mono);color:var(--muted);margin-top:6px;
+ letter-spacing:0;text-transform:none;white-space:normal}
 .cal-mov{font-size:12px;margin-top:7px;color:var(--muted)}.cal-mov b{font:650 12px var(--mono);color:var(--ink)}
 .cal-margin{min-width:800px}.cal-median{font-weight:750;color:rgb(var(--accent-tx))}
 .cal-margin-note{max-width:100ch;line-height:1.7}
