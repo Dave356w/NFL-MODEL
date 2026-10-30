@@ -104,6 +104,7 @@ def render(tmp_path, **kw):
 
 
 PUBLIC = ("index.html", "grades.html", "market-calibration.html")
+HISTORICAL_PUBLIC = {"historical-calibration.html", "historical_calibration.csv"}
 # Public downloads: the board and recorded picks. Replayed ledgers and median-map rules stay in data/latest.
 SPREAD_EXPORTS = {"fixed_band_board.csv"}
 RESEARCH_EXPORTS = {"fixed_band_ledger.csv", "fixed_band_summary.csv", "fixed_band_rules.json"}
@@ -132,9 +133,9 @@ def visible_text(html):
     return re.sub(r"<[^>]+>", " ", html)
 
 
-def test_three_public_pages_with_nav_and_no_nan(tmp_path):
+def test_public_pages_with_nav_and_no_nan(tmp_path):
     out, files = render(tmp_path)
-    assert set(PUBLIC) | SPREAD_EXPORTS | {"ats_2026_results.csv", ".nojekyll"} == set(files)
+    assert set(PUBLIC) | HISTORICAL_PUBLIC | SPREAD_EXPORTS | {"ats_2026_results.csv", ".nojekyll"} == set(files)
     assert "model.html" not in files and "board.html" not in files
     for name in PUBLIC:
         html = (out / name).read_text()
@@ -571,7 +572,7 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     g.write_outputs(g.grade(recs, res), data)
     out = tmp_path / "public"
     files = b.render_all(out, data, now=NOW)
-    assert set(files) <= {*PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll"}
+    assert set(files) <= {*PUBLIC, *HISTORICAL_PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll"}
     pages = "".join((out / p).read_text() for p in PUBLIC)
     for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
         assert marker not in pages

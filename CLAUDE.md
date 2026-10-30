@@ -6,17 +6,21 @@ code and data, report what the evidence establishes in proportion to its
 strength, and turn criticism into a measurable next step. The owner directs the
 product and decides which experiments to run.
 
-Public presentation (owner decision 2026-10-19 UTC) is ATS-only: picks, frozen
-handicaps, results, cover rates, units and ROI. Probability/moneyline calculations
-and the original archives remain internal and in repository research reports.
-Do not publish moneyline picks, win-probability values or moneyline CSV columns.
+Picks, Results and Performance remain ATS-only: picks, frozen handicaps,
+results, cover rates, units and ROI (owner decision 2026-10-19 UTC).
+The owner added a public historical Calibration tab on 2026-10-30: aggregate
+market/model WP calibration and ATS results by band, with signed median MOV,
+from 2023 through the current season, updated after complete weeks only.
+Historical WP aggregates are authorized on that page and its aggregate CSV.
+Do not publish live moneyline picks, per-game probabilities or moneyline CSV columns.
 This presentation change does not change v1.18, the median map or lock timing.
 The public 2026 headline, weekly/game results, running units, same-game controls
 and season CSV pool replayed and recorded results, one row per game (owner
 request 2026-10-19). Saved ATS selections take priority over replay. Keep source
 tracking in backend reporting only, without source labels or breakdowns on the
 public pages or season CSV; the pooled total is descriptive.
-Earlier seasons and detailed research stay in repository reports.
+Detailed research stays in repository reports; the historical Calibration tab
+labels its reconstructed, exposed development basis separately from live results.
 
 ## Sources of truth
 
