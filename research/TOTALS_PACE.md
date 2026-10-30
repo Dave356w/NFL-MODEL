@@ -265,3 +265,35 @@ The residual model's only consistent terms are roof and division effects of abou
 on top of the posted total. Any further test should isolate them: a registered rule on
 those terms alone, falsified by an LL gain at or below zero. The median and the pace model
 contribute nothing beyond the line.
+
+## Addendum C: per-team market residuals from implied points (protocol committed 2026-10-30, before its run)
+
+This is the owner's follow-up question: do teams persistently beat or miss the market's
+implied points, and does that adjust the O/U line?
+
+- **Implied points.** From the schedule line and spread (`spread_line`, positive means the
+  home team is favoured): home = (total_line + spread_line)/2, away = (total_line −
+  spread_line)/2. These quotes have the same unknown capture time as before.
+- **Team residuals.** For each team-game:
+  - offense residual o = points scored − the team's implied points;
+  - defense residual d = points allowed − the opponent's implied points.
+
+  Each team's pregame residual is a decayed mean over its earlier games this season
+  (half-life h), shrunk toward 0 with weight K games: Σw·x / (K + Σw). Only weeks strictly
+  before the game are used. Week 1 has no residual (0).
+- **Signal.** R = o_home + d_away + o_away + d_home, in points versus the line.
+- **Adjusted total.** T_c = line + k·R. k is the no-intercept least-squares slope of
+  (final − line) on R, fitted on seasons 2009 to Y − 1 for evaluation season Y. k is
+  unclipped, so a negative k (the market overreacting) is allowed and reported. σ is the
+  residual sd of (final − T_c) on the training rows, computed separately for stages E and
+  M. P(over) = 1 − Φ((line − T_c)/σ).
+- **Grid.** (h, K) ∈ {4, 8, 16} × {2, 4, 8}, chosen on the lowest 2009–2016 walk-forward
+  RMSE of T_c (with k fitted walk-forward inside that window, from 2008), then fixed. No
+  grid choice uses 2017+ or any price.
+- **Second arm, C2.** The same, but o and d carry over from last season, regressed 50%, as
+  the starting value with weight K.
+- **Evaluation and criteria.** Unchanged: stages M and E, 2017–2025, with 2026 to date as a
+  diagnostic only. Pass requires RMSE no worse than the line, an LL gain whose 95% interval
+  excludes zero, and a weight above 0 on (T_c − line). The weight test here is a test of k.
+
+Run: `python research/totals_team_residual.py` → `research/totals_pace_results/TEAM_RESIDUAL.txt`.
