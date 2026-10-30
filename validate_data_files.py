@@ -143,7 +143,7 @@ def validate_h4(path):
 
 def validate_h5(path):
     """Every line is JSON; one record per game; recorded before kickoff; finite total;
-    moneylines missing or American odds (|ML| >= 100)."""
+    moneylines missing or American odds (|ML| >= 100); optional over/under prices the same."""
     path = Path(path)
     seen = set()
     for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), start=1):
@@ -166,8 +166,8 @@ def validate_h5(path):
         t = r["total_line"]
         if not isinstance(t, (int, float)) or t != t or t <= 0:
             raise ValueError(f"{path}:{line_number}: total_line must be a positive number")
-        for k in ("home_moneyline", "away_moneyline"):
-            v = r[k]
+        for k in ("home_moneyline", "away_moneyline", "over_odds", "under_odds"):
+            v = r.get(k)
             if v is not None and (not isinstance(v, (int, float)) or v != v or abs(v) < 100):
                 raise ValueError(f"{path}:{line_number}: {k} must be null or American odds")
     return len(seen)

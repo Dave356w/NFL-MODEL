@@ -43,7 +43,9 @@ def rec(gid, wp, hm, am, ko="2026-10-11T17:00:00+00:00"):
 
 SCHED = pd.DataFrame({"game_id": ["lo", "hi", "pk", "nt", "old"], "total_line": [40.5, 47.5, 38., np.nan, 39.],
                       "home_moneyline": [-200., -150., -110., -150., -150.],
-                      "away_moneyline": [170., 130., -110., 130., 130.]})
+                      "away_moneyline": [170., 130., -110., 130., 130.],
+                      "over_odds": [-110., -105., np.nan, -110., -110.],
+                      "under_odds": [-110., -115., np.nan, -110., -110.]})
 
 
 def ledger(tmp_path):
@@ -61,10 +63,16 @@ def test_totals_record_once_per_locked_future_game(tmp_path):
     assert v.validate_h5(path) == 3
     got = {r["game_id"]: r for r in totals.load(path)}
     assert got["lo"]["total_line"] == 40.5 and got["lo"]["away_moneyline"] == 170.
+    assert got["hi"]["over_odds"] == -105. and got["hi"]["under_odds"] == -115.
+    assert got["pk"]["over_odds"] is None and got["pk"]["under_odds"] is None
+    old = SCHED.drop(columns=["over_odds", "under_odds"])     # a feed without the prices still records
+    (tmp_path / "h5_totals.jsonl").unlink()
+    assert totals.record(tmp_path, NOW, lambda: old) == 3
+    assert totals.load(path)[0]["over_odds"] is None
     assert totals.safe_record(tmp_path, NOW, lambda: 1 / 0) == 0  # a failure never raises
 
 
-@pytest.mark.parametrize("bad", ["dup", "late", "total", "ml"])
+@pytest.mark.parametrize("bad", ["dup", "late", "total", "ml", "ou"])
 def test_validate_h5_rejects_bad_rows(tmp_path, bad):
     ledger(tmp_path)
     totals.record(tmp_path, NOW, lambda: SCHED)
@@ -76,6 +84,8 @@ def test_validate_h5_rejects_bad_rows(tmp_path, bad):
         rows[0]["captured_utc"] = "2026-10-12T00:00:00+00:00"
     elif bad == "total":
         rows[0]["total_line"] = None
+    elif bad == "ou":
+        rows[0]["over_odds"] = -50
     else:
         rows[0]["home_moneyline"] = -50
     path.write_text("".join(json.dumps(r) + "\n" for r in rows))
