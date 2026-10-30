@@ -9,9 +9,12 @@ product and decides which experiments to run.
 Picks, Results and Performance remain ATS-only: picks, frozen handicaps,
 results, cover rates, units and ROI (owner decision 2026-10-19 UTC).
 The owner added a public historical Calibration tab on 2026-10-30: aggregate
-market/model WP and projected-spread calibration by band, with signed median MOV,
+market/model WP calibration with signed median MOV and ATS pick ROI by spread band,
 from 2023 through the current season, updated after complete weeks only.
 Historical WP aggregates are authorized on that page and its aggregate CSV.
+The owner requested ROI-only spread tables: market favorites grouped by market
+spread magnitude and model ATS picks grouped by mapped model spread magnitude,
+both graded against market handicaps at flat 1u and −110, with sample sizes and ROI SE.
 Do not publish live moneyline picks, per-game probabilities or moneyline CSV columns.
 This presentation change does not change v1.18, the median map or lock timing.
 The public 2026 headline, weekly/game results, running units, same-game controls

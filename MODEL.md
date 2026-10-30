@@ -41,16 +41,16 @@ away and both-side observations. Market bands also show approximate fair America
 odds equivalents; rounded price labels do not change probability-band membership.
 Actual and mean implied WP exclude tied finals;
 signed median MOV includes them and includes losses. Standard errors cluster
-paired observations by game. Market/model spread tables use identical eligible
-games, each forecast's own favorite and its own projected-margin bands (`<3`,
-`3–<7`, `7–<10`, `10+`). The model forecast is the prior-season mapped spread.
-Either forecast being pick'em or unavailable excludes the game from both tables.
-Projected MOV is positive toward that forecast's favorite; actual MOV is signed
-toward the same favorite, including losses and tied finals. Each band shows the
-mean projected MOV, median actual MOV, median game-by-game error (actual minus
-projected) and counts above, at or below that forecast. These are spread
-calibration, with ATS picks and returns on Performance. Public downloads contain
-aggregates, not per-game WP.
+paired observations by game. The two spread tables display ATS ROI only, with
+bet counts and one standard error. The market table backs market favorites and
+groups by market spread magnitude; the model table uses production ATS selections
+and groups by mapped model spread magnitude (`<3`, `3–<7`, `7–<10`, `10+`). Both
+grade against market handicaps at flat 1u and assumed −110. Wins return +1/1.1u,
+losses −1u, pushes 0u; ROI divides net units by all bets including pushes. The
+tables use identical eligible games, excluding market pick'ems and missing model
+spreads. A zero model spread remains eligible against a nonzero market line;
+zero edge follows the production favorite rule. The CSV includes aggregate
+W-L-P and units supporting ROI, not per-game WP.
 
 Evidence for the penalty (log-loss gain vs v1.16; picks identical): +0.0040 ± 0.0027 on 2017–20 out
 of sample and +0.0023 ± 0.0017 on 2021–25 (both exposed; λ chosen on 2021–25), +0.026 ± 0.025 on
