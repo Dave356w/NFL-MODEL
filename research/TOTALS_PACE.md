@@ -142,3 +142,28 @@ They allow a later check at that timing if the owner wants one. Re-run this scri
 point, with the predictions joined to the captured prices. A market-anchored residual model
 (line + small corrections such as dome or wind forecast) is the remaining candidate. It
 would be falsified by w ≤ 0 or an LL gain interval at or below zero, as here.
+
+## Addendum A: shrinkage toward the market-context median (protocol committed 2026-10-30, before its run)
+
+This is the owner's follow-up question: can the model work if its total is shrunk toward the
+historical median final total for its posted O/U? The 2017–2025 verdict above stands
+whatever this addendum finds.
+
+- **Median by line band, m(line).** Posted totals are put in 2-point bands: < 36, [36, 38),
+  [38, 40), … [52, 54), ≥ 54. For evaluation season Y, m(line) = line + the median of
+  (final − line) in that band over all priced games from 2006 to Y − 1. Only earlier seasons
+  are used.
+- **S1, shrunk total.** T_s = m + w·(T − m). T is the walk-forward T1 (secondary: T0), with
+  the same fits as above. w is the no-intercept least-squares slope of (final − m) on
+  (T − m) over the out-of-sample predictions from 2009 to Y − 1, clipped to [0, 1].
+  σ_s is the residual sd of (final − T_s) on those same seasons, computed separately for
+  stage E and stage M. P(over) = 1 − Φ((line − T_s)/σ_s).
+- **M1, median alone.** Bet the sign of (m − line) and skip games where it is zero. This
+  rule has no probability, so it gets an ROI only.
+- **Evaluation.** The same criteria and output as the main protocol, for stage M and stage
+  E, 2017–2025. The 2026 season to date is shown separately as a current-season diagnostic
+  that cannot count toward a verdict. The pass criteria are unchanged: RMSE no worse than
+  the line, an LL gain whose 95% interval excludes zero, and a weight on (T_s − line)
+  above 0.
+
+Run: `python research/totals_median.py` → `research/totals_pace_results/MEDIAN_SHRINK.txt`.
