@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 
 import fixed_bands
-import nfl_model as m
 
 FIRST_SEASON = 2023
 PROB_CUTS = [.2, .3, .4, .5, .6, .7, .8]
@@ -18,9 +17,9 @@ PROB_LABELS = ['0–<20%', '20–<30%', '30–<40%', '40–<50%',
 SPREAD_CUTS = [3., 7., 10.]
 SPREAD_LABELS = ['<3 points', '3–<7 points', '7–<10 points', '10+ points']
 EXPORT_COLUMNS = ['season', 'view', 'band', 'side', 'observations', 'decided',
-                  'wins', 'losses', 'pushes', 'ties', 'implied_wp', 'actual_wp',
-                  'gap_pp', 'se_pp', 'implied_mov', 'median_mov', 'cover_rate',
-                  'units', 'roi']
+                  'wins', 'losses', 'ties', 'implied_wp', 'actual_wp',
+                  'gap_pp', 'se_pp', 'implied_mov', 'median_mov', 'median_error',
+                  'above_forecast', 'at_forecast', 'below_forecast']
 
 
 def history(latest):
@@ -100,44 +99,44 @@ def wp_rows(frame, column, view):
             residual = decided.mov.gt(0).astype(float) - decided.probability
             se = standard_error(residual, decided.game_id)
             rows.append(dict(view=view, band=band, side=side, observations=len(group),
-                decided=n, wins=wins, losses=n-wins, pushes=0,
+                decided=n, wins=wins, losses=n-wins,
                 ties=int(group.mov.eq(0).sum()), implied_wp=implied, actual_wp=actual,
                 gap_pp=100 * (actual-implied) if n else None,
                 se_pp=100 * se if se is not None else None,
                 implied_mov=None, median_mov=float(group.mov.median()) if len(group) else None,
-                cover_rate=None, units=None, roi=None))
+                median_error=None, above_forecast=None, at_forecast=None, below_forecast=None))
     return rows
 
 
-def ats_rows(frame, model, view):
-    # Identical eligible games and market-spread bands in both ATS views.
+def margin_rows(frame, column, view):
+    """Evaluate each forecast's own favorite in its own projected-margin band.
+
+    Use the same nonzero, finite market/model-spread cohort, but allow the
+    forecasts to choose different favorites and bands. This is calibration of
+    projected margins, not grading model selections against a market handicap.
+    """
     valid = (np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
-             & np.isfinite(frame.fixed_band_spread))
+             & np.isfinite(frame.fixed_band_spread) & frame.fixed_band_spread.ne(0))
     data = frame.loc[valid].copy()
-    side = (fixed_bands.pick(data.fixed_band_spread, data.spread_line) if model
-            else np.sign(data.spread_line.to_numpy()))
+    side = np.sign(data[column])
     data['mov'] = side * data.result
-    data['implied_mov'] = side * (data.fixed_band_spread if model else data.spread_line)
-    data['cover_margin'] = side * (data.result - data.spread_line)
-    data['band_number'] = np.digitize(data.spread_line.abs(), SPREAD_CUTS)
+    data['implied_mov'] = data[column].abs()
+    data['error'] = data.mov - data.implied_mov
+    data['band_number'] = np.digitize(data.implied_mov, SPREAD_CUTS)
     rows = []
     for k, band in enumerate(SPREAD_LABELS):
         group = data.loc[data.band_number.eq(k)]
         n = len(group)
-        won = group.cover_margin.gt(fixed_bands.EPS)
-        lost = group.cover_margin.lt(-fixed_bands.EPS)
-        w, losses = int(won.sum()), int(lost.sum())
-        decided = group.loc[won | lost]
-        se = standard_error(decided.cover_margin.gt(0).astype(float), decided.game_id)
-        units = w / 1.1 - losses
-        rows.append(dict(view=view, band=band, side='selected', observations=n,
-            decided=w+losses, wins=w, losses=losses, pushes=n-w-losses,
+        above = int(group.error.gt(fixed_bands.EPS).sum())
+        below = int(group.error.lt(-fixed_bands.EPS).sum())
+        rows.append(dict(view=view, band=band, side='forecast_favorite', observations=n,
+            decided=None, wins=None, losses=None,
             ties=int(group.result.eq(0).sum()), implied_wp=None, actual_wp=None,
-            gap_pp=None, se_pp=100 * se if se is not None else None,
+            gap_pp=None, se_pp=None,
             implied_mov=float(group.implied_mov.mean()) if n else None,
             median_mov=float(group.mov.median()) if n else None,
-            cover_rate=w/(w+losses) if w+losses else None,
-            units=units if n else None, roi=units/n if n else None))
+            median_error=float(group.error.median()) if n else None,
+            above_forecast=above, at_forecast=n-above-below, below_forecast=below))
     return rows
 
 
@@ -149,8 +148,8 @@ def panel(frame, season):
         return float(-(y*np.log(p)+(1-y)*np.log1p(-p)).mean()) if len(y) else None
     rows = (wp_rows(frame, 'market_wp', 'market_wp')
             + wp_rows(frame, 'model_wp', 'model_wp')
-            + ats_rows(frame, False, 'market_ats')
-            + ats_rows(frame, True, 'model_ats'))
+            + margin_rows(frame, 'spread_line', 'market_spread')
+            + margin_rows(frame, 'fixed_band_spread', 'model_spread'))
     return dict(season=season, games=len(frame), binary_games=len(binary),
         ties=int(frame.result.eq(0).sum()), market_log_loss=log_loss('market_wp'),
         model_log_loss=log_loss('model_wp'), rows=rows)
@@ -208,26 +207,22 @@ def wp_table(rows, view):
             "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
 
 
-def ats_table(rows, view):
+def margin_table(rows, view):
     body = []
     for r in rows:
         if r['view'] != view:
             continue
-        record = f"{r['wins']}–{r['losses']}–{r['pushes']}"
+        record = f"{r['above_forecast']} / {r['at_forecast']} / {r['below_forecast']}"
         body.append("<tr><th scope='row'>" + r['band'] + '</th>'
             + f"<td class='n'>{r['observations']}</td>"
             + "<td class='n'>" + number(r['implied_mov'], signed=True) + '</td>'
             + "<td class='n cal-median'>" + number(r['median_mov'], signed=True) + '</td>'
-            + "<td class='n'>" + record + '</td>'
-            + "<td class='n'>" + percentage(r['cover_rate'])
-            + "<small class='cal-se'>± " + number(r['se_pp']) + ' pp</small></td>'
-            + "<td class='n'>" + number(r['units'], digits=2, signed=True, suffix='u') + '</td>'
-            + "<td class='n'>" + percentage(r['roi']) + '</td></tr>')
-    return ("<div class='gr-tablewrap'><table class='gr cal-ats'><thead><tr>"
-            "<th scope='col'>Market spread band</th><th scope='col'>Bets</th>"
-            "<th scope='col'>Avg implied MOV</th><th scope='col'>Median actual MOV</th>"
-            "<th scope='col'>W–L–P</th><th scope='col'>Cover rate</th>"
-            "<th scope='col'>Units</th><th scope='col'>ROI</th>"
+            + "<td class='n'>" + number(r['median_error'], signed=True) + '</td>'
+            + "<td class='n'>" + record + '</td></tr>')
+    return ("<div class='gr-tablewrap'><table class='gr cal-margin'><thead><tr>"
+            "<th scope='col'>Projected MOV band</th><th scope='col'>Games</th>"
+            "<th scope='col'>Avg projected MOV</th><th scope='col'>Median actual MOV</th>"
+            "<th scope='col'>Median forecast error</th><th scope='col'>Above / at / below forecast</th>"
             "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
 
 
@@ -262,20 +257,22 @@ def render_body(pack):
         for view, title, lead in [
             ('market_wp', 'Market implied vs actual WP', 'Paired market moneylines with the book’s margin removed.'),
             ('model_wp', 'Model implied vs actual WP', 'The production model’s win probabilities, including its confidence adjustment.'),
-            ('market_ats', 'Market ATS vs actual', 'The market favorite against its market handicap, grouped by market spread magnitude.'),
-            ('model_ats', 'Model ATS vs actual', 'The model’s ATS selection against the same market handicap, in the same market-spread groups.')]:
+            ('market_spread', 'Market spread vs actual MOV', 'Market forecasts beside actual results, from the market favorite’s perspective. Grouped by the market’s projected winning margin.'),
+            ('model_spread', 'Model spread vs actual MOV', 'Model forecasts beside actual results, from the model favorite’s perspective. Grouped by the model’s own mapped spread; its favorite and band can differ from the market’s.')]:
             out.append("<h2 class='sec'>" + title + "</h2><p class='sec-lead'>" + lead + '</p>')
-            out.append(wp_table(p['rows'], view) if view.endswith('_wp') else ats_table(p['rows'], view))
+            out.append(wp_table(p['rows'], view) if view.endswith('_wp') else margin_table(p['rows'], view))
             if view == 'model_wp':
                 out.append("<p class='mut small'>WP = win probability. Actual WP and implied WP use decided games only; "
                     "n excludes tied finals. Both sides contains one observation per team. A game can appear in two "
                     "different bands; paired sides stay together when computing the ±1 standard error. "
                     "Median MOV includes losses and tied finals, signed toward the home or away side in each cell.</p>")
-        out.append("<p class='mut small'>ATS = against the spread. Both ATS views use the same eligible games; pick’em "
-            "lines and games without a model spread are excluded. Avg implied MOV and median actual MOV are signed "
-            "toward the selected team, so an underdog can have a negative MOV and still cover. The model supplies a "
-            "spread, not an implied cover probability. Cover rates exclude pushes; flat 1u returns assume −110 and "
-            "include pushed stakes. Break-even cover rate: 52.4%. ± is one standard error.</p></section>")
+        out.append("<p class='mut small cal-margin-note'>All margins are in points, from each forecast’s favorite’s "
+            "perspective. Negative actual MOV means that favorite lost. Median forecast error is the median of "
+            "each game’s actual MOV minus projected MOV: + means the favorite did better than projected; − means "
+            "worse. The last column counts games above, exactly at and below that same projection.</p>"
+            "<p class='mut small'>The two spread tables use the same eligible games, with each game counted "
+            "once per table. Pick’em forecasts and unavailable spreads are excluded from both. "
+            "See <a href='market-calibration.html'>Performance</a> for model ATS picks, cover rates and betting returns.</p></section>")
     out.append("<div class='downloads'><a href='historical_calibration.csv'>Download all calibration bands</a></div>"
                "<noscript><style>[data-cal-season][hidden]{display:block!important} .cal-season-control{display:none}</style>"
                "<p class='mut small'>All season tables are shown below when JavaScript is disabled.</p></noscript>")
@@ -289,14 +286,14 @@ CSS = """
  border-radius:9px;background:var(--surface);color:var(--ink);max-width:100%}
 .cal-summary{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:22px}
 .cal-wp{min-width:650px;table-layout:fixed}.cal-wp th:first-child{width:19%}
-.cal-wp tbody th,.cal-ats tbody th{font:650 12px var(--mono);letter-spacing:0;text-transform:none;color:var(--ink);
+.cal-wp tbody th,.cal-margin tbody th{font:650 12px var(--mono);letter-spacing:0;text-transform:none;color:var(--ink);
  background:transparent;white-space:nowrap;border-bottom:1px solid var(--line-2)}
 .cal-wp td{vertical-align:top!important}.cal-rate{font:800 23px/1.3 var(--mono);letter-spacing:-.04em}
 .cal-detail{font-size:12px;line-height:1.6;color:var(--muted);margin:5px 0}.cal-gap{display:block}
 .cal-meta{font:500 11px/1.5 var(--mono);color:var(--faint)}
 .cal-mov{font-size:12px;margin-top:7px;color:var(--muted)}.cal-mov b{font:650 12px var(--mono);color:var(--ink)}
-.cal-ats{min-width:900px}.cal-median{font-weight:750;color:rgb(var(--accent-tx))}
-.cal-se{display:block;font:500 10px/1.6 var(--mono);color:var(--faint);margin-top:3px}
+.cal-margin{min-width:800px}.cal-median{font-weight:750;color:rgb(var(--accent-tx))}
+.cal-margin-note{max-width:100ch;line-height:1.7}
 [data-cal-season][hidden]{display:none!important}
 @media(max-width:720px){.cal-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.cal-summary .v{font-size:20px}
  .cal-summary .gr-stat{padding:12px 9px}.cal-summary .l{font-size:10px}.cal-summary .s{font-size:11px}
