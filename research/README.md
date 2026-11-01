@@ -4,6 +4,16 @@ Research-only scripts and experiment records. Some import `nfl_model.py` and
 change settings inside their own process; the joint-score track below is
 standalone. They never write `data/`, the frozen recipe or the forward ledger.
 
+[Joint interaction-penalty test](interaction_penalty_results/REPORT.md)
+compares production v1.18 with penalties 0.3, 1 and 3 and a jointly refitted
+no-interaction control. Annual selection uses earlier seasons' log loss only.
+The selected stronger penalty and the no-interaction control both had worse
+log-loss and Brier point estimates in each of 2023-2025; paired intervals
+remain unresolved. The registered advancement gate failed. Production stays
+unchanged and no native challenger capture was launched.
+See the [registered protocol](INTERACTION_PENALTY_TEST.md).
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python research/interaction_penalty_test.py`.
+
 [Soft neighboring-band empirical distributions](soft_band_distribution_results/REPORT.md)
 tests one fixed interpolation of the production bands' complete prior-season
 margin distributions. It preserves observed margin atoms and derives line-specific

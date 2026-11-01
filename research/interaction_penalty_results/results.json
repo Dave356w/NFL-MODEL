@@ -1,0 +1,832 @@
+{
+  "protocol_commit": "3b1d797685e11bb2fb898801cf00b9876a989bd6",
+  "seed": 20261031,
+  "bootstrap_draws": 10000,
+  "basis": "Exposed historical development, 2023-2025; no native challenger evidence",
+  "selections": [
+    {
+      "evaluation_season": 2023,
+      "selection_max_season": 2022,
+      "prior_binary_games": 540,
+      "chosen": "ridge_3",
+      "selected_penalty": 3.0,
+      "prior_log_losses": {
+        "ridge_0.3": 0.6197027372747658,
+        "ridge_1": 0.6192787420021314,
+        "ridge_3": 0.6191422317913556
+      }
+    },
+    {
+      "evaluation_season": 2024,
+      "selection_max_season": 2023,
+      "prior_binary_games": 812,
+      "chosen": "ridge_0.3",
+      "selected_penalty": 0.3,
+      "prior_log_losses": {
+        "ridge_0.3": 0.6231538989774204,
+        "ridge_1": 0.6232103285934424,
+        "ridge_3": 0.623440837239567
+      }
+    },
+    {
+      "evaluation_season": 2025,
+      "selection_max_season": 2024,
+      "prior_binary_games": 1084,
+      "chosen": "ridge_0.3",
+      "selected_penalty": 0.3,
+      "prior_log_losses": {
+        "ridge_0.3": 0.6137349222282962,
+        "ridge_1": 0.6139481076656302,
+        "ridge_3": 0.6141564023614979
+      }
+    },
+    {
+      "evaluation_season": 2026,
+      "selection_max_season": 2025,
+      "prior_binary_games": 1355,
+      "chosen": "ridge_0.3",
+      "selected_penalty": 0.3,
+      "prior_log_losses": {
+        "ridge_0.3": 0.6119657863472859,
+        "ridge_1": 0.6123922273825476,
+        "ridge_3": 0.6126669934741573
+      }
+    }
+  ],
+  "scores": [
+    {
+      "season": 2023,
+      "arm": "production",
+      "n": 272,
+      "log_loss": 0.630621593666589,
+      "brier": 0.22016712877036765,
+      "ll_delta": 0.0,
+      "brier_delta": 0.0,
+      "ll_delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "brier_delta_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_0.3",
+      "n": 272,
+      "log_loss": 0.6300054700047494,
+      "brier": 0.2197544688448726,
+      "ll_delta": -0.0006161236618397622,
+      "brier_delta": -0.0004126599254950694,
+      "ll_delta_ci95": [
+        -0.004598428260262797,
+        0.0028453510454132715
+      ],
+      "brier_delta_ci95": [
+        -0.002272768326755978,
+        0.0010617594812247994
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_1",
+      "n": 272,
+      "log_loss": 0.6310156843261924,
+      "brier": 0.2202649025419714,
+      "ll_delta": 0.0003940906596032249,
+      "brier_delta": 9.777377160370912e-05,
+      "ll_delta_ci95": [
+        -0.0064201246035681244,
+        0.007902085353050616
+      ],
+      "brier_delta_ci95": [
+        -0.003127011250283569,
+        0.0034877873461926774
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_3",
+      "n": 272,
+      "log_loss": 0.6319748333499869,
+      "brier": 0.2206914890627244,
+      "ll_delta": 0.0013532396833978526,
+      "brier_delta": 0.0005243602923567424,
+      "ll_delta_ci95": [
+        -0.006860852640365881,
+        0.011150908079220494
+      ],
+      "brier_delta_ci95": [
+        -0.0033027799431050993,
+        0.004896102835355673
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "no_interactions",
+      "n": 272,
+      "log_loss": 0.6325787511697247,
+      "brier": 0.2209536408857985,
+      "ll_delta": 0.001957157503135576,
+      "brier_delta": 0.0007865121154308332,
+      "ll_delta_ci95": [
+        -0.006834446866808833,
+        0.01250723449664077
+      ],
+      "brier_delta_ci95": [
+        -0.003249250690941936,
+        0.005437223363072412
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "selected_stronger",
+      "n": 272,
+      "log_loss": 0.6319748333499869,
+      "brier": 0.2206914890627244,
+      "ll_delta": 0.0013532396833978526,
+      "brier_delta": 0.0005243602923567424,
+      "ll_delta_ci95": [
+        -0.006860852640365881,
+        0.011150908079220494
+      ],
+      "brier_delta_ci95": [
+        -0.0033027799431050993,
+        0.004896102835355673
+      ]
+    },
+    {
+      "season": 2023,
+      "arm": "market",
+      "n": 272,
+      "log_loss": 0.627348797217123,
+      "brier": 0.21870951462559265,
+      "ll_delta": -0.0032727964494660188,
+      "brier_delta": -0.0014576141447750037,
+      "ll_delta_ci95": [
+        -0.015553869419340999,
+        0.008177863162744341
+      ],
+      "brier_delta_ci95": [
+        -0.007067767157727134,
+        0.003694714709986282
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "production",
+      "n": 272,
+      "log_loss": 0.5851693980452396,
+      "brier": 0.19912303927648975,
+      "ll_delta": 0.0,
+      "brier_delta": 0.0,
+      "ll_delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "brier_delta_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_0.3",
+      "n": 272,
+      "log_loss": 0.5856165063448815,
+      "brier": 0.19932880424901697,
+      "ll_delta": 0.0004471082996417822,
+      "brier_delta": 0.00020576497252722882,
+      "ll_delta_ci95": [
+        -0.0019724984103670893,
+        0.002553261570637361
+      ],
+      "brier_delta_ci95": [
+        -0.0009113965098850367,
+        0.0011636743260081941
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_1",
+      "n": 272,
+      "log_loss": 0.5862976540134852,
+      "brier": 0.1996241679198297,
+      "ll_delta": 0.0011282559682455706,
+      "brier_delta": 0.000501128643339939,
+      "ll_delta_ci95": [
+        -0.003220657416367243,
+        0.00497778343001385
+      ],
+      "brier_delta_ci95": [
+        -0.0015625104151324128,
+        0.002321341365909859
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_3",
+      "n": 272,
+      "log_loss": 0.5864396335343204,
+      "brier": 0.1996768702023217,
+      "ll_delta": 0.0012702354890808325,
+      "brier_delta": 0.0005538309258319167,
+      "ll_delta_ci95": [
+        -0.003828193704054446,
+        0.005648688344068126
+      ],
+      "brier_delta_ci95": [
+        -0.0018876299240410406,
+        0.0026238163966633603
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "no_interactions",
+      "n": 272,
+      "log_loss": 0.586366236509107,
+      "brier": 0.19964818264330564,
+      "ll_delta": 0.0011968384638674414,
+      "brier_delta": 0.0005251433668159058,
+      "ll_delta_ci95": [
+        -0.004443606671030435,
+        0.006004936468436514
+      ],
+      "brier_delta_ci95": [
+        -0.0021594561870877426,
+        0.0027911932302987206
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "selected_stronger",
+      "n": 272,
+      "log_loss": 0.5856165063448815,
+      "brier": 0.19932880424901697,
+      "ll_delta": 0.0004471082996417822,
+      "brier_delta": 0.00020576497252722882,
+      "ll_delta_ci95": [
+        -0.0019724984103670893,
+        0.002553261570637361
+      ],
+      "brier_delta_ci95": [
+        -0.0009113965098850367,
+        0.0011636743260081941
+      ]
+    },
+    {
+      "season": 2024,
+      "arm": "market",
+      "n": 272,
+      "log_loss": 0.5874888995056521,
+      "brier": 0.2001616187888562,
+      "ll_delta": 0.0023195014604125057,
+      "brier_delta": 0.0010385795123664166,
+      "ll_delta_ci95": [
+        -0.007733972961904207,
+        0.011975995301261231
+      ],
+      "brier_delta_ci95": [
+        -0.0038257625837339313,
+        0.005635200348414186
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "production",
+      "n": 271,
+      "log_loss": 0.6034408744375189,
+      "brier": 0.209127522738952,
+      "ll_delta": 0.0,
+      "brier_delta": 0.0,
+      "ll_delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "brier_delta_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_0.3",
+      "n": 271,
+      "log_loss": 0.6048892428232449,
+      "brier": 0.20984098144691352,
+      "ll_delta": 0.001448368385725872,
+      "brier_delta": 0.0007134587079614562,
+      "ll_delta_ci95": [
+        -0.0003716158171752414,
+        0.0033162557044730595
+      ],
+      "brier_delta_ci95": [
+        -0.00012785493959719166,
+        0.0015735065833281652
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_1",
+      "n": 271,
+      "log_loss": 0.6061687062502172,
+      "brier": 0.2104975782191769,
+      "ll_delta": 0.0027278318126983357,
+      "brier_delta": 0.0013700554802248447,
+      "ll_delta_ci95": [
+        -0.00039238134357800244,
+        0.005967859319692296
+      ],
+      "brier_delta_ci95": [
+        -6.819286036781428e-05,
+        0.0028804167506252254
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_3",
+      "n": 271,
+      "log_loss": 0.6067093579247955,
+      "brier": 0.21078280782201594,
+      "ll_delta": 0.0032684834872766595,
+      "brier_delta": 0.0016552850830639499,
+      "ll_delta_ci95": [
+        -0.0003629288727850873,
+        0.007091726159806153
+      ],
+      "brier_delta_ci95": [
+        -2.297560215081878e-05,
+        0.003468208596072113
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "no_interactions",
+      "n": 271,
+      "log_loss": 0.6070131248779838,
+      "brier": 0.2109427359729934,
+      "ll_delta": 0.003572250440464744,
+      "brier_delta": 0.0018152132340413655,
+      "ll_delta_ci95": [
+        -0.00028040169080114724,
+        0.0076046177931104785
+      ],
+      "brier_delta_ci95": [
+        4.398538253869364e-05,
+        0.0037191390489723394
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "selected_stronger",
+      "n": 271,
+      "log_loss": 0.6048892428232449,
+      "brier": 0.20984098144691352,
+      "ll_delta": 0.001448368385725872,
+      "brier_delta": 0.0007134587079614562,
+      "ll_delta_ci95": [
+        -0.0003716158171752414,
+        0.0033162557044730595
+      ],
+      "brier_delta_ci95": [
+        -0.00012785493959719166,
+        0.0015735065833281652
+      ]
+    },
+    {
+      "season": 2025,
+      "arm": "market",
+      "n": 271,
+      "log_loss": 0.6093832198972614,
+      "brier": 0.21213896835079202,
+      "ll_delta": 0.00594234545974256,
+      "brier_delta": 0.0030114456118399786,
+      "ll_delta_ci95": [
+        -0.002846741434654361,
+        0.013672892722742306
+      ],
+      "brier_delta_ci95": [
+        -0.0010603947556316598,
+        0.006637785364475226
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "production",
+      "n": 815,
+      "log_loss": 0.6064142659118834,
+      "brier": 0.2094729869582837,
+      "ll_delta": 0.0,
+      "brier_delta": 0.0,
+      "ll_delta_ci95": [
+        0.0,
+        0.0
+      ],
+      "brier_delta_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "ridge_0.3",
+      "n": 815,
+      "log_loss": 0.6068394630333729,
+      "brier": 0.20964117331736384,
+      "ll_delta": 0.0004251971214893998,
+      "brier_delta": 0.0001681863590801251,
+      "ll_delta_ci95": [
+        -0.0012144077133205435,
+        0.0019120483147534232
+      ],
+      "brier_delta_ci95": [
+        -0.0005908100763860233,
+        0.0008280238815781545
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "ridge_1",
+      "n": 815,
+      "log_loss": 0.607829383340124,
+      "brier": 0.21012843050675684,
+      "ll_delta": 0.0014151174282406398,
+      "brier_delta": 0.0006554435484731352,
+      "ll_delta_ci95": [
+        -0.0014288094052248206,
+        0.004376229368741416
+      ],
+      "brier_delta_ci95": [
+        -0.0006942532388814174,
+        0.0020057076399432995
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "ridge_3",
+      "n": 815,
+      "log_loss": 0.6083766515216579,
+      "brier": 0.21038323268694337,
+      "ll_delta": 0.0019623856097744506,
+      "brier_delta": 0.0009102457286596877,
+      "ll_delta_ci95": [
+        -0.001451313765864255,
+        0.005706100479188701
+      ],
+      "brier_delta_ci95": [
+        -0.0006932872404149268,
+        0.002600911106775662
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "no_interactions",
+      "n": 815,
+      "log_loss": 0.6086547159393568,
+      "brier": 0.2105143281577884,
+      "ll_delta": 0.0022404500274733332,
+      "brier_delta": 0.001041341199504691,
+      "ll_delta_ci95": [
+        -0.0014597951587925534,
+        0.006301519783523348
+      ],
+      "brier_delta_ci95": [
+        -0.000671114725475024,
+        0.0028660170259102026
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "selected_stronger",
+      "n": 815,
+      "log_loss": 0.6074967229473663,
+      "brier": 0.20995389662933397,
+      "ll_delta": 0.0010824570354828122,
+      "brier_delta": 0.0004809096710503004,
+      "ll_delta_ci95": [
+        -0.0018054581422543771,
+        0.004457872922758997
+      ],
+      "brier_delta_ci95": [
+        -0.0008558496011080018,
+        0.001995402123954014
+      ]
+    },
+    {
+      "season": "all",
+      "arm": "market",
+      "n": 815,
+      "log_loss": 0.6080720320254634,
+      "brier": 0.21033448921692602,
+      "ll_delta": 0.0016577661135799729,
+      "brier_delta": 0.0008615022586423289,
+      "ll_delta_ci95": [
+        -0.004138025214705451,
+        0.00750769996551922
+      ],
+      "brier_delta_ci95": [
+        -0.001852746955623645,
+        0.0035464727682697583
+      ]
+    }
+  ],
+  "gate": {
+    "passed": false,
+    "criteria": {
+      "every_season_both_better": false,
+      "both_paired_intervals_below_zero": false,
+      "not_worse_than_market": true
+    },
+    "production_adoption": false,
+    "next_step": "Historical gate failed. Keep production unchanged; no native launch from this test."
+  },
+  "ats": [
+    {
+      "season": 2023,
+      "arm": "production",
+      "n": 272,
+      "wins": 136,
+      "losses": 122,
+      "pushes": 14,
+      "skips": 0,
+      "units": 1.6363636363636367,
+      "roi": 0.006016042780748665,
+      "cover_rate": 0.5271317829457365,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_0.3",
+      "n": 272,
+      "wins": 134,
+      "losses": 124,
+      "pushes": 14,
+      "skips": 0,
+      "units": -2.18181818181818,
+      "roi": -0.008021390374331543,
+      "cover_rate": 0.5193798449612403,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_1",
+      "n": 272,
+      "wins": 132,
+      "losses": 126,
+      "pushes": 14,
+      "skips": 0,
+      "units": -6.0,
+      "roi": -0.022058823529411766,
+      "cover_rate": 0.5116279069767442,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "ridge_3",
+      "n": 272,
+      "wins": 132,
+      "losses": 126,
+      "pushes": 14,
+      "skips": 0,
+      "units": -6.0,
+      "roi": -0.022058823529411766,
+      "cover_rate": 0.5116279069767442,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "no_interactions",
+      "n": 272,
+      "wins": 131,
+      "losses": 127,
+      "pushes": 14,
+      "skips": 0,
+      "units": -7.909090909090909,
+      "roi": -0.029077540106951873,
+      "cover_rate": 0.5077519379844961,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "selected_stronger",
+      "n": 272,
+      "wins": 132,
+      "losses": 126,
+      "pushes": 14,
+      "skips": 0,
+      "units": -6.0,
+      "roi": -0.022058823529411766,
+      "cover_rate": 0.5116279069767442,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2023,
+      "arm": "market",
+      "n": 272,
+      "wins": 135,
+      "losses": 123,
+      "pushes": 14,
+      "skips": 0,
+      "units": -0.2727272727272734,
+      "roi": -0.0010026737967914461,
+      "cover_rate": 0.5232558139534884,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "production",
+      "n": 272,
+      "wins": 142,
+      "losses": 126,
+      "pushes": 4,
+      "skips": 0,
+      "units": 3.0909090909090917,
+      "roi": 0.011363636363636367,
+      "cover_rate": 0.5298507462686567,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_0.3",
+      "n": 272,
+      "wins": 141,
+      "losses": 127,
+      "pushes": 4,
+      "skips": 0,
+      "units": 1.1818181818181817,
+      "roi": 0.004344919786096256,
+      "cover_rate": 0.5261194029850746,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_1",
+      "n": 272,
+      "wins": 141,
+      "losses": 127,
+      "pushes": 4,
+      "skips": 0,
+      "units": 1.1818181818181817,
+      "roi": 0.004344919786096256,
+      "cover_rate": 0.5261194029850746,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "ridge_3",
+      "n": 272,
+      "wins": 141,
+      "losses": 127,
+      "pushes": 4,
+      "skips": 0,
+      "units": 1.1818181818181799,
+      "roi": 0.00434491978609625,
+      "cover_rate": 0.5261194029850746,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "no_interactions",
+      "n": 272,
+      "wins": 141,
+      "losses": 127,
+      "pushes": 4,
+      "skips": 0,
+      "units": 1.1818181818181799,
+      "roi": 0.00434491978609625,
+      "cover_rate": 0.5261194029850746,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "selected_stronger",
+      "n": 272,
+      "wins": 141,
+      "losses": 127,
+      "pushes": 4,
+      "skips": 0,
+      "units": 1.1818181818181817,
+      "roi": 0.004344919786096256,
+      "cover_rate": 0.5261194029850746,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2024,
+      "arm": "market",
+      "n": 272,
+      "wins": 136,
+      "losses": 132,
+      "pushes": 4,
+      "skips": 0,
+      "units": -8.363636363636362,
+      "roi": -0.03074866310160427,
+      "cover_rate": 0.5074626865671642,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "production",
+      "n": 272,
+      "wins": 152,
+      "losses": 119,
+      "pushes": 1,
+      "skips": 0,
+      "units": 19.18181818181818,
+      "roi": 0.07052139037433154,
+      "cover_rate": 0.5608856088560885,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_0.3",
+      "n": 272,
+      "wins": 150,
+      "losses": 121,
+      "pushes": 1,
+      "skips": 0,
+      "units": 15.363636363636363,
+      "roi": 0.056483957219251334,
+      "cover_rate": 0.5535055350553506,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_1",
+      "n": 272,
+      "wins": 151,
+      "losses": 120,
+      "pushes": 1,
+      "skips": 0,
+      "units": 17.272727272727273,
+      "roi": 0.06350267379679145,
+      "cover_rate": 0.5571955719557196,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "ridge_3",
+      "n": 272,
+      "wins": 150,
+      "losses": 121,
+      "pushes": 1,
+      "skips": 0,
+      "units": 15.363636363636363,
+      "roi": 0.056483957219251334,
+      "cover_rate": 0.5535055350553506,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "no_interactions",
+      "n": 272,
+      "wins": 150,
+      "losses": 121,
+      "pushes": 1,
+      "skips": 0,
+      "units": 15.363636363636363,
+      "roi": 0.056483957219251334,
+      "cover_rate": 0.5535055350553506,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "selected_stronger",
+      "n": 272,
+      "wins": 150,
+      "losses": 121,
+      "pushes": 1,
+      "skips": 0,
+      "units": 15.363636363636363,
+      "roi": 0.056483957219251334,
+      "cover_rate": 0.5535055350553506,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    },
+    {
+      "season": 2025,
+      "arm": "market",
+      "n": 272,
+      "wins": 143,
+      "losses": 128,
+      "pushes": 1,
+      "skips": 0,
+      "units": 1.9999999999999991,
+      "roi": 0.007352941176470585,
+      "cover_rate": 0.5276752767527675,
+      "basis": "historical replay; unchanged production median map; assumed -110"
+    }
+  ],
+  "native_audit": {
+    "saved_ats_locks": 16,
+    "pregame_finalized_locks": 15,
+    "recovered_locks": 1,
+    "locks_with_exact_saved_first_snapshot_inputs": 0,
+    "frozen_pack_latest_labeled_season": 2026,
+    "frozen_pack_latest_labeled_week": 5,
+    "native_challenger_predictions": 0,
+    "native_challenger_graded": 0,
+    "note": "Existing locks are production evidence only. No challenger existed at their cutoffs; no backfill or first-snapshot substitution."
+  },
+  "raw_reproduction_max_error": 1.0271150596707912e-10,
+  "protected_sources_unchanged": true
+}
