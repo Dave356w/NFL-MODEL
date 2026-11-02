@@ -13,9 +13,9 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
 | boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
 | boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
-| boxscore-composite-v1.16 | 56 | 34-17-1 | -0.20 | -0.39% ± 10.00 | +3.25 | -4.09% | 0.677507 | 0.627295 |
+| boxscore-composite-v1.16 | 56 | 35-17-1 | +0.20 | +0.37% ± 9.84 | +3.65 | -4.09% | 0.670954 | 0.622674 |
 | boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
-| boxscore-composite-v1.18 | 42 | 25-13-0 | -0.58 | -1.52% ± 11.95 | +2.88 | -4.10% | 0.656048 | 0.645462 |
+| boxscore-composite-v1.18 | 42 | 26-13-0 | -0.18 | -0.46% ± 11.69 | +3.28 | -4.09% | 0.648982 | 0.638933 |
 
 ## Frozen archived-input counterfactuals
 
