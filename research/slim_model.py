@@ -26,6 +26,7 @@ RECIPE = m.LEGACY_PRODUCT_RECIPE
 BASES = fi.BASES
 K = 3
 Z_BAR = float(norm.ppf(1-.05/K/2))  # 2.39
+PROD_MAP_FIRST = 2021  # data/latest/fixed_band_ledger.csv history
 SPREAD_SCALE = 12.37  # production's WP -> model spread (production_sanity.py)
 
 F = 'd__for__rates_core__'; A = 'd__allowed__rates_core__'; V = 'd__avail__'
@@ -74,6 +75,15 @@ def weekly(pack, games):
     return pd.concat(out, ignore_index=True)
 
 
+def prod_window_map(d):
+    """Supplementary (not in the protocol): production's map history starts in 2021."""
+    h = d[d.season >= PROD_MAP_FIRST]; mapped = np.full(len(d), np.nan)
+    for y in sorted(h.season.unique()):
+        rule = fixed_bands.fit(h, int(y)); k = d.season.eq(y).to_numpy()
+        if rule is not None: mapped[k] = fixed_bands.apply(d.loc[k, 'model_spread'], rule)
+    return mapped
+
+
 def forecasts(parts, zero=(), merge_int=False):
     rows = []
     for pack, games in parts:
@@ -87,6 +97,7 @@ def forecasts(parts, zero=(), merge_int=False):
         rule = fixed_bands.fit(d, int(y)); k = d.season.eq(y).to_numpy()
         mapped[k] = fixed_bands.apply(d.loc[k, 'model_spread'], rule)
     d['mapped_spread'] = mapped
+    d['mapped_spread_prod_window'] = prod_window_map(d)
     return d
 
 
@@ -114,29 +125,40 @@ def ats_record(side, margin):
             'cover': w/(w+l) if w+l else np.nan}, ret
 
 
-def ats_rows(frames, b):
+def map_reproduction(prod):
+    f = pd.read_csv(ROOT/'data/latest/fixed_band_ledger.csv')[['game_id', 'fixed_band_spread']]
+    j = prod.merge(f, on='game_id', validate='one_to_one')
+    j = j[j.season.between(2023, 2025)]
+    err = float(np.nanmax(np.abs(j.fixed_band_spread-j.mapped_spread_prod_window)))
+    if err > 1e-9 or j.mapped_spread_prod_window.isna().any():
+        raise ValueError(f'production-window map does not reproduce fixed_band_spread ({err})')
+    return err
+
+
+def ats_rows(frames, b, col='mapped_spread', label='median map'):
     """Same rows for every arm: graded, with a spread and a map for every arm."""
     ok = None
     for d in frames.values():
         k = d.set_index('game_id')
-        g = k.index[np.isfinite(k.spread_line) & np.isfinite(k.result) & np.isfinite(k.mapped_spread)]
+        g = k.index[np.isfinite(k.spread_line) & np.isfinite(k.result) & np.isfinite(k[col])]
         ok = set(g) if ok is None else ok & set(g)
     rows, sides = [], {}
     for arm, d in frames.items():
         s = d[d.game_id.isin(ok)].sort_values('game_id').reset_index(drop=True)
         margin = s.result.to_numpy(float) - s.spread_line.to_numpy(float)
         line = s.spread_line.to_numpy(float)
-        for view, pred in (('median map', s.mapped_spread), ('raw spread', s.model_spread)):
+        views = (((label, s[col]), ('raw spread', s.model_spread)) if col == 'mapped_spread' else ((label, s[col]),))
+        for view, pred in views:
             side = fixed_bands.pick(pred.to_numpy(float), line)
             rec, ret = ats_record(side, margin)
             sides[(arm, view)] = (side, ret)
             rows.append({'basis': b, 'arm': arm, 'view': view, **rec})
-        if arm == 'P':
+        if arm == 'P' and col == 'mapped_spread':
             for name, side in (('always favorite', np.sign(line)), ('always home', np.ones(len(s)))):
                 rec, _ = ats_record(side, margin)
                 rows.append({'basis': b, 'arm': name, 'view': 'baseline', **rec})
     for r in rows:
-        if r['view'] in ('median map', 'raw spread') and r['arm'] != 'P':
+        if r['view'] in (label, 'raw spread') and r['arm'] != 'P':
             sa, ra = sides[(r['arm'], r['view'])]; sp, rp = sides[('P', r['view'])]
             f = sa != sp
             r['flips_vs_P'] = int(f.sum()); r['units_arm_minus_P_on_flips'] = float((ra-rp)[f].sum())
@@ -165,6 +187,7 @@ def run(out=OUT):
     parts = season_parts()
     full = {'P': forecasts(parts)}
     repro = fi.reproduction({b: basis(full['P'], b) for b in BASES})
+    repro['fixed_band_spread 2023-25'] = map_reproduction(full['P'])
     for arm, a in ARMS.items(): full[arm] = forecasts(parts, a['zero'], a['merge_int'])
     ll, ats, ml = [], [], []
     for b in BASES:
@@ -173,6 +196,7 @@ def run(out=OUT):
             ll.append({'basis': b, 'arm': arm, 'terms': terms(arm), **ll_row(fr['P'], fr[arm], b)})
             ml.append({'basis': b, 'arm': arm, **ml_row(fr['P'], fr[arm], b)})
         ats += ats_rows(fr, b)
+        if b == '2023-25': ats += ats_rows(fr, b, 'mapped_spread_prod_window', 'median map, 2021+ history (supplementary)')
     ll, ats, ml = pd.DataFrame(ll), pd.DataFrame(ats), pd.DataFrame(ml)
     verdicts = {arm: verdict(ll[ll.arm == arm].to_dict('records'), arm) for arm in ARMS}
     ll.to_csv(out/'log_loss.csv', index=False, float_format='%.6g')

@@ -1,0 +1,22 @@
+{
+  "protocol": "research/SLIM_MODEL.md",
+  "protocol_commit": "4b11376",
+  "reproduction_max_error": {
+    "2017-20": 1.1102230246251565e-16,
+    "2021-22": 2.3003821070233244e-13,
+    "2023-25": 1.1102230246251565e-16,
+    "fixed_band_spread 2023-25": 0.0
+  },
+  "z_bar": 2.3939797998185104,
+  "verdicts": {
+    "S1 trim": "forward candidate",
+    "S2 trim + one INT term": "forward candidate",
+    "S3 core": "unresolved"
+  },
+  "terms": {
+    "P": 29,
+    "S1 trim": 22,
+    "S2 trim + one INT term": 21,
+    "S3 core": 10
+  }
+}
