@@ -4,10 +4,10 @@
     "training_max_season": 2022,
     "training_games": 543,
     "training_band_counts": [
-      197,
-      184,
-      100,
-      62
+      191,
+      186,
+      107,
+      59
     ],
     "cuts": [
       3.0,
@@ -17,8 +17,8 @@
     "magnitudes": [
       2.0,
       3.0,
-      6.5,
-      14.5
+      8.0,
+      14.0
     ],
     "method": "median_signed_mov",
     "policy_version": "median-mov-ats-2026-10-17-v1",
@@ -29,9 +29,9 @@
     "training_max_season": 2023,
     "training_games": 815,
     "training_band_counts": [
-      310,
-      280,
-      133,
+      295,
+      286,
+      142,
       92
     ],
     "cuts": [
@@ -40,7 +40,7 @@
       10.0
     ],
     "magnitudes": [
-      3.0,
+      2.0,
       3.0,
       7.0,
       14.0
@@ -54,10 +54,10 @@
     "training_max_season": 2024,
     "training_games": 1087,
     "training_band_counts": [
-      407,
-      388,
-      178,
-      114
+      387,
+      395,
+      193,
+      112
     ],
     "cuts": [
       3.0,
@@ -66,8 +66,8 @@
     ],
     "magnitudes": [
       3.0,
-      4.0,
-      6.5,
+      5.0,
+      7.0,
       14.0
     ],
     "method": "median_signed_mov",
@@ -79,10 +79,10 @@
     "training_max_season": 2025,
     "training_games": 1359,
     "training_band_counts": [
-      497,
-      478,
-      228,
-      156
+      476,
+      485,
+      243,
+      155
     ],
     "cuts": [
       3.0,
