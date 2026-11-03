@@ -1,6 +1,6 @@
 {
-  "revision": "boxscore-composite-v1.18",
-  "config_signature": "73636f306d54de2c12a0d8ba394f0aecae9d58d2cd9aa415a87c4b22bca58a20",
+  "revision": "boxscore-composite-v1.19",
+  "config_signature": "3ca5cb32d97f8ba45a8cfa5f8489dcd7f2e4809d8ea5b38e69241c4b3a6b0a7c",
   "protocol_commit": "e5538ef06d0e315adb7bffd51105db55cace41c5",
   "level": 0.975,
   "terms": {
