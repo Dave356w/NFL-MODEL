@@ -1,0 +1,16 @@
+{
+  "games_csv_sha256": "a3ab260a0664111a3a52e23de6df702a7e8802dc0aff42816fac00661180a3d9",
+  "games_csv_source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "fixed_band_ledger_sha256": "f94efa8092ebb9b28bd18733bc30fac270bc99d94705fbab3e83e59871ea0db7",
+  "fixed_band_rules_sha256": "9bee20d87c220f571c0638842f0a56885eee0c2955f9649d373fc168b2393ca1",
+  "games_sha256": "3ec7b8c621381b5646c5a32a4b87140dbe593ef0d5eb6215803f702769cca7b9",
+  "refs_sha256": "a29c101d54c4c526b5653d8e66ae68b63c0c3505bf6925f84e527ae752d574b6",
+  "rules_sha256": "9bee20d87c220f571c0638842f0a56885eee0c2955f9649d373fc168b2393ca1",
+  "games_by_season": {
+    "2022": 271,
+    "2023": 272,
+    "2024": 272,
+    "2025": 272,
+    "2026": 121
+  }
+}

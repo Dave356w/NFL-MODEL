@@ -1,0 +1,599 @@
+{
+  "protocol": "research/MARKET_MEDIAN_MAP.md",
+  "protocol_commit": "d4c316a",
+  "fit_seasons": [
+    2022,
+    2024
+  ],
+  "test_seasons": [
+    2025,
+    2026
+  ],
+  "rules": {
+    "A": {
+      "by_total": false,
+      "fit_seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "fit_games": 815,
+      "band_counts": [
+        205,
+        417,
+        112,
+        81
+      ],
+      "base_magnitudes": [
+        3.0,
+        5.0,
+        6.0,
+        11.0
+      ],
+      "magnitudes": [
+        [
+          3.0
+        ],
+        [
+          5.0
+        ],
+        [
+          6.0
+        ],
+        [
+          11.0
+        ]
+      ],
+      "total_cuts": []
+    },
+    "B": {
+      "by_total": true,
+      "fit_seasons": [
+        2022,
+        2023,
+        2024
+      ],
+      "fit_games": 815,
+      "band_counts": [
+        205,
+        417,
+        112,
+        81
+      ],
+      "base_magnitudes": [
+        3.0,
+        5.0,
+        6.0,
+        11.0
+      ],
+      "magnitudes": [
+        [
+          1.0,
+          3.0
+        ],
+        [
+          4.0,
+          5.0
+        ],
+        [
+          5.0,
+          7.0
+        ],
+        [
+          11.0,
+          10.5
+        ]
+      ],
+      "total_cuts": [
+        43.5
+      ],
+      "cell_counts": [
+        [
+          105,
+          100
+        ],
+        [
+          206,
+          211
+        ],
+        [
+          60,
+          52
+        ],
+        [
+          37,
+          44
+        ]
+      ],
+      "fallback": [
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ]
+    }
+  },
+  "results": {
+    "pooled 2025-26": {
+      "games": 393,
+      "mae_line": 9.67557251908397,
+      "point": {
+        "A": {
+          "mae": 9.69974554707379,
+          "gain": -0.024173027989821884,
+          "ci95": [
+            -0.1894015532206487,
+            0.12246417997250705
+          ],
+          "verdict": "no detectable difference"
+        },
+        "B": {
+          "mae": 9.729007633587786,
+          "gain": -0.05343511450381679,
+          "ci95": [
+            -0.18767378717000882,
+            0.05996053787839036
+          ],
+          "verdict": "no detectable difference"
+        }
+      },
+      "ats": {
+        "A, ties take favorite": {
+          "W": 203,
+          "L": 183,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": 1.545454545454545,
+          "roi": 0.003932454314133702,
+          "roi_se": 0.04771635715420947,
+          "cover": 0.5259067357512953,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.3893129770992366
+        },
+        "A, ties skip": {
+          "W": 203,
+          "L": 183,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": 1.545454545454545,
+          "roi": 0.003932454314133702,
+          "roi_se": 0.04771635715420947,
+          "cover": 0.5259067357512953,
+          "ats_verdict": "unresolved"
+        },
+        "B, ties take favorite": {
+          "W": 204,
+          "L": 182,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": 3.454545454545457,
+          "roi": 0.008790191996298873,
+          "roi_se": 0.04770289840357024,
+          "cover": 0.5284974093264249,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.48854961832061067
+        },
+        "B, ties skip": {
+          "W": 194,
+          "L": 173,
+          "P": 5,
+          "skips": 21,
+          "n": 372,
+          "units": 3.363636363636364,
+          "roi": 0.009042033235581625,
+          "roi_se": 0.04914273681701931,
+          "cover": 0.5286103542234333,
+          "ats_verdict": "unresolved"
+        },
+        "Always favorite": {
+          "W": 187,
+          "L": 199,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": -28.999999999999993,
+          "roi": -0.07379134860050889,
+          "roi_se": 0.04776007190069923,
+          "cover": 0.4844559585492228,
+          "ats_verdict": "unresolved"
+        },
+        "Always underdog": {
+          "W": 199,
+          "L": 187,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": -6.090909090909086,
+          "roi": -0.015498496414526938,
+          "roi_se": 0.047757550983757516,
+          "cover": 0.5155440414507773,
+          "ats_verdict": "unresolved"
+        },
+        "Always home": {
+          "W": 187,
+          "L": 199,
+          "P": 7,
+          "skips": 0,
+          "n": 393,
+          "units": -29.0,
+          "roi": -0.0737913486005089,
+          "roi_se": 0.04776007190069924,
+          "cover": 0.4844559585492228,
+          "ats_verdict": "unresolved"
+        }
+      }
+    },
+    "2025": {
+      "games": 272,
+      "mae_line": 9.722426470588236,
+      "point": {
+        "A": {
+          "mae": 9.830882352941176,
+          "gain": -0.10845588235294118,
+          "ci95": [
+            -0.31853142643084575,
+            0.06455157745480307
+          ],
+          "verdict": "no detectable difference"
+        },
+        "B": {
+          "mae": 9.808823529411764,
+          "gain": -0.08639705882352941,
+          "ci95": [
+            -0.27273160999306034,
+            0.06067299836601301
+          ],
+          "verdict": "no detectable difference"
+        }
+      },
+      "ats": {
+        "A, ties take favorite": {
+          "W": 135,
+          "L": 136,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": -13.272727272727272,
+          "roi": -0.04879679144385026,
+          "roi_se": 0.05787770566056277,
+          "cover": 0.4981549815498155,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.4264705882352941
+        },
+        "A, ties skip": {
+          "W": 135,
+          "L": 136,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": -13.272727272727272,
+          "roi": -0.04879679144385026,
+          "roi_se": 0.05787770566056277,
+          "cover": 0.4981549815498155,
+          "ats_verdict": "unresolved"
+        },
+        "B, ties take favorite": {
+          "W": 144,
+          "L": 127,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": 3.9090909090909083,
+          "roi": 0.014371657754010692,
+          "roi_se": 0.05776385328365944,
+          "cover": 0.5313653136531366,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.5183823529411765
+        },
+        "B, ties skip": {
+          "W": 135,
+          "L": 121,
+          "P": 1,
+          "skips": 15,
+          "n": 257,
+          "units": 1.7272727272727288,
+          "roi": 0.006720905553590385,
+          "roi_se": 0.05945381047216763,
+          "cover": 0.52734375,
+          "ats_verdict": "unresolved"
+        },
+        "Always favorite": {
+          "W": 131,
+          "L": 140,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": -20.909090909090907,
+          "roi": -0.07687165775401068,
+          "roi_se": 0.0578465888114201,
+          "cover": 0.4833948339483395,
+          "ats_verdict": "unresolved"
+        },
+        "Always underdog": {
+          "W": 140,
+          "L": 131,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": -3.7272727272727284,
+          "roi": -0.013703208556149737,
+          "roi_se": 0.05784591542537329,
+          "cover": 0.5166051660516605,
+          "ats_verdict": "unresolved"
+        },
+        "Always home": {
+          "W": 135,
+          "L": 136,
+          "P": 1,
+          "skips": 0,
+          "n": 272,
+          "units": -13.272727272727273,
+          "roi": -0.04879679144385027,
+          "roi_se": 0.057877705660562766,
+          "cover": 0.4981549815498155,
+          "ats_verdict": "unresolved"
+        }
+      }
+    },
+    "2026": {
+      "games": 121,
+      "mae_line": 9.570247933884298,
+      "point": {
+        "A": {
+          "mae": 9.40495867768595,
+          "gain": 0.1652892561983471,
+          "ci95": [
+            -0.012096774193548387,
+            0.32905982905982906
+          ],
+          "verdict": "no detectable difference"
+        },
+        "B": {
+          "mae": 9.549586776859504,
+          "gain": 0.02066115702479339,
+          "ci95": [
+            -0.1341738304678129,
+            0.1598360655737705
+          ],
+          "verdict": "no detectable difference"
+        }
+      },
+      "ats": {
+        "A, ties take favorite": {
+          "W": 68,
+          "L": 47,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": 14.81818181818182,
+          "roi": 0.1224643125469572,
+          "roi_se": 0.08356042693099232,
+          "cover": 0.591304347826087,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.30578512396694213
+        },
+        "A, ties skip": {
+          "W": 68,
+          "L": 47,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": 14.81818181818182,
+          "roi": 0.1224643125469572,
+          "roi_se": 0.08356042693099232,
+          "cover": 0.591304347826087,
+          "ats_verdict": "unresolved"
+        },
+        "B, ties take favorite": {
+          "W": 60,
+          "L": 55,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": -0.45454545454545503,
+          "roi": -0.0037565740045078927,
+          "roi_se": 0.08486947900139787,
+          "cover": 0.5217391304347826,
+          "ats_verdict": "unresolved",
+          "dog_share": 0.4214876033057851
+        },
+        "B, ties skip": {
+          "W": 59,
+          "L": 52,
+          "P": 4,
+          "skips": 6,
+          "n": 115,
+          "units": 1.6363636363636367,
+          "roi": 0.01422924901185771,
+          "roi_se": 0.08765834375032903,
+          "cover": 0.5315315315315315,
+          "ats_verdict": "unresolved"
+        },
+        "Always favorite": {
+          "W": 56,
+          "L": 59,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": -8.09090909090909,
+          "roi": -0.06686701728024042,
+          "roi_se": 0.08493230847708504,
+          "cover": 0.48695652173913045,
+          "ats_verdict": "unresolved"
+        },
+        "Always underdog": {
+          "W": 59,
+          "L": 56,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": -2.3636363636363638,
+          "roi": -0.019534184823441023,
+          "roi_se": 0.08492184012588905,
+          "cover": 0.5130434782608696,
+          "ats_verdict": "unresolved"
+        },
+        "Always home": {
+          "W": 52,
+          "L": 63,
+          "P": 6,
+          "skips": 0,
+          "n": 121,
+          "units": -15.727272727272728,
+          "roi": -0.12997746055597295,
+          "roi_se": 0.08460368459086415,
+          "cover": 0.45217391304347826,
+          "ats_verdict": "unresolved"
+        }
+      }
+    }
+  },
+  "by_band_total": [
+    {
+      "band": "<3",
+      "total": "low",
+      "games": 48,
+      "A": "25-23-0 -0.3u",
+      "B": "23-25-0 -4.1u",
+      "favorite": "25-23-0"
+    },
+    {
+      "band": "<3",
+      "total": "high",
+      "games": 51,
+      "A": "27-24-0 +0.5u",
+      "B": "27-24-0 +0.5u",
+      "favorite": "27-24-0"
+    },
+    {
+      "band": "3\u2013<7",
+      "total": "low",
+      "games": 72,
+      "A": "36-35-1 -2.3u",
+      "B": "40-31-1 +5.4u",
+      "favorite": "34-37-1"
+    },
+    {
+      "band": "3\u2013<7",
+      "total": "high",
+      "games": 111,
+      "A": "51-57-3 -10.6u",
+      "B": "51-57-3 -10.6u",
+      "favorite": "55-53-3"
+    },
+    {
+      "band": "7\u2013<10",
+      "total": "low",
+      "games": 30,
+      "A": "20-9-1 +9.2u",
+      "B": "20-9-1 +9.2u",
+      "favorite": "9-20-1"
+    },
+    {
+      "band": "7\u2013<10",
+      "total": "high",
+      "games": 39,
+      "A": "24-13-2 +8.8u",
+      "B": "23-14-2 +6.9u",
+      "favorite": "13-24-2"
+    },
+    {
+      "band": "10+",
+      "total": "low",
+      "games": 19,
+      "A": "8-11-0 -3.7u",
+      "B": "8-11-0 -3.7u",
+      "favorite": "10-9-0"
+    },
+    {
+      "band": "10+",
+      "total": "high",
+      "games": 23,
+      "A": "12-11-0 -0.1u",
+      "B": "12-11-0 -0.1u",
+      "favorite": "14-9-0"
+    }
+  ],
+  "production_references": {
+    "games": 393,
+    "records": {
+      "Production median map (model input)": {
+        "W": 217,
+        "L": 169,
+        "P": 7,
+        "skips": 0,
+        "n": 393,
+        "units": 28.27272727272727,
+        "roi": 0.07194078186444598,
+        "roi_se": 0.04741218797754027,
+        "cover": 0.5621761658031088,
+        "ats_verdict": "unresolved"
+      },
+      "Line through production map (ledger control)": {
+        "W": 207,
+        "L": 179,
+        "P": 7,
+        "skips": 0,
+        "n": 393,
+        "units": 9.181818181818183,
+        "roi": 0.02336340504279436,
+        "roi_se": 0.047654920713603714,
+        "cover": 0.5362694300518135,
+        "ats_verdict": "unresolved"
+      },
+      "A, market-only": {
+        "W": 203,
+        "L": 183,
+        "P": 7,
+        "skips": 0,
+        "n": 393,
+        "units": 1.5454545454545476,
+        "roi": 0.003932454314133709,
+        "roi_se": 0.04771635715420948,
+        "cover": 0.5259067357512953,
+        "ats_verdict": "unresolved"
+      },
+      "B, market-only": {
+        "W": 204,
+        "L": 182,
+        "P": 7,
+        "skips": 0,
+        "n": 393,
+        "units": 3.4545454545454546,
+        "roi": 0.008790191996298867,
+        "roi_se": 0.04770289840357024,
+        "cover": 0.5284974093264249,
+        "ats_verdict": "unresolved"
+      }
+    },
+    "paired_vs_A": {
+      "Production median map (model input)": {
+        "units": 26.72727272727273,
+        "per_game": 0.06800832755031229,
+        "per_game_se": 0.05480202153925067,
+        "sides_differ": 125
+      },
+      "Line through production map (ledger control)": {
+        "units": 7.636363636363637,
+        "per_game": 0.01943095072866065,
+        "per_game_se": 0.0457143516863149,
+        "sides_differ": 57
+      }
+    }
+  }
+}

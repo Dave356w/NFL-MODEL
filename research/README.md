@@ -1815,3 +1815,35 @@ over the arm's features.
 Consistent with Tests 4 and 43 and the passing-robustness test, nothing here earns a market-level stage 2. B is
 "unresolved" only because its effect is too small to sign. Running stage 2 on it is the owner's call; it is not
 recommended. No `REVISION`.
+
+### Test 51: a market-only median map, fitted on 2022–24 and tested on 2025–26 (2026-11-03): break-even, no better than the line
+
+Protocol [`MARKET_MEDIAN_MAP.md`](MARKET_MEDIAN_MAP.md), pushed (`d4c316a`) before the map was fitted or scored.
+Script `market_median_map.py`; frozen inputs `market_median_map_inputs/`; results `market_median_map_results/`
+(REPORT.md). Owner design: medians of the favorite's actual margin by market spread band (A) and band × total half
+(B), from pregame lines only, no model input. Fitted once on 2022–24 (815 games), tested on 2025 and 2026 to date
+(393 games). Exposed development: these seasons were seen in that day's exploratory market-only analyses.
+
+* **Fitted map (A):** 3 / 5 / 6 / 11 for |spread| <3, 3–7, 7–10, 10+. So A takes favorites below 3 and at 3–4.5,
+  underdogs at 5.5–6.5, **underdogs at every line from 7 to 9.5** (median 6), and favorites at 10–10.5.
+
+| Pooled 2025–26, 393 games | Absolute-error gain over the line [95%] | ATS at −110 | ROI ± SE | Cover |
+|---|---|---|---:|---:|
+| A, market-only | −0.024 [−0.189, +0.122] | 203-183-7, +1.5u | +0.39% ± 4.77 | 52.6% |
+| B, market-only (× total) | −0.053 [−0.188, +0.060] | 204-182-7, +3.5u | +0.88% ± 4.77 | 52.8% |
+| Always favorite / underdog / home | – | −29.0u / −6.1u / −29.0u | −7.38 / −1.55 / −7.38% | 48.4 / 51.6 / 48.4% |
+| Reference: production median map (model input) | – | 217-169-7, +28.3u | +7.19% ± 4.74 | 56.2% |
+| Reference: line through production map (ledger control) | – | 207-179-7, +9.2u | +2.34% ± 4.77 | 53.6% |
+
+- **No better than the line as a forecast.** Both intervals straddle zero. The line is already the market's median.
+- **ATS is break-even and unstable by season.** A went −4.88% in 2025 and +12.25% in 2026; B went +1.44% and −0.38%.
+  All verdicts are "unresolved" at 2 SE.
+- **The model map did better on the same games:** +26.7u over A, +0.068 ± 0.055 per game (1.2 SE, unresolved), with
+  sides differing on 125 of 393. These seasons are part of the map's exposed replay.
+- **One cell to watch, descriptive only:** A's fitted rule took the underdog at 7–9.5, and those games went 44-22-3
+  (+18.0u). It was the fit's own prediction, not chosen afterwards, but it is one of eight cells and 69 games. The
+  long-run base rate is much weaker: underdogs at 7.5–9.5 covered 51.5% over 2006–26 and about 57% in 2020–26 only.
+
+**Reading.** A median map built from market lines alone breaks even. It does not beat the line as a forecast,
+and its ATS result swings by season. It is a cleaner null than the current ledger control, which uses model-fitted
+magnitudes, and the production map's lead over it (unresolved) is the right measure of what the model adds.
