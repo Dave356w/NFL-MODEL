@@ -255,8 +255,8 @@ def test_pooled_2026_v118_picks_no_double_count(tmp_path):
         exported = pd.read_csv(out / 'ats_2026_results.csv')
         assert not exported.game_id.duplicated().any()
 
-    # A later revision cannot silently inherit v1.18's pooled headline.
-    latest["manifest"]["revision"] = "boxscore-composite-v1.19"
+    # A different revision cannot silently inherit the production pooled headline.
+    latest["manifest"]["revision"] = "boxscore-composite-v1.18"
     assert b.pooled_2026_v118_rows(latest, saved) is None
     assert b.pooled_2026_v118_header(latest, saved) == ""
 

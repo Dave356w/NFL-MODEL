@@ -22,6 +22,11 @@ and season CSV pool replayed and recorded results, one row per game (owner
 request 2026-10-19). Saved ATS selections take priority over replay. Keep source
 tracking in backend reporting only, without source labels or breakdowns on the
 public pages or season CSV; the pooled total is descriptive.
+**v1.19 is production (owner decision 2026-11-03):** v1.18 fitted on ten core terms
+(research Test 50 arm S3). Picks, Results, Performance and Calibration show v1.19:
+2026 games whose ATS deadline precedes 2026-11-05 12:00 UTC use v1.19's replayed pick,
+replacing v1.18's displayed locks; later games use v1.19's own 60-minute locks. No new page
+tags or warnings. v1.18's snapshots and locks stay unchanged in their append-only files.
 Detailed research stays in repository reports; the historical Calibration tab
 labels its reconstructed, exposed development basis separately from live results.
 

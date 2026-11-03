@@ -22,14 +22,14 @@ def test_fixed_arms_remove_only_the_promised_terms():
 def test_removed_terms_have_zero_weight_and_no_evaluation_effect(arm):
     train, test = fixture(); cols = s.ARMS[arm]
     zeroed = train.assign(**{c: 0. for c in cols})
-    fit = m.fit_composite(zeroed, m.PRODUCT_RECIPE, 2023, 1)
+    fit = m.fit_composite(zeroed, m.V118_RECIPE, 2023, 1)
     assert all(fit['beta'][fit['names'].index(c)] == 0. for c in cols)
     p = m.apply_fit(test.assign(**{c: 0. for c in cols}), fit)
     changed = test.assign(**{c: 10000. for c in cols})
     np.testing.assert_array_equal(p, m.apply_fit(changed, fit))
     assert train[cols].abs().sum().sum() > 0       # original input was not mutated
     with pytest.raises(ValueError, match='current/future'):
-        m.fit_composite(pd.concat([zeroed, test]), m.PRODUCT_RECIPE, 2023, 1)
+        m.fit_composite(pd.concat([zeroed, test]), m.V118_RECIPE, 2023, 1)
 
 
 def test_comparison_rejects_different_coverage_before_scoring():

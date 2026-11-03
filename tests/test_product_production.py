@@ -76,7 +76,7 @@ def test_owner_recipe_does_not_reselect_from_historical_outcomes():
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
     o['home won']=1-o['home won']
     assert m.select_recipe(o)[0]==m.PRODUCT_RECIPE
-    assert m.REVISION=='boxscore-composite-v1.18'
+    assert m.REVISION=='boxscore-composite-v1.19'
     assert m.config_signature()[1]['production_recipe']==m.PRODUCT_RECIPE
 
 

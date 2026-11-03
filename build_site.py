@@ -1083,11 +1083,12 @@ def _qb(r, side):
 
 
 def pooled_2026_v118_rows(latest, ledger):
-    """One 2026 row per game: native v1.18 lock wins over any historical replay."""
+    """One 2026 row per game: a native lock of the production revision wins over any historical replay
+    (legacy moneyline research; not published)."""
     if latest is None:
         return None
     man = latest.get("manifest", {})
-    if man.get("revision") != "boxscore-composite-v1.18" or int(man.get("season", 0)) != 2026:
+    if man.get("revision") != m.REVISION or int(man.get("season", 0)) != 2026:
         return None
 
     replay = latest.get("retro_ledger", pd.DataFrame())
@@ -1098,7 +1099,7 @@ def pooled_2026_v118_rows(latest, ledger):
                         & replay["basis"].eq("current season walk-forward")].copy()
     replay = replay.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="last")
 
-    native = ledger.loc[(ledger["revision"].eq("boxscore-composite-v1.18"))
+    native = ledger.loc[(ledger["revision"].eq(m.REVISION))
                         & (pd.to_numeric(ledger["season"], errors="coerce") == 2026)].copy()
     native = native.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="first")
     # Block every native game from replay, including games still pending.
@@ -1145,7 +1146,7 @@ def pooled_2026_v118_header(latest, ledger):
         if weekly:
             parts.append(f"<p class='mut small'>By week: {esc(' · '.join(weekly))}</p>")
     else:
-        parts.append("<p class='mut small'>No graded 2026 v1.18 picks yet.</p>")
+        parts.append(f"<p class='mut small'>No graded 2026 {esc(m.REVISION.rsplit('-', 1)[-1])} picks yet.</p>")
     return "".join(parts)
 
 
