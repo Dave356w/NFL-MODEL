@@ -1,30 +1,30 @@
 feature,label,coefficient per scaled unit,training scale,training missing fraction
-site,Home field,-0.057892899947165795,1.0,0.0
-d__for__rates_core__plays_per_game,Offense: plays per game,-0.04189607214728126,2.4602248931065387,0.0
-d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,-0.0003655073820228945,0.712847149849909,0.0
-d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,-0.023606661578781284,0.4065023575526907,0.0
-d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.058865087512408674,2.3514420181254114,0.0
-d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,0.03371961516595508,0.16876030050964838,0.0
-d__for__rates_core__interception_pct,Offense: interception %,0.11506656241526805,0.7011091068276046,0.0
-d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.01684373912988446,6.873683101595372,0.0
-d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.025108894885791367,2.278212097936417,0.0
-d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.00937797706432775,0.5344925091171676,0.0
-d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.025500945772142562,0.35774155241445377,0.0
-d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.0626586727632281,1.857138561008063,0.0
-d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.035090315748835116,0.1746025797391343,0.0
-d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.0698737159562958,0.7306099427139905,0.0
-d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.08721694572715705,6.457693945845861,0.0
-d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.04328045600422936,0.383813429846443,0.0
-d__avail__OL_out_cs,Availability: offensive line snaps unavailable (this-season window),-0.024742156725981224,0.15808999153961134,0.0
-d__avail__WRTE_out_cs,Availability: receiver and tight end snaps unavailable (this-season window),-0.02763514476813226,0.15426745177430606,0.0
-d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),0.0068788788739037494,0.2541755569905763,0.0
-d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.016814113884798886,0.1555433084242777,0.0
-d__avail__LB_out_cs,Availability: linebacker snaps unavailable (this-season window),0.0061197320793946915,0.2063105613001971,0.0
-d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),-0.0009847316531453663,0.1666844200699839,0.0
-d__max_lead,Largest lead per game (decayed),-0.009876956034271021,3.15082091922543,0.0
-d__max_deficit,Largest deficit per game (decayed),0.005125633439113166,3.0481819789676043,0.0
-pass_product,Pass matchup product,0.0855935858034254,1.2355576610113381,0.0
-pass_1sd_pp,Pass matchup 1 SD context PP,-0.0566881899579776,0.04513297924207138,0.0
-pass_1sd_pn,Pass matchup 1 SD context PN,-0.03933368406801703,0.1112098824868781,0.0
-pass_1sd_np,Pass matchup 1 SD context NP,0.07048762832438198,0.056277322369785374,0.0
-pass_1sd_nn,Pass matchup 1 SD context NN,-0.05035347602362659,0.06178594035747023,0.0
+site,Home field,-0.048349729611135796,1.0,0.0
+d__for__rates_core__plays_per_game,Offense: plays per game,-0.02209946865745168,2.4595818438463315,0.0
+d__for__rates_core__net_pass_yards_per_pass_play,Offense: net yards per dropback,-0.0033442059638126445,0.7147131525624981,0.0
+d__for__rates_core__rush_yards_per_attempt,Offense: yards per rush,-0.03215891776827105,0.404973129325518,0.0
+d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.059951330127254995,2.3666610576018003,0.0
+d__for__rates_core__fumbles_lost_per_game,Offense: fumbles lost per game,0.025295189088488004,0.1688808099495277,0.0
+d__for__rates_core__interception_pct,Offense: interception %,0.10749329786108136,0.6990152091192199,0.0
+d__for__rates_core__penalty_yards_per_game,Offense: penalty yards per game,0.014385190609678028,6.845889317791753,0.0
+d__allowed__rates_core__plays_per_game,Defense: opponents’ plays per game,-0.020354271599930546,2.285232322099832,0.0
+d__allowed__rates_core__net_pass_yards_per_pass_play,Defense: opponents’ net yards per dropback,-0.0006660195415659924,0.5359852547993514,0.0
+d__allowed__rates_core__rush_yards_per_attempt,Defense: opponents’ yards per rush,-0.02500696299298052,0.35763698158266966,0.0
+d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.07458658571037279,1.8611440457600552,0.0
+d__allowed__rates_core__fumbles_lost_per_game,Defense: opponents’ fumbles lost per game,0.0353174749268757,0.17424723281354954,0.0
+d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.07269738194097332,0.7290465298074387,0.0
+d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.09174075719645142,6.481658234152661,0.0
+d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.04039080877610796,0.38117157354149656,0.0
+d__avail__OL_out_cs,Availability: offensive line snaps unavailable (this-season window),-0.025199665022099443,0.15736281297156274,0.0
+d__avail__WRTE_out_cs,Availability: receiver and tight end snaps unavailable (this-season window),-0.02209804455843734,0.1531769119222195,0.0
+d__avail__RB_out_cs,Availability: running back snaps unavailable (this-season window),0.007531106544070296,0.25313117390548157,0.0
+d__avail__DL_out_cs,Availability: defensive line snaps unavailable (this-season window),-0.012090799482704508,0.1566491423450172,0.0
+d__avail__LB_out_cs,Availability: linebacker snaps unavailable (this-season window),0.003654166304949818,0.20487052887478277,0.0
+d__avail__DB_out_cs,Availability: secondary snaps unavailable (this-season window),0.00011210778973269173,0.1655200117790835,0.0
+d__max_lead,Largest lead per game (decayed),-0.004116787159895239,3.1400873009686276,0.0
+d__max_deficit,Largest deficit per game (decayed),0.003912421279613636,3.042191407134738,0.0
+pass_product,Pass matchup product,0.07446250318909942,1.2490076338856106,0.0
+pass_1sd_pp,Pass matchup 1 SD context PP,-0.034704659460537066,0.049401501731451226,0.0
+pass_1sd_pn,Pass matchup 1 SD context PN,-0.03224956707163444,0.11231514621645167,0.0
+pass_1sd_np,Pass matchup 1 SD context NP,0.07705465820262342,0.05585037092279291,0.0
+pass_1sd_nn,Pass matchup 1 SD context NN,-0.04718340959484622,0.06118195219338987,0.0
