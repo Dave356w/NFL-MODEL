@@ -1,4 +1,4 @@
-"""NFL box-score composite W/L model — v1.18 (v1.16 with the favorite-confidence penalty).
+"""NFL box-score composite W/L model — v1.19 (v1.18 fitted on ten core terms).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
@@ -9,6 +9,19 @@ Production restoration, owner decision 2026-10-12: resume the exact v1.16
 recipe and configuration identity. v1.17 stays available for independent
 research verification. Original forecasts remain immutable; all snapshots
 and historical games are retrospectively regraded in separate reports.
+
+v1.19 (NEW experiment, owner decision 2026-11-03; new REVISION/OUTPUT_NAME and config signature):
+the v1.18 recipe (market offset, h8/h16 profiles, ridge 0.1, favorite penalty 0.2) fitted on ten
+terms (CORE_TERMS): home field, offense and defense first-down rate, offense and defense INT %,
+defense penalty yards, QB projection, pass product and the PN/NP pass hinges. The other 19 inputs
+are still built but get no coefficient. Research Test 50 arm S3 (research/SLIM_MODEL.md): log loss vs
+v1.18 +1.22 +/- 3.39 (2015-16, its only basis not used to pick the terms), -2.68 +/- 1.15 (2017-22)
+and -1.40 +/- 1.38 (2023-25) per 1000 games; 2026 weeks 1-8 replay -15.2 +/- 4.6, a current-season
+diagnostic seen before adoption. The recipe carries 'terms'; model_terms() applies it to the fit,
+the probability range and the replay. The v1.16 shadow lock now gets its own v1.16 fit
+(shadow_fit) and refuses any other. Picks, results, performance and calibration move to v1.19:
+2026 games whose ATS deadline precedes adoption use the v1.19 replay (season_ats.REPLAY_UNTIL).
+Every earlier snapshot and ATS lock is unchanged.
 
 v1.18 (NEW experiment, owner decision 2026-10-13; new REVISION/OUTPUT_NAME and config signature):
 production forecast = v1.16 with the favorite-confidence penalty of v1.16.2 (FAVORITE_PENALTY 0.2,
@@ -467,11 +480,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.18'
+REVISION='boxscore-composite-v1.19'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_18'  # v1.18: favorite-penalized v1.16 (new experiment)
+OUTPUT_NAME='nfl_boxscore_output_v1_19'  # v1.19: v1.18 restricted to ten core terms (new experiment)
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -492,7 +505,7 @@ MIN_TRAIN_GAMES=150
 SELECTION_RULE='min_log_loss'  # 'one_se' restores v1 behavior
 SELECTION_ONE_SE=1.         # used only when SELECTION_RULE=='one_se'; always reported
 MARKET_SIGMA=12.37          # fixed spread-to-WP comparator only
-FAVORITE_PENALTY=.2         # v1.18 production (v1.16.2 reporting): share of a favorite-bullish departure kept
+FAVORITE_PENALTY=.2         # v1.18/v1.19 production (v1.16.2 reporting): share of a favorite-bullish departure kept
 FLAG_GAP_PP=10.             # board flags |model - market| at or above this many points
 CACHE_MAX_AGE_HOURS=24.                # current season's play-by-play reconstruction
 COMPLETED_CACHE_MAX_AGE_HOURS=24.*7    # completed seasons: weekly refresh picks up upstream revisions
@@ -502,7 +515,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.19 v1.18 fitted on ten core terms (2026-11-03); v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1686,15 +1699,39 @@ def checked_optimize(obj,p):
 
 
 PRODUCT_CONTEXT_NAMES=('pass_product','pass_1sd_pp','pass_1sd_pn','pass_1sd_np','pass_1sd_nn')
+
+
+def model_terms(recipe):
+    """(profile terms, market-context terms) fitted by a recipe. A recipe with 'terms' (v1.19)
+    keeps only those, in feature order; 'site' stays first so its lighter ridge still applies."""
+    main=feature_names(recipe['family'])
+    ctx=list(PRODUCT_CONTEXT_NAMES) if recipe.get('architecture') in ('market_product_1sd','market_pass_predicted_total') else []
+    keep=recipe.get('terms')
+    if keep is None: return main,ctx
+    unknown=set(keep)-set(main)-set(ctx)
+    if unknown: raise ValueError(f'Recipe terms not in its family or contexts: {sorted(unknown)}')
+    if 'site' not in keep: raise ValueError("Recipe terms must keep 'site'")
+    if recipe.get('architecture')=='market_pass_predicted_total': raise ValueError('Term restriction is not defined for the passing-total stack')
+    return [n for n in main if n in keep],[n for n in ctx if n in keep]
+
+
 LEGACY_PRODUCT_RECIPE={'family':'rates_core_avail_cs_peaks_nosacks','half_life':8.,'ridge':.1,
                 'architecture':'market_product_1sd','interaction_ridge':.1,'pass_half_life':16.}
 PASS_TOTAL_RECIPE={**LEGACY_PRODUCT_RECIPE,'architecture':'market_pass_predicted_total',
  'target_first_season':2020,'target_mean_ridge':.1,'target_selection':'prior_season_integer_bin_nll',
  'target_rules':['market_relationships','resid_h4_k4','resid_h4_k12','resid_h16_k4','resid_h16_k12'],
  'total_reference_points':45.,'target_unit_points':10.}
-PRODUCT_RECIPE=dict(LEGACY_PRODUCT_RECIPE,favorite_penalty=FAVORITE_PENALTY)  # v1.18
-# v1.18 shadow lock: v1.16 (same fit, no penalty) keeps locking under its original identity for the
+V118_RECIPE=dict(LEGACY_PRODUCT_RECIPE,favorite_penalty=FAVORITE_PENALTY)  # v1.18 (archived production)
+# v1.19 (owner decision 2026-11-03; research Test 50 arm S3): the v1.18 recipe fitted on ten terms only.
+# The other 19 v1.18 inputs are still built and audited but get no coefficient.
+CORE_TERMS=('site','d__for__rates_core__first_down_rate','d__allowed__rates_core__first_down_rate',
+            'd__for__rates_core__interception_pct','d__allowed__rates_core__interception_pct',
+            'd__allowed__rates_core__penalty_yards_per_game','d__avail__qb_delta',
+            'pass_product','pass_1sd_pn','pass_1sd_np')
+PRODUCT_RECIPE=dict(V118_RECIPE,terms=list(CORE_TERMS))  # v1.19
+# v1.18 shadow lock: v1.16 (no penalty, all terms) keeps locking under its original identity for the
 # pre-registered H1/H2/H6 sample and the penalty's forward verdict; reported in ledger_report.txt only.
+# From v1.19 the shadow has its own v1.16 fit (shadow_fit), never the production fit.
 SHADOW_REVISION='boxscore-composite-v1.16'
 SHADOW_RECIPE=dict(LEGACY_PRODUCT_RECIPE)
 SHADOW_LOCK=True
@@ -1928,8 +1965,9 @@ def fit_composite(train,recipe,year,week,baseline=False):
         t=t[np.isfinite(t.q)&np.isfinite(t[list(PRODUCT_CONTEXT_NAMES)]).all(axis=1)].copy()
     if len(t)<MIN_TRAIN_GAMES: raise ValueError(f'Only {len(t)} eligible labeled games; need {MIN_TRAIN_GAMES}')
     if not before(t,year,week).all(): raise ValueError('Training includes current/future week')
-    names=['site'] if baseline else feature_names(recipe['family'])
-    if offset: names=names+list(PRODUCT_CONTEXT_NAMES)
+    main,ctx=model_terms(recipe)
+    names=['site'] if baseline else main
+    if offset: names=names+ctx
     if stack: names=names+list(PASS_TOTAL_NAMES)
     raw=t[names].to_numpy(float)
     missing=~np.isfinite(raw)
@@ -1944,7 +1982,7 @@ def fit_composite(train,recipe,year,week,baseline=False):
     y=t['home won'].to_numpy(float)
     lam=float(recipe['ridge']) if not baseline else .01
     penalty=np.full(len(names),lam); penalty[0]*=.1
-    if offset: penalty[len(feature_names(recipe['family'])):]=float(recipe['interaction_ridge'])
+    if offset: penalty[len(main):]=float(recipe['interaction_ridge'])
     base=logit(np.clip(t.q.to_numpy(),1e-5,1-1e-5)) if offset else np.zeros(len(t))
     def obj(beta):
         eta=base+Z@beta
@@ -2006,7 +2044,7 @@ def offset_band(train,fit,rows,level=BAND_LEVEL):
     w=np.exp2(-age); w/=w.sum()
     p=expit(logit(np.clip(t.q.to_numpy(),1e-5,1-1e-5))+X@beta)
     penalty=np.full(len(names),float(recipe['ridge'])); penalty[0]*=.1
-    penalty[len(feature_names(recipe['family'])):]=float(recipe['interaction_ridge'])
+    penalty[len(model_terms(recipe)[0]):]=float(recipe['interaction_ridge'])
     cov=np.linalg.inv((X.T@((w*p*(1-p))[:,None]*X)+np.diag(penalty))/np.sum(w*w))
     raw=rows[names].to_numpy(float); Z=np.where(np.isfinite(raw),raw,0.)/scale
     se=np.sqrt(np.einsum('ij,jk,ik->i',Z,cov,Z))
@@ -2025,6 +2063,8 @@ def recipe_key(r):
     if r.get('architecture')=='market_product_1sd':
         key+=f'_market_product_1sd_i{r["interaction_ridge"]:g}'
         if r.get('favorite_penalty') is not None: key+=f'_fp{r["favorite_penalty"]:g}'
+        if r.get('terms') is not None:  # v1.19: term subset, named by count and content
+            key+=f'_t{len(r["terms"])}_'+hashlib.sha256(json.dumps(sorted(r['terms'])).encode()).hexdigest()[:6]
     return key
 def candidates():
     return [{'family':f,'half_life':h,'ridge':r} for f in FEATURE_FAMILIES for h in TEAM_HALF_LIVES for r in RIDGE_GRID]
@@ -2586,7 +2626,20 @@ def blend_verdict(blend):
     return out
 
 
-def current_predictions(features,recipe,year,through_week):
+def term_restricted(fit):
+    """True for a fit whose recipe keeps only some terms (v1.19): its unpenalized forecast is not v1.16's."""
+    return fit.get('recipe',{}).get('terms') is not None
+
+
+def shadow_fit(train,fit,year,week):
+    """The v1.16 shadow's fit for a week: the production fit itself while production uses every term
+    (v1.18: the unpenalized forecast is v1.16's), otherwise a separate v1.16 fit on the same rows (v1.19)."""
+    return fit_composite(train,SHADOW_RECIPE,year,week) if term_restricted(fit) else fit
+
+
+def current_predictions(features,recipe,year,through_week,shadow_out=None):
+    """Weekly walk-forward forecasts for this season. shadow_out (a dict) receives the v1.16 shadow
+    fit for through_week under 'fit'."""
     f=features[recipe['half_life']]; rows=[]; current_fit=None
     for week in range(1,through_week+1):
         te=f[(f.season==year)&(f.week==week)].copy()
@@ -2599,7 +2652,8 @@ def current_predictions(features,recipe,year,through_week):
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
-        te['model_wp_v116']=apply_fit(te,fit,raw=True)  # v1.18 shadow lock; equals model_wp without a penalty
+        sfit=shadow_fit(tr,fit,year,week)
+        te['model_wp_v116']=apply_fit(te,sfit,raw=True)  # v1.16 shadow lock (its own fit from v1.19)
         try: te['offset_se'],te['model_wp_lo'],te['model_wp_hi']=offset_band(tr,fit,te)
         except (ValueError,np.linalg.LinAlgError) as e:  # reporting only: never costs a forecast
             print(f'  Note: week {week} probability range unavailable ({e})')
@@ -2607,7 +2661,9 @@ def current_predictions(features,recipe,year,through_week):
         te['homefield_wp']=apply_fit(te,baseline)
         te['recipe']=recipe_key(recipe)
         rows.append(te)
-        if week==through_week: current_fit=fit
+        if week==through_week:
+            current_fit=fit
+            if shadow_out is not None: shadow_out['fit']=sfit
     return pd.concat(rows,ignore_index=True),current_fit
 
 
@@ -2752,8 +2808,11 @@ class revision_identity:
 def record_shadow(board,fit,oof,season,asof=None):
     """v1.18 shadow lock: the unpenalized v1.16 forecast for the same games, under v1.16's own
     frozen recipe and config signature, so the pre-registered v1.16 sample (H1/H2/H6) and the
-    penalty's forward verdict continue. Same gate and first-snapshot rule as production."""
+    penalty's forward verdict continue. Same gate and first-snapshot rule as production.
+    `fit` must be a v1.16 fit (from v1.19, the shadow fit from current_predictions), never a
+    term-restricted production fit."""
     if not SHADOW_LOCK or PRODUCT_RECIPE.get('favorite_penalty') is None or 'model_wp_v116' not in board: return 0
+    if term_restricted(fit): raise ValueError('Shadow lock needs the v1.16 fit, not a term-restricted production fit')
     with revision_identity(SHADOW_REVISION,SHADOW_RECIPE):
         rec=frozen_recipe(oof,season)
         if rec['recipe']!=SHADOW_RECIPE: raise ValueError('Shadow frozen recipe is not the v1.16 recipe')
@@ -3128,12 +3187,12 @@ def walk_forward_product(features,last_historical_season):
     col='p__'+recipe_key(PRODUCT_RECIPE)
     out[col]=np.nan; out['homefield_wp']=np.nan
     raw_col='p__'+recipe_key(SHADOW_RECIPE) if PRODUCT_RECIPE.get('favorite_penalty') is not None else None
-    if raw_col: out[raw_col]=np.nan  # v1.18: unpenalized v1.16 forecasts, for the shadow lock's frozen recipe
+    if raw_col: out[raw_col]=np.nan  # unpenalized v1.16 forecasts (own fit from v1.19), for the shadow lock's frozen recipe
     for (year,week),test in f.loc[valid].groupby(['season','week'],sort=True):
         tr=f[before(f,year,week)]
         fit=fit_composite(tr,PRODUCT_RECIPE,year,week)
         out.loc[test.index,col]=apply_fit(test,fit)
-        if raw_col: out.loc[test.index,raw_col]=apply_fit(test,fit,raw=True)
+        if raw_col: out.loc[test.index,raw_col]=apply_fit(test,shadow_fit(tr,fit,year,week),raw=True)
         baseline=fit_composite(tr,PRODUCT_RECIPE,year,week,baseline=True)
         out.loc[test.index,'homefield_wp']=apply_fit(test,baseline)
     if not np.isfinite(out[col]).all(): raise ValueError('Incomplete production reconstruction')
@@ -3151,7 +3210,7 @@ def regrade_product_ledger(features,schedules,outdir):
         if game not in f.index: raise ValueError(f'Ledger game missing reconstructed profiles: {game}')
         te=f.loc[[game]].copy(); year,week=int(record['season']),int(record['week'])
         for name,value in record.get('model_inputs',{}).items():
-            if name in feature_names(PRODUCT_RECIPE['family'])+list(PRODUCT_CONTEXT_NAMES):te[name]=np.nan if value is None else value
+            if name in feature_names(PRODUCT_RECIPE['family'])+list(PRODUCT_CONTEXT_NAMES):te[name]=np.nan if value is None else value  # all built inputs, not only fitted terms
         key=(year,week)
         if key not in fits:
             fits[key]=fit_composite(features[8.][before(features[8.],year,week)],PRODUCT_RECIPE,year,week)
@@ -3456,7 +3515,8 @@ def main():
     print('Best validation log loss by family (lower is better):'); print(fam_best.round(5).to_string())
     dump(outdir/'frozen_recipe.json',recipe_rec)
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
-    gw,fit=current_predictions(features,recipe,season,cur)
+    shadow_out={}
+    gw,fit=current_predictions(features,recipe,season,cur,shadow_out)
     gw=attach_moneylines(gw,schedules)
     save(gw,'current_season_predictions.csv')
     for wk,prior_board in gw.groupby('week'):
@@ -3489,7 +3549,7 @@ def main():
     if HAS_IPY: display(HTML(html))
     if WRITE_FORWARD_LEDGER:
         records,new=record_forward(board,fit,recipe_rec)
-        shadow=record_shadow(board,fit,oof,season)
+        shadow=record_shadow(board,shadow_out['fit'],oof,season)
         if shadow: print(f'  v1.16 shadow snapshots added (ledger report only): {shadow}')
         graded,forward_card=grade_forward(records,schedules)
         save(graded,'forward_ledger_grades.csv'); save(forward_card,'forward_only_scorecard.csv')
@@ -3516,6 +3576,7 @@ def main():
                  'game-bootstrap intervals omit selection and serial-dependence uncertainty',
                  'v1.16 restored by owner decision after exposed comparisons; reliable profit edge and rare passing-context calibration unresolved',
                  'v1.18 favorite-confidence penalty (lambda 0.2) chosen on exposed 2021-25 log loss; it never changes a pick; forward verdict at 200 native v1.16 shadow games',
+                 'v1.19 ten-term restriction chosen by owner after exposed development (research Test 50, terms picked on 2019-25 bootstrap support) and a 2026 weeks 1-8 replay; gain unresolved on the one basis not used to pick the terms',
                  'historical moneylines have no independent capture timestamp; no quote means no prediction']
     limitations+=(['availability: final injury-report status (no intra-week timestamps); of the game week\'s own roster only '
                    'the reserve list is used (v1.15; no publish time: historical rows use the final weekly file); '

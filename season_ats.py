@@ -10,6 +10,8 @@ Backend reporting also grades the timed locks against same-row controls. The
 line-only map runs the market line through the same frozen median map, so the
 production map's difference from it is what the model adds beyond the line.
 """
+import datetime as dt
+
 import numpy as np
 import pandas as pd
 
@@ -20,22 +22,36 @@ import espn_spreads
 from schedule_gate import kickoff as scheduled_kickoff
 
 
-def historical_before_adoption(row):
-    """Permit replay only when its T-60 deadline is known to predate adoption.
+# A production revision adopted after the ATS policy replays its own 2026 games up to its adoption
+# (owner decision 2026-11-03, v1.19): every 2026 game whose T-60 deadline precedes this time shows the
+# revision's replayed pick; later games need that revision's own 60-minute lock. Saved locks of the
+# same revision still take priority. Locks and snapshots of earlier revisions stay in their files.
+REPLAY_UNTIL = {'boxscore-composite-v1.19': dt.datetime.fromisoformat('2026-11-05T12:00:00+00:00')}
+
+
+def replay_cutoff(revision):
+    """Latest T-60 deadline (exclusive) for which a revision's replay may stand in for a lock."""
+    return max(ats_locks.ADOPTED_UTC, REPLAY_UNTIL.get(revision, ats_locks.ADOPTED_UTC))
+
+
+def historical_before_adoption(row, cutoff=None):
+    """Permit replay only when its T-60 deadline is known to predate adoption (`cutoff`,
+    default the ATS policy adoption).
 
     Older replay exports have a game date without a kickoff time. Keep such a
     game only if every possible kickoff on that Eastern date has an earlier
     deadline; an ambiguous adoption-day or missing date cannot authorize replay.
     """
+    cutoff = ats_locks.ADOPTED_UTC if cutoff is None else cutoff
     try:
         ko = ats_locks.utc(row.get('kickoff_utc'))
     except (ValueError, TypeError):
         ko = None
     if ko is not None:
-        return ats_locks.deadline(ko) < ats_locks.ADOPTED_UTC
+        return ats_locks.deadline(ko) < cutoff
     ko = scheduled_kickoff(row)
     if ko is not None:
-        return ats_locks.deadline(ko) < ats_locks.ADOPTED_UTC
+        return ats_locks.deadline(ko) < cutoff
     value = row.get('gameday')
     if not isinstance(value, str):
         return False
@@ -45,7 +61,7 @@ def historical_before_adoption(row):
     next_midnight = (pd.Timestamp(day.date()) + pd.Timedelta(days=1)).tz_localize('America/New_York')
     # Actual kickoffs on this date precede next midnight, so equality of this
     # upper bound still proves their deadlines are strictly before adoption.
-    return ats_locks.deadline(next_midnight.to_pydatetime()) <= ats_locks.ADOPTED_UTC
+    return ats_locks.deadline(next_midnight.to_pydatetime()) <= cutoff
 
 
 def build(latest, ledger):
@@ -59,7 +75,7 @@ def build(latest, ledger):
             if r['game_id'] in rows:
                 raise ValueError('duplicate historical ATS game')
             row = dict(r, ats_basis='Historical replay')
-            if not historical_before_adoption(r):
+            if not historical_before_adoption(r, replay_cutoff(revision)):
                 row.update(spread_line=np.nan, fixed_band_spread=np.nan,
                            ats_basis='Awaiting ATS lock')
             rows[r['game_id']] = row

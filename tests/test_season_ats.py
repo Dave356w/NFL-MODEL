@@ -64,6 +64,7 @@ class SeasonATS(unittest.TestCase):
 
     def test_missing_post_adoption_snapshot_does_not_turn_history_into_a_bet(self):
         latest, _ = self.fixture()
+        latest['manifest']['revision'] = 'boxscore-composite-v1.18'  # no replay window after ATS adoption
         latest['fixed_band_ledger'] = latest['fixed_band_ledger'].query("game_id=='pending'").assign(
             kickoff_utc='2026-10-25T17:00:00Z', home_score=24., away_score=17.)
         latest['ats_locks'] = {}
@@ -77,6 +78,47 @@ class SeasonATS(unittest.TestCase):
         self.assertTrue(np.isnan(row.spread_line))
         self.assertTrue(np.isnan(row.fixed_band_spread))
         self.assertEqual((s.summary(pool)['bets'], s.summary(pool)['unavailable']), (0, 1))
+
+    def v119(self, kickoff):
+        latest, _ = self.fixture()
+        latest['manifest']['revision'] = 'boxscore-composite-v1.19'
+        latest['fixed_band_ledger'] = latest['fixed_band_ledger'].query("game_id=='pending'").assign(
+            kickoff_utc=kickoff, home_score=24., away_score=17.)
+        latest['ats_locks'] = {}
+        return latest
+
+    def test_v119_replays_its_own_picks_until_its_adoption(self):
+        # Positive: a game after the ATS policy but before v1.19's cutoff shows v1.19's replayed pick.
+        row = s.build(self.v119('2026-10-25T17:00:00Z'), pd.DataFrame()).iloc[0]
+        self.assertEqual((row.ats_basis, row.ats_status, row.fixed_band_ats_team), ('Historical replay', 'graded', 'TEN'))
+        self.assertEqual((row.fixed_band_spread, row.spread_line, row.fixed_band_ats_result), (4., 6.5, 'L'))
+        # Negative: after the cutoff a v1.19 game needs its own lock.
+        late = s.REPLAY_UNTIL['boxscore-composite-v1.19'] + dt.timedelta(hours=1, seconds=1)
+        row = s.build(self.v119(late.isoformat()), pd.DataFrame()).iloc[0]
+        self.assertEqual((row.ats_basis, row.ats_status), ('Awaiting ATS lock', 'unavailable'))
+        self.assertTrue(np.isnan(row.fixed_band_spread))
+
+    def test_v119_ignores_v118_locks_and_keeps_its_own_lock_priority(self):
+        latest = self.v119('2026-10-25T17:00:00Z')
+        lock = dict(game_id='pending', season=2026, week=7, home='IND', away='TEN', model_wp=.8,
+                    market_spread=7., fixed_band_spread=14., selected_side='home',
+                    generated_utc='2026-10-25T15:00:00Z', kickoff_utc='2026-10-25T17:00:00Z',
+                    lock_at_utc='2026-10-25T16:00:00Z', policy_version='v2')
+        latest['ats_locks'] = {('boxscore-composite-v1.18', 'pending'): lock}
+        row = s.build(latest, pd.DataFrame()).iloc[0]
+        self.assertEqual((row.ats_basis, row.fixed_band_spread), ('Historical replay', 4.))   # v1.18 lock not shown
+        latest['ats_locks'] = {('boxscore-composite-v1.19', 'pending'): lock}
+        row = s.build(latest, pd.DataFrame()).iloc[0]
+        self.assertEqual((row.ats_basis, row.fixed_band_spread), ('60-minute lock', 14.))     # own lock wins
+
+    def test_replay_cutoff_is_per_revision_and_never_before_ats_adoption(self):
+        self.assertEqual(s.replay_cutoff('boxscore-composite-v1.18'), ats_locks.ADOPTED_UTC)
+        self.assertEqual(s.replay_cutoff('unknown'), ats_locks.ADOPTED_UTC)
+        cut = s.replay_cutoff('boxscore-composite-v1.19')
+        self.assertGreater(cut, ats_locks.ADOPTED_UTC)
+        edge = cut + dt.timedelta(hours=1)  # kickoff whose T-60 deadline equals the cutoff
+        self.assertFalse(s.historical_before_adoption({'kickoff_utc': edge.isoformat()}, cut))
+        self.assertTrue(s.historical_before_adoption({'kickoff_utc': (edge-dt.timedelta(seconds=1)).isoformat()}, cut))
 
     def test_historical_timing_requires_a_provably_pre_adoption_deadline(self):
         boundary = ats_locks.ADOPTED_UTC + dt.timedelta(hours=1)

@@ -1815,3 +1815,35 @@ over the arm's features.
 Consistent with Tests 4 and 43 and the passing-robustness test, nothing here earns a market-level stage 2. B is
 "unresolved" only because its effect is too small to sign. Running stage 2 on it is the owner's call; it is not
 recommended. No `REVISION`.
+
+### Test 50: slim models from the fit analysis (2026-11-03): trimming 7 near-zero terms is not worse; no gain is shown
+
+Protocol [`SLIM_MODEL.md`](SLIM_MODEL.md), pushed (`4b11376`) before any arm was scored. Script `slim_model.py`;
+results `slim_model_results/` (REPORT.md). Owner request after the 2026-11-03 fit sanity check. All three bases
+were exposed before the arms were chosen, so this is development evidence, not confirmation. P reproduces the
+published forecasts (max error 2.3e-13) and production's `fixed_band_spread` for 2023–25 exactly.
+
+* **Arms.** S1 (22 terms) drops largest lead, largest deficit, RB/LB/DB absences and both net-yards-per-dropback
+  regressors. S2 (21) is S1 with offense + defense INT % as one term. S3 (10) keeps only the terms with in-sample
+  bootstrap support. S3 was selected on 2019–25, so only 2015–16 counts toward its verdict.
+
+| Log loss, arm − v1.18 (×1000, negative = slim better) | 2015–16 (510) | 2017–22 (1,559) | 2023–25 (815) | Verdict |
+|---|---:|---:|---:|---|
+| S1 trim (22) | +0.48 ± 1.72 | −0.78 ± 0.83 | −1.11 ± 0.86 | forward candidate |
+| S2 trim + one INT term (21) | +0.11 ± 1.73 | −0.63 ± 0.91 | −1.30 ± 0.82 | forward candidate |
+| S3 core (10) | +1.22 ± 3.39 | −2.68 ± 1.15 | −1.40 ± 1.38 | unresolved (2015–16 only) |
+
+- **No slim arm is reliably worse or reliably better.** S1 and S2 are nominally better on 2017–25 and nominally
+  worse on 2015–16. Every interval crosses zero, and the gains are about 0.2% of the per-game log loss.
+- **S3's 2017–22 gain (z −2.3) is circular.** Its terms were picked on overlapping seasons. On its only fair
+  basis, 2015–16, it is nominally worse.
+- **ATS ordering depends on which map history is used, so it is noise.** On 2023–25 with production's own map
+  (2021+ history), v1.18 goes 430-367-19 (+23.9u, +2.9% ± 3.3), against S1 +1.0u, S2 +14.4u and S3 +18.2u.
+  With the protocol's longer own-history map (2014+), the order flips: v1.18 +2.9u, S1 +22.0u, S2 +27.7u.
+  Each arm moves 110–195 bets against v1.18, and every ROI SE is about 3.3 points.
+- **Moneyline units (legacy) are lower for every slim arm on 2017–25**, by 10–26u.
+
+**Reading.** The seven S1 terms carry no measurable accuracy, so the model loses nothing by dropping them. That
+is a simplicity argument, not an edge. The decision belongs to the owner. Adopting S1 or S2 changes
+`config_signature()` and needs a new `REVISION`. The only clean test is a reporting-only forward shadow, reviewed
+at 100 decided locks on log loss and ATS units against v1.18 on the same games.

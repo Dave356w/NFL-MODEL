@@ -1,4 +1,6 @@
-"""v1.18: the favorite penalty applied at the source, and the v1.16 shadow lock."""
+"""v1.18: the favorite penalty applied at the source, and the v1.16 shadow lock.
+
+v1.19 is production from 2026-11-03; these tests run under v1.18's own identity (V118_RECIPE)."""
 import datetime as dt
 import json
 import numpy as np
@@ -8,6 +10,13 @@ import nfl_model as m
 from test_product_production import fixture
 
 ASOF = dt.datetime(2023, 9, 9, tzinfo=dt.timezone.utc)
+V118 = 'boxscore-composite-v1.18'
+
+
+@pytest.fixture(autouse=True)
+def as_v118():
+    with m.revision_identity(V118, m.V118_RECIPE):
+        yield
 
 
 def lockable(train, board, fit):
@@ -24,7 +33,7 @@ def lockable(train, board, fit):
 
 def test_penalty_applies_at_the_source_without_changing_the_fit():
     train, test = fixture()
-    fit18 = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
+    fit18 = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
     fit16 = m.fit_composite(train, m.LEGACY_PRODUCT_RECIPE, 2023, 1)
     assert fit18['beta'] == fit16['beta'] and fit18['scale'] == fit16['scale']      # the penalty never touches fitting
     raw = m.apply_fit(test, fit16)
@@ -36,14 +45,23 @@ def test_penalty_applies_at_the_source_without_changing_the_fit():
 
 
 def test_v118_and_v116_have_distinct_identities():
-    assert m.recipe_key(m.PRODUCT_RECIPE).endswith('_fp0.2')
+    assert m.recipe_key(m.V118_RECIPE).endswith('_fp0.2')
     assert m.recipe_key(m.SHADOW_RECIPE) == m.recipe_key(m.LEGACY_PRODUCT_RECIPE)
     sig18 = m.config_signature()[0]
     with m.revision_identity(m.SHADOW_REVISION, m.SHADOW_RECIPE):
         sig16 = m.config_signature()[0]
         assert m.REVISION == 'boxscore-composite-v1.16'
     assert sig16.startswith('9dad9b9a') and sig18 != sig16
-    assert m.REVISION == 'boxscore-composite-v1.18' and m.PRODUCT_RECIPE['favorite_penalty'] == m.FAVORITE_PENALTY
+    assert m.REVISION == V118 and m.V118_RECIPE['favorite_penalty'] == m.FAVORITE_PENALTY
+    assert 'terms' not in m.V118_RECIPE and sig18.startswith('73636f30')        # v1.18's frozen identity
+
+
+def test_v119_is_production_and_keeps_v118_and_v116_identities():
+    with m.revision_identity('boxscore-composite-v1.19', dict(m.V118_RECIPE, terms=list(m.CORE_TERMS))):
+        sig19 = m.config_signature()[0]
+        key19 = m.recipe_key(m.PRODUCT_RECIPE)
+    assert not sig19.startswith(('73636f30', '9dad9b9a')) and key19.endswith('_t10_f8ff0b')
+    assert key19.startswith(m.recipe_key(m.V118_RECIPE))
 
 
 def shadow_state(tmp_path, monkeypatch, season=2023):
@@ -58,9 +76,9 @@ def shadow_state(tmp_path, monkeypatch, season=2023):
 
 def test_shadow_locks_v116_beside_v118(tmp_path, monkeypatch):
     sig16 = shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
+    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
     board = lockable(train, board, fit)
-    rec18 = {'config_signature': m.config_signature()[0], 'recipe': m.PRODUCT_RECIPE, 'season': 2023}
+    rec18 = {'config_signature': m.config_signature()[0], 'recipe': m.V118_RECIPE, 'season': 2023}
     _, n18 = m.record_forward(board, fit, rec18, asof=ASOF)
     n16 = m.record_shadow(board, fit, None, 2023, asof=ASOF)
     assert n18 == n16 == 4
@@ -80,7 +98,7 @@ def test_shadow_locks_v116_beside_v118(tmp_path, monkeypatch):
 
 def test_shadow_off_or_without_raw_column_writes_nothing(tmp_path, monkeypatch):
     shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
+    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
     board = lockable(train, board, fit)
     assert m.record_shadow(board.drop(columns='model_wp_v116'), fit, None, 2023, asof=ASOF) == 0
     monkeypatch.setattr(m, 'SHADOW_LOCK', False)
@@ -90,7 +108,7 @@ def test_shadow_off_or_without_raw_column_writes_nothing(tmp_path, monkeypatch):
 
 def test_shadow_refuses_a_tampered_raw_forecast(tmp_path, monkeypatch):
     shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
+    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
     board = lockable(train, board, fit)
     with pytest.raises(ValueError, match='does not match'):
         m.record_shadow(board.assign(model_wp_v116=board.model_wp), fit, None, 2023, asof=ASOF)
@@ -99,7 +117,7 @@ def test_shadow_refuses_a_tampered_raw_forecast(tmp_path, monkeypatch):
 
 def test_model_range_bounds_follow_the_penalty():
     train, test = fixture()
-    fit = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
+    fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
     se, lo, hi = m.offset_band(train, fit, test)
     p = m.apply_fit(test, fit)
     assert np.all(lo <= p+1e-12) and np.all(p <= hi+1e-12) and np.all(np.isfinite(se))

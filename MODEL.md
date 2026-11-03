@@ -1,10 +1,46 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.18), newest first; this page describes what the code
+version history (v1 to v1.19), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.18`
+## The current model: `boxscore-composite-v1.19`
+
+**v1.18 fitted on ten core terms (owner decision 2026-11-03).** New `REVISION`, `OUTPUT_NAME`
+(`nfl_boxscore_output_v1_19`) and config signature. Everything else is v1.18 below: market offset,
+h8 main and h16 pass profiles, ridge 0.1 on both blocks, weekly refits on earlier games only, and the
+0.2 favorite-confidence penalty. The recipe carries `terms` (`CORE_TERMS`), and only these get a
+coefficient:
+
+| Term | Input |
+|---|---|
+| `site` | home field |
+| offense / defense first-down rate | first downs per 100 plays, own and allowed |
+| offense / defense INT % | interceptions thrown and forced |
+| defense penalty yards | opponents' penalty yards per game |
+| `d__avail__qb_delta` | QB projection |
+| `pass_product`, `pass_1sd_pn`, `pass_1sd_np` | pass matchup product and two tail hinges |
+
+The other 19 v1.18 inputs (plays, yards per rush and per dropback, fumbles, own penalty yards,
+unit absences, largest lead and deficit, the PP and NN hinges) are still built and audited but
+not fitted. `model_terms()` applies the restriction to the fit, the probability range and every
+replay. Fitting without a term is identical to v1.18 with that column at zero (checked to 1e-17).
+
+Evidence (research Test 50, `research/SLIM_MODEL.md`, arm S3; log loss vs v1.18 per 1000 games):
++1.22 ± 3.39 on 2015–16, the only basis not used to choose the terms; −2.68 ± 1.15 on 2017–22 and
+−1.40 ± 1.38 on 2023–25, where the terms were chosen on overlapping 2019–25 bootstrap support. A 2026
+weeks 1–8 replay, seen before adoption, gave −15.2 ± 4.6 (every model trailed the market there).
+ATS differences against v1.18 are within noise and change order with the median-map history.
+
+**Picks, results, performance and calibration** follow v1.19. The 2021–25 history and 2026 replay
+regenerate under v1.19, and 2026 games whose ATS deadline precedes 2026-11-05 12:00 UTC show v1.19's
+replayed pick (`season_ats.REPLAY_UNTIL`). Later games use v1.19's own 60-minute locks. v1.18's
+snapshots and ATS locks stay unchanged in their append-only files.
+
+**v1.16 shadow lock** continues under its own identity, now with its own v1.16 fit (`shadow_fit`);
+`record_shadow` refuses any fit that is not v1.16's.
+
+### v1.18 (archived production, 2026-10-13 to 2026-11-03)
 
 **v1.16 with the favorite-confidence penalty (owner decision 2026-10-13).** New `REVISION`,
 `OUTPUT_NAME` (`nfl_boxscore_output_v1_18`) and config signature. Same features, fit and

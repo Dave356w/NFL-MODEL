@@ -12,8 +12,8 @@ take the market favorite (pick'em lines skip); pushes return the stake. Returns 
 pushes and ROI including pushed stakes. Recorded and replayed results remain
 identified separately. Picks freeze at the 60-minute pregame cutoff.
 
-The v1.18 probability engine and prior-season median spread mapping are
-unchanged. Original moneyline snapshots and research scoring remain available
+The v1.19 probability engine and prior-season median spread mapping drive
+every page. Original moneyline snapshots and research scoring remain available
 in the repository, including their original pricing and capture times; the
 Picks, Results and Performance and their public CSVs contain ATS data only;
 the separate historical calibration download contains aggregate bands.
@@ -56,10 +56,12 @@ Source tracking and breakdowns remain in the backend report; the public pages
 and season CSV present the combined results without source labels.
 Pricing is assumed −110 with 1-unit stakes.
 
-Current model (2026-10-13): `boxscore-composite-v1.18`, the v1.16 model with a favorite-confidence
-penalty: where v1.16 backs the market favorite more strongly than the no-vig price, only 0.2 of that
-lean is kept. Picks and bets are identical to v1.16's; only those probabilities change. v1.16 keeps
-locking as a shadow for its pre-registered tests, reported in the ledger report only.
+Current model (2026-11-03): `boxscore-composite-v1.19`, the v1.18 model fitted on ten core terms
+(home field, offense/defense first-down rate and INT %, defense penalty yards, QB projection, pass
+product and two pass hinges; research Test 50). v1.18 was the v1.16 model with a favorite-confidence
+penalty: where the model backs the market favorite more strongly than the no-vig price, only 0.2 of
+that lean is kept; v1.19 keeps it. v1.16 keeps locking as a shadow for its pre-registered tests, with
+its own fit, reported in the ledger report only.
 v1.16 is the owner-fixed **Product + 1 SD**
 market-offset model. No-vig moneyline log-odds form its baseline. Raw h8 offense,
 defense, availability and prior lead/deficit profiles provide additive corrections;
@@ -76,7 +78,7 @@ fixed groups (2026: **3/4/7/14** points for original spread magnitudes below 3,
 calibration pages show season-by-season retrospective ATS results at assumed
 −110, including pushes and skips, with downloadable per-game data. Each mapping
 uses earlier seasons only; these are exposed historical comparisons. Win
-probabilities and moneyline picks retain the v1.18 recipe. See `fixed_bands.py`
+probabilities and moneyline picks use the v1.19 recipe. See `fixed_bands.py`
 and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 
 | Page | For |
