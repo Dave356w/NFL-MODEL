@@ -1779,3 +1779,39 @@ no-vig probability moved 0.92 points on average (max 2.5) between lock (~28 h be
 nflverse's close. Departures under the two anchors correlate 0.996, and a close-anchored v1.16 picks
 the same side in all 14 games (v1.17: 2 of 14 change). Historical close-based tests look comparable
 to forward locks so far; rerun as rows accrue.
+
+### Test 49: outlier-robust team profiles, stage-1 stat screen (2026-11-03): median and cap stop; winsorizing is null-sized
+
+Protocol [`ROBUST_PROFILES.md`](ROBUST_PROFILES.md), pushed (`0271988`) before any arm was built or scored. Script
+`robust_profiles.py`; capped-yardage inputs `robust_profiles_inputs/`; results `robust_profiles_results/` (REPORT.md).
+Owner idea: windowed medians per feature, so outlier games stop biasing the means. Stage 1 uses no win/loss outcomes,
+prices or ROI. Each arm's pregame profile predicts the team's realized stat in that game. The primary score is
+denominator-weighted MSE after a walk-forward linear recalibration fitted on earlier seasons, averaged as a % change
+over the arm's features.
+
+* **Arms** (production's window, h8 decay, offseason halving and 4 pseudo-games throughout). **A** weighted median
+  (12 features; fumbles and INT % excluded because their medians are degenerate). **B** each earlier game winsorized
+  at the league's 2.5/97.5% from the same history (all 16). **C** pass plays capped at 20 yards and rushes at 10
+  (Test 33's explosive thresholds), re-aggregated with production's code (4 yardage features).
+* **Fidelity.** P reproduces production's profiles exactly (0.0 max difference, 3,486 games). The 2013–25
+  play-by-play is hash-identical to Test 40's. The uncapped re-aggregation reproduces every frozen box score exactly.
+
+| Mean % change in recalibrated MSE vs production | 2015–16 (1,024) | 2017–22 (3,134) | 2023–25 (1,632) | 2015–25 98.33% interval | Verdict |
+|---|---:|---:|---:|---|---|
+| A weighted median | +0.34 | +0.70 | +0.45 | +0.57 [+0.41, +0.73] | stop |
+| B winsorized mean | −0.01 | −0.00 | +0.01 | −0.00 [−0.02, +0.02] | unresolved |
+| C per-play cap | +0.02 | −0.07 | +0.26 | +0.04 [−0.16, +0.24] | stop |
+
+- **The median is reliably worse.** It loses on all three bases and in every week bucket. The worst losses are on
+  the near-normal stats: first-down rate +1.44%, net yards per dropback +1.16%, score peaks +0.7%. With mild tails
+  and few effective games, the median gives up more precision than it gains in robustness.
+- **Winsorizing changes nothing measurable.** It clips about 5% of history games per feature. The pooled change is
+  bounded within ±0.02% of MSE, roughly 30 times smaller than the median's significant loss. Per-feature signs split
+  (penalty yards slightly better, net yards per dropback slightly worse).
+- **Capping long gains does not help.** The effect flips sign across bases. Offensive rush yards per attempt gets
+  worse (+0.44% [+0.00, +0.89]), and the other three features are within noise.
+
+**Reading.** Production's decayed ratio of sums already handles outlier games about as well as these estimators.
+Consistent with Tests 4 and 43 and the passing-robustness test, nothing here earns a market-level stage 2. B is
+"unresolved" only because its effect is too small to sign. Running stage 2 on it is the owner's call; it is not
+recommended. No `REVISION`.
