@@ -1,0 +1,28 @@
+{
+  "published_replay_2023_on": {
+    "games": 937,
+    "W": 495,
+    "L": 417,
+    "P": 25,
+    "units": 32.99999999999994
+  },
+  "fixed_band_summary_sha256": "64a4ab93a697f4f0d76b2764b76865b2db8ea89fba86fdbcb65b3fa325d9223c",
+  "games_csv_sha256": "a3ab260a0664111a3a52e23de6df702a7e8802dc0aff42816fac00661180a3d9",
+  "games_csv_source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "fixed_band_ledger_sha256": "f94efa8092ebb9b28bd18733bc30fac270bc99d94705fbab3e83e59871ea0db7",
+  "oos_predictions_sha256": "b93f0d18a189d7ef760b78f19d46be0f81ac625fd5e2af1c6c2784617dc8f6d0",
+  "replay_sha256": "f0ec1721433d4dbe63cefa5997030590e96702abc8729b59a67cce0c94b4608b",
+  "oos_sha256": "7769e17f2496e8b8fc281ecce727741091b4e75385f2904279d2ad20f9415a0c",
+  "totals_sha256": "f89a10be9e3d1d851e51d224f4fcc9973fa4c8528f929738bf1e4097c7716ac7",
+  "rows_differing_from_games_csv": {
+    "replay": {
+      "spread_line": 0,
+      "result": 0
+    },
+    "oos": {
+      "spread_line": 0,
+      "result": 0
+    }
+  },
+  "note": "replay.csv is a frozen copy of data/latest/fixed_band_ledger.csv columns (bot-generated, changes each build); oos.csv maps the 2017-20 out-of-sample production probability through nfl_model.implied_spread; totals.csv is nflverse total_line (capture time unknown). Spreads and results are taken from the frozen inputs."
+}

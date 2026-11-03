@@ -1815,3 +1815,33 @@ over the arm's features.
 Consistent with Tests 4 and 43 and the passing-robustness test, nothing here earns a market-level stage 2. B is
 "unresolved" only because its effect is too small to sign. Running stage 2 on it is the owner's call; it is not
 recommended. No `REVISION`.
+
+### Test 50: a total-conditioned median map (2026-11-03): not supported
+
+Protocol [`TOTAL_MEDIAN_MAP.md`](TOTAL_MEDIAN_MAP.md), pushed (`ecb6168`) before any total-conditioned magnitude was
+fitted or scored. Script `total_median_map.py`; frozen inputs `total_median_map_inputs/`; results
+`total_median_map_results/` (REPORT.md). The idea came from that day's exploratory market-only line × total
+analysis, which covers these seasons. All bases are exposed development.
+
+* **Arms.** Production's four prior-season median magnitudes (M) against the same medians fitted per band × total
+  half (T2, primary; split at the training rows' median total, cells under 30 games fall back to M) and per total
+  tercile (T3, descriptive). Production's selection rule throughout.
+* **Fidelity.** M reproduces the published `fixed_band_spread` on all 937 replay rows and the published 2023-on
+  replay, 495-417-25, +33.0u. Replay spreads and results match nflverse exactly.
+
+| Absolute-error gain over production (points per game, 95%) | Games | T2 | T3 (descriptive) | ATS units, T2 minus production |
+|---|---:|---|---|---:|
+| R, production replay 2023–25 | 816 | −0.058 [−0.118, +0.009] | −0.097 [−0.195, +0.006] | −11.5 (153 flips: 72-78-3) |
+| O, out-of-sample 2019–20 | 512 | **−0.170 [−0.305, −0.038]** | −0.201 [−0.334, −0.055] | −11.5 (119 flips: 56-62-1) |
+| 2026 to date (diagnostic) | 121 | −0.025 [−0.101, +0.049] | −0.029 [−0.187, +0.119] | −3.8 |
+
+- **Splitting by total makes the medians noisier, not sharper.** Halving each band's sample lets the median jump
+  between key numbers. The 2023 low-total <3 band fits −1 (a pick that loses by a point at the median), and the
+  2019 high-total 7–10 band fits 3, below its 3–7 band's 6.5. Production's four cells already sit on those numbers.
+- **ATS agrees but does not decide.** On R, production went 430-367-19 (+23.9u, +2.93% ± 3.29); T2 went 424-373-19
+  (+12.5u). Same rows: line-only map −4.7u, always favorite −12.4u, always home −33.4u. By total half the T2
+  difference flips sign between bases (R: low −32.5u, high +21.0u; O: low 0, high −11.4u), which looks like noise.
+
+**Reading.** Conditioning the median map on the total loses absolute error on both bases, significantly out of
+sample, and gives up units on every basis. Together with the market-only result, the O/U carries no usable side
+information at these sample sizes. Production keeps its four-magnitude map; no policy change.
