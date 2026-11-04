@@ -407,3 +407,55 @@ def test_plain_confirmed_start_is_still_a_fact():
     text='The Ravens announced Bob Beta will start against the Jaguars this Thursday.'
     facts,issues=c.news_facts(dict(title='Ravens quarterback update',body=text),'BAL',EVENT,c.PlayerIndex(PLAYERS))
     assert [f['gsis_id'] for f in facts if f['field']=='qb_starter']==['00-0000002'] and not issues
+
+
+CLUB_URL='https://www.baltimoreravens.com/news/ravens-inactives-vs-jaguars-week-9'
+
+
+class ClubSources(Sources):
+    """Baltimore's feed also carries a club inactive article."""
+    club_body='The Ravens announced their inactives against the Jaguars.\nQB Aaron Alpha\nWR Dan Gamma'
+
+    def __call__(self,url):
+        if url=='https://www.baltimoreravens.com/rss/news':
+            self.calls.append(url)
+            items=''.join(f'<item><title>{t}</title><link>{u}</link><pubDate>{d}</pubDate></item>' for t,u,d in [
+                ('Bob Beta Will Start vs. Jaguars',START_URL,'Wed, 04 Nov 2026 18:00:00 GMT'),
+                ('Ravens inactives vs. Jaguars',CLUB_URL,'Thu, 05 Nov 2026 23:30:00 GMT')])
+            text=f'<rss><channel>{items}</channel></rss>'
+            return dict(url=url,text=text,captured_utc=self.now.isoformat(),body_sha256=c.digest(text))
+        if url==CLUB_URL:
+            self.calls.append(url)
+            text=html('Ravens inactives vs. Jaguars',self.club_body,NOW-dt.timedelta(minutes=15))
+            return dict(url=url,text=text,captured_utc=self.now.isoformat(),body_sha256=c.digest(text))
+        return super().__call__(url)
+
+
+def test_failed_club_article_cannot_withdraw_a_complete_league_list(tmp_path):
+    # Prose-only club articles are common (BAL, DEN, DET in 2026 week 8); they are reviewed, not blocking.
+    source=ClubSources();source.club_body='Bob Beta is active. Dan Gamma is among the Ravens inactives.'
+    state=collect(tmp_path,source)
+    assert CLUB_URL in source.calls
+    assert state['teams']['BAL']['inactives']['complete'] is True
+    assert state['teams']['BAL']['inactives']['url']==INACTIVE_URL
+    assert c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
+    assert any(r['source_url']==CLUB_URL and r['issue']=='no complete inactive list found' for r in c.read(tmp_path/c.REVIEW))
+
+
+def test_failed_revision_of_the_accepted_club_list_withdraws_it(tmp_path):
+    source=ClubSources();source.inactives=False   # no NFL.com list: the club page is the only source
+    state=collect(tmp_path,source)
+    assert state['teams']['BAL']['inactives']['url']==CLUB_URL
+    assert c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
+    source.now+=dt.timedelta(minutes=1)
+    source.club_body='The Ravens announced their inactives against the Jaguars.\nQuarterback Aaron Alpha\nWR Dan Gamma'
+    state=collect(tmp_path,source)
+    assert state['teams']['BAL']['inactives']['complete'] is False
+    assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),source.now,True)
+
+
+def test_failed_league_list_outranks_a_club_success_in_the_same_refresh(tmp_path):
+    source=ClubSources();source.inactive_body='RAVENS\nQuarterback Aaron Alpha\nJAGUARS\nWR Fred Epsilon'
+    state=collect(tmp_path,source)
+    assert state['teams']['BAL']['inactives']['complete'] is False
+    assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
