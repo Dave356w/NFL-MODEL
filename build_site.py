@@ -166,7 +166,8 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
             shutil.copyfile(outdir / src, latest / dst)
     board = pd.read_csv(outdir / f"week{week}_board.csv")
     avail = [c for c in board.columns if c.startswith(("home__avail__", "away__avail__"))]
-    compact = board[[c for c in BOARD_COLS if c in board.columns] + avail]
+    evidence = [c for c in board.columns if c == 'availability_policy' or '_availability_evidence' in c]
+    compact = board[[c for c in BOARD_COLS if c in board.columns] + avail + evidence]
     compact.to_csv(latest / "board.csv", index=False, float_format="%.6g")
     Path(projections).mkdir(parents=True, exist_ok=True)
     for prior in outdir.glob("week*_board.csv"):
@@ -174,7 +175,8 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
         if full.empty:
             continue
         prior_week = int(prior.stem.removeprefix("week").removesuffix("_board"))
-        fields = [c for c in BOARD_COLS if c in full] + [c for c in full if c.startswith(("home__avail__", "away__avail__"))]
+        fields = [c for c in BOARD_COLS if c in full] + [c for c in full if c.startswith(("home__avail__", "away__avail__"))
+                  or c == 'availability_policy' or '_availability_evidence' in c]
         full[fields].to_csv(Path(projections) / f"{season}_week{prior_week:02d}.csv", index=False, float_format="%.6g")
     compact.to_csv(Path(projections) / f"{season}_week{week:02d}.csv", index=False, float_format="%.6g")
     html = outdir / f"week{week}_board.html"

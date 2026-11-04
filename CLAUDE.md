@@ -35,6 +35,8 @@ their saved annual rules. v1.19 and `config_signature()` are unchanged.
 Detailed research stays in repository reports; the historical Calibration tab
 labels its reconstructed, exposed development basis separately from live results.
 
+**v1.20 availability safeguards (owner request 2026-11-04) supersede the v1.19 production identity above.** The ten-term fit is unchanged. Only upcoming games can consume timestamped, sourced game observations; historical inputs and the v1.16 shadow remain unchanged. `data/availability_observations.jsonl` is a curated input, not a bot-generated snapshot. See `AVAILABILITY.md`. New injury coefficients still require separate validation.
+
 ## Sources of truth
 
 - `nfl_model.py`: the model. Its docstring is the version history; `MODEL.md`

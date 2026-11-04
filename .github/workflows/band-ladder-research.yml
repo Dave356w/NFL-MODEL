@@ -41,6 +41,8 @@ jobs:
       OMP_NUM_THREADS: '1'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # identify the commit that produced each frozen report
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -51,9 +53,9 @@ jobs:
       - name: Reproduce the committed results
         if: github.event_name == 'pull_request'
         run: |
-          python research/check_replay.py research/band_ladder_results -- python -m research.band_ladder_score
-          python research/check_replay.py research/soft_band_ladder_results -- python -m research.soft_band_ladder_score
-          python research/check_replay.py research/h13_results -- python -m research.h13_shadow
+          python research/check_replay.py research/band_ladder_results --frozen-data-at-report -- python -m research.band_ladder_score
+          python research/check_replay.py research/soft_band_ladder_results --frozen-data-at-report -- python -m research.soft_band_ladder_score
+          python research/check_replay.py research/h13_results --frozen-data-at-report -- python -m research.h13_shadow
       - name: Score the current ledger
         if: github.event_name != 'pull_request'
         run: |

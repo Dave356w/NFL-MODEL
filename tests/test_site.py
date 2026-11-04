@@ -324,7 +324,9 @@ def test_snapshot_copies_page_inputs(tmp_path):
     (run / "run_manifest.json").write_text(json.dumps({"revision": "r", "season": 2026, "week": 5,
                                                        "source_audit": [{"source": "schedule"}]}))
     pd.DataFrame({"game_id": ["g"], "home": ["H"], "away": ["A"], "model_wp": [.6], "d__x": [1.],
-                  "home__avail__qb_delta": [.1]}).to_csv(run / "week5_board.csv", index=False)
+                  "home__avail__qb_delta": [.1], "availability_policy": [m.AVAILABILITY_POLICY],
+                  "home_availability_evidence": ['{"fixture": true}'],
+                  "home_availability_evidence_sha256": ["fixture-hash"]}).to_csv(run / "week5_board.csv", index=False)
     pd.DataFrame({"a": [1]}).to_csv(run / "calibration_bands.csv", index=False)
     pd.DataFrame().to_csv(run / "market_blend_diagnostic.csv", index=False)  # empty: must not be copied
     (run / "week5_board.html").write_text("<html></html>")
@@ -340,7 +342,11 @@ def test_snapshot_copies_page_inputs(tmp_path):
     assert "market_blend.csv" not in names
     board = pd.read_csv(latest / "board.csv")
     assert "d__x" not in board.columns and "home__avail__qb_delta" in board.columns
+    assert board.home_availability_evidence.iloc[0]=='{"fixture": true}'
+    assert board.home_availability_evidence_sha256.iloc[0]=='fixture-hash'
+    assert board.availability_policy.iloc[0]==m.AVAILABILITY_POLICY
     assert (proj / "2026_week05.csv").exists()
+    assert pd.read_csv(proj/"2026_week05.csv").home_availability_evidence.iloc[0]=='{"fixture": true}'
     assert pd.read_csv(proj / "2026_week04.csv").model_wp.iloc[0] == .61
     assert pd.read_csv(proj / "2026_week04.csv").game_id.iloc[0] == "prior"
     assert json.loads((latest / "manifest.json").read_text())["availability_audit"] == []

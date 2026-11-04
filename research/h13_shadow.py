@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -18,8 +19,9 @@ import fixed_bands
 from research import h12_capped_residual as h12
 
 ROOT = Path(__file__).resolve().parents[1]
-HISTORY = ROOT / 'data/latest/fixed_band_ledger.csv'
-LOCKS = ROOT / 'data/ats_locks.jsonl'
+DATA = Path(os.environ.get('NFL_RESEARCH_DATA_DIR',ROOT/'data'))
+HISTORY = DATA / 'latest/fixed_band_ledger.csv'
+LOCKS = DATA / 'ats_locks.jsonl'
 OUTPUT = ROOT / 'research/h13_results'
 REVISION = 'boxscore-composite-v1.18'
 CUTOFF = pd.Timestamp('2026-10-28T00:00:00Z')

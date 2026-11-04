@@ -108,6 +108,8 @@ def validate_store(data='data'):
         generated, observed = utc(row['generated_utc']), utc(row['observed_utc'])
         if not ADOPTED_UTC <= generated <= observed <= cutoff or cutoff != utc(row['lock_at_utc']):
             raise ValueError('ATS candidate is outside the pre-lock cutoff')
+        if row.get('availability_policy') is not None:
+            validate_availability(row)
         if row['policy_version'] not in POLICIES or row['lock_lead_minutes'] != LEAD_MINUTES:
             raise ValueError('ATS candidate timing policy mismatch')
         rule = row['fixed_rule']
@@ -163,6 +165,31 @@ def validate_store(data='data'):
     return {'candidates': len(candidates), 'locks': len(locks)}
 
 
+def validate_availability(row):
+    """Stdlib-only timing and identity audit of the availability frozen in a candidate.
+
+    Old candidates do not acquire new fields. Rehashing a new candidate cannot authorize
+    evidence published, captured or effective after the forecast was generated.
+    """
+    try:
+        if row['availability_policy']!='sourced-game-availability-2026-11-04-v1':
+            raise ValueError('unknown policy')
+        for side in ('home','away'):
+            evidence=row['availability'][side]
+            if (evidence['policy']!=row['availability_policy'] or evidence['game_id']!=row['game_id']
+                    or evidence['team']!=row[side] or evidence['blockers'] or evidence['report_complete'] is not True
+                    or utc(evidence['kickoff_utc'])!=utc(row['kickoff_utc'])
+                    or utc(evidence['asof_utc'])>utc(row['generated_utc'])):
+                raise ValueError('identity, completeness or cutoff mismatch')
+            for fact in evidence['observations']:
+                if (fact['game_id']!=row['game_id'] or fact['team']!=row[side] or fact['status']!='confirmed'
+                        or utc(fact['published_utc'])>utc(fact['observed_utc'])
+                        or any(utc(fact[c])>utc(evidence['asof_utc']) for c in ('published_utc','observed_utc','effective_utc'))):
+                    raise ValueError('observation is not a confirmed pre-forecast fact')
+    except (KeyError,TypeError,ValueError) as exc:
+        raise ValueError(f'ATS availability evidence invalid: {exc}') from exc
+
+
 def record(data='data', now=None):
     """Save refreshes before T−60; finalize only already-persisted candidates."""
     import nfl_model as m
@@ -201,8 +228,14 @@ def record(data='data', now=None):
                 candidate_id = (*identity, generated.isoformat())
                 if identity in locked or candidate_id in seen or not ADOPTED_UTC <= generated <= now <= cutoff:
                     continue
+                if manifest['revision']=='boxscore-composite-v1.20' and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
+                    continue  # no v1.20 lock from a legacy board that lost its evidence columns
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
+                availability = None
+                if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
+                    availability=m.availability_snapshot(raw,ko,generated)
+                    if availability is None: continue
                 try:
                     wp, line = float(raw['model_wp']), float(raw['spread_line'])
                 except (KeyError, TypeError, ValueError):
@@ -233,6 +266,10 @@ def record(data='data', now=None):
                            fixed_rule=rule, config_signature=manifest.get('config_signature'),
                            quote_basis='source quote has no independent capture timestamp')
                 import espn_spreads
+                if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
+                    row['availability_policy']=m.AVAILABILITY_POLICY
+                    row['availability']=availability
+                    validate_availability(row)
                 row['espn_quote'] = espn_spreads.candidate_quote(row, data)
                 row['espn_quote_status'] = 'captured_prelock' if row['espn_quote'] else 'no_matching_prelock_price'
                 row['candidate_sha256'] = digest(row)

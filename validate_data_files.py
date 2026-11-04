@@ -87,6 +87,46 @@ def validate_ledger(path):
     return len(seen)
 
 
+def validate_availability_observations(path):
+    """Audit the curated input journal before commits, without importing model dependencies."""
+    from urllib.parse import urlsplit
+    fields={'eligible','report_status','qb_starter','report_complete','inactives_complete'}
+    required={'game_id','team','field','value','source_url','published_utc','observed_utc','effective_utc'}
+    optional={'gsis_id','player','position','status','reason'}
+    count=0
+    for number,line in enumerate(Path(path).read_text(encoding='utf-8').splitlines(),1):
+        if not line.strip(): continue
+        try:
+            r=json.loads(line)
+            if not isinstance(r,dict) or not required<=r.keys() or r.keys()-required-optional:
+                raise ValueError('missing or unknown observation fields')
+            game=re.fullmatch(r'(\d{4})_(\d{2})_([A-Z]+)_([A-Z]+)',str(r['game_id']))
+            if not game or not 1<=int(game[2])<=22 or r['team'] not in game.groups()[2:]:
+                raise ValueError('game/team mismatch')
+            if r['field'] not in fields: raise ValueError('unknown availability field')
+            if r['field'] in ('report_complete','inactives_complete'):
+                if r.get('gsis_id'): raise ValueError('completeness is a team fact')
+            elif not re.fullmatch(r'00-\d{7}',str(r.get('gsis_id',''))):
+                raise ValueError('invalid GSIS ID')
+            if r['field']=='report_status':
+                if r['value'] not in ('Available','Out','Doubtful','Questionable'): raise ValueError('invalid injury status')
+            elif type(r['value']) is not bool: raise ValueError('fact requires a boolean')
+            if r['field']=='qb_starter' and (r['value'] is not True or r.get('position')!='QB' or not r.get('player')):
+                raise ValueError('starter requires true, QB position and player name')
+            if r['field']=='eligible' and r['value'] and (not r.get('position') or not r.get('player')):
+                raise ValueError('eligibility requires position and player name')
+            url=urlsplit(str(r['source_url']))
+            if url.scheme!='https' or not url.hostname or url.username or url.password: raise ValueError('invalid source URL')
+            times={k:datetime.fromisoformat(r[k].replace('Z','+00:00')) for k in ('published_utc','observed_utc','effective_utc')}
+            if any(t.tzinfo is None for t in times.values()) or times['published_utc']>times['observed_utc']:
+                raise ValueError('invalid observation timing')
+            if r.get('status','confirmed') not in ('confirmed','pending'): raise ValueError('invalid observation status')
+        except (ValueError,TypeError,KeyError) as exc:
+            raise ValueError(f'{path}:{number}: {exc}') from exc
+        count+=1
+    return count
+
+
 def validate_kalshi(path):
     """Every line is JSON; one capture per game and capture time; captured before kickoff; 0 <= bid < ask <= 1."""
     path = Path(path)
@@ -196,6 +236,10 @@ def validate_data_dir(data_dir="data"):
     if h5.exists():
         validate_h5(h5)
         paths.append(h5)
+    observations=data_dir/'availability_observations.jsonl'
+    if observations.exists():
+        validate_availability_observations(observations)
+        paths.append(observations)
     import ats_locks
     ats_locks.validate_store(data_dir)
     import espn_spreads
