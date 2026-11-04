@@ -2090,15 +2090,16 @@ earlier seasons: A uses v1.19's raw spread, B production's mapped spread. Actual
 
 - **Neither arm improves on the no-vig spread price.** Gains are within ±1.1 ×10⁻³ with no interval excluding zero.
   The fitted β changes sign: A runs from −1.31 (2016, fit on two seasons) to +0.55 (2026), and B from +0.42 to −0.08.
-- **The tilted probabilities barely leave the market.** Most games are within 0.3 points of q. Even the most extreme
-  decile is only 1.2–2.7 points off.
+- **The tilted probabilities barely leave the market.** For arm A, 60% of games on 2016–22 and 80% on 2023–26 are within
+  0.3 points of q. Even the most extreme decile averages only 1.2–2.7 points off.
 - **Where the model disagrees most, the direction flips by period.** On 2016–22 the top decile of p − q (p 0.525) had
   home covers at 44.4% and the bottom decile (p 0.485) at 56.7%, both opposite to the model. On 2023–26 they were 52.2%
   and 42.4%, both with it.
 - **Bets at actual prices (EV > 0 only) are few and lose.** A: 249 bets on 2016–22, −21.9u (−8.8% ± 6.2); 17 bets on
   2023–26. B: 156 bets, −16.9u; 52 bets, −0.8u.
 - **Actual prices matter for production's record.** Graded at the real prices instead of −110, production's picks are
-  −65.5u (−3.6% ± 2.3) on 2016–22 instead of −96.0u, because the typical price then was about −105. On 2023–26 they
+  −65.5u (−3.6% ± 2.3) on 2016–22 instead of −96.0u, because the median price on both sides then was −105 (hold 2.5%,
+  against 4.7% on 2023–26, where the median is −110). On 2023–26 they
   are +28.6u (+3.1% ± 3.1), close to the −110 figure. The market-correct null on the same bets is −2.4% and −4.5%.
   Always favorite at actual prices: −119.5u and −21.7u.
 
