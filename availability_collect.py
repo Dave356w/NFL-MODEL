@@ -48,6 +48,7 @@ TEAMS={
 STATUSES={'OUT':'Out','DOUBTFUL':'Doubtful','QUESTIONABLE':'Questionable',
           '(-)':'Available','-':'Available','':'Available','UNSPECIFIED':'Available'}
 UNCERTAIN=re.compile(r'\b(could|may|might|potential|possibly|reportedly|expected|likely|if|rumou?r|pundit|prediction|mock)\b',re.I)
+NEGATION=re.compile(r"\b(?:not|never|no longer|cannot|unable|instead of|rather than|in place of|ruled out|benched)\b|n[\u2019']t\b",re.I)
 RELEVANT=re.compile(r'inactiv|injur|quarterback|\bQB\b|start|signs?|signed|waiv|releas|activat|elevat|trad|reserve',re.I)
 
 
@@ -231,6 +232,23 @@ def bound_article(item,event,team,now):
     return start<=pub<=now<ko
 
 
+class InactiveIdentityMismatch(ValueError):
+    """The article does not announce this team's list for this game (for example, a league bundle
+    covering another kickoff). Any other parse failure concerns this team's own list."""
+
+
+INACTIVE_POSITIONS=r'QB|RB|HB|FB|WR|TE|OL|OT|OG|IOL|LT|RT|LG|RG|C|G|T|DL|DE|DT|NT|IDL|EDGE|LB|OLB|ILB|MLB|CB|DB|NB|S|SAF|FS|SS|K|PK|P|LS'
+INACTIVE_ROW=re.compile(r'^(?:\d+\s*[-.:)]?\s*)?(?:[-•*·–—]\s*)?('+INACTIVE_POSITIONS+r')\s*[:\-–—.,]?\s+(.+)$',re.I)
+# A short line with no sentence ending is list-shaped; it must parse exactly or the list is not complete.
+LIST_SHAPED=re.compile(r'^(?!.*[.!?]["\u201d\u2019]?$)(?:\S+\s+){0,7}\S+$')
+
+
+def mentions_team_player(line,team,index):
+    """Any exact alias of a current or transferred player inside a line, at word boundaries."""
+    text=' '+norm(line)+' '
+    return any(' '+key+' ' in text for key in index.names if key and len(key.split())>=2)
+
+
 def parse_inactives(info,team,event,index):
     """A complete named list, never 'DNP', box-score participation, or an absent list."""
     from zoneinfo import ZoneInfo
@@ -238,13 +256,13 @@ def parse_inactives(info,team,event,index):
     if not pub:raise ValueError('inactive article has no publication time')
     ko=utc(event['kickoff_utc']);stamp=utc(pub)
     if stamp.astimezone(ZoneInfo('America/New_York')).date()!=ko.astimezone(ZoneInfo('America/New_York')).date() or stamp>=ko:
-        raise ValueError('inactive list is not a pregame publication for this game day')
+        raise InactiveIdentityMismatch('inactive list is not a pregame publication for this game day')
     title=info['title'];body=info['body'];other=event['away'] if team==event['home'] else event['home']
     week=re.search(r'\bweek\s*(\d+)\b',title,re.I)
-    if week and int(week[1])!=int(event['week']):raise ValueError('inactive article week mismatch')
-    if not week and nickname(other).casefold() not in (title+'\n'+body[:5000]).casefold():raise ValueError('inactive article opponent missing')
+    if week and int(week[1])!=int(event['week']):raise InactiveIdentityMismatch('inactive article week mismatch')
+    if not week and nickname(other).casefold() not in (title+'\n'+body[:5000]).casefold():raise InactiveIdentityMismatch('inactive article opponent missing')
     if 'inactiv' not in title.casefold() and not (info.get('source_team')==team and re.search(r'\binactives?\b',body,re.I)):
-        raise ValueError('article is not an inactive announcement')
+        raise InactiveIdentityMismatch('article is not an inactive announcement')
     lines=[s.strip() for s in body.splitlines() if s.strip()]
     headings={norm(name):key for key,(name,_) in TEAMS.items()}
     headings.update({norm(nickname(key)):key for key in TEAMS})
@@ -253,19 +271,42 @@ def parse_inactives(info,team,event,index):
     # A league-wide article must name this team's section. A club article can be
     # a single list, but only when fetched from that club's verified feed.
     club_article=info.get('source_team')==team
-    if not used_sections and not club_article:raise ValueError('inactive team section missing')
-    for line in lines:
-        heading=headings.get(norm(line))
-        if heading:
-            section=heading;continue
-        if used_sections and section!=team:continue
-        match=re.match(r'^(?:\d+\s*[-.:]?\s*)?(QB|RB|FB|WR|TE|OL|OT|OG|LT|RT|LG|RG|C|G|T|DL|DE|DT|NT|LB|OLB|ILB|CB|DB|S|SAF|FS|SS|K|P|LS)\s+(.+)$',line,re.I)
-        if match:
-            name=re.sub(r'\s*\([^)]*\)\s*','',match[2]).strip(' -–—:')
-            if len(name.split())<2:continue
-            player=index.resolve(name,team,allow_transfer=True)
-            if player is None:raise ValueError('unresolved inactive player: '+name)
-            listed.append(dict(gsis_id=player['gsis_id'],player=player['player'],position=player['position']))
+    if not used_sections and not club_article:raise InactiveIdentityMismatch('inactive team section missing')
+    if used_sections and not club_article and not any(headings.get(norm(line))==team for line in lines):
+        raise InactiveIdentityMismatch('inactive team section missing')
+    # Rows must form one contiguous block. Every list-shaped line that names a player or
+    # carries a position prefix must resolve exactly; a skipped line would silently drop
+    # an inactive player and leave a partial list marked complete.
+    ended=False;team_sections=0;line_error=None;mentioned=set()
+    try:
+        for line in lines:
+            heading=headings.get(norm(line))
+            if heading:
+                if listed and heading==team:raise ValueError('inactive team section repeated')
+                if listed:ended=True
+                section=heading;team_sections+=heading==team;continue
+            if used_sections and section!=team:continue
+            bare=index.resolve(re.sub(r'\s*\([^)]*\)\s*','',line).strip(' -–—:,•*·'),team,allow_transfer=True)
+            if bare:mentioned.add(bare['gsis_id'])
+            match=INACTIVE_ROW.match(line);player=None
+            if match:
+                name=re.sub(r'\s*\([^)]*\)\s*','',match[2]).strip(' -–—:,')
+                player=index.resolve(name,team,allow_transfer=True) if len(name.split())>=2 else None
+                if player is None and not LIST_SHAPED.match(line) and not mentions_team_player(line,team,index):match=None
+                elif player is None:raise ValueError('unresolved inactive player: '+name)
+            if match:
+                if ended:raise ValueError('inactive list is fragmented by unparsed lines')
+                listed.append(dict(gsis_id=player['gsis_id'],player=player['player'],position=player['position']))
+                continue
+            if LIST_SHAPED.match(line) and mentions_team_player(line,team,index):
+                raise ValueError('unparsed inactive line: '+line[:80])
+            if listed:ended=True
+        if used_sections and team_sections>1:raise ValueError('inactive team section repeated')
+    except ValueError as exc:
+        # A club page's bullets can flatten into bare names in the article text; only then may
+        # the structured HTML list below stand in, and it must contain every bare name.
+        if listed or not club_article or used_sections:raise
+        line_error=exc
     if not listed and club_article:
         # Team articles often use HTML bullets without position prefixes.
         for ul in info['document'].select('.nfl-c-body-part--text ul, .d3-l-article__content ul, [itemprop="articleBody"] ul'):
@@ -274,12 +315,16 @@ def parse_inactives(info,team,event,index):
             if not re.search(r'inactiv',label,re.I) and nickname(team).casefold() not in label.casefold():continue
             names=[]
             for li in ul.find_all('li',recursive=False):
-                name=re.sub(r'^(?:QB|RB|WR|TE|OL|DL|LB|DB|CB|S|G|T|C|K|P|LS)\s+','',li.get_text(' ',strip=True))
-                name=re.sub(r'\s*\([^)]*\)\s*','',name).strip()
+                text=li.get_text(' ',strip=True);row=INACTIVE_ROW.match(text)
+                name=row[2] if row else text
+                name=re.sub(r'\s*\([^)]*\)\s*','',name).strip(' -–—:,')
                 player=index.resolve(name,team,allow_transfer=True)
                 if player is None:raise ValueError('unresolved inactive player: '+name)
                 names.append({k:player[k] for k in ('gsis_id','player','position')})
-            if names:listed=names;break
+            if names:
+                if not mentioned<={p['gsis_id'] for p in names}:raise ValueError('inactive bullets omit a listed player')
+                listed=names;break
+        if not listed and line_error is not None:raise line_error
     unique={p['gsis_id']:p for p in listed}
     if not 1<=len(unique)<=15:raise ValueError('no complete inactive list found')
     return dict(rows=list(unique.values()),complete=True,issues=[])
@@ -303,6 +348,10 @@ def news_facts(info,team,event,index):
                 sentence=re.split(r'[.?!\n]',text[max(0,match.start()-150):match.end()+120])
                 clause=next((s for s in sentence if alias.casefold() in s.casefold() and re.search(r'\bstart',s,re.I)),match[0])
                 if UNCERTAIN.search(clause) or '?' in title:continue
+                # Negated or contrastive starts ("is not going to start", "won't start",
+                # "will start instead of") are never positive facts; they go to review.
+                if NEGATION.search(match[0]) or NEGATION.search(clause):
+                    issues.append('negated or contrastive start statement');continue
                 if re.search(r'\b(last (?:week|season)|previous|had been|was named|started)\b',clause,re.I):continue
                 other=event['away'] if team==event['home'] else event['home']
                 if not (nickname(other).casefold() in text.casefold() or re.search(r'\b(?:this (?:week|Thursday|Sunday|Monday)|tomorrow)\b',clause,re.I)):
@@ -524,6 +573,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
             if not any(j[0]==team for j in article_jobs.get(url,[])):article_jobs.setdefault(url,[]).append(job)
     downloaded=requests_batch(article_jobs)
     article_errors={team:[] for team in events}
+    inactive_failed=set()
     for url,jobs in article_jobs.items():
         response=downloaded[url];health=articles.setdefault(url,{})
         try:
@@ -544,12 +594,18 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
                         source=capture('official_inactives',team,event,response,parsed,pub)
                         facts(source,[dict(field='eligible',value=False,**p) for p in parsed['rows']]
                               +[dict(field='inactives_complete',value=True)])
-                        success(teams[team]['inactives'],response,complete=True,source_capture_sha256=source['source_capture_sha256'])
+                        if team not in inactive_failed:
+                            success(teams[team]['inactives'],response,complete=True,url=url,
+                                    source_capture_sha256=source['source_capture_sha256'])
                     except ValueError as exc:
                         # A bundle may contain other kickoffs; only this team's failed list is reviewed.
                         review(team,event,url,[str(exc)])
-                        if str(exc).startswith('unresolved inactive player'):
-                            failure(teams[team]['inactives'],exc);teams[team]['inactives']['complete']=False
+                        # Any failure on this team's own list, or on the page that supplied the accepted
+                        # list, withdraws completeness: an unparseable revision never inherits the old
+                        # list. Within one refresh, a failure also outranks another page's success.
+                        h=teams[team]['inactives']
+                        if not isinstance(exc,InactiveIdentityMismatch) or h.get('url')==url:
+                            failure(h,exc);h['complete']=False;inactive_failed.add(team)
                 if club:
                     values,issues=news_facts(info,team,event,index)
                     if values:

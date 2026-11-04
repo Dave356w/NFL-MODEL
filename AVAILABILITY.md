@@ -45,9 +45,21 @@ emergency third QB. A revised list supersedes the old list's observations; omiss
 asserts health or active status. Box-score participation and ESPN roster `active` flags are not
 used to infer an official inactive list.
 
+A list is complete only when every row in the team's section parses exactly. The team's rows
+must form one contiguous block under a single section. Any list-shaped line that names a player
+or carries a position prefix must resolve, including an unknown prefix, a bare name or a one-word
+name. Otherwise the whole list is rejected rather than accepted with that player missing. A club
+page whose text flattens its bullets may use the HTML bullet list instead, but only if that list
+contains every name found in the text. Any failed parse of this team's list withdraws its
+completeness for that refresh, including a failed revision of the page that supplied the accepted
+list. It also outranks another page's success in the same refresh. Only a bundle that does not
+cover this team's game leaves the accepted list in place.
+
 News rules accept exact, explicit upcoming-game QB announcements, confirmed active-roster moves
 and explicit same-game medical exclusions. Rumors, conditional starts, past starts, practice reps,
-practice-window openings and practice-squad signings do not establish game eligibility. Ambiguous
+practice-window openings and practice-squad signings do not establish game eligibility. A
+negated or contrastive start clause ("is not going to start", "instead of", "rather than") never
+becomes a starter fact; it is queued for review. Ambiguous
 material is queued for review. Exact names and known aliases are used; fuzzy matching is prohibited.
 
 Both teams need successful source checks within 35 minutes of the forecast. ATS candidates
@@ -140,6 +152,11 @@ produce a candidate. The public site retains its existing ATS presentation; sour
 in repository outputs and archives.
 
 ## Validation and remaining limits
+
+Game-card injury notes (`report_notes.csv`) show the sourced facts the forecast applied. These
+include official statuses, official inactives (labelled as such) and sourced roster activations.
+A team whose resolution has blockers keeps the feed's notes, as the model does. One sourced player
+status does not mark the team's report final.
 
 Tests cover late observations, future effective times, pending deals, team/game isolation,
 same-week additions, returns, medical exclusions, outdated clearances, conflicting starters,
