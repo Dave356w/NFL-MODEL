@@ -15,9 +15,10 @@ import nfl_model as m
 UTC = dt.timezone.utc
 KO = dt.datetime(2026, 10, 25, 17, tzinfo=UTC)
 CUTOFF = KO - dt.timedelta(hours=1)
-RULE = dict(season=2026, training_max_season=2025, training_games=1359, cuts=[3., 7., 10.],
-            magnitudes=[3., 4., 7., 14.], method='median_signed_mov',
-            policy_version='median-mov-ats-2026-10-17-v1')
+RULE = dict(season=2026, week=7, training_max_season=2026, training_max_week=6, training_games=1450,
+            training_band_counts=[500, 510, 270, 170], cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.],
+            method='weighted_median_signed_mov_weekly_decay', policy_version='median-mov-weekly-decay-2026-11-04-v2',
+            half_life_seasons=1.)
 RAW = dict(game_id='2026_07_TEN_IND', season=2026, week=7, home='IND', away='TEN',
            gameday='2026-10-25', gametime='13:00', result='', ready=True,
            model_wp=NormalDist().cdf(8 / 12.37), spread_line=7.,

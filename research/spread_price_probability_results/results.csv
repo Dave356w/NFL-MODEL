@@ -1,0 +1,92 @@
+basis,period,arm,kind,n,gain_x1000,se_x1000,z,W,L,P,bets,units,roi,roi_se,cover,null_roi
+2016-22,2016-2022,A raw disagreement,log loss,1776,-1.03607,0.623183,-1.66254,,,,,,,,,
+2016-22,2016-2022,B mapped disagreement,log loss,1278,-0.635216,0.668759,-0.949843,,,,,,,,,
+2016-22,2016-2022,A raw disagreement,ATS at actual prices,,,,,114,132,3,249,-21.8644,-0.0878089,0.0619477,0.463415,-0.0239727
+2016-22,2016-2022,B mapped disagreement,ATS at actual prices,,,,,70,82,4,156,-16.9008,-0.108338,0.0763516,0.460526,-0.0250695
+2016-22,2016-2022,production picks,ATS at actual prices,,,,,880,896,46,1822,-65.4645,-0.03593,0.0225095,0.495495,-0.0244308
+2016-22,2016-2022,always favorite,ATS at actual prices,,,,,843,929,46,1818,-119.53,-0.0657478,0.0226977,0.475734,-0.0244322
+2016-22,2016-2022,always home,ATS at actual prices,,,,,862,914,46,1822,-94.8322,-0.0520484,0.022576,0.48536,-0.0244308
+2016-22,2016,A raw disagreement,log loss,251,-5.28593,3.78844,-1.39528,,,,,,,,,
+2016-22,2016,B mapped disagreement,log loss,0,,,,,,,,,,,,
+2016-22,2016,A raw disagreement,ATS at actual prices,,,,,77,85,3,165,-11.1821,-0.0677705,0.0757678,0.475309,-0.0238879
+2016-22,2016,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2016,production picks,ATS at actual prices,,,,,139,112,5,256,19.9091,0.0777698,0.0601455,0.553785,-0.023886
+2016-22,2016,always favorite,ATS at actual prices,,,,,128,122,5,255,0.511202,0.00200471,0.060841,0.512,-0.0238819
+2016-22,2016,always home,ATS at actual prices,,,,,123,128,5,256,-11.0122,-0.0430162,0.060548,0.49004,-0.023886
+2016-22,2017,A raw disagreement,log loss,247,-0.594578,1.32713,-0.448016,,,,,,,,,
+2016-22,2017,B mapped disagreement,log loss,0,,,,,,,,,,,,
+2016-22,2017,A raw disagreement,ATS at actual prices,,,,,30,34,0,64,-4.67962,-0.0731191,0.124428,0.46875,-0.0238077
+2016-22,2017,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2017,production picks,ATS at actual prices,,,,,131,116,8,255,7.17892,0.0281526,0.0598693,0.530364,-0.0238953
+2016-22,2017,always favorite,ATS at actual prices,,,,,131,113,8,252,12.539,0.049758,0.0607259,0.536885,-0.0239015
+2016-22,2017,always home,ATS at actual prices,,,,,129,118,8,255,5.00673,0.0196342,0.0603298,0.522267,-0.0238953
+2016-22,2018,A raw disagreement,log loss,247,-1.13169,1.32873,-0.851708,,,,,,,,,
+2016-22,2018,B mapped disagreement,log loss,247,-1.40542,3.13755,-0.447935,,,,,,,,,
+2016-22,2018,A raw disagreement,ATS at actual prices,,,,,7,12,0,19,-5.00266,-0.263298,0.227541,0.368421,-0.0252926
+2016-22,2018,B mapped disagreement,ATS at actual prices,,,,,47,53,1,101,-9.5981,-0.0950307,0.0956169,0.47,-0.025721
+2016-22,2018,production picks,ATS at actual prices,,,,,114,133,9,256,-25.343,-0.0989959,0.059706,0.461538,-0.0257472
+2016-22,2018,always favorite,ATS at actual prices,,,,,114,133,9,256,-23.1627,-0.0904792,0.0602948,0.461538,-0.0257472
+2016-22,2018,always home,ATS at actual prices,,,,,119,128,9,256,-14.8104,-0.0578532,0.0600441,0.481781,-0.0257472
+2016-22,2019,A raw disagreement,log loss,246,0.0688798,0.0826709,0.833181,,,,,,,,,
+2016-22,2019,B mapped disagreement,log loss,246,-1.57564,1.33913,-1.17661,,,,,,,,,
+2016-22,2019,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2019,B mapped disagreement,ATS at actual prices,,,,,23,29,3,55,-7.30268,-0.132776,0.127878,0.442308,-0.0238732
+2016-22,2019,production picks,ATS at actual prices,,,,,115,131,10,256,-21.9977,-0.0859284,0.0597304,0.46748,-0.0238734
+2016-22,2019,always favorite,ATS at actual prices,,,,,113,133,10,256,-24.1473,-0.0943253,0.0601333,0.45935,-0.0238734
+2016-22,2019,always home,ATS at actual prices,,,,,106,140,10,256,-39.3205,-0.153596,0.0593635,0.430894,-0.0238734
+2016-22,2020,A raw disagreement,log loss,256,-0.192812,0.3474,-0.555014,,,,,,,,,
+2016-22,2020,B mapped disagreement,log loss,256,-0.0183589,0.0475077,-0.38644,,,,,,,,,
+2016-22,2020,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2020,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2020,production picks,ATS at actual prices,,,,,125,131,0,256,-12.2514,-0.0478572,0.0611,0.488281,-0.02402
+2016-22,2020,always favorite,ATS at actual prices,,,,,114,142,0,256,-32.1398,-0.125546,0.061159,0.445312,-0.02402
+2016-22,2020,always home,ATS at actual prices,,,,,127,129,0,256,-8.33031,-0.0325403,0.0611202,0.496094,-0.02402
+2016-22,2021,A raw disagreement,log loss,268,-0.208659,0.494319,-0.422115,,,,,,,,,
+2016-22,2021,B mapped disagreement,log loss,268,0.0833744,0.154638,0.53916,,,,,,,,,
+2016-22,2021,A raw disagreement,ATS at actual prices,,,,,0,1,0,1,-1,-1,,0,-0.0234553
+2016-22,2021,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2021,production picks,ATS at actual prices,,,,,124,144,4,272,-27.1492,-0.0998134,0.0584609,0.462687,-0.0256603
+2016-22,2021,always favorite,ATS at actual prices,,,,,125,143,4,272,-22.6374,-0.0832257,0.0591022,0.466418,-0.0256603
+2016-22,2021,always home,ATS at actual prices,,,,,129,139,4,272,-16.5655,-0.0609024,0.0587779,0.481343,-0.0256603
+2016-22,2022,A raw disagreement,log loss,261,0.00550088,0.0104039,0.528734,,,,,,,,,
+2016-22,2022,B mapped disagreement,log loss,261,-0.362859,0.287135,-1.26372,,,,,,,,,
+2016-22,2022,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2022,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2016-22,2022,production picks,ATS at actual prices,,,,,132,129,10,271,-5.8112,-0.0214435,0.0577847,0.505747,-0.0238861
+2016-22,2022,always favorite,ATS at actual prices,,,,,118,143,10,271,-30.4926,-0.112519,0.0581352,0.452107,-0.0238861
+2016-22,2022,always home,ATS at actual prices,,,,,129,132,10,271,-9.80006,-0.0361626,0.058204,0.494253,-0.0238861
+2023-26,2023-2026,A raw disagreement,log loss,912,-0.00271508,0.475415,-0.00571096,,,,,,,,,
+2023-26,2023-2026,B mapped disagreement,log loss,386,0.709505,1.68625,0.42076,,,,,,,,,
+2023-26,2023-2026,A raw disagreement,ATS at actual prices,,,,,8,9,0,17,-2.0112,-0.118306,0.233861,0.470588,-0.0447208
+2023-26,2023-2026,B mapped disagreement,ATS at actual prices,,,,,27,25,0,52,-0.842851,-0.0162087,0.132679,0.519231,-0.0446146
+2023-26,2023-2026,production picks,ATS at actual prices,,,,,493,419,25,937,28.5871,0.0305092,0.0306771,0.54057,-0.0448999
+2023-26,2023-2026,always favorite,ATS at actual prices,,,,,467,445,25,937,-21.7354,-0.0231968,0.0307443,0.512061,-0.0448999
+2023-26,2023-2026,always home,ATS at actual prices,,,,,452,460,25,937,-48.3098,-0.051558,0.0308251,0.495614,-0.0448999
+2023-26,2023,A raw disagreement,log loss,258,-0.0306852,0.247784,-0.123838,,,,,,,,,
+2023-26,2023,B mapped disagreement,log loss,0,,,,,,,,,,,,
+2023-26,2023,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2023-26,2023,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2023-26,2023,production picks,ATS at actual prices,,,,,133,125,14,272,-3.85687,-0.0141797,0.0565175,0.515504,-0.0449963
+2023-26,2023,always favorite,ATS at actual prices,,,,,137,121,14,272,3.00607,0.0110517,0.0562734,0.531008,-0.0449963
+2023-26,2023,always home,ATS at actual prices,,,,,128,130,14,272,-13.4578,-0.0494771,0.0565421,0.496124,-0.0449963
+2023-26,2024,A raw disagreement,log loss,268,0.0129012,0.0171187,0.75363,,,,,,,,,
+2023-26,2024,B mapped disagreement,log loss,0,,,,,,,,,,,,
+2023-26,2024,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2023-26,2024,B mapped disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2023-26,2024,production picks,ATS at actual prices,,,,,143,125,4,272,5.31396,0.0195366,0.0575141,0.533582,-0.0450273
+2023-26,2024,always favorite,ATS at actual prices,,,,,143,125,4,272,4.73118,0.0173941,0.0573954,0.533582,-0.0450273
+2023-26,2024,always home,ATS at actual prices,,,,,137,131,4,272,-5.5849,-0.0205327,0.0577569,0.511194,-0.0450273
+2023-26,2025,A raw disagreement,log loss,271,1.34697,0.525102,2.56516,,,,,,,,,
+2023-26,2025,B mapped disagreement,log loss,271,0.288453,2.05576,0.140314,,,,,,,,,
+2023-26,2025,A raw disagreement,ATS at actual prices,,,,,0,0,0,0,0,,,,
+2023-26,2025,B mapped disagreement,ATS at actual prices,,,,,17,19,0,36,-3.82289,-0.106191,0.159888,0.472222,-0.0445456
+2023-26,2025,production picks,ATS at actual prices,,,,,151,120,1,272,16.2779,0.0598453,0.0573429,0.557196,-0.044748
+2023-26,2025,always favorite,ATS at actual prices,,,,,131,140,1,272,-21.2918,-0.0782789,0.0577935,0.483395,-0.044748
+2023-26,2025,always home,ATS at actual prices,,,,,135,136,1,272,-13.7,-0.0503678,0.0578195,0.498155,-0.044748
+2023-26,2026,A raw disagreement,log loss,115,-3.15692,3.28941,-0.959722,,,,,,,,,
+2023-26,2026,B mapped disagreement,log loss,115,1.70172,2.89221,0.588381,,,,,,,,,
+2023-26,2026,A raw disagreement,ATS at actual prices,,,,,8,9,0,17,-2.0112,-0.118306,0.233861,0.470588,-0.0447208
+2023-26,2026,B mapped disagreement,ATS at actual prices,,,,,10,6,0,16,2.98004,0.186252,0.237405,0.625,-0.0447699
+2023-26,2026,production picks,ATS at actual prices,,,,,66,49,6,121,10.8521,0.0896869,0.0840058,0.573913,-0.0447384
+2023-26,2026,always favorite,ATS at actual prices,,,,,56,59,6,121,-8.1808,-0.0676099,0.0849153,0.486957,-0.0447384
+2023-26,2026,always home,ATS at actual prices,,,,,52,63,6,121,-15.5671,-0.128654,0.0847874,0.452174,-0.0447384

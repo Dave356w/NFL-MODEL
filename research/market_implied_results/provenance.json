@@ -1,0 +1,10 @@
+{
+  "research/market_implied.py": "e27d1922bc5ba22b8091f04aeb10b84c3b4ce0f5ec7697e0bc2cb11c3cdeab37",
+  "research/MARKET_IMPLIED.md": "eb5b0c6dd1bd53aada622532200fb6cd745308b3747702804557dd079f60e18b",
+  "nfl_model.py": "194aa10a646f145c0a202cb576a7b0f7862c9102004e2a6d9ecbefc2e68d3f37",
+  "fixed_bands.py": "5f54ef4094757e25877a101e4aaf7b6f49e3c4ca8b37b8398b8ae8b93ffe3229",
+  "research/market_implied_inputs/schedule_scores.csv": "1ec4b90d19a0a2e9980d83acdca0d951fa34b23787bcb7505795a4b052fec4be",
+  "research/out_of_sample_results/frozen_features_2013_2020.csv.gz": "6f0d416d1feb1146325dbd9e92ba5765e73dd20f56f0e26fc9b69b8f0ca50ec8",
+  "research/shrinkage_results/frozen_training_features.csv.gz": "a41dc647a8c21c6953043b14b0f7b20a124219937a7d2973a32cf084ccca5d9f",
+  "research/slim_model_results/forecasts.csv.gz": "9b16accfc5ff9fe6436ee340f280cfc63dcd98f7f483c1bb7fd6dc2426b95a05"
+}

@@ -70,7 +70,7 @@ current board week is included as soon as every game has a final score. The
 existing build refreshes the page and `historical_calibration.csv` automatically.
 The page labels reconstructed historical forecasts and exposed development
 seasons, separately from the live season record. It does not change the recipe,
-confidence penalty, annual median map, selections or forecast archives.
+confidence penalty, median map, selections or forecast archives.
 
 Market/model WP tables use the side's implied probability bands, with home,
 away and both-side observations. Market bands also show approximate fair American
@@ -81,8 +81,11 @@ paired observations by game. The two spread tables display ATS ROI only, with
 bet counts and one standard error. The market table backs market favorites and
 groups by market spread magnitude; the model table uses production ATS selections
 and groups by mapped model spread magnitude (`<3`, `3–<7`, `7–<10`, `10+`). Both
-grade against market handicaps at flat 1u and assumed −110. Wins return +1/1.1u,
-losses −1u, pushes 0u; ROI divides net units by all bets including pushes. The
+grade against market handicaps at flat 1u at each game's actual spread price for the side
+bet (owner decision 2026-11-04): the schedule's home/away spread odds, closing basis, carried in
+`retro_ledger.csv` and the board (`nfl_model.attach_spread_prices`, reporting only). A win returns that
+price's profit, losses −1u, pushes 0u; a game without a valid price uses −110 and is counted in the
+CSV's `assumed_prices` and the page note. ROI divides net units by all bets including pushes. The
 tables use identical eligible games, excluding market pick'ems and missing model
 spreads. A zero model spread remains eligible against a nonzero market line;
 zero edge follows the production favorite rule. The CSV includes aggregate
@@ -631,7 +634,37 @@ Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
 walk-forward grid.
 
+### Weekly decayed median map (owner decision 2026-11-04; ATS lock policy v3)
+
+**Owner decision 2026-11-04 (research Test 59 arm D).** The median map is refit before every week
+instead of once per season. For games in week w of season Y, each band's number is the weighted
+median of the signed margins of all earlier games (earlier seasons and this season's earlier weeks),
+weight 2^(−age) with age = ((Y − season)·19 + (w − week))/19, a one-season half-life. Bands
+(|raw spread| cut at 3, 7, 10), training rows (losses negative, ties 0, zero spreads excluded) and
+minimums (two complete earlier seasons, 300 games, 30 per band) are the annual map's. Rules carry
+`season`, `week`, `training_max_season`, `training_max_week`, `method=weighted_median_signed_mov_weekly_decay`
+and `policy_version=median-mov-weekly-decay-2026-11-04-v2` (`fixed_bands.fit_weekly`). The zero-edge
+favorite rule is unchanged.
+
+The 60-minute locks use `median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3` and save the weekly rule
+in force; `ats_locks.validate_store` requires it to be fitted for that game's week on earlier games
+only. v1 and v2 locks keep validating under their saved annual rules and are not rewritten. Picks,
+Results, Performance and Calibration regenerate under the weekly map: the 2021–25 history and the 2026
+replay before 2026-11-05 12:00 UTC show weekly-map picks, and later games use v3 locks. v1.19, its
+coefficients and `config_signature()` are unchanged. The independent audit
+(`research/production_sanity.py`) recomputes the weekly rules and checks each export against the map
+policy it declares.
+
+Evidence (exposed development, not forward): ATS units against the annual map +76.4 ± 35.3 on 2016–22
+(v1.19 replay) and +59.2 ± 26.5 on 2023–26 (production ledger), about 2.2 SE each; 92 of the 136 units
+come from 2021 and 2024, and the mechanism differs by period (mostly underdogs on key-number ties
+2016–22, mostly favorites 2023–26). The band numbers are no more accurate than the annual map's
+(Test 59, unresolved), and a linear-trend map was reliably worse.
+
 ### Median-MOV displayed spread (2026-10-17)
+
+Superseded as the active map on 2026-11-04 by the weekly decayed map above; `fixed_bands.fit` still
+fits it for saved v1/v2 decisions, legacy exports and research.
 
 The site's **Model spread** uses a prior-season median signed MOV calibration
 in `fixed_bands.py`, replacing the earlier ATS W-L optimized values. The

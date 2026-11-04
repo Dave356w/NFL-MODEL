@@ -1,7 +1,12 @@
 """Public historical calibration, using completed regular-season weeks only.
 
-This is an aggregate reporting view. It never changes forecasts, annual maps,
+This is an aggregate reporting view. It never changes forecasts, the median map,
 ATS selections, snapshots or the forward ledger.
+
+Spread-band ROI (owner decision 2026-11-04) is graded at each game's actual spread price for
+the side bet (nflverse home/away spread odds, closing basis): a win pays that price, a loss
+costs 1u, a push 0. A game without a valid price (|odds| >= 100) is graded at −110 and
+counted in `assumed_prices`.
 """
 from html import escape
 
@@ -18,7 +23,8 @@ SPREAD_CUTS = [3., 7., 10.]
 SPREAD_LABELS = ['<3 points', '3–<7 points', '7–<10 points', '10+ points']
 EXPORT_COLUMNS = ['season', 'view', 'band', 'side', 'observations', 'decided',
                   'wins', 'losses', 'pushes', 'ties', 'implied_wp', 'actual_wp',
-                  'gap_pp', 'se_pp', 'median_mov', 'units', 'roi', 'roi_se_pp']
+                  'gap_pp', 'se_pp', 'median_mov', 'units', 'roi', 'roi_se_pp',
+                  'actual_prices', 'assumed_prices']
 
 
 def history(latest):
@@ -103,8 +109,16 @@ def wp_rows(frame, column, view):
                 gap_pp=100 * (actual-implied) if n else None,
                 se_pp=100 * se if se is not None else None,
                 median_mov=float(group.mov.median()) if len(group) else None,
-                units=None, roi=None, roi_se_pp=None))
+                units=None, roi=None, roi_se_pp=None, actual_prices=None, assumed_prices=None))
     return rows
+
+
+def win_payout(odds):
+    """Profit per 1u on a win at American odds; NaN for a missing or invalid price."""
+    o = pd.to_numeric(pd.Series(odds), errors='coerce').to_numpy(float)
+    valid = np.isfinite(o) & (np.abs(o) >= 100)
+    safe = np.where(valid, o, 100.)
+    return np.where(valid, np.where(safe > 0, safe/100., 100./-safe), np.nan)
 
 
 def roi_rows(frame, model, view):
@@ -115,7 +129,16 @@ def roi_rows(frame, model, view):
     prediction = data.fixed_band_spread if model else data.spread_line
     # A market-line forecast has zero edge, so the production rule backs its
     # favorite. The model forecast selects its ATS side using that same rule.
-    data['ats_result'], data['units'] = fixed_bands.grade(data, prediction)
+    data['ats_result'], _ = fixed_bands.grade(data, prediction)
+    side = fixed_bands.pick(prediction, data.spread_line)
+    home = win_payout(data['home_spread_odds'] if 'home_spread_odds' in data else np.nan)
+    away = win_payout(data['away_spread_odds'] if 'away_spread_odds' in data else np.nan)
+    if np.ndim(home) == 0 or len(home) != len(data): home = np.full(len(data), np.nan)
+    if np.ndim(away) == 0 or len(away) != len(data): away = np.full(len(data), np.nan)
+    actual = np.where(side > 0, home, np.where(side < 0, away, np.nan))
+    data['priced'] = np.isfinite(actual)
+    payout = np.where(data.priced, actual, 1/1.1)
+    data['units'] = np.where(data.ats_result.eq('W'), payout, np.where(data.ats_result.eq('L'), -1., 0.))
     data['band_number'] = np.digitize(prediction.abs(), SPREAD_CUTS)
     rows = []
     for k, band in enumerate(SPREAD_LABELS):
@@ -129,7 +152,8 @@ def roi_rows(frame, model, view):
             ties=int(group.result.eq(0).sum()), implied_wp=None, actual_wp=None,
             gap_pp=None, se_pp=None,
             median_mov=None, units=units if n else None, roi=units/n if n else None,
-            roi_se_pp=100*se if se is not None else None))
+            roi_se_pp=100*se if se is not None else None,
+            actual_prices=int(group.priced.sum()), assumed_prices=int((~group.priced).sum())))
     return rows
 
 
@@ -228,6 +252,8 @@ def roi_table(rows, view):
         if n:
             meta += (' · ± ' + number(r['roi_se_pp']) + ' pp'
                      if r['roi_se_pp'] is not None else ' · SE unavailable')
+            if r.get('assumed_prices'):
+                meta += f" · {r['assumed_prices']:,} at assumed −110"
         roi = number(100*r['roi'], signed=True, suffix='%') if n else '—'
         tone = 'pos-tx' if n and r['roi'] > 0 else 'neg-tx' if n and r['roi'] < 0 else ''
         body.append("<tr><th scope='row'>" + r['band'] + '</th>'
@@ -283,7 +309,13 @@ def render_body(pack):
                     "n excludes tied finals. Both sides contains one observation per team. A game can appear in two "
                     "different bands; paired sides stay together when computing the ±1 standard error. "
                     "Median MOV includes losses and tied finals, signed toward the home or away side in each cell.</p>")
-        out.append("<p class='mut small cal-roi-note'>Flat 1-unit stakes at assumed −110. ROI is net profit divided "
+        spread_rows = [r for r in p['rows'] if r['view'] == 'model_spread']
+        priced = sum(r['actual_prices'] or 0 for r in spread_rows)
+        assumed = sum(r['assumed_prices'] or 0 for r in spread_rows)
+        price_text = ('Flat 1-unit stakes at each game’s actual spread price for the side bet (closing quotes). '
+                      + (f'{assumed:,} of {priced + assumed:,} model stakes had no price and use assumed −110. '
+                         if assumed else ''))
+        out.append("<p class='mut small cal-roi-note'>" + price_text + "ROI is net profit divided "
             "by total stakes, including pushes. ± is one standard error. Both tables use the same eligible games, "
             "each counted once; their band counts can differ because each uses its own spread. Market pick’em "
             "lines and unavailable model spreads are excluded.</p></section>")

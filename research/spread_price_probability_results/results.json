@@ -1,0 +1,40 @@
+{
+  "protocol": "research/SPREAD_PRICE_PROBABILITY.md",
+  "protocol_commit": "d91b78a",
+  "reproduction_max_error": {
+    "v1.19 retro_ledger 2021-25": 2.4424906541753444e-15,
+    "Test 50 S3 2014-20 (6-digit CSV)": 4.997278759688584e-07,
+    "fixed_band_spread 2023-25": 0.0,
+    "map vs fixed_bands 2016-22": 0.0,
+    "map vs fixed_bands 2023-26": 0.0
+  },
+  "z_bar": 2.241402727604947,
+  "verdicts": {
+    "A raw disagreement": "unresolved",
+    "B mapped disagreement": "unresolved"
+  },
+  "betas": {
+    "A raw disagreement 2016": -1.306290400916579,
+    "A raw disagreement 2017": -0.4916461674228149,
+    "A raw disagreement 2018": -0.2929573310662075,
+    "A raw disagreement 2019": 0.027153553466546434,
+    "A raw disagreement 2020": 0.17635079334570888,
+    "A raw disagreement 2021": 0.1068464762413232,
+    "A raw disagreement 2022": 0.004008907208030196,
+    "B mapped disagreement 2016": null,
+    "B mapped disagreement 2017": null,
+    "B mapped disagreement 2018": 0.4203501577845669,
+    "B mapped disagreement 2019": 0.2234949085828261,
+    "B mapped disagreement 2020": 0.011231105739505164,
+    "B mapped disagreement 2021": -0.02810053702798239,
+    "B mapped disagreement 2022": -0.08274380734468877,
+    "A raw disagreement 2023": -0.05053310660533848,
+    "A raw disagreement 2024": 0.0050928737708098365,
+    "A raw disagreement 2025": 0.15172656137529594,
+    "A raw disagreement 2026": 0.5524766848013589,
+    "B mapped disagreement 2023": null,
+    "B mapped disagreement 2024": null,
+    "B mapped disagreement 2025": 0.38717783877360407,
+    "B mapped disagreement 2026": 0.3462831699393686
+  }
+}

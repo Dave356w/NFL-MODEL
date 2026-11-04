@@ -8,6 +8,13 @@ Legacy W-L fitting is retained only to reproduce the superseded research rule.
 Selection (owner decision 2026-10-19): a mapped spread equal to the market line
 takes the market favorite instead of skipping. Only a pick'em line with a zero
 mapped spread still skips. Saved decisions keep the rule they were made under.
+
+Map policy v2 (owner decision 2026-11-04, research Test 59 arm D): the band
+numbers are refit before every week as weighted medians of all earlier games'
+signed margins, weight 2^(-age) with age in seasons (19 week slots per season),
+so the half-life is one season. Same bands, rows and minimums as the annual map
+(two complete earlier seasons, 300 games, 30 per band).
+`fit` (annual) is kept for saved v1/v2 decisions, legacy exports and research.
 """
 import numpy as np
 import pandas as pd
@@ -18,6 +25,12 @@ BANDS = ['<3', '3–<7', '7–<10', '10+']
 POLICY_VERSION = 'median-mov-ats-2026-10-17-v1'
 METHOD = 'median_signed_mov'
 SELECTION_VERSION = 'favorite-on-zero-edge-2026-10-19-v1'
+# Active map (owner decision 2026-11-04): weekly refit, one-season half-life.
+MAP_POLICY_VERSION = 'median-mov-weekly-decay-2026-11-04-v2'
+MAP_METHOD = 'weighted_median_signed_mov_weekly_decay'
+ANNUAL_MAP_POLICY_VERSION = POLICY_VERSION
+HALF_LIFE_SEASONS = 1.
+WEEKS_PER_SEASON = 19.
 
 
 def fit_legacy(history, season):
@@ -92,6 +105,73 @@ def fit(history, season):
                 policy_version=POLICY_VERSION, includes_tied_finals=True)
 
 
+def weighted_median(values, weights):
+    """Smallest value whose cumulative weight reaches half the total; an exact half averages
+    with the next value, so equal weights give np.median."""
+    order = np.argsort(values, kind='mergesort')
+    x = np.asarray(values, float)[order]
+    w = np.asarray(weights, float)[order]
+    c = np.cumsum(w)
+    half = c[-1] / 2
+    tol = 1e-12 * c[-1]
+    i = int(np.searchsorted(c, half - tol))
+    if abs(c[i] - half) <= tol and i + 1 < len(x):
+        return float((x[i] + x[i + 1]) / 2)
+    return float(x[i])
+
+
+def fit_weekly(history, season, week):
+    """Map policy v2: band numbers for games in (season, week) from every earlier game only,
+    weighted 2^(-age / HALF_LIFE_SEASONS), age = ((season - s) * 19 + (week - w)) / 19."""
+    d = history.copy()
+    for name in ('model_spread', 'result', 'season', 'week'):
+        d[name] = pd.to_numeric(d[name], errors='coerce')
+    earlier = (d.season < season) | ((d.season == season) & (d.week < week))
+    d = d.loc[earlier & np.isfinite(d[['model_spread', 'result']]).all(axis=1) & d.model_spread.ne(0)]
+    # Same coverage as the annual map: at least two complete earlier seasons.
+    if d.loc[d.season < season].season.nunique() < 2 or len(d) < 300:
+        return None
+    band = np.digitize(d.model_spread.abs(), CUTS)
+    counts = np.bincount(band, minlength=4)
+    if min(counts) < 30:
+        return None
+    signed_margin = np.sign(d.model_spread.to_numpy()) * d.result.to_numpy()
+    age = ((season - d.season.to_numpy()) * WEEKS_PER_SEASON + (week - d.week.to_numpy())) / WEEKS_PER_SEASON
+    weight = np.exp2(-age / HALF_LIFE_SEASONS)
+    medians = [weighted_median(signed_margin[band == k], weight[band == k]) for k in range(4)]
+    latest = d.loc[d.season == d.season.max()]
+    return dict(season=int(season), week=int(week), training_max_season=int(d.season.max()),
+                training_max_week=int(latest.week.max()), training_games=len(d),
+                training_band_counts=counts.tolist(), cuts=list(CUTS), magnitudes=medians,
+                method=MAP_METHOD, policy_version=MAP_POLICY_VERSION,
+                half_life_seasons=HALF_LIFE_SEASONS, includes_tied_finals=True)
+
+
+def trained_before(rule, season, week):
+    """True when the rule uses only games before the forecast: earlier seasons for an annual
+    rule; earlier (season, week) for a weekly rule fitted for this exact week."""
+    if rule is None:
+        return False
+    if 'week' not in rule:
+        return rule['training_max_season'] < season
+    return (int(rule['season']) == int(season) and int(rule['week']) == int(week)
+            and (rule['training_max_season'], rule['training_max_week']) < (int(season), int(week)))
+
+
+def rule_for(rules, season, week, weekly=None):
+    """The rule for (season, week): the weekly rule for that week, else the season's annual rule.
+    weekly=True or False restricts the search to that kind."""
+    if weekly is not False:
+        for r in rules:
+            if r and 'week' in r and int(r['season']) == int(season) and int(r['week']) == int(week):
+                return r
+    if weekly is not True:
+        for r in rules:
+            if r and 'week' not in r and int(r['season']) == int(season):
+                return r
+    return None
+
+
 def apply(spread, rule):
     x = np.asarray(spread, dtype=float)
     if rule is None:
@@ -130,16 +210,14 @@ def prepare(latest):
         # Older snapshots may only contain probabilities.
         import nfl_model as m
         history['model_spread'] = m.implied_spread(history.model_wp)
-    rules = {}
     board = latest.get('board', pd.DataFrame()).copy()
-    seasons = set(history.season.astype(int))
+    keys = set(zip(history.season.astype(int), history.week.astype(int)))
     if len(board):
-        seasons.update(board.season.astype(int))
-    for year in sorted(seasons):
-        rules[year] = fit(history, year)
+        keys.update(zip(board.season.astype(int), board.week.astype(int)))
+    rules = {key: fit_weekly(history, *key) for key in sorted(keys)}
     history['fixed_band_spread'] = np.nan
-    for year, rule in rules.items():
-        mask = history.season == year
+    for (year, week), rule in rules.items():
+        mask = (history.season == year) & (history.week == week)
         history.loc[mask, 'fixed_band_spread'] = apply(history.loc[mask, 'model_spread'], rule)
     # The continuous-spread comparison keeps its original skip definition.
     for prefix, col, tie in [('original', 'model_spread', False), ('fixed_band', 'fixed_band_spread', True)]:
@@ -153,6 +231,7 @@ def prepare(latest):
                                                      np.where(side == 'away', history.spread_line, np.nan))
     history['spread_band'] = np.asarray(BANDS)[np.digitize(history.model_spread.abs(), CUTS)]
     history['selection_version'] = SELECTION_VERSION
+    history['map_policy_version'] = MAP_POLICY_VERSION
     latest['fixed_band_ledger'] = history
     latest['fixed_band_rules'] = [r for r in rules.values() if r is not None]
     if len(board):
@@ -160,8 +239,8 @@ def prepare(latest):
             import nfl_model as m
             board['model_spread'] = m.implied_spread(board.model_wp)
         board['fixed_band_spread'] = np.nan
-        for year, rule in rules.items():
-            mask = board.season == year
+        for (year, week), rule in rules.items():
+            mask = (board.season == year) & (board.week == week)
             board.loc[mask, 'fixed_band_spread'] = apply(board.loc[mask, 'model_spread'], rule)
         latest['board'] = board
 
@@ -180,7 +259,7 @@ def summary(frame):
                 raise AssertionError("Every eligible ATS opportunity must be selected or skipped")
             rows.append(dict(season=str(group), method=label, games=len(g),
                              opportunities=len(g), bets=bets, selected=bets,
-                             policy_version=POLICY_VERSION, calibration_method=METHOD,
+                             policy_version=MAP_POLICY_VERSION, calibration_method=MAP_METHOD,
                              wins=w, losses=l, pushes=p, skips=s,
                              selection_rate=bets / len(g) if len(g) else np.nan,
                              units=units, roi=units / bets if bets else np.nan))

@@ -458,8 +458,9 @@ def test_price_band_flags_small_samples_only():
 
 
 def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
-                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
+                        dict(season=year, week=week, training_max_season=year - 1, training_max_week=18,
+                             cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
     assert "<span>Model DAL −5.0</span> · <span>Market DAL −9.5</span>" in idx
@@ -589,8 +590,9 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
 
 
 def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_path, monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
-                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
+                        dict(season=year, week=week, training_max_season=year - 1, training_max_week=18,
+                             cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     data = make_data(tmp_path / 'data')
     path = data / 'latest' / 'retro_ledger.csv'
     retro = pd.read_csv(path)
@@ -619,15 +621,18 @@ def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_pat
     for game in public.game_id:
         assert grades.count(f"data-game-id='{game}'") == 1
     performance = (out / 'market-calibration.html').read_text()
-    assert stats['priced_bets'] == stats['assumed_prices'] == 3
+    # Three replayed history games plus the early native week-5 snapshot, replayed with its week's
+    # rule (the injected weekly rules carry a season, as production rules always do).
+    assert stats['priced_bets'] == stats['assumed_prices'] == 4
     assert 'assumed −110 in pooled units and ROI' in performance
     assert f"Pick {stats['bets']}" in performance
     assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 
 
 def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
-                        dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
+                        dict(season=year, week=week, training_max_season=year - 1, training_max_week=18,
+                             cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     out, _ = render(tmp_path)
     for page in PUBLIC:
         text = (out / page).read_text()
@@ -656,8 +661,9 @@ def test_ats_card_pick_disagrees_with_moneyline_and_handles_skips():
 
 
 def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit', lambda history, year:
-                        dict(cuts=[3,7,10], magnitudes=[4,5,7,13]))
+    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
+                        dict(season=year, week=week, training_max_season=year-1, training_max_week=18,
+                             cuts=[3,7,10], magnitudes=[4,5,7,13]))
     out,_=render(tmp_path)
     text=(out/'index.html').read_text()
     assert "<span class='kind'>ATS pick</span>" in text

@@ -26,10 +26,15 @@ class TimedATS(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.data = Path(self.tmp.name)
         (self.data / 'latest').mkdir()
-        self.rule = dict(season=2026, training_max_season=2025, training_games=1359,
-                         cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.],
-                         method='median_signed_mov', policy_version='median-mov-ats-2026-10-17-v1')
-        (self.data / 'latest/fixed_band_rules.json').write_text(json.dumps([self.rule]))
+        # The weekly rule (lock policy v3) and the annual rule kept for saved v1/v2 decisions.
+        self.rule = dict(season=2026, week=7, training_max_season=2026, training_max_week=6, training_games=1450,
+                         training_band_counts=[500, 510, 270, 170], cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.],
+                         method='weighted_median_signed_mov_weekly_decay',
+                         policy_version='median-mov-weekly-decay-2026-11-04-v2', half_life_seasons=1.)
+        self.annual_rule = dict(season=2026, training_max_season=2025, training_games=1359,
+                                cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.],
+                                method='median_signed_mov', policy_version='median-mov-ats-2026-10-17-v1')
+        (self.data / 'latest/fixed_band_rules.json').write_text(json.dumps([self.rule, self.annual_rule]))
         self.raw = dict(game_id='2026_07_TEN_IND', season=2026, week=7, home='IND', away='TEN',
                         gameday='2026-10-25', gametime='13:00', result='', ready=True,
                         model_wp=NormalDist().cdf(8 / 12.37), spread_line=7.,
@@ -361,3 +366,39 @@ class TimedATS(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class WeeklyPolicy(TimedATS):
+    def test_v3_lock_saves_the_weekly_rule_for_its_week(self):
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        saved = self.locks()[0]
+        self.assertEqual(saved['policy_version'], a.POLICY_VERSION)
+        self.assertEqual((saved['fixed_rule']['season'], saved['fixed_rule']['week']), (2026, 7))
+        self.assertEqual(saved['fixed_rule']['method'], a.POLICY_METHODS[a.POLICY_VERSION])
+
+    def test_v3_candidate_with_another_weeks_rule_is_rejected(self):
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        for change in (dict(week=8), dict(training_max_week=7), dict(method='median_signed_mov')):
+            path = self.data / a.CANDIDATES
+            row = a.read(path)[0]
+            row['fixed_rule'] = dict(row['fixed_rule'], **change)
+            row.pop('candidate_sha256')
+            row['candidate_sha256'] = a.digest(row)
+            path.write_text(json.dumps(row)+'\n')
+            (self.data / a.LOCKS).unlink(missing_ok=True)
+            with self.assertRaisesRegex(ValueError, 'not fitted on games before'):
+                a.validate_store(self.data)
+
+    def test_annual_only_export_falls_back_to_a_weekly_fit_from_the_ledger(self):
+        (self.data / 'latest/fixed_band_rules.json').write_text(json.dumps([self.annual_rule]))
+        root = Path(__file__).resolve().parents[1]
+        (self.data / 'latest/retro_ledger.csv').write_bytes((root / 'data/latest/retro_ledger.csv').read_bytes())
+        self.board(CUTOFF)
+        a.record(self.data, CUTOFF)
+        saved = self.locks()[0]
+        import fixed_bands
+        history = pd.read_csv(self.data / 'latest/retro_ledger.csv')
+        history['model_spread'] = m.implied_spread(history.model_wp)
+        self.assertEqual(saved['fixed_rule'], fixed_bands.fit_weekly(history, 2026, 7))

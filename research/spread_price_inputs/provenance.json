@@ -1,0 +1,8 @@
+{
+  "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "fetched_utc": "2026-11-04",
+  "source_sha256": "937909d36ccb5ec6fc2c50ebf881088dd6b51028bdc7fe97c9a4efb555c4a98a",
+  "filter": "REG, 2014-2026, completed, both spread prices |odds|>=100",
+  "rows": 3271,
+  "sha256": "9cff9ffd599abf0fbc6456d79a8fbebb78eb720d9b3fe513cc31db0d8995b379"
+}

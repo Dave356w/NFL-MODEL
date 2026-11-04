@@ -1847,3 +1847,296 @@ published forecasts (max error 2.3e-13) and production's `fixed_band_spread` for
 is a simplicity argument, not an edge. The decision belongs to the owner. Adopting S1 or S2 changes
 `config_signature()` and needs a new `REVISION`. The only clean test is a reporting-only forward shadow, reviewed
 at 100 decided locks on log loss and ATS units against v1.18 on the same games.
+
+### Test 51: per-team market-implied points in the v1.19 fit (2026-11-04): neither arm adds measurable accuracy
+
+Protocol [`MARKET_IMPLIED.md`](MARKET_IMPLIED.md), pushed (`2e8c50c`) with its frozen input before any arm was built or
+scored. Script `market_implied.py`; input `market_implied_inputs/` (nflverse scores and closing spread/total, 2011–25);
+results `market_implied_results/` (REPORT.md). Owner request: add per-team market-implied values to the fit. Both arms are
+v1.19 plus two terms. All bases were exposed by earlier tests, so this is development evidence. P reproduces v1.19's
+published 2021–25 forecasts (2.4e-15), Test 50's S3 forecasts for 2014–20 (5e-7, the 6-digit CSV) and production's
+`fixed_band_spread` for 2023–25 exactly. A lookahead fixture checks that arm B ignores a game's own and later scores.
+
+* **Arms.** A: this game's implied points, home (total + spread)/2 and away (total − spread)/2, each minus 22.5. B: each
+  team's decayed residual against its implied points in earlier games, offense (scored − own implied) and defense
+  (allowed − opponent's implied), home minus away, by production's decayed-margin rule (h8, offseason halving, four
+  pseudo-games at 0).
+
+| Log loss, arm − v1.19 (×1000, negative = arm better) | 2015–16 (510) | 2017–22 (1,559) | 2023–25 (815) | Verdict |
+|---|---:|---:|---:|---|
+| A this game's implied points | −0.32 ± 0.90 | +0.26 ± 0.46 | −0.60 ± 0.58 | forward candidate (rule) |
+| B history vs implied points | +0.29 ± 1.14 | −0.22 ± 0.45 | +0.62 ± 0.72 | unresolved |
+
+- **Neither arm moves log loss measurably.** Every |z| ≤ 1.0 against a 2.24 bar; the largest change is 0.1% of the
+  per-game log loss. A meets the "forward candidate" rule only because two of three means are below zero. The
+  effects are not resolved in either direction.
+- **The added coefficients are small and change sign between fits.** A's terms correlate ±0.81 with the market
+  log-odds, so beyond the moneyline offset they mostly carry the total and the spread-vs-moneyline disagreement.
+  Their fitted weights stay within ±0.07 per RMS unit. B's defense coefficient is −0.06, +0.11 and −0.03 in the
+  last fits of the three bases. This matches Test 12: once the market is the offset, market-derived inputs add
+  nothing the close lacks.
+- **ATS is noise and depends on the map history.** With each arm's own map, A is −21.0u, +22.9u and −9.5u on its
+  flips against v1.19; B is −13.4u, +101.2u and −9.5u. On 2023–25 with production's 2021+ map, v1.19 goes 427-370-19
+  (+18.2u, +2.2% ± 3.3), A +6.7u and B +1.0u. Every ROI SE is 2.4–5.9 points. Moneyline units (legacy) are lower
+  for A on all three bases.
+
+**Reading.** Per-team implied points, either for this game or as a team's running record against them, do not
+improve v1.19 on any basis. Arm A's rule label is not evidence of a gain. A forward shadow would also need a
+lock-time total saved with each snapshot. It is not recommended; that call belongs to the owner. No `REVISION`.
+
+### Test 52: implied points as fitted features with no moneyline offset (2026-11-04): worse than v1.19; stop
+
+Protocol [`IMPLIED_NO_OFFSET.md`](IMPLIED_NO_OFFSET.md), pushed (`5e912a4`) before any arm was scored. Script
+`implied_no_offset.py`; results `implied_no_offset_results/` (REPORT.md). Owner follow-up to Test 51: let the market
+enter only through each team's implied points with fitted weights, without the no-vig moneyline as the fixed starting
+point. Both arms also drop the favorite penalty, which would pull forecasts back to the moneyline. Same rows as v1.19.
+A research copy of `fit_composite` reproduces v1.19 to 2e-16 with the offset switched back on.
+
+| Log loss, arm − v1.19 (×1000) | 2015–16 (510) | 2017–22 (1,559) | 2023–25 (815) | Verdict |
+|---|---:|---:|---:|---|
+| C ten core terms + implied points, no offset | +4.08 ± 3.77 | +6.89 ± 2.15 (z +3.2) | +3.28 ± 2.55 | stop |
+| C0 implied points only, no offset | +0.83 ± 3.79 | +7.14 ± 2.87 (z +2.5) | +10.07 ± 3.80 (z +2.6) | stop |
+
+| Model − no-vig moneyline alone (×1000) | 2015–16 | 2017–22 | 2023–25 |
+|---|---:|---:|---:|
+| v1.19 | +1.17 ± 1.67 | −0.04 ± 1.24 | −3.06 ± 2.23 |
+| C | +5.25 ± 4.56 | +6.85 ± 2.75 | +0.22 ± 3.48 |
+| C0 | +2.00 ± 3.88 | +7.10 ± 2.60 | +7.01 ± 3.32 |
+
+- **The fixed moneyline is the better starting point.** Both arms are worse than v1.19 on every basis, beyond the bar
+  on 2017–22 (both) and 2023–25 (C0). Fitted weights on implied points (about +0.07 to +0.10 log-odds per home point,
+  −0.08 to −0.12 per away point) price games worse than the moneyline itself. This matches Test 12: freeing the market's
+  weight does not help, and the moneyline carries the price more accurately than a linear map of spread and total.
+- **The box-score terms still add something without the offset** (C beats C0 on 2023–25 by about 7 ×10⁻³), but not
+  enough to make up for losing the moneyline.
+- **ATS is mixed and not a reason to switch.** The no-offset maps lack 30 games per band until later seasons, so the
+  protocol's mapped comparison has no 2015–16 rows and 1,311 of 1,566 on 2017–22. On mapped rows, C goes +35.4u
+  (+4.3% ± 3.3) vs v1.19 +8.6u on 2023–25 (n 816) and −42.8u vs −113.5u on 2017–22. With production's 2021+ map,
+  C is +29.9u vs +22.3u (n 544). A raw-spread view on all rows, added after the missing maps were seen, has C ahead
+  of v1.19's raw spread on all three bases, but v1.19 is mapped in production, and every SE is 2.4–4.2 points.
+  The same-row always-favorite baseline is −36.0u, −157.0u and −12.4u. Selection stays on log loss, so these do
+  not override the verdict.
+
+**Reading.** Keep the moneyline as the fixed offset. Implied points work no better as the market input than as an
+addition to it (Test 51). No `REVISION`.
+
+### Test 53: price-dependent calibration of the no-vig moneyline (2026-11-04): fail, keep q
+
+Protocol [`MARKET_PRICE_CALIBRATION.md`](MARKET_PRICE_CALIBRATION.md), pushed (`baa1dbf`) before any calibrated price was
+scored. Script `market_price_calibration.py`; results `market_price_calibration_results/` (REPORT.md). Owner question:
+should v1.19's fixed moneyline starting point be capped by realized market accuracy, which depends on the price?
+Market only, Test 35's frozen 2006–25 pack. Each arm is refit per season on all earlier seasons. Selection 2009–16
+(2,029 games); held-out 2017–25 (2,374).
+
+| Log-loss gain over raw q (×1000, positive = better) | 2009–16 | 2017–25 held out [97.5%] |
+|---|---:|---:|
+| M1 linear (home bias + overall confidence) | −0.58 ± 0.73 | +0.15 [−0.67, +0.98] |
+| M2 four price-band shifts (ridge) | −1.67 ± 1.04 | −0.28 [−1.61, +1.05] |
+| M3 isotonic | −5.29 ± 2.74 | −1.68 [−5.51, +2.15] |
+
+- **Raw q was selected, so the verdict is fail: keep q.** No price-dependent map fitted on earlier seasons beats the
+  raw no-vig price, and every held-out interval crosses zero. The more flexible the map, the worse it does.
+- **The price pattern is mostly not stable.** Realized minus implied favorite win rate, 2006–16 then 2017–25:
+  0.50–0.60 −1.6 then +0.7 points; 0.70–0.80 −0.6 then +2.9; ≥ 0.80 +1.9 then +0.9 (SEs 1.6–2.2 points). Only
+  0.60–0.70 repeats (−1.8 and −1.8, each about 1 SE), matching Test 35's ROI for that band. M2 learned that shift and
+  still did not gain on held-out games.
+- The fitted overall confidence slope stays at 1.01–1.04, so nothing supports a cap below weight 1.
+
+**Reading.** The closing moneyline is about as accurate as its price says at every price level, within what earlier
+seasons can predict. Keep q at weight 1 as v1.19's offset. Stage 2 is not registered. No `REVISION`.
+
+### Test 54: raw spread inside the 3–7 band, median map elsewhere (2026-11-04): unresolved, the band pattern does not replicate
+
+Protocol [`HYBRID_BAND.md`](HYBRID_BAND.md), pushed (`7b39c4e`) before the hybrid was scored. Script `hybrid_band.py`;
+results `hybrid_band_results/` (REPORT.md). Owner request after the map-vs-raw band breakdown, where on 2023–26 the map
+trailed the raw spread only for |raw spread| in [3, 7) (−26.7u ± 24.0). Test basis 2016–22: the v1.19 replay with each
+season's map fitted on the replay's earlier seasons; 2023–26 (production map) is discovery. v1.19's terms were chosen on
+2019–25, and Tests 50–51 had shown raw ahead of the map in total on 2017–22.
+
+| Flat 1u at −110 | 2016–22 (test, 1,822) | 2023–26 (discovery, 937) |
+|---|---:|---:|
+| M map | 880-896-46, −96.0u (−5.3% ± 2.2) | 493-419-25, +29.2u (+3.1% ± 3.1) |
+| R raw | 889-887-46, −78.8u (−4.3% ± 2.2) | 455-457-25, -43.4u (-4.6% ± 3.1) |
+| H hybrid | 872-904-46, −111.3u (−6.1% ± 2.2) | 507-405-25, +55.9u (+6.0% ± 3.1) |
+| always favorite / always home | −162.6u / −130.4u | -20.5u / -49.1u |
+| **H − M** | **−15.3u ± 33.1 (z −0.46; 303 flips, H 146-154-3)** | +26.7u ± 24.0 (z +1.11) |
+
+- **Primary verdict: unresolved, with the sign reversed.** On the test seasons the hybrid is behind the map: H − M is
+  negative in 3 of 7 seasons, positive in 3, and zero in 1, and no season is beyond 1.1 SE.
+- **Inside the band the map was better on 2016–22** (−48.4u vs raw −63.6u), the opposite of 2023–26. Outside the band,
+  raw beat the map there (−15.2u vs −47.6u), also the opposite of 2023–26. Which side wins in which band changes with
+  the period. The 2023–26 band pattern looks like noise.
+- **All three rules lose on 2016–22** (−4.3% to −6.1% ROI), better than the same-row always-favorite (−8.9%) and
+  always-home (−7.2%) baselines, and below break-even.
+
+**Reading.** No support for switching to the raw spread inside 3–7. Keep the median map everywhere; the overall
+map-vs-raw question stays with the 100-lock review. No policy change.
+
+### Test 55: less noisy band numbers for the median map (2026-11-04): smoother numbers are less noisy; ATS gains do not replicate
+
+Protocol [`SMOOTH_MAP.md`](SMOOTH_MAP.md), pushed (`42ee991`) before any arm was scored. Script `smooth_map.py`; results
+`smooth_map_results/` (REPORT.md). Owner request: make the map less noisy instead of abandoning it. Same bands, rows and
+minimums as production; only the per-band statistic of prior-season signed margins changes. M0 reproduces
+`fixed_bands.fit` and the exported `fixed_band_spread` exactly. Both bases are exposed (v1.19's terms chosen on 2019–25;
+Test 54 and the band-variance analysis saw these seasons).
+
+| Units, arm − production (bar \|z\| ≥ 2.39) | 2016–22 (1,822) | 2023–26 (937) | Verdict |
+|---|---:|---:|---|
+| M1 Harrell–Davis median | +70.6 ± 29.8 (z +2.37) | −15.3 ± 17.9 (z −0.85) | unresolved |
+| M2 20% trimmed mean | +53.5 ± 42.8 (z +1.25) | −68.7 ± 26.2 (z −2.62) | worse |
+| M3 Harrell–Davis, rounded to x.5 | +80.2 ± 33.1 (z +2.42) | −15.3 ± 24.2 (z −0.63) | unresolved |
+
+Records: 2016–22 production 880-896-46 (−96.0u, −5.3% ± 2.2), M1 −25.4u, M3 −15.8u, always favorite −162.6u; 2023–26
+production 493-419-25 (+29.2u, +3.1% ± 3.1), M1 and M3 +13.9u, M2 −39.5u, always favorite −20.5u.
+
+- **The smoother statistics do reduce noise.** Harrell–Davis lowers the bootstrap SD of every band number (2016–22:
+  <3 0.81→0.72, 3–7 0.68→0.55, 7–10 1.18→1.04, 10+ 2.30→1.87). On 2023–26 it halves the 3–7 band's season-to-season
+  change (1.00→0.55). M3 holds the 3–7 band at 3.5 in every 2016–22 season.
+- **Accuracy as a median estimate is unchanged.** Out-of-sample mean absolute error against next-season margins differs
+  only in the second decimal (about 9.4–11.0 points per band for every arm). Less noise did not make the band numbers
+  measurably better estimates.
+- **The ATS gains flip with the period, as in Test 54.** M1 and M3 gain about 70–80u on 2016–22 (just at or below the bar)
+  and lose 15u on 2023–26. The flips concentrate on key-number lines. Lines of exactly 3 are 28–39% of M1's flips and
+  15–32% of M3's: when production's number is exactly 3, those games tie and go to the favorite, while a number just off
+  3 decides them outright. Lines of 3.5 are 21–28% of M3's flips, because M3's 3.5 ties them instead. Which side won
+  those games differs by period.
+- **The trimmed mean estimates a mean, not a median,** and is reliably worse on 2023–26.
+
+**Reading.** Variance in the band numbers is real and a smoother estimator removes some of it, but nothing shows that
+this improves ATS results consistently. Keep the production median. If the owner wants to follow M1 or M3, the clean
+step is a reporting-only arm on native v1.19 locks, reviewed at 100 decided locks. No policy change.
+
+### Test 56: favorite, underdog or skip on zero-edge ATS games (2026-11-04): unresolved; zero-edge bets lose about the vig either way
+
+Protocol [`ZERO_EDGE.md`](ZERO_EDGE.md), pushed (`0f1d9d2`) before the policies were scored. Script `zero_edge.py`; results
+`zero_edge_results/` (REPORT.md). Owner request after the Harrell–Davis exploration showed about 70% of that arm's flips
+were production zero-edge games (mapped spread equal to the line, not a pick'em). Both bases are fully exposed, so this
+is descriptive. The map reproduces `fixed_bands.fit` and the exported spreads exactly.
+
+| Zero-edge games, flat 1u at −110 | 2016–22 (268 games, 14.7% of bets) | 2023–26 (133 games, 14.2% of bets) |
+|---|---:|---:|
+| F favorite (production) | 119-132-17, −23.8u | 68-53-12, +8.8u |
+| D underdog | 132-119-17, +1.0u | 53-68-12, −19.8u |
+| S skip | 0 | 0 |
+| D − F | +24.8 ± 30.3 (z +0.82) | −28.6 ± 20.9 (z −1.37) |
+| S − F | +23.8 ± 15.1 (z +1.58) | −8.8 ± 10.5 (z −0.84) |
+
+Whole strategy: 2016–22 F −96.0u (−5.3% ± 2.2, 1,822 bets), D −71.2u, S −72.2u (−4.6% ± 2.4, 1,554 bets); 2023–26
+F +29.2u (+3.1% ± 3.1, 937 bets), D +0.5u, S +20.4u (+2.5% ± 3.3, 804 bets). Always favorite −162.6u / −20.5u; always
+home −130.4u / −49.1u.
+
+- **Both verdicts are unresolved** (bar |z| ≥ 2.24). No policy wins on both bases. The favorite and underdog sides
+  trade places between periods, as underdogs at +3 did (53.9% then 44.4%).
+- **Over all eleven seasons, zero-edge bets lose about the vig on either side.** Added across both bases (descriptive
+  only), favorites went 187-185-29 for −15.0u and underdogs 185-187-29 for −18.8u, both near the −4% expected from
+  a coin flip at −110. That matches the stated prior: zero edge means no view, and the market priced these games at 50%.
+- **Skipping removes about 14–15% of bets.** It raises ROI per bet slightly in 2016–22 (−4.6% vs −5.3%) and lowers it
+  slightly in 2023–26 (+2.5% vs +3.1%). Units move by +23.8u and −8.8u.
+- **By line:** zero-edge favorites at −3 went 54-71-15 (−21.9u) in 2016–22 and 33-22-9 (+8.0u) in 2023–26; at −7
+  they were positive in both (+10.8u, +1.4u; 36 games each).
+
+**Reading.** The data cannot separate the three policies. On expectation, skipping is the only one that does not pay the
+vig on games where the model has no view, but the realized difference is within noise on both bases. Changing the
+zero-edge rule is a new lock policy version and the owner's decision; the clean evidence would be a reporting-only skip
+arm on native v1.19 locks. No policy change.
+
+### Test 57: a vig-aware map for picking underdogs worth the points (2026-11-04): unresolved against production; its underdog selection beats all underdogs in both periods
+
+Protocol [`VIG_AWARE_MAP.md`](VIG_AWARE_MAP.md), pushed (`5d71016`) before any arm was computed. Script `vig_aware_map.py`;
+results `vig_aware_map_results/` (REPORT.md). Owner framing: the median map exists to pick which underdogs are worth the
+points. Same bands and prior-season rows as production; a side is bet only if its cover rate at this line among the
+band's earlier games (pushes excluded) is at least 52.381%, the −110 break-even. V bets either side or skips; U bets
+underdogs only. Both bases are fully exposed (Tests 54–56 and the band breakdowns), so this is descriptive. Check: V at
+a 50% threshold agrees with production on 85–99% of games per season.
+
+| Flat 1u at −110 | 2016–22 (1,822 games) | 2023–26 (937 games) |
+|---|---|---|
+| P production | 880-896-46, −96.0u (−5.3% ± 2.2), drawdown 121.5u | 493-419-25, +29.2u (+3.1% ± 3.1), drawdown 18.2u |
+| V vig-aware (31% skipped, 66% underdogs) | 628-586-43, −15.1u (−1.2% ± 2.6), drawdown 48.9u | 336-300-15, +5.5u (+0.8% ± 3.7), drawdown 22.5u |
+| U underdog-only (830 / 429 bets) | 429-372-29, +18.0u (+2.2% ± 3.2), drawdown 22.2u | 215-204-10, −8.5u (−2.0% ± 4.6), drawdown 36.9u |
+| V − P | +80.9 ± 28.8 (z +2.81) | −23.7 ± 18.2 (z −1.30) |
+| U − P | +114.0 ± 34.7 (z +3.29) | −37.7 ± 23.0 (z −1.64) |
+| Always underdog / favorite / home | +1.5u / −162.6u / −130.4u | −62.5u / −20.5u / −49.1u |
+
+- **Verdicts: both unresolved** (bar |z| ≥ 2.24). Each clears the bar on 2016–22 but is negative on 2023–26, which the
+  protocol requires to be positive. U − P is positive in 6 of 7 seasons on 2016–22 and negative in all 4 on 2023–26.
+- **The goal measure holds in both periods.** U's underdogs covered 53.6% against 52.4% for all underdogs on 2016–22
+  (+1.2 points, SE about 1.8), and 51.3% against 48.8% on 2023–26 (+2.5 points, SE about 2.4). The selection adds 1–2.5
+  points over taking every underdog, but each gap is within about 1 SE.
+- **Whether that clears the vig depends on the period.** Underdogs as a group covered 52.4% on 2016–22 and 48.8% on
+  2023–26. A 1–2.5 point selection edge on top of that is above break-even in the first period and below it in the
+  second. Any rule that leans toward underdogs (V is 66% underdogs, U 100%) rises and falls with how underdogs do overall.
+- **V cuts risk where the model loses** (drawdown 48.9u against 121.5u on 2016–22) but gives up units where it wins
+  (+5.5u against +29.2u on 2023–26).
+
+**Reading.** The underdog-selection idea behind the map is consistent with the data: in both periods the vig-aware
+underdog picks covered more often than underdogs in general. But the edge is small (1–2.5 points), unresolved in each
+period, and not large enough to overcome a bad year for underdogs. Neither rule is shown to beat production. The clean
+next step is forward and reporting-only: U's underdog cover rate against all underdogs on native v1.19 locks. No policy change.
+
+### Test 58: market-centered ATS cover probability at actual spread prices (2026-11-04): unresolved; the model adds nothing to the no-vig spread price
+
+Protocol [`SPREAD_PRICE_PROBABILITY.md`](SPREAD_PRICE_PROBABILITY.md), pushed (`d91b78a`) with frozen nflverse spread
+prices (`spread_price_inputs/`, 2014–26; lines and results identical to production's ledger on all 1,480 shared games)
+before any arm was scored. Script `spread_price_probability.py`; results `spread_price_probability_results/` (REPORT.md).
+Owner idea: start from the market line and price, not the median map. q = proportional no-vig home cover probability
+from the two spread prices (pushes refund). Arms tilt logit q by β × (model − line)/10, β fitted by maximum likelihood on
+earlier seasons: A uses v1.19's raw spread, B production's mapped spread. Actual spread prices had not been used before.
+
+| Cover log loss gain over q (×1000, positive = better) | 2016–22 | 2023–26 | Verdict |
+|---|---:|---:|---|
+| A raw disagreement | −1.04 ± 0.62 (z −1.66, n 1,776) | −0.00 ± 0.48 (n 912) | unresolved |
+| B mapped disagreement | −0.64 ± 0.67 (n 1,278; from 2018) | +0.71 ± 1.69 (n 386; from 2025) | unresolved |
+
+- **Neither arm improves on the no-vig spread price.** Gains are within ±1.1 ×10⁻³ with no interval excluding zero.
+  The fitted β changes sign: A runs from −1.31 (2016, fit on two seasons) to +0.55 (2026), and B from +0.42 to −0.08.
+- **The tilted probabilities barely leave the market.** For arm A, 60% of games on 2016–22 and 80% on 2023–26 are within
+  0.3 points of q. Even the most extreme decile averages only 1.2–2.7 points off.
+- **Where the model disagrees most, the direction flips by period.** On 2016–22 the top decile of p − q (p 0.525) had
+  home covers at 44.4% and the bottom decile (p 0.485) at 56.7%, both opposite to the model. On 2023–26 they were 52.2%
+  and 42.4%, both with it.
+- **Bets at actual prices (EV > 0 only) are few and lose.** A: 249 bets on 2016–22, −21.9u (−8.8% ± 6.2); 17 bets on
+  2023–26. B: 156 bets, −16.9u; 52 bets, −0.8u.
+- **Actual prices matter for production's record.** Graded at the real prices instead of −110, production's picks are
+  −65.5u (−3.6% ± 2.3) on 2016–22 instead of −96.0u, because the median price on both sides then was −105 (hold 2.5%,
+  against 4.7% on 2023–26, where the median is −110). On 2023–26 they
+  are +28.6u (+3.1% ± 3.1), close to the −110 figure. The market-correct null on the same bets is −2.4% and −4.5%.
+  Always favorite at actual prices: −119.5u and −21.7u.
+
+**Reading.** Starting from the market price and adding v1.19's disagreement does not beat the price, which matches
+Test 48 and AC1. Everything the model says about ATS outcomes is already in the line, to within noise. The useful
+by-product is that real spread prices change ROI by several points, so ATS evaluation should use them where available.
+No policy change.
+
+### Test 59: weekly refits of the median map, and a linear-trend map (2026-11-04): no accuracy gain; the linear trend is worse
+
+Protocol [`WEEKLY_MAP.md`](WEEKLY_MAP.md), pushed (`b0d78ca`) before any arm was scored. Script `weekly_map.py`; results
+`weekly_map_results/` (REPORT.md). Owner view: season-to-season changes are linear, so fit the map week by week. Arms:
+A annual (production), W weekly with an expanding window, D weekly with a one-season half-life, T annual plus the
+linear trend of earlier seasons' band medians. Checks passed: the weighted median equals `np.median` with equal
+weights, W equals A in week 1 of every season, and A reproduces `fixed_bands.fit`. Every arm is scored on the same
+games, so 2016 and 2023 drop out (T needs three earlier seasons): n = 1,566 and 665.
+
+| Arm | Error vs A, 2016–22 | Error vs A, 2023–26 | Verdict | ATS units vs A, 2016–22 | ATS units vs A, 2023–26 |
+|---|---:|---:|---|---:|---:|
+| W weekly, expanding | −0.004 ± 0.011 (z −0.4) | −0.037 ± 0.026 (z −1.4) | unresolved | +40.1 ± 19.9 | +7.6 ± 15.0 |
+| D weekly, decayed | +0.012 ± 0.029 (z +0.4) | −0.066 ± 0.054 (z −1.2) | unresolved | +84.0 ± 32.6 | +43.9 ± 21.5 |
+| T linear trend | +0.152 ± 0.037 (z +4.1) | +0.602 ± 0.165 (z +3.6) | **worse than A** | +53.5 ± 30.4 | −24.8 ± 28.4 |
+
+Mean absolute error of the band number against realized signed margins is about 10.0 points per game on 2016–22 and
+9.6 on 2023–26 for A. ATS on the same games: A −110.4u (−7.0% ± 2.4) and +33.3u (+5.0% ± 3.7); always favorite −157.0u
+and −24.0u; always home −114.2u and −35.5u.
+
+- **The linear-drift idea is contradicted.** Extending each band's season trend makes the band numbers reliably less
+  accurate on both bases (z +4.1 and +3.6). Season-to-season changes behave like noise around a stable level (yearly
+  changes have negative autocorrelation), so extrapolating them adds error.
+- **Weekly refitting changes accuracy by less than 0.07 points per game,** within noise on both bases. The expanding
+  version barely moves within a season (mean weekly change 0.01–0.26 points); the decayed version moves 0.04–0.51.
+- **D's ATS gain appears on both bases but is not a stable mechanism.** On 2016–22 D took the underdog on 72% of its
+  296 flips, and +61.1u came from games where A's number tied the line (and so took the favorite). On 2023–26 D took the
+  favorite on 84% of its 128 flips, and 109 of them were in 2024. Without 2021 and 2024, D's gain is +34.4u and +1.9u.
+  This is the key-number pattern of Tests 55–56 again, and D's numbers are no more accurate than A's.
+
+**Reading.** Keep the annual fit. Linear trends make the map worse, and weekly refitting does not make the band numbers
+more accurate. D's ATS result is worth watching as a reporting-only arm on native v1.19 locks, but its gains come from
+key-number ties in two seasons and point in opposite directions in the two periods. No policy change.

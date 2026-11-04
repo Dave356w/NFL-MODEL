@@ -1,0 +1,9 @@
+{
+  "research/smooth_map.py": "87e96fa390deabe45209640f55063d67c378f532e8329d392a0ce6e0063bc426",
+  "research/SMOOTH_MAP.md": "b07eca22f45bdd727d3fbb167d303fe6ea4582cb1f8387c8cceb9b41c65cad05",
+  "research/market_implied.py": "e27d1922bc5ba22b8091f04aeb10b84c3b4ce0f5ec7697e0bc2cb11c3cdeab37",
+  "nfl_model.py": "194aa10a646f145c0a202cb576a7b0f7862c9102004e2a6d9ecbefc2e68d3f37",
+  "fixed_bands.py": "5f54ef4094757e25877a101e4aaf7b6f49e3c4ca8b37b8398b8ae8b93ffe3229",
+  "data/latest/fixed_band_ledger.csv": "ce357ca2ccf943dff37f9cb3859f898949f98120c5f028b365c7effd1445e098",
+  "research/market_implied_inputs/schedule_scores.csv": "1ec4b90d19a0a2e9980d83acdca0d951fa34b23787bcb7505795a4b052fec4be"
+}

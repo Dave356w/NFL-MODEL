@@ -1,0 +1,7 @@
+basis,arm,fit_season,fit_week,mkt_home_implied,mkt_away_implied,d__mkt_off_resid,d__mkt_def_resid
+2015-16,A this game's implied points,2016,17,-0.046965,-0.0642617,,
+2015-16,B history vs implied points,2016,17,,,-0.025993,-0.0570634
+2017-22,A this game's implied points,2022,18,-0.0143434,-0.0232297,,
+2017-22,B history vs implied points,2022,18,,,-0.0465427,0.112279
+2023-25,A this game's implied points,2025,18,0.0181132,-0.051576,,
+2023-25,B history vs implied points,2025,18,,,-0.0298438,-0.0257549

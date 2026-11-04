@@ -7,7 +7,8 @@ the market favorite everywhere; saved zero-edge skips are backfilled as favorite
 bets (owner decision 2026-10-19) under their own basis label.
 
 Backend reporting also grades the timed locks against same-row controls. The
-line-only map runs the market line through the same frozen median map, so the
+line-only map runs the market line through the same median map (the weekly rule for
+that game's week, map policy v2 from 2026-11-04), so the
 production map's difference from it is what the model adds beyond the line.
 """
 import datetime as dt
@@ -92,18 +93,19 @@ def build(latest, ledger):
     if len(ledger):
         native = ledger.loc[ledger.revision.eq(revision) & ledger.season.eq(2026)].copy()
         native = native.sort_values('generated_utc', kind='stable').drop_duplicates('game_id', keep='first')
-    rules = {r['season']: r for r in latest.get('fixed_band_rules', []) if 'season' in r}
+    rules = [r for r in latest.get('fixed_band_rules', []) if r and 'season' in r]
     # Every native game blocks historical fallback, including pending games.
     for r in native.to_dict('records'):
         row = {k: r.get(k) for k in ('game_id', 'season', 'week', 'home', 'away',
                'kickoff_utc', 'generated_utc', 'model_wp', 'result', 'home_score', 'away_score')}
         row.update(spread_line=np.nan, fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock')
-        rule = rules.get(2026)
+        week = pd.to_numeric(r.get('week'), errors='coerce')
+        rule = fixed_bands.rule_for(rules, 2026, int(week)) if np.isfinite(week) else None
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
         generated = pd.to_datetime(r.get('generated_utc'), utc=True, errors='coerce')
         early = (pd.notna(ko) and pd.notna(generated) and generated < ko
                  and ats_locks.deadline(ko.to_pydatetime()) < ats_locks.ADOPTED_UTC)
-        if early and rule is not None and rule['training_max_season'] < 2026:
+        if early and fixed_bands.trained_before(rule, 2026, int(week)):
             wp, line = pd.to_numeric(r.get('model_wp'), errors='coerce'), pd.to_numeric(r.get('spread_line'), errors='coerce')
             if np.isfinite(wp) and np.isfinite(line):
                 row.update(spread_line=float(line), fixed_band_spread=float(
@@ -322,10 +324,11 @@ def lock_baselines(latest, frame):
     """Timed locks graded beside same-row controls; backend reporting only."""
     revision = (latest or {}).get('manifest', {}).get('revision', m.REVISION)
     locks = (latest or {}).get('ats_locks', {})
-    rules = {r['season']: r for r in (latest or {}).get('fixed_band_rules', []) if 'season' in r}
+    rules = [r for r in (latest or {}).get('fixed_band_rules', []) if r and 'season' in r]
     lines = ['ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; '
              'break-even cover 52.4%).',
-             'Line-only map: the market line through the same frozen median map, without model input. '
+             'Line-only map: the market line through the same median map (each saved lock\'s own rule; '
+             'otherwise the weekly rule for that game\'s week), without model input. '
              'Median map minus line-only is what the model adds beyond the line\'s own band.',
              'Per-arm records are descriptive; the map-versus-raw review is at 100 decided locks.']
     for basis in TIMED_BASES:
@@ -333,7 +336,8 @@ def lock_baselines(latest, frame):
         rows = []
         for r in g.to_dict('records'):
             saved = locks.get((revision, r['game_id']), {})
-            rule = saved.get('fixed_rule') or rules.get(int(r['season']))
+            week = pd.to_numeric(r.get('week'), errors='coerce')
+            rule = saved.get('fixed_rule') or fixed_bands.rule_for(rules, int(r['season']), int(week) if np.isfinite(week) else -1)
             rows.append(dict(mapped=r['fixed_band_spread'], line=r['spread_line'], result=r['result'],
                              raw=pd.to_numeric(saved.get('raw_spread'), errors='coerce'),
                              line_mapped=float(fixed_bands.apply([r['spread_line']], rule)[0])))
@@ -346,13 +350,15 @@ def lock_baselines(latest, frame):
             lines += _baseline_lines(sides, (decided.result - decided.line).to_numpy(float))
     history = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
     if len(history) and 'model_spread' in history:
-        h = history.loc[history.fixed_band_spread.notna() & history.spread_line.notna()
-                        & history.result.notna() & history.season.isin(list(rules))]
+        h = history.loc[history.fixed_band_spread.notna() & history.spread_line.notna() & history.result.notna()]
         if len(h):
             line_mapped = np.full(len(h), np.nan)
-            for year, rule in rules.items():
-                mask = (h.season == year).to_numpy()
-                line_mapped[mask] = fixed_bands.apply(h.spread_line.to_numpy(float)[mask], rule)
+            weeks = (pd.to_numeric(h['week'], errors='coerce') if 'week' in h else pd.Series(np.nan, index=h.index)).fillna(-1)
+            for (year, week), idx in h.groupby([h.season.to_numpy(), weeks.to_numpy()]).indices.items():
+                rule = fixed_bands.rule_for(rules, int(year), int(week))  # annual rule if no weekly one
+                line_mapped[idx] = fixed_bands.apply(h.spread_line.to_numpy(float)[idx], rule)
+            keep = np.isfinite(line_mapped)
+            h, line_mapped = h.loc[keep], line_mapped[keep]
             lines.append(f'Development history (replay, not forward evidence; backtest seasons share the recipe '
                          f'selection, the current season is walk-forward): '
                          f'{int(h.season.min())}-{int(h.season.max())}, {len(h)} graded')

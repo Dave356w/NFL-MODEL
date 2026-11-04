@@ -10,6 +10,11 @@ recipe and configuration identity. v1.17 stays available for independent
 research verification. Original forecasts remain immutable; all snapshots
 and historical games are retrospectively regraded in separate reports.
 
+v1.19.1 (reporting only, owner decision 2026-11-04): retro_ledger and the current-season board carry
+the schedule's home/away spread prices (attach_spread_prices) so the Calibration tab grades its
+spread-band ROI at actual prices. Never a model input; recipe, fits and config signature unchanged.
+The same day the ATS median map moved to weekly refits (fixed_bands map policy v2, lock policy v3).
+
 v1.19 (NEW experiment, owner decision 2026-11-03; new REVISION/OUTPUT_NAME and config signature):
 the v1.18 recipe (market offset, h8/h16 profiles, ridge 0.1, favorite penalty 0.2) fitted on ten
 terms (CORE_TERMS): home field, offense and defense first-down rate, offense and defense INT %,
@@ -2270,6 +2275,20 @@ def attach_moneylines(df,schedules):
     return df
 
 
+SPREAD_PRICE_COLS=('home_spread_odds','away_spread_odds')
+
+
+def attach_spread_prices(df,schedules):
+    """Reporting only (2026-11-04): the schedule's two spread prices by game_id, for grading ATS
+    tables at actual prices. Never a model input; NaN where the schedule has none."""
+    df=df.drop(columns=[c for c in SPREAD_PRICE_COLS if c in df])
+    cols=[c for c in SPREAD_PRICE_COLS if c in schedules]
+    if cols: df=df.merge(schedules[['game_id',*cols]].drop_duplicates('game_id'),on='game_id',how='left',validate='many_to_one')
+    for c in SPREAD_PRICE_COLS:
+        if c not in df: df[c]=np.nan
+    return df
+
+
 def flat_bets(df,col='model_wp'):
     """One row per game: the side `col` favors, its moneyline, the no-vig market
     probability of that side (q), and the 1u result. units is NaN while the game
@@ -2386,6 +2405,7 @@ def retrospective_ledger(oof,gw,recipe,schedules,season,cur):
     b=gw.loc[(gw.season==season)&(gw.week<cur)&gw.result.notna(),RETRO_COLS+['model_wp']].assign(basis='current season walk-forward')
     r=pd.concat([a,b],ignore_index=True)
     r=attach_moneylines(r,schedules)
+    r=attach_spread_prices(r,schedules)
     extra=[c for c in ('home_score','away_score','gameday') if c in schedules]
     if extra: r=r.merge(schedules[['game_id',*extra]].drop_duplicates('game_id'),on='game_id',how='left')
     bets=flat_bets(r)
@@ -3518,6 +3538,7 @@ def main():
     shadow_out={}
     gw,fit=current_predictions(features,recipe,season,cur,shadow_out)
     gw=attach_moneylines(gw,schedules)
+    gw=attach_spread_prices(gw,schedules)
     save(gw,'current_season_predictions.csv')
     for wk,prior_board in gw.groupby('week'):
         prior_board=prior_board.copy();prior_board['model_spread']=implied_spread(prior_board.model_wp)

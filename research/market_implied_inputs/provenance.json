@@ -1,0 +1,9 @@
+{
+  "source": "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv",
+  "fetched_utc": "2026-11-04T17:24:41+00:00",
+  "source_sha256": "937909d36ccb5ec6fc2c50ebf881088dd6b51028bdc7fe97c9a4efb555c4a98a",
+  "filter": "game_type REG, seasons 2011-2025, final result; teams via nfl_model.normalize_teams",
+  "rows": 3919,
+  "sha256": "1ec4b90d19a0a2e9980d83acdca0d951fa34b23787bcb7505795a4b052fec4be",
+  "checks": "home/away/result/spread_line identical to both frozen feature packs on every shared game_id"
+}
