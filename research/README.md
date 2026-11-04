@@ -1971,3 +1971,35 @@ season's map fitted on the replay's earlier seasons; 2023–26 (production map) 
 
 **Reading.** No support for switching to the raw spread inside 3–7. Keep the median map everywhere; the overall
 map-vs-raw question stays with the 100-lock review. No policy change.
+
+### Test 55: less noisy band numbers for the median map (2026-11-04): smoother numbers are less noisy; ATS gains do not replicate
+
+Protocol [`SMOOTH_MAP.md`](SMOOTH_MAP.md), pushed (`42ee991`) before any arm was scored. Script `smooth_map.py`; results
+`smooth_map_results/` (REPORT.md). Owner request: make the map less noisy instead of abandoning it. Same bands, rows and
+minimums as production; only the per-band statistic of prior-season signed margins changes. M0 reproduces
+`fixed_bands.fit` and the exported `fixed_band_spread` exactly. Both bases are exposed (v1.19's terms chosen on 2019–25;
+Test 54 and the band-variance analysis saw these seasons).
+
+| Units, arm − production (bar \|z\| ≥ 2.39) | 2016–22 (1,822) | 2023–26 (937) | Verdict |
+|---|---:|---:|---|
+| M1 Harrell–Davis median | +70.6 ± 29.8 (z +2.37) | −15.3 ± 17.9 (z −0.85) | unresolved |
+| M2 20% trimmed mean | +53.5 ± 42.8 (z +1.25) | −68.7 ± 26.2 (z −2.62) | worse |
+| M3 Harrell–Davis, rounded to x.5 | +80.2 ± 33.1 (z +2.42) | −15.3 ± 24.2 (z −0.63) | unresolved |
+
+Records: 2016–22 production 880-896-46 (−96.0u, −5.3% ± 2.2), M1 −25.4u, M3 −15.8u, always favorite −162.6u; 2023–26
+production 493-419-25 (+29.2u, +3.1% ± 3.1), M1 and M3 +13.9u, M2 −39.5u, always favorite −20.5u.
+
+- **The smoother statistics do reduce noise.** Harrell–Davis lowers the bootstrap SD of every band number (2016–22:
+  <3 0.81→0.72, 3–7 0.68→0.55, 7–10 1.18→1.04, 10+ 2.30→1.87). On 2023–26 it halves the 3–7 band's season-to-season
+  change (1.00→0.55). M3 holds the 3–7 band at 3.5 in every 2016–22 season.
+- **Accuracy as a median estimate is unchanged.** Out-of-sample mean absolute error against next-season margins differs
+  only in the second decimal (about 9.4–11.0 points per band for every arm). Less noise did not make the band numbers
+  measurably better estimates.
+- **The ATS gains flip with the period, as in Test 54.** M1 and M3 gain about 70–80u on 2016–22 (just at or below the bar)
+  and lose 15u on 2023–26. Most flips come from games lined 3.5: a number of 3.5 (M3) ties them and takes the favorite;
+  production's 3 takes the underdog, and 4 takes the favorite. Which side won those games differs by period.
+- **The trimmed mean estimates a mean, not a median,** and is reliably worse on 2023–26.
+
+**Reading.** Variance in the band numbers is real and a smoother estimator removes some of it, but nothing shows that
+this improves ATS results consistently. Keep the production median. If the owner wants to follow M1 or M3, the clean
+step is a reporting-only arm on native v1.19 locks, reviewed at 100 decided locks. No policy change.
