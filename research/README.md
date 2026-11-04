@@ -1883,3 +1883,39 @@ published 2021–25 forecasts (2.4e-15), Test 50's S3 forecasts for 2014–20 (5
 **Reading.** Per-team implied points, either for this game or as a team's running record against them, do not
 improve v1.19 on any basis. Arm A's rule label is not evidence of a gain. A forward shadow would also need a
 lock-time total saved with each snapshot. It is not recommended; that call belongs to the owner. No `REVISION`.
+
+### Test 52: implied points as fitted features with no moneyline offset (2026-11-04): worse than v1.19; stop
+
+Protocol [`IMPLIED_NO_OFFSET.md`](IMPLIED_NO_OFFSET.md), pushed (`5e912a4`) before any arm was scored. Script
+`implied_no_offset.py`; results `implied_no_offset_results/` (REPORT.md). Owner follow-up to Test 51: let the market
+enter only through each team's implied points with fitted weights, without the no-vig moneyline as the fixed starting
+point. Both arms also drop the favorite penalty, which would pull forecasts back to the moneyline. Same rows as v1.19.
+A research copy of `fit_composite` reproduces v1.19 to 2e-16 with the offset switched back on.
+
+| Log loss, arm − v1.19 (×1000) | 2015–16 (510) | 2017–22 (1,559) | 2023–25 (815) | Verdict |
+|---|---:|---:|---:|---|
+| C ten core terms + implied points, no offset | +4.08 ± 3.77 | +6.89 ± 2.15 (z +3.2) | +3.28 ± 2.55 | stop |
+| C0 implied points only, no offset | +0.83 ± 3.79 | +7.14 ± 2.87 (z +2.5) | +10.07 ± 3.80 (z +2.6) | stop |
+
+| Model − no-vig moneyline alone (×1000) | 2015–16 | 2017–22 | 2023–25 |
+|---|---:|---:|---:|
+| v1.19 | +1.17 ± 1.67 | −0.04 ± 1.24 | −3.06 ± 2.23 |
+| C | +5.25 ± 4.56 | +6.85 ± 2.75 | +0.22 ± 3.48 |
+| C0 | +2.00 ± 3.88 | +7.10 ± 2.60 | +7.01 ± 3.32 |
+
+- **The fixed moneyline is the better starting point.** Both arms are worse than v1.19 on every basis, beyond the bar
+  on 2017–22 (both) and 2023–25 (C0). Fitted weights on implied points (about +0.07 to +0.10 log-odds per home point,
+  −0.08 to −0.12 per away point) price games worse than the moneyline itself. This matches Test 12: freeing the market's
+  weight does not help, and the moneyline carries the price more accurately than a linear map of spread and total.
+- **The box-score terms still add something without the offset** (C beats C0 on 2023–25 by about 7 ×10⁻³), but not
+  enough to make up for losing the moneyline.
+- **ATS is mixed and not a reason to switch.** The no-offset maps lack 30 games per band until later seasons, so the
+  protocol's mapped comparison has no 2015–16 rows and 1,311 of 1,566 on 2017–22. On mapped rows, C goes +35.4u
+  (+4.3% ± 3.3) vs v1.19 +8.6u on 2023–25 (n 816) and −42.8u vs −113.5u on 2017–22. With production's 2021+ map,
+  C is +29.9u vs +22.3u (n 544). A raw-spread view on all rows, added after the missing maps were seen, has C ahead
+  of v1.19's raw spread on all three bases, but v1.19 is mapped in production, and every SE is 2.4–4.2 points.
+  The same-row always-favorite baseline is −36.0u, −157.0u and −12.4u. Selection stays on log loss, so these do
+  not override the verdict.
+
+**Reading.** Keep the moneyline as the fixed offset. Implied points work no better as the market input than as an
+addition to it (Test 51). No `REVISION`.

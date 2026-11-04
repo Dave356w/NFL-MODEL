@@ -1,0 +1,7 @@
+basis,arm,mkt_home_implied per point,mkt_away_implied per point,site
+2015-16,"C core + implied, no offset",0.0716843,-0.103227,0.0870166
+2015-16,"C0 implied only, no offset",0.0850198,-0.116496,0.0480424
+2017-22,"C core + implied, no offset",0.0730109,-0.0823788,0.0398748
+2017-22,"C0 implied only, no offset",0.0960935,-0.103191,-0.00254671
+2023-25,"C core + implied, no offset",0.0826039,-0.0928284,0.0247971
+2023-25,"C0 implied only, no offset",0.103897,-0.112242,-0.0134455

@@ -1,0 +1,7 @@
+basis,arm,bets,units_prod,units_arm
+2015-16,"C core + implied, no offset",512,-18.1442,-23.5287
+2015-16,"C0 implied only, no offset",512,-18.1442,-24.8214
+2017-22,"C core + implied, no offset",1566,-45.6094,-16.33
+2017-22,"C0 implied only, no offset",1566,-45.6094,-46.9962
+2023-25,"C core + implied, no offset",816,19.0508,24.7385
+2023-25,"C0 implied only, no offset",816,19.0508,-1.74218
