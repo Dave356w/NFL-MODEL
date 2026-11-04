@@ -176,8 +176,28 @@ def article(text):
                     nodes.append(el)
         body='\n'.join(n.get_text(' ',strip=True) for n in nodes)
     pub=data.get('datePublished')
-    return dict(title=str(title).strip(),body=str(body or '').strip(),
+    return dict(title=str(title).strip(),body=str(body or '').strip(),lines=block_lines(doc),
                 published_utc=utc(pub).isoformat() if pub else None,document=doc)
+
+
+BLOCKS=('p','li','h1','h2','h3','h4','h5','h6','div','tr','ul','ol','table','blockquote','section')
+
+
+def block_lines(doc):
+    """One line per rendered block (paragraph, list item, heading, <br>) of the article body.
+    JSON-LD articleBody often joins blocks without separators ("...inactives.QB Andy Dalton"),
+    which hides rows from a line-based list parser. Empty when the page has no body markup."""
+    nodes=doc.select('.nfl-c-body-part--text, .d3-l-article__content, [itemprop="articleBody"]')
+    if not nodes:return []
+    nodes=[n for n in nodes if not any(p in nodes for p in n.parents)]
+    lines=[]
+    for node in nodes:
+        copy=soup(str(node))
+        for br in copy.find_all('br'):br.replace_with('\n')
+        for el in copy.find_all(BLOCKS):
+            el.insert(0,'\n');el.append('\n')
+        lines+=[' '.join(x.split()) for x in copy.get_text().splitlines() if x.strip()]
+    return lines
 
 
 def parse_injury_report(text,team,event,index):
@@ -249,6 +269,15 @@ def mentions_team_player(line,team,index):
     return any(' '+key+' ' in text for key in index.names if key and len(key.split())>=2)
 
 
+def embedded_row(line,team,index):
+    """A position-prefixed exact player name inside a longer line: a list row glued to prose
+    or to another row by text extraction ("...announced their inactives.QB Andy Dalton")."""
+    for match in re.finditer(r'(?<![A-Za-z])(?:'+INACTIVE_POSITIONS+r')\s+((?:[A-Z][\w.\'\u2019-]*\s*){2,4})',line):
+        words=match[1].split()
+        if any(index.resolve(' '.join(words[:n]),team,allow_transfer=True) for n in range(len(words),1,-1)):return True
+    return False
+
+
 def parse_inactives(info,team,event,index):
     """A complete named list, never 'DNP', box-score participation, or an absent list."""
     from zoneinfo import ZoneInfo
@@ -263,7 +292,7 @@ def parse_inactives(info,team,event,index):
     if not week and nickname(other).casefold() not in (title+'\n'+body[:5000]).casefold():raise InactiveIdentityMismatch('inactive article opponent missing')
     if 'inactiv' not in title.casefold() and not (info.get('source_team')==team and re.search(r'\binactives?\b',body,re.I)):
         raise InactiveIdentityMismatch('article is not an inactive announcement')
-    lines=[s.strip() for s in body.splitlines() if s.strip()]
+    lines=info.get('lines') or [s.strip() for s in body.splitlines() if s.strip()]
     headings={norm(name):key for key,(name,_) in TEAMS.items()}
     headings.update({norm(nickname(key)):key for key in TEAMS})
     section=None;listed=[]
@@ -300,6 +329,8 @@ def parse_inactives(info,team,event,index):
                 continue
             if LIST_SHAPED.match(line) and mentions_team_player(line,team,index):
                 raise ValueError('unparsed inactive line: '+line[:80])
+            if embedded_row(line,team,index):
+                raise ValueError('inactive row joined to other text: '+line[:80])
             if listed:ended=True
         if used_sections and team_sections>1:raise ValueError('inactive team section repeated')
     except ValueError as exc:
@@ -600,11 +631,14 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
                     except ValueError as exc:
                         # A bundle may contain other kickoffs; only this team's failed list is reviewed.
                         review(team,event,url,[str(exc)])
-                        # Any failure on this team's own list, or on the page that supplied the accepted
-                        # list, withdraws completeness: an unparseable revision never inherits the old
-                        # list. Within one refresh, a failure also outranks another page's success.
+                        # A failed revision of the page that supplied the accepted list never inherits
+                        # it. Any other failure of an NFL.com list covering this game withdraws completeness
+                        # too, and outranks another page's success in the same refresh. Club articles
+                        # are often prose or both-team lists in varied formats (2026 week 8: 13 of 20
+                        # failed to parse); their failures are reviewed but cannot withdraw a list
+                        # accepted from another page.
                         h=teams[team]['inactives']
-                        if not isinstance(exc,InactiveIdentityMismatch) or h.get('url')==url:
+                        if h.get('url')==url or not (club or isinstance(exc,InactiveIdentityMismatch)):
                             failure(h,exc);h['complete']=False;inactive_failed.add(team)
                 if club:
                     values,issues=news_facts(info,team,event,index)

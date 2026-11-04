@@ -50,10 +50,17 @@ must form one contiguous block under a single section. Any list-shaped line that
 or carries a position prefix must resolve, including an unknown prefix, a bare name or a one-word
 name. Otherwise the whole list is rejected rather than accepted with that player missing. A club
 page whose text flattens its bullets may use the HTML bullet list instead, but only if that list
-contains every name found in the text. Any failed parse of this team's list withdraws its
-completeness for that refresh, including a failed revision of the page that supplied the accepted
-list. It also outranks another page's success in the same refresh. Only a bundle that does not
-cover this team's game leaves the accepted list in place.
+contains every name found in the text. Lines are read from the page's rendered blocks
+(paragraphs, list items, headings, line breaks) when it has them, because JSON-LD article text
+often joins blocks without separators. A position-prefixed player name joined to other text
+rejects the list.
+
+A failed revision of the page that supplied the accepted list withdraws completeness. Any other
+failure of an NFL.com list covering this game also withdraws it, and outranks another page's
+success in the same refresh. A club article's failure is queued for review but cannot withdraw a
+list accepted from another page. Club articles are often prose or both-team lists in varied
+formats: of 20 club pages from 2026 week 8, 7 parsed (each checked row by row against the page)
+and 13 were rejected. `tests/test_club_inactive_formats.py` keeps those formats as fixtures.
 
 News rules accept exact, explicit upcoming-game QB announcements, confirmed active-roster moves
 and explicit same-game medical exclusions. Rumors, conditional starts, past starts, practice reps,

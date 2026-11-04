@@ -83,7 +83,9 @@ def test_market_probability_bands_include_rounded_fair_american_odds():
     assert 'Fair American odds' in market and all(label in market for label in labels)
     assert 'Fair American odds' not in model and 'cal-odds' not in model
     html = b.render_historical_calibration(latest([game('a')]), 'test')
-    assert 'Rounded odds ranges are a reading guide' in html
+    assert 'Fair odds are approximate' in html and 'Fair odds (market)' in html
+    assert [c.favorite_odds(i) for i in range(4)] == ['≈ −100 to −150', '≈ −150 to −233',
+                                                      '≈ −233 to −400', '−400 or shorter']
 
 
 def test_roi_grades_actual_ats_picks_at_market_lines_and_counts_pushed_stakes():
@@ -145,12 +147,14 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     pack = c.build(source)
     html = b.render_historical_calibration(source, 'test', pack)
     assert "href='historical-calibration.html' aria-current=\"page\"" in html
-    assert 'Market implied vs actual WP' in html and 'Model implied vs actual WP' in html
-    assert 'Market spread pick ROI' in html and 'Model spread pick ROI' in html
+    assert 'Win probability vs actual win rate' in html and 'Market favorite' in html and 'Model favorite' in html
+    assert 'Split by favorite at home or away' in html and 'ATS ROI by spread band' in html
+    # The page shows only the four favorite bands; the CSV keeps all eight two-sided bands.
+    assert '50–<60%' in html and '0–<20%' not in html and '40–<50%' not in html
     assert 'Median forecast error' not in html and 'Above / at / below forecast' not in html
     assert 'Avg projected MOV' not in html and 'Median actual MOV' not in html
     assert '>ATS ROI<' in html and '>Market spread band<' in html and '>Model spread band<' in html
-    assert 'Median MOV' in html and 'actual spread price for the side bet' in html
+    assert 'median MOV' in html and 'actual spread price for the side bet' in html
     # Fixtures carry no prices, so every stake is shown as an assumed −110 fallback.
     assert 'model stakes had no price and use assumed −110' in html and 'at assumed −110' in html
     roi_table = c.roi_table(pack['panels'][0]['rows'], 'market_spread')
@@ -238,3 +242,63 @@ def test_roi_uses_the_actual_price_of_the_side_bet_and_counts_fallbacks():
 def test_win_payout_rejects_missing_and_invalid_prices():
     np.testing.assert_allclose(c.win_payout([-110., 150., 100., -100., 50., np.nan]),
                                [100/110, 1.5, 1., 1., np.nan, np.nan], equal_nan=True)
+
+
+def test_favorite_view_folds_the_two_sided_bands_without_losing_games():
+    root = Path(__file__).resolve().parents[1]
+    pack = c.build(b.load_latest(root/'data/latest'))
+    p = pack['panels'][0]
+    # The model has no exact 50% games, so each favorite band equals the two-sided 50%+ band.
+    for k, band in enumerate(c.FAV_LABELS):
+        fav = p['favorites']['model_wp'][band, 'all']
+        both = select(p['rows'], 'model_wp', c.PROB_LABELS[4 + k])
+        assert (fav['decided'], fav['actual_wp']) == (both['decided'], both['actual_wp'])
+        split = p['favorites']['model_wp']
+        assert split[band, 'home']['decided'] + split[band, 'away']['decided'] == fav['decided']
+    assert sum(p['favorites']['market_wp'][band, 'all']['decided'] for band in c.FAV_LABELS) == p['binary_games']
+
+
+def test_favorite_rows_count_each_game_once_signed_toward_the_favorite():
+    frame = pd.DataFrame([game('h', result=7., p=.65), game('a', result=3., p=.3),
+                          game('t', result=0., p=.55), game('even', result=-2., p=.5)])
+    rows = c.favorite_rows(frame, 'model_wp')
+    # 'a': the away team is the 70% favorite and lost by 3.
+    assert rows['70–<80%', 'away']['decided'] == 1 and rows['70–<80%', 'away']['actual_wp'] == 0
+    assert rows['70–<80%', 'all']['median_mov'] == -3
+    # A 50% game counts once, on its home side; a tie is excluded from n but kept in MOV.
+    assert rows['50–<60%', 'home']['decided'] == 1 and rows['50–<60%', 'home']['ties'] == 1
+    assert rows['60–<70%', 'all']['actual_wp'] == 1
+
+
+def ml_game(gid, result, p, home_ml, away_ml, q=.6):
+    return dict(game(gid, result=result, p=p, q=q), home_moneyline=home_ml, away_moneyline=away_ml)
+
+
+def test_moneyline_roi_uses_the_legacy_flat_basis_on_the_same_games():
+    frame = pd.DataFrame([
+        ml_game('agree_win', 3., .65, -150, 130),      # both back home at -150: +0.667u each
+        ml_game('disagree', -4., .55, 120, -140),      # model home +120 loses; market away -140 wins
+        ml_game('tie', 0., .75, -300, 250),            # push: 0u for both
+        ml_game('pickem', 5., .6, -110, -110),         # market pick'em: excluded from both
+        ml_game('no_price', 5., .6, np.nan, 120)])     # missing price: excluded from both
+    rows = {r['band']: r for r in c.moneyline_rows(frame)}
+    total = rows['All bands']
+    assert total['model']['bets'] == total['market']['bets'] == 3 and total['differ'] == 1
+    assert total['model']['units'] == pytest.approx(100/150 - 1)
+    assert total['market']['units'] == pytest.approx(100/150 + 100/140)
+    assert total['model']['null_roi'] < 0   # negative by the hold
+    assert rows['60–<70%']['model']['wins'] == 1 and rows['70–<80%']['model']['pushes'] == 1
+    assert sum(rows[b]['model']['bets'] for b in c.FAV_LABELS) == 3
+
+
+def test_moneyline_roi_is_on_the_page_but_never_in_the_csv():
+    source = latest([ml_game('a', 3., .65, -150, 130), ml_game('b', -3., .4, 140, -160)])
+    pack = c.build(source)
+    html = b.render_historical_calibration(source, 'test', pack)
+    assert 'Moneyline ROI: model vs market favorite' in html and 'Market-correct null' in html
+    assert 'no moneyline picks are published' in html
+    table = c.export(pack)
+    assert not any('moneyline' in str(v) for v in table.view.unique())
+    assert not {'home_moneyline', 'away_moneyline', 'null_roi', 'model_wp'} & set(table.columns)
+    # Without moneylines the section is omitted rather than rendered empty.
+    assert 'Moneyline ROI' not in b.render_historical_calibration(latest([game('x')]), 'test')

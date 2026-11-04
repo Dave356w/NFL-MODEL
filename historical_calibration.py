@@ -7,6 +7,14 @@ Spread-band ROI (owner decision 2026-11-04) is graded at each game's actual spre
 the side bet (nflverse home/away spread odds, closing basis): a win pays that price, a loss
 costs 1u, a push 0. A game without a valid price (|odds| >= 100) is graded at −110 and
 counted in `assumed_prices`.
+
+The page shows win-probability calibration folded to the favorite (owner decision 2026-11-04):
+each game enters once, at its favorite's probability, so the four 50%+ bands carry everything the
+eight two-sided bands do. The CSV keeps the full eight-band, two-sided export.
+
+Moneyline ROI (owner decision 2026-11-04, page only, never in the CSV): MODEL.md's legacy flat 1u
+basis. The model's favorite at its posted moneyline, beside the market favorite on the same
+games and the market-correct null (negative by the hold). Aggregate history only.
 """
 from html import escape
 
@@ -19,6 +27,8 @@ FIRST_SEASON = 2023
 PROB_CUTS = [.2, .3, .4, .5, .6, .7, .8]
 PROB_LABELS = ['0–<20%', '20–<30%', '30–<40%', '40–<50%',
                '50–<60%', '60–<70%', '70–<80%', '80–100%']
+FAV_CUTS = [.6, .7, .8]
+FAV_LABELS = ['50–<60%', '60–<70%', '70–<80%', '80–100%']
 SPREAD_CUTS = [3., 7., 10.]
 SPREAD_LABELS = ['<3 points', '3–<7 points', '7–<10 points', '10+ points']
 EXPORT_COLUMNS = ['season', 'view', 'band', 'side', 'observations', 'decided',
@@ -157,6 +167,51 @@ def roi_rows(frame, model, view):
     return rows
 
 
+def favorite_rows(frame, column):
+    """Each game once, at its favorite's probability; MOV signed toward that favorite.
+    A 50% game counts its home side. Keyed by (band, 'home' | 'away' | 'all')."""
+    p = frame[column].to_numpy(float)
+    home = p >= .5
+    fav = pd.DataFrame({'game_id': frame.game_id.to_numpy(), 'side': np.where(home, 'home', 'away'),
+                        'probability': np.where(home, p, 1-p),
+                        'mov': np.where(home, 1, -1) * frame.result.to_numpy(float)})
+    fav['band_number'] = np.digitize(np.round(fav.probability, 12), FAV_CUTS)
+    out = {}
+    for k, band in enumerate(FAV_LABELS):
+        for side in ['home', 'away', 'all']:
+            group = fav.loc[fav.band_number.eq(k) & (fav.side.eq(side) if side != 'all' else True)]
+            decided = group.loc[group.mov.ne(0)]
+            n = len(decided)
+            actual = float(decided.mov.gt(0).mean()) if n else None
+            implied = float(decided.probability.mean()) if n else None
+            se = standard_error(decided.mov.gt(0).astype(float) - decided.probability, decided.game_id)
+            out[band, side] = dict(decided=n, ties=int(group.mov.eq(0).sum()), actual_wp=actual,
+                implied_wp=implied, gap_pp=100*(actual-implied) if n else None,
+                se_pp=100*se if se is not None else None,
+                median_mov=float(group.mov.median()) if len(group) else None)
+    return out
+
+
+def moneyline_rows(frame):
+    """Flat 1u at the posted moneyline (MODEL.md legacy basis), by the model favorite's WP band.
+    Both sources use the same games: priced, decided by the model and not a market pick'em."""
+    import nfl_model as m
+    if not {'home_moneyline', 'away_moneyline'} <= set(frame):
+        return []
+    d = frame.copy()
+    d['home won'] = np.where(d.result > 0, 1., np.where(d.result < 0, 0., .5))
+    d['market_ml_wp'] = m.market_ml_wp(d)
+    model, market = m.flat_bets(d, 'model_wp'), m.flat_bets(d, 'market_ml_wp')
+    keep = (model.units.notna() & market.units.notna()).to_numpy()
+    band = np.digitize(np.round(np.maximum(d.model_wp, 1-d.model_wp), 12), FAV_CUTS)
+    rows = []
+    for k, label in [*enumerate(FAV_LABELS), (None, 'All bands')]:
+        mask = keep & (band == k) if k is not None else keep
+        rows.append(dict(band=label, model=m.roi_summary(model[mask]), market=m.roi_summary(market[mask]),
+                         differ=int((model.side[mask] != market.side[mask]).sum())))
+    return rows
+
+
 def panel(frame, season):
     binary = frame.loc[frame.result.ne(0)]
     y = binary.result.gt(0).to_numpy(float)
@@ -169,7 +224,9 @@ def panel(frame, season):
             + roi_rows(frame, True, 'model_spread'))
     return dict(season=season, games=len(frame), binary_games=len(binary),
         ties=int(frame.result.eq(0).sum()), market_log_loss=log_loss('market_wp'),
-        model_log_loss=log_loss('model_wp'), rows=rows)
+        model_log_loss=log_loss('model_wp'), rows=rows,
+        favorites={v: favorite_rows(frame, v) for v in ('market_wp', 'model_wp')},
+        moneyline=moneyline_rows(frame))
 
 
 def build(latest):
@@ -265,6 +322,78 @@ def roi_table(rows, view):
             "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
 
 
+def favorite_odds(index):
+    if index == len(FAV_LABELS)-1:
+        return american_odds(FAV_CUTS[-1]) + ' or shorter'
+    low = '−100' if index == 0 else american_odds(FAV_CUTS[index-1])
+    return '≈ ' + low + ' to ' + american_odds(FAV_CUTS[index])
+
+
+def calibration_cell(r):
+    if not r['decided']:
+        return "<td><div class='cal-rate'>—</div><div class='cal-meta'>No decided games</div></td>"
+    gap = number(r['gap_pp'], signed=True)
+    uncertainty = f'{gap} ± {number(r["se_pp"])} pp' if r['se_pp'] is not None else f'{gap} pp'
+    tone = '' if r['se_pp'] is None or abs(r['gap_pp']) < r['se_pp'] else (' pos-tx' if r['gap_pp'] > 0 else ' neg-tx')
+    return ("<td><div class='cal-rate'>" + percentage(r['actual_wp']) + "</div>"
+            + "<div class='cal-detail'>vs " + percentage(r['implied_wp']) + " implied · "
+            + f"<span class='cal-gap{tone}'>{uncertainty}</span></div>"
+            + f"<div class='cal-meta'>n={r['decided']:,}" + (f" · {r['ties']} tie{'s' if r['ties'] != 1 else ''}" if r['ties'] else '')
+            + " · median MOV " + number(r['median_mov'], signed=True) + "</div></td>")
+
+
+def favorite_table(p):
+    body = []
+    for index, band in enumerate(FAV_LABELS):
+        body.append("<tr><th scope='row'>" + band + "<span class='cal-odds'>" + favorite_odds(index) + '</span></th>'
+                    + calibration_cell(p['favorites']['market_wp'][band, 'all'])
+                    + calibration_cell(p['favorites']['model_wp'][band, 'all']) + '</tr>')
+    return ("<div class='gr-tablewrap'><table class='gr cal-wp cal-fav'><thead><tr>"
+            "<th scope='col'>Favorite WP band<span class='cal-odds'>Fair odds (market)</span></th>"
+            "<th scope='col'>Market favorite</th><th scope='col'>Model favorite</th>"
+            "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
+
+
+def favorite_split_table(p, view):
+    body = ''.join("<tr><th scope='row'>" + band + '</th>'
+                   + calibration_cell(p['favorites'][view][band, 'home'])
+                   + calibration_cell(p['favorites'][view][band, 'away']) + '</tr>' for band in FAV_LABELS)
+    source = 'Market' if view == 'market_wp' else 'Model'
+    return ("<div class='gr-tablewrap'><table class='gr cal-wp cal-fav'><thead><tr>"
+            f"<th scope='col'>{source} favorite WP</th><th scope='col'>Favorite at home</th>"
+            "<th scope='col'>Favorite away</th></tr></thead><tbody>" + body + '</tbody></table></div>')
+
+
+def roi_cell(summary, null=None):
+    n = summary['bets']
+    if not n:
+        return "<td class='n'><div class='cal-roi-rate'>—</div><div class='cal-roi-meta'>No bets</div></td>"
+    roi = summary['roi']
+    tone = 'pos-tx' if roi > 0 else 'neg-tx' if roi < 0 else ''
+    se = summary['roi_se']
+    meta = (f"{summary['wins']}-{summary['losses']}-{summary['pushes']} · {number(summary['units'], 1, True)}u"
+            + (f" · ± {number(100*se)} pp" if se is not None and np.isfinite(se) else ''))
+    return (f"<td class='n'><div class='cal-roi-rate {tone}'>" + number(100*roi, signed=True, suffix='%')
+            + "</div><div class='cal-roi-meta'>" + meta + '</div></td>')
+
+
+def moneyline_table(rows):
+    body = []
+    for r in rows:
+        total = r['band'] == 'All bands'
+        null = r['model']['null_roi']
+        body.append(f"<tr{' class=cal-total' if total else ''}><th scope='row'>" + r['band']
+                    + f"<span class='cal-odds'>{r['model']['bets']:,} games · {r['differ']:,} on different sides</span></th>"
+                    + roi_cell(r['model']) + roi_cell(r['market'])
+                    + "<td class='n'><div class='cal-roi-rate cal-null'>"
+                    + (number(100*null, signed=True, suffix='%') if r['model']['bets'] else '—')
+                    + "</div><div class='cal-roi-meta'>if the market is right</div></td></tr>")
+    return ("<div class='gr-tablewrap'><table class='gr cal-roi cal-ml'><thead><tr>"
+            "<th scope='col'>Model favorite WP band</th><th scope='col'>Model favorite</th>"
+            "<th scope='col'>Market favorite</th><th scope='col'>Market-correct null</th>"
+            "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
+
+
 def render_body(pack):
     if not pack['panels']:
         return "<p class='empty'>No completed weeks are available for historical calibration yet.</p>"
@@ -293,22 +422,21 @@ def render_body(pack):
             + number(p['market_log_loss'], 4) + "</div><div class='s'>Lower is better</div></div>"
             + "<div class='gr-stat'><div class='l'>Model log loss</div><div class='v'>"
             + number(p['model_log_loss'], 4) + "</div><div class='s'>Same decided games</div></div></div>")
-        for view, title, lead in [
-            ('market_wp', 'Market implied vs actual WP', 'Paired market moneylines with the book’s margin removed.'),
-            ('model_wp', 'Model implied vs actual WP', 'The production model’s win probabilities, including its confidence adjustment.'),
-            ('market_spread', 'Market spread pick ROI', 'Back the market favorite against its market handicap. Grouped by market spread magnitude.'),
-            ('model_spread', 'Model spread pick ROI', 'Back the model’s ATS pick against the market handicap. Grouped by the model’s mapped spread magnitude.')]:
-            out.append("<h2 class='sec'>" + title + "</h2><p class='sec-lead'>" + lead + '</p>')
-            out.append(wp_table(p['rows'], view) if view.endswith('_wp') else roi_table(p['rows'], view))
-            if view == 'market_wp':
-                out.append("<p class='mut small'>American odds are approximate fair equivalents after removing the "
-                    "bookmaker’s margin. Rounded odds ranges are a reading guide; the WP cutoffs determine "
-                    "which band a game enters.</p>")
-            elif view == 'model_wp':
-                out.append("<p class='mut small'>WP = win probability. Actual WP and implied WP use decided games only; "
-                    "n excludes tied finals. Both sides contains one observation per team. A game can appear in two "
-                    "different bands; paired sides stay together when computing the ±1 standard error. "
-                    "Median MOV includes losses and tied finals, signed toward the home or away side in each cell.</p>")
+        out.append("<h2 class='sec'>Win probability vs actual win rate</h2><p class='sec-lead'>Each game counted "
+                   "once, at its favorite’s probability. The market uses paired moneylines with the book’s margin "
+                   "removed; the model uses its production win probabilities.</p>")
+        out.append(favorite_table(p))
+        out.append("<details class='cal-more'><summary>Split by favorite at home or away</summary>"
+                   + favorite_split_table(p, 'market_wp') + favorite_split_table(p, 'model_wp') + '</details>')
+        out.append("<p class='mut small'>WP = win probability. Bands below 50% are the underdog side of these same "
+                   "games, so they are omitted here; the CSV keeps both sides. Actual and implied WP use decided games; "
+                   "n excludes tied finals. ± is one standard error; the gap is colored only when it exceeds it. "
+                   "Median MOV includes losses and ties, signed toward the favorite. Fair odds are approximate, "
+                   "after removing the bookmaker’s margin.</p>")
+        out.append("<h2 class='sec'>ATS ROI by spread band</h2><p class='sec-lead'>Left: back the market favorite, "
+                   "grouped by market spread. Right: back the model’s ATS pick, grouped by its mapped spread. Both are "
+                   "graded against the market handicap.</p><div class='cal-pair'>"
+                   + roi_table(p['rows'], 'market_spread') + roi_table(p['rows'], 'model_spread') + '</div>')
         spread_rows = [r for r in p['rows'] if r['view'] == 'model_spread']
         priced = sum(r['actual_prices'] or 0 for r in spread_rows)
         assumed = sum(r['assumed_prices'] or 0 for r in spread_rows)
@@ -318,7 +446,17 @@ def render_body(pack):
         out.append("<p class='mut small cal-roi-note'>" + price_text + "ROI is net profit divided "
             "by total stakes, including pushes. ± is one standard error. Both tables use the same eligible games, "
             "each counted once; their band counts can differ because each uses its own spread. Market pick’em "
-            "lines and unavailable model spreads are excluded.</p></section>")
+            "lines and unavailable model spreads are excluded.</p>")
+        if p.get('moneyline'):
+            out.append("<h2 class='sec'>Moneyline ROI: model vs market favorite</h2><p class='sec-lead'>Flat 1u on "
+                       "the side each source makes the favorite, at that side’s posted closing moneyline, on the same "
+                       "games. Grouped by the model favorite’s win probability.</p>" + moneyline_table(p['moneyline'])
+                       + "<p class='mut small cal-roi-note'>The market-correct null is the ROI expected on the model’s "
+                       "bets if the market’s no-vig probabilities were exactly right. It is negative by the hold, so it "
+                       "is the bar to beat, not zero. The two sources differ only on games where they favor different "
+                       "sides. ± is one standard error; an interval that crosses the null is unresolved. Historical "
+                       "aggregate only: the live product is ATS, and no moneyline picks are published.</p>")
+        out.append('</section>')
     out.append("<div class='downloads'><a href='historical_calibration.csv'>Download all calibration bands</a></div>"
                "<noscript><style>[data-cal-season][hidden]{display:block!important} .cal-season-control{display:none}</style>"
                "<p class='mut small'>All season tables are shown below when JavaScript is disabled.</p></noscript>")
@@ -345,8 +483,18 @@ CSS = """
 .cal-roi-rate{font:800 22px/1.3 var(--mono);letter-spacing:-.04em}
 .cal-roi-meta{font:500 11px/1.6 var(--mono);color:var(--faint);margin-top:5px}
 .cal-roi-note{max-width:100ch;line-height:1.7}
+.cal-fav{min-width:520px}.cal-fav th:first-child{width:30%}
+.cal-gap.pos-tx,.cal-gap.neg-tx{font-weight:700}
+.cal-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.cal-pair .cal-roi-wrap{max-width:none}
+.cal-ml{min-width:600px}.cal-ml th:first-child{width:28%}.cal-null{color:var(--muted)}
+.cal-total th,.cal-total td{border-top:2px solid var(--line)}
+.cal-more{margin:12px 0 4px}.cal-more summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);padding:6px 0}
+.cal-more .gr-tablewrap{margin-top:10px}
 [data-cal-season][hidden]{display:none!important}
-@media(max-width:720px){.cal-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.cal-summary .v{font-size:20px}
+@media(max-width:720px){.cal-pair{grid-template-columns:1fr}
+ .cal-fav,.cal-ml,.cal-roi{min-width:0}.cal-fav th,.cal-fav td,.cal-ml th,.cal-ml td{padding-left:8px!important;padding-right:8px!important;white-space:normal!important}
+ .cal-fav th:first-child{width:27%}.cal-ml th:first-child{width:25%}.cal-ml .cal-roi-rate{font-size:16px}
+ .cal-ml .cal-roi-meta,.cal-fav .cal-meta{white-space:normal;overflow-wrap:anywhere}.cal-fav .cal-rate{font-size:18px}.cal-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.cal-summary .v{font-size:20px}
  .cal-summary .gr-stat{padding:12px 9px}.cal-summary .l{font-size:10px}.cal-summary .s{font-size:11px}
  .cal-toolbar{align-items:flex-start}.cal-wp td{white-space:normal!important}.cal-rate{font-size:21px}}
 """
