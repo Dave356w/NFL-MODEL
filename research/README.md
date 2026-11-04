@@ -1944,3 +1944,30 @@ Market only, Test 35's frozen 2006–25 pack. Each arm is refit per season on al
 
 **Reading.** The closing moneyline is about as accurate as its price says at every price level, within what earlier
 seasons can predict. Keep q at weight 1 as v1.19's offset. Stage 2 is not registered. No `REVISION`.
+
+### Test 54: raw spread inside the 3–7 band, median map elsewhere (2026-11-04): unresolved, the band pattern does not replicate
+
+Protocol [`HYBRID_BAND.md`](HYBRID_BAND.md), pushed (`7b39c4e`) before the hybrid was scored. Script `hybrid_band.py`;
+results `hybrid_band_results/` (REPORT.md). Owner request after the map-vs-raw band breakdown, where on 2023–26 the map
+trailed the raw spread only for |raw spread| in [3, 7) (−26.7u ± 24.0). Test basis 2016–22: the v1.19 replay with each
+season's map fitted on the replay's earlier seasons; 2023–26 (production map) is discovery. v1.19's terms were chosen on
+2019–25, and Tests 50–51 had shown raw ahead of the map in total on 2017–22.
+
+| Flat 1u at −110 | 2016–22 (test, 1,822) | 2023–26 (discovery, 937) |
+|---|---:|---:|
+| M map | 880-896-46, −96.0u (−5.3% ± 2.2) | 493-419-25, +29.2u (+3.1% ± 3.1) |
+| R raw | 889-887-46, −78.8u (−4.3% ± 2.2) | 455-457-25, -43.4u (-4.6% ± 3.1) |
+| H hybrid | 872-904-46, −111.3u (−6.1% ± 2.2) | 507-405-25, +55.9u (+6.0% ± 3.1) |
+| always favorite / always home | −162.6u / −130.4u | -20.5u / -49.1u |
+| **H − M** | **−15.3u ± 33.1 (z −0.46; 303 flips, H 146-154-3)** | +26.7u ± 24.0 (z +1.11) |
+
+- **Primary verdict: unresolved, with the sign reversed.** On the test seasons the hybrid is behind the map: H − M is
+  negative in 3 of 7 seasons, positive in 3, and zero in 1, and no season is beyond 1.1 SE.
+- **Inside the band the map was better on 2016–22** (−48.4u vs raw −63.6u), the opposite of 2023–26. Outside the band,
+  raw beat the map there (−15.2u vs −47.6u), also the opposite of 2023–26. Which side wins in which band changes with
+  the period. The 2023–26 band pattern looks like noise.
+- **All three rules lose on 2016–22** (−4.3% to −6.1% ROI), better than the same-row always-favorite (−8.9%) and
+  always-home (−7.2%) baselines, and below break-even.
+
+**Reading.** No support for switching to the raw spread inside 3–7. Keep the median map everywhere; the overall
+map-vs-raw question stays with the 100-lock review. No policy change.

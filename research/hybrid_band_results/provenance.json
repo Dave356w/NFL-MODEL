@@ -1,0 +1,9 @@
+{
+  "research/hybrid_band.py": "97921aecbb62c787cf97492e51be463f43f351ced87954cb9fc5326156c270c0",
+  "research/HYBRID_BAND.md": "700d36869fa39b59a1d53dc6bfe55f38ba1c945e5d31fd9398e8aef700759d42",
+  "research/market_implied.py": "e27d1922bc5ba22b8091f04aeb10b84c3b4ce0f5ec7697e0bc2cb11c3cdeab37",
+  "nfl_model.py": "194aa10a646f145c0a202cb576a7b0f7862c9102004e2a6d9ecbefc2e68d3f37",
+  "fixed_bands.py": "5f54ef4094757e25877a101e4aaf7b6f49e3c4ca8b37b8398b8ae8b93ffe3229",
+  "data/latest/fixed_band_ledger.csv": "ce357ca2ccf943dff37f9cb3859f898949f98120c5f028b365c7effd1445e098",
+  "research/market_implied_inputs/schedule_scores.csv": "1ec4b90d19a0a2e9980d83acdca0d951fa34b23787bcb7505795a4b052fec4be"
+}
