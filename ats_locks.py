@@ -186,6 +186,18 @@ def validate_availability(row):
                         or utc(fact['published_utc'])>utc(fact['observed_utc'])
                         or any(utc(fact[c])>utc(evidence['asof_utc']) for c in ('published_utc','observed_utc','effective_utc'))):
                     raise ValueError('observation is not a confirmed pre-forecast fact')
+            if row['revision']=='boxscore-composite-v1.21':
+                import availability_collect as ac
+                collection=evidence.get('collection',{})
+                if (collection.get('team')!=row[side] or collection.get('game_id')!=row['game_id']
+                        or not ac.collection_ready(collection,row['generated_utc'],require_inactives=True)
+                        or not ac.collection_ready(collection,row['lock_at_utc'],require_inactives=True)):
+                    raise ValueError('complete fresh official collection required through the cutoff')
+                for kind,field in (('report','report_complete'),('inactives','inactives_complete')):
+                    if not any(f['field']==field and f['value'] is True
+                               and f.get('source_capture_sha256')==collection[kind]['source_capture_sha256']
+                               for f in evidence['observations']):
+                        raise ValueError('collection completeness has no matching sourced observation')
     except (KeyError,TypeError,ValueError) as exc:
         raise ValueError(f'ATS availability evidence invalid: {exc}') from exc
 
@@ -228,7 +240,7 @@ def record(data='data', now=None):
                 candidate_id = (*identity, generated.isoformat())
                 if identity in locked or candidate_id in seen or not ADOPTED_UTC <= generated <= now <= cutoff:
                     continue
-                if manifest['revision']=='boxscore-composite-v1.20' and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21') and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
                     continue  # no v1.20 lock from a legacy board that lost its evidence columns
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
@@ -236,6 +248,10 @@ def record(data='data', now=None):
                 if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
                     availability=m.availability_snapshot(raw,ko,generated)
                     if availability is None: continue
+                if manifest['revision']=='boxscore-composite-v1.21':
+                    import availability_collect as ac
+                    if not availability or any(not ac.collection_ready(e.get('collection',{}),cutoff,require_inactives=True)
+                                               for e in availability.values()):continue
                 try:
                     wp, line = float(raw['model_wp']), float(raw['spread_line'])
                 except (KeyError, TypeError, ValueError):

@@ -1,5 +1,5 @@
-"""NFL box-score composite W/L model — v1.20 (v1.19 fit with sourced game availability).
-Paste the entire file into ONE Colab cell; or python nfl_model.py.
+"""NFL box-score composite W/L model — v1.21 (automatic official availability collection).
+Run notebooks/NFL_C_B_MODEL.ipynb in Colab; or python nfl_model.py from the checkout.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
 (committed data/: frozen recipe, forward ledger) and NFL_CACHE_DIR (restored
@@ -14,6 +14,14 @@ v1.19.1 (reporting only, owner decision 2026-11-04): retro_ledger and the curren
 the schedule's home/away spread prices (attach_spread_prices) so the Calibration tab grades its
 spread-band ROI at actual prices. Never a model input; recipe, fits and config signature unchanged.
 The same day the ATS median map moved to weekly refits (fixed_bands map policy v2, lock policy v3).
+
+v1.21 (automatic collection, owner request 2026-11-04; new REVISION/OUTPUT_NAME and signature):
+all 32 official team news feeds, current-game injury tables and official inactive announcements
+are collected by availability_collect.py before scoring upcoming games. Only exact resolved,
+game-bound facts apply. Rumors and unknown names are reviewed. Both teams' fresh complete
+official inactive lists are required before an ATS candidate can be saved; the cutoff hold also
+waits for games with no candidate yet. Source captures and observations are append-only.
+The ten-term fit, historical inputs, v1.16 shadow and previous revision signatures are unchanged.
 
 v1.20 (availability safeguards, owner request 2026-11-04; new REVISION/OUTPUT_NAME and signature):
 the exact v1.19 ten-term fit, with sourced availability corrections for upcoming games only.
@@ -496,11 +504,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.20'
+REVISION='boxscore-composite-v1.21'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_20'  # same ten-term fit; sourced availability corrections for upcoming games
+OUTPUT_NAME='nfl_boxscore_output_v1_21'  # same ten-term fit; automatic official availability for upcoming games
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -1022,7 +1030,9 @@ def load_availability(years,season):
         if 'status_description_abbr' not in rost: rost['status_description_abbr']=None
         if y==season and 'full_name' in rost:  # names for the card notes (display only)
             rdetail.append(normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','full_name','position','status','status_description_abbr']].copy()))
-        rost=normalize_teams(rost.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','position','status','status_description_abbr']].copy())
+        rcols=['season','week','team','gsis_id','position','status','status_description_abbr']
+        if y==season:rcols += [c for c in ('full_name','first_name','last_name','football_name','espn_id') if c in rost]
+        rost=normalize_teams(rost.dropna(subset=['gsis_id'])[rcols].copy())
         snaps=fetch_upstream(lambda:nfl.load_snap_counts(y).to_pandas(),f'snap counts {y}'); snaps=normalize_teams(snaps[snaps.game_type=='REG'].copy())
         if players is None: players=load_player_ids(nfl)
         snaps['gsis_id']=snaps.pfr_player_id.map(players)
@@ -1591,10 +1601,15 @@ def validate_availability_observation(raw):
     import re
     from urllib.parse import urlsplit
     required={'game_id','team','field','value','source_url','published_utc','observed_utc','effective_utc'}
-    optional={'gsis_id','player','position','status','reason'}
+    optional={'gsis_id','player','position','status','reason','source_kind','source_capture_sha256','publication_time_basis'}
     if not isinstance(raw,dict) or not required<=set(raw) or set(raw)-required-optional:
         raise ValueError('availability observation has missing or unknown fields')
     row=dict(raw)
+    if any(k in row for k in ('source_kind','source_capture_sha256','publication_time_basis')):
+        if (row.get('source_kind') not in ('official_injury_report','official_inactives','official_team_news')
+                or not re.fullmatch(r'[a-f0-9]{64}',str(row.get('source_capture_sha256','')))
+                or row.get('publication_time_basis') not in ('source_publication','first_capture')):
+            raise ValueError('invalid automatic source provenance')
     match=re.fullmatch(r'(\d{4})_(\d{2})_([A-Z]+)_([A-Z]+)',str(row['game_id']))
     if (not match or not 1<=int(match[2])<=22 or row['team'] not in match.groups()[2:]
             or not set(match.groups()[2:])<=PERSONNEL_TEAMS):
@@ -1653,7 +1668,7 @@ def availability_evidence_digest(evidence):
     return hashlib.sha256(json.dumps(evidence,sort_keys=True,allow_nan=False).encode()).hexdigest()
 
 
-def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=None,observations=(),asof=None):
+def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=None,observations=(),asof=None,collection=None):
     """Forward-only corrections. Historical feature matrices and the v1.16 shadow stay untouched.
 
     Only confirmed observations captured, published and effective by asof apply, for an exact
@@ -1673,6 +1688,14 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
         game=target['game_id']; original=indexed.loc[key].to_dict()
         eligible=[r for r in observations if r['game_id']==game and r['team']==t and r['status']=='confirmed'
                   and all(availability_utc(r[c])<=asof for c in ('published_utc','observed_utc','effective_utc'))]
+        if collection is not None:
+            # A revised complete list replaces that source's old list. Removing an
+            # old observation does not infer healthy/active status from absence;
+            # independent native medical and roster exclusions still apply.
+            health=collection.get('teams',{}).get(t,{})
+            for kind,section in (('official_injury_report','report'),('official_inactives','inactives')):
+                current=health.get(section,{}).get('source_capture_sha256') if health.get('game_id')==game else None
+                if current:eligible=[r for r in eligible if r.get('source_kind')!=kind or r.get('source_capture_sha256')==current]
         grouped={}
         for r in eligible:
             k=(r.get('gsis_id',''),r['field']) if r['field']!='qb_starter' else ('','qb_starter')
@@ -1747,6 +1770,12 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
         complete=original.get('injury_report')=='final'
         for r in applied:
             if r['field']=='report_complete': complete=r['value']
+        collected=None
+        if collection is not None:
+            import availability_collect as ac
+            collected=ac.team_snapshot(collection,t,game)
+            complete=complete and collected['report'].get('complete') is True
+            if not ac.collection_ready(collected,asof):blockers.append('automatic source checks incomplete or stale')
         record['injury_report']='final' if complete else ('practice' if original.get('injury_report')=='practice' else 'none')
         if record.get('qb_source')=='backup_prior' or not record.get('qb_expected'):
             blockers.append('starting quarterback unresolved')
@@ -1757,6 +1786,7 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
             inputs_sha256={name:data_hash(frame) for name,frame in [('injuries',inj.loc[(inj.season==y)&(inj.week==w)&inj.team.eq(t)]),
                 ('roster',rost.loc[(rost.season==y)&rost.team.eq(t)&rost.week.isin([rw,w])])]},
             observations=applied,blockers=sorted(set(blockers)))
+        if collected is not None:evidence['collection']=collected
         record.update(season=y,week=w,team=t,game_id=game,
             availability_evidence=json.dumps(evidence,sort_keys=True,allow_nan=False),
             availability_evidence_sha256=availability_evidence_digest(evidence))
@@ -1798,6 +1828,10 @@ def availability_snapshot(row,ko,asof):
                 return None
             if row.get(f'{side}_qb_expected') is not None and row.get(f'{side}_qb_expected')!=evidence['qb_expected']:
                 return None
+            if 'collection' in evidence:
+                import availability_collect as ac
+                c=evidence['collection']
+                if c.get('team')!=row[side] or c.get('game_id')!=row['game_id'] or not ac.collection_ready(c,asof):return None
             for fact in evidence['observations']:
                 fact=validate_availability_observation(fact)
                 if (fact['game_id']!=row['game_id'] or fact['team']!=row[side] or fact['status']!='confirmed'
@@ -3012,9 +3046,13 @@ def config_signature():
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         cfg['evaluation_ties']='graded as pushes; excluded from binary fitting/scoring'
         cfg['market_targets']={'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'}
-    if REVISION=='boxscore-composite-v1.20':
+    if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21'):
         cfg['availability_observations']={'policy':AVAILABILITY_POLICY,'fields':AVAILABILITY_FIELDS,
             'rule':'confirmed, game-scoped, captured/published/effective by forecast; unresolved conflicts block locks; historical and shadow inputs unchanged'}
+    if REVISION=='boxscore-composite-v1.21':
+        import availability_collect as ac
+        cfg['automatic_availability']={'policy':ac.POLICY,'sources':'32 official club RSS feeds, official game injury tables and inactive announcements',
+            'max_source_age_minutes':ac.MAX_AGE_MINUTES,'ats':'both complete official inactive lists required before saving a candidate'}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -3666,8 +3704,8 @@ def resolve_output_root():
 
 def main():
     global OUTPUT_ROOT
-    for pkg in ('nflreadpy','pyarrow'):
-        if importlib.util.find_spec(pkg) is None:
+    for pkg,module in (('nflreadpy','nflreadpy'),('pyarrow','pyarrow'),('beautifulsoup4','bs4')):
+        if importlib.util.find_spec(module) is None:
             subprocess.run([sys.executable,'-m','pip','install','-q',pkg],check=True)
     AUDIT.clear()
     apply_env_config()
@@ -3743,16 +3781,22 @@ def main():
                   f'{", ".join(f"{t} ({src})" for t,src in zip(nochart.team,nochart.qb_source))}')
         pend=cr[cr.injury_report!='final']
         if len(pend):
-            fallback='' if REVISION=='boxscore-composite-v1.20' else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
+            fallback='' if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21') else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
             print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
                   f'{", ".join(f"{t} ({st})" for t,st in zip(pend.team,pend.injury_report))}. '
                   f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
                   f'ledger until game statuses publish{fallback}.')
         else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
-        if REVISION=='boxscore-composite-v1.20':
+        if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21'):
             observations=load_availability_observations()
+            collection=None
+            if REVISION=='boxscore-composite-v1.21':
+                import availability_collect as ac
+                collection=ac.refresh(state_dir(),schedules,a['rost'],force=True)
+                observations+=load_availability_observations(state_dir()/ac.AUTO)
+                AUDIT.append({'source':'automatic_availability','policy':ac.POLICY,**ac.validate_store(state_dir())})
             resolved_availability=resolve_game_availability(targets,avail,qb,a['snaps'],a['inj'],a['rost'],
-                depth=a.get('depth'),events=events,observations=observations,asof=now_utc())
+                depth=a.get('depth'),events=events,observations=observations,asof=now_utc(),collection=collection)
             if len(resolved_availability): save(resolved_availability,'resolved_availability.csv')
     notes=None
     if avail is not None:
@@ -3812,6 +3856,10 @@ def main():
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
     shadow_out={}
     gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability)
+    if REVISION=='boxscore-composite-v1.21':
+        # Collection occurs during this run. The run-start time would predate
+        # that evidence and make every otherwise valid automatic candidate fail.
+        now=now_utc()
     gw=attach_moneylines(gw,schedules)
     gw=attach_spread_prices(gw,schedules)
     save(gw,'current_season_predictions.csv')
