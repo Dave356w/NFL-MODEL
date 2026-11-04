@@ -94,6 +94,13 @@ exceptions; routine injury, roster and depth-chart downloads continue as before.
 news is not proof of health. Broader injury coefficients or new QB mixture probabilities need
 separate chronological and forward validation before adoption.
 
+Research replay checks preserve the original result and provenance files byte for byte after
+verifying the numerical outputs. A new runner revision/signature and verified model/grading
+source hashes are recorded separately in `_replay_validation.json` in the job artifact. Only
+those execution identity fields may differ; input hashes, recipes, outcomes, schema, text and
+integer values remain strict. A numerical change still fails, and a failed rerun replaces any
+earlier PASS audit. Original research files are not relabelled with the new production revision.
+
 Before a PR, run `python sync_notebook.py`, `python validate_data_files.py`, and
 `python -m pytest tests/ -q`. The three previously failing snapshot assertions now distinguish
 annual targets from weekly map exports and settle historical ROI at actual spread prices.

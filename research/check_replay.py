@@ -1,7 +1,9 @@
 """Run a replay and compare every committed output, allowing numerical noise."""
 import gzip
+import hashlib
 import io
 import json
+import datetime as dt
 from pathlib import Path
 import re
 import subprocess
@@ -10,6 +12,39 @@ import numpy as np
 import pandas as pd
 TOLERANCE=1e-8
 NUMBER=re.compile(r'[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?')
+REPLAY_AUDIT='_replay_validation.json'
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def replay_metadata(name,old,new,changes):
+    """Separate verified runner identity from experimental results, without editing origin files.
+
+    Only current model revision/signature labels and the hashes of model/grading source may
+    change. Dataset hashes, recipes, outcomes, reports and all other fields remain strict.
+    Every accepted identity change is preserved in a separate replay audit artifact.
+    """
+    if name not in ('results.json','provenance.json'): return new
+    a,b=json.loads(old),json.loads(new)
+    if not isinstance(a,dict) or not isinstance(b,dict): return new
+    permitted={}
+    if name=='provenance.json':
+        for key in ('nfl_model.py','grade_ledger.py'):
+            permitted[key]=hashlib.sha256((ROOT/key).read_bytes()).hexdigest()
+    else:
+        sys.path.insert(0,str(ROOT)) if str(ROOT) not in sys.path else None
+        import nfl_model as m
+        permitted={'revision':m.REVISION,'model_revision_at_run':m.REVISION,'config_signature':m.config_signature()[0]}
+    for key,current in permitted.items():
+        if key not in a or key not in b or a[key]==b[key]: continue
+        if b[key]!=current: raise ValueError(f'{name}.{key}: replay identity is not the executing source')
+        if key in ('revision','model_revision_at_run'):
+            if not isinstance(a[key],str) or not re.fullmatch(r'boxscore-composite-v\d+\.\d+',a[key]):
+                raise ValueError(f'{name}.{key}: not a production identity field')
+        elif not isinstance(a[key],str) or not re.fullmatch(r'[0-9a-f]{64}',a[key]):
+            raise ValueError(f'{name}.{key}: invalid original source fingerprint')
+        changes.append({'file':name,'field':key,'original':a[key],'replayed':b[key]})
+        b[key]=a[key]
+    return json.dumps(b).encode()
 
 
 def compare_json(a,b,path='value'):
@@ -54,16 +89,29 @@ def compare_file(name,old,new):
     else:raise ValueError(f'{name}: bytes changed')
 
 
-def main():
-    root=Path(sys.argv[1]);command=sys.argv[2:]
+def main(argv=None):
+    args=sys.argv[1:] if argv is None else argv
+    root=Path(args[0]);command=args[1:]
     if command and command[0]=='--':command=command[1:]
-    prior={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file()}
-    subprocess.run(command,check=True)
-    after={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file()}
-    if prior.keys()!=after.keys():raise ValueError('Replay output file set changed; regenerate and commit outputs')
-    for name,old in prior.items():compare_file(str(name),old,after[name])
-    # Restore identical committed bytes after validating platform-level differences.
-    for name,old in prior.items():(root/name).write_bytes(old)
+    prior={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file() and p.name!=REPLAY_AUDIT}
+    metadata=[]
+    audit=dict(status='RUNNING',observed_utc=dt.datetime.now(dt.timezone.utc).isoformat(),command=command,
+               files_checked=len(prior),absolute_tolerance=TOLERANCE,identity_changes=metadata,
+               checker_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),original_outputs_restored=False)
+    (root/REPLAY_AUDIT).write_text(json.dumps(audit,indent=2)+'\n')
+    try:
+        subprocess.run(command,check=True)
+        after={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file() and p.name!=REPLAY_AUDIT}
+        if prior.keys()!=after.keys():raise ValueError('Replay output file set changed; regenerate and commit outputs')
+        for name,old in prior.items():compare_file(str(name),old,replay_metadata(str(name),old,after[name],metadata))
+        # Restore identical committed bytes only after validating every output.
+        for name,old in prior.items():(root/name).write_bytes(old)
+        audit.update(status='PASS',original_outputs_restored=True)
+    except Exception as exc:
+        audit.update(status='FAIL',error=str(exc))
+        raise
+    finally:
+        (root/REPLAY_AUDIT).write_text(json.dumps(audit,indent=2)+'\n')
     print(f'{len(prior)} replay files agree within absolute {TOLERANCE:g}; integer/text/schema checks exact.')
 
 if __name__=='__main__':main()

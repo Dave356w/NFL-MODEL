@@ -1,4 +1,6 @@
 import sys
+import json
+import hashlib
 from pathlib import Path
 import pytest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'research'))
@@ -20,3 +22,54 @@ def test_substantive_stale_output_rejected():
 def test_row_identity_missingness_and_schema_rejected():
     for altered in (b'game,p\nb,0.6\n',b'game,p\na,\n',b'game,p,q\na,0.6,0.5\n'):
         with pytest.raises(ValueError):c.compare_file('x.csv',b'game,p\na,0.6\n',altered)
+
+
+def test_replay_source_identity_is_audited_but_numeric_checks_stay_strict():
+    import nfl_model as m
+    before={'revision':'boxscore-composite-v1.19','config_signature':'0'*64,'games':815,'log_loss':.61}
+    after=dict(before,revision=m.REVISION,config_signature=m.config_signature()[0])
+    changes=[]
+    normalized=c.replay_metadata('results.json',json.dumps(before).encode(),json.dumps(after).encode(),changes)
+    c.compare_file('results.json',json.dumps(before).encode(),normalized)
+    assert {r['field'] for r in changes}=={'revision','config_signature'}
+    after['games']=816
+    with pytest.raises(ValueError,match='numeric value changed'):
+        c.compare_file('results.json',json.dumps(before).encode(),c.replay_metadata(
+            'results.json',json.dumps(before).encode(),json.dumps(after).encode(),[]))
+
+
+def test_only_real_current_source_hash_can_change_and_input_hashes_remain_strict():
+    sha=hashlib.sha256((c.ROOT/'nfl_model.py').read_bytes()).hexdigest()
+    before={'nfl_model.py':'0'*64,'data.csv':'1'*64}
+    after=dict(before,**{'nfl_model.py':sha})
+    changes=[]
+    c.compare_file('provenance.json',json.dumps(before).encode(),c.replay_metadata(
+        'provenance.json',json.dumps(before).encode(),json.dumps(after).encode(),changes))
+    assert changes[0]['original']=='0'*64 and changes[0]['replayed']==sha
+    after['data.csv']='2'*64
+    with pytest.raises(ValueError,match='value changed'):
+        c.compare_file('provenance.json',json.dumps(before).encode(),c.replay_metadata(
+            'provenance.json',json.dumps(before).encode(),json.dumps(after).encode(),[]))
+    after['nfl_model.py']='3'*64
+    with pytest.raises(ValueError,match='not the executing source'):
+        c.replay_metadata('provenance.json',json.dumps(before).encode(),json.dumps(after).encode(),[])
+
+
+def test_main_preserves_original_bytes_and_never_leaves_a_stale_pass_audit(tmp_path):
+    import nfl_model as m
+    path=tmp_path/'results.json'
+    original=json.dumps({'model_revision_at_run':'boxscore-composite-v1.19','games':815}).encode()
+    path.write_bytes(original)
+    replay=json.dumps({'model_revision_at_run':m.REVISION,'games':815})
+    command=[str(tmp_path),'--',sys.executable,'-c',
+             f'from pathlib import Path; Path({str(path)!r}).write_text({replay!r})']
+    c.main(command)
+    assert path.read_bytes()==original
+    audit=json.loads((tmp_path/c.REPLAY_AUDIT).read_text())
+    assert audit['status']=='PASS' and audit['original_outputs_restored']
+    assert audit['identity_changes'][0]['replayed']==m.REVISION
+    # A second run must not compare the audit to itself, and a failing run must replace PASS.
+    c.main(command)
+    command[-1]=command[-1].replace('815','816')
+    with pytest.raises(ValueError,match='numeric value changed'): c.main(command)
+    assert json.loads((tmp_path/c.REPLAY_AUDIT).read_text())['status']=='FAIL'
