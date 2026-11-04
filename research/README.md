@@ -2005,3 +2005,37 @@ production 493-419-25 (+29.2u, +3.1% ± 3.1), M1 and M3 +13.9u, M2 −39.5u, alw
 **Reading.** Variance in the band numbers is real and a smoother estimator removes some of it, but nothing shows that
 this improves ATS results consistently. Keep the production median. If the owner wants to follow M1 or M3, the clean
 step is a reporting-only arm on native v1.19 locks, reviewed at 100 decided locks. No policy change.
+
+### Test 56: favorite, underdog or skip on zero-edge ATS games (2026-11-04): unresolved; zero-edge bets lose about the vig either way
+
+Protocol [`ZERO_EDGE.md`](ZERO_EDGE.md), pushed (`0f1d9d2`) before the policies were scored. Script `zero_edge.py`; results
+`zero_edge_results/` (REPORT.md). Owner request after the Harrell–Davis exploration showed about 70% of that arm's flips
+were production zero-edge games (mapped spread equal to the line, not a pick'em). Both bases are fully exposed, so this
+is descriptive. The map reproduces `fixed_bands.fit` and the exported spreads exactly.
+
+| Zero-edge games, flat 1u at −110 | 2016–22 (268 games, 14.7% of bets) | 2023–26 (133 games, 14.2% of bets) |
+|---|---:|---:|
+| F favorite (production) | 119-132-17, −23.8u | 68-53-12, +8.8u |
+| D underdog | 132-119-17, +1.0u | 53-68-12, −19.8u |
+| S skip | 0 | 0 |
+| D − F | +24.8 ± 30.3 (z +0.82) | −28.6 ± 20.9 (z −1.37) |
+| S − F | +23.8 ± 15.1 (z +1.58) | −8.8 ± 10.5 (z −0.84) |
+
+Whole strategy: 2016–22 F −96.0u (−5.3% ± 2.2, 1,822 bets), D −71.2u, S −72.2u (−4.6% ± 2.4, 1,554 bets); 2023–26
+F +29.2u (+3.1% ± 3.1, 937 bets), D +0.5u, S +20.4u (+2.5% ± 3.3, 804 bets). Always favorite −162.6u / −20.5u; always
+home −130.4u / −49.1u.
+
+- **Both verdicts are unresolved** (bar |z| ≥ 2.24). No policy wins on both bases. The favorite and underdog sides
+  trade places between periods, as underdogs at +3 did (53.9% then 44.4%).
+- **Over all eleven seasons, zero-edge bets lose about the vig on either side.** Added across both bases (descriptive
+  only), favorites went 187-185-29 for −15.0u and underdogs 185-187-29 for −18.8u, both near the −4% expected from
+  a coin flip at −110. That matches the stated prior: zero edge means no view, and the market priced these games at 50%.
+- **Skipping removes about 14–15% of bets.** It raises ROI per bet slightly in 2016–22 (−4.6% vs −5.3%) and lowers it
+  slightly in 2023–26 (+2.5% vs +3.1%). Units move by +23.8u and −8.8u.
+- **By line:** zero-edge favorites at −3 went 54-71-15 (−21.9u) in 2016–22 and 33-22-9 (+8.0u) in 2023–26; at −7
+  they were positive in both (+10.8u, +1.4u; 36 games each).
+
+**Reading.** The data cannot separate the three policies. On expectation, skipping is the only one that does not pay the
+vig on games where the model has no view, but the realized difference is within noise on both bases. Changing the
+zero-edge rule is a new lock policy version and the owner's decision; the clean evidence would be a reporting-only skip
+arm on native v1.19 locks. No policy change.
