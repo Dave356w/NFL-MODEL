@@ -112,11 +112,19 @@ def test_strict_zero_edge_and_explicit_selection_denominator():
     assert fixed.selection_rate == 1 / 3
 
 
-def test_committed_annual_maps_are_frozen_regression_targets():
-    # Source is the committed exposed-history ledger, not newly selected
-    # outcomes. A change to any saved band would invalidate ATS comparisons.
+V118_LEDGER = 'tests/fixtures/v118_fixed_band_ledger.csv'  # frozen copy from 989d882; never regenerated
+
+
+def frozen_v118():
     root = Path(__file__).resolve().parents[1]
-    d = pd.read_csv(root / 'data/latest/fixed_band_ledger.csv', low_memory=False)
+    return pd.read_csv(root / V118_LEDGER)
+
+
+def test_committed_annual_maps_are_frozen_regression_targets():
+    # Source is a frozen copy of the v1.18 exposed-history ledger (bot builds cannot change it),
+    # not newly selected outcomes. A change to any saved band would invalidate ATS comparisons.
+    root = Path(__file__).resolve().parents[1]
+    d = frozen_v118()
     archived = json.loads((root / 'tests/fixtures/legacy_fixed_band_rules.json').read_text())
     assert [int(r['season']) for r in archived] == [2023, 2024, 2025, 2026]
     for stored in archived:
@@ -169,8 +177,7 @@ def test_median_insufficient_band_and_zero_direction_training_unavailable():
 
 
 def test_production_median_reproduces_tested_maps_and_895_game_replay():
-    root = Path(__file__).resolve().parents[1]
-    d = pd.read_csv(root/'data/latest/retro_ledger.csv')
+    d = frozen_v118()  # v1.18 targets; the live v1.19 maps are checked below
     import nfl_model as m
     d['model_spread'] = m.implied_spread(d.model_wp)
     expected = {2023: [2., 3., 6.5, 14.5], 2024: [3., 3., 7., 14.],
@@ -194,3 +201,37 @@ def test_production_median_reproduces_tested_maps_and_895_game_replay():
         grades = [r[0] for r in scored]
         assert [grades.count(k) for k in ('W', 'L', 'P', 'S')] == [473, 397, 25, 0]
         assert np.isclose(sum(r[1] for r in scored), 33.)
+
+
+# Median maps the committed live ledger must reproduce, keyed by the revision that produced it.
+# Add a new entry when a REVISION regenerates the replay; never edit a recorded one (pin it to a
+# frozen fixture as v1.18 is above).
+LIVE_MAPS = {
+    'boxscore-composite-v1.19': {2023: [2., 3., 8., 14.], 2024: [2., 3., 7., 14.],
+                                 2025: [3., 5., 7., 14.], 2026: [3., 4., 7., 14.]},
+}
+
+
+def test_live_median_maps_match_the_recorded_targets_for_their_revision():
+    root = Path(__file__).resolve().parents[1]
+    revision = json.loads((root / 'data/latest/manifest.json').read_text())['revision']
+    import nfl_model as m
+    assert revision == m.REVISION
+    assert revision in LIVE_MAPS, f'record the median-map targets for {revision} in LIVE_MAPS'
+    d = pd.read_csv(root / 'data/latest/retro_ledger.csv')
+    d['model_spread'] = m.implied_spread(d.model_wp)
+    exported = {r['season']: r for r in json.loads((root / 'data/latest/fixed_band_rules.json').read_text())}
+    for year, values in LIVE_MAPS[revision].items():
+        rule = f.fit(d, year)
+        assert rule['magnitudes'] == values
+        assert rule['training_max_season'] < year
+        assert exported[year]['magnitudes'] == values
+    assert f.fit(d, 2026)['training_games'] == 1359
+
+
+def test_live_targets_reject_a_changed_map():
+    # Negative fixture: the same comparison fails when one band moves.
+    d = frozen_v118()
+    import nfl_model as m
+    d['model_spread'] = m.implied_spread(d.model_wp)
+    assert f.fit(d, 2023)['magnitudes'] != LIVE_MAPS['boxscore-composite-v1.19'][2023]

@@ -1,0 +1,17 @@
+{
+  "source": "data/latest/fixed_band_ledger.csv at 989d882 (last green main; v1.18 replay ledger)",
+  "source_sha256": "94cd3e71042d131c893c931833e446d4e97a30417f35be11b902c58f7eaa7384",
+  "columns": [
+    "game_id",
+    "season",
+    "week",
+    "home won",
+    "result",
+    "spread_line",
+    "model_wp",
+    "model_spread"
+  ],
+  "rows": 1480,
+  "revision": "boxscore-composite-v1.18",
+  "purpose": "frozen input for the v1.18 median-map regression targets; never regenerated"
+}
