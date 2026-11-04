@@ -67,11 +67,15 @@ def _timed_store(data, original_skip=False):
     a=s.ats_locks
     wp=float(ndtr(8./12.37))
     legacy=next(policy for policy,favorite in a.POLICIES.items() if not favorite)
-    row=dict(revision=s.m.REVISION, game_id='2026_07_TEN_IND', season=2026,
+    # The legacy v1 skip keeps its annual rule; a current (v3) lock carries the weekly rule for its week.
+    annual=dict(training_max_season=2025,cuts=[3.,7.,10.],magnitudes=[3.,4.,7.,14.])
+    weekly=dict(season=2026,week=7,training_max_season=2026,training_max_week=6,cuts=[3.,7.,10.],
+                magnitudes=[3.,4.,7.,14.],method=a.POLICY_METHODS[a.POLICY_VERSION])
+    row=dict(revision=s.m.REVISION, game_id='2026_07_TEN_IND', season=2026, week=7,
         generated_utc='2026-10-25T15:58:00+00:00', observed_utc='2026-10-25T15:59:00+00:00',
         kickoff_utc='2026-10-25T17:00:00+00:00', lock_at_utc='2026-10-25T16:00:00+00:00',
         policy_version=legacy if original_skip else a.POLICY_VERSION, lock_lead_minutes=60,
-        fixed_rule=dict(training_max_season=2025,cuts=[3.,7.,10.],magnitudes=[3.,4.,7.,14.]),
+        fixed_rule=annual if original_skip else weekly,
         model_wp=wp, raw_spread=float(s.m.implied_spread([wp])[0]),
         market_spread=7. if original_skip else 6.5, fixed_band_spread=7.,
         selected_side='' if original_skip else 'home', skip_reason='zero_edge' if original_skip else None)

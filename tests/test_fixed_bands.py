@@ -235,3 +235,100 @@ def test_live_targets_reject_a_changed_map():
     import nfl_model as m
     d['model_spread'] = m.implied_spread(d.model_wp)
     assert f.fit(d, 2023)['magnitudes'] != LIVE_MAPS['boxscore-composite-v1.19'][2023]
+
+
+# --- Map policy v2: weekly refit, one-season half-life (owner decision 2026-11-04) ---------------
+
+def weekly_history():
+    """Three seasons, 16 weeks, 4 bands x 5 games a week; margins 2 above the spread."""
+    rows = []
+    for season in (2021, 2022, 2023):
+        for week in range(1, 17):
+            for x in (1., 4., 8., 12.):
+                rows += [dict(season=season, week=week, model_spread=x, result=x + 2, spread_line=x)] * 5
+    return pd.DataFrame(rows)
+
+
+def test_weighted_median_equals_numpy_median_with_equal_weights():
+    rng = np.random.default_rng(7)
+    for _ in range(300):
+        x = rng.integers(-21, 28, rng.integers(1, 40)).astype(float)
+        assert f.weighted_median(x, np.ones(len(x))) == np.median(x)
+    assert f.weighted_median([0., 10.], [1., 3.]) == 10.  # heavier value wins
+
+
+def test_weekly_rule_uses_only_games_before_its_week():
+    d = weekly_history()
+    rule = f.fit_weekly(d, 2023, 9)
+    assert rule['magnitudes'] == [3., 6., 10., 14.]
+    assert (rule['season'], rule['week'], rule['training_max_season'], rule['training_max_week']) == (2023, 9, 2023, 8)
+    assert rule['method'] == f.MAP_METHOD and rule['policy_version'] == f.MAP_POLICY_VERSION
+    # Negative: the forecast week itself and every later game cannot move the rule.
+    poison = d[(d.season == 2023) & (d.week >= 9)].assign(result=-100.)
+    later = d.assign(season=2024, result=-100.)
+    clean = d[(d.season < 2023) | (d.week < 9)]
+    assert f.fit_weekly(pd.concat([clean, poison, later]), 2023, 9) == rule
+    # Positive: earlier weeks of the same season do move it once they carry most of the weight
+    # (by week 16 this season's 15 weeks outweigh the two older seasons).
+    moved = d.copy()
+    moved.loc[(moved.season == 2023) & (moved.week < 16), 'result'] = -100.
+    assert f.fit_weekly(moved, 2023, 16)['magnitudes'] == [-100.] * 4
+    assert f.fit_weekly(d, 2023, 16)['magnitudes'] == [3., 6., 10., 14.]
+
+
+def test_weekly_rule_weights_recent_games_more():
+    d = weekly_history()
+    old = d.season < 2023
+    d.loc[old, 'result'] = d.loc[old, 'model_spread']        # older seasons: margin = spread
+    d.loc[~old, 'result'] = d.loc[~old, 'model_spread'] + 6  # this season: 6 points more
+    # 2023 weeks 1-15 carry most of the weight (one-season half-life), so the median follows them.
+    assert f.fit_weekly(d, 2023, 16)['magnitudes'] == [7., 10., 14., 18.]
+    # With equal weights the larger older sample would hold the median at the spread.
+    assert f.fit(d[d.season < 2023].assign(season=d.season[d.season < 2023]), 2023)['magnitudes'] == [1., 4., 8., 12.]
+
+
+def test_weekly_rule_needs_two_complete_earlier_seasons_and_band_counts():
+    d = weekly_history()
+    assert f.fit_weekly(d, 2022, 10) is None          # only 2021 is complete
+    assert f.fit_weekly(d, 2023, 1) is not None       # 2021 and 2022 complete
+    assert f.fit_weekly(d[d.model_spread != 12.], 2023, 5) is None
+
+
+def test_trained_before_and_rule_for_match_the_week():
+    rule = f.fit_weekly(weekly_history(), 2023, 9)
+    assert f.trained_before(rule, 2023, 9)
+    assert not f.trained_before(rule, 2023, 10) and not f.trained_before(rule, 2024, 9)
+    assert not f.trained_before(dict(rule, training_max_week=9), 2023, 9)
+    annual = dict(season=2023, training_max_season=2022, cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.])
+    assert f.rule_for([annual, rule], 2023, 9) is rule
+    assert f.rule_for([annual, rule], 2023, 10) is annual
+    assert f.rule_for([annual, rule], 2023, 9, weekly=False) is annual
+    assert f.rule_for([annual], 2023, 9, weekly=True) is None
+
+
+def test_prepare_maps_each_week_with_its_own_rule_and_declares_the_policy():
+    d = weekly_history()
+    d.loc[(d.season == 2023) & (d.week >= 5), 'result'] = -20.
+    for c, v in dict(game_id=[f'g{i}' for i in range(len(d))], home='H', away='A', model_wp=.6).items():
+        d[c] = v
+    latest = {'retro_ledger': d.copy()}
+    f.prepare(latest)
+    led = latest['fixed_band_ledger']
+    for (season, week), g in led[led.season == 2023].groupby(['season', 'week']):
+        rule = f.fit_weekly(d, season, week)
+        np.testing.assert_array_equal(g.fixed_band_spread, f.apply(g.model_spread, rule))
+    assert (led.map_policy_version == f.MAP_POLICY_VERSION).all()
+    assert led.loc[led.season < 2023, 'fixed_band_spread'].isna().all()
+    assert {(r['season'], r['week']) for r in latest['fixed_band_rules']} == {(2023, w) for w in range(1, 17)}
+
+
+def test_live_export_matches_the_map_policy_it_declares():
+    root = Path(__file__).resolve().parents[1]
+    led = pd.read_csv(root / 'data/latest/fixed_band_ledger.csv', low_memory=False)
+    if led.get('map_policy_version', pd.Series(dtype=object)).dropna().eq(f.MAP_POLICY_VERSION).all() and 'map_policy_version' in led:
+        import nfl_model as m
+        h = pd.read_csv(root / 'data/latest/retro_ledger.csv')
+        h['model_spread'] = m.implied_spread(h.model_wp)
+        for (season, week), g in led.groupby(['season', 'week']):
+            rule = f.fit_weekly(h, int(season), int(week))
+            np.testing.assert_array_equal(g.fixed_band_spread.to_numpy(float), f.apply(g.model_spread, rule))

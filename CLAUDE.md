@@ -27,6 +27,10 @@ public pages or season CSV; the pooled total is descriptive.
 2026 games whose ATS deadline precedes 2026-11-05 12:00 UTC use v1.19's replayed pick,
 replacing v1.18's displayed locks; later games use v1.19's own 60-minute locks. No new page
 tags or warnings. v1.18's snapshots and locks stay unchanged in their append-only files.
+**The weekly decayed median map is production (owner decision 2026-11-04; research Test 59 arm D):**
+the map is refit before every week with a one-season half-life (map policy v2), and 60-minute locks use
+ATS lock policy v3. Picks, Results, Performance and Calibration regenerate under it; v1/v2 locks keep
+their saved annual rules. v1.19 and `config_signature()` are unchanged.
 Detailed research stays in repository reports; the historical Calibration tab
 labels its reconstructed, exposed development basis separately from live results.
 
@@ -66,7 +70,7 @@ and the same-row always-favorite and always-home baselines. Per-band records
 are descriptive, not per-game cover probabilities. Spread point error is a
 secondary diagnostic. ROI is reported, not optimized: recipe selection and
 coefficient fitting stay on log loss, and the median map stays fitted to
-prior-season margins, unless the owner decides otherwise. That would be a new
+earlier games' margins (weekly, one-season half-life, since 2026-11-04), unless the owner decides otherwise. That would be a new
 `REVISION` or ATS policy version.
 
 The open ATS question is whether the median map beats the raw model spread

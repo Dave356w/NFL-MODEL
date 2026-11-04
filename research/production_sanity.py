@@ -1,4 +1,8 @@
-"""Read-only, independent checks of v1.18 and the production median ATS map.
+"""Read-only, independent checks of the production model and its median ATS map.
+
+Each exported ledger is checked against the map policy it declares: the weekly decayed map
+(map policy v2, owner decision 2026-11-04) or, for an export without the column, the annual
+prior-season map.
 
 No snapshots, recipes, probabilities, or grading policies are changed. The report
 is regenerated from current data by build_site and stays in the repository.
@@ -37,6 +41,36 @@ def median_rule(history, year):
     return dict(season=int(year), training_max_season=int(tr.season.max()),
                 training_games=len(tr), training_band_counts=counts,
                 cuts=list(CUTS), magnitudes=[float(np.median(signed[band == k])) for k in range(4)])
+
+
+def weekly_rule(history, year, week):
+    """Map policy v2, recomputed independently of fixed_bands.fit_weekly: every game before
+    (year, week), weight 0.5 ** (age in 19-slot seasons), weighted median per band."""
+    s_, w_ = history.season.to_numpy(float), history.week.to_numpy(float)
+    keep = ((s_ < year) | ((s_ == year) & (w_ < week))) & np.isfinite(history.model_spread.to_numpy(float)) \
+        & np.isfinite(history.result.to_numpy(float)) & (history.model_spread.to_numpy(float) != 0)
+    tr = history.loc[keep]
+    if tr.loc[tr.season < year].season.nunique() < 2 or len(tr) < 300:
+        return None
+    band = np.searchsorted(CUTS, tr.model_spread.abs(), side='right')
+    counts = [int((band == k).sum()) for k in range(4)]
+    if min(counts) < 30:
+        return None
+    signed = np.sign(tr.model_spread.to_numpy()) * tr.result.to_numpy()
+    weight = 0.5 ** (((year - tr.season.to_numpy()) * 19 + (week - tr.week.to_numpy())) / 19)
+    mags = []
+    for k in range(4):
+        v, w = signed[band == k], weight[band == k]
+        order = np.argsort(v, kind='stable'); v, w = v[order], w[order]
+        below = np.cumsum(w) - w  # weight strictly before each sorted value
+        half = w.sum() / 2
+        i = int(np.argmax(below + w >= half * (1 - 1e-12)))
+        exact = abs(below[i] + w[i] - half) <= 1e-12 * w.sum()
+        mags.append(float((v[i] + v[i + 1]) / 2) if exact and i + 1 < len(v) else float(v[i]))
+    last = tr.loc[tr.season == tr.season.max()]
+    return dict(season=int(year), week=int(week), training_max_season=int(tr.season.max()),
+                training_max_week=int(last.week.max()), training_games=len(tr), training_band_counts=counts,
+                cuts=list(CUTS), magnitudes=mags)
 
 
 def independent_grades(predicted, lines, margins, favorite_on_tie=True):
@@ -111,23 +145,47 @@ def inspect(data='data'):
         checks['historical_moneyline_outcomes']=bool(np.array_equal(d.bet_result.fillna('').to_numpy(),ml_grades))
         checks['historical_moneyline_returns']=bool(np.allclose(d.units,ml_units,atol=1e-10,equal_nan=True))
     d['model_spread'] = 12.37*ndtri(np.clip(d.model_wp.to_numpy(), .005, .995))
-    predicted = np.full(len(d), np.nan); rules = []
-    for year in sorted(d.season.unique()):
-        rule = median_rule(d, year)
-        if rule is None:
-            continue
-        rules.append(rule)
-        mask = d.season.eq(year).to_numpy(); x = d.loc[mask, 'model_spread'].to_numpy()
-        predicted[mask] = np.sign(x)*np.array(rule['magnitudes'])[np.searchsorted(CUTS, abs(x), side='right')]
-        production = fixed_bands.fit(d, year)
-        checks[f'{int(year)}_prior_only_medians'] = bool(production and
-            production['magnitudes'] == rule['magnitudes'] and
-            production['training_band_counts'] == rule['training_band_counts'] and
-            production['training_max_season'] < year)
-    grades = independent_grades(predicted, d.spread_line, d.result)
     exported = latest/'fixed_band_ledger.csv'
-    if exported.exists():
-        saved = pd.read_csv(exported).set_index('game_id').reindex(d.game_id)
+    saved = pd.read_csv(exported).set_index('game_id').reindex(d.game_id) if exported.exists() else None
+    declared_map = (saved.get('map_policy_version', pd.Series(dtype=object)).dropna().unique().tolist()
+                    if saved is not None else [fixed_bands.MAP_POLICY_VERSION])
+    weekly = declared_map == [fixed_bands.MAP_POLICY_VERSION]
+    checks['exported_map_policy_known'] = len(declared_map) <= 1 and (weekly or not declared_map)
+    predicted = np.full(len(d), np.nan); rules = []
+    if weekly:
+        for year in sorted(d.season.unique()):
+            ok = True; season_rules = []
+            for week in sorted(d.loc[d.season.eq(year), 'week'].unique()):
+                rule = weekly_rule(d, int(year), int(week))
+                production = fixed_bands.fit_weekly(d, int(year), int(week))
+                if (rule is None) != (production is None):
+                    ok = False; continue
+                if rule is None:
+                    continue
+                season_rules.append(rule)
+                ok &= (production['magnitudes'] == rule['magnitudes']
+                       and production['training_band_counts'] == rule['training_band_counts']
+                       and fixed_bands.trained_before(production, int(year), int(week)))
+                mask = (d.season.eq(year) & d.week.eq(week)).to_numpy(); x = d.loc[mask, 'model_spread'].to_numpy()
+                predicted[mask] = np.sign(x)*np.array(rule['magnitudes'])[np.searchsorted(CUTS, abs(x), side='right')]
+            if season_rules:
+                rules += season_rules
+                checks[f'{int(year)}_prior_only_weekly_medians'] = bool(ok)
+    else:
+        for year in sorted(d.season.unique()):
+            rule = median_rule(d, year)
+            if rule is None:
+                continue
+            rules.append(rule)
+            mask = d.season.eq(year).to_numpy(); x = d.loc[mask, 'model_spread'].to_numpy()
+            predicted[mask] = np.sign(x)*np.array(rule['magnitudes'])[np.searchsorted(CUTS, abs(x), side='right')]
+            production = fixed_bands.fit(d, year)
+            checks[f'{int(year)}_prior_only_medians'] = bool(production and
+                production['magnitudes'] == rule['magnitudes'] and
+                production['training_band_counts'] == rule['training_band_counts'] and
+                production['training_max_season'] < year)
+    grades = independent_grades(predicted, d.spread_line, d.result)
+    if saved is not None:
         checks['exported_median_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
         # Each export is checked against the selection rule it declares; an export
         # written before the 2026-10-19 rule has no column and used the zero-edge skip.
@@ -143,11 +201,13 @@ def inspect(data='data'):
     if saved_rules.exists():
         raw_rules=json.loads(saved_rules.read_text())
         required={'season','training_max_season','training_games','training_band_counts','cuts','magnitudes'}
+        if weekly: required |= {'week','training_max_week'}
         schema=isinstance(raw_rules,list) and all(isinstance(r,dict) and required.issubset(r) for r in raw_rules)
         checks['exported_rule_schema']=schema
-        stored={r['season']:r for r in raw_rules if isinstance(r,dict) and 'season' in r} if isinstance(raw_rules,list) else {}
-        checks['exported_prior_season_maps']=all(r['season'] in stored and
-            all(stored[r['season']].get(k)==v for k,v in r.items()) for r in rules)
+        rkey=(lambda r:(r['season'],r['week'])) if weekly else (lambda r:r['season'])
+        stored={rkey(r):r for r in raw_rules if isinstance(r,dict) and required.issubset(r)} if schema else {}
+        checks['exported_prior_season_maps']=schema and all(rkey(r) in stored and
+            all(stored[rkey(r)].get(k)==v for k,v in r.items()) for r in rules)
     historical = []
     eligible = np.isin(grades, list('WLPS'))
     for label, mask in [('All', eligible)] + [(str(int(y)), eligible & d.season.eq(y).to_numpy()) for y in sorted(d.season.unique())]:
@@ -218,16 +278,18 @@ def inspect(data='data'):
         archive['original_selections'] = sum(bool(r.get('selected_side')) for r in rows)
         archive['original_skips'] = len(rows)-archive['original_selections']
         archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
-    return dict(checks=checks,rules=rules,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
+    return dict(checks=checks,rules=rules,weekly=weekly,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
                 export_selection=export_rule if exported.exists() else None,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
 
 def report(data='data'):
     audit = inspect(data)
-    lines = ['Production sanity check: v1.18 and fixed-band median ATS',f"Status: {audit['status']}",
+    lines = [f'Production sanity check: {m.REVISION} and the median ATS map',f"Status: {audit['status']}",
              'Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.',
-             'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.',
+             ('ATS map policy v2: weekly weighted medians of signed pick margins (one-season half-life), '
+              'including losses and tied finals; games before the forecast week only.' if audit.get('weekly', True) else
+              'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.'),
              'Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite '
              '(a pick\'em line skips) before push grading.',
              'Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.',
@@ -235,9 +297,19 @@ def report(data='data'):
     for name, ok in audit['checks'].items():lines.append(f"  {'PASS' if ok else 'FAIL'} {name}")
     if audit.get('export_selection'):
         lines.append(f"  Exported ATS selection rule: {audit['export_selection']}")
-    lines += ['', 'Prior-season maps (training excludes the forecast season):']
-    for r in audit['rules']:
-        lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")
+    if audit.get('weekly'):
+        lines += ['', 'Weekly maps, last week of each season (training ends before the forecast week):']
+        last = {}
+        for r in audit['rules']: last[r['season']] = r
+        for r in last.values():
+            n = sum(x['season'] == r['season'] for x in audit['rules'])
+            lines.append(f"  {r['season']} week {r['week']}: {r['magnitudes']}; prior n={r['training_games']}, "
+                         f"band counts={r['training_band_counts']}, through {r['training_max_season']} week {r['training_max_week']}; "
+                         f"{n} weekly rules this season")
+    else:
+        lines += ['', 'Prior-season maps (training excludes the forecast season):']
+        for r in audit['rules']:
+            lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")
     lines += ['', 'Historical replay: median ATS versus moneyline on identical game opportunities:']
     for r in audit['historical']:
         ml = r['moneyline']; baseline = r['favorite']

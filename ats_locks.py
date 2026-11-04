@@ -22,9 +22,14 @@ import os
 from pathlib import Path
 from statistics import NormalDist
 
-POLICY_VERSION = 'median-mov-ats-t60-favtie-2026-10-19-v2'
+# v3 (owner decision 2026-11-04): the weekly decayed median map (fixed_bands map policy v2).
+# v1 and v2 used the annual prior-season map; their saved locks stay valid under their own rules.
+POLICY_VERSION = 'median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3'
 # Policy version -> whether a zero edge takes the market favorite.
-POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, POLICY_VERSION: True}
+POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, 'median-mov-ats-t60-favtie-2026-10-19-v2': True,
+            POLICY_VERSION: True}
+# Policy version -> the map method its saved rule must declare (v1/v2 rules predate the field).
+POLICY_METHODS = {POLICY_VERSION: 'weighted_median_signed_mov_weekly_decay'}
 ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T05:05:26+00:00')
 LEAD_MINUTES = 60
 FINALIZATION_GRACE_HOURS = 48
@@ -106,8 +111,14 @@ def validate_store(data='data'):
         if row['policy_version'] not in POLICIES or row['lock_lead_minutes'] != LEAD_MINUTES:
             raise ValueError('ATS candidate timing policy mismatch')
         rule = row['fixed_rule']
-        if rule['training_max_season'] >= row['season']:
-            raise ValueError('ATS rule uses the forecast season')
+        expected_method = POLICY_METHODS.get(row['policy_version'])
+        if expected_method is None:
+            if rule['training_max_season'] >= row['season']:
+                raise ValueError('ATS rule uses the forecast season')
+        elif (rule.get('method') != expected_method or 'week' not in rule
+              or int(rule['season']) != int(row['season']) or int(rule['week']) != int(row['week'])
+              or (rule['training_max_season'], rule['training_max_week']) >= (int(row['season']), int(row['week']))):
+            raise ValueError('ATS weekly rule is not fitted on games before the forecast week')
         wp, line = float(row['model_wp']), float(row['market_spread'])
         if not 0 < wp < 1 or not math.isfinite(line):
             raise ValueError('ATS candidate has invalid probability or line')
@@ -170,19 +181,14 @@ def record(data='data', now=None):
         manifest = json.loads((latest / 'manifest.json').read_text())
         generated = utc(manifest['generated_utc'])
         rule_path = latest / 'fixed_band_rules.json'
-        # The build can derive rules before render_all has exported them.
-        if rule_path.exists():
-            rules = json.loads(rule_path.read_text())
-        elif (latest / 'retro_ledger.csv').exists():
+        # The build can derive rules before render_all has exported them, and an export written
+        # before the weekly map has only annual rules: weekly rules are then fitted here.
+        rules = json.loads(rule_path.read_text()) if rule_path.exists() else []
+        history = None
+        if (latest / 'retro_ledger.csv').exists():
             import pandas as pd
-            import fixed_bands
             history = pd.read_csv(latest / 'retro_ledger.csv')
             history['model_spread'] = m.implied_spread(history.model_wp)
-            rule = fixed_bands.fit(history, int(manifest['season']))
-            rules = [rule] if rule else []
-        else:
-            rules = []
-        rules = {r['season']: r for r in rules}
         with (latest / 'board.csv').open(newline='') as src:
             for raw in csv.DictReader(src):
                 ko = kickoff(raw)
@@ -201,11 +207,17 @@ def record(data='data', now=None):
                     wp, line = float(raw['model_wp']), float(raw['spread_line'])
                 except (KeyError, TypeError, ValueError):
                     continue
-                rule = rules.get(int(raw['season']))
-                if not rule or rule['training_max_season'] >= int(raw['season']) or not 0 < wp < 1 or not math.isfinite(line):
+                import fixed_bands
+                season, week = int(raw['season']), int(raw['week'])
+                weekly = POLICY_VERSION in POLICY_METHODS
+                rule = fixed_bands.rule_for(rules, season, week, weekly=weekly)
+                if rule is None and history is not None:
+                    rule = (fixed_bands.fit_weekly(history, season, week) if weekly
+                            else fixed_bands.fit(history, season))
+                if not fixed_bands.trained_before(rule, season, week) or not 0 < wp < 1 or not math.isfinite(line):
                     continue
-                if rule.get('method') != 'median_signed_mov':
-                    raise ValueError('ATS lock requires the production median-MOV rule')
+                if rule.get('method') != POLICY_METHODS.get(POLICY_VERSION, fixed_bands.METHOD):
+                    raise ValueError('ATS lock rule does not match the lock policy\'s median map')
                 # Use the production conversion, including its exact floating-
                 # point behavior at 3/7/10, rather than a second inverse CDF.
                 x = float(m.implied_spread([wp])[0])

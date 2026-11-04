@@ -1,6 +1,6 @@
 """Public historical calibration, using completed regular-season weeks only.
 
-This is an aggregate reporting view. It never changes forecasts, annual maps,
+This is an aggregate reporting view. It never changes forecasts, the median map,
 ATS selections, snapshots or the forward ledger.
 """
 from html import escape
