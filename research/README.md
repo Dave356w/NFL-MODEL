@@ -2073,3 +2073,36 @@ a 50% threshold agrees with production on 85–99% of games per season.
 underdog picks covered more often than underdogs in general. But the edge is small (1–2.5 points), unresolved in each
 period, and not large enough to overcome a bad year for underdogs. Neither rule is shown to beat production. The clean
 next step is forward and reporting-only: U's underdog cover rate against all underdogs on native v1.19 locks. No policy change.
+
+### Test 58: market-centered ATS cover probability at actual spread prices (2026-11-04): unresolved; the model adds nothing to the no-vig spread price
+
+Protocol [`SPREAD_PRICE_PROBABILITY.md`](SPREAD_PRICE_PROBABILITY.md), pushed (`d91b78a`) with frozen nflverse spread
+prices (`spread_price_inputs/`, 2014–26; lines and results identical to production's ledger on all 1,480 shared games)
+before any arm was scored. Script `spread_price_probability.py`; results `spread_price_probability_results/` (REPORT.md).
+Owner idea: start from the market line and price, not the median map. q = proportional no-vig home cover probability
+from the two spread prices (pushes refund). Arms tilt logit q by β × (model − line)/10, β fitted by maximum likelihood on
+earlier seasons: A uses v1.19's raw spread, B production's mapped spread. Actual spread prices had not been used before.
+
+| Cover log loss gain over q (×1000, positive = better) | 2016–22 | 2023–26 | Verdict |
+|---|---:|---:|---|
+| A raw disagreement | −1.04 ± 0.62 (z −1.66, n 1,776) | −0.00 ± 0.48 (n 912) | unresolved |
+| B mapped disagreement | −0.64 ± 0.67 (n 1,278; from 2018) | +0.71 ± 1.69 (n 386; from 2025) | unresolved |
+
+- **Neither arm improves on the no-vig spread price.** Gains are within ±1.1 ×10⁻³ with no interval excluding zero.
+  The fitted β changes sign: A runs from −1.31 (2016, fit on two seasons) to +0.55 (2026), and B from +0.42 to −0.08.
+- **The tilted probabilities barely leave the market.** Most games are within 0.3 points of q. Even the most extreme
+  decile is only 1.2–2.7 points off.
+- **Where the model disagrees most, the direction flips by period.** On 2016–22 the top decile of p − q (p 0.525) had
+  home covers at 44.4% and the bottom decile (p 0.485) at 56.7%, both opposite to the model. On 2023–26 they were 52.2%
+  and 42.4%, both with it.
+- **Bets at actual prices (EV > 0 only) are few and lose.** A: 249 bets on 2016–22, −21.9u (−8.8% ± 6.2); 17 bets on
+  2023–26. B: 156 bets, −16.9u; 52 bets, −0.8u.
+- **Actual prices matter for production's record.** Graded at the real prices instead of −110, production's picks are
+  −65.5u (−3.6% ± 2.3) on 2016–22 instead of −96.0u, because the typical price then was about −105. On 2023–26 they
+  are +28.6u (+3.1% ± 3.1), close to the −110 figure. The market-correct null on the same bets is −2.4% and −4.5%.
+  Always favorite at actual prices: −119.5u and −21.7u.
+
+**Reading.** Starting from the market price and adding v1.19's disagreement does not beat the price, which matches
+Test 48 and AC1. Everything the model says about ATS outcomes is already in the line, to within noise. The useful
+by-product is that real spread prices change ROI by several points, so ATS evaluation should use them where available.
+No policy change.
