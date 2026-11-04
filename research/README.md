@@ -1919,3 +1919,28 @@ A research copy of `fit_composite` reproduces v1.19 to 2e-16 with the offset swi
 
 **Reading.** Keep the moneyline as the fixed offset. Implied points work no better as the market input than as an
 addition to it (Test 51). No `REVISION`.
+
+### Test 53: price-dependent calibration of the no-vig moneyline (2026-11-04): fail, keep q
+
+Protocol [`MARKET_PRICE_CALIBRATION.md`](MARKET_PRICE_CALIBRATION.md), pushed (`baa1dbf`) before any calibrated price was
+scored. Script `market_price_calibration.py`; results `market_price_calibration_results/` (REPORT.md). Owner question:
+should v1.19's fixed moneyline starting point be capped by realized market accuracy, which depends on the price?
+Market only, Test 35's frozen 2006–25 pack. Each arm is refit per season on all earlier seasons. Selection 2009–16
+(2,029 games); held-out 2017–25 (2,374).
+
+| Log-loss gain over raw q (×1000, positive = better) | 2009–16 | 2017–25 held out [97.5%] |
+|---|---:|---:|
+| M1 linear (home bias + overall confidence) | −0.58 ± 0.73 | +0.15 [−0.67, +0.98] |
+| M2 four price-band shifts (ridge) | −1.67 ± 1.04 | −0.28 [−1.61, +1.05] |
+| M3 isotonic | −5.29 ± 2.74 | −1.68 [−5.51, +2.15] |
+
+- **Raw q was selected, so the verdict is fail: keep q.** No price-dependent map fitted on earlier seasons beats the
+  raw no-vig price, and every held-out interval crosses zero. The more flexible the map, the worse it does.
+- **The price pattern is mostly not stable.** Realized minus implied favorite win rate, 2006–16 then 2017–25:
+  0.50–0.60 −1.6 then +0.7 points; 0.70–0.80 −0.6 then +2.9; ≥ 0.80 +1.9 then +0.9 (SEs 1.6–2.2 points). Only
+  0.60–0.70 repeats (−1.8 and −1.8, each about 1 SE), matching Test 35's ROI for that band. M2 learned that shift and
+  still did not gain on held-out games.
+- The fitted overall confidence slope stays at 1.01–1.04, so nothing supports a cap below weight 1.
+
+**Reading.** The closing moneyline is about as accurate as its price says at every price level, within what earlier
+seasons can predict. Keep q at weight 1 as v1.19's offset. Stage 2 is not registered. No `REVISION`.
