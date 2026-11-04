@@ -2039,3 +2039,37 @@ home −130.4u / −49.1u.
 vig on games where the model has no view, but the realized difference is within noise on both bases. Changing the
 zero-edge rule is a new lock policy version and the owner's decision; the clean evidence would be a reporting-only skip
 arm on native v1.19 locks. No policy change.
+
+### Test 57: a vig-aware map for picking underdogs worth the points (2026-11-04): unresolved against production; its underdog selection beats all underdogs in both periods
+
+Protocol [`VIG_AWARE_MAP.md`](VIG_AWARE_MAP.md), pushed (`5d71016`) before any arm was computed. Script `vig_aware_map.py`;
+results `vig_aware_map_results/` (REPORT.md). Owner framing: the median map exists to pick which underdogs are worth the
+points. Same bands and prior-season rows as production; a side is bet only if its cover rate at this line among the
+band's earlier games (pushes excluded) is at least 52.381%, the −110 break-even. V bets either side or skips; U bets
+underdogs only. Both bases are fully exposed (Tests 54–56 and the band breakdowns), so this is descriptive. Check: V at
+a 50% threshold agrees with production on 85–99% of games per season.
+
+| Flat 1u at −110 | 2016–22 (1,822 games) | 2023–26 (937 games) |
+|---|---|---|
+| P production | 880-896-46, −96.0u (−5.3% ± 2.2), drawdown 121.5u | 493-419-25, +29.2u (+3.1% ± 3.1), drawdown 18.2u |
+| V vig-aware (31% skipped, 66% underdogs) | 628-586-43, −15.1u (−1.2% ± 2.6), drawdown 48.9u | 336-300-15, +5.5u (+0.8% ± 3.7), drawdown 22.5u |
+| U underdog-only (830 / 429 bets) | 429-372-29, +18.0u (+2.2% ± 3.2), drawdown 22.2u | 215-204-10, −8.5u (−2.0% ± 4.6), drawdown 36.9u |
+| V − P | +80.9 ± 28.8 (z +2.81) | −23.7 ± 18.2 (z −1.30) |
+| U − P | +114.0 ± 34.7 (z +3.29) | −37.7 ± 23.0 (z −1.64) |
+| Always underdog / favorite / home | +1.5u / −162.6u / −130.4u | −62.5u / −20.5u / −49.1u |
+
+- **Verdicts: both unresolved** (bar |z| ≥ 2.24). Each clears the bar on 2016–22 but is negative on 2023–26, which the
+  protocol requires to be positive. U − P is positive in 6 of 7 seasons on 2016–22 and negative in all 4 on 2023–26.
+- **The goal measure holds in both periods.** U's underdogs covered 53.6% against 52.4% for all underdogs on 2016–22
+  (+1.2 points, SE about 1.8), and 51.3% against 48.8% on 2023–26 (+2.5 points, SE about 2.4). The selection adds 1–2.5
+  points over taking every underdog, but each gap is within about 1 SE.
+- **Whether that clears the vig depends on the period.** Underdogs as a group covered 52.4% on 2016–22 and 48.8% on
+  2023–26. A 1–2.5 point selection edge on top of that is above break-even in the first period and below it in the
+  second. Any rule that leans toward underdogs (V is 66% underdogs, U 100%) rises and falls with how underdogs do overall.
+- **V cuts risk where the model loses** (drawdown 48.9u against 121.5u on 2016–22) but gives up units where it wins
+  (+5.5u against +29.2u on 2023–26).
+
+**Reading.** The underdog-selection idea behind the map is consistent with the data: in both periods the vig-aware
+underdog picks covered more often than underdogs in general. But the edge is small (1–2.5 points), unresolved in each
+period, and not large enough to overcome a bad year for underdogs. Neither rule is shown to beat production. The clean
+next step is forward and reporting-only: U's underdog cover rate against all underdogs on native v1.19 locks. No policy change.
