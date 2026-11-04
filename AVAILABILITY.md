@@ -100,6 +100,11 @@ source hashes are recorded separately in `_replay_validation.json` in the job ar
 those execution identity fields may differ; input hashes, recipes, outcomes, schema, text and
 integer values remain strict. A numerical change still fails, and a failed rerun replaces any
 earlier PASS audit. Original research files are not relabelled with the new production revision.
+For the H10/H11/H13 reports, `--frozen-data-at-report` exports the `data/` tree from the Git
+commit that wrote each report into a temporary directory. The current code replays against that
+snapshot, and the audit records its commit and archive hash. This prevents a growing live ledger
+from being compared to an older report's sample. The scheduled research job still scores current
+data. The ladder workflow retains its pinned numerical-library versions, including pandas 2.2.3.
 
 Before a PR, run `python sync_notebook.py`, `python validate_data_files.py`, and
 `python -m pytest tests/ -q`. The three previously failing snapshot assertions now distinguish

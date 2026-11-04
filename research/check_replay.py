@@ -4,6 +4,10 @@ import hashlib
 import io
 import json
 import datetime as dt
+import os
+import tarfile
+import tempfile
+from contextlib import contextmanager
 from pathlib import Path
 import re
 import subprocess
@@ -14,6 +18,21 @@ TOLERANCE=1e-8
 NUMBER=re.compile(r'[-+]?(?:\d+\.\d*|\.\d+|\d+)(?:[eE][-+]?\d+)?')
 REPLAY_AUDIT='_replay_validation.json'
 ROOT=Path(__file__).resolve().parents[1]
+
+
+@contextmanager
+def archived_data(output):
+    """Export data from the commit that wrote the report, leaving today's ledger untouched."""
+    relative=(Path(output).resolve()/'results.json').relative_to(ROOT)
+    shallow=subprocess.check_output(['git','rev-parse','--is-shallow-repository'],cwd=ROOT,text=True).strip()
+    if shallow=='true': raise ValueError('Frozen report replay requires checkout fetch-depth: 0')
+    ref=subprocess.check_output(['git','log','-1','--format=%H','--',str(relative)],cwd=ROOT,text=True).strip()
+    if not re.fullmatch(r'[0-9a-f]{40}',ref): raise ValueError('Cannot identify the report input commit')
+    archive=subprocess.check_output(['git','archive','--format=tar',ref,'data'],cwd=ROOT)
+    with tempfile.TemporaryDirectory(prefix='nfl-frozen-replay-') as tmp:
+        with tarfile.open(fileobj=io.BytesIO(archive)) as src:
+            src.extractall(tmp,filter='data')
+        yield Path(tmp)/'data',ref,hashlib.sha256(archive).hexdigest()
 
 
 def replay_metadata(name,old,new,changes):
@@ -92,6 +111,8 @@ def compare_file(name,old,new):
 def main(argv=None):
     args=sys.argv[1:] if argv is None else argv
     root=Path(args[0]);command=args[1:]
+    freeze=bool(command and command[0]=='--frozen-data-at-report')
+    if freeze: command=command[1:]
     if command and command[0]=='--':command=command[1:]
     prior={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file() and p.name!=REPLAY_AUDIT}
     metadata=[]
@@ -100,7 +121,12 @@ def main(argv=None):
                checker_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),original_outputs_restored=False)
     (root/REPLAY_AUDIT).write_text(json.dumps(audit,indent=2)+'\n')
     try:
-        subprocess.run(command,check=True)
+        if freeze:
+            with archived_data(root) as (data,ref,sha):
+                audit.update(input_commit=ref,input_archive_sha256=sha)
+                subprocess.run(command,check=True,env=dict(os.environ,NFL_RESEARCH_DATA_DIR=str(data)))
+        else:
+            subprocess.run(command,check=True)
         after={p.relative_to(root):p.read_bytes() for p in root.rglob('*') if p.is_file() and p.name!=REPLAY_AUDIT}
         if prior.keys()!=after.keys():raise ValueError('Replay output file set changed; regenerate and commit outputs')
         for name,old in prior.items():compare_file(str(name),old,replay_metadata(str(name),old,after[name],metadata))

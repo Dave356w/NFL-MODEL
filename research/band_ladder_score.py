@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -20,9 +21,11 @@ import nfl_model as m
 from research import soft_band_distributions as sb
 
 ROOT = Path(__file__).resolve().parents[1]
-LEDGER = ROOT / 'data/forward_ledger.csv'
-SNAPSHOTS = ROOT / 'data/kalshi_snapshots.jsonl'
-HISTORICAL = ROOT / 'data/kalshi_historical/kalshi_quotes.csv'
+DATA = Path(os.environ.get('NFL_RESEARCH_DATA_DIR',ROOT/'data'))
+LEDGER = DATA / 'forward_ledger.csv'
+SNAPSHOTS = DATA / 'kalshi_snapshots.jsonl'
+HISTORICAL = DATA / 'kalshi_historical/kalshi_quotes.csv'
+REFERENCE = DATA / 'kalshi_ladder_reference.csv'
 OUTPUT = ROOT / 'research/band_ladder_results'
 PRIMARY = 'boxscore-composite-v1.18'
 SECONDARY = 'boxscore-composite-v1.16'
@@ -162,7 +165,7 @@ def run(output_dir=OUTPUT):
     snaps = [json.loads(line) for line in SNAPSHOTS.read_text().splitlines() if line.strip()]
     games = pd.read_csv(sb.INPUT)
     fit = sb.fit_prior(sb.clean(games)[lambda g: g.season < 2026], 2026)
-    table = k.load_ladder_table() if k.LADDER_TABLE.exists() else None
+    table = k.load_ladder_table(REFERENCE) if REFERENCE.exists() else None
     primary, audit = forward_rungs(ledger, snaps, fit, PRIMARY, table)
     v116, _ = forward_rungs(ledger, snaps, fit, SECONDARY, table)
     dev = development_rungs(pd.read_csv(HISTORICAL), games)

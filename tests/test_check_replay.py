@@ -1,6 +1,7 @@
 import sys
 import json
 import hashlib
+import subprocess
 from pathlib import Path
 import pytest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'research'))
@@ -73,3 +74,24 @@ def test_main_preserves_original_bytes_and_never_leaves_a_stale_pass_audit(tmp_p
     command[-1]=command[-1].replace('815','816')
     with pytest.raises(ValueError,match='numeric value changed'): c.main(command)
     assert json.loads((tmp_path/c.REPLAY_AUDIT).read_text())['status']=='FAIL'
+
+
+def test_archived_data_uses_report_commit_without_changing_current_ledger(tmp_path,monkeypatch):
+    def git(*args):
+        return subprocess.check_output(['git',*args],cwd=tmp_path,text=True).strip()
+    git('init','-q')
+    git('config','user.name','Replay test')
+    git('config','user.email','replay@example.test')
+    (tmp_path/'data').mkdir(); (tmp_path/'data/ledger.txt').write_text('28 games\n')
+    output=tmp_path/'research/results';output.mkdir(parents=True)
+    (output/'results.json').write_text('{"games":28}')
+    git('add','.');git('commit','-qm','recorded report')
+    recorded=git('rev-parse','HEAD')
+    (tmp_path/'data/ledger.txt').write_text('42 games\n')
+    git('commit','-qam','more games')
+    monkeypatch.setattr(c,'ROOT',tmp_path)
+    with c.archived_data(output) as (data,ref,sha):
+        assert (data/'ledger.txt').read_text()=='28 games\n'
+        assert ref==recorded and len(sha)==64
+    assert (tmp_path/'data/ledger.txt').read_text()=='42 games\n'
+    assert git('status','--porcelain')==''
