@@ -313,3 +313,97 @@ def test_legacy_signature_and_shadow_are_preserved():
         assert 'automatic_availability' not in cfg and 'availability_observations' in cfg
     new,cfg=m.config_signature()
     assert new!=old and cfg['automatic_availability']['policy']==c.POLICY
+
+
+# --- Regression cases from the 2026-11-04 review of commit adf72ed ---------------------------
+
+# Body text of NFL.com's "Week 8 Monday night inactives: Chicago Bears at Seattle Seahawks"
+# (published 2026-11-02), as article() extracts it.
+REAL_BODY=('BEARS\n\nQB Case Keenum (emergency third quarterback)\nRB Kyle Monangai\nOL Jordan McFadden\n'
+           'OL Jordan van den Berg\nDL Jayden Loving\nDB Malik Muhammad\n\nSEAHAWKS\n\n'
+           'QB Drew Lock (emergency third quarterback)\nRB Velus Jones\nWR Rashid Shaheed\nG Beau Stephens\n'
+           'OT Charles Cross\nDT Brandon Pili\nLB Uchenna Nwosu')
+
+
+def test_real_nfl_inactive_page_format_parses_every_row():
+    ko=dt.datetime(2026,11,3,1,15,tzinfo=UTC)
+    event=dict(game_id='2026_08_CHI_SEA',season=2026,week=8,home='SEA',away='CHI',kickoff_utc=ko.isoformat())
+    rows=[]
+    for line in REAL_BODY.splitlines():
+        parts=line.split()
+        if len(parts)<3:continue
+        team='CHI' if not rows or rows[-1]['team']=='CHI' and 'Drew' not in line else 'SEA'
+        name=' '.join(p for p in parts[1:] if not p.startswith('(') and not p.endswith(')') and p not in ('third',))
+        rows.append(dict(gsis_id=f'00-{len(rows)+10:07d}',full_name=name,position=parts[0],team=team,season=2026,week=7,status='ACT'))
+    index=c.PlayerIndex(rows)
+    info=c.article(html('Week 8 Monday night inactives: Chicago Bears at Seattle Seahawks',REAL_BODY,ko-dt.timedelta(minutes=90)))
+    assert len(c.parse_inactives(info,'CHI',event,index)['rows'])==6
+    assert len(c.parse_inactives(info,'SEA',event,index)['rows'])==7
+
+
+@pytest.mark.parametrize('body',[
+    'RAVENS\nQuarterback Bob Beta\nWR Dan Gamma\nJAGUARS\nWR Fred Epsilon',   # unknown prefix
+    'RAVENS\nBob Beta\nWR Dan Gamma\nJAGUARS\nWR Fred Epsilon',               # bare name
+    'RAVENS\nQB Bob\nWR Dan Gamma\nJAGUARS\nWR Fred Epsilon',                 # one-word name
+    'RAVENS\nQB Bob Beta, WR Dan Gamma\nJAGUARS\nWR Fred Epsilon',            # two players on a line
+    'RAVENS\nWR Dan Gamma\nAlso inactive for Baltimore:\nQB Bob Beta\nJAGUARS\nWR Fred Epsilon',  # fragmented
+    'RAVENS\nWR Dan Gamma\nJAGUARS\nWR Fred Epsilon\nRAVENS\nQB Bob Beta',   # repeated section
+])
+def test_partial_inactive_list_is_never_complete(body):
+    with pytest.raises(ValueError):
+        c.parse_inactives(c.article(inactive_html(body=body)),'BAL',EVENT,c.PlayerIndex(PLAYERS))
+
+
+def test_strict_inactive_parser_accepts_punctuated_rows_and_trailing_prose():
+    body='RAVENS\nQB: Bob Beta\n- WR Dan Gamma (hamstring)\nJAGUARS\nWR Fred Epsilon\nStay with NFL.com for coverage of the game.'
+    info=c.article(inactive_html(body=body));index=c.PlayerIndex(PLAYERS)
+    assert {r['gsis_id'] for r in c.parse_inactives(info,'BAL',EVENT,index)['rows']}=={'00-0000002','00-0000003'}
+    assert {r['gsis_id'] for r in c.parse_inactives(info,'JAX',EVENT,index)['rows']}=={'00-0000005'}
+
+
+def test_bundle_without_this_team_is_an_identity_mismatch_not_a_list_failure():
+    info=c.article(inactive_html(body='BILLS\nWR Fred Epsilon'))
+    with pytest.raises(c.InactiveIdentityMismatch):c.parse_inactives(info,'BAL',EVENT,c.PlayerIndex(PLAYERS))
+
+
+def test_partial_list_end_to_end_blocks_collection(tmp_path):
+    source=Sources();source.inactive_body='RAVENS\nQuarterback Aaron Alpha\nWR Dan Gamma\nJAGUARS\nWR Fred Epsilon'
+    state=collect(tmp_path,source)
+    assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
+    assert c.collection_ready(c.team_snapshot(state,'JAX',EVENT['game_id']),NOW,True)
+    assert not any(r['field']=='inactives_complete' and r['team']=='BAL' for r in c.read(tmp_path/c.AUTO))
+
+
+@pytest.mark.parametrize('body',[
+    'RAVENS\nQuarterback Aaron Alpha\nJAGUARS\nWR Fred Epsilon',   # unparseable revision of the same page
+    'JAGUARS\nWR Fred Epsilon',                                     # revision dropped this team's section
+])
+def test_failed_revision_of_accepted_list_withdraws_completeness(tmp_path,body):
+    source=Sources();state=collect(tmp_path,source)
+    assert c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),source.now,True)
+    source.now+=dt.timedelta(minutes=1);source.inactive_body=body
+    state=collect(tmp_path,source)
+    assert state['teams']['BAL']['inactives']['complete'] is False
+    assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),source.now,True)
+    assert c.collection_ready(c.team_snapshot(state,'JAX',EVENT['game_id']),source.now,True)
+    # No candidate can be saved from the withdrawn list.
+    save_board(tmp_path,resolved(tmp_path,state,asof=source.now),generated=source.now)
+    assert locks.record(tmp_path,source.now)['candidates']==0
+
+
+@pytest.mark.parametrize('text',[
+    'Bob Beta is not going to start against the Jaguars this Thursday.',
+    "Bob Beta won't start against the Jaguars this Thursday.",   # no start phrase: no fact, nothing to review
+    'Bob Beta won’t be the starting quarterback; Aaron Alpha will start against the Jaguars, not Beta.',
+    'Instead of Aaron Alpha, Bob Beta will start against the Jaguars this Thursday.',
+])
+def test_negated_or_contrastive_start_is_review_not_a_fact(text):
+    facts,issues=c.news_facts(dict(title='Ravens quarterback update',body=text),'BAL',EVENT,c.PlayerIndex(PLAYERS))
+    assert not any(f['field']=='qb_starter' for f in facts)
+    if "won't start" not in text:assert 'negated or contrastive start statement' in issues
+
+
+def test_plain_confirmed_start_is_still_a_fact():
+    text='The Ravens announced Bob Beta will start against the Jaguars this Thursday.'
+    facts,issues=c.news_facts(dict(title='Ravens quarterback update',body=text),'BAL',EVENT,c.PlayerIndex(PLAYERS))
+    assert [f['gsis_id'] for f in facts if f['field']=='qb_starter']==['00-0000002'] and not issues

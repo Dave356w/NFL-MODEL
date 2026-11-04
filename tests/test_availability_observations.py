@@ -288,3 +288,39 @@ def test_rehashing_cannot_authorize_post_forecast_availability(tmp_path):
     a.validate_availability(saved)
     saved['availability']['home']['observations'][0]['observed_utc']=(NOW+dt.timedelta(seconds=1)).isoformat()
     with pytest.raises(ValueError,match='availability evidence invalid'): a.validate_availability(saved)
+
+
+def test_report_notes_follow_resolved_sourced_facts():
+    """Displayed injury details come from the facts the forecast applied, not the stale feed."""
+    import json
+    import pandas as pd
+    import nfl_model as m
+    snaps=pd.DataFrame([dict(season=2026,week=w,game_id=f'g{w}',team='BAL',gsis_id=g,position=pos,
+                             offense_snaps=n,defense_snaps=0.) for w in (6,7,8)
+                        for g,pos,n in (('qb1','QB',60.),('qb2','QB',1.),('wr','WR',50.),('rb','RB',30.))])
+    detail=pd.DataFrame([dict(season=2026,week=9,team='BAL',gsis_id='qb1',full_name='Lamar QB',position='QB',
+                              report_status=None,practice_status='Limited Participation in Practice'),
+                         dict(season=2026,week=9,team='BAL',gsis_id='wr',full_name='Wide R',position='WR',
+                              report_status=None,practice_status='Did Not Participate In Practice')])
+    def frame(observations,blockers=()):
+        evidence=dict(observations=observations,blockers=list(blockers))
+        return pd.DataFrame([dict(season=2026,week=9,team='BAL',availability_evidence=json.dumps(evidence))])
+    fact=lambda field,pid,value,name='Lamar QB',pos='QB':dict(field=field,gsis_id=pid,value=value,player=name,position=pos)
+    base=m.resolved_report_notes(detail,snaps,['BAL'],2026,9).set_index('gsis_id')
+    assert base.loc['qb1','report_state']=='practice' and base.loc['qb1','this_week'].startswith('practice')
+    obs=[fact('report_status','qb1','Out'),fact('eligible','qb2',False,'Backup QB'),
+         dict(field='report_complete',value=True,gsis_id='',player='',position='')]
+    n=m.resolved_report_notes(detail,snaps,['BAL'],2026,9,resolved=frame(obs)).set_index('gsis_id')
+    assert n.loc['qb1','this_week']=='Out' and n.loc['qb1','counted']==1
+    assert n.loc['qb2','this_week']=='Inactive (official list)' and n.loc['qb2','counted']==1
+    assert (n.report_state=='final').all() and n.loc['wr','counted']==0
+    # A single sourced status does not by itself make the team's report final.
+    partial=m.resolved_report_notes(detail,snaps,['BAL'],2026,9,resolved=frame(obs[:1])).set_index('gsis_id')
+    assert partial.loc['qb1','this_week']=='Out' and (partial.report_state=='practice').all()
+    assert partial.loc['wr','this_week'].startswith('practice')
+    # Blocked resolutions are not applied by the model, so the display keeps the feed.
+    blocked=m.resolved_report_notes(detail,snaps,['BAL'],2026,9,resolved=frame(obs,['starting quarterback unresolved']))
+    assert blocked.set_index('gsis_id').loc['qb1','this_week'].startswith('practice')
+    # Other weeks' resolutions never touch this week's notes.
+    other=frame(obs).assign(week=8)
+    assert m.resolved_report_notes(detail,snaps,['BAL'],2026,9,resolved=other).equals(m.resolved_report_notes(detail,snaps,['BAL'],2026,9))

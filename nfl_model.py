@@ -1200,7 +1200,7 @@ def roster_note(row):
     return ROSTER_DESC_LABEL.get(d,f'{row.get("status")}' + (f' ({d})' if isinstance(d,str) and d else ''))
 
 
-def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=None):
+def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=None,states=None):
     """Per team, what the injury reports say about players who matter to the
     window the model uses, and how that changes through the week:
       * report_state 'none'    : this week's report is not published yet. Players
@@ -1234,6 +1234,7 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
     for t in teams:
         cur=d[(d.week==week)&(d.team==t)]
         state='final' if cur.report_status.notna().any() else 'practice' if len(cur) else 'none'
+        if states and t in states: state=states[t]
         earlier=d[(d.week<week)&(d.team==t)]
         pw=int(earlier.week.max()) if len(earlier) else None
         prev=earlier[(earlier.week==pw)&earlier.report_status.isin(list(STATUS_WEIGHT))] if pw is not None else earlier.iloc[:0]
@@ -1300,6 +1301,47 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
                          'this_week':now,'counted':w,'report_state':state})
     out=pd.DataFrame(rows,columns=cols)
     return out.sort_values(['team','snap_share'],ascending=[True,False]).reset_index(drop=True)
+
+
+def resolved_report_notes(detail,snaps,teams,season,week,resolved=None,**kw):
+    """report_notes() for the inputs the forecast actually used (v1.20+): the sourced game facts
+    applied by resolve_game_availability() replace the feed's rows for those players, in the same
+    order the model applies them. Teams whose resolution has blockers keep the feed, as the model
+    does. Official inactives are labelled as such and counted out; a sourced roster activation
+    clears a roster-removal note. Display only: features and the ledger are unchanged."""
+    cols=['season','week','team','gsis_id','full_name','position','report_status','practice_status']
+    if detail is None or detail.empty: detail=pd.DataFrame(columns=cols)
+    detail=detail.copy(); inactive={}; activated=set(); final=set()
+    def feed_state(t):
+        cur=detail[(detail.season==season)&(detail.week==week)&(detail.team==t)]
+        return 'final' if cur.report_status.notna().any() else 'practice' if len(cur) else 'none'
+    # A sourced player status is not proof the team's final report published.
+    states={t:feed_state(t) for t in teams}
+    if resolved is not None and len(resolved) and 'availability_evidence' in resolved:
+        for r in resolved.itertuples(index=False):
+            if int(r.season)!=int(season) or int(r.week)!=int(week): continue
+            evidence=json.loads(r.availability_evidence)
+            if evidence.get('blockers'): continue
+            order={'report_status':0,'eligible':1}
+            for o in sorted(evidence.get('observations',[]),key=lambda o:order.get(o['field'],2)):
+                field,pid=o['field'],o.get('gsis_id','')
+                if field=='report_complete' and o['value'] is True: final.add(r.team)
+                if field=='eligible' and o['value'] is True: activated.add((r.team,pid))
+                if field not in ('report_status','eligible') or (field=='eligible' and o['value'] is not False): continue
+                mask=(detail.season==season)&(detail.week==week)&(detail.team==r.team)&detail.gsis_id.eq(pid)
+                status='Out' if field=='eligible' else (None if o['value']=='Available' else o['value'])
+                if field=='eligible': inactive[(r.team,pid)]=True
+                else: inactive.pop((r.team,pid),None)
+                detail=pd.concat([detail.loc[~mask],pd.DataFrame([dict(season=season,week=week,team=r.team,gsis_id=pid,
+                    full_name=o.get('player'),position=o.get('position'),report_status=status,practice_status=None)])],ignore_index=True)
+    states.update({t:'final' for t in final})
+    notes=report_notes(detail,snaps,teams,season,week,states=states,**kw)
+    for i,x in notes.iterrows():
+        key=(x.team,x.gsis_id)
+        if key in inactive: notes.loc[i,['this_week','counted']]=['Inactive (official list)',1.]
+        elif key in activated and x.this_week not in STATUS_WEIGHT:
+            notes.loc[i,['this_week','counted']]=['active (official roster move)',0.]
+    return notes
 
 
 def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=None,gameday=None,qb_starters=None):
@@ -3801,8 +3843,8 @@ def main():
     notes=None
     if avail is not None:
         wk=schedules[(schedules.season==season)&(schedules.week==cur)]
-        notes=report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur,
-                           rost=a.get('roster_detail'),events=events,gameday=targets)
+        notes=resolved_report_notes(a.get('inj_detail'),a['snaps'],sorted(set(wk.home_team)|set(wk.away_team)),season,cur,
+                           resolved=resolved_availability,rost=a.get('roster_detail'),events=events,gameday=targets)
         save(notes,'report_notes.csv')
     print('[2/4] Building strictly lagged, decayed profiles')
     features={}
