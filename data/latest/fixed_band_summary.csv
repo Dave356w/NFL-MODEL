@@ -1,11 +1,11 @@
 season,method,games,opportunities,bets,selected,policy_version,calibration_method,wins,losses,pushes,skips,selection_rate,units,roi
-All,Original spread,937,937,937,937,median-mov-ats-2026-10-17-v1,median_signed_mov,455,457,25,0,1.0,-43.363636363636374,-0.04627922770932377
-All,Fixed bands,937,937,937,937,median-mov-ats-2026-10-17-v1,median_signed_mov,493,419,25,0,1.0,29.18181818181813,0.031143882798098325
-2023,Original spread,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,118,140,14,0,1.0,-32.727272727272734,-0.12032085561497328
-2023,Fixed bands,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,133,125,14,0,1.0,-4.090909090909108,-0.01504010695187172
-2024,Original spread,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,133,135,4,0,1.0,-14.090909090909108,-0.05180481283422466
-2024,Fixed bands,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,143,125,4,0,1.0,5.0,0.01838235294117647
-2025,Original spread,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,145,126,1,0,1.0,5.818181818181813,0.021390374331550784
-2025,Fixed bands,272,272,272,272,median-mov-ats-2026-10-17-v1,median_signed_mov,151,120,1,0,1.0,17.272727272727252,0.06350267379679136
-2026,Original spread,121,121,121,121,median-mov-ats-2026-10-17-v1,median_signed_mov,59,56,6,0,1.0,-2.363636363636367,-0.019534184823441048
-2026,Fixed bands,121,121,121,121,median-mov-ats-2026-10-17-v1,median_signed_mov,66,49,6,0,1.0,10.999999999999993,0.09090909090909086
+All,Original spread,937,937,937,937,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,455,457,25,0,1.0,-43.363636363636374,-0.04627922770932377
+All,Fixed bands,937,937,937,937,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,524,388,25,0,1.0,88.36363636363632,0.0943048413699427
+2023,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,118,140,14,0,1.0,-32.727272727272734,-0.12032085561497328
+2023,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,141,117,14,0,1.0,11.181818181818159,0.04110962566844911
+2024,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,133,135,4,0,1.0,-14.090909090909108,-0.05180481283422466
+2024,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,165,103,4,0,1.0,47.0,0.17279411764705882
+2025,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,145,126,1,0,1.0,5.818181818181813,0.021390374331550784
+2025,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,151,120,1,0,1.0,17.272727272727252,0.06350267379679136
+2026,Original spread,121,121,121,121,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,59,56,6,0,1.0,-2.363636363636367,-0.019534184823441048
+2026,Fixed bands,121,121,121,121,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,67,48,6,0,1.0,12.909090909090907,0.10668670172802402
