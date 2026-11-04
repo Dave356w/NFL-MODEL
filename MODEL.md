@@ -81,8 +81,11 @@ paired observations by game. The two spread tables display ATS ROI only, with
 bet counts and one standard error. The market table backs market favorites and
 groups by market spread magnitude; the model table uses production ATS selections
 and groups by mapped model spread magnitude (`<3`, `3–<7`, `7–<10`, `10+`). Both
-grade against market handicaps at flat 1u and assumed −110. Wins return +1/1.1u,
-losses −1u, pushes 0u; ROI divides net units by all bets including pushes. The
+grade against market handicaps at flat 1u at each game's actual spread price for the side
+bet (owner decision 2026-11-04): the schedule's home/away spread odds, closing basis, carried in
+`retro_ledger.csv` and the board (`nfl_model.attach_spread_prices`, reporting only). A win returns that
+price's profit, losses −1u, pushes 0u; a game without a valid price uses −110 and is counted in the
+CSV's `assumed_prices` and the page note. ROI divides net units by all bets including pushes. The
 tables use identical eligible games, excluding market pick'ems and missing model
 spreads. A zero model spread remains eligible against a nonzero market line;
 zero edge follows the production favorite rule. The CSV includes aggregate

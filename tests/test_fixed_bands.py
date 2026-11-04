@@ -332,3 +332,13 @@ def test_live_export_matches_the_map_policy_it_declares():
         for (season, week), g in led.groupby(['season', 'week']):
             rule = f.fit_weekly(h, int(season), int(week))
             np.testing.assert_array_equal(g.fixed_band_spread.to_numpy(float), f.apply(g.model_spread, rule))
+
+
+def test_spread_prices_attach_by_game_and_never_enter_the_fit():
+    import nfl_model as m
+    sched = pd.DataFrame({'game_id': ['a', 'b'], 'home_spread_odds': [-115., 100.], 'away_spread_odds': [-105., -120.]})
+    out = m.attach_spread_prices(pd.DataFrame({'game_id': ['b', 'c'], 'x': [1, 2]}), sched)
+    assert out.home_spread_odds.tolist()[0] == 100. and np.isnan(out.home_spread_odds.tolist()[1])
+    assert m.attach_spread_prices(pd.DataFrame({'game_id': ['a']}), pd.DataFrame({'game_id': ['a']})).home_spread_odds.isna().all()
+    main, ctx = m.model_terms(m.PRODUCT_RECIPE)
+    assert not set(m.SPREAD_PRICE_COLS) & set(main + ctx)

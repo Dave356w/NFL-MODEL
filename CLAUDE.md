@@ -14,7 +14,8 @@ from 2023 through the current season, updated after complete weeks only.
 Historical WP aggregates are authorized on that page and its aggregate CSV.
 The owner requested ROI-only spread tables: market favorites grouped by market
 spread magnitude and model ATS picks grouped by mapped model spread magnitude,
-both graded against market handicaps at flat 1u and −110, with sample sizes and ROI SE.
+both graded against market handicaps at flat 1u, at each game's actual spread price for the side bet
+(owner decision 2026-11-04; −110 only where no price exists, counted), with sample sizes and ROI SE.
 Do not publish live moneyline picks, per-game probabilities or moneyline CSV columns.
 This presentation change does not change v1.18, the median map or lock timing.
 The public 2026 headline, weekly/game results, running units, same-game controls

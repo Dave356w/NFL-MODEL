@@ -150,7 +150,9 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     assert 'Median forecast error' not in html and 'Above / at / below forecast' not in html
     assert 'Avg projected MOV' not in html and 'Median actual MOV' not in html
     assert '>ATS ROI<' in html and '>Market spread band<' in html and '>Model spread band<' in html
-    assert 'Median MOV' in html and 'Flat 1-unit stakes at assumed −110' in html
+    assert 'Median MOV' in html and 'actual spread price for the side bet' in html
+    # Fixtures carry no prices, so every stake is shown as an assumed −110 fallback.
+    assert 'model stakes had no price and use assumed −110' in html and 'at assumed −110' in html
     roi_table = c.roi_table(pack['panels'][0]['rows'], 'market_spread')
     assert roi_table.count("scope='col'") == 2  # display only the spread band and ROI
     assert "id='cal-season'" in html and "select.addEventListener('change'" in html
@@ -199,3 +201,28 @@ def test_committed_history_stops_at_completed_week_and_render_keeps_archives(tmp
     before = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
     b.render_historical_calibration(source, 'test', pack)
     assert before == {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+
+
+def test_roi_uses_the_actual_price_of_the_side_bet_and_counts_fallbacks():
+    priced = [dict(game('home-fav-wins', result=10., line=6.5, mapped=7.), home_spread_odds=-125., away_spread_odds=105.),
+              dict(game('away-dog-wins', result=3., line=6.5, mapped=4.), home_spread_odds=-125., away_spread_odds=105.),
+              dict(game('loss', result=-3., line=6.5, mapped=7.), home_spread_odds=-125., away_spread_odds=105.),
+              dict(game('push', result=7., line=7., mapped=4.), home_spread_odds=-110., away_spread_odds=-110.),
+              dict(game('no-price', result=10., line=6.5, mapped=7.), home_spread_odds=np.nan, away_spread_odds=50.)]
+    rows = c.roi_rows(pd.DataFrame(priced), True, 'model_spread')
+    total = sum(r['units'] or 0 for r in rows)
+    # home win at -125 pays 0.8; away win at +105 pays 1.05; loss -1; push 0; unpriced win at -110.
+    assert total == pytest.approx(.8 + 1.05 - 1. + 0. + 1/1.1)
+    assert sum(r['actual_prices'] for r in rows) == 4 and sum(r['assumed_prices'] for r in rows) == 1
+    # Negative: the same games without prices grade exactly as before, all at −110.
+    bare = c.roi_rows(pd.DataFrame([{k: v for k, v in g.items() if 'odds' not in k} for g in priced]), True, 'model_spread')
+    assert sum(r['units'] or 0 for r in bare) == pytest.approx(3/1.1 - 1.)
+    assert sum(r['assumed_prices'] for r in bare) == 5
+    # The market table backs the favorite at the favorite's own price.
+    market = c.roi_rows(pd.DataFrame(priced[:1]), False, 'market_spread')
+    assert sum(r['units'] or 0 for r in market) == pytest.approx(.8)
+
+
+def test_win_payout_rejects_missing_and_invalid_prices():
+    np.testing.assert_allclose(c.win_payout([-110., 150., 100., -100., 50., np.nan]),
+                               [100/110, 1.5, 1., 1., np.nan, np.nan], equal_nan=True)
