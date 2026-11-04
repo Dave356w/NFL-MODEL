@@ -220,13 +220,21 @@ def test_live_median_maps_match_the_recorded_targets_for_their_revision():
     assert revision in LIVE_MAPS, f'record the median-map targets for {revision} in LIVE_MAPS'
     d = pd.read_csv(root / 'data/latest/retro_ledger.csv')
     d['model_spread'] = m.implied_spread(d.model_wp)
-    exported = {r['season']: r for r in json.loads((root / 'data/latest/fixed_band_rules.json').read_text())}
+    raw = json.loads((root / 'data/latest/fixed_band_rules.json').read_text())
+    annual_export = all('week' not in r for r in raw)
+    exported = {r['season']: r for r in raw}
     for year, values in LIVE_MAPS[revision].items():
         rule = f.fit(d, year)
         assert rule['magnitudes'] == values
         assert rule['training_max_season'] < year
-        assert exported[year]['magnitudes'] == values
+        if annual_export:  # an export written before map policy v2 (2026-11-04)
+            assert exported[year]['magnitudes'] == values
     assert f.fit(d, 2026)['training_games'] == 1359
+    if not annual_export:
+        # Map policy v2: every exported weekly rule reproduces fit_weekly on the live ledger.
+        assert {r['policy_version'] for r in raw} == {f.MAP_POLICY_VERSION}
+        for r in raw:
+            assert f.fit_weekly(d, int(r['season']), int(r['week'])) == r
 
 
 def test_live_targets_reject_a_changed_map():

@@ -190,7 +190,13 @@ def test_committed_history_stops_at_completed_week_and_render_keeps_archives(tmp
     for model, view in [(False, 'market_spread'), (True, 'model_spread')]:
         rows = [r for r in all_rows if r['view'] == view]
         prediction = eligible.fixed_band_spread if model else eligible.spread_line
-        _, returns = c.fixed_bands.grade(eligible, prediction)
+        grades, _ = c.fixed_bands.grade(eligible, prediction)
+        # Wins pay the side's actual spread price where the ledger has one, else −110 (2026-11-04).
+        side = c.fixed_bands.pick(prediction, eligible.spread_line)
+        cols = [eligible.get(k, pd.Series(np.nan, index=eligible.index)) for k in ('home_spread_odds', 'away_spread_odds')]
+        price = np.where(side > 0, c.win_payout(cols[0]), c.win_payout(cols[1]))
+        win = np.where(np.isfinite(price), price, 1/1.1)
+        returns = np.where(grades == 'W', win, np.where(grades == 'L', -1., 0.))
         assert sum(r['observations'] for r in rows) == len(eligible)
         assert sum(r['units'] or 0 for r in rows) == pytest.approx(returns.sum())
         assert sum((r['roi'] or 0)*r['observations'] for r in rows)/len(eligible) == pytest.approx(returns.mean())

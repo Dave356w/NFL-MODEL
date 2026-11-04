@@ -46,7 +46,13 @@ def test_current_production_snapshot_passes_independent_audit():
     assert archive['original_selections']+archive['original_skips']==archive['snapshots']
     assert archive['backfilled_skips']<=archive['original_skips']
     rule=next(x for x in audit['rules'] if x['season']==2026)
-    assert rule['magnitudes']==[3.,4.,7.,14.] and rule['training_max_season']==2025
+    if audit['weekly']:
+        # Map policy v2: the first 2026 rule is week 1, trained through 2025 only; every weekly rule
+        # was already checked against fixed_bands.fit_weekly by the audit.
+        assert rule['week']==1 and rule['training_max_season']==2025
+        assert any(k.endswith('_prior_only_weekly_medians') for k in audit['checks'])
+    else:
+        assert rule['magnitudes']==[3.,4.,7.,14.] and rule['training_max_season']==2025
     total=next(x for x in audit['historical'] if x['season']=='All')
     assert total['selected']+total['skips']==total['opportunities']
     if total['opportunities']==895:
