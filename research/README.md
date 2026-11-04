@@ -2107,3 +2107,36 @@ earlier seasons: A uses v1.19's raw spread, B production's mapped spread. Actual
 Test 48 and AC1. Everything the model says about ATS outcomes is already in the line, to within noise. The useful
 by-product is that real spread prices change ROI by several points, so ATS evaluation should use them where available.
 No policy change.
+
+### Test 59: weekly refits of the median map, and a linear-trend map (2026-11-04): no accuracy gain; the linear trend is worse
+
+Protocol [`WEEKLY_MAP.md`](WEEKLY_MAP.md), pushed (`b0d78ca`) before any arm was scored. Script `weekly_map.py`; results
+`weekly_map_results/` (REPORT.md). Owner view: season-to-season changes are linear, so fit the map week by week. Arms:
+A annual (production), W weekly with an expanding window, D weekly with a one-season half-life, T annual plus the
+linear trend of earlier seasons' band medians. Checks passed: the weighted median equals `np.median` with equal
+weights, W equals A in week 1 of every season, and A reproduces `fixed_bands.fit`. Every arm is scored on the same
+games, so 2016 and 2023 drop out (T needs three earlier seasons): n = 1,566 and 665.
+
+| Arm | Error vs A, 2016–22 | Error vs A, 2023–26 | Verdict | ATS units vs A, 2016–22 | ATS units vs A, 2023–26 |
+|---|---:|---:|---|---:|---:|
+| W weekly, expanding | −0.004 ± 0.011 (z −0.4) | −0.037 ± 0.026 (z −1.4) | unresolved | +40.1 ± 19.9 | +7.6 ± 15.0 |
+| D weekly, decayed | +0.012 ± 0.029 (z +0.4) | −0.066 ± 0.054 (z −1.2) | unresolved | +84.0 ± 32.6 | +43.9 ± 21.5 |
+| T linear trend | +0.152 ± 0.037 (z +4.1) | +0.602 ± 0.165 (z +3.6) | **worse than A** | +53.5 ± 30.4 | −24.8 ± 28.4 |
+
+Mean absolute error of the band number against realized signed margins is about 10.0 points per game on 2016–22 and
+9.6 on 2023–26 for A. ATS on the same games: A −110.4u (−7.0% ± 2.4) and +33.3u (+5.0% ± 3.7); always favorite −157.0u
+and −24.0u; always home −114.2u and −35.5u.
+
+- **The linear-drift idea is contradicted.** Extending each band's season trend makes the band numbers reliably less
+  accurate on both bases (z +4.1 and +3.6). Season-to-season changes behave like noise around a stable level (yearly
+  changes have negative autocorrelation), so extrapolating them adds error.
+- **Weekly refitting changes accuracy by less than 0.07 points per game,** within noise on both bases. The expanding
+  version barely moves within a season (mean weekly change 0.01–0.26 points); the decayed version moves 0.04–0.51.
+- **D's ATS gain appears on both bases but is not a stable mechanism.** On 2016–22 D took the underdog on 72% of its
+  296 flips, and +61.1u came from games where A's number tied the line (and so took the favorite). On 2023–26 D took the
+  favorite on 84% of its 128 flips, and 109 of them were in 2024. Without 2021 and 2024, D's gain is +34.4u and +1.9u.
+  This is the key-number pattern of Tests 55–56 again, and D's numbers are no more accurate than A's.
+
+**Reading.** Keep the annual fit. Linear trends make the map worse, and weekly refitting does not make the band numbers
+more accurate. D's ATS result is worth watching as a reporting-only arm on native v1.19 locks, but its gains come from
+key-number ties in two seasons and point in opposite directions in the two periods. No policy change.

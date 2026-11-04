@@ -1,0 +1,17 @@
+{
+  "protocol": "research/WEEKLY_MAP.md",
+  "protocol_commit": "b0d78ca",
+  "reproduction_max_error": {
+    "v1.19 retro_ledger 2021-25": 2.4424906541753444e-15,
+    "Test 50 S3 2014-20 (6-digit CSV)": 4.997278759688584e-07,
+    "fixed_band_spread 2023-25": 0.0,
+    "checks 2016-22": true,
+    "checks 2023-26": true
+  },
+  "z_bar": 2.3939797998185104,
+  "verdicts": {
+    "W weekly expanding": "unresolved",
+    "D weekly decayed": "unresolved",
+    "T linear trend": "worse than A"
+  }
+}

@@ -1,0 +1,9 @@
+basis,arm,weekly_change_<3,weekly_change_3-7,weekly_change_7-10,weekly_change_10+
+2016-22,A annual,0,0,0,0
+2016-22,W weekly expanding,0.0341387,0.0887605,0.0887605,0.256828
+2016-22,D weekly decayed,0.174895,0.151261,0.370273,0.51208
+2016-22,T linear trend,0,0,0,0
+2023-26,A annual,0,0,0,0
+2023-26,W weekly expanding,0.0441176,0.0441176,0.0147059,0.0619748
+2023-26,D weekly decayed,0.0441176,0.117647,0.109244,0.294118
+2023-26,T linear trend,0,0,0,0
