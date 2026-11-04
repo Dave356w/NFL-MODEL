@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-11-04 20:06 UTC
+NFL forward ledger report -- 2026-11-04 21:28 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -256,8 +256,8 @@ Appendix A: competing model versions and research arms (from data/latest/version
 
 # Production restoration and all competing-model results
 
-Current production: **boxscore-composite-v1.19**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
-Configuration: `3ca5cb32d97f8ba45a8cfa5f8489dcd7f2e4809d8ea5b38e69241c4b3a6b0a7c`. Owner decision 2026-10-13.
+Current production: **boxscore-composite-v1.20**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
+Configuration: `d8f1c3da2479d934a3d9c3890a3225d301b8cdf11acd49007eb184f969e9fe60`. Owner decision 2026-10-13.
 Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.
 
 ## Native forward results
@@ -401,7 +401,7 @@ The restored production is not qualified as reliably profitable. Retrospective s
 Appendix B: original snapshots replayed with the current model (from data/latest/regraded_ledger_report.md)
 ==============================================================================
 
-# boxscore-composite-v1.19 retrospective ledger replay
+# boxscore-composite-v1.20 retrospective ledger replay
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
@@ -538,7 +538,7 @@ boxscore-composite-v1.16 2026_08_CHI_SEA           0.650658  0.605839          L
 
 Appendix C: current production sanity checks
 
-Production sanity check: boxscore-composite-v1.19 and the median ATS map
+Production sanity check: boxscore-composite-v1.20 and the median ATS map
 Status: PASS
 Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.
 ATS map policy v2: weekly weighted medians of signed pick margins (one-season half-life), including losses and tied finals; games before the forecast week only.
@@ -600,7 +600,7 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
     Common-row ML/favorite control n=121 (excludes market pick'ems for both): model -0.70u, ROI -0.58%; favorite -3.61u, ROI -2.98%
     Binary proper scores n=120: log loss 0.650589, market 0.647936; Brier 0.228232; tied finals excluded from binary scoring.
 
-Legacy native boxscore-composite-v1.19 moneyline: {"graded": 0, "moneyline": {"bets": 0, "losses": 0, "pushes": 0, "roi": NaN, "units": 0.0, "wins": 0}, "pending": 0, "snapshots": 0, "ties": 0}
+Legacy native boxscore-composite-v1.20 moneyline: {"graded": 0, "moneyline": {"bets": 0, "losses": 0, "pushes": 0, "roi": NaN, "units": 0.0, "wins": 0}, "pending": 0, "snapshots": 0, "ties": 0}
 Earlier median ATS archive (development history): {"backfilled_skips": 2, "completed": 0, "original_selections": 11, "original_skips": 2, "pending": 13, "policy": "median-mov-ats-2026-10-17-v1", "snapshots": 13}
 Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 289, "original_selections": 29, "original_skips": 0, "policy": "median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3", "recovered_saved_forecasts": 2, "timed_locks": 27}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
@@ -668,8 +668,8 @@ ATS same-row baselines
 ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; break-even cover 52.4%).
 Line-only map: the market line through the same median map (each saved lock's own rule; otherwise the weekly rule for that game's week), without model input. Median map minus line-only is what the model adds beyond the line's own band.
 Per-arm records are descriptive; the map-versus-raw review is at 100 decided locks.
-60-minute lock, boxscore-composite-v1.19: 0 graded, 0 pending
-Recovered saved forecast, boxscore-composite-v1.19: 0 graded, 0 pending (reported separately from pregame-finalized locks)
+60-minute lock, boxscore-composite-v1.20: 0 graded, 0 pending
+Recovered saved forecast, boxscore-composite-v1.20: 0 graded, 0 pending (reported separately from pregame-finalized locks)
 Development history (replay, not forward evidence; backtest seasons share the recipe selection, the current season is walk-forward): 2023-2026, 937 graded
   Median map (production)  524-388-25, 0 skips, +88.36u, ROI +9.4% +/- 3.0, cover 57.5%
   Raw model spread         455-457-25, 0 skips, -43.36u, ROI -4.6% +/- 3.1, cover 49.9%

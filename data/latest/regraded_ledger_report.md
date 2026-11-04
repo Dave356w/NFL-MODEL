@@ -1,4 +1,4 @@
-# boxscore-composite-v1.19 retrospective ledger replay
+# boxscore-composite-v1.20 retrospective ledger replay
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 

@@ -1,7 +1,7 @@
 # Production restoration and all competing-model results
 
-Current production: **boxscore-composite-v1.19**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
-Configuration: `3ca5cb32d97f8ba45a8cfa5f8489dcd7f2e4809d8ea5b38e69241c4b3a6b0a7c`. Owner decision 2026-10-13.
+Current production: **boxscore-composite-v1.20**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
+Configuration: `d8f1c3da2479d934a3d9c3890a3225d301b8cdf11acd49007eb184f969e9fe60`. Owner decision 2026-10-13.
 Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.
 
 ## Native forward results
