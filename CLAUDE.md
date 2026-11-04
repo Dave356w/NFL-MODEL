@@ -17,6 +17,10 @@ spread magnitude and model ATS picks grouped by mapped model spread magnitude,
 both graded against market handicaps at flat 1u, at each game's actual spread price for the side bet
 (owner decision 2026-11-04; −110 only where no price exists, counted), with sample sizes and ROI SE.
 Do not publish live moneyline picks, per-game probabilities or moneyline CSV columns.
+The owner added two Calibration-page changes on 2026-11-04. The WP tables fold to the four 50%+
+favorite bands, each game counted once; the CSV keeps the eight two-sided bands. The page also adds
+aggregate historical moneyline ROI on MODEL.md's legacy flat 1u basis: the model favorite vs the
+same-game market favorite, with the market-correct null and SE. This is page only, never in the CSV.
 This presentation change does not change v1.18, the median map or lock timing.
 The public 2026 headline, weekly/game results, running units, same-game controls
 and season CSV pool replayed and recorded results, one row per game (owner

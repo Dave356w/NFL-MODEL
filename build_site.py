@@ -1439,7 +1439,7 @@ def render_historical_calibration(latest, built, pack=None):
     pack = historical_calibration.build(latest) if pack is None else pack
     current = pack['current_season']
     body = head('Market & model calibration',
-        'Win probabilities against actual win rates, plus ATS ROI by market and model spread band.',
+        'Favorite win probabilities against actual win rates, ATS ROI by spread band and moneyline ROI against the market favorite.',
         f'2023–{current} · completed weeks')
     body += historical_calibration.render_body(pack)
     return html_document(body, f'{SITE_NAME} historical calibration',
