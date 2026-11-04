@@ -22,13 +22,16 @@ serialized; polls that arrive meanwhile queue behind it.
 from __future__ import annotations
 
 import argparse
+import csv
 import datetime as dt
+import json
 import subprocess
 import sys
 import time
 from pathlib import Path
 
 import ats_locks
+from schedule_gate import kickoff
 
 DATA = Path('data')
 MAX_WAIT_MINUTES = 150
@@ -39,13 +42,31 @@ SETTLE_SECONDS = 20
 def pending(data, now, horizon):
     """{cutoff: newest saved generated_utc} for unlocked candidates with now < cutoff <= horizon."""
     locked = {ats_locks.key(r) for r in ats_locks.read(Path(data) / ats_locks.LOCKS)}
-    out = {}
+    out = {};saved_games=set()
     for row in ats_locks.read(Path(data) / ats_locks.CANDIDATES):
         cutoff = ats_locks.utc(row['lock_at_utc'])
         if ats_locks.key(row) in locked or not now < cutoff <= horizon:
             continue
         generated = ats_locks.utc(row['generated_utc'])
+        saved_games.add(ats_locks.key(row))
         out[cutoff] = max(out.get(cutoff, generated), generated)
+    # v1.21 cannot save a candidate until official inactive lists arrive (~T-90).
+    # Hold scheduled games even with no candidate, so the T-70 refresh can collect
+    # the lists. This never creates a candidate or authorizes a late input.
+    latest=Path(data)/'latest'
+    if (latest/'manifest.json').exists() and (latest/'board.csv').exists():
+        manifest=json.loads((latest/'manifest.json').read_text())
+        if manifest.get('revision')=='boxscore-composite-v1.21':
+            with (latest/'board.csv').open(newline='') as src:
+                for row in csv.DictReader(src):
+                    ko=kickoff(row)
+                    if ko is None or row.get('result','').strip():continue
+                    cutoff=ats_locks.deadline(ko)
+                    if (manifest['revision'],row['game_id']) not in locked and now<cutoff<=horizon:
+                        # An epoch sentinel means no candidate exists yet: refresh even if
+                        # this board was generated recently but had unresolved availability.
+                        if (manifest['revision'],row['game_id']) not in saved_games:
+                            out[cutoff]=dt.datetime(1970,1,1,tzinfo=dt.timezone.utc)
     return out
 
 
@@ -59,8 +80,8 @@ def hold(data, horizon, refresh, finalize, clock, sleep):
             return steps
         cutoff = min(due)
         refresh_at = cutoff - dt.timedelta(minutes=REFRESH_LEAD_MINUTES)
-        if cutoff not in refreshed and due[cutoff] < refresh_at and clock() < refresh_at:
-            sleep((refresh_at - clock()).total_seconds())
+        if cutoff not in refreshed and due[cutoff] < refresh_at:
+            sleep(max(0.,(refresh_at - clock()).total_seconds()))
             refreshed.add(cutoff)
             steps.append(('refresh', cutoff, refresh()))
             continue

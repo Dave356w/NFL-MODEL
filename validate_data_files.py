@@ -92,7 +92,7 @@ def validate_availability_observations(path):
     from urllib.parse import urlsplit
     fields={'eligible','report_status','qb_starter','report_complete','inactives_complete'}
     required={'game_id','team','field','value','source_url','published_utc','observed_utc','effective_utc'}
-    optional={'gsis_id','player','position','status','reason'}
+    optional={'gsis_id','player','position','status','reason','source_kind','source_capture_sha256','publication_time_basis'}
     count=0
     for number,line in enumerate(Path(path).read_text(encoding='utf-8').splitlines(),1):
         if not line.strip(): continue
@@ -100,6 +100,11 @@ def validate_availability_observations(path):
             r=json.loads(line)
             if not isinstance(r,dict) or not required<=r.keys() or r.keys()-required-optional:
                 raise ValueError('missing or unknown observation fields')
+            if any(k in r for k in ('source_kind','source_capture_sha256','publication_time_basis')):
+                if (r.get('source_kind') not in ('official_injury_report','official_inactives','official_team_news')
+                        or not re.fullmatch(r'[a-f0-9]{64}',str(r.get('source_capture_sha256','')))
+                        or r.get('publication_time_basis') not in ('source_publication','first_capture')):
+                    raise ValueError('invalid automatic source provenance')
             game=re.fullmatch(r'(\d{4})_(\d{2})_([A-Z]+)_([A-Z]+)',str(r['game_id']))
             if not game or not 1<=int(game[2])<=22 or r['team'] not in game.groups()[2:]:
                 raise ValueError('game/team mismatch')
@@ -240,6 +245,12 @@ def validate_data_dir(data_dir="data"):
     if observations.exists():
         validate_availability_observations(observations)
         paths.append(observations)
+    import availability_collect as ac
+    auto=data_dir/ac.AUTO
+    if auto.exists():
+        validate_availability_observations(auto)
+        paths.append(auto)
+    ac.validate_store(data_dir)
     import ats_locks
     ats_locks.validate_store(data_dir)
     import espn_spreads

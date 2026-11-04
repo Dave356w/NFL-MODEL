@@ -1,0 +1,38 @@
+name: Collect official team availability
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+# Uses the same queue as the build/ATS hold. Never interleave journal commits.
+concurrency:
+  group: site-build
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Collect all official team feeds and upcoming-game reports
+        run: python availability_collect.py
+      - name: Preserve source captures and collection health
+        if: ${{ !cancelled() }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python validate_data_files.py
+          python commit_data.py --branch main --message "availability $(date -u +%FT%H:%MZ)"

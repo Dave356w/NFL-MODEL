@@ -37,6 +37,8 @@ labels its reconstructed, exposed development basis separately from live results
 
 **v1.20 availability safeguards (owner request 2026-11-04) supersede the v1.19 production identity above.** The ten-term fit is unchanged. Only upcoming games can consume timestamped, sourced game observations; historical inputs and the v1.16 shadow remain unchanged. `data/availability_observations.jsonl` is a curated input, not a bot-generated snapshot. See `AVAILABILITY.md`. New injury coefficients still require separate validation.
 
+**v1.21 automatic collection (owner request 2026-11-04) supersedes v1.20's production identity.** All 32 official club RSS feeds, game injury tables and official inactive announcements are collected automatically. The automatic journals are bot-generated and append-only; the curated journal remains separate. Both teams' fresh complete official inactive lists are required before an ATS candidate is saved. The cutoff hold watches games even before a candidate exists. All previous revision signatures, historical inputs and the v1.16 shadow are preserved. The generated single-cell notebook embeds the collector as well as the model.
+
 ## Sources of truth
 
 - `nfl_model.py`: the model. Its docstring is the version history; `MODEL.md`

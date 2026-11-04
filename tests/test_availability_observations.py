@@ -223,7 +223,7 @@ def test_overlay_changes_only_target_game_and_does_not_mutate_base():
 
 
 def test_v120_identity_keeps_old_frozen_signatures_and_ten_terms():
-    assert m.REVISION=='boxscore-composite-v1.20'
+    assert m.REVISION=='boxscore-composite-v1.21'
     sig20,cfg=m.config_signature()
     assert cfg['availability_observations']['policy']==m.AVAILABILITY_POLICY
     assert len(sum(m.model_terms(m.PRODUCT_RECIPE),[]))==10
@@ -252,7 +252,8 @@ def test_production_overlay_keeps_coefficients_historical_rows_and_shadow_inputs
     pd.testing.assert_frame_equal(source[8.],original)
 
 
-def test_ats_candidate_and_lock_preserve_evidence_and_reject_missing_or_bad_evidence(tmp_path):
+def test_ats_candidate_and_lock_preserve_evidence_and_reject_missing_or_bad_evidence(tmp_path,monkeypatch):
+    monkeypatch.setattr(m,'REVISION','boxscore-composite-v1.20')  # original manual-evidence contract
     import ats_locks as a
     resolved=resolve([fact()])
     raw=dict(board(resolved),season=2026,week=9,gameday='2026-11-05',gametime='20:15',result='',ready=True,
@@ -281,7 +282,7 @@ def test_ats_candidate_and_lock_preserve_evidence_and_reject_missing_or_bad_evid
 
 def test_rehashing_cannot_authorize_post_forecast_availability(tmp_path):
     import ats_locks as a
-    saved=dict(revision=m.REVISION,game_id=GAME,home='BAL',away='JAX',generated_utc=NOW.isoformat(),
+    saved=dict(revision='boxscore-composite-v1.20',game_id=GAME,home='BAL',away='JAX',generated_utc=NOW.isoformat(),
                kickoff_utc=KO,availability_policy=m.AVAILABILITY_POLICY,
                availability=m.availability_snapshot(board(resolve([fact()])),pd.Timestamp(KO),NOW))
     a.validate_availability(saved)

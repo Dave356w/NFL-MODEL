@@ -12,7 +12,7 @@ take the market favorite (pick'em lines skip); pushes return the stake. Returns 
 pushes and ROI including pushed stakes. Recorded and replayed results remain
 identified separately. Picks freeze at the 60-minute pregame cutoff.
 
-The v1.20 probability engine and weekly decayed median spread mapping drive
+The v1.21 probability engine and weekly decayed median spread mapping drive
 every page. Original moneyline snapshots and research scoring remain available
 in the repository, including their original pricing and capture times; the
 Picks, Results and Performance and their public CSVs contain ATS data only;
@@ -56,7 +56,7 @@ Source tracking and breakdowns remain in the backend report; the public pages
 and season CSV present the combined results without source labels.
 Pricing is assumed −110 with 1-unit stakes.
 
-Current model (2026-11-04): `boxscore-composite-v1.20`, the v1.19 ten-term model with sourced availability corrections for upcoming games. See [AVAILABILITY.md](AVAILABILITY.md) for the capture command, safeguards and remaining limits. The underlying fit is the v1.18 model fitted on ten core terms
+Current model (2026-11-04): `boxscore-composite-v1.21`, the v1.19 ten-term model with automatic collection of all 32 official team news feeds, game injury tables and official inactive lists. Both complete inactive lists and fresh source checks gate ATS candidates. See [AVAILABILITY.md](AVAILABILITY.md) for operation, review and safeguards. The underlying fit is the v1.18 model fitted on ten core terms
 (home field, offense/defense first-down rate and INT %, defense penalty yards, QB projection, pass
 product and two pass hinges; research Test 50). v1.18 was the v1.16 model with a favorite-confidence
 penalty: where the model backs the market favorite more strongly than the no-vig price, only 0.2 of
@@ -78,7 +78,7 @@ fixed groups (2026: **3/4/7/14** points for original spread magnitudes below 3,
 calibration pages show season-by-season retrospective ATS results at assumed
 −110, including pushes and skips, with downloadable per-game data. Each mapping
 uses earlier seasons only; these are exposed historical comparisons. Win
-probabilities and moneyline picks use the v1.20 recipe (the same ten terms as v1.19). See `fixed_bands.py`
+probabilities and moneyline picks use the v1.21 recipe (the same ten terms as v1.19). See `fixed_bands.py`
 and the fixed-band section in `MODEL.md` for the full rule and grading basis.
 
 | Page | For |
