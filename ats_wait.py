@@ -5,10 +5,10 @@ trusted to land between T−60 and kickoff (2026-10-19: no build ran from 22:38
 to 00:33 UTC and WAS-SF was only recovered after kickoff; 2026-10-26: no
 build between 21:49 and 23:39 UTC, so DAL-PHI locked 25 minutes late from a
 4.5-hour-old forecast). Instead, a build that finishes within MAX_WAIT_MINUTES
-(150) of a cutoff for an already-saved,
-unlocked candidate stays alive until that cutoff:
+(150) of a cutoff for an unlocked candidate or v1.21 scheduled game stays
+alive until that cutoff:
 
-  * if the newest saved candidate for the cutoff is older than the refresh
+  * if a v1.21 game has no candidate yet, or the newest saved candidate is older than the refresh
     point, run one full build REFRESH_LEAD_MINUTES before the cutoff, so the
     lock carries a recent line (a failed refresh keeps the older candidate);
   * at the cutoff, finalize with ats_locks.record, re-render the pages and

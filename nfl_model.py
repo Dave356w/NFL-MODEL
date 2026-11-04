@@ -3892,7 +3892,7 @@ def main():
     (outdir/f'week{cur}_board.html').write_text(html,encoding='utf-8')
     if HAS_IPY: display(HTML(html))
     if WRITE_FORWARD_LEDGER:
-        records,new=record_forward(board,fit,recipe_rec,asof=now if REVISION=='boxscore-composite-v1.21' else None)
+        records,new=record_forward(board,fit,recipe_rec)
         shadow_board=attach_moneylines(shadow_out['board'],schedules)
         shadow=record_shadow(shadow_board,shadow_out['fit'],oof,season)
         if shadow: print(f'  v1.16 shadow snapshots added (ledger report only): {shadow}')
