@@ -1847,3 +1847,39 @@ published forecasts (max error 2.3e-13) and production's `fixed_band_spread` for
 is a simplicity argument, not an edge. The decision belongs to the owner. Adopting S1 or S2 changes
 `config_signature()` and needs a new `REVISION`. The only clean test is a reporting-only forward shadow, reviewed
 at 100 decided locks on log loss and ATS units against v1.18 on the same games.
+
+### Test 51: per-team market-implied points in the v1.19 fit (2026-11-04): neither arm adds measurable accuracy
+
+Protocol [`MARKET_IMPLIED.md`](MARKET_IMPLIED.md), pushed (`2e8c50c`) with its frozen input before any arm was built or
+scored. Script `market_implied.py`; input `market_implied_inputs/` (nflverse scores and closing spread/total, 2011–25);
+results `market_implied_results/` (REPORT.md). Owner request: add per-team market-implied values to the fit. Both arms are
+v1.19 plus two terms. All bases were exposed by earlier tests, so this is development evidence. P reproduces v1.19's
+published 2021–25 forecasts (2.4e-15), Test 50's S3 forecasts for 2014–20 (5e-7, the 6-digit CSV) and production's
+`fixed_band_spread` for 2023–25 exactly. A lookahead fixture checks that arm B ignores a game's own and later scores.
+
+* **Arms.** A: this game's implied points, home (total + spread)/2 and away (total − spread)/2, each minus 22.5. B: each
+  team's decayed residual against its implied points in earlier games, offense (scored − own implied) and defense
+  (allowed − opponent's implied), home minus away, by production's decayed-margin rule (h8, offseason halving, four
+  pseudo-games at 0).
+
+| Log loss, arm − v1.19 (×1000, negative = arm better) | 2015–16 (510) | 2017–22 (1,559) | 2023–25 (815) | Verdict |
+|---|---:|---:|---:|---|
+| A this game's implied points | −0.32 ± 0.90 | +0.26 ± 0.46 | −0.60 ± 0.58 | forward candidate (rule) |
+| B history vs implied points | +0.29 ± 1.14 | −0.22 ± 0.45 | +0.62 ± 0.72 | unresolved |
+
+- **Neither arm moves log loss measurably.** Every |z| ≤ 1.0 against a 2.24 bar; the largest change is 0.1% of the
+  per-game log loss. A meets the "forward candidate" rule only because two of three means are below zero. The
+  effects are not resolved in either direction.
+- **The added coefficients are small and change sign between fits.** A's terms correlate ±0.81 with the market
+  log-odds, so beyond the moneyline offset they mostly carry the total and the spread-vs-moneyline disagreement.
+  Their fitted weights stay within ±0.07 per RMS unit. B's defense coefficient is −0.06, +0.11 and −0.03 in the
+  last fits of the three bases. This matches Test 12: once the market is the offset, market-derived inputs add
+  nothing the close lacks.
+- **ATS is noise and depends on the map history.** With each arm's own map, A is −21.0u, +22.9u and −9.5u on its
+  flips against v1.19; B is −13.4u, +101.2u and −9.5u. On 2023–25 with production's 2021+ map, v1.19 goes 427-370-19
+  (+18.2u, +2.2% ± 3.3), A +6.7u and B +1.0u. Every ROI SE is 2.4–5.9 points. Moneyline units (legacy) are lower
+  for A on all three bases.
+
+**Reading.** Per-team implied points, either for this game or as a team's running record against them, do not
+improve v1.19 on any basis. Arm A's rule label is not evidence of a gain. A forward shadow would also need a
+lock-time total saved with each snapshot. It is not recommended; that call belongs to the owner. No `REVISION`.

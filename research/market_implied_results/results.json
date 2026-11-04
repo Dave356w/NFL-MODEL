@@ -1,0 +1,14 @@
+{
+  "protocol": "research/MARKET_IMPLIED.md",
+  "protocol_commit": "2e8c50c",
+  "reproduction_max_error": {
+    "v1.19 retro_ledger 2021-25": 2.4424906541753444e-15,
+    "Test 50 S3 2014-20 (6-digit CSV)": 4.997278759688584e-07,
+    "fixed_band_spread 2023-25": 0.0
+  },
+  "z_bar": 2.241402727604947,
+  "verdicts": {
+    "A this game's implied points": "forward candidate",
+    "B history vs implied points": "unresolved"
+  }
+}
