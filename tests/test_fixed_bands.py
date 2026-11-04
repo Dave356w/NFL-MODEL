@@ -210,22 +210,29 @@ LIVE_MAPS = {
     'boxscore-composite-v1.19': {2023: [2., 3., 8., 14.], 2024: [2., 3., 7., 14.],
                                  2025: [3., 5., 7., 14.], 2026: [3., 4., 7., 14.]},
 }
+# v1.20 changes only sourced upcoming-game availability; its historical fit is v1.19's.
+LIVE_MAPS['boxscore-composite-v1.20'] = LIVE_MAPS['boxscore-composite-v1.19']
 
 
 def test_live_median_maps_match_the_recorded_targets_for_their_revision():
     root = Path(__file__).resolve().parents[1]
     revision = json.loads((root / 'data/latest/manifest.json').read_text())['revision']
     import nfl_model as m
-    assert revision == m.REVISION
+    assert revision in ('boxscore-composite-v1.19', m.REVISION)  # bot snapshot may precede code adoption
     assert revision in LIVE_MAPS, f'record the median-map targets for {revision} in LIVE_MAPS'
     d = pd.read_csv(root / 'data/latest/retro_ledger.csv')
     d['model_spread'] = m.implied_spread(d.model_wp)
-    exported = {r['season']: r for r in json.loads((root / 'data/latest/fixed_band_rules.json').read_text())}
+    exported = json.loads((root / 'data/latest/fixed_band_rules.json').read_text())
     for year, values in LIVE_MAPS[revision].items():
         rule = f.fit(d, year)
         assert rule['magnitudes'] == values
         assert rule['training_max_season'] < year
-        assert exported[year]['magnitudes'] == values
+    # The frozen annual targets above do not describe policy-v2 weekly exports.
+    for saved in exported:
+        year = saved['season']
+        rule = f.fit_weekly(d, year, saved['week']) if 'week' in saved else f.fit(d, year)
+        assert f.trained_before(rule, year, saved.get('week', 1))
+        assert saved == rule
     assert f.fit(d, 2026)['training_games'] == 1359
 
 

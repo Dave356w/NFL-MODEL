@@ -1,4 +1,4 @@
-"""NFL box-score composite W/L model — v1.19 (v1.18 fitted on ten core terms).
+"""NFL box-score composite W/L model — v1.20 (v1.19 fit with sourced game availability).
 Paste the entire file into ONE Colab cell; or python nfl_model.py.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
@@ -14,6 +14,17 @@ v1.19.1 (reporting only, owner decision 2026-11-04): retro_ledger and the curren
 the schedule's home/away spread prices (attach_spread_prices) so the Calibration tab grades its
 spread-band ROI at actual prices. Never a model input; recipe, fits and config signature unchanged.
 The same day the ATS median map moved to weekly refits (fixed_bands map policy v2, lock policy v3).
+
+v1.20 (availability safeguards, owner request 2026-11-04; new REVISION/OUTPUT_NAME and signature):
+the exact v1.19 ten-term fit, with sourced availability corrections for upcoming games only.
+data/availability_observations.jsonl carries game/player facts, source URLs, publication, capture
+and effective timestamps. Confirmed starters beat stale charts; explicit game eligibility can
+admit a same-week acquisition or supersede an old personnel exclusion, but cannot clear a medical
+absence. Unknown IDs, conflicting facts or ineligible starters block locks. Final reports must be
+complete: practice-only data never becomes final just because kickoff is close. Evidence is saved
+with each forward snapshot and ATS candidate. Historical features, fitted terms, unit weights,
+old archives and the v1.16 shadow's inputs remain unchanged. This is an engineering correction,
+not evidence of improved betting returns. See AVAILABILITY.md and set_availability.py.
 
 v1.19 (NEW experiment, owner decision 2026-11-03; new REVISION/OUTPUT_NAME and config signature):
 the v1.18 recipe (market offset, h8/h16 profiles, ridge 0.1, favorite penalty 0.2) fitted on ten
@@ -485,11 +496,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.19'
+REVISION='boxscore-composite-v1.20'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_19'  # v1.19: v1.18 restricted to ten core terms (new experiment)
+OUTPUT_NAME='nfl_boxscore_output_v1_20'  # same ten-term fit; sourced availability corrections for upcoming games
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -520,7 +531,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.19 v1.18 fitted on ten core terms (2026-11-03); v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.20 sourced game availability (2026-11-04); v1.19 v1.18 fitted on ten core terms (2026-11-03); v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -1004,7 +1015,8 @@ def load_availability(years,season):
         if y==season:  # names, injuries and practice status for the card notes (display only)
             dcols=['season','week','team','gsis_id','full_name','position','report_status','report_primary_injury','practice_status']
             detail.append(inj.dropna(subset=['gsis_id'])[[c for c in dcols if c in inj]].drop_duplicates(['season','week','team','gsis_id']))
-        inj=inj.dropna(subset=['gsis_id'])[['season','week','team','gsis_id','report_status']].drop_duplicates()
+        icols=['season','week','team','gsis_id','report_status']+(['date_modified'] if 'date_modified' in inj else [])
+        inj=inj.dropna(subset=['gsis_id'])[icols].drop_duplicates()
         rost=fetch_upstream(lambda:nfl.load_rosters_weekly(y).to_pandas(),f'rosters {y}')
         if 'game_type' in rost: rost=rost[rost.game_type=='REG']
         if 'status_description_abbr' not in rost: rost['status_description_abbr']=None
@@ -1280,7 +1292,7 @@ def report_notes(detail,snaps,teams,season,week,rost=None,events=None,gameday=No
     return out.sort_values(['team','snap_share'],ascending=[True,False]).reset_index(drop=True)
 
 
-def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=None,gameday=None):
+def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=None,gameday=None,qb_starters=None):
     """One row per (season, week, team) to forecast. Uses the week's injury
     report, the team's most recent roster before the game (status and
     membership; week 1 uses the week-1 roster), and snaps/QB play from earlier
@@ -1469,7 +1481,15 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
                         rec['qb_depth_chart_utc']=chart_t.strftime('%Y-%m-%dT%H:%M:%SZ')
                     elif chart: stats['qb_depth_chart_no_available_qb']+=1
                     else: stats['qb_depth_chart_missing']+=1
+                confirmed=(qb_starters or {}).get((y,w,t))
+                if confirmed is not None:
+                    pid=confirmed['gsis_id']
+                    if qbl is None or pid not in qbl or unavail(pid)>=1.:
+                        raise ValueError(f'{t}: confirmed starting QB is not eligible')
+                    order=[pid]+[c for c in order if c!=pid]
+                    source='confirmed_starter'
                 def qname(c):
+                    if confirmed is not None and c==confirmed['gsis_id']: return confirmed['player']
                     if c in agg.index: return agg.loc[c,'name']
                     if c in qb_player: return qb_player[c].sort_values(['season','week'])['name'].iloc[-1]
                     return chart_name.get(c,c)
@@ -1554,6 +1574,239 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None,e
 
 
 # Lagged profiles. No final-game stat can enter its own feature row.
+AVAILABILITY_POLICY='sourced-game-availability-2026-11-04-v1'
+AVAILABILITY_FILE='availability_observations.jsonl'
+AVAILABILITY_FIELDS=('eligible','report_status','qb_starter','report_complete','inactives_complete')
+
+
+def availability_utc(value):
+    """Reject ambiguous local times; every observation is a point-in-time fact."""
+    stamp=pd.Timestamp(value)
+    if pd.isna(stamp) or stamp.tzinfo is None: raise ValueError('availability timestamps must include a timezone')
+    return stamp.tz_convert('UTC')
+
+
+def validate_availability_observation(raw):
+    """One sourced fact for one game. Membership, medical status and role are independent."""
+    import re
+    from urllib.parse import urlsplit
+    required={'game_id','team','field','value','source_url','published_utc','observed_utc','effective_utc'}
+    optional={'gsis_id','player','position','status','reason'}
+    if not isinstance(raw,dict) or not required<=set(raw) or set(raw)-required-optional:
+        raise ValueError('availability observation has missing or unknown fields')
+    row=dict(raw)
+    match=re.fullmatch(r'(\d{4})_(\d{2})_([A-Z]+)_([A-Z]+)',str(row['game_id']))
+    if (not match or not 1<=int(match[2])<=22 or row['team'] not in match.groups()[2:]
+            or not set(match.groups()[2:])<=PERSONNEL_TEAMS):
+        raise ValueError('availability observation game/team mismatch')
+    field=row['field']
+    if field not in AVAILABILITY_FIELDS: raise ValueError('unknown availability field')
+    team_fact=field in ('report_complete','inactives_complete')
+    pid=row.get('gsis_id','')
+    if team_fact:
+        if pid: raise ValueError('report completeness is a team fact, not a player fact')
+    elif not isinstance(pid,str) or not re.fullmatch(r'00-\d{7}',pid):
+        raise ValueError('availability observation requires a GSIS player ID')
+    if field=='report_status':
+        if row['value'] not in ('Available','Out','Doubtful','Questionable'):
+            raise ValueError('unknown game injury status')
+    elif type(row['value']) is not bool:
+        raise ValueError('availability fact must have a boolean value')
+    if field=='qb_starter' and (row['value'] is not True or row.get('position')!='QB' or not row.get('player')):
+        raise ValueError('confirmed starter requires true, QB position and player name')
+    if field=='eligible' and row['value'] and (not row.get('player') or not row.get('position')):
+        raise ValueError('eligibility addition requires player name and position')
+    url=urlsplit(str(row['source_url']))
+    if url.scheme!='https' or not url.hostname or url.username or url.password:
+        raise ValueError('availability evidence requires an HTTPS source URL')
+    row.setdefault('status','confirmed')
+    if row['status'] not in ('confirmed','pending'): raise ValueError('unknown observation status')
+    for name in ('published_utc','observed_utc','effective_utc'):
+        row[name]=availability_utc(row[name]).isoformat()
+    if availability_utc(row['published_utc'])>availability_utc(row['observed_utc']):
+        raise ValueError('availability observation was captured before its publication')
+    return row
+
+
+def load_availability_observations(path=None):
+    """Optional, append-only owner-curated input; missing input never manufactures facts."""
+    if path is None:
+        choices=list(dict.fromkeys((state_dir()/AVAILABILITY_FILE,Path('data')/AVAILABILITY_FILE)))
+        path=next((p for p in choices if p.exists()),choices[0])
+    path=Path(path)
+    rows=[]; seen=set()
+    if path.exists():
+        for number,line in enumerate(path.read_text(encoding='utf-8').splitlines(),1):
+            if not line.strip(): continue
+            try:
+                row=validate_availability_observation(json.loads(line))
+            except (ValueError,TypeError) as exc:
+                raise ValueError(f'{path}:{number}: {exc}') from exc
+            key=json.dumps(row,sort_keys=True)
+            if key not in seen: rows.append(row); seen.add(key)
+    AUDIT.append({'source':'availability_observations','path':str(path),'rows_loaded':len(rows),
+                  'sha256':hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None})
+    return rows
+
+
+def availability_evidence_digest(evidence):
+    return hashlib.sha256(json.dumps(evidence,sort_keys=True,allow_nan=False).encode()).hexdigest()
+
+
+def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=None,observations=(),asof=None):
+    """Forward-only corrections. Historical feature matrices and the v1.16 shadow stay untouched.
+
+    Only confirmed observations captured, published and effective by asof apply, for an exact
+    game/team. Conflicting facts block a lock rather than guessing a lineup. A membership addition
+    may clear old roster/personnel exclusions, but never independently clears a medical absence.
+    """
+    asof=availability_utc(asof if asof is not None else now_utc())
+    observations=[validate_availability_observation(r) for r in observations]
+    indexed=base.set_index(['season','week','team'])
+    output=[]
+    for target in targets.to_dict('records'):
+        ko=target.get('kickoff')
+        if not ko or pd.isna(ko) or availability_utc(ko)<=asof or pd.notna(target.get('result')): continue
+        y,w,t=int(target['season']),int(target['week']),target['team']
+        key=(y,w,t)
+        if key not in indexed.index: continue
+        game=target['game_id']; original=indexed.loc[key].to_dict()
+        eligible=[r for r in observations if r['game_id']==game and r['team']==t and r['status']=='confirmed'
+                  and all(availability_utc(r[c])<=asof for c in ('published_utc','observed_utc','effective_utc'))]
+        grouped={}
+        for r in eligible:
+            k=(r.get('gsis_id',''),r['field']) if r['field']!='qb_starter' else ('','qb_starter')
+            grouped.setdefault(k,[]).append(r)
+        chosen=[]; blockers=[]
+        for k,group in grouped.items():
+            last=max((availability_utc(r['effective_utc']),availability_utc(r['published_utc'])) for r in group)
+            latest=[r for r in group if (availability_utc(r['effective_utc']),availability_utc(r['published_utc']))==last]
+            values={(r.get('gsis_id',''),json.dumps(r['value'])) for r in latest}
+            if len(values)>1:
+                blockers.append(f'conflicting {k[1]} observations'); continue
+            chosen.append(min(latest,key=lambda r:r['observed_utc']))
+        ii=inj.copy(); rr=rost.copy(); ee=events.copy() if events is not None else None
+        team_mask=(rr.season==y)&(rr.team==t)
+        rw=original.get('roster_reference_week')
+        starters={}; known=set(rost.gsis_id)|set(snaps.gsis_id)
+        if qb is not None: known.update(qb.gsis_id)
+        applied=[]
+        # Medical facts cannot clear an independent eligibility restriction, regardless of file order.
+        for r in sorted(chosen,key=lambda r: {'report_status':0,'eligible':1,'qb_starter':2}.get(r['field'],3)):
+            field,pid=r['field'],r.get('gsis_id','')
+            if field in ('report_complete','inactives_complete'): applied.append(r); continue
+            if pid not in known:
+                blockers.append(f'{pid}: unknown player ID'); continue
+            mask=(ii.season==y)&(ii.week==w)&(ii.team==t)&ii.gsis_id.eq(pid)
+            if field=='report_status' and 'date_modified' in ii and mask.any():
+                dates=pd.to_datetime(ii.loc[mask,'date_modified'],utc=True,errors='coerce')
+                if dates.notna().any() and dates.max()>availability_utc(r['published_utc']): continue
+            if field=='eligible':
+                if r['value']:
+                    if rw is None or not np.isfinite(rw):
+                        blockers.append(f'{pid}: no reference roster'); continue
+                    known_positions=set(rost.loc[rost.gsis_id.eq(pid),'position'].dropna())
+                    if known_positions and r['position'] not in known_positions:
+                        blockers.append(f'{pid}: position does not match roster'); continue
+                    # This is an explicit game eligibility fact, not inference from a final weekly file.
+                    rr=rr.loc[~(team_mask&rr.week.isin([int(rw),w])&rr.gsis_id.eq(pid))].copy()
+                    extra={c:None for c in rr.columns}
+                    extra.update(season=y,week=int(rw),team=t,gsis_id=pid,position=r['position'],status='ACT',
+                                 full_name=r['player'])
+                    rr=pd.concat([rr,pd.DataFrame([extra])],ignore_index=True)
+                    team_mask=(rr.season==y)&(rr.team==t)
+                    if ee is not None:
+                        day=availability_utc(r['effective_utc']).date()
+                        ee=ee.loc[~(ee.team.eq(t)&ee.gsis_id.eq(pid)&(ee.event_date<day))].copy()
+                else:
+                    ii=ii.loc[~mask].copy()
+                    ii=pd.concat([ii,pd.DataFrame([dict(season=y,week=w,team=t,gsis_id=pid,report_status='Out')])],ignore_index=True)
+            elif field=='report_status':
+                # Without a feed publication time, a claimed clearance cannot safely beat an existing OUT.
+                if r['value'] not in ('Out','Doubtful') and mask.any() and ii.loc[mask,'report_status'].isin(['Out','Doubtful']).any():
+                    dates=pd.to_datetime(ii.loc[mask,'date_modified'],utc=True,errors='coerce') if 'date_modified' in ii else pd.Series(dtype='datetime64[ns, UTC]')
+                    if not dates.notna().any():
+                        blockers.append(f'{pid}: cannot date the medical exclusion being cleared'); continue
+                ii=ii.loc[~mask].copy()
+                ii=pd.concat([ii,pd.DataFrame([dict(season=y,week=w,team=t,gsis_id=pid,
+                    report_status=None if r['value']=='Available' else r['value'],date_modified=r['published_utc'])])],ignore_index=True)
+            elif field=='qb_starter':
+                starters[key]={'gsis_id':pid,'player':r['player']}
+            applied.append(r)
+        record=original.copy()
+        if applied and not blockers:
+            try:
+                one=pd.DataFrame([target])
+                corrected=availability_table(one,qb,snaps,ii,rr,depth=depth,events=ee,gameday=one,qb_starters=starters)
+                record=corrected.iloc[0].to_dict()
+                if starters and record.get('qb_source')!='confirmed_starter':
+                    blockers.append('confirmed starter could not be projected')
+            except ValueError as exc:
+                blockers.append(str(exc))
+        # A player correction is not proof that the entire team's final report was published.
+        complete=original.get('injury_report')=='final'
+        for r in applied:
+            if r['field']=='report_complete': complete=r['value']
+        record['injury_report']='final' if complete else ('practice' if original.get('injury_report')=='practice' else 'none')
+        if record.get('qb_source')=='backup_prior' or not record.get('qb_expected'):
+            blockers.append('starting quarterback unresolved')
+        evidence=dict(policy=AVAILABILITY_POLICY,game_id=game,team=t,asof_utc=asof.isoformat(),
+            kickoff_utc=availability_utc(ko).isoformat(),report_complete=complete,
+            qb_expected=record.get('qb_expected'),qb_source=record.get('qb_source'),
+            reference_week=int(rw) if rw is not None and np.isfinite(rw) else None,
+            inputs_sha256={name:data_hash(frame) for name,frame in [('injuries',inj.loc[(inj.season==y)&(inj.week==w)&inj.team.eq(t)]),
+                ('roster',rost.loc[(rost.season==y)&rost.team.eq(t)&rost.week.isin([rw,w])])]},
+            observations=applied,blockers=sorted(set(blockers)))
+        record.update(season=y,week=w,team=t,game_id=game,
+            availability_evidence=json.dumps(evidence,sort_keys=True,allow_nan=False),
+            availability_evidence_sha256=availability_evidence_digest(evidence))
+        output.append(record)
+    return pd.DataFrame(output)
+
+
+def apply_game_availability(frame,resolved):
+    """Replace only explicit upcoming game/team inputs. Historical rows remain byte-for-byte equal."""
+    if resolved is None or resolved.empty: return frame.copy()
+    out=frame.copy(); lookup=resolved.set_index(['game_id','team'])
+    for i,row in out.iterrows():
+        touched=False
+        for side in ('home','away'):
+            key=(row.game_id,row[side])
+            if key not in lookup.index: continue
+            rec=lookup.loc[key]; touched=True
+            for c in ALL_AVAIL_COLS: out.loc[i,f'{side}__avail__{c}']=rec[c]
+            for c in ('qb_expected','qb_usual','injury_report','availability_evidence','availability_evidence_sha256'):
+                out.loc[i,f'{side}_{c}']=rec[c]
+        if touched:
+            out.loc[i,'availability_policy']=AVAILABILITY_POLICY
+            for c in ALL_AVAIL_COLS: out.loc[i,'d__avail__'+c]=out.loc[i,'home__avail__'+c]-out.loc[i,'away__avail__'+c]
+    return out
+
+
+def availability_snapshot(row,ko,asof):
+    """Validate the evidence copied into a forecast and later into its immutable ATS candidate."""
+    snapshot={}
+    for side in ('home','away'):
+        raw=row.get(f'{side}_availability_evidence')
+        try:
+            evidence=json.loads(raw) if isinstance(raw,str) else raw
+            if not isinstance(evidence,dict) or availability_evidence_digest(evidence)!=row.get(f'{side}_availability_evidence_sha256'): return None
+            if (evidence['policy']!=AVAILABILITY_POLICY or evidence['game_id']!=row['game_id']
+                    or evidence['team']!=row[side] or evidence['blockers']!=[] or evidence['report_complete'] is not True
+                    or availability_utc(evidence['kickoff_utc'])!=availability_utc(ko)
+                    or not availability_utc(evidence['asof_utc'])<=availability_utc(asof)<availability_utc(ko)):
+                return None
+            if row.get(f'{side}_qb_expected') is not None and row.get(f'{side}_qb_expected')!=evidence['qb_expected']:
+                return None
+            for fact in evidence['observations']:
+                fact=validate_availability_observation(fact)
+                if (fact['game_id']!=row['game_id'] or fact['team']!=row[side] or fact['status']!='confirmed'
+                        or any(availability_utc(fact[c])>availability_utc(evidence['asof_utc']) for c in ('published_utc','observed_utc','effective_utc'))): return None
+            snapshot[side]=evidence
+        except (ValueError,TypeError,KeyError): return None
+    return snapshot
+
+
 def before(df,year,week):
     return (df.season<year)|((df.season==year)&(df.week<week))
 
@@ -2657,7 +2910,7 @@ def shadow_fit(train,fit,year,week):
     return fit_composite(train,SHADOW_RECIPE,year,week) if term_restricted(fit) else fit
 
 
-def current_predictions(features,recipe,year,through_week,shadow_out=None):
+def current_predictions(features,recipe,year,through_week,shadow_out=None,availability=None):
     """Weekly walk-forward forecasts for this season. shadow_out (a dict) receives the v1.16 shadow
     fit for through_week under 'fit'."""
     f=features[recipe['half_life']]; rows=[]; current_fit=None
@@ -2670,10 +2923,14 @@ def current_predictions(features,recipe,year,through_week,shadow_out=None):
             fit['market_target_fit']=features['market_target_fits'][f'{year}_{week}']
             fit['market_target_selection']=[r for r in features['market_target_selections'] if r['season']==year]
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
+        sfit=shadow_fit(tr,fit,year,week)
+        shadow_board=te.copy()
+        shadow_board['model_wp_v116']=apply_fit(shadow_board,sfit,raw=True)
+        shadow_board['homefield_wp']=apply_fit(shadow_board,baseline)
+        te=apply_game_availability(te,availability)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
-        sfit=shadow_fit(tr,fit,year,week)
-        te['model_wp_v116']=apply_fit(te,sfit,raw=True)  # v1.16 shadow lock (its own fit from v1.19)
+        te['model_wp_v116']=shadow_board.model_wp_v116  # shadow retains the original availability inputs
         try: te['offset_se'],te['model_wp_lo'],te['model_wp_hi']=offset_band(tr,fit,te)
         except (ValueError,np.linalg.LinAlgError) as e:  # reporting only: never costs a forecast
             print(f'  Note: week {week} probability range unavailable ({e})')
@@ -2683,7 +2940,9 @@ def current_predictions(features,recipe,year,through_week,shadow_out=None):
         rows.append(te)
         if week==through_week:
             current_fit=fit
-            if shadow_out is not None: shadow_out['fit']=sfit
+            if shadow_out is not None:
+                shadow_out['fit']=sfit
+                shadow_out['board']=shadow_board
     return pd.concat(rows,ignore_index=True),current_fit
 
 
@@ -2753,6 +3012,9 @@ def config_signature():
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         cfg['evaluation_ties']='graded as pushes; excluded from binary fitting/scoring'
         cfg['market_targets']={'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'}
+    if REVISION=='boxscore-composite-v1.20':
+        cfg['availability_observations']={'policy':AVAILABILITY_POLICY,'fields':AVAILABILITY_FIELDS,
+            'rule':'confirmed, game-scoped, captured/published/effective by forecast; unresolved conflicts block locks; historical and shadow inputs unchanged'}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -2795,16 +3057,20 @@ def availability_targets(schedules):
     kickoff time, which disables the depth-chart rule)."""
     ko=[kickoff_utc(r) for r in schedules.to_dict('records')]
     ko=[k.strftime('%Y-%m-%dT%H:%M:%SZ') if k is not None else None for k in ko]
-    base=schedules[['season','week','home_team','away_team']].assign(kickoff=ko)
+    base=schedules[['season','week','home_team','away_team']+[c for c in ('game_id','result') if c in schedules]].assign(kickoff=ko)
     base['gameday']=schedules['gameday'] if 'gameday' in schedules else None
-    cols=['season','week','gameday','kickoff']
+    cols=['season','week','gameday','kickoff']+[c for c in ('game_id','result') if c in base]
     return pd.concat([base[cols+['home_team']].rename(columns={'home_team':'team'}),
                       base[cols+['away_team']].rename(columns={'away_team':'team'})],ignore_index=True)
 
 
 def injury_reports_ready(r,ko,asof):
-    """Both teams' game statuses are published: a 'final' report, or practice
-    rows only (no designations at all) within FINAL_REPORT_HOURS of kickoff."""
+    """Sourced boards require complete, valid evidence for both teams. Legacy boards retain
+    their final-report gate and practice-only fallback within FINAL_REPORT_HOURS."""
+    if r.get('availability_policy')==AVAILABILITY_POLICY:
+        return availability_snapshot(r,ko,asof) is not None
+    if isinstance(r.get('availability_policy'),str) and r.get('availability_policy'):
+        return False
     for side in ('home','away'):
         st=r.get(f'{side}_injury_report')
         if st=='final': continue
@@ -2889,6 +3155,9 @@ def record_forward(board,fit,recipe_record,asof=None):
             'injury_report':{side:r.get(f'{side}_injury_report') for side in ('home','away')},
             'recipe':recipe_record['recipe'],'coefficient_fit':fit,
             'source_note':'First locally recorded pre-kickoff forecast; source market quote has no independent quote timestamp.'}
+        if r.get('availability_policy')==AVAILABILITY_POLICY:
+            record['availability_policy']=AVAILABILITY_POLICY
+            record['availability']=availability_snapshot(r,ko,asof)
         if fit.get('market_offset'):
             record['market_no_vig_wp']=float(r['q'])
             record['model_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in fit['names']}
@@ -3444,7 +3713,7 @@ def main():
         raise ValueError('Box-score season/week/team does not match the schedule; refusing ambiguous timing')
     save(box,'team_game_boxscores.csv'); save(definitions_table(),'stat_definitions.csv')
     print(f'  {len(box)} team-game rows; possession time missing in {int(box.top_seconds.isna().sum())}.')
-    avail=None
+    avail=None; resolved_availability=None
     if any(f in AVAIL_FAMILIES for f in FEATURE_FAMILIES):
         print('  Player availability: injury reports, weekly rosters, snap counts')
         a=load_availability(years,season)
@@ -3474,11 +3743,17 @@ def main():
                   f'{", ".join(f"{t} ({src})" for t,src in zip(nochart.team,nochart.qb_source))}')
         pend=cr[cr.injury_report!='final']
         if len(pend):
+            fallback='' if REVISION=='boxscore-composite-v1.20' else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
             print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
                   f'{", ".join(f"{t} ({st})" for t,st in zip(pend.team,pend.injury_report))}. '
                   f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
-                  f'ledger until game statuses publish (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff).')
+                  f'ledger until game statuses publish{fallback}.')
         else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
+        if REVISION=='boxscore-composite-v1.20':
+            observations=load_availability_observations()
+            resolved_availability=resolve_game_availability(targets,avail,qb,a['snaps'],a['inj'],a['rost'],
+                depth=a.get('depth'),events=events,observations=observations,asof=now_utc())
+            if len(resolved_availability): save(resolved_availability,'resolved_availability.csv')
     notes=None
     if avail is not None:
         wk=schedules[(schedules.season==season)&(schedules.week==cur)]
@@ -3536,7 +3811,7 @@ def main():
     dump(outdir/'frozen_recipe.json',recipe_rec)
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
     shadow_out={}
-    gw,fit=current_predictions(features,recipe,season,cur,shadow_out)
+    gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability)
     gw=attach_moneylines(gw,schedules)
     gw=attach_spread_prices(gw,schedules)
     save(gw,'current_season_predictions.csv')
@@ -3570,7 +3845,8 @@ def main():
     if HAS_IPY: display(HTML(html))
     if WRITE_FORWARD_LEDGER:
         records,new=record_forward(board,fit,recipe_rec)
-        shadow=record_shadow(board,shadow_out['fit'],oof,season)
+        shadow_board=attach_moneylines(shadow_out['board'],schedules)
+        shadow=record_shadow(shadow_board,shadow_out['fit'],oof,season)
         if shadow: print(f'  v1.16 shadow snapshots added (ledger report only): {shadow}')
         graded,forward_card=grade_forward(records,schedules)
         save(graded,'forward_ledger_grades.csv'); save(forward_card,'forward_only_scorecard.csv')

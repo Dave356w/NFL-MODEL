@@ -28,6 +28,7 @@ from schedule_gate import kickoff as scheduled_kickoff
 # revision's replayed pick; later games need that revision's own 60-minute lock. Saved locks of the
 # same revision still take priority. Locks and snapshots of earlier revisions stay in their files.
 REPLAY_UNTIL = {'boxscore-composite-v1.19': dt.datetime.fromisoformat('2026-11-05T12:00:00+00:00')}
+REPLAY_UNTIL['boxscore-composite-v1.20']=REPLAY_UNTIL['boxscore-composite-v1.19']
 
 
 def replay_cutoff(revision):

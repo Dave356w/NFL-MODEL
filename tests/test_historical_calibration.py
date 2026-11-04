@@ -190,7 +190,19 @@ def test_committed_history_stops_at_completed_week_and_render_keeps_archives(tmp
     for model, view in [(False, 'market_spread'), (True, 'model_spread')]:
         rows = [r for r in all_rows if r['view'] == view]
         prediction = eligible.fixed_band_spread if model else eligible.spread_line
-        _, returns = c.fixed_bands.grade(eligible, prediction)
+        grades, _ = c.fixed_bands.grade(eligible, prediction)
+        # Reporting now settles the selected side at its actual price, with -110 only if absent.
+        edge = prediction.to_numpy()-eligible.spread_line.to_numpy()
+        side = np.where(abs(edge)<=1e-10,eligible.spread_line.to_numpy(),edge)
+        home = eligible.get('home_spread_odds',pd.Series(np.nan,index=eligible.index)).to_numpy(float)
+        away = eligible.get('away_spread_odds',pd.Series(np.nan,index=eligible.index)).to_numpy(float)
+        odds = np.where(side>0,home,away)
+        payout = np.full(len(odds),1/1.1)
+        plus = np.isfinite(odds)&(odds>=100)
+        minus = np.isfinite(odds)&(odds<=-100)
+        payout[plus] = odds[plus]/100
+        payout[minus] = -100/odds[minus]
+        returns = np.where(grades=='W',payout,np.where(grades=='L',-1.,0.))
         assert sum(r['observations'] for r in rows) == len(eligible)
         assert sum(r['units'] or 0 for r in rows) == pytest.approx(returns.sum())
         assert sum((r['roi'] or 0)*r['observations'] for r in rows)/len(eligible) == pytest.approx(returns.mean())

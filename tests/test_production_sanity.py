@@ -46,7 +46,11 @@ def test_current_production_snapshot_passes_independent_audit():
     assert archive['original_selections']+archive['original_skips']==archive['snapshots']
     assert archive['backfilled_skips']<=archive['original_skips']
     rule=next(x for x in audit['rules'] if x['season']==2026)
-    assert rule['magnitudes']==[3.,4.,7.,14.] and rule['training_max_season']==2025
+    if audit['weekly']:
+        assert (rule['training_max_season'],rule['training_max_week']) < (rule['season'],rule['week'])
+        assert len([r for r in audit['rules'] if r['season']==2026]) > 1
+    else:
+        assert rule['magnitudes']==[3.,4.,7.,14.] and rule['training_max_season']==2025
     total=next(x for x in audit['historical'] if x['season']=='All')
     assert total['selected']+total['skips']==total['opportunities']
     if total['opportunities']==895:

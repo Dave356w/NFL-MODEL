@@ -42,7 +42,7 @@ class Clock:
 def board(data, now, **changes):
     (data / 'latest').mkdir(exist_ok=True)
     (data / 'latest/fixed_band_rules.json').write_text(json.dumps([RULE]))
-    manifest = dict(revision=m.REVISION, season=2026, week=7, generated_utc=now.isoformat(),
+    manifest = dict(revision='boxscore-composite-v1.19', season=2026, week=7, generated_utc=now.isoformat(),
                     config_signature='test', recipe={'family': 'rates_core_avail_cs'})
     (data / 'latest/manifest.json').write_text(json.dumps(manifest))
     row = dict(RAW, **changes)

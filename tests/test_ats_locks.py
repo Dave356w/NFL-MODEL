@@ -22,6 +22,9 @@ CUTOFF = KO - dt.timedelta(hours=1)
 
 class TimedATS(unittest.TestCase):
     def setUp(self):
+        from unittest.mock import patch
+        legacy=patch.object(m,'REVISION','boxscore-composite-v1.19')
+        legacy.start(); self.addCleanup(legacy.stop)
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.data = Path(self.tmp.name)
@@ -41,7 +44,8 @@ class TimedATS(unittest.TestCase):
                         home_injury_report='final', away_injury_report='final')
 
     def board(self, now, **changes):
-        manifest = dict(revision=m.REVISION, season=2026, week=7, generated_utc=now.isoformat(),
+        # These fixtures exercise the original report-gated board format. v1.20 evidence is tested separately.
+        manifest = dict(revision='boxscore-composite-v1.19', season=2026, week=7, generated_utc=now.isoformat(),
                         config_signature='test', recipe={'family': 'rates_core_avail_cs'})
         (self.data / 'latest/manifest.json').write_text(json.dumps(manifest))
         row = dict(self.raw, **changes)
