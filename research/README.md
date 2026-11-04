@@ -1996,8 +1996,10 @@ production 493-419-25 (+29.2u, +3.1% ± 3.1), M1 and M3 +13.9u, M2 −39.5u, alw
   only in the second decimal (about 9.4–11.0 points per band for every arm). Less noise did not make the band numbers
   measurably better estimates.
 - **The ATS gains flip with the period, as in Test 54.** M1 and M3 gain about 70–80u on 2016–22 (just at or below the bar)
-  and lose 15u on 2023–26. Most flips come from games lined 3.5: a number of 3.5 (M3) ties them and takes the favorite;
-  production's 3 takes the underdog, and 4 takes the favorite. Which side won those games differs by period.
+  and lose 15u on 2023–26. The flips concentrate on key-number lines. Lines of exactly 3 are 28–39% of M1's flips and
+  15–32% of M3's: when production's number is exactly 3, those games tie and go to the favorite, while a number just off
+  3 decides them outright. Lines of 3.5 are 21–28% of M3's flips, because M3's 3.5 ties them instead. Which side won
+  those games differs by period.
 - **The trimmed mean estimates a mean, not a median,** and is reliably worse on 2023–26.
 
 **Reading.** Variance in the band numbers is real and a smoother estimator removes some of it, but nothing shows that
