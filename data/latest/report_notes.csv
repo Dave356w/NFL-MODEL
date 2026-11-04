@@ -10,15 +10,12 @@ ATL,00-0033945,Samson Ebukam,DE,DL,0.11255411255411256,8.0,Questionable,Hamstrin
 ATL,00-0037746,Brian Robinson,RB,RB,0.10084033613445378,8.0,Out,Hamstring,not on a week-9 report yet,0.0,none
 ATL,00-0041469,Avieon Terrell,CB,DB,0.09311424100156494,8.0,Questionable,Illness,not on a week-9 report yet,0.0,none
 ATL,00-0035208,Olamide Zaccheaus,WR,WRTE,0.08025343189017951,8.0,Questionable,Shoulder,not on a week-9 report yet,0.0,none
-BAL,00-0035993,Tyler Huntley,QB,QB,0.995260663507109,,,,practice: Did Not Participate In Practice,0.0,practice
-BAL,00-0036369,John Simpson,G,OL,0.1984189723320158,,,,practice: Limited Participation in Practice,0.0,practice
-BAL,00-0039233,Roger Rosengarten,T,OL,0.19683794466403162,,,,practice: Limited Participation in Practice,0.0,practice
-BAL,00-0026190,Calais Campbell,DT,DL,0.1870748299319728,,,,practice: Did Not Participate In Practice,0.0,practice
-BAL,00-0040866,Olaivavega Ioane,G,OL,0.11778656126482213,8.0,Out,Knee,practice: Full Participation in Practice,0.0,practice
-BAL,00-0030070,John Jenkins,DT,DL,0.11054421768707483,,,,practice: Limited Participation in Practice,0.0,practice
-BAL,00-0038505,Tavius Robinson,LB,LB,0.07955689828801611,,,,Reserve/Injured (IR) on wk 8 roster,1.0,practice
-BAL,00-0036302,Jaylinn Hawkins,S,DB,0.07148347425057648,8.0,Out,Knee,practice: Did Not Participate In Practice,0.0,practice
-BAL,00-0034796,Lamar Jackson,QB,QB,0.004739336492890996,,,,practice: Did Not Participate In Practice,0.0,practice
+BAL,00-0035993,Tyler Huntley,QB,QB,0.995260663507109,,,,Out,1.0,final
+BAL,00-0039232,Nate Wiggins,DB,DB,0.17909300538047657,,,,Questionable,0.25,final
+BAL,00-0040866,Olaivavega Ioane,OL,OL,0.11778656126482213,8.0,Out,Knee,"listed, no status",0.0,final
+BAL,00-0038505,Tavius Robinson,LB,LB,0.07955689828801611,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
+BAL,00-0036302,Jaylinn Hawkins,DB,DB,0.07148347425057648,8.0,Out,Knee,Out,1.0,final
+BAL,00-0034796,Lamar Jackson,QB,QB,0.004739336492890996,,,,Out,1.0,final
 BUF,00-0038933,Dalton Kincaid,TE,WRTE,0.16117216117216118,8.0,Questionable,Chest,not on a week-9 report yet,0.0,none
 BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.13914373088685014,,,,Reserve/Non-football illness on wk 8 roster,1.0,none
 BUF,00-0036976,Spencer Brown,T,OL,0.1297640653357532,8.0,Questionable,Back,not on a week-9 report yet,0.0,none
@@ -63,17 +60,11 @@ IND,00-0040139,Justin Walley,CB,DB,0.11976630963972736,8.0,Out,Knee,not on a wee
 IND,00-0037292,Andrew Ogletree,TE,WRTE,0.09107468123861566,8.0,Questionable,Knee,not on a week-9 report yet,0.0,none
 IND,00-0041518,Bryce Boettcher,LB,LB,0.06502242152466367,8.0,Questionable,Groin,not on a week-9 report yet,0.0,none
 IND,00-0037753,Cam Taylor-Britt,DB,DB,0.05063291139240506,,,,Reserve/Injured (IR) on wk 8 roster,1.0,none
-JAX,00-0040719,Bhayshul Tuten,RB,RB,0.5953307392996109,,,,practice: Did Not Participate In Practice,0.0,practice
-JAX,00-0038611,Chris Rodriguez Jr.,RB,RB,0.22178988326848248,,,,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0039353,Jarrian Jones,CB,DB,0.20445736434108527,,,,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0037235,Travon Walker,DE,DL,0.20422535211267606,,,,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0034960,Jakobi Meyers,WR,WRTE,0.18940137389597644,8.0,Questionable,Hamstring,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0036327,Ezra Cleveland,G,OL,0.17101226993865032,,,,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0038596,Antonio Johnson,S,DB,0.15794573643410853,8.0,Out,Ankle,practice: Limited Participation in Practice,0.0,practice
-JAX,00-0033038,Eric Murray,S,DB,0.10368217054263566,,,,practice: Did Not Participate In Practice,0.0,practice
-JAX,00-0036262,DaVon Hamilton,DT,DL,0.1006036217303823,,,,practice: Did Not Participate In Practice,0.0,practice
-JAX,00-0038934,Anton Harrison,OL,OL,0.0789877300613497,,,,Reserve/Injured (IR) on wk 8 roster,1.0,practice
-JAX,00-0040326,Branson Combs,LB,LB,0.06754530477759473,,,,practice: Limited Participation in Practice,0.0,practice
+JAX,00-0040719,Bhayshul Tuten,RB,RB,0.5953307392996109,,,,Questionable,0.25,final
+JAX,00-0037235,Travon Walker,DL,DL,0.20422535211267606,,,,Questionable,0.25,final
+JAX,00-0034960,Jakobi Meyers,WR,WRTE,0.18940137389597644,8.0,Questionable,Hamstring,"listed, no status",0.0,final
+JAX,00-0038596,Antonio Johnson,DB,DB,0.15794573643410853,8.0,Out,Ankle,"listed, no status",0.0,final
+JAX,00-0038934,Anton Harrison,OL,OL,0.0789877300613497,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 KC,00-0041543,Mansoor Delane,CB,DB,0.15406976744186046,8.0,Questionable,Shoulder,not on a week-9 report yet,0.0,none
 KC,00-0041501,R Mason Thomas,DE,DL,0.10559006211180125,8.0,Questionable,Not injury related - personal matter,not on a week-9 report yet,0.0,none
 KC,WOO547869,,,DL,0.08429458740017746,,,,not on wk 8 roster (left team),1.0,none
