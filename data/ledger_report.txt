@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-11-04 23:28 UTC
+NFL forward ledger report -- 2026-11-05 18:46 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -6,6 +6,47 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
 
 == boxscore-composite-v1.21: 1 snapshots, 0 graded, 1 pending, 0 ties
   No graded bets with a saved moneyline yet.
+
+== boxscore-composite-v1.16: 57 snapshots, 55 graded, 1 pending, 1 ties
+  HEADLINE flat 1u, model's side at the snapshot moneyline: 35-18-1, -0.80u, ROI -1.5% +/- 9.8 (1 SE)
+    win 66.0% vs no-vig q 63.9% (excess +2.1pp); market-correct null ROI -4.1%
+    same rows, market favorite every game: +2.65u, ROI +4.9%
+  Model vs favorite, games where they pick different sides (all other bets are identical): n=2, model -2.00u (ROI -100.0%) vs favorite +1.46u (ROI +72.9%); difference -3.46u
+  ROI by the picked side's price band (model):
+            ≤ −250  n=17   13-4-0    -0.30u  ROI   -1.8%  q 75.6%
+      −249 to −175  n=12   9-3-0    +1.54u  ROI  +12.8%  q 63.6%
+      −174 to −130  n=20   12-7-1    +1.11u  ROI   +5.6%  q 57.8%
+      −129 to −100  n=4    1-3-0    -2.15u  ROI  -53.8%  q 51.4%
+      +130 to +174  n=1    0-1-0    -1.00u  ROI -100.0%  q 39.6%
+         All games  n=54   35-18-1    -0.80u  ROI   -1.5%  q 63.9%
+  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
+    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
+          all games  23-31-2  cover 42.6% (Wilson 95% 30.3-55.8)
+     |gap| >= 3 pts  2-4-0  cover 33.3% (Wilson 95% 9.7-70.0)
+  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 36-18, -0.18u, ROI -0.3% +/- 10.0
+    Kalshi-correct null -3.2%; same rows, Kalshi favorite +1.34u, ROI +2.4%; capture lag after lock median 0.0h, max 0.0h
+  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 18-8, +4.56u, ROI +17.5% +/- 16.2
+    same rows, favorite at its Kalshi game-winner ask: +3.16u, ROI +12.2%
+  Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 4-8, +1.01u, ROI +8.4% +/- 49.7
+    Kalshi-mid null -7.8% on the same bets; 12 games qualified so far
+  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
+    model's side, n=55: the no-vig price moved +0.16 pts +/- 0.17 on average (positive = toward the model's side); on its underdog picks (n=2) -0.33 pts
+    line move vs the model's departure from the lock price: slope +0.000 +/- 0.023 (positive = the market moved toward the model)
+  Scored rows (graded, market present): 55
+  Model picks  36-18 (.667)
+  Market picks 37-17 (.685)
+  Log loss  model 0.6779  market 0.6280  gain -0.0499 +/- 0.0368 (1 SE; positive = model better)
+  Brier     model 0.2355  market 0.2170
+  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6473 vs model 0.6779, gain +0.0306 +/- 0.0297 (1 SE; n=55, 23 probabilities changed); bets unchanged; week-cluster SE 0.0365 over 4 weeks; interim reading, not a verdict (judged only at the January checkpoints): no verdict before 200 graded games
+  Pick records by confidence band (model | market):
+       50-55%        8-3 (.727) |       3-3 (.500)
+       55-60%        5-5 (.500) |      10-7 (.588)
+       60-65%       10-2 (.833) |       8-2 (.800)
+       65-70%        2-2 (.500) |       5-1 (.833)
+       70-75%        5-3 (.625) |       5-2 (.714)
+       75-80%        3-1 (.750) |       5-1 (.833)
+         80%+        3-2 (.600) |       1-1 (.500)
+    All picks      36-18 (.667) |     37-17 (.685)
 
 == boxscore-composite-v1.18: 42 snapshots, 42 graded, 0 pending, 0 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 26-14-0, -1.18u, ROI -2.9% +/- 11.7 (1 SE)
@@ -46,47 +87,6 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
        75-80%        2-1 (.667) |       3-1 (.750)
          80%+        2-1 (.667) |       1-1 (.500)
     All picks      27-14 (.659) |     28-13 (.683)
-
-== boxscore-composite-v1.16: 56 snapshots, 55 graded, 0 pending, 1 ties
-  HEADLINE flat 1u, model's side at the snapshot moneyline: 35-18-1, -0.80u, ROI -1.5% +/- 9.8 (1 SE)
-    win 66.0% vs no-vig q 63.9% (excess +2.1pp); market-correct null ROI -4.1%
-    same rows, market favorite every game: +2.65u, ROI +4.9%
-  Model vs favorite, games where they pick different sides (all other bets are identical): n=2, model -2.00u (ROI -100.0%) vs favorite +1.46u (ROI +72.9%); difference -3.46u
-  ROI by the picked side's price band (model):
-            ≤ −250  n=17   13-4-0    -0.30u  ROI   -1.8%  q 75.6%
-      −249 to −175  n=12   9-3-0    +1.54u  ROI  +12.8%  q 63.6%
-      −174 to −130  n=20   12-7-1    +1.11u  ROI   +5.6%  q 57.8%
-      −129 to −100  n=4    1-3-0    -2.15u  ROI  -53.8%  q 51.4%
-      +130 to +174  n=1    0-1-0    -1.00u  ROI -100.0%  q 39.6%
-         All games  n=54   35-18-1    -0.80u  ROI   -1.5%  q 63.9%
-  Diagnostic, not the goal metric: legacy continuous-spread conversion vs the snapshot spread (break-even at -110: 52.4%)
-    This diagnostic is not the production fixed-band median-MOV ATS policy; see the repository production sanity appendix.
-          all games  23-31-2  cover 42.6% (Wilson 95% 30.3-55.8)
-     |gap| >= 3 pts  2-4-0  cover 33.3% (Wilson 95% 9.7-70.0)
-  Secondary: model's side at the Kalshi ask, first capture at or after lock (est. fee incl.): 36-18, -0.18u, ROI -0.3% +/- 10.0
-    Kalshi-correct null -3.2%; same rows, Kalshi favorite +1.34u, ROI +2.4%; capture lag after lock median 0.0h, max 0.0h
-  Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 18-8, +4.56u, ROI +17.5% +/- 16.2
-    same rows, favorite at its Kalshi game-winner ask: +3.16u, ROI +12.2%
-  Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 4-8, +1.01u, ROI +8.4% +/- 49.7
-    Kalshi-mid null -7.8% on the same bets; 12 games qualified so far
-  Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
-    model's side, n=55: the no-vig price moved +0.16 pts +/- 0.17 on average (positive = toward the model's side); on its underdog picks (n=2) -0.33 pts
-    line move vs the model's departure from the lock price: slope +0.000 +/- 0.023 (positive = the market moved toward the model)
-  Scored rows (graded, market present): 55
-  Model picks  36-18 (.667)
-  Market picks 37-17 (.685)
-  Log loss  model 0.6779  market 0.6280  gain -0.0499 +/- 0.0368 (1 SE; positive = model better)
-  Brier     model 0.2355  market 0.2170
-  Reporting only (v1.16.2, research/FAVORITE_PENALTY.md): favorite-confidence penalty (lambda 0.2) log loss 0.6473 vs model 0.6779, gain +0.0306 +/- 0.0297 (1 SE; n=55, 23 probabilities changed); bets unchanged; week-cluster SE 0.0365 over 4 weeks; interim reading, not a verdict (judged only at the January checkpoints): no verdict before 200 graded games
-  Pick records by confidence band (model | market):
-       50-55%        8-3 (.727) |       3-3 (.500)
-       55-60%        5-5 (.500) |      10-7 (.588)
-       60-65%       10-2 (.833) |       8-2 (.800)
-       65-70%        2-2 (.500) |       5-1 (.833)
-       70-75%        5-3 (.625) |       5-2 (.714)
-       75-80%        3-1 (.750) |       5-1 (.833)
-         80%+        3-2 (.600) |       1-1 (.500)
-    All picks      36-18 (.667) |     37-17 (.685)
 
 == boxscore-composite-v1.17: 14 snapshots, 13 graded, 0 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 8-5-1, -1.34u, ROI -9.6% +/- 19.3 (1 SE)
@@ -230,10 +230,10 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   n=56 graded games, partial r +0.002 [-0.185, +0.193] (95%): unresolved
 
 == Pre-registered H1/H2/H6 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addenda 2026-10-13 in research/PREREGISTRATION.md)
-  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 42 priced rows; verdict: no qualifying graded rows
+  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 43 priced rows; verdict: no qualifying graded rows
   H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=42 -0.0051; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no late-season rows
   H2 secondary, flat 1u ROI: weeks 5-13 n=41 -0.7% +/- 11.6 (null -4.1%, favorite +5.7%); weeks 14-18 n=0
-  H6, the model backs the market underdog (its side's no-vig q < 0.5): 2 graded bets of 42 priced rows; 0-2-0, -2.00u, ROI -100.0% +/- 0.0, null -4.3%, same-row favorite +72.9%, log-loss gain vs q -0.1895; verdict: no verdict before 10 graded bets
+  H6, the model backs the market underdog (its side's no-vig q < 0.5): 2 graded bets of 43 priced rows; 0-2-0, -2.00u, ROI -100.0% +/- 0.0, null -4.3%, same-row favorite +72.9%, log-loss gain vs q -0.1895; verdict: no verdict before 10 graded bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H9 (one row per game, first production snapshot from 2026 week 6; prices only): moneyline vs spread disagreement
@@ -272,7 +272,7 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
 | boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
 | boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
-| boxscore-composite-v1.16 | 56 | 35-18-1 | -0.80 | -1.49% ± 9.83 | +2.65 | -4.09% | 0.677877 | 0.627996 |
+| boxscore-composite-v1.16 | 57 | 35-18-1 | -0.80 | -1.49% ± 9.83 | +2.65 | -4.09% | 0.677877 | 0.627996 |
 | boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
 | boxscore-composite-v1.18 | 42 | 26-14-0 | -1.18 | -2.95% ± 11.66 | +2.28 | -4.09% | 0.655953 | 0.645515 |
 | boxscore-composite-v1.21 | 1 | 0-0-0 | +0.00 | —% ± — | +0.00 | —% | — | — |
@@ -409,7 +409,7 @@ Appendix B: original snapshots replayed with the current model (from data/latest
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 116; unique games: 58. Repeated snapshots are not independent games.
+Snapshots: 117; unique games: 58. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
@@ -418,7 +418,7 @@ Ties push in returns and are excluded from binary scores. Pending games remain u
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.573301         1.567153 0.628279      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.615652         1.609438 0.641984      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.657356         1.651078 0.655060      0.653118
-boxscore-composite-v1.16     56        0    36      19       1 -0.894446 -0.015972 0.097837        -0.040994        1.654263      0.030078            55  0.636915         0.627996 0.221770      0.216950
+boxscore-composite-v1.16     57        1    36      19       1 -0.894446 -0.015972 0.097837        -0.040994        1.654263      0.030078            55  0.636915         0.627996 0.221770      0.216950
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.617739         0.574300 0.215205      0.194824
 boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.030224 0.115655        -0.041048        1.279323      0.031203            42  0.643780         0.645515 0.224277      0.224255
 boxscore-composite-v1.21      1        1     0       0       0  0.000000       NaN      NaN              NaN        0.000000           NaN             0       NaN              NaN      NaN           NaN
@@ -540,6 +540,7 @@ boxscore-composite-v1.16 2026_08_TEN_CIN           0.862389  0.842191          W
 boxscore-composite-v1.18 2026_08_CHI_SEA           0.610058  0.605839          L  -1.000000
 boxscore-composite-v1.16 2026_08_CHI_SEA           0.650658  0.605839          L  -1.000000
 boxscore-composite-v1.21 2026_09_JAX_BAL           0.182724  0.182724                   NaN
+boxscore-composite-v1.16 2026_09_JAX_BAL           0.156113  0.186447                   NaN
 
 
 Appendix C: current production sanity checks
