@@ -2140,3 +2140,53 @@ and −24.0u; always home −114.2u and −35.5u.
 **Reading.** Keep the annual fit. Linear trends make the map worse, and weekly refitting does not make the band numbers
 more accurate. D's ATS result is worth watching as a reporting-only arm on native v1.19 locks, but its gains come from
 key-number ties in two seasons and point in opposite directions in the two periods. No policy change.
+
+### Test 60: a departure-calibrated challenger to production (2026-11-05): the challenge is not met; shrinking toward the market trades units for probability score
+
+Protocol [`CHALLENGER.md`](CHALLENGER.md), pushed (`842f1ec`) before any arm was scored. Script `challenger.py`; results
+`challenger_results/` (REPORT.md). Owner challenge: "build a competitive model that surpasses current production model on
+all measures". All bases were exposed by earlier tests, so this is development evidence. P reproduces v1.19's published
+2021–25 forecasts (2.4e-15) and production's v2 weekly map on 2023–26 exactly (0.0). Inverting the 0.2 penalty on the
+published ledger recovers the unpenalized fit (2.4e-15), which gives 2026 weeks 1–8 as a fourth basis.
+
+* **Arms.** C challenger: logit p = logit q + α · (production's penalized departure), with α refit before every week as the
+  posterior mode on all earlier games, prior N(1, 0.5²). α = 1 is production, so C nests it. M market only (p = q) is a
+  benchmark. Every arm's ATS picks use map policy v2 on its own spreads. The scorecard has 26 cells: 9 measures across
+  4 probability bases or 2 ATS bases.
+
+| C − P (± 1 SE) | 2015–16 | 2017–22 | 2023–25 | 2026 wk 1–8 |
+|---|---:|---:|---:|---:|
+| Log loss ×1000 (negative = C better) | −0.54 ± 0.70 | −0.23 ± 0.58 | +0.66 ± 1.05 | −1.62 ± 3.06 |
+| Moneyline units (legacy) | −4.7 ± 4.8 | −10.4 ± 12.0 | −1.7 ± 7.7 | +1.6 ± 1.5 |
+
+| ATS, flat 1u at −110 | 2016–22 (1,822) | 2023–26 (937) |
+|---|---:|---:|
+| P production | 920-856-46, −19.6u (−1.1% ± 2.2) | 524-388-25, +88.4u (+9.4% ± 3.0) |
+| C challenger | 908-868-46, −42.5u (−2.3% ± 2.2) | 514-398-25, +69.3u (+7.4% ± 3.1) |
+| M market only, same map | 899-877-46, −59.7u (−3.3% ± 2.2) | 494-418-25, +31.1u (+3.3% ± 3.1) |
+| always favorite / always home | −162.6u / −130.4u | −20.5u / −49.1u |
+| C − P | −22.9u ± 26.5 | −19.1u ± 15.3 |
+| M − P | −40.1u ± 37.3 | −57.3u ± 26.1 (z 2.2) |
+
+- **The challenge is not met.** C is better than production in 11 of 26 cells and worse in 15. No cell is beyond
+  1.96 SE in either direction. By the protocol's log-loss rule C is a "forward candidate" (lower on 3 of 4 bases), but
+  every |z| ≤ 0.8.
+- **The learned weight says to halve production's departures, but outcomes cannot pin it down.** α sits between 0.38 and
+  0.73 in every season from 2015, and its SE is 0.25–0.45. Production's α = 1 is within about 1–2 SE throughout.
+- **Shrinking costs units everywhere.** C loses ATS units on both bases, at −110 and at actual prices, and loses
+  moneyline units on three of four bases. Most moneyline flips are production's picks against the market favorite going
+  back to the favorite (63 → 27 on 2017–22). This is the same trade-off Tests 39–41 found.
+- **The market-only benchmark separates the map from the model for the first time.** Applied to the market alone,
+  production's map makes −59.7u on 2016–22 and +31.1u on 2023–26. The model's departures add +40.1u and +57.3u on
+  top. On ATS units, the order is M < C < P on both bases, matching the departure weight (0, about 0.5, 1). On log
+  loss, M beats P on 2015–16 and 2026 and ties on 2017–22. The 2023–26 gap (z 2.2) is on the seasons used to adopt
+  map v2, and the 2016–22 gap is within noise. This is descriptive, not evidence of an ATS edge.
+- **Power.** C and P differ on 210 of 1,822 ATS picks. Resolving a 1-point ROI difference between them at z = 2 would
+  take about 15,000 games (57 seasons). Resolving a 0.5×10⁻³ log-loss difference would take about 8,000 (30 seasons).
+
+**Reading.** No challenger is shown to beat production, and in this design probability-score gains and unit gains move
+in opposite directions. A model better on every measure would need information the closing market lacks. Sixty
+tests on public box-score data have not found any. The one new fact is that production's departures, not the map
+alone, account for part of its ATS record on both bases. Nothing here resolves whether that will hold. No `REVISION`.
+The clean next step, if the owner wants C, is a reporting-only shadow on native snapshots, which already save q and
+`model_wp`. It would be reviewed at 100 decided locks on log loss and ATS units against production on the same games.

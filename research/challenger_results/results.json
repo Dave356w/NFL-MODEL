@@ -1,0 +1,21 @@
+{
+  "protocol": "research/CHALLENGER.md",
+  "protocol_commit": "842f1ec",
+  "reproduction": {
+    "P vs published v1.19 model_wp 2021-25": 2.4424906541753444e-15,
+    "penalty inversion vs unpenalized fit 2021-25": 2.4424906541753444e-15,
+    "2026 re-penalized vs published model_wp": 1.1102230246251565e-16,
+    "spread price file: line/result mismatches": 0,
+    "spread price file: games without prices": 0,
+    "P map vs published fixed_band_spread 2023-26": 0.0
+  },
+  "cells": 26,
+  "challenger_cells": {
+    "worse": 15,
+    "better": 11
+  },
+  "challenger_reliably_better": 0,
+  "challenger_reliably_worse": 0,
+  "challenge_met": false,
+  "primary_verdict": "forward candidate"
+}
