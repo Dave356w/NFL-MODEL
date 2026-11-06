@@ -193,6 +193,24 @@ def test_emergency_qb_is_an_inactive_not_a_starter_or_inferred_active():
     assert parsed['complete']
 
 
+@pytest.mark.parametrize('encoded', ['Cam&#39;Ron', 'Cam&#x27;Ron', 'Cam’Ron'])
+@pytest.mark.parametrize('rendered_lines', [False, True])
+def test_html_encoded_apostrophe_resolves_exact_inactive_player(encoded, rendered_lines):
+    player=dict(gsis_id='00-0000008', full_name="Cam'Ron Silmon-Craig", position='S', team='JAX')
+    idx=c.PlayerIndex(PLAYERS+[player])
+    body=f'RAVENS\nWR Dan Gamma\nJAGUARS\nS {encoded} Silmon-Craig\nWR Fred Epsilon'
+    info=c.article(inactive_html(body=body))
+    if rendered_lines:info['lines']=body.splitlines()
+    parsed=c.parse_inactives(info,'JAX',EVENT,idx)
+    assert parsed['complete']
+    assert {p['gsis_id'] for p in parsed['rows']}=={'00-0000008','00-0000005'}
+    # Decoding an entity never authorizes fuzzy matching to an unknown name.
+    info['body']=body.replace('Silmon-Craig','Unknown')
+    info['lines']=info['body'].splitlines() if rendered_lines else []
+    with pytest.raises(ValueError,match='unresolved inactive player'):
+        c.parse_inactives(info,'JAX',EVENT,idx)
+
+
 @pytest.mark.parametrize('text',[
     'Bob Beta could start against the Jaguars this Thursday.',
     'Bob Beta is expected to start against the Jaguars.',
