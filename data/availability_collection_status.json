@@ -587,7 +587,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-06T00:05:21.909026+00:00"
+        "last_attempt_utc": "2026-11-06T00:16:12.937936+00:00"
       }
     },
     "BAL": {
@@ -630,7 +630,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-06T00:05:21.909026+00:00"
+        "last_attempt_utc": "2026-11-06T00:16:12.937936+00:00"
       }
     },
     "CAR": {
@@ -686,7 +686,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-06T00:05:21.909026+00:00"
+        "last_attempt_utc": "2026-11-06T00:16:12.937936+00:00"
       }
     },
     "CLE": {
@@ -966,7 +966,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-06T00:05:21.909026+00:00"
+        "last_attempt_utc": "2026-11-06T00:16:12.937936+00:00"
       }
     },
     "NE": {
@@ -1172,5 +1172,5 @@
       }
     }
   },
-  "updated_utc": "2026-11-06T00:05:32.391856+00:00"
+  "updated_utc": "2026-11-06T00:16:12.937936+00:00"
 }
