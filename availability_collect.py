@@ -10,6 +10,7 @@ import concurrent.futures
 import datetime as dt
 from email.utils import parsedate_to_datetime
 import hashlib
+from html import unescape
 import json
 import re
 import unicodedata
@@ -63,7 +64,7 @@ def utc(value):
 
 
 def norm(text):
-    text=''.join(c for c in unicodedata.normalize('NFKD',str(text)) if not unicodedata.combining(c))
+    text=''.join(c for c in unicodedata.normalize('NFKD',unescape(str(text))) if not unicodedata.combining(c))
     words=re.sub(r'[^a-z0-9 ]','',text.casefold()).split()
     if words and words[-1] in ('jr','sr','ii','iii','iv','v'): words.pop()
     return ' '.join(words)
@@ -286,13 +287,13 @@ def parse_inactives(info,team,event,index):
     ko=utc(event['kickoff_utc']);stamp=utc(pub)
     if stamp.astimezone(ZoneInfo('America/New_York')).date()!=ko.astimezone(ZoneInfo('America/New_York')).date() or stamp>=ko:
         raise InactiveIdentityMismatch('inactive list is not a pregame publication for this game day')
-    title=info['title'];body=info['body'];other=event['away'] if team==event['home'] else event['home']
+    title=unescape(info['title']);body=unescape(info['body']);other=event['away'] if team==event['home'] else event['home']
     week=re.search(r'\bweek\s*(\d+)\b',title,re.I)
     if week and int(week[1])!=int(event['week']):raise InactiveIdentityMismatch('inactive article week mismatch')
     if not week and nickname(other).casefold() not in (title+'\n'+body[:5000]).casefold():raise InactiveIdentityMismatch('inactive article opponent missing')
     if 'inactiv' not in title.casefold() and not (info.get('source_team')==team and re.search(r'\binactives?\b',body,re.I)):
         raise InactiveIdentityMismatch('article is not an inactive announcement')
-    lines=info.get('lines') or [s.strip() for s in body.splitlines() if s.strip()]
+    lines=[unescape(s) for s in (info.get('lines') or [s.strip() for s in body.splitlines() if s.strip()])]
     headings={norm(name):key for key,(name,_) in TEAMS.items()}
     headings.update({norm(nickname(key)):key for key in TEAMS})
     section=None;listed=[]

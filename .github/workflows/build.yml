@@ -98,6 +98,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Apply owner-requested retro locks from saved pregame commits
+        run: python retro_lock.py
+
       - name: Validate committed data
         run: python validate_data_files.py
 

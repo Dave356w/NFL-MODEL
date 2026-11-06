@@ -125,6 +125,7 @@ def build(latest, ledger):
             espn_quote=saved.get('espn_quote'),
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
             finalized_utc=saved.get('finalized_utc'),
+            retro_locked=saved.get('retro_locked', False),
             recovered_after_kickoff=saved.get('recovered_after_kickoff', False),
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
             else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')

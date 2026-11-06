@@ -1,0 +1,7 @@
+[
+  {
+    "game_id": "2026_09_JAX_BAL",
+    "source_commit": "1727d22d29ff2f2c593a13e710c6af170578813b",
+    "reason": "Owner requested the missed TNF pick be retro locked and included in normal results on 2026-11-05. The T-70 refresh saved this board before T-60, but an HTML-encoded apostrophe in Jacksonville's inactive list blocked automatic candidate creation. Preserve those original blockers; use only the saved pregame model, line and weekly map."
+  }
+]

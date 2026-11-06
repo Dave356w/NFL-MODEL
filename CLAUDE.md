@@ -105,6 +105,13 @@ effect is zero. Pick accuracy is not calibration.
 
 ## Engineering contract
 
+Owner-requested TNF recovery (2026-11-05): `ats_retro_requests.json` explicitly
+authorizes JAX-BAL's retro lock from the board committed before T-60. The workflow
+applies it through `retro_lock.py` into the normal `ats_locks.jsonl` journal and
+normal public picks/results/totals. Keep actual recovery time, original availability
+blockers and source-commit hashes in the backend record. This is an explicit exception
+to the no-backfill rule, not authorization to reconstruct other missing locks.
+
 - **No lookahead.** Never let a game's own or later stats, snaps or labels
   into its features. Same-week roster status is ignored except the game week's
   own reserve list (v1.15, owner decision 2026-10-09). Membership and

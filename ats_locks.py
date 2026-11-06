@@ -6,6 +6,9 @@ Delayed finalization can recover an existing candidate for 48 hours after
 kickoff, explicitly labelled separately from pregame finalizations.
 Earlier moneyline and ATS archives stay intact.
 
+Explicit owner-requested retro locks from pre-cutoff Git snapshots join this
+same journal via retro_lock.py, preserving their actual creation time and source.
+
 v2 (owner decision 2026-10-19): a zero edge takes the market favorite. Rows saved
 under v1 keep their bytes and validate against v1's skip; grading and display
 backfill those saved skips as favorite bets (owner decision 2026-10-19), labelled
@@ -148,6 +151,10 @@ def validate_store(data='data'):
         if key(row) in seen:
             raise ValueError('duplicate ATS lock')
         seen.add(key(row))
+        if row.get('retro_locked'):
+            import retro_lock
+            retro_lock.validate(row)
+            continue
         candidate = by_hash.get(row['candidate_sha256'])
         if candidate is None or any(row.get(k) != v for k, v in candidate.items()):
             raise ValueError('ATS lock differs from its saved candidate')
@@ -338,12 +345,14 @@ def report(data='data'):
              f'An already-saved candidate may be finalized up to {FINALIZATION_GRACE_HOURS} hours after kickoff '
              f'under {RECOVERY_POLICY}; its actual finalization time and recovery flag are retained.',
              'Recovered saved forecasts are reported separately from pregame-finalized locks. '
-             'Missing pre-cutoff candidates are never reconstructed.',
+             'Automatic recovery never reconstructs missing pre-cutoff candidates. Explicit owner-requested '
+             'retro locks may use a Git snapshot committed by the cutoff; they join the same lock journal '
+             'and pooled results, with source hashes, original blockers and actual creation times retained.',
              'The moneyline ledger and earlier ATS shadow archive retain their original timing and records.',
              f'Store validation: PASS; {info["candidates"]} saved candidates, {info["locks"]} finalized saved decisions.']
     for row in read(Path(data) / LOCKS):
         lag = (utc(row['lock_at_utc']) - utc(row['generated_utc'])).total_seconds() / 60
         lines.append(f'{row["game_id"]}: {row["selected_side"] or "skip"}; cutoff {row["lock_at_utc"]}; '
                      f'forecast {row["generated_utc"]} ({lag:.1f} min before cutoff); finalized {row["finalized_utc"]}; '
-                     f'{"recovered saved forecast" if row.get("recovered_after_kickoff") else "pregame finalization"}')
+                     f'{"owner-requested retro lock" if row.get("retro_locked") else "recovered saved forecast" if row.get("recovered_after_kickoff") else "pregame finalization"}')
     return '\n'.join(lines)
