@@ -22,17 +22,15 @@ BAL,00-0040866,Olaivavega Ioane,G,OL,0.11778656126482213,8.0,Out,Knee,practice: 
 BAL,00-0038505,Tavius Robinson,LB,LB,0.07955689828801611,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 BAL,00-0036302,Jaylinn Hawkins,S,DB,0.07148347425057648,8.0,Out,Knee,Out,1.0,final
 BAL,00-0034796,Lamar Jackson,QB,QB,0.004739336492890996,,,,RES (A01) on wk 9 roster,1.0,final
-BUF,00-0033904,Dion Dawkins,T,OL,0.2441016333938294,,,,practice: Did Not Participate In Practice,0.0,practice
-BUF,00-0039901,Keon Coleman,WR,WRTE,0.19413919413919414,,,,practice: Limited Participation in Practice,0.0,practice
-BUF,00-0037261,Khalil Shakir,WR,WRTE,0.16941391941391942,,,,practice: Did Not Participate In Practice,0.0,practice
-BUF,00-0038933,Dalton Kincaid,TE,WRTE,0.16117216117216118,8.0,Questionable,Chest,practice: Full Participation in Practice,0.0,practice
-BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.13914373088685014,,,,Reserve/Non-football illness on wk 8 roster,1.0,practice
-BUF,00-0036976,Spencer Brown,T,OL,0.1297640653357532,8.0,Questionable,Back,practice: Limited Participation in Practice,0.0,practice
-BUF,00-0035667,Greg Gaines,DT,DL,0.12693498452012383,8.0,Questionable,Calf,practice: Did Not Participate In Practice,0.0,practice
-BUF,00-0041036,TJ Parker,LB,LB,0.09626168224299066,8.0,Questionable,Knee,practice: Full Participation in Practice,0.0,practice
-BUF,00-0034827,DJ Moore,WR,WRTE,0.07051282051282051,8.0,Questionable,Shoulder,practice: Limited Participation in Practice,0.0,practice
-BUF,00-0036988,Josh Palmer,WR,WRTE,0.05402930402930403,,,,practice: Did Not Participate In Practice,0.0,practice
-BUF,00-0037034,Dee Alford,CB,DB,0.05122324159021407,8.0,Questionable,Ankle,practice: Full Participation in Practice,0.0,practice
+BUF,00-0033904,Dion Dawkins,OL,OL,0.2441016333938294,,,,Questionable,0.25,final
+BUF,00-0038933,Dalton Kincaid,TE,WRTE,0.16117216117216118,8.0,Questionable,Chest,"listed, no status",0.0,final
+BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.13914373088685014,,,,Inactive (official list),1.0,final
+BUF,00-0036976,Spencer Brown,OL,OL,0.1297640653357532,8.0,Questionable,Back,"listed, no status",0.0,final
+BUF,00-0035667,Greg Gaines,DL,DL,0.12693498452012383,8.0,Questionable,Calf,Questionable,0.25,final
+BUF,00-0041036,TJ Parker,LB,LB,0.09626168224299066,8.0,Questionable,Knee,"listed, no status",0.0,final
+BUF,00-0034827,DJ Moore,WR,WRTE,0.07051282051282051,8.0,Questionable,Shoulder,"listed, no status",0.0,final
+BUF,00-0036988,Josh Palmer,WR,WRTE,0.05402930402930403,,,,Out,1.0,final
+BUF,00-0037034,Dee Alford,DB,DB,0.05122324159021407,8.0,Questionable,Ankle,"listed, no status",0.0,final
 CAR,00-0035687,Bobby Okereke,LB,LB,0.22574626865671643,,,,Out,1.0,final
 CAR,00-0041063,Will Lee III,DB,DB,0.17109375,,,,Out,1.0,final
 CAR,00-0038101,Akayleb Evans,CB,DB,0.15390625,8.0,Out,Triceps,RES (A01) on wk 8 roster,1.0,final
@@ -97,7 +95,7 @@ HOU,00-0040138,Jaylin Noel,WR,WRTE,0.1254125412541254,,,,Reserve/Injured (IR) on
 HOU,00-0037246,Jalen Pitre,DB,DB,0.08834729626808835,7.0,Out,Shoulder,"listed, no status",0.0,final
 IND,00-0036298,Akeem Davis-Gaither,LB,LB,0.4260089686098655,,,,Out,1.0,final
 IND,00-0040163,Jalen Travis,OL,OL,0.1963898916967509,,,,Questionable,0.25,final
-IND,00-0041043,A.J. Haulcy,DB,DB,0.19571567672833495,,,,Questionable,0.25,final
+IND,00-0041043,A.J. Haulcy,DB,DB,0.19571567672833495,,,,Out,1.0,final
 IND,00-0034342,Quenton Nelson,OL,OL,0.1552346570397112,,,,not on wk 8 roster (left team),1.0,final
 IND,00-0040139,Justin Walley,DB,DB,0.11976630963972736,8.0,Out,Knee,Out,1.0,final
 IND,00-0037292,Andrew Ogletree,TE,WRTE,0.09107468123861566,8.0,Questionable,Knee,"listed, no status",0.0,final
@@ -118,19 +116,14 @@ KC,00-0041543,Mansoor Delane,DB,DB,0.15406976744186046,8.0,Questionable,Shoulder
 KC,00-0041501,R Mason Thomas,DE,DL,0.10559006211180125,8.0,Questionable,Not injury related - personal matter,not listed (cleared),0.0,final
 KC,WOO547869,,,DL,0.08429458740017746,,,,not on wk 8 roster (left team),1.0,final
 KC,00-0036374,L'Jarius Sneed,CB,DB,0.07994186046511628,8.0,Questionable,Knee,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0031388,Aaron Donald,DT,DL,0.2708978328173375,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0039137,Byron Young,LB,LB,0.25443786982248523,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0039075,Puka Nacua,WR,WRTE,0.22024367385192128,,,,practice: Did Not Participate In Practice,0.0,final
 LA,00-0034114,Coleman Shelton,C,OL,0.2,8.0,Questionable,Hip,not listed (cleared),0.0,final
-LA,00-0033110,Tyler Higbee,TE,WRTE,0.18837863167760074,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0036349,Kam Curl,S,DB,0.1853932584269663,,,,Questionable,0.25,final
-LA,00-0037195,Jaylen Watson,CB,DB,0.1699438202247191,,,,Out,1.0,final
-LA,00-0036603,Alaric Jackson,T,OL,0.15413533834586465,,,,practice: Did Not Participate In Practice,0.0,final
+LA,00-0036349,Kam Curl,DB,DB,0.1853932584269663,,,,Questionable,0.25,final
+LA,00-0037195,Jaylen Watson,DB,DB,0.1699438202247191,,,,Out,1.0,final
 LA,00-0036244,Colby Parkinson,TE,WRTE,0.1302717900656045,8.0,Questionable,Rib,Questionable,0.25,final
 LA,00-0039138,Kobie Turner,DL,DL,0.1021671826625387,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 LA,00-0031381,Davante Adams,WR,WRTE,0.09653233364573571,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 LA,00-0034234,Poona Ford,DL,DL,0.08359133126934984,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0037191,Trent McDuffie,CB,DB,0.07935393258426966,8.0,Questionable,Groin,Questionable,0.25,final
+LA,00-0037191,Trent McDuffie,DB,DB,0.07935393258426966,8.0,Questionable,Groin,Questionable,0.25,final
 LAC,00-0035125,Alec Ingold,RB,RB,0.10106382978723404,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.08,,,,not on wk 8 roster (left team),1.0,final
 LAC,00-0037320,Deane Leonard,DB,DB,0.05235137533274179,8.0,Out,Concussion,Out,1.0,final
@@ -140,10 +133,9 @@ MIA,00-0039156,Julius Brents,CB,DB,0.1765195670274771,8.0,Questionable,Neck,not 
 MIA,00-0041521,Kadyn Proctor,OL,OL,0.1437024513947591,8.0,Out,Concussion,"listed, no status",0.0,final
 MIA,00-0039874,Jaylen Wright,RB,RB,0.12091503267973856,,,,Questionable,0.25,final
 MIA,00-0036682,Malik Herring,DL,DL,0.06978967495219886,,,,Questionable,0.25,final
-MIN,00-0035228,Kyler Murray,QB,QB,1.0,,,,practice: Did Not Participate In Practice,0.0,practice
-MIN,00-0035272,Andrew Van Ginkel,LB,LB,0.21016949152542372,,,,practice: Limited Participation in Practice,0.0,practice
-MIN,00-0036259,Jauan Jennings,WR,WRTE,0.18800813008130082,,,,practice: Did Not Participate In Practice,0.0,practice
-MIN,00-0037301,Theo Jackson,S,DB,0.11777301927194861,,,,practice: Did Not Participate In Practice,0.0,practice
+MIN,00-0035228,Kyler Murray,QB,QB,1.0,,,,Out,1.0,final
+MIN,00-0036259,Jauan Jennings,WR,WRTE,0.18800813008130082,,,,Out,1.0,final
+MIN,00-0037301,Theo Jackson,DB,DB,0.11777301927194861,,,,Questionable,0.25,final
 NE,00-0036813,Christian Elliss,LB,LB,0.24453280318091453,8.0,Questionable,Chest,not listed (cleared),0.0,final
 NE,00-0033132,Kevin Byard,DB,DB,0.1981981981981982,,,,Questionable,0.25,final
 NE,00-0040734,TreVeyon Henderson,RB,RB,0.15355805243445692,8.0,Questionable,Illness,Out,1.0,final
