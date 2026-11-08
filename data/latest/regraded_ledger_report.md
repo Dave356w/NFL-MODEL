@@ -2,7 +2,7 @@
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 140; unique games: 72. Repeated snapshots are not independent games.
+Snapshots: 142; unique games: 72. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
@@ -11,7 +11,7 @@ Ties push in returns and are excluded from binary scores. Pending games remain u
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.573301         1.567153 0.628279      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.615652         1.609438 0.641984      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.657356         1.651078 0.655060      0.653118
-boxscore-composite-v1.16     69       12    37      19       1 -0.702138 -0.012318 0.096175        -0.040995        1.846571      0.032974            56  0.629226         0.620671 0.218430      0.213760
+boxscore-composite-v1.16     71       14    37      19       1 -0.702138 -0.012318 0.096175        -0.040995        1.846571      0.032974            56  0.629226         0.620671 0.218430      0.213760
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.617739         0.574300 0.215205      0.194824
 boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.030224 0.115655        -0.041048        1.279323      0.031203            42  0.643780         0.645515 0.224277      0.224255
 boxscore-composite-v1.21     12       11     1       0       0  0.186916  0.186916      NaN        -0.040785        0.186916      0.186916             1  0.201779         0.212999 0.033388      0.036804
@@ -157,3 +157,5 @@ boxscore-composite-v1.16 2026_09_NYG_PHI           0.343261  0.403581           
 boxscore-composite-v1.16  2026_09_NYJ_KC           0.781526  0.788355                   NaN
 boxscore-composite-v1.16  2026_09_TB_CHI           0.682476  0.669476                   NaN
 boxscore-composite-v1.21 2026_09_BUF_MIN           0.459494  0.459494                   NaN
+boxscore-composite-v1.16 2026_09_BUF_MIN           0.444987  0.459494                   NaN
+boxscore-composite-v1.16 2026_09_HOU_LAC           0.391889  0.384924                   NaN
