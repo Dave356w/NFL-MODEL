@@ -2,23 +2,23 @@
   "articles": {
     "https://www.49ers.com/news/morning-reports/morning-report-head-coach-kyle-shanahan-talks-trade-deadline-and-more": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.334023+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.334023+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.694818+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.694818+00:00"
     },
     "https://www.49ers.com/news/morning-reports/morning-report-recap-bye-week-49ers-sign-beal-jr": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.527783+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.527783+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.815213+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.815213+00:00"
     },
     "https://www.49ers.com/news/the-49ers-sign-dl-beal-jr-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.168762+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.168762+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.766594+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.766594+00:00"
     },
     "https://www.49ers.com/news/the-49ers-sign-wr-khadarel-hodge-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.208835+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.208835+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.847593+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.847593+00:00"
     },
     "https://www.atlantafalcons.com/news/atlanta-falcons-week-9-inactives-cincinnati-bengals": {
       "error": null,
@@ -57,38 +57,38 @@
     },
     "https://www.azcardinals.com/news/cardinals-activate-isaiah-adams-to-roster": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.965627+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.965627+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.788168+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.788168+00:00"
     },
     "https://www.azcardinals.com/news/gardner-minshew-named-cardinals-starting-quarterback-carson-beck-made-backup": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.962791+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.962791+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.808881+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.808881+00:00"
     },
     "https://www.azcardinals.com/news/jacoby-brissett-trade-to-ravens-becomes-official": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.967688+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.967688+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.797253+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.797253+00:00"
     },
     "https://www.azcardinals.com/news/jeremiyah-love-kendrick-bourne-placed-on-injured-reserve": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.968922+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.968922+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.789494+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.789494+00:00"
     },
     "https://www.azcardinals.com/news/jeremiyah-love-with-new-ankle-issue-as-cardinals-offense-catches-injury-bug": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.982757+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.982757+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.787860+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.787860+00:00"
     },
     "https://www.azcardinals.com/news/reports-jacoby-brissett-to-be-traded-to-ravens": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.055572+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.055572+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.788735+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.788735+00:00"
     },
     "https://www.azcardinals.com/news/you-ve-got-mail-different-qb-new-spark": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.970913+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.970913+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.908102+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.908102+00:00"
     },
     "https://www.baltimoreravens.com/news/jacoby-brissett-ravens-trade-quarterback-cardinals-2026": {
       "error": null,
@@ -177,43 +177,43 @@
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-4-diaby-egbuka-roberts-did-not-participate": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.311590+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.311590+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.765292+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.765292+00:00"
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-5-week-9-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.372867+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.372867+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.741958+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.741958+00:00"
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-6-week-9-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.300994+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.300994+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.726578+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.726578+00:00"
     },
     "https://www.buccaneers.com/news/bucs-claim-g-trevor-keegan-waivers-vikings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.247957+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.247957+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.897743+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.897743+00:00"
     },
     "https://www.buccaneers.com/news/bucs-release-week-nine-depth-chart-bucs-ramp-up-tight-end-usage": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.357745+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.357745+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.852187+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.852187+00:00"
     },
     "https://www.buffalobills.com/news/bills-lt-dion-dawkins-trying-to-push-through-rib-injury-for-week-9-against-vikings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.089791+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.089791+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.921776+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.921776+00:00"
     },
     "https://www.buffalobills.com/news/bills-sign-cb-kader-kohou-to-the-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.247034+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.247034+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.916623+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.916623+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-vikings-week-9": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:31.977351+00:00",
-      "last_success_utc": "2026-11-08T17:02:31.977351+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.790473+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.790473+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-release-safety-cj-gardner-johnson": {
       "error": null,
@@ -227,33 +227,33 @@
     },
     "https://www.chargers.com/news/2026-nfl-trade-deadline": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.346883+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.346883+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.180150+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.180150+00:00"
     },
     "https://www.chargers.com/news/david-njoku-injury-jim-harbaugh-mike-mcdaniel": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.619611+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.619611+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.547037+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.547037+00:00"
     },
     "https://www.chargers.com/news/depth-chart-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.315278+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.315278+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.417660+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.417660+00:00"
     },
     "https://www.chargers.com/news/texans-injury-report-week-9-david-njoku": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.210934+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.210934+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.042276+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.042276+00:00"
     },
     "https://www.chicagobears.com/news/bears-quick-starts-have-fueled-three-game-win-streak": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.392340+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.392340+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.915465+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.915465+00:00"
     },
     "https://www.chicagobears.com/news/kyle-monangai-back-at-practice-questionable-for-buccaneers-game-injury-update": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.219100+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.219100+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.911909+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.911909+00:00"
     },
     "https://www.chiefs.com/news/week-9-inactive-players-jets-vs-chiefs": {
       "error": null,
@@ -427,8 +427,8 @@
     },
     "https://www.houstontexans.com/news/week-9-injury-report-texans-at-chargers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.852780+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.852780+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.994317+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.994317+00:00"
     },
     "https://www.jaguars.com/news/roster-moves-jaguars-elevate-s-cam-ron-silmon-craig": {
       "error": null,
@@ -532,48 +532,48 @@
     },
     "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.339498+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.859846+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.859846+00:00"
     },
     "https://www.nfl.com/news/week-9-thursday-night-inactives-jacksonville-jaguars-at-baltimore-ravens": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.388266+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.388266+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.873601+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.873601+00:00"
     },
     "https://www.packers.com/news/award-winning-evan-williams-brandon-cisse-elevating-packers-defense-nov-6-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.739743+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.739743+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.924225+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.924225+00:00"
     },
     "https://www.packers.com/news/brenton-cox-jr-starting-to-hit-his-stride-as-pass-rusher-for-packers-nov-4-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.958275+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.958275+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.126476+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.126476+00:00"
     },
     "https://www.packers.com/news/jordan-love-s-fast-start-has-him-on-historic-trajectory-nov-5-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.728225+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.728225+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.134530+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.134530+00:00"
     },
     "https://www.packers.com/news/packers-list-three-questionable-rule-out-five-vs-patriots-week-9-injury-report": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.634932+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.634932+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.914862+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.914862+00:00"
     },
     "https://www.packers.com/news/packers-patriots-injury-report-nov-4-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.875759+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.875759+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.040630+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.040630+00:00"
     },
     "https://www.packers.com/news/packers-patriots-injury-report-nov-5-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.731969+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.731969+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:39.932237+00:00",
+      "last_success_utc": "2026-11-08T18:59:39.932237+00:00"
     },
     "https://www.packers.com/news/packers-qb-jordan-love-named-fedex-air-and-ground-player-of-week-8-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:32.892627+00:00",
-      "last_success_utc": "2026-11-08T17:02:32.892627+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.121401+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.121401+00:00"
     },
     "https://www.panthers.com/news/brady-christensen-designated-to-return-from-injured-reserve": {
       "error": null,
@@ -612,13 +612,13 @@
     },
     "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-wr-a-j-brown-rb-treveyon-henderson-te-hunter-henry-questionable-for-sunday-vs-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.499730+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.499730+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.320101+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.320101+00:00"
     },
     "https://www.patriots.com/news/patriots-activate-wr-mack-hollins-to-the-53-man-roster": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.478363+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.478363+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.350224+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.350224+00:00"
     },
     "https://www.patriots.com/news/patriots-sign-cb-kindle-vildor-to-the-practice-squad": {
       "error": null,
@@ -632,13 +632,13 @@
     },
     "https://www.patriots.com/news/roster-analysis-patriots-activate-wr-mack-hollins-to-the-53-man-roster-for-sunday-s-game-vs-the-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.447388+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.447388+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.259730+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.259730+00:00"
     },
     "https://www.patriots.com/news/week-9-injury-report-patriots-vs-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.501560+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.501560+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.264428+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.264428+00:00"
     },
     "https://www.philadelphiaeagles.com/news/eagles-elevate-elijah-mitchell-cole-wisniewski-for-sunday-s-game-vs-giants": {
       "error": null,
@@ -667,68 +667,68 @@
     },
     "https://www.raiders.com/news/raiders-49ers-week-9-injury-report": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.367066+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.367066+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.118439+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.118439+00:00"
     },
     "https://www.seahawks.com/news/2026-week-8-seahawks-vs-bears-in-game-injury-updates": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.077550+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.077550+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.685923+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.685923+00:00"
     },
     "https://www.seahawks.com/news/fantasy-football-week-9-guide-top-starts-and-waiver-wire-rankings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.133656+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.133656+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.650426+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.650426+00:00"
     },
     "https://www.seahawks.com/news/injury-updates-from-seahawks-week-8-loss-to-bears": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.132321+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.132321+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.669802+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.669802+00:00"
     },
     "https://www.seahawks.com/news/recapturing-us-injury-updates-other-takeaways-from-seahawks-coach-mike-macdonald-on-seattle-sports-710am": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.950207+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.950207+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.641169+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.641169+00:00"
     },
     "https://www.seahawks.com/news/seahawks-activate-rb-jadarian-price-from-injured-reserve": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.185471+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.185471+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.690087+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.690087+00:00"
     },
     "https://www.seahawks.com/news/seahawks-mailbag-sam-darnold-s-injury-trade-deadline-more": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.912170+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.912170+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.479774+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.479774+00:00"
     },
     "https://www.seahawks.com/news/seahawks-qb-drew-lock-feeling-good-really-excited-about-another-opportunity-to-start-in-week-9": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.869531+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.869531+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.447630+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.447630+00:00"
     },
     "https://www.seahawks.com/news/seahawks-qb-sam-darnold-out-for-sunday-s-game-vs-arizona-due-to-quad-injury": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.076686+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.076686+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.535889+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.535889+00:00"
     },
     "https://www.seahawks.com/news/seahawks-sign-dt-deven-eastern-off-practice-squad-elevate-two-players": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.839666+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.839666+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.559363+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.559363+00:00"
     },
     "https://www.seahawks.com/news/seahawks-sign-qb-adrian-martinez-lb-jamie-sheriff-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.038840+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.038840+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.639303+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.639303+00:00"
     },
     "https://www.seahawks.com/news/velus-jones-jr-released-rb-subsequently-signed-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:34.044348+00:00",
-      "last_success_utc": "2026-11-08T17:02:34.044348+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.400466+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.400466+00:00"
     },
     "https://www.seahawks.com/news/week-9-injury-report-cardinals-at-seahawks": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.909040+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.909040+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.393166+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.393166+00:00"
     },
     "https://www.therams.com/news/from-the-podium-rams-head-coach-sean-mcvay-quarterback-matthew-stafford-coordinators-wide-receiver-puka-nacua-defensive-end-aaron-donald-preview-matchup-with-commanders": {
       "error": null,
@@ -762,8 +762,8 @@
     },
     "https://www.vikings.com/news/bills-injury-report-week-9-2026-nfl-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.398222+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.398222+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.348817+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.348817+00:00"
     },
     "https://www.vikings.com/news/kevin-oconnell-updates-injuries-recaps-offense-after-week-8": {
       "error": null,
@@ -772,8 +772,8 @@
     },
     "https://www.vikings.com/news/quarterback-carson-wentz-monday-night-bills": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T17:02:33.398969+00:00",
-      "last_success_utc": "2026-11-08T17:02:33.398969+00:00"
+      "last_attempt_utc": "2026-11-08T18:59:40.258068+00:00",
+      "last_success_utc": "2026-11-08T18:59:40.258068+00:00"
     },
     "https://www.vikings.com/news/sign-running-back-deejay-dallas-corey-robinson-roster-moves": {
       "error": null,
@@ -796,21 +796,24 @@
   "teams": {
     "ARI": {
       "game_id": "2026_09_ARI_SEA",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:25:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:28.242126+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.242126+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.916853+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.916853+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.268345+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.268345+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:37.932249+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.932249+00:00",
         "source_capture_sha256": "4fe9a7ea38daae95bdb270b2333c30136299e16cba6672c18ba2a68ae07b2e21"
       }
     },
@@ -822,8 +825,8 @@
         "article_errors": [],
         "error": null,
         "items": 35,
-        "last_attempt_utc": "2026-11-08T17:02:28.309364+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.309364+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.887406+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.887406+00:00"
       },
       "report": {}
     },
@@ -835,8 +838,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.309291+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.309291+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.920509+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.920509+00:00"
       },
       "report": {}
     },
@@ -848,44 +851,30 @@
         "article_errors": [],
         "error": null,
         "items": 10,
-        "last_attempt_utc": "2026-11-08T17:02:28.264717+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.264717+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.922671+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.922671+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.296010+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.296010+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:37.946724+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.946724+00:00",
         "source_capture_sha256": "cabd4a31e5be158414eb1cee3ab426aa8e93bef85a2ec4c3f3cf68a87424fc07"
       }
     },
     "CAR": {
-      "game_id": "2026_09_DEN_CAR",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "cf3f4a73baeafb3fbb6124ceb12998070fb744e5fcd708befce030ea4e9373e9",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.288938+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.288938+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.940065+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.940065+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.313054+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.313054+00:00",
-        "source_capture_sha256": "15352ca73807c97301d78877f1112bb8ad4f1f9022b8ccbfc39b3e983ba7503e"
-      }
+      "report": {}
     },
     "CHI": {
       "game_id": "2026_09_TB_CHI",
@@ -895,15 +884,15 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.307843+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.307843+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:37.940904+00:00",
+        "last_success_utc": "2026-11-08T18:59:37.940904+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.372834+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.372834+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.024375+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.024375+00:00",
         "source_capture_sha256": "6ec87ea14a098d8ee33c502308bc84dc4b378357189622f1be23af79327fb26b"
       }
     },
@@ -915,182 +904,121 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.422480+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.422480+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.105885+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.105885+00:00"
       },
       "report": {}
     },
     "CLE": {
-      "game_id": "2026_09_CLE_NO",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "f8ff4b995d9622b713fa4c286b51953ee53c87d898970fa11d81ace9e4aa55fb",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 30,
-        "last_attempt_utc": "2026-11-08T17:02:28.408458+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.408458+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.098991+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.098991+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.417672+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.417672+00:00",
-        "source_capture_sha256": "5fa37e123c695ec2f6dd6fa2bc051612dd3af7862242978a1ab64e8954d6d5c6"
-      }
+      "report": {}
     },
     "DAL": {
-      "game_id": "2026_09_DAL_IND",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "48de27979cae182c33b7e8171485d2062b7a2cd98f0a5f13c3edaa4788fd3f7a",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.459336+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.459336+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.105225+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.105225+00:00"
       },
-      "report": {
-        "complete": false,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.467968+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.467968+00:00",
-        "source_capture_sha256": "515f803741e19aca3c6ee5ab7d339763ac403154bf8d441f141fc4bcfbb18d87"
-      }
+      "report": {}
     },
     "DEN": {
-      "game_id": "2026_09_DEN_CAR",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "a66b8a60655cb54697f44aa30829dfeda9b2eb3db4e2c3f7e0bd4641b31bcdb8",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.483790+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.483790+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.113982+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.113982+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.501856+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.501856+00:00",
-        "source_capture_sha256": "7fa592c728f58f278ef7ef471da11f90b5ba7bb4d1e23285ba27743c43d92232"
-      }
+      "report": {}
     },
     "DET": {
-      "game_id": "2026_09_DET_MIA",
-      "inactives": {
-        "complete": false,
-        "error": "unresolved inactive player: Jordan Meeks",
-        "last_attempt_utc": "2026-11-08T17:02:23.780224+00:00"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:28.549059+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.549059+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.072860+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.072860+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.573569+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.573569+00:00",
-        "source_capture_sha256": "f150c31fa23fe24d6eed570fbea0164a293518e4ced10ff5ce4e5f960c2bcb12"
-      }
+      "report": {}
     },
     "GB": {
       "game_id": "2026_09_GB_NE",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:25:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.560563+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.560563+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.115705+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.115705+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.567010+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.567010+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.131292+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.131292+00:00",
         "source_capture_sha256": "9653d6f4e3182a86a72f09b8d4ada76d78ad2eccf2d4bfef35ba0930928d05c6"
       }
     },
     "HOU": {
       "game_id": "2026_09_HOU_LAC",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-08T17:02:28.658439+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.658439+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.203039+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.203039+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.693280+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.693280+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.225987+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.225987+00:00",
         "source_capture_sha256": "11106e261b5f69933029d9bb8e740eed08f3ecab8201984798f520cbf1ededed"
       }
     },
     "IND": {
-      "game_id": "2026_09_DAL_IND",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "73b456bd6426a681e1c6fadb566656e9bbb1770165ca83ed6ed0065f91833c49",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.632235+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.632235+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.291435+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.291435+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.651256+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.651256+00:00",
-        "source_capture_sha256": "a528e6c25c79ebac0074402625970eb36cae13e0c6b910801187142f5a436935"
-      }
+      "report": {}
     },
     "JAX": {
       "game_id": null,
@@ -1100,131 +1028,95 @@
         "article_errors": [],
         "error": null,
         "items": 75,
-        "last_attempt_utc": "2026-11-08T17:02:28.723445+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.723445+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.260494+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.260494+00:00"
       },
       "report": {}
     },
     "KC": {
-      "game_id": "2026_09_NYJ_KC",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "0bc3191e96c8b4a3cfd43c1f6ac436b9a4488e2a643cc10f46e6db394ee50006",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:28.707940+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.707940+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.220725+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.220725+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.742564+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.742564+00:00",
-        "source_capture_sha256": "6ccb0cfd10e4ff676fb5d7098ca301ad552ca7ef90c68e898232e19ea90761da"
-      }
+      "report": {}
     },
     "LA": {
-      "game_id": "2026_09_LA_WAS",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "6017f123dc1a742f149ce5ef55f0c5274eaa2be01e42b38c60801f8c0c43d378",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.747809+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.747809+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.239885+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.239885+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.763845+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.763845+00:00",
-        "source_capture_sha256": "f7f3a285665e3f5a8a7dc77b92486f528a23ca68fb235115def01a9bec489438"
-      }
+      "report": {}
     },
     "LAC": {
       "game_id": "2026_09_HOU_LAC",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:28.839438+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.839438+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.272961+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.272961+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.896624+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.896624+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.287948+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.287948+00:00",
         "source_capture_sha256": "4cc79e47610a1fe383753db466427ed8c7587c0b14153096c614f190395cdf4d"
       }
     },
     "LV": {
       "game_id": "2026_09_LV_SF",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 80,
-        "last_attempt_utc": "2026-11-08T17:02:28.856732+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.856732+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.329021+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.329021+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.014014+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.014014+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.326348+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.326348+00:00",
         "source_capture_sha256": "b08fcf0529c621f63b3d594d3c1d8ede23347e007844e2c022fc6fbc6b65478a"
       }
     },
     "MIA": {
-      "game_id": "2026_09_DET_MIA",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "568434bcf19a824d09bf97b7fa2931e56f692ad7e87acd5ab4a501b063a9accd",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-08T17:02:28.880886+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.880886+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.351034+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.351034+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.904723+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.904723+00:00",
-        "source_capture_sha256": "c414ee7a6e63adb496bb5e864eaec4899c3a15c4e24a7d942ef58f3db8047112"
-      }
+      "report": {}
     },
     "MIN": {
       "game_id": "2026_09_BUF_MIN",
@@ -1234,142 +1126,92 @@
         "article_errors": [],
         "error": null,
         "items": 8,
-        "last_attempt_utc": "2026-11-08T17:02:28.928480+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.928480+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.373408+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.373408+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.960348+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.960348+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.405558+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.405558+00:00",
         "source_capture_sha256": "1006644d2821a7a81d45a97f53b11ee3b223356e031286d5ed53ca8e39e43f19"
       }
     },
     "NE": {
       "game_id": "2026_09_GB_NE",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:25:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 5,
-        "last_attempt_utc": "2026-11-08T17:02:29.009795+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.009795+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.420610+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.420610+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.026449+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.026449+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.458704+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.458704+00:00",
         "source_capture_sha256": "13f152c4e0a38296caade9213809cfa392a914271303582844b0d495bd15b567"
       }
     },
     "NO": {
-      "game_id": "2026_09_CLE_NO",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "afa592d6ee7d15f861d27626ce3b48339cb6bfbe0b515feedf4f0a5a66992844",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:28.984711+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.984711+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.442288+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.442288+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:28.999512+00:00",
-        "last_success_utc": "2026-11-08T17:02:28.999512+00:00",
-        "source_capture_sha256": "db8cee318aad81f2ca7e334ab001d4623ef91ea3b35e79ff320cb056fc6c5ac9"
-      }
+      "report": {}
     },
     "NYG": {
-      "game_id": "2026_09_NYG_PHI",
-      "inactives": {
-        "complete": false,
-        "error": "unresolved inactive player: C.J. Okoye",
-        "last_attempt_utc": "2026-11-08T17:02:23.780224+00:00"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:29.082582+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.082582+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.512233+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.512233+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.101894+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.101894+00:00",
-        "source_capture_sha256": "e2b667e0900b084bda91d2b8a63cc7d66815450ffacd313389729867fd883336"
-      }
+      "report": {}
     },
     "NYJ": {
-      "game_id": "2026_09_NYJ_KC",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "ee09ac62d3a10803fb7a92e3a09a616a9f25b7622dab13e03b3aff9e2fc5bf96",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 17,
-        "last_attempt_utc": "2026-11-08T17:02:29.141582+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.141582+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.414022+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.414022+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.165310+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.165310+00:00",
-        "source_capture_sha256": "89ad73bdec02746db3040b462d32bd819b5b8166795ec7a35042da2a16c35e20"
-      }
+      "report": {}
     },
     "PHI": {
-      "game_id": "2026_09_NYG_PHI",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "e732b94d13a45106e5c181e1aad4eddb2d1f2d31aaf762e6692a778d5cfb1088",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:29.175520+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.175520+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.510092+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.510092+00:00"
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.184911+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.184911+00:00",
-        "source_capture_sha256": "b052d915e5ba705da0c465f6ff7f9bc7ea38af6f764ff09205131e7999ca3479"
-      }
+      "report": {}
     },
     "PIT": {
       "game_id": null,
@@ -1379,48 +1221,54 @@
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-08T17:02:29.150965+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.150965+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.549019+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.549019+00:00"
       },
       "report": {}
     },
     "SEA": {
       "game_id": "2026_09_ARI_SEA",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:25:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-08T17:02:29.141177+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.141177+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.559687+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.559687+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.161974+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.161974+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.572909+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.572909+00:00",
         "source_capture_sha256": "d74407ecae662bfc4fb4bb4f947f9a3b9801cc3d1928a0cebb0439cfadc4edc9"
       }
     },
     "SF": {
       "game_id": "2026_09_LV_SF",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+      },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:29.261964+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.261964+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.581393+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.581393+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.291496+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.291496+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.634038+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.634038+00:00",
         "source_capture_sha256": "daf0e48dfe60f7daa3d5d9d3c3d924a3cfb271acf9cd6eda177ee601dee9990b"
       }
     },
@@ -1432,15 +1280,15 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T17:02:29.282016+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.282016+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.586643+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.586643+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.305693+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.305693+00:00",
+        "last_attempt_utc": "2026-11-08T18:59:38.586972+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.586972+00:00",
         "source_capture_sha256": "cadaca03b4bf1ff5cfebcd83df6d7414397a149774c91e053dd2a765bd2a84c1"
       }
     },
@@ -1452,38 +1300,24 @@
         "article_errors": [],
         "error": null,
         "items": 15,
-        "last_attempt_utc": "2026-11-08T17:02:29.303656+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.303656+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.653216+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.653216+00:00"
       },
       "report": {}
     },
     "WAS": {
-      "game_id": "2026_09_LA_WAS",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-08T17:02:34.339498+00:00",
-        "last_success_utc": "2026-11-08T17:02:34.339498+00:00",
-        "source_capture_sha256": "e2fbff53579ca00437564f2da16034dcc351923e64fb1739b5158aebb52329ff",
-        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-08T18:00:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T17:02:29.312967+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.312967+00:00"
+        "last_attempt_utc": "2026-11-08T18:59:38.698286+00:00",
+        "last_success_utc": "2026-11-08T18:59:38.698286+00:00"
       },
-      "report": {
-        "complete": false,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-08T17:02:29.345374+00:00",
-        "last_success_utc": "2026-11-08T17:02:29.345374+00:00",
-        "source_capture_sha256": "863705abb73376535d4a09b08273f13daeee34ce6db0bc40869991e9f9846b87"
-      }
+      "report": {}
     }
   },
-  "updated_utc": "2026-11-08T17:02:34.527783+00:00"
+  "updated_utc": "2026-11-08T18:59:40.897743+00:00"
 }
