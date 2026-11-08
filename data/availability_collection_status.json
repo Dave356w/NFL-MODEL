@@ -2,23 +2,23 @@
   "articles": {
     "https://www.49ers.com/news/morning-reports/morning-report-head-coach-kyle-shanahan-talks-trade-deadline-and-more": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.694818+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.694818+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.111474+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.111474+00:00"
     },
     "https://www.49ers.com/news/morning-reports/morning-report-recap-bye-week-49ers-sign-beal-jr": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.815213+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.815213+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.035825+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.035825+00:00"
     },
     "https://www.49ers.com/news/the-49ers-sign-dl-beal-jr-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.766594+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.766594+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.002477+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.002477+00:00"
     },
     "https://www.49ers.com/news/the-49ers-sign-wr-khadarel-hodge-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.847593+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.847593+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.033819+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.033819+00:00"
     },
     "https://www.atlantafalcons.com/news/atlanta-falcons-week-9-inactives-cincinnati-bengals": {
       "error": null,
@@ -57,38 +57,38 @@
     },
     "https://www.azcardinals.com/news/cardinals-activate-isaiah-adams-to-roster": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.788168+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.788168+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:25.991375+00:00",
+      "last_success_utc": "2026-11-08T19:55:25.991375+00:00"
     },
     "https://www.azcardinals.com/news/gardner-minshew-named-cardinals-starting-quarterback-carson-beck-made-backup": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.808881+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.808881+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.072099+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.072099+00:00"
     },
     "https://www.azcardinals.com/news/jacoby-brissett-trade-to-ravens-becomes-official": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.797253+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.797253+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.156185+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.156185+00:00"
     },
     "https://www.azcardinals.com/news/jeremiyah-love-kendrick-bourne-placed-on-injured-reserve": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.789494+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.789494+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:25.992656+00:00",
+      "last_success_utc": "2026-11-08T19:55:25.992656+00:00"
     },
     "https://www.azcardinals.com/news/jeremiyah-love-with-new-ankle-issue-as-cardinals-offense-catches-injury-bug": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.787860+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.787860+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:25.991951+00:00",
+      "last_success_utc": "2026-11-08T19:55:25.991951+00:00"
     },
     "https://www.azcardinals.com/news/reports-jacoby-brissett-to-be-traded-to-ravens": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.788735+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.788735+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.080224+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.080224+00:00"
     },
     "https://www.azcardinals.com/news/you-ve-got-mail-different-qb-new-spark": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.908102+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.908102+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.350894+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.350894+00:00"
     },
     "https://www.baltimoreravens.com/news/jacoby-brissett-ravens-trade-quarterback-cardinals-2026": {
       "error": null,
@@ -177,43 +177,43 @@
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-4-diaby-egbuka-roberts-did-not-participate": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.765292+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.765292+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.147645+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.147645+00:00"
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-5-week-9-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.741958+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.741958+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.212111+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.212111+00:00"
     },
     "https://www.buccaneers.com/news/buccaneers-bears-injury-report-nov-6-week-9-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.726578+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.726578+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.206504+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.206504+00:00"
     },
     "https://www.buccaneers.com/news/bucs-claim-g-trevor-keegan-waivers-vikings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.897743+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.897743+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.178504+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.178504+00:00"
     },
     "https://www.buccaneers.com/news/bucs-release-week-nine-depth-chart-bucs-ramp-up-tight-end-usage": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.852187+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.852187+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.197838+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.197838+00:00"
     },
     "https://www.buffalobills.com/news/bills-lt-dion-dawkins-trying-to-push-through-rib-injury-for-week-9-against-vikings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.921776+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.921776+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.312043+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.312043+00:00"
     },
     "https://www.buffalobills.com/news/bills-sign-cb-kader-kohou-to-the-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.916623+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.916623+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.250450+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.250450+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-vikings-week-9": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.790473+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.790473+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:25.993989+00:00",
+      "last_success_utc": "2026-11-08T19:55:25.993989+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-release-safety-cj-gardner-johnson": {
       "error": null,
@@ -227,33 +227,38 @@
     },
     "https://www.chargers.com/news/2026-nfl-trade-deadline": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.180150+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.180150+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.462032+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.462032+00:00"
     },
     "https://www.chargers.com/news/david-njoku-injury-jim-harbaugh-mike-mcdaniel": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.547037+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.547037+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.798763+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.798763+00:00"
     },
     "https://www.chargers.com/news/depth-chart-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.417660+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.417660+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.475982+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.475982+00:00"
+    },
+    "https://www.chargers.com/news/texans-inactives-week-9-2026": {
+      "error": null,
+      "last_attempt_utc": "2026-11-08T19:55:26.391868+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.391868+00:00"
     },
     "https://www.chargers.com/news/texans-injury-report-week-9-david-njoku": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.042276+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.042276+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.393195+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.393195+00:00"
     },
     "https://www.chicagobears.com/news/bears-quick-starts-have-fueled-three-game-win-streak": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.915465+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.915465+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.183777+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.183777+00:00"
     },
     "https://www.chicagobears.com/news/kyle-monangai-back-at-practice-questionable-for-buccaneers-game-injury-update": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.911909+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.911909+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.129823+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.129823+00:00"
     },
     "https://www.chiefs.com/news/week-9-inactive-players-jets-vs-chiefs": {
       "error": null,
@@ -425,10 +430,15 @@
       "last_attempt_utc": "2026-11-08T17:02:33.793484+00:00",
       "last_success_utc": "2026-11-08T17:02:33.793484+00:00"
     },
+    "https://www.houstontexans.com/news/texans-inactives-week-9-vs-los-angeles-chargers": {
+      "error": null,
+      "last_attempt_utc": "2026-11-08T19:55:26.349005+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.349005+00:00"
+    },
     "https://www.houstontexans.com/news/week-9-injury-report-texans-at-chargers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.994317+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.994317+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.387318+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.387318+00:00"
     },
     "https://www.jaguars.com/news/roster-moves-jaguars-elevate-s-cam-ron-silmon-craig": {
       "error": null,
@@ -532,48 +542,48 @@
     },
     "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.859846+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.859846+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.122650+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.122650+00:00"
     },
     "https://www.nfl.com/news/week-9-thursday-night-inactives-jacksonville-jaguars-at-baltimore-ravens": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.873601+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.873601+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.183547+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.183547+00:00"
     },
     "https://www.packers.com/news/award-winning-evan-williams-brandon-cisse-elevating-packers-defense-nov-6-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.924225+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.924225+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.175555+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.175555+00:00"
     },
     "https://www.packers.com/news/brenton-cox-jr-starting-to-hit-his-stride-as-pass-rusher-for-packers-nov-4-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.126476+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.126476+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.325605+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.325605+00:00"
     },
     "https://www.packers.com/news/jordan-love-s-fast-start-has-him-on-historic-trajectory-nov-5-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.134530+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.134530+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.390806+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.390806+00:00"
     },
     "https://www.packers.com/news/packers-list-three-questionable-rule-out-five-vs-patriots-week-9-injury-report": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.914862+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.914862+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.155676+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.155676+00:00"
     },
     "https://www.packers.com/news/packers-patriots-injury-report-nov-4-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.040630+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.040630+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.317286+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.317286+00:00"
     },
     "https://www.packers.com/news/packers-patriots-injury-report-nov-5-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:39.932237+00:00",
-      "last_success_utc": "2026-11-08T18:59:39.932237+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.210656+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.210656+00:00"
     },
     "https://www.packers.com/news/packers-qb-jordan-love-named-fedex-air-and-ground-player-of-week-8-2026": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.121401+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.121401+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.323701+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.323701+00:00"
     },
     "https://www.panthers.com/news/brady-christensen-designated-to-return-from-injured-reserve": {
       "error": null,
@@ -612,13 +622,13 @@
     },
     "https://www.patriots.com/news/injury-report-analysis-patriots-rule-out-wr-a-j-brown-rb-treveyon-henderson-te-hunter-henry-questionable-for-sunday-vs-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.320101+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.320101+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.550118+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.550118+00:00"
     },
     "https://www.patriots.com/news/patriots-activate-wr-mack-hollins-to-the-53-man-roster": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.350224+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.350224+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.635539+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.635539+00:00"
     },
     "https://www.patriots.com/news/patriots-sign-cb-kindle-vildor-to-the-practice-squad": {
       "error": null,
@@ -632,13 +642,13 @@
     },
     "https://www.patriots.com/news/roster-analysis-patriots-activate-wr-mack-hollins-to-the-53-man-roster-for-sunday-s-game-vs-the-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.259730+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.259730+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.469320+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.469320+00:00"
     },
     "https://www.patriots.com/news/week-9-injury-report-patriots-vs-packers": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.264428+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.264428+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.811936+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.811936+00:00"
     },
     "https://www.philadelphiaeagles.com/news/eagles-elevate-elijah-mitchell-cole-wisniewski-for-sunday-s-game-vs-giants": {
       "error": null,
@@ -667,68 +677,68 @@
     },
     "https://www.raiders.com/news/raiders-49ers-week-9-injury-report": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.118439+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.118439+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.601479+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.601479+00:00"
     },
     "https://www.seahawks.com/news/2026-week-8-seahawks-vs-bears-in-game-injury-updates": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.685923+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.685923+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.991810+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.991810+00:00"
     },
     "https://www.seahawks.com/news/fantasy-football-week-9-guide-top-starts-and-waiver-wire-rankings": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.650426+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.650426+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.955081+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.955081+00:00"
     },
     "https://www.seahawks.com/news/injury-updates-from-seahawks-week-8-loss-to-bears": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.669802+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.669802+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.951255+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.951255+00:00"
     },
     "https://www.seahawks.com/news/recapturing-us-injury-updates-other-takeaways-from-seahawks-coach-mike-macdonald-on-seattle-sports-710am": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.641169+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.641169+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.093802+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.093802+00:00"
     },
     "https://www.seahawks.com/news/seahawks-activate-rb-jadarian-price-from-injured-reserve": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.690087+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.690087+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:27.104706+00:00",
+      "last_success_utc": "2026-11-08T19:55:27.104706+00:00"
     },
     "https://www.seahawks.com/news/seahawks-mailbag-sam-darnold-s-injury-trade-deadline-more": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.479774+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.479774+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.745457+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.745457+00:00"
     },
     "https://www.seahawks.com/news/seahawks-qb-drew-lock-feeling-good-really-excited-about-another-opportunity-to-start-in-week-9": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.447630+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.447630+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.681064+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.681064+00:00"
     },
     "https://www.seahawks.com/news/seahawks-qb-sam-darnold-out-for-sunday-s-game-vs-arizona-due-to-quad-injury": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.535889+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.535889+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.787548+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.787548+00:00"
     },
     "https://www.seahawks.com/news/seahawks-sign-dt-deven-eastern-off-practice-squad-elevate-two-players": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.559363+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.559363+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.790027+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.790027+00:00"
     },
     "https://www.seahawks.com/news/seahawks-sign-qb-adrian-martinez-lb-jamie-sheriff-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.639303+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.639303+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.846336+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.846336+00:00"
     },
     "https://www.seahawks.com/news/velus-jones-jr-released-rb-subsequently-signed-to-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.400466+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.400466+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.732888+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.732888+00:00"
     },
     "https://www.seahawks.com/news/week-9-injury-report-cardinals-at-seahawks": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.393166+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.393166+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.647444+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.647444+00:00"
     },
     "https://www.therams.com/news/from-the-podium-rams-head-coach-sean-mcvay-quarterback-matthew-stafford-coordinators-wide-receiver-puka-nacua-defensive-end-aaron-donald-preview-matchup-with-commanders": {
       "error": null,
@@ -762,8 +772,8 @@
     },
     "https://www.vikings.com/news/bills-injury-report-week-9-2026-nfl-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.348817+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.348817+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.509855+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.509855+00:00"
     },
     "https://www.vikings.com/news/kevin-oconnell-updates-injuries-recaps-offense-after-week-8": {
       "error": null,
@@ -772,8 +782,8 @@
     },
     "https://www.vikings.com/news/quarterback-carson-wentz-monday-night-bills": {
       "error": null,
-      "last_attempt_utc": "2026-11-08T18:59:40.258068+00:00",
-      "last_success_utc": "2026-11-08T18:59:40.258068+00:00"
+      "last_attempt_utc": "2026-11-08T19:55:26.522116+00:00",
+      "last_success_utc": "2026-11-08T19:55:26.522116+00:00"
     },
     "https://www.vikings.com/news/sign-running-back-deejay-dallas-corey-robinson-roster-moves": {
       "error": null,
@@ -805,15 +815,15 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:37.916853+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.916853+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.290295+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.290295+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:37.932249+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.932249+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.331986+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.331986+00:00",
         "source_capture_sha256": "4fe9a7ea38daae95bdb270b2333c30136299e16cba6672c18ba2a68ae07b2e21"
       }
     },
@@ -825,8 +835,8 @@
         "article_errors": [],
         "error": null,
         "items": 35,
-        "last_attempt_utc": "2026-11-08T18:59:37.887406+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.887406+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.298734+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.298734+00:00"
       },
       "report": {}
     },
@@ -838,8 +848,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:37.920509+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.920509+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.328101+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.328101+00:00"
       },
       "report": {}
     },
@@ -851,15 +861,15 @@
         "article_errors": [],
         "error": null,
         "items": 10,
-        "last_attempt_utc": "2026-11-08T18:59:37.922671+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.922671+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.280606+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.280606+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:37.946724+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.946724+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.286778+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.286778+00:00",
         "source_capture_sha256": "cabd4a31e5be158414eb1cee3ab426aa8e93bef85a2ec4c3f3cf68a87424fc07"
       }
     },
@@ -871,8 +881,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:37.940065+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.940065+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.323964+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.323964+00:00"
       },
       "report": {}
     },
@@ -884,15 +894,15 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:37.940904+00:00",
-        "last_success_utc": "2026-11-08T18:59:37.940904+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.293040+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.293040+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.024375+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.024375+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.378697+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.378697+00:00",
         "source_capture_sha256": "6ec87ea14a098d8ee33c502308bc84dc4b378357189622f1be23af79327fb26b"
       }
     },
@@ -904,8 +914,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.105885+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.105885+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.522597+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.522597+00:00"
       },
       "report": {}
     },
@@ -917,8 +927,8 @@
         "article_errors": [],
         "error": null,
         "items": 30,
-        "last_attempt_utc": "2026-11-08T18:59:38.098991+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.098991+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.457090+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.457090+00:00"
       },
       "report": {}
     },
@@ -930,8 +940,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.105225+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.105225+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.472322+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.472322+00:00"
       },
       "report": {}
     },
@@ -943,8 +953,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.113982+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.113982+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.426649+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.426649+00:00"
       },
       "report": {}
     },
@@ -956,8 +966,8 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:38.072860+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.072860+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.528853+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.528853+00:00"
       },
       "report": {}
     },
@@ -972,38 +982,39 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.115705+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.115705+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.455234+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.455234+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.131292+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.131292+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.452801+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.452801+00:00",
         "source_capture_sha256": "9653d6f4e3182a86a72f09b8d4ada76d78ad2eccf2d4bfef35ba0930928d05c6"
       }
     },
     "HOU": {
       "game_id": "2026_09_HOU_LAC",
       "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+        "complete": false,
+        "error": "unresolved inactive player: Nate Thomas",
+        "last_attempt_utc": "2026-11-08T19:55:20.510505+00:00"
       },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-08T18:59:38.203039+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.203039+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.579892+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.579892+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.225987+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.225987+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.602718+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.602718+00:00",
         "source_capture_sha256": "11106e261b5f69933029d9bb8e740eed08f3ecab8201984798f520cbf1ededed"
       }
     },
@@ -1015,8 +1026,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.291435+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.291435+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.590080+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.590080+00:00"
       },
       "report": {}
     },
@@ -1028,8 +1039,8 @@
         "article_errors": [],
         "error": null,
         "items": 75,
-        "last_attempt_utc": "2026-11-08T18:59:38.260494+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.260494+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.613886+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.613886+00:00"
       },
       "report": {}
     },
@@ -1041,8 +1052,8 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:38.220725+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.220725+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.582862+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.582862+00:00"
       },
       "report": {}
     },
@@ -1054,31 +1065,35 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.239885+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.239885+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.618951+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.618951+00:00"
       },
       "report": {}
     },
     "LAC": {
       "game_id": "2026_09_HOU_LAC",
       "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-08T18:59:34.277650+00:00"
+        "complete": true,
+        "error": null,
+        "last_attempt_utc": "2026-11-08T19:55:27.122650+00:00",
+        "last_success_utc": "2026-11-08T19:55:27.122650+00:00",
+        "source_capture_sha256": "5f96f73c1134c66cebe0a5e70c5b446039bfba7c0898fee7253b2ac31cd2bbef",
+        "url": "https://www.nfl.com/news/nfl-week-9-inactives-players-ruled-out-sunday-2026-season"
       },
       "kickoff_utc": "2026-11-08T21:05:00+00:00",
       "news": {
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.272961+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.272961+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.647521+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.647521+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.287948+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.287948+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.653880+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.653880+00:00",
         "source_capture_sha256": "4cc79e47610a1fe383753db466427ed8c7587c0b14153096c614f190395cdf4d"
       }
     },
@@ -1093,15 +1108,15 @@
         "article_errors": [],
         "error": null,
         "items": 80,
-        "last_attempt_utc": "2026-11-08T18:59:38.329021+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.329021+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.757405+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.757405+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.326348+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.326348+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.778516+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.778516+00:00",
         "source_capture_sha256": "b08fcf0529c621f63b3d594d3c1d8ede23347e007844e2c022fc6fbc6b65478a"
       }
     },
@@ -1113,8 +1128,8 @@
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-08T18:59:38.351034+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.351034+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.752745+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.752745+00:00"
       },
       "report": {}
     },
@@ -1126,15 +1141,15 @@
         "article_errors": [],
         "error": null,
         "items": 8,
-        "last_attempt_utc": "2026-11-08T18:59:38.373408+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.373408+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.741431+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.741431+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.405558+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.405558+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.773976+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.773976+00:00",
         "source_capture_sha256": "1006644d2821a7a81d45a97f53b11ee3b223356e031286d5ed53ca8e39e43f19"
       }
     },
@@ -1149,16 +1164,16 @@
         "article_errors": [],
         "error": null,
         "items": 5,
-        "last_attempt_utc": "2026-11-08T18:59:38.420610+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.420610+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.740797+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.740797+00:00"
       },
       "report": {
-        "complete": true,
+        "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.458704+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.458704+00:00",
-        "source_capture_sha256": "13f152c4e0a38296caade9213809cfa392a914271303582844b0d495bd15b567"
+        "last_attempt_utc": "2026-11-08T19:55:24.753477+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.753477+00:00",
+        "source_capture_sha256": "52edac0c26b877e9f511aa63dcbbcca3a120d5199b70542789ccadf4aad411b4"
       }
     },
     "NO": {
@@ -1169,8 +1184,8 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:38.442288+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.442288+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.730379+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.730379+00:00"
       },
       "report": {}
     },
@@ -1182,8 +1197,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.512233+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.512233+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.903634+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.903634+00:00"
       },
       "report": {}
     },
@@ -1195,8 +1210,8 @@
         "article_errors": [],
         "error": null,
         "items": 17,
-        "last_attempt_utc": "2026-11-08T18:59:38.414022+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.414022+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.913474+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.913474+00:00"
       },
       "report": {}
     },
@@ -1208,8 +1223,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.510092+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.510092+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.884381+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.884381+00:00"
       },
       "report": {}
     },
@@ -1221,8 +1236,8 @@
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-08T18:59:38.549019+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.549019+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.900258+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.900258+00:00"
       },
       "report": {}
     },
@@ -1237,15 +1252,15 @@
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-08T18:59:38.559687+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.559687+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.926229+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.926229+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.572909+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.572909+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.940611+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.940611+00:00",
         "source_capture_sha256": "d74407ecae662bfc4fb4bb4f947f9a3b9801cc3d1928a0cebb0439cfadc4edc9"
       }
     },
@@ -1260,15 +1275,15 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:38.581393+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.581393+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:24.913772+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.913772+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.634038+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.634038+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:24.932314+00:00",
+        "last_success_utc": "2026-11-08T19:55:24.932314+00:00",
         "source_capture_sha256": "daf0e48dfe60f7daa3d5d9d3c3d924a3cfb271acf9cd6eda177ee601dee9990b"
       }
     },
@@ -1280,15 +1295,15 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-08T18:59:38.586643+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.586643+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:25.048431+00:00",
+        "last_success_utc": "2026-11-08T19:55:25.048431+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-08T18:59:38.586972+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.586972+00:00",
+        "last_attempt_utc": "2026-11-08T19:55:25.064491+00:00",
+        "last_success_utc": "2026-11-08T19:55:25.064491+00:00",
         "source_capture_sha256": "cadaca03b4bf1ff5cfebcd83df6d7414397a149774c91e053dd2a765bd2a84c1"
       }
     },
@@ -1300,8 +1315,8 @@
         "article_errors": [],
         "error": null,
         "items": 15,
-        "last_attempt_utc": "2026-11-08T18:59:38.653216+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.653216+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:25.070393+00:00",
+        "last_success_utc": "2026-11-08T19:55:25.070393+00:00"
       },
       "report": {}
     },
@@ -1313,11 +1328,11 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-08T18:59:38.698286+00:00",
-        "last_success_utc": "2026-11-08T18:59:38.698286+00:00"
+        "last_attempt_utc": "2026-11-08T19:55:25.054337+00:00",
+        "last_success_utc": "2026-11-08T19:55:25.054337+00:00"
       },
       "report": {}
     }
   },
-  "updated_utc": "2026-11-08T18:59:40.897743+00:00"
+  "updated_utc": "2026-11-08T19:55:27.212111+00:00"
 }
