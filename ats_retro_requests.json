@@ -43,5 +43,15 @@
     "game_id": "2026_09_NYJ_KC",
     "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
     "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_HOU_LAC",
+    "source_commit": "d95ff5011816c978a0a93fa6fec0975d48bc054a",
+    "reason": "Owner requested activation of today's missed locks on 2026-11-08. The 12:05 Pacific cutoff passed without an eligible inactive-gated candidate. Use only this forecast, market line and weekly map committed before T-60; retain the original source collection blockers and actual recovery timestamp."
+  },
+  {
+    "game_id": "2026_09_LV_SF",
+    "source_commit": "d95ff5011816c978a0a93fa6fec0975d48bc054a",
+    "reason": "Owner requested activation of today's missed locks on 2026-11-08. The 12:05 Pacific cutoff passed without an eligible inactive-gated candidate. Use only this forecast, market line and weekly map committed before T-60; retain the original source collection blockers and actual recovery timestamp."
   }
 ]

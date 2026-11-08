@@ -117,6 +117,8 @@ in `ats_retro_requests.json` recover CIN-ATL and the seven 13:00 ET games from
 their last committed pre-cutoff boards. Keep these selections in normal public
 results. Backend `ats_basis` identifies all retro locks separately from native
 60-minute locks; never rewrite earlier journal rows or use post-cutoff inputs.
+The follow-up activation request also covers HOU-LAC and LV-SF, which missed
+their 12:05 Pacific cutoff; their pinned 19:57 UTC board remains the sole basis.
 
 - **No lookahead.** Never let a game's own or later stats, snaps or labels
   into its features. Same-week roster status is ignored except the game week's
