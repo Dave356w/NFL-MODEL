@@ -164,7 +164,10 @@ def test_retired_research_artifacts_are_removed_from_public_output(tmp_path):
 
 @pytest.mark.parametrize('pages_only',[False,True])
 def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_only):
+    import retro_lock
     data=tmp_path/'data';data.mkdir();latest=data/'latest';latest.mkdir()
+    recovered=[]
+    monkeypatch.setattr(retro_lock,'apply',lambda path: recovered.append(path) or 0)
     monkeypatch.setattr(b,'DATA',data);monkeypatch.setattr(b,'LATEST',latest)
     monkeypatch.setattr(b,'run_model',lambda:tmp_path/'run')
     monkeypatch.setattr(b.espn_spreads, 'safe_refresh', lambda *a, **k: None)
@@ -175,6 +178,7 @@ def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_
     monkeypatch.setattr(b.grade_ledger,'main',lambda *_:None)
     monkeypatch.setattr(b.version_report,'run',lambda *_:None)
     def render(_):
+        assert recovered == [data]  # pages-only held finalization also applies repairs
         (data/'ledger_report.txt').write_text('before capture')
         return []
     def capture(_):

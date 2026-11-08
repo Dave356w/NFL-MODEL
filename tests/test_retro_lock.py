@@ -57,6 +57,8 @@ def test_retro_lock_joins_normal_journal_idempotently_without_backdating(tmp_pat
     assert pool.iloc[0].fixed_band_ats_handicap == -10.
     assert pool.iloc[0].fixed_band_ats_result == 'W'
     assert pool.iloc[0].retro_locked
+    assert pool.iloc[0].ats_basis == 'Owner-requested retro lock'
+    assert pool.iloc[0].ats_basis not in season_ats.TIMED_BASES
     assert season_ats.summary(pool)['bets'] == 1
 
 

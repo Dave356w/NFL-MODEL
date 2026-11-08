@@ -128,6 +128,7 @@ def build(latest, ledger):
             retro_locked=saved.get('retro_locked', False),
             recovered_after_kickoff=saved.get('recovered_after_kickoff', False),
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
+            else 'Owner-requested retro lock' if saved.get('retro_locked')
             else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
             else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
     # ESPN supplies final scores only. It cannot create or change a decision.
@@ -212,7 +213,7 @@ def summary(frame):
         eligible = r.isin(list('WLP')) & numeric_units.notna()
         returns = numeric_units.loc[eligible].to_numpy(float)
         priced_bets = len(returns)
-        units = float(returns.sum()) if priced_bets else np.nan
+        units = float(returns.sum()) if priced_bets else (0. if bets == 0 else np.nan)
         prelock = int((eligible & frame.ats_price_basis.isin(['captured_prelock', 'historical_prelock'])).sum())
         estimates = int((eligible & frame.ats_price_basis.eq('closing_estimate')).sum())
         assumed = int((eligible & frame.ats_price_basis.eq('assumed_minus110')).sum())

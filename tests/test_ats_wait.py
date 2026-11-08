@@ -99,7 +99,7 @@ def test_stale_candidate_refreshes_once_then_finalizes_after_cutoff(tmp_path):
     assert CUTOFF < calls[1][1] < KO
 
 
-def test_fresh_candidate_skips_refresh_and_failed_refresh_is_not_retried(tmp_path):
+def test_fresh_candidate_skips_refresh_and_failed_refresh_is_retried_once(tmp_path):
     clock = Clock(CUTOFF - dt.timedelta(minutes=5))
     candidate(tmp_path, clock.now)
     finalize = lambda: a.append(tmp_path / a.LOCKS, [dict(revision=m.REVISION, game_id='g1')])  # noqa: E731
@@ -112,7 +112,7 @@ def test_fresh_candidate_skips_refresh_and_failed_refresh_is_not_retried(tmp_pat
     clock = Clock(CUTOFF - dt.timedelta(minutes=30))
     candidate(tmp_path, clock.now - dt.timedelta(minutes=30))
     steps = w.hold(tmp_path, clock.now + dt.timedelta(minutes=90), lambda: 1, finalize, clock, clock.sleep)
-    assert [s[0] for s in steps] == ['refresh', 'finalize']
+    assert [s[0] for s in steps] == ['refresh', 'refresh', 'finalize']
 
 
 def test_unfinalizable_candidate_does_not_loop(tmp_path):
@@ -122,6 +122,72 @@ def test_unfinalizable_candidate_does_not_loop(tmp_path):
     steps = w.hold(tmp_path, clock.now + dt.timedelta(minutes=90), lambda: 0, lambda: {'locks': 0},
                    clock, clock.sleep)
     assert [s[0] for s in steps] == ['finalize']
+
+
+def test_failed_early_refresh_can_recover_before_cutoff(tmp_path):
+    saved = CUTOFF - dt.timedelta(minutes=40)
+    board(tmp_path, saved)
+    a.record(tmp_path, saved)
+    clock = Clock(saved)
+    calls = []
+
+    def refresh():
+        calls.append(clock.now)
+        if len(calls) == 1:
+            return 1
+        board(tmp_path, clock.now)
+        a.record(tmp_path, clock.now)
+        return 0
+
+    steps = w.hold(tmp_path, KO, refresh, lambda: a.record(tmp_path, clock.now), clock, clock.sleep)
+    assert calls == [CUTOFF - dt.timedelta(minutes=20), CUTOFF - dt.timedelta(minutes=10)]
+    assert [s[0] for s in steps] == ['refresh', 'refresh', 'finalize']
+    lock, = a.read(tmp_path / a.LOCKS)
+    assert a.utc(lock['generated_utc']) == calls[-1]
+    assert a.utc(lock['finalized_utc']) < KO
+
+
+def test_slow_refresh_crossing_cutoff_finalizes_earlier_saved_candidate(tmp_path):
+    saved = CUTOFF - dt.timedelta(minutes=40)
+    board(tmp_path, saved)
+    a.record(tmp_path, saved)
+    clock = Clock(saved)
+
+    def refresh():
+        clock.sleep(21 * 60)
+        board(tmp_path, clock.now)  # post-cutoff inputs cannot become a candidate
+        a.record(tmp_path, clock.now)
+        return 0
+
+    steps = w.hold(tmp_path, KO, refresh, lambda: a.record(tmp_path, clock.now), clock, clock.sleep)
+    assert [s[0] for s in steps] == ['refresh', 'finalize']
+    lock, = a.read(tmp_path / a.LOCKS)
+    assert a.utc(lock['generated_utc']) == saved
+    assert a.utc(lock['finalized_utc']) == CUTOFF + dt.timedelta(minutes=1)
+
+
+def test_early_sunday_poll_stays_awake_for_a_queued_handoff(tmp_path):
+    # Nov 8's early poll had no inactive-gated candidate and the next delivered
+    # build was after London's cutoff. Watch the scheduled game across jobs.
+    clock = Clock(CUTOFF - dt.timedelta(minutes=350))
+    board(tmp_path, clock.now)
+    manifest = tmp_path / 'latest/manifest.json'
+    data = json.loads(manifest.read_text())
+    data['revision'] = 'boxscore-composite-v1.21'
+    manifest.write_text(json.dumps(data))
+    horizon = clock.now + dt.timedelta(minutes=w.MAX_WAIT_MINUTES)
+    steps = w.watch(tmp_path, horizon, lambda: pytest.fail('early refresh'),
+                    lambda: pytest.fail('early finalization'), clock, clock.sleep)
+    assert steps == [('handoff', CUTOFF, None)]
+    assert clock.now == horizon < CUTOFF
+
+
+def test_watch_does_not_wait_for_games_outside_its_window(tmp_path):
+    clock = Clock(CUTOFF - dt.timedelta(minutes=w.WATCH_AHEAD_MINUTES + 1))
+    candidate(tmp_path, clock.now)
+    assert w.watch(tmp_path, clock.now + dt.timedelta(minutes=w.MAX_WAIT_MINUTES),
+                   lambda: 0, lambda: 0, clock, clock.sleep) == []
+    assert clock.slept == []
 
 
 def test_consecutive_cutoffs_are_each_finalized_in_order(tmp_path):
@@ -139,7 +205,8 @@ def test_consecutive_cutoffs_are_each_finalized_in_order(tmp_path):
 
     steps = w.hold(tmp_path, clock.now + dt.timedelta(minutes=90), lambda: 0, finalize, clock, clock.sleep)
     # The early candidate is fresh; the late one is stale by its own refresh point.
-    assert [(s[0], s[1]) for s in steps] == [('finalize', CUTOFF), ('refresh', later), ('finalize', later)]
+    assert [(s[0], s[1]) for s in steps] == [('finalize', CUTOFF), ('refresh', later),
+                                          ('refresh', later), ('finalize', later)]
     assert order == ['early', 'late']
 
 
@@ -172,13 +239,20 @@ def test_workflow_holds_after_committing_and_still_deploys():
     # The hold step needs room after the last cutoff to refresh pages and commit.
     assert hold_timeout >= w.MAX_WAIT_MINUTES + 20
     assert timeout >= 75 + hold_timeout
+    assert build.index('name: Publish current board\n') < build.index('Hold for the 60-minute ATS cutoff')
+    # Default GitHub concurrency replaces the pending run. Both journal writers
+    # must retain the queue so an availability poll cannot discard the handoff.
+    root = Path(__file__).resolve().parents[1]
+    for workflow in ('build.yml', 'availability.yml'):
+        source = (root / '.github/workflows' / workflow).read_text()
+        assert 'group: site-build' in source and 'queue: max' in source
 
 
 def test_default_hold_reaches_a_cutoff_150_minutes_out_and_no_further(tmp_path):
     now = CUTOFF - dt.timedelta(minutes=140)
     horizon = now + dt.timedelta(minutes=w.MAX_WAIT_MINUTES)
     candidate(tmp_path, now - dt.timedelta(minutes=5))
-    candidate(tmp_path, now, game_id='beyond', lock=now + dt.timedelta(minutes=151))
+    candidate(tmp_path, now, game_id='beyond', lock=horizon + dt.timedelta(minutes=1))
     assert w.pending(tmp_path, now, horizon) == {CUTOFF: now - dt.timedelta(minutes=5)}
 
 

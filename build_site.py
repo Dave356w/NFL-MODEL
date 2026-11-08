@@ -887,7 +887,8 @@ def ats_card_state(latest, row, now):
     if saved is not None:
         ms, line = num(saved['fixed_band_spread']), num(saved['market_spread'])
         status = 'locked'
-        source = ('Recovered saved forecast' if saved.get('recovered_after_kickoff')
+        source = ('Owner-requested retro lock' if saved.get('retro_locked')
+                  else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
                   else 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock')
         when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
         note = f'ATS locked {when}'
@@ -1570,6 +1571,10 @@ def main(argv=None):
     ap.add_argument("--pages-only", action="store_true", help="render from committed data/ without running the model")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR", "public"))
     args = ap.parse_args(argv)
+    # A held job may pick up a repair while already running. Pages-only
+    # finalization must apply the same explicit requests as a fresh workflow.
+    import retro_lock
+    print(f'Owner-requested ATS retro locks: {retro_lock.apply(DATA)}')
     if not args.pages_only:
         # Finalize persisted inputs before the expensive model refresh. Even a
         # later model failure must not strand an eligible pre-cutoff candidate.
