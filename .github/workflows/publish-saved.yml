@@ -42,7 +42,11 @@ jobs:
           git diff --exit-code -- data/ats_locks.jsonl data/ats_lock_candidates.jsonl data/forward_predictions.jsonl
       - uses: actions/upload-pages-artifact@v3
         with:
+          name: saved-ats-${{ github.run_attempt }}
           path: public
       - name: Deploy saved selections
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: saved-ats-${{ github.run_attempt }}
+
