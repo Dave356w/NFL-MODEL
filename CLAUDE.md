@@ -150,3 +150,7 @@ questions, one to three candidate changes with what would falsify each, and
 the recommended next test. For implementation requests, deliver the change,
 then summarize the files, behavior preserved, tests run and remaining
 limitations.
+
+Owner activation follow-up (2026-11-08): GB-NE may also be recovered from the
+pinned 20:17 UTC board after its 12:25 Pacific cutoff when no native lock exists.
+The original collection/medical blockers remain in its source evidence.

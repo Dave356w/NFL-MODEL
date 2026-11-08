@@ -53,5 +53,10 @@
     "game_id": "2026_09_LV_SF",
     "source_commit": "d95ff5011816c978a0a93fa6fec0975d48bc054a",
     "reason": "Owner requested activation of today's missed locks on 2026-11-08. The 12:05 Pacific cutoff passed without an eligible inactive-gated candidate. Use only this forecast, market line and weekly map committed before T-60; retain the original source collection blockers and actual recovery timestamp."
+  },
+  {
+    "game_id": "2026_09_GB_NE",
+    "source_commit": "6370aefd2610ec2f7e5aba02f7e55db0fa81201d",
+    "reason": "Owner requested activation of today's missed locks on 2026-11-08. If no normal lock exists after the 12:25 Pacific cutoff, recover only the board committed at 20:18 UTC before T-60. Retain the original New England source and medical-clearance blockers, the saved model, market line and weekly map, and actual creation time. A normal existing lock remains authoritative."
   }
 ]
