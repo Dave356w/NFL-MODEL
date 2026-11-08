@@ -3,5 +3,45 @@
     "game_id": "2026_09_JAX_BAL",
     "source_commit": "1727d22d29ff2f2c593a13e710c6af170578813b",
     "reason": "Owner requested the missed TNF pick be retro locked and included in normal results on 2026-11-05. The T-70 refresh saved this board before T-60, but an HTML-encoded apostrophe in Jacksonville's inactive list blocked automatic candidate creation. Preserve those original blockers; use only the saved pregame model, line and weekly map."
+  },
+  {
+    "game_id": "2026_09_CIN_ATL",
+    "source_commit": "a3420d07db5de2459978b71d7dbaf658454bae76",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_CLE_NO",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_DAL_IND",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_DEN_CAR",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_DET_MIA",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_LA_WAS",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_NYG_PHI",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
+  },
+  {
+    "game_id": "2026_09_NYJ_KC",
+    "source_commit": "7624d8e008d6d2e0f472fff157f76d0f862f91d2",
+    "reason": "Owner requested repair of failed Sunday locks on 2026-11-08. Recover only this immutable board committed before this game's T-60 cutoff, preserving its model, market line, weekly map and original availability blockers. GitHub delivered the next build after the cutoff; the prior watch ended too early. Recovery time is actual, never backdated."
   }
 ]

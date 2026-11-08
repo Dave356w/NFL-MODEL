@@ -9,6 +9,7 @@ on:
 concurrency:
   group: site-build
   cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: write

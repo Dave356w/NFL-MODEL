@@ -357,8 +357,8 @@ class TimedATS(unittest.TestCase):
 
     def test_fast_poll_is_limited_to_ats_window_even_without_moneyline_locks(self):
         game = dict(game_id='g', gameday='2026-10-25', gametime='13:00', game_type='REG', result='')
-        for minutes, due in [(181,False),(180,True),(146,True),(121,True),(120,True),(91,True),(61,True),(60,True),
-                             (50,True),(49,True),(15,True),(14,False),(300,False)]:
+        for minutes, due in [(541,False),(540,True),(181,True),(180,True),(146,True),(121,True),(120,True),(91,True),(61,True),(60,True),
+                             (50,True),(49,True),(15,True),(14,False),(300,True)]:
             with self.subTest(minutes=minutes):
                 now = KO-dt.timedelta(minutes=minutes)
                 result = sg.decision('schedule', sg.ATS_CRON, now, games=[game], recorded=set())

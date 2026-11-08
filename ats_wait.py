@@ -5,12 +5,12 @@ trusted to land between T−60 and kickoff (2026-10-19: no build ran from 22:38
 to 00:33 UTC and WAS-SF was only recovered after kickoff; 2026-10-26: no
 build between 21:49 and 23:39 UTC, so DAL-PHI locked 25 minutes late from a
 4.5-hour-old forecast). Instead, a build that finishes within MAX_WAIT_MINUTES
-(150) of a cutoff for an unlocked candidate or v1.21 scheduled game stays
+(240) of a cutoff for an unlocked candidate or v1.21 scheduled game stays
 alive until that cutoff:
 
   * if a v1.21 game has no candidate yet, or the newest saved candidate is older than the refresh
     point, run one full build REFRESH_LEAD_MINUTES before the cutoff, so the
-    lock carries a recent line (a failed refresh keeps the older candidate);
+    lock carries a recent line; retry at T-70 if inputs remain missing;
   * at the cutoff, finalize with ats_locks.record, re-render the pages and
     commit.
 
@@ -18,6 +18,9 @@ This changes only when finalization happens, never what it may use:
 ats_locks.record still freezes the latest candidate saved by the cutoff. The
 run keeps the site-build concurrency group while it waits, so builds stay
 serialized; polls that arrive meanwhile queue behind it.
+An earlier delivered run watches games up to eight hours before their cutoff,
+handing off after at most four hours to stay within GitHub's six-hour job limit.
+The workflow publishes before waiting and after the first cutoff it processes.
 """
 from __future__ import annotations
 
@@ -34,8 +37,13 @@ import ats_locks
 from schedule_gate import kickoff
 
 DATA = Path('data')
-MAX_WAIT_MINUTES = 150
-REFRESH_LEAD_MINUTES = 10
+MAX_WAIT_MINUTES = 240
+# Stay on a runner even when the next cutoff is beyond this job's wait
+# budget. A queued poll can then take over before the deadline, rather than
+# requiring GitHub to deliver a new cron in a narrow pregame window.
+WATCH_AHEAD_MINUTES = 480
+REFRESH_LEAD_MINUTES = 20
+RETRY_LEAD_MINUTES = 10
 SETTLE_SECONDS = 20
 
 
@@ -71,7 +79,7 @@ def pending(data, now, horizon):
 
 
 def hold(data, horizon, refresh, finalize, clock, sleep):
-    """Refresh at most once and finalize at each cutoff up to horizon. Returns the steps taken."""
+    """Refresh, retry missing inputs once, and finalize each cutoff up to horizon."""
     steps = []
     refreshed = set()
     while True:
@@ -80,10 +88,17 @@ def hold(data, horizon, refresh, finalize, clock, sleep):
             return steps
         cutoff = min(due)
         refresh_at = cutoff - dt.timedelta(minutes=REFRESH_LEAD_MINUTES)
-        if cutoff not in refreshed and due[cutoff] < refresh_at:
-            sleep(max(0.,(refresh_at - clock()).total_seconds()))
-            refreshed.add(cutoff)
+        attempts = [cutoff - dt.timedelta(minutes=lead)
+                    for lead in (REFRESH_LEAD_MINUTES, RETRY_LEAD_MINUTES)]
+        attempt = next((point for point in attempts if (cutoff, point) not in refreshed), None)
+        if attempt is not None and due[cutoff] < refresh_at:
+            sleep(max(0.,(attempt - clock()).total_seconds()))
+            refreshed.add((cutoff, attempt))
             steps.append(('refresh', cutoff, refresh()))
+            # A slow refresh can cross the deadline. Finalize an earlier saved
+            # candidate immediately; pending() deliberately excludes past cutoffs.
+            if clock() >= cutoff:
+                steps.append(('finalize', cutoff, finalize()))
             continue
         sleep(max(0., (cutoff - clock()).total_seconds()) + SETTLE_SECONDS)
         steps.append(('finalize', cutoff, finalize()))
@@ -124,6 +139,19 @@ def stamp(now):
     return now.strftime('%FT%H:%MZ')
 
 
+def watch(data, horizon, refresh, finalize, clock, sleep):
+    """Carry an early delivered poll forward, bounded by this job's wait budget."""
+    steps = hold(data, horizon, refresh, finalize, clock, sleep)
+    now = clock()
+    upcoming = pending(data, now, now + dt.timedelta(minutes=WATCH_AHEAD_MINUTES))
+    if now < horizon and upcoming:
+        print(f'ATS watch: handing off at {horizon.isoformat()}; '
+              f'next cutoff {min(upcoming).isoformat()}', flush=True)
+        sleep((horizon - now).total_seconds())
+        steps.append(('handoff', min(upcoming), None))
+    return steps
+
+
 def refresh_build():
     code = run(sys.executable, 'build_site.py', check=False)
     commit(f'ledger {stamp(dt.datetime.now(dt.timezone.utc))} ATS refresh')
@@ -149,9 +177,13 @@ def main(argv=None):
     clock = lambda: dt.datetime.now(dt.timezone.utc)  # noqa: E731
     horizon = clock() + dt.timedelta(minutes=args.max_wait_minutes)
     due = pending(DATA, clock(), horizon)
+    # End at the first cutoff so the workflow publishes those locks immediately;
+    # the queued run takes the next kickoff group with a fresh model build.
+    if due:
+        horizon = min(horizon, min(due))
     print(f'ATS hold: {len(due)} cutoff(s) by {horizon.isoformat()}: '
           + (', '.join(c.isoformat() for c in sorted(due)) or 'none'), flush=True)
-    for step in hold(DATA, horizon, refresh_build, finalize_locks, clock, time.sleep):
+    for step in watch(DATA, horizon, refresh_build, finalize_locks, clock, time.sleep):
         print(f'ATS hold: {step[0]} for {step[1].isoformat()}: {step[2]}', flush=True)
     return 0
 

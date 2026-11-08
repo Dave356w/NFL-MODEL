@@ -112,6 +112,12 @@ normal public picks/results/totals. Keep actual recovery time, original availabi
 blockers and source-commit hashes in the backend record. This is an explicit exception
 to the no-backfill rule, not authorization to reconstruct other missing locks.
 
+Owner-requested Sunday lock repair (2026-11-08): the eight additional entries
+in `ats_retro_requests.json` recover CIN-ATL and the seven 13:00 ET games from
+their last committed pre-cutoff boards. Keep these selections in normal public
+results. Backend `ats_basis` identifies all retro locks separately from native
+60-minute locks; never rewrite earlier journal rows or use post-cutoff inputs.
+
 - **No lookahead.** Never let a game's own or later stats, snaps or labels
   into its features. Same-week roster status is ignored except the game week's
   own reserve list (v1.15, owner decision 2026-10-09). Membership and

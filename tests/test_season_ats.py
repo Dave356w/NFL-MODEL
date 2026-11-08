@@ -232,6 +232,16 @@ class SeasonATS(unittest.TestCase):
             with self.subTest(grades=grades):
                 self.assertTrue(np.isnan(s.summary(pd.DataFrame({'fixed_band_ats_result': grades}))['roi_se']))
 
+    def test_pending_only_week_adds_zero_units_without_claiming_an_roi(self):
+        frame = pd.DataFrame(dict(fixed_band_ats_result=[''], ats_status=['pending'],
+                                  fixed_band_ats_units=[np.nan], ats_price_basis=['assumed_minus110']))
+        result = s.summary(frame)
+        self.assertEqual((result['units'], result['bets'], result['pending']), (0., 0, 1))
+        self.assertTrue(np.isnan(result['roi']))
+        # A completed bet with no price is still unknown, rather than zero.
+        frame['fixed_band_ats_result'] = 'W'
+        self.assertTrue(np.isnan(s.summary(frame)['units']))
+
     def test_duplicate_ledger_uses_first_snapshot_not_later_probability(self):
         latest,native=self.fixture();latest['ats_locks']={}
         # The later snapshot would take the away side and win.

@@ -310,7 +310,7 @@ def test_failed_refresh_cannot_freeze_a_missing_inactive_list(tmp_path):
     from test_ats_wait import Clock
     clock=Clock(NOW)
     steps=ats_wait.hold(tmp_path,KO,lambda:1,lambda:locks.record(tmp_path,clock.now),clock,clock.sleep)
-    assert [r[0] for r in steps]==['refresh','finalize']
+    assert [r[0] for r in steps]==['refresh','refresh','finalize']
     assert not c.read(tmp_path/locks.LOCKS)
 
 

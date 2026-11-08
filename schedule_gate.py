@@ -1,7 +1,7 @@
 """Decide whether a scheduled workflow run should do the full model build.
 
 GitHub cron is static, so build.yml polls hourly, plus every five minutes
-from T−180 to T−15 for the ATS cutoff, and this script gates the
+from T−540 to T−15 for the ATS cutoff watch, and this script gates the
 expensive run (play-by-play reconstruction, weekly refits) against the live
 NFL schedule. Stdlib only, so the plan job needs no pip install.
 
@@ -40,7 +40,7 @@ ATS_CRON = "*/5 * * * *"
 # GitHub delivered ~0.5 scheduled runs per hour in October 2026 (median gap
 # 102 minutes). A delivered poll this far ahead still builds, and the hold in
 # ats_wait.py carries it to the T−60 cutoff.
-ATS_REFRESH_MINUTES = 180
+ATS_REFRESH_MINUTES = 540  # start an eight-hour cutoff watch; runners hand off within four hours
 ATS_FINALIZE_MINUTES = 15
 LEDGER_WINDOW_HOURS = 30
 FINAL_REFRESH_MINUTES = 150
@@ -99,6 +99,10 @@ def due_games(games, now, recorded):
             continue
         if minutes <= FINAL_REFRESH_MINUTES:
             due.append((g["game_id"], "final pregame refresh"))
+        elif minutes <= ATS_REFRESH_MINUTES:
+            # Every delivered poll can arm the watch. The hourly poll may be
+            # the only run GitHub delivers before a London or early US cutoff.
+            due.append((g["game_id"], "60-minute ATS lock watch"))
         elif minutes <= 60 * LEDGER_WINDOW_HOURS and g["game_id"] not in recorded:
             due.append((g["game_id"], "awaiting first ledger snapshot"))
     return due
