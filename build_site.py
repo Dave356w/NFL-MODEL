@@ -1156,7 +1156,8 @@ def pooled_2026_v118_header(latest, ledger):
 # Every public season surface uses the same deduplicated pool. Provenance stays
 # in season_ats and the repository report rather than the customer interface.
 PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', '60-minute lock',
-                'Recorded pregame', 'Recovered saved forecast', 'Backfilled recorded skip', 'Awaiting ATS lock'}
+                'Recorded pregame', 'Recovered saved forecast', 'Owner-requested retro lock',
+                'Backfilled recorded skip', 'Awaiting ATS lock'}
 BREAK_EVEN = 110 / 210
 
 

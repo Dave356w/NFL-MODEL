@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: [.github/workflows/publish-saved.yml]
+    paths: [.github/workflows/publish-saved.yml, build_site.py]
 
 # Rendering committed selections does not write or commit either lock journal.
 # It can publish while the model runner is holding for another kickoff group.
@@ -49,4 +49,3 @@ jobs:
         uses: actions/deploy-pages@v4
         with:
           artifact_name: saved-ats-${{ github.run_attempt }}
-

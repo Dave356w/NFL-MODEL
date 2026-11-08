@@ -766,11 +766,12 @@ def test_pick_badge_text_contrast_in_light_and_dark_themes():
 
 def test_public_ats_keeps_all_season_sources_and_missing_locks():
     pooled = pd.DataFrame({
-        'game_id': ['lock', 'legacy', 'backfill', 'replay', 'snapshot', 'early_missing', 'late_missing'],
+        'game_id': ['lock', 'legacy', 'backfill', 'replay', 'snapshot', 'early_missing', 'late_missing', 'retro'],
         'ats_basis': ['60-minute lock', 'Recorded pregame', 'Backfilled recorded skip', 'Historical replay',
-                      'Replayed pregame forecast', 'Awaiting ATS lock', 'Awaiting ATS lock'],
+                      'Replayed pregame forecast', 'Awaiting ATS lock', 'Awaiting ATS lock', 'Owner-requested retro lock'],
         'kickoff_utc': ['2026-10-25T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00',
-                        None, '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-25T17:00:00+00:00']})
+                        None, '2026-10-18T17:00:00+00:00', '2026-10-18T17:00:00+00:00', '2026-10-25T17:00:00+00:00',
+                        '2026-11-06T01:15:00+00:00']})
     kept = set(b.public_ats({'pooled_ats': pooled}).game_id)
     # Missing locks remain visible without a graded pick; no source is dropped.
     assert kept == set(pooled.game_id)

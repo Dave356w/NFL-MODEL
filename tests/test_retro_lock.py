@@ -10,6 +10,7 @@ import pytest
 import ats_locks as a
 import retro_lock as r
 import season_ats
+import build_site
 
 NOW = dt.datetime(2026, 11, 6, 3, tzinfo=dt.timezone.utc)
 REQUEST = dict(game_id='2026_09_JAX_BAL', source_commit='a' * 40, reason='Owner requested retro lock')
@@ -60,6 +61,10 @@ def test_retro_lock_joins_normal_journal_idempotently_without_backdating(tmp_pat
     assert pool.iloc[0].ats_basis == 'Owner-requested retro lock'
     assert pool.iloc[0].ats_basis not in season_ats.TIMED_BASES
     assert season_ats.summary(pool)['bets'] == 1
+    public = build_site.public_ats({'pooled_ats': pool})
+    assert len(public) == 1  # normal Results/export/headline pool includes the recovery
+    assert season_ats.summary(public) == season_ats.summary(pool)
+    assert public.iloc[0].ats_basis not in season_ats.TIMED_BASES
 
 
 @pytest.mark.parametrize('change', ['late_commit', 'late_forecast', 'score', 'not_ready', 'future_rule', 'wrong_week'])
