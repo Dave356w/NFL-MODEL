@@ -380,3 +380,10 @@ def test_long_wait_collects_sources_and_preserves_wake_time():
     w.monitored_sleep(65 * 60, clock, clock.sleep, collect)
     assert len(checks) == 4 and clock.now == wake
     assert all(b-a <= dt.timedelta(minutes=16) for a,b in zip(checks,checks[1:]))
+
+
+def test_collection_commit_failure_keeps_deadline_watch_alive(monkeypatch):
+    monkeypatch.setattr(w,'run',lambda *args,**kwargs:0)
+    def failed(message):raise subprocess.CalledProcessError(1,['commit_data.py'])
+    monkeypatch.setattr(w,'commit',failed)
+    assert w.collect_availability()==1

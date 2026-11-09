@@ -168,7 +168,13 @@ def collect_availability():
     # The separate collector queues behind this held build. Keep its source
     # checks alive here instead of leaving monitoring silent for four hours.
     code = run(sys.executable, 'availability_collect.py', check=False)
-    commit(f'availability {stamp(dt.datetime.now(dt.timezone.utc))} ATS watch')
+    try:
+        commit(f'availability {stamp(dt.datetime.now(dt.timezone.utc))} ATS watch')
+    except subprocess.CalledProcessError as exc:
+        # Keep the runner awake for the deadline. The uncommitted journals stay
+        # on disk for the next heartbeat and the workflow's final commit step.
+        print(f'::warning::ATS watch collection commit failed; preserving local evidence: {exc}', flush=True)
+        return code or 1
     return code
 
 
