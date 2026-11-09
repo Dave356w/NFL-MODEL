@@ -45,19 +45,20 @@ WATCH_AHEAD_MINUTES = 480
 REFRESH_LEAD_MINUTES = 20
 RETRY_LEAD_MINUTES = 10
 SETTLE_SECONDS = 20
+COLLECTION_INTERVAL_SECONDS = 15 * 60
 
 
 def pending(data, now, horizon):
     """{cutoff: newest saved generated_utc} for unlocked candidates with now < cutoff <= horizon."""
     locked = {ats_locks.key(r) for r in ats_locks.read(Path(data) / ats_locks.LOCKS)}
-    out = {};saved_games=set()
+    by_game = {}
     for row in ats_locks.read(Path(data) / ats_locks.CANDIDATES):
         cutoff = ats_locks.utc(row['lock_at_utc'])
         if ats_locks.key(row) in locked or not now < cutoff <= horizon:
             continue
         generated = ats_locks.utc(row['generated_utc'])
-        saved_games.add(ats_locks.key(row))
-        out[cutoff] = max(out.get(cutoff, generated), generated)
+        identity = (cutoff, ats_locks.key(row))
+        by_game[identity] = max(by_game.get(identity, generated), generated)
     # v1.21 cannot save a candidate until official inactive lists arrive (~T-90).
     # Hold scheduled games even with no candidate, so the T-70 refresh can collect
     # the lists. This never creates a candidate or authorizes a late input.
@@ -73,8 +74,13 @@ def pending(data, now, horizon):
                     if (manifest['revision'],row['game_id']) not in locked and now<cutoff<=horizon:
                         # An epoch sentinel means no candidate exists yet: refresh even if
                         # this board was generated recently but had unresolved availability.
-                        if (manifest['revision'],row['game_id']) not in saved_games:
-                            out[cutoff]=dt.datetime(1970,1,1,tzinfo=dt.timezone.utc)
+                        identity = (cutoff, (manifest['revision'],row['game_id']))
+                        by_game.setdefault(identity, dt.datetime(1970,1,1,tzinfo=dt.timezone.utc))
+    # Every game at a shared kickoff needs fresh inputs. A fresh candidate for
+    # one game must never suppress retries for another missing/stale candidate.
+    out = {}
+    for (cutoff, _), generated in by_game.items():
+        out[cutoff] = min(out.get(cutoff, generated), generated)
     return out
 
 
@@ -158,6 +164,23 @@ def refresh_build():
     return code
 
 
+def collect_availability():
+    # The separate collector queues behind this held build. Keep its source
+    # checks alive here instead of leaving monitoring silent for four hours.
+    code = run(sys.executable, 'availability_collect.py', check=False)
+    commit(f'availability {stamp(dt.datetime.now(dt.timezone.utc))} ATS watch')
+    return code
+
+
+def monitored_sleep(seconds, clock, sleep, collect):
+    """Keep source collection alive during long waits, without extending the wake time."""
+    wake = clock() + dt.timedelta(seconds=seconds)
+    while (wake - clock()).total_seconds() > COLLECTION_INTERVAL_SECONDS:
+        sleep(COLLECTION_INTERVAL_SECONDS)
+        collect()
+    sleep(max(0., (wake - clock()).total_seconds()))
+
+
 def finalize_locks():
     result = ats_locks.record(DATA)
     print(f'ATS held capture: {result}', flush=True)
@@ -183,7 +206,8 @@ def main(argv=None):
         horizon = min(horizon, min(due))
     print(f'ATS hold: {len(due)} cutoff(s) by {horizon.isoformat()}: '
           + (', '.join(c.isoformat() for c in sorted(due)) or 'none'), flush=True)
-    for step in watch(DATA, horizon, refresh_build, finalize_locks, clock, time.sleep):
+    sleep = lambda seconds: monitored_sleep(seconds, clock, time.sleep, collect_availability)
+    for step in watch(DATA, horizon, refresh_build, finalize_locks, clock, sleep):
         print(f'ATS hold: {step[0]} for {step[1].isoformat()}: {step[2]}', flush=True)
     return 0
 

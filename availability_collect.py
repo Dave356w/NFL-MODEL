@@ -13,6 +13,7 @@ import hashlib
 from html import unescape
 import json
 import re
+import time
 import unicodedata
 from pathlib import Path
 import urllib.parse
@@ -319,6 +320,14 @@ def parse_inactives(info,team,event,index):
             bare=index.resolve(re.sub(r'\s*\([^)]*\)\s*','',line).strip(' -–—:,•*·'),team,allow_transfer=True)
             if bare:mentioned.add(bare['gsis_id'])
             match=INACTIVE_ROW.match(line);player=None
+            # One verified club CMS typo: Tampa Bay's Nov 8 list uses KB for
+            # Keyshaun Elliott (a linebacker). Resolve the exact full name and
+            # require LB; arbitrary unknown prefixes still reject the list.
+            typo=re.fullmatch(r'KB\s+(.+)',line) if club_article else None
+            if typo:
+                resolved=index.resolve(typo[1],team,allow_transfer=True)
+                if resolved and resolved['position']=='LB':
+                    match=INACTIVE_ROW.match('LB '+typo[1])
             if match:
                 name=re.sub(r'\s*\([^)]*\)\s*','',match[2]).strip(' -–—:,')
                 player=index.resolve(name,team,allow_transfer=True) if len(name.split())>=2 else None
@@ -455,11 +464,45 @@ def collection_ready(snapshot,asof,require_inactives=False):
         required=('news','report','inactives') if require_inactives else ('news','report')
         for kind in required:
             item=snapshot[kind];checked=utc(item['last_success_utc'])
+            if item.get('error'):return False
             if kind=='news' and item.get('article_errors'):return False
             if not dt.timedelta(0)<=utc(asof)-checked<=dt.timedelta(minutes=MAX_AGE_MINUTES):return False
             if kind!='news' and (item.get('complete') is not True or not re.fullmatch(r'[a-f0-9]{64}',item.get('source_capture_sha256',''))):return False
         return True
     except (KeyError,ValueError,TypeError):return False
+
+
+def readiness_issues(snapshot,asof,require_inactives=False):
+    """Actionable reasons for an operational monitor; no relaxation of the gate."""
+    issues=[]
+    for kind in (('news','report','inactives') if require_inactives else ('news','report')):
+        item=snapshot.get(kind,{})
+        if item.get('error'):issues.append(f'{kind}: {item["error"]}')
+        if kind=='news' and item.get('article_errors'):issues.append('news: relevant article download failed')
+        try:
+            age=utc(asof)-utc(item['last_success_utc'])
+            if not dt.timedelta(0)<=age<=dt.timedelta(minutes=MAX_AGE_MINUTES):
+                issues.append(f'{kind}: source check stale or after forecast')
+        except (KeyError,TypeError,ValueError):issues.append(f'{kind}: no successful source check')
+        if kind!='news' and item.get('complete') is not True:issues.append(f'{kind}: complete official list/report missing')
+    if not issues and not collection_ready(snapshot,asof,require_inactives):
+        issues.append('collection: invalid policy or source evidence')
+    return issues
+
+
+def lock_readiness(state,now):
+    """Fail monitoring for near-game blockers, not next week's unpublished reports."""
+    rows=[]
+    for team,h in sorted(state.get('teams',{}).items()):
+        if not h.get('game_id') or not h.get('kickoff_utc'):continue
+        minutes=(utc(h['kickoff_utc'])-utc(now)).total_seconds()/60
+        if not 0<minutes<=24*60:continue
+        inactive_due=minutes<=85
+        snapshot=team_snapshot(state,team,h['game_id'])
+        issues=readiness_issues(snapshot,now,require_inactives=inactive_due)
+        rows.append(dict(team=team,game_id=h['game_id'],minutes_to_kickoff=round(minutes,1),
+                         inactives_required=inactive_due,ready=not issues,issues=issues))
+    return rows
 
 
 def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
@@ -477,6 +520,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
     state=json.loads(state_path.read_text()) if state_path.exists() else {}
     if state.get('policy')!=POLICY:state={}
     state.update(policy=POLICY,max_age_minutes=MAX_AGE_MINUTES)
+    state.pop('input_error',None)
     teams=state.setdefault('teams',{});articles=state.setdefault('articles',{})
     sources=read(data/SOURCES);latest_sources={}
     for r in sources:latest_sources[(r['kind'],r['team'],r['game_id'],r['url'])]=r
@@ -725,16 +769,26 @@ def main(argv=None):
     p.add_argument('--force',action='store_true')
     args=p.parse_args(argv);now=dt.datetime.now(UTC)
     season=args.season or (now.year if now.month>=8 else now.year-1)
-    schedule=nfl.load_schedules(season).to_pandas()
-    roster=nfl.load_rosters_weekly(season).to_pandas()
+    try:
+        schedule,roster=load_inputs(nfl,season)
+    except Exception as exc:
+        path=Path(args.data)/STATE;path.parent.mkdir(parents=True,exist_ok=True)
+        state=json.loads(path.read_text()) if path.exists() else {}
+        state.update(updated_utc=dt.datetime.now(UTC).isoformat(),input_error=str(exc)[:500])
+        temporary=path.with_suffix('.tmp');temporary.write_text(json.dumps(state,sort_keys=True,indent=2)+'\n');temporary.replace(path)
+        print('::error::Availability inputs unavailable: '+str(exc))
+        return 1
     roster['team']=roster.team.replace({'LAR':'LA','JAC':'JAX','WSH':'WAS','OAK':'LV','SD':'LAC','STL':'LA'})
     state=refresh(args.data,schedule,roster,now=now,force=args.force)
     def fresh(h):
-        try:return not h['news'].get('article_errors') and dt.timedelta(0)<=dt.datetime.now(UTC)-utc(h['news']['last_success_utc'])<=dt.timedelta(minutes=MAX_AGE_MINUTES)
+        try:return not h['news'].get('error') and not h['news'].get('article_errors') and dt.timedelta(0)<=dt.datetime.now(UTC)-utc(h['news']['last_success_utc'])<=dt.timedelta(minutes=MAX_AGE_MINUTES)
         except (KeyError,ValueError):return False
     count=sum(fresh(h) for h in state['teams'].values())
+    readiness=lock_readiness(state,dt.datetime.now(UTC))
+    blocked=[r for r in readiness if not r['ready']]
     print(json.dumps(dict(teams=len(state['teams']),news_fresh=count,
-        pending_games=len({h.get('game_id') for h in state['teams'].values()}-{None}),**validate_store(args.data)),sort_keys=True))
+        lock_readiness=readiness,pending_games=len({h.get('game_id') for h in state['teams'].values()}-{None}),**validate_store(args.data)),sort_keys=True))
+    for r in blocked:print('::error::'+r['game_id']+' '+r['team']+': '+'; '.join(r['issues']))
     summary=os.environ.get('GITHUB_STEP_SUMMARY')
     if summary:
         lines=['Official availability collection','',f'Fresh team news: {count}/32. Unpublished reports remain incomplete.','',
@@ -745,8 +799,19 @@ def main(argv=None):
                 item=h[kind]
                 cells.append('no upcoming game' if not h.get('game_id') else 'complete' if item.get('complete') else 'pending')
             lines.append('| '+' | '.join(cells)+' |')
+        lines+=['','Near-game lock blockers:']+[r['game_id']+' '+r['team']+': '+'; '.join(r['issues']) for r in blocked]
         with Path(summary).open('a') as out:out.write('\n'.join(lines)+'\n')
-    return 0 if count==32 else 1
+    return 0 if count==32 and not blocked else 1
+
+
+def load_inputs(nfl,season,sleep=time.sleep):
+    """Retry transient upstream errors without substituting old roster identities."""
+    for attempt in range(3):
+        try:
+            return nfl.load_schedules(season).to_pandas(),nfl.load_rosters_weekly(season).to_pandas()
+        except Exception:
+            if attempt==2:raise
+            sleep((1,3)[attempt])
 
 
 if __name__=='__main__':raise SystemExit(main())

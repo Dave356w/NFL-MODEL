@@ -477,3 +477,76 @@ def test_failed_league_list_outranks_a_club_success_in_the_same_refresh(tmp_path
     state=collect(tmp_path,source)
     assert state['teams']['BAL']['inactives']['complete'] is False
     assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
+
+
+@pytest.mark.parametrize('kind',['news','report','inactives'])
+def test_failed_new_check_blocks_even_while_old_success_is_fresh(tmp_path,kind):
+    state=collect(tmp_path)
+    snap=c.team_snapshot(state,'BAL',EVENT['game_id'])
+    assert c.collection_ready(snap,NOW,True)
+    snap[kind]['error']='latest request failed'
+    assert not c.collection_ready(snap,NOW+dt.timedelta(minutes=1),True)
+    assert any('latest request failed' in s for s in c.readiness_issues(snap,NOW,True))
+
+
+def test_lock_monitor_checks_near_game_inactives_and_ignores_next_week(tmp_path):
+    state=collect(tmp_path)
+    state['teams']['BAL']['inactives']['complete']=False
+    # T-90: lists may still be publishing; final reports are already required.
+    assert all(r['ready'] for r in c.lock_readiness(state,NOW))
+    # T-80: recent RSS alone cannot make the monitor green.
+    blocked=[r for r in c.lock_readiness(state,NOW+dt.timedelta(minutes=10)) if not r['ready']]
+    assert [r['team'] for r in blocked]==['BAL']
+    assert any('complete official' in s for s in blocked[0]['issues'])
+    state['teams']['BAL']['kickoff_utc']=(NOW+dt.timedelta(days=5)).isoformat()
+    assert all(r['team']!='BAL' for r in c.lock_readiness(state,NOW))
+
+
+@pytest.mark.parametrize('position,club,accepted', [('LB',True,True),('WR',True,False),('LB',False,False)])
+def test_club_kb_typo_requires_exact_resolved_linebacker(position,club,accepted):
+    players=[dict(p,position=position) if p['full_name']=='Dan Gamma' else dict(p) for p in PLAYERS]
+    info=c.article(inactive_html(body='RAVENS\nKB Dan Gamma\nJAGUARS\nWR Fred Epsilon'))
+    if club:info['source_team']='BAL'
+    if accepted:
+        rows=c.parse_inactives(info,'BAL',EVENT,c.PlayerIndex(players))['rows']
+        assert rows==[dict(gsis_id='00-0000003',player='Dan Gamma',position='LB')]
+    else:
+        with pytest.raises(ValueError):c.parse_inactives(info,'BAL',EVENT,c.PlayerIndex(players))
+
+
+def test_transient_roster_failure_retries_but_never_substitutes_stale_data():
+    from types import SimpleNamespace
+    calls=[];sleeps=[]
+    def load(season):
+        calls.append(season)
+        if len(calls)<3:raise ConnectionError('504')
+        return SimpleNamespace(to_pandas=lambda: 'fresh roster')
+    nfl=SimpleNamespace(load_schedules=lambda y:SimpleNamespace(to_pandas=lambda:'schedule'),load_rosters_weekly=load)
+    assert c.load_inputs(nfl,2026,sleeps.append)==('schedule','fresh roster')
+    assert calls==[2026]*3 and sleeps==[1,3]
+    nfl.load_rosters_weekly=lambda y:(_ for _ in ()).throw(ConnectionError('outage'))
+    with pytest.raises(ConnectionError):c.load_inputs(nfl,2026,sleeps.append)
+
+
+def test_input_outage_is_saved_without_changing_evidence(tmp_path,monkeypatch):
+    collect(tmp_path)
+    before=(tmp_path/c.AUTO).read_bytes()
+    def failed(*args):raise ConnectionError('roster endpoint 504')
+    monkeypatch.setattr(c,'load_inputs',failed)
+    assert c.main(['--data',str(tmp_path),'--season','2026'])==1
+    assert 'roster endpoint 504' in json.loads((tmp_path/c.STATE).read_text())['input_error']
+    assert (tmp_path/c.AUTO).read_bytes()==before
+
+
+def test_capture_status_explains_missing_lists_without_creating_lock(tmp_path):
+    source=Sources();source.inactives=False
+    state=collect(tmp_path,source)
+    save_board(tmp_path,resolved(tmp_path,state,asof=source.now),generated=source.now)
+    assert locks.record(tmp_path,source.now)=={'candidates':0,'locks':0}
+    status=json.loads((tmp_path/'ats_capture_status.json').read_text())
+    game,=status['games']
+    assert game['state']=='awaiting candidate'
+    assert any('inactives' in s for s in game['issues'])
+    locks.record(tmp_path,c.utc(EVENT['kickoff_utc'])-dt.timedelta(minutes=59))
+    assert json.loads((tmp_path/'ats_capture_status.json').read_text())['games'][0]['state']=='missed cutoff'
+    assert locks.read(tmp_path/locks.LOCKS)==[]

@@ -12,7 +12,9 @@ injury tables, and discovers official inactive announcements from club feeds and
 inactive hub. No API key or model-generated interpretation is required. The model refreshes
 collection before scoring upcoming games. `.github/workflows/availability.yml` also polls every
 15 minutes, sharing the build's serialized `site-build` queue. GitHub schedules are best effort;
-the held build refreshes again before the 60-minute cutoff.
+the held build collects sources every 15 minutes during long waits and refreshes the model
+again before the 60-minute cutoff. A fresh candidate for one game cannot suppress retries
+for another game at the same kickoff.
 
 ```bash
 python availability_collect.py                 # collect without running the model
@@ -27,6 +29,8 @@ python validate_data_files.py                  # includes hashes and fact-to-sou
 | `availability_auto_observations.jsonl` | Confirmed game/player facts linked to saved source evidence |
 | `availability_review.jsonl` | Uncertain announcements, unknown players and unsupported formats |
 | `availability_collection_status.json` | Latest checks, failures and report/inactive completeness per team/game |
+| `ats_capture_status.json` | Each game's candidate/lock state and reasons a forecast cannot lock |
+| `forecast_refreshes.jsonl` | Immutable pregame board refreshes, including blocked projections, their map and injury evidence |
 
 The first four files are append-only; only operational health is replaced atomically. Rechecking
 unchanged evidence updates health without changing its first-capture time. A report that changes
@@ -77,8 +81,12 @@ candidate. No earlier candidate can silently substitute for the missing lists. T
 scheduled games even before a candidate exists, refreshes at T-70, and freezes only candidates
 already saved by T-60. A failed refresh cannot create a late selection.
 
-The collection workflow exposes a team-by-team job summary. A feed outage is visible in health;
-previous evidence is retained and can be used only while still fresh. Unpublished Sunday reports
+The collection workflow exposes a team-by-team job summary. The CLI also fails on incomplete final
+reports within 24 hours of kickoff and missing official inactive lists within 85 minutes. Reports
+for more distant games do not fail that readiness check. Transient schedule/roster downloads are
+retried three times; exhausted failures are saved in operational health without replacing source
+evidence or substituting stale roster identities. A failed latest source check blocks readiness
+even if an earlier success is less than 35 minutes old. Previous evidence is retained. Unpublished Sunday reports
 on Wednesday are pending, not healthy. Unsupported source formats or unresolved player identities
 need a parser/identity correction before automated completeness can be certified.
 
@@ -152,6 +160,13 @@ The board carries that object and its hash through the compact snapshot. Forward
 and ATS candidates freeze it alongside their existing inputs. ATS archive validation independently
 checks game/team identity, source timing, completeness and the forecast cutoff. New corrections
 cannot change existing candidates or locked decisions.
+
+`data/latest` and `data/projections` remain rolling reporting views. Full site builds also append
+each observed pregame refresh to `forecast_refreshes.jsonl`, including projections blocked by
+availability checks. Hashes, actual observation times, map rules and injury evidence are retained.
+This journal is diagnostic only: it cannot create a lock, authorize a retro lock or enter grading.
+Existing first-forward snapshots, candidates and locks are never rewritten. Pages-only publications
+do not append forecast refreshes.
 
 v1.21 never treats practice-only data as a complete final report merely because kickoff is close.
 Legacy rows keep their old report gate. A v1.20/v1.21 ATS board missing its evidence columns cannot

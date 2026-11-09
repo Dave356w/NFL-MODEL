@@ -317,7 +317,62 @@ def record(data='data', now=None):
         frozen.append(lock)
     append(data / LOCKS, frozen)
     validate_store(data)
+    write_capture_status(data, now)
     return {'candidates': len(added), 'locks': len(frozen)}
+
+
+def write_capture_status(data='data', now=None):
+    """Explain unsaved decisions without creating or changing an archived pick."""
+    import nfl_model as m
+    import availability_collect as ac
+    from schedule_gate import kickoff
+
+    data = Path(data)
+    now = utc(now or dt.datetime.now(dt.timezone.utc))
+    latest = data / 'latest'
+    if not (latest / 'manifest.json').exists() or not (latest / 'board.csv').exists():
+        return
+    manifest = json.loads((latest / 'manifest.json').read_text())
+    generated = utc(manifest['generated_utc'])
+    locked = {key(r) for r in read(data / LOCKS)}
+    candidates = {key(r) for r in read(data / CANDIDATES)}
+    games = []
+    with (latest / 'board.csv').open(newline='') as src:
+        for raw in csv.DictReader(src):
+            ko = kickoff(raw)
+            if ko is None or now > ko + dt.timedelta(hours=FINALIZATION_GRACE_HOURS):
+                continue
+            identity = (manifest['revision'], raw['game_id'])
+            cutoff = deadline(ko)
+            issues = []
+            if identity in locked:
+                state = 'locked'
+            elif identity in candidates:
+                state = 'candidate saved; awaiting finalization'
+            else:
+                state = 'missed cutoff' if now >= cutoff else 'awaiting candidate'
+                if raw.get('ready') != 'True':issues.append('model history not ready')
+                if not generated <= now <= cutoff:issues.append('current board cannot be captured before the cutoff')
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21'):
+                    if raw.get('availability_policy') != m.AVAILABILITY_POLICY:
+                        issues.append('forecast availability evidence missing')
+                    else:
+                        for side in ('home','away'):
+                            try:
+                                e = json.loads(raw[side+'_availability_evidence'])
+                                issues.extend(raw[side]+': '+str(b) for b in e.get('blockers',[]))
+                                if not e.get('report_complete'):issues.append(raw[side]+': final report incomplete')
+                                if manifest['revision']=='boxscore-composite-v1.21':
+                                    issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,True))
+                            except (KeyError,ValueError,TypeError):
+                                issues.append(raw[side]+': forecast availability evidence invalid')
+                        if m.availability_snapshot(raw,ko,generated) is None:
+                            issues.append('forecast availability validation failed')
+                if not issues:issues.append('candidate rejected; check market line and fitted map')
+            games.append(dict(game_id=raw['game_id'],state=state,lock_at_utc=cutoff.isoformat(),issues=issues))
+    payload=dict(updated_utc=now.isoformat(),revision=manifest['revision'],forecast_utc=generated.isoformat(),games=games)
+    path=data/'ats_capture_status.json'
+    temporary=path.with_suffix('.tmp');temporary.write_text(json.dumps(payload,sort_keys=True,indent=2)+'\n');temporary.replace(path)
 
 
 def display_records(data='data'):

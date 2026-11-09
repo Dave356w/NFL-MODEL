@@ -49,6 +49,7 @@ import nfl_model as m
 import totals
 import fixed_bands
 import ats_locks
+import forecast_history
 import season_ats
 import espn_spreads
 import historical_calibration
@@ -1577,12 +1578,15 @@ def main(argv=None):
     import retro_lock
     print(f'Owner-requested ATS retro locks: {retro_lock.apply(DATA)}')
     if not args.pages_only:
+        # Retain the previous rolling board before a model run can replace it.
+        forecast_history.record(DATA, load_latest(DATA / 'latest'))
         # Finalize persisted inputs before the expensive model refresh. Even a
         # later model failure must not strand an eligible pre-cutoff candidate.
         print(f"ATS saved capture: {ats_locks.record(DATA)}")
         espn_spreads.safe_refresh(DATA)
         outdir = run_model()
         season, week = snapshot(outdir)
+        print(f"Pregame forecast refreshes saved: {forecast_history.record(DATA, load_latest(DATA / 'latest'))}")
         print(f"snapshot: {season} week {week} -> {LATEST}")
         espn_spreads.safe_refresh(DATA)
         print(f"ATS timed capture: {ats_locks.record(DATA)}")
