@@ -43,6 +43,8 @@ labels its reconstructed, exposed development basis separately from live results
 
 **v1.21 automatic collection (owner request 2026-11-04) supersedes v1.20's production identity.** All 32 official club RSS feeds, game injury tables and official inactive announcements are collected automatically. The automatic journals are bot-generated and append-only; the curated journal remains separate. Both teams' fresh complete official inactive lists are required before an ATS candidate is saved. The cutoff hold watches games even before a candidate exists. All previous revision signatures, historical inputs and the v1.16 shadow are preserved. The generated single-cell notebook embeds the collector as well as the model.
 
+**v1.22 RSS retirement (owner request 2026-11-09) supersedes v1.21 production.** Stop RSS polling and automatic team-news facts. Keep official injury-table and inactive-list collection, final-report and T-60 safeguards, the unchanged ten-term fit and v1.16 shadow. New revision/output/signature; prior signatures and journals remain unchanged. Existing v1.21 picks whose deadlines precede 2026-11-09 19:30 UTC remain authoritative in normal public results without rewriting their source rows. The owner also authorizes the missing Sunday TB-CHI pick from the last board committed before T-60 (`b049776c391f7903623b7a2cd650f28eb198f44a`): TB +6. Preserve original blockers and actual recovery time; no post-cutoff inputs.
+
 ## Sources of truth
 
 - `nfl_model.py`: the model. Its docstring is the version history; `MODEL.md`

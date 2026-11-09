@@ -58,5 +58,10 @@
     "game_id": "2026_09_GB_NE",
     "source_commit": "6370aefd2610ec2f7e5aba02f7e55db0fa81201d",
     "reason": "Owner requested activation of today's missed locks on 2026-11-08. If no normal lock exists after the 12:25 Pacific cutoff, recover only the board committed at 20:18 UTC before T-60. Retain the original New England source and medical-clearance blockers, the saved model, market line and weekly map, and actual creation time. A normal existing lock remains authoritative."
+  },
+  {
+    "game_id": "2026_09_TB_CHI",
+    "source_commit": "b049776c391f7903623b7a2cd650f28eb198f44a",
+    "reason": "Owner requested retirement of RSS and rescue of yesterday's missing picks on 2026-11-09. Recover this final pre-cutoff board committed at 2026-11-09T00:13:00Z before T-60 (00:20Z). Preserve Tampa Bay +6, the saved model and weekly map, original inactive-parser blockers and actual recovery time. Do not refit or use post-cutoff inputs."
   }
 ]

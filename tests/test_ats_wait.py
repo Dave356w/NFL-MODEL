@@ -345,3 +345,45 @@ def test_sync_survives_an_unreachable_remote(stale_checkout):
     before = git(job, 'rev-parse', 'HEAD')
     assert w.sync() is False
     assert git(job, 'rev-parse', 'HEAD') == before
+
+
+def test_missing_game_is_not_masked_by_fresh_candidate_at_same_cutoff(tmp_path):
+    clock = Clock(CUTOFF - dt.timedelta(minutes=8))
+    board(tmp_path, clock.now)
+    path = tmp_path / 'latest/manifest.json'
+    manifest = json.loads(path.read_text())
+    manifest['revision'] = m.REVISION
+    path.write_text(json.dumps(manifest))
+    # A different game has fresh inputs, but TEN-IND still has no candidate.
+    candidate(tmp_path, clock.now, game_id='other')
+    assert w.pending(tmp_path, clock.now, KO)[CUTOFF] == dt.datetime(1970, 1, 1, tzinfo=UTC)
+    calls = []
+    w.hold(tmp_path, CUTOFF, lambda: calls.append('retry'), lambda: None, clock, clock.sleep)
+    assert calls == ['retry', 'retry']
+
+
+def test_stale_game_is_not_masked_by_fresh_candidate_at_same_cutoff(tmp_path):
+    now = CUTOFF - dt.timedelta(minutes=8)
+    candidate(tmp_path, now, game_id='fresh')
+    old = CUTOFF - dt.timedelta(minutes=40)
+    candidate(tmp_path, old, game_id='stale')
+    assert w.pending(tmp_path, now, KO)[CUTOFF] == old
+
+
+def test_long_wait_collects_sources_and_preserves_wake_time():
+    clock = Clock(CUTOFF - dt.timedelta(hours=3))
+    wake = clock.now + dt.timedelta(minutes=65)
+    checks = []
+    def collect():
+        checks.append(clock.now)
+        clock.sleep(5)  # collection work consumes part of the wait, never extends it
+    w.monitored_sleep(65 * 60, clock, clock.sleep, collect)
+    assert len(checks) == 4 and clock.now == wake
+    assert all(b-a <= dt.timedelta(minutes=16) for a,b in zip(checks,checks[1:]))
+
+
+def test_collection_commit_failure_keeps_deadline_watch_alive(monkeypatch):
+    monkeypatch.setattr(w,'run',lambda *args,**kwargs:0)
+    def failed(message):raise subprocess.CalledProcessError(1,['commit_data.py'])
+    monkeypatch.setattr(w,'commit',failed)
+    assert w.collect_availability()==1

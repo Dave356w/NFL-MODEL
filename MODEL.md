@@ -1,12 +1,12 @@
 # The model and its pipeline
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.21), newest first; this page describes what the code
+version history (v1 to v1.22), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.21`
+## The current model: `boxscore-composite-v1.22`
 
-v1.21 preserves the v1.19 ten-term fit and automatically collects all 32 official club news feeds, current-game injury reports and official inactive lists. It has a new revision, output name (`nfl_boxscore_output_v1_21`) and config signature. Both complete official inactive lists and fresh source checks are required before an ATS candidate can be saved. Historical training features, prior revision signatures and the v1.16 shadow inputs remain unchanged. Non-QB absence columns still receive no fitted coefficient. Collection, review and lock evidence are documented in [AVAILABILITY.md](AVAILABILITY.md); engineering tests do not establish a betting-performance improvement.
+v1.22 preserves the v1.19 ten-term fit and collects official game injury reports and inactive lists. RSS polling, team-news observations and news-freshness lock requirements are retired by owner request on 2026-11-09. The new revision, output name (`nfl_boxscore_output_v1_22`) and configuration signature keep earlier experiments intact. Both complete official inactive lists and fresh report checks remain required before a candidate is saved. Already-saved v1.21 selections from before retirement remain authoritative in normal public results; no stored row is rewritten or relabelled as a new native forecast. Historical training features, earlier signatures and the v1.16 shadow remain unchanged. See [AVAILABILITY.md](AVAILABILITY.md).
 
 ## v1.19 foundation: ten core terms
 

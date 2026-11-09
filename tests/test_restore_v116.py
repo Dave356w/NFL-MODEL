@@ -16,7 +16,7 @@ def test_restored_configuration_matches_original_frozen_recipe():
         assert m.REVISION=='boxscore-composite-v1.16'
         assert m.PRODUCT_RECIPE==original['recipe']
         assert m.config_signature()[0]==original['config_signature']
-    assert m.REVISION=='boxscore-composite-v1.21' and m.OUTPUT_NAME=='nfl_boxscore_output_v1_21'
+    assert m.REVISION=='boxscore-composite-v1.22' and m.OUTPUT_NAME=='nfl_boxscore_output_v1_22'
     assert {k:v for k,v in m.PRODUCT_RECIPE.items() if k not in ('favorite_penalty','terms')}==original['recipe']
     assert m.PRODUCT_RECIPE['favorite_penalty']==m.FAVORITE_PENALTY
     assert m.config_signature()[0]!=original['config_signature']

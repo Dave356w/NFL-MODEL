@@ -30,6 +30,7 @@ from schedule_gate import kickoff as scheduled_kickoff
 REPLAY_UNTIL = {'boxscore-composite-v1.19': dt.datetime.fromisoformat('2026-11-05T12:00:00+00:00')}
 REPLAY_UNTIL['boxscore-composite-v1.20']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.21']=REPLAY_UNTIL['boxscore-composite-v1.19']
+REPLAY_UNTIL['boxscore-composite-v1.22']=REPLAY_UNTIL['boxscore-composite-v1.19']
 
 
 def replay_cutoff(revision):
@@ -115,7 +116,7 @@ def build(latest, ledger):
                     ats_basis='Replayed pregame forecast')
         rows[r['game_id']] = row
     # Immutable ATS archives replace BOTH history and any snapshot replay.
-    for (rev, game), saved in latest.get('ats_locks', {}).items():
+    for (rev, game), saved in ats_locks.current_records(latest.get('ats_locks', {}), revision).items():
         if rev != revision or int(saved['season']) != 2026:
             continue
         rows[game] = dict(game_id=game, season=2026, week=int(saved['week']),
@@ -125,6 +126,7 @@ def build(latest, ledger):
             espn_quote=saved.get('espn_quote'),
             fixed_band_spread=saved['fixed_band_spread'], policy_version=saved.get('policy_version'),
             finalized_utc=saved.get('finalized_utc'),
+            forecast_revision=saved.get('revision', rev),
             retro_locked=saved.get('retro_locked', False),
             recovered_after_kickoff=saved.get('recovered_after_kickoff', False),
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
@@ -327,7 +329,7 @@ def _baseline_lines(sides, margin):
 def lock_baselines(latest, frame):
     """Timed locks graded beside same-row controls; backend reporting only."""
     revision = (latest or {}).get('manifest', {}).get('revision', m.REVISION)
-    locks = (latest or {}).get('ats_locks', {})
+    locks = ats_locks.current_records((latest or {}).get('ats_locks', {}), revision)
     rules = [r for r in (latest or {}).get('fixed_band_rules', []) if r and 'season' in r]
     lines = ['ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; '
              'break-even cover 52.4%).',
