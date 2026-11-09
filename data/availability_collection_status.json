@@ -212,18 +212,18 @@
     },
     "https://www.buffalobills.com/news/bills-lt-dion-dawkins-trying-to-push-through-rib-injury-for-week-9-against-vikings": {
       "error": null,
-      "last_attempt_utc": "2026-11-09T04:48:32.981898+00:00",
-      "last_success_utc": "2026-11-09T04:48:32.981898+00:00"
+      "last_attempt_utc": "2026-11-09T13:33:45.786681+00:00",
+      "last_success_utc": "2026-11-09T13:33:45.786681+00:00"
     },
     "https://www.buffalobills.com/news/bills-sign-cb-kader-kohou-to-the-practice-squad": {
       "error": null,
-      "last_attempt_utc": "2026-11-09T04:48:32.973198+00:00",
-      "last_success_utc": "2026-11-09T04:48:32.973198+00:00"
+      "last_attempt_utc": "2026-11-09T13:33:45.849265+00:00",
+      "last_success_utc": "2026-11-09T13:33:45.849265+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-injury-report-vs-vikings-week-9": {
       "error": null,
-      "last_attempt_utc": "2026-11-09T04:48:32.974129+00:00",
-      "last_success_utc": "2026-11-09T04:48:32.974129+00:00"
+      "last_attempt_utc": "2026-11-09T13:33:45.859281+00:00",
+      "last_success_utc": "2026-11-09T13:33:45.859281+00:00"
     },
     "https://www.buffalobills.com/news/buffalo-bills-release-safety-cj-gardner-johnson": {
       "error": null,
@@ -807,8 +807,8 @@
     },
     "https://www.vikings.com/news/bills-injury-report-week-9-2026-nfl-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-09T04:48:33.020322+00:00",
-      "last_success_utc": "2026-11-09T04:48:33.020322+00:00"
+      "last_attempt_utc": "2026-11-09T13:33:45.776110+00:00",
+      "last_success_utc": "2026-11-09T13:33:45.776110+00:00"
     },
     "https://www.vikings.com/news/kevin-oconnell-updates-injuries-recaps-offense-after-week-8": {
       "error": null,
@@ -817,8 +817,8 @@
     },
     "https://www.vikings.com/news/quarterback-carson-wentz-monday-night-bills": {
       "error": null,
-      "last_attempt_utc": "2026-11-09T04:48:32.975469+00:00",
-      "last_success_utc": "2026-11-09T04:48:32.975469+00:00"
+      "last_attempt_utc": "2026-11-09T13:33:45.772672+00:00",
+      "last_success_utc": "2026-11-09T13:33:45.772672+00:00"
     },
     "https://www.vikings.com/news/sign-running-back-deejay-dallas-corey-robinson-roster-moves": {
       "error": null,
@@ -847,12 +847,12 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.026555+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.026555+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.753241+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.753241+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "ATL": {
@@ -863,12 +863,12 @@
         "article_errors": [],
         "error": null,
         "items": 35,
-        "last_attempt_utc": "2026-11-09T04:48:29.023131+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.023131+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.761725+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.761725+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "BAL": {
@@ -879,12 +879,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.031533+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.031533+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.796684+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.796684+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "BUF": {
@@ -895,15 +895,15 @@
         "article_errors": [],
         "error": null,
         "items": 10,
-        "last_attempt_utc": "2026-11-09T04:48:29.020862+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.020862+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.751705+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.751705+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-09T04:48:29.039025+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.039025+00:00",
+        "last_attempt_utc": "2026-11-09T13:33:42.801362+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.801362+00:00",
         "source_capture_sha256": "cabd4a31e5be158414eb1cee3ab426aa8e93bef85a2ec4c3f3cf68a87424fc07"
       }
     },
@@ -915,12 +915,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.104927+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.104927+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.867447+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.867447+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "CHI": {
@@ -931,8 +931,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.104622+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.104622+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.877778+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.877778+00:00"
       },
       "report": {}
     },
@@ -944,12 +944,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.100034+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.100034+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.925669+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.925669+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "CLE": {
@@ -960,12 +960,12 @@
         "article_errors": [],
         "error": null,
         "items": 30,
-        "last_attempt_utc": "2026-11-09T04:48:29.111400+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.111400+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.897793+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.897793+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "DAL": {
@@ -976,12 +976,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.171394+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.171394+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:42.937938+00:00",
+        "last_success_utc": "2026-11-09T13:33:42.937938+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "DEN": {
@@ -992,8 +992,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.189337+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.189337+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.017147+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.017147+00:00"
       },
       "report": {}
     },
@@ -1005,12 +1005,12 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.198222+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.198222+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.001106+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.001106+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "GB": {
@@ -1021,12 +1021,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.247319+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.247319+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.044540+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.044540+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "HOU": {
@@ -1037,12 +1037,12 @@
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-09T04:48:29.281572+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.281572+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.072190+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.072190+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "IND": {
@@ -1053,12 +1053,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.333083+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.333083+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.078894+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.078894+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "JAX": {
@@ -1069,12 +1069,12 @@
         "article_errors": [],
         "error": null,
         "items": 75,
-        "last_attempt_utc": "2026-11-09T04:48:29.364549+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.364549+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.123887+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.123887+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "KC": {
@@ -1085,12 +1085,12 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.412756+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.412756+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.142212+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.142212+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "LA": {
@@ -1101,12 +1101,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.439080+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.439080+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.185505+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.185505+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "LAC": {
@@ -1117,12 +1117,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.493535+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.493535+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.240505+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.240505+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "LV": {
@@ -1133,12 +1133,12 @@
         "article_errors": [],
         "error": null,
         "items": 80,
-        "last_attempt_utc": "2026-11-09T04:48:29.526290+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.526290+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.278966+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.278966+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "MIA": {
@@ -1149,12 +1149,12 @@
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-09T04:48:29.609014+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.609014+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.244393+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.244393+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "MIN": {
@@ -1165,15 +1165,15 @@
         "article_errors": [],
         "error": null,
         "items": 8,
-        "last_attempt_utc": "2026-11-09T04:48:29.608388+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.608388+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.291502+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.291502+00:00"
       },
       "report": {
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-09T04:48:29.647500+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.647500+00:00",
+        "last_attempt_utc": "2026-11-09T13:33:43.337196+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.337196+00:00",
         "source_capture_sha256": "1006644d2821a7a81d45a97f53b11ee3b223356e031286d5ed53ca8e39e43f19"
       }
     },
@@ -1185,12 +1185,12 @@
         "article_errors": [],
         "error": null,
         "items": 5,
-        "last_attempt_utc": "2026-11-09T04:48:29.678388+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.678388+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.325322+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.325322+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "NO": {
@@ -1201,12 +1201,12 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.734287+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.734287+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.363622+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.363622+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "NYG": {
@@ -1217,12 +1217,12 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.788169+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.788169+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.405981+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.405981+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "NYJ": {
@@ -1233,12 +1233,12 @@
         "article_errors": [],
         "error": null,
         "items": 17,
-        "last_attempt_utc": "2026-11-09T04:48:29.817793+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.817793+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.402094+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.402094+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "PHI": {
@@ -1249,8 +1249,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:29.839507+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.839507+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.459159+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.459159+00:00"
       },
       "report": {}
     },
@@ -1262,12 +1262,12 @@
         "article_errors": [],
         "error": null,
         "items": 12,
-        "last_attempt_utc": "2026-11-09T04:48:29.834016+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.834016+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.458965+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.458965+00:00"
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "SEA": {
@@ -1278,12 +1278,12 @@
         "article_errors": [],
         "error": null,
         "items": 50,
-        "last_attempt_utc": "2026-11-09T04:48:29.923810+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.923810+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.506863+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.506863+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "SF": {
@@ -1294,12 +1294,12 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.902163+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.902163+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.506214+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.506214+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "TB": {
@@ -1310,8 +1310,8 @@
         "article_errors": [],
         "error": null,
         "items": 100,
-        "last_attempt_utc": "2026-11-09T04:48:30.032847+00:00",
-        "last_success_utc": "2026-11-09T04:48:30.032847+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.564213+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.564213+00:00"
       },
       "report": {}
     },
@@ -1323,12 +1323,12 @@
         "article_errors": [],
         "error": null,
         "items": 15,
-        "last_attempt_utc": "2026-11-09T04:48:29.928996+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.928996+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.558540+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.558540+00:00"
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     },
     "WAS": {
@@ -1339,14 +1339,14 @@
         "article_errors": [],
         "error": null,
         "items": 20,
-        "last_attempt_utc": "2026-11-09T04:48:29.991171+00:00",
-        "last_success_utc": "2026-11-09T04:48:29.991171+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:43.598232+00:00",
+        "last_success_utc": "2026-11-09T13:33:43.598232+00:00"
       },
       "report": {
         "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-09T04:48:27.431513+00:00"
+        "last_attempt_utc": "2026-11-09T13:33:40.687187+00:00"
       }
     }
   },
-  "updated_utc": "2026-11-09T04:48:33.020322+00:00"
+  "updated_utc": "2026-11-09T13:33:45.859281+00:00"
 }
