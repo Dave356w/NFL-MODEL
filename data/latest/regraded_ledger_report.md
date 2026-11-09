@@ -1,8 +1,8 @@
-# boxscore-composite-v1.21 retrospective ledger replay
+# boxscore-composite-v1.22 retrospective ledger replay
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 142; unique games: 72. Repeated snapshots are not independent games.
+Snapshots: 143; unique games: 72. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
@@ -15,6 +15,7 @@ boxscore-composite-v1.16     71        1    49      20       1  3.382725  0.0483
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.617739         0.574300 0.215205      0.194824
 boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.030224 0.115655        -0.041048        1.279323      0.031203            42  0.643780         0.645515 0.224277      0.224255
 boxscore-composite-v1.21     12        1    10       1       0  2.813064  0.255733 0.136370        -0.040786        2.813064      0.255733            11  0.415579         0.408413 0.121652      0.118810
+boxscore-composite-v1.22      1        1     0       0       0  0.000000       NaN      NaN              NaN        0.000000           NaN             0       NaN              NaN      NaN           NaN
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.792640          L  -1.000000
@@ -159,3 +160,4 @@ boxscore-composite-v1.16  2026_09_TB_CHI           0.682476  0.669476          W
 boxscore-composite-v1.21 2026_09_BUF_MIN           0.459494  0.459494                   NaN
 boxscore-composite-v1.16 2026_09_BUF_MIN           0.444987  0.459494                   NaN
 boxscore-composite-v1.16 2026_09_HOU_LAC           0.391889  0.384924          W   0.420168
+boxscore-composite-v1.22 2026_09_BUF_MIN           0.424779  0.424779                   NaN
