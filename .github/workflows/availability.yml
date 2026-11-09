@@ -1,4 +1,4 @@
-name: Collect official team availability
+name: Collect official injury reports and inactives
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Collect all official team feeds and upcoming-game reports
+      - name: Collect official injury reports and inactive lists
         run: python availability_collect.py
       - name: Preserve source captures and collection health
         if: ${{ !cancelled() }}

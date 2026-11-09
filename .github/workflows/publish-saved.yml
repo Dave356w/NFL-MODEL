@@ -15,6 +15,7 @@ concurrency:
 
 permissions:
   contents: read
+  actions: write  # one-time retirement of the pinned v1.21 watcher below
   pages: write
   id-token: write
 
@@ -29,6 +30,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+      # This pre-retirement runner already committed and published its initial
+      # snapshot, and is sleeping hours ahead of Monday's deadline. Release its
+      # queue so the push-triggered v1.22 build can start now. Never cancel a
+      # different run or one still capturing/committing its initial snapshot.
+      - name: Retire the already-committed RSS watcher
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          old_run=42681916632
+          state=$(gh api "repos/$GH_REPO/actions/runs/$old_run" --jq .status)
+          if [ "$state" != completed ]; then
+            head=$(gh api "repos/$GH_REPO/actions/runs/$old_run" --jq .head_sha)
+            test "$head" = a24fc427cfbf48bf2b6880547b89c7e74c8fa202
+            committed=$(gh api "repos/$GH_REPO/actions/runs/$old_run/jobs" --jq '.jobs[] | select(.name == "build") | .steps[] | select(.name == "Commit ledger and snapshots") | .conclusion')
+            holding=$(gh api "repos/$GH_REPO/actions/runs/$old_run/jobs" --jq '.jobs[] | select(.name == "build") | .steps[] | select(.name == "Hold for the 60-minute ATS cutoff") | .status')
+            test "$committed" = success
+            test "$holding" = in_progress
+            gh run cancel "$old_run"
+          fi
       - uses: actions/configure-pages@v5
       - uses: actions/setup-python@v5
         with:

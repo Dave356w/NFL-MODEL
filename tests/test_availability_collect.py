@@ -69,9 +69,15 @@ class Sources:
         return dict(url=url,text=text,captured_utc=self.now.isoformat(),body_sha256=c.digest(text))
 
 
+@pytest.fixture(autouse=True)
+def archived_v121_identity():
+    with m.revision_identity('boxscore-composite-v1.21',m.PRODUCT_RECIPE):
+        yield
+
+
 def collect(tmp_path,source=None,**kwargs):
     source=source or Sources()
-    return c.refresh(tmp_path,SCHEDULE,PLAYERS,now=source.now,fetcher=source,force=True,**kwargs)
+    return c.refresh(tmp_path,SCHEDULE,PLAYERS,now=source.now,fetcher=source,force=True,legacy_news=True,**kwargs)
 
 
 def test_all_32_official_feeds_and_sourced_facts_are_automatic(tmp_path):
@@ -138,7 +144,7 @@ def test_relevant_news_article_failure_is_visible_and_blocks_completeness(tmp_pa
     def fetch(url):
         if url==START_URL:raise OSError('article unavailable')
         return source(url)
-    state=c.refresh(tmp_path,SCHEDULE,PLAYERS,now=NOW,fetcher=fetch,force=True)
+    state=c.refresh(tmp_path,SCHEDULE,PLAYERS,now=NOW,fetcher=fetch,force=True,legacy_news=True)
     assert state['teams']['BAL']['news']['article_errors']==[START_URL]
     assert not c.collection_ready(c.team_snapshot(state,'BAL',EVENT['game_id']),NOW,True)
 

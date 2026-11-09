@@ -865,7 +865,7 @@ def ats_card_state(latest, row, now):
     rev = latest['manifest']['revision']
     home, away = row['home'], row['away']
     ms, line = num(row.get('fixed_band_spread')), num(row.get('spread_line'))
-    saved = latest.get('ats_locks', {}).get((rev, row['game_id']))
+    saved = ats_locks.current_records(latest.get('ats_locks', {}), rev).get((rev, row['game_id']))
     completed = None
     display_row = dict(row)
     pool = public_ats(latest)

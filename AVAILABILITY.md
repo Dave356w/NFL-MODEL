@@ -1,15 +1,15 @@
-# Automatic availability collection for v1.21
+# Official injury reports and inactives for v1.22
 
-v1.21 keeps v1.19's ten fitted terms and coefficients for the same training inputs. It adds
+v1.22 keeps v1.19's ten fitted terms and coefficients for the same training inputs. It adds
 sourced corrections for upcoming games. Non-QB absence columns still have no fitted coefficient.
 This release establishes correct player selection and temporal safeguards, not a demonstrated
 increase in predictive accuracy or betting returns.
 
 ## Automatic collection
 
-`availability_collect.py` polls all 32 official club RSS feeds, reads current-game official
-injury tables, and discovers official inactive announcements from club feeds and NFL.com's
-inactive hub. No API key or model-generated interpretation is required. The model refreshes
+`availability_collect.py` reads official current-game injury tables and discovers official inactive
+announcements through NFL.com's inactive hub. RSS polling, team-news fact extraction and
+news-freshness lock requirements are retired (owner request 2026-11-09). No API key or model-generated interpretation is required. The model refreshes
 collection before scoring upcoming games. `.github/workflows/availability.yml` also polls every
 15 minutes, sharing the build's serialized `site-build` queue. GitHub schedules are best effort;
 the held build collects sources every 15 minutes during long waits and refreshes the model
@@ -24,7 +24,7 @@ python validate_data_files.py                  # includes hashes and fact-to-sou
 
 | Generated file in `data/` | Purpose |
 |---|---|
-| `team_news.jsonl` | All clubs' article references, short titles, publication and first-capture times |
+| `team_news.jsonl` | Retired RSS evidence, retained unchanged for audit; no production appends |
 | `availability_sources.jsonl` | Parsed factual tables/lists/announcements, source URLs and capture hashes |
 | `availability_auto_observations.jsonl` | Confirmed game/player facts linked to saved source evidence |
 | `availability_review.jsonl` | Uncertain announcements, unknown players and unsupported formats |
@@ -66,16 +66,13 @@ list accepted from another page. Club articles are often prose or both-team list
 formats: of 20 club pages from 2026 week 8, 7 parsed (each checked row by row against the page)
 and 13 were rejected. `tests/test_club_inactive_formats.py` keeps those formats as fixtures.
 
-News rules accept exact, explicit upcoming-game QB announcements, confirmed active-roster moves
-and explicit same-game medical exclusions. Rumors, conditional starts, past starts, practice reps,
-practice-window openings and practice-squad signings do not establish game eligibility. A
-negated or contrastive start clause ("is not going to start", "instead of", "rather than") never
-becomes a starter fact; it is queued for review. Ambiguous
-material is queued for review. Exact names and known aliases are used; fuzzy matching is prohibited.
+Legacy v1.21 news parsing and its fixtures are retained for archive compatibility only. New
+production forecasts exclude every automatic `official_team_news` fact, including older facts
+already in the journal. Confirmed owner-curated corrections remain a separate supported input.
 
 Both teams need successful source checks within 35 minutes of the forecast. ATS candidates
 additionally require both complete official inactive lists and checks fresh through the cutoff.
-Completeness must link to the actual saved source facts. Missing/stale sources, relevant article
+Completeness must link to the actual saved source facts. Missing/stale reports, official inactive-article
 download failures, unresolved reports or an unknown player on an updated inactive list prevent a
 candidate. No earlier candidate can silently substitute for the missing lists. The hold watches
 scheduled games even before a candidate exists, refreshes at T-70, and freezes only candidates
@@ -91,6 +88,12 @@ on Wednesday are pending, not healthy. Unsupported source formats or unresolved 
 need a parser/identity correction before automated completeness can be certified.
 
 ## Inputs and resolution
+
+Existing v1.21 locks whose deadlines precede 2026-11-09 19:30 UTC remain authoritative across
+the retirement. They stay under their actual revision and timestamps in the original journals.
+Tampa Bay–Chicago is explicitly authorized for recovery from commit
+`b049776c391f7903623b7a2cd650f28eb198f44a` (00:13 UTC, before its 00:20 cutoff): Tampa Bay +6.
+Its original parser blocker and actual recovery time stay in the backend record.
 
 The optional, append-only `data/availability_observations.jsonl` is an owner-curated input,
 like `personnel_events.csv`, not a bot-generated model output. Use the capture command below
@@ -151,7 +154,7 @@ that the full final report or inactive list has been published, and do not add B
 The baseline historical features are built as before. Corrections apply only to upcoming
 game/team rows, before scoring those rows with the existing fit. Coefficients are not refitted
 on the corrections. The v1.16 shadow is scored and captured from its original, uncorrected inputs.
-v1.16, v1.18, v1.19 and v1.20 retain their frozen config signatures and archives. v1.21 has a new
+v1.16 through v1.21 retain their frozen config signatures and archives. v1.22 has a new
 revision, output folder and signature; the previous season replay cutoff remains unchanged.
 
 Each team gets an availability evidence object containing its selected observations, baseline
@@ -168,8 +171,8 @@ This journal is diagnostic only: it cannot create a lock, authorize a retro lock
 Existing first-forward snapshots, candidates and locks are never rewritten. Pages-only publications
 do not append forecast refreshes.
 
-v1.21 never treats practice-only data as a complete final report merely because kickoff is close.
-Legacy rows keep their old report gate. A v1.20/v1.21 ATS board missing its evidence columns cannot
+v1.22 never treats practice-only data as a complete final report merely because kickoff is close.
+Legacy rows keep their old report gate. A v1.20/v1.21/v1.22 ATS board missing its evidence columns cannot
 produce a candidate. The public site retains its existing ATS presentation; source details stay
 in repository outputs and archives.
 
@@ -185,9 +188,8 @@ same-week additions, returns, medical exclusions, outdated clearances, conflicti
 unknown IDs, corrupt journals, evidence tampering, unchanged historical inputs, unchanged
 coefficients, shadow isolation and immutable ATS capture/finalization.
 
-All 32 official news feeds and official inactive announcements are now collected automatically.
-Collection does not make every news sentence an actionable fact: uncertain language and unknown
-names remain reviewed exceptions. Routine injury, roster and depth-chart downloads continue.
+RSS feeds are retired. Official injury tables and inactive announcements are collected
+automatically; unresolved names or incomplete lists remain blocked and visible in diagnostics. Routine injury, roster and depth-chart downloads continue.
 An absence of news is not proof of health. Broader injury coefficients or new QB mixture
 probabilities need separate chronological and forward validation before adoption.
 

@@ -1,7 +1,7 @@
-"""Collect official NFL team news, final injury reports and game-day inactive lists.
+"""Collect official NFL final injury reports and game-day inactive lists.
 
-No keys, model calls or subjective injury penalties. Raw news is reference material:
-only explicit, game-bound statements become facts. Unresolved material is queued for review.
+RSS polling and team-news facts are retired from production. Legacy parsers remain only
+for archived v1.21 fixtures. No keys, model calls or subjective injury penalties.
 All journals are append-only. Publication and first-capture times are kept separate.
 """
 from __future__ import annotations
@@ -22,6 +22,7 @@ import xml.etree.ElementTree as ET
 
 UTC=dt.timezone.utc
 POLICY='official-availability-collection-2026-11-04-v1'
+REPORTS_POLICY='official-reports-inactives-2026-11-09-v2'
 AUTO='availability_auto_observations.jsonl'
 SOURCES='availability_sources.jsonl'
 NEWS='team_news.jsonl'
@@ -460,8 +461,8 @@ def schedule_events(schedule,now):
 def collection_ready(snapshot,asof,require_inactives=False):
     """Pure/stdlib validation of the source checks frozen inside a forecast."""
     try:
-        if snapshot['policy']!=POLICY or snapshot['max_age_minutes']!=MAX_AGE_MINUTES:return False
-        required=('news','report','inactives') if require_inactives else ('news','report')
+        if snapshot['policy'] not in (POLICY,REPORTS_POLICY) or snapshot['max_age_minutes']!=MAX_AGE_MINUTES:return False
+        required=(('news',) if snapshot['policy']==POLICY else ())+('report',)+(('inactives',) if require_inactives else ())
         for kind in required:
             item=snapshot[kind];checked=utc(item['last_success_utc'])
             if item.get('error'):return False
@@ -475,7 +476,8 @@ def collection_ready(snapshot,asof,require_inactives=False):
 def readiness_issues(snapshot,asof,require_inactives=False):
     """Actionable reasons for an operational monitor; no relaxation of the gate."""
     issues=[]
-    for kind in (('news','report','inactives') if require_inactives else ('news','report')):
+    required=(('news',) if snapshot.get('policy')==POLICY else ())+('report',)+(('inactives',) if require_inactives else ())
+    for kind in required:
         item=snapshot.get(kind,{})
         if item.get('error'):issues.append(f'{kind}: {item["error"]}')
         if kind=='news' and item.get('article_errors'):issues.append('news: relevant article download failed')
@@ -505,7 +507,7 @@ def lock_readiness(state,now):
     return rows
 
 
-def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
+def refresh(data,schedule,players,now=None,fetcher=fetch,force=False,legacy_news=False):
     """Collect every club's news and current game's reports; persist facts before using them.
 
     The caller serializes writes (the build and collector workflows share site-build).
@@ -518,8 +520,11 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
     if not index.players:raise ValueError('no GSIS player names available for collection')
     state_path=data/STATE
     state=json.loads(state_path.read_text()) if state_path.exists() else {}
-    if state.get('policy')!=POLICY:state={}
-    state.update(policy=POLICY,max_age_minutes=MAX_AGE_MINUTES)
+    # RSS is retired from every production entry point. The legacy branch is
+    # retained solely for archived v1.21 replay/validation fixtures.
+    policy=POLICY if legacy_news else REPORTS_POLICY
+    if state.get('policy')!=policy:state={}
+    state.update(policy=policy,max_age_minutes=MAX_AGE_MINUTES,rss_enabled=legacy_news)
     state.pop('input_error',None)
     teams=state.setdefault('teams',{});articles=state.setdefault('articles',{})
     sources=read(data/SOURCES);latest_sources={}
@@ -541,7 +546,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
 
     def capture(kind,team,event,response,parsed,published=None):
         basis='source_publication' if published else 'first_capture'
-        payload=dict(policy=POLICY,kind=kind,team=team,game_id=event['game_id'],url=response['url'],
+        payload=dict(policy=policy,kind=kind,team=team,game_id=event['game_id'],url=response['url'],
                      source_published_utc=published,publication_time_basis=basis,parsed=parsed)
         semantic=digest(payload)
         key=(kind,team,event['game_id'],response['url']);previous=latest_sources.get(key)
@@ -563,7 +568,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
 
     def review(team,event,url,issues):
         for issue in issues:
-            payload=dict(policy=POLICY,team=team,game_id=event['game_id'],source_url=url,issue=issue)
+            payload=dict(policy=policy,team=team,game_id=event['game_id'],source_url=url,issue=issue)
             h=digest(payload)
             if h not in review_keys:
                 new_reviews.append(dict(payload,first_observed_utc=now.isoformat(),review_sha256=h));review_keys.add(h)
@@ -582,7 +587,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
     requests={};feeds={};reports={}
     for team,(_,host) in TEAMS.items():
         health=teams.setdefault(team,{});health.setdefault('news',{})
-        if due(health['news']):
+        if legacy_news and due(health['news']):
             url='https://www.'+host+'/rss/news';requests[url]=None;feeds[team]=url
         event=events.get(team)
         if event:
@@ -593,7 +598,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
                 url='https://www.'+host+'/team/injury-report/';requests[url]=None;reports[team]=url
         else:
             health.update(game_id=None,report={},inactives={})
-    # The NFL hub discovers league-wide official lists when a team's feed is slow.
+    # The NFL hub discovers official inactive announcements without RSS.
     near={t:e for t,e in events.items() if utc(e['kickoff_utc'])-now<=dt.timedelta(hours=4)}
     if near:requests[NFL+'/inactives/']=None
     responses=requests_batch(requests)
@@ -685,7 +690,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
                         h=teams[team]['inactives']
                         if h.get('url')==url or not (club or isinstance(exc,InactiveIdentityMismatch)):
                             failure(h,exc);h['complete']=False;inactive_failed.add(team)
-                if club:
+                if club and legacy_news:
                     values,issues=news_facts(info,team,event,index)
                     if values:
                         source=capture('official_team_news',team,event,response,dict(facts=values),pub);facts(source,values)
@@ -714,7 +719,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False):
 
 def team_snapshot(state,team,game_id):
     h=state.get('teams',{}).get(team,{})
-    return dict(policy=POLICY,max_age_minutes=MAX_AGE_MINUTES,team=team,game_id=game_id,
+    return dict(policy=state.get('policy',REPORTS_POLICY),max_age_minutes=MAX_AGE_MINUTES,team=team,game_id=game_id,
                 **{k:dict(h.get(k,{})) if h.get('game_id')==game_id or k=='news' else {}
                    for k in ('news','report','inactives')})
 
@@ -727,7 +732,8 @@ def validate_store(data):
         if digest(payload)!=h or h in by_hash:raise ValueError('availability source hash mismatch/duplicate')
         semantic={k:source[k] for k in ('policy','kind','team','game_id','url','source_published_utc','publication_time_basis','parsed')}
         if digest(semantic)!=source['semantic_sha256']:raise ValueError('availability source semantic hash mismatch')
-        if source['policy']!=POLICY or source['team'] not in TEAMS:raise ValueError('unknown automatic source identity')
+        if source['policy'] not in (POLICY,REPORTS_POLICY) or source['team'] not in TEAMS:raise ValueError('unknown automatic source identity')
+        if source['policy']==REPORTS_POLICY and source['kind']=='official_team_news':raise ValueError('news source in reports-only policy')
         url=urllib.parse.urlsplit(source['url']);host=url.hostname.removeprefix('www.') if url.hostname else ''
         allowed={TEAMS[source['team']][1]}
         if source['kind']=='official_inactives':allowed.add('nfl.com')
@@ -780,28 +786,24 @@ def main(argv=None):
         return 1
     roster['team']=roster.team.replace({'LAR':'LA','JAC':'JAX','WSH':'WAS','OAK':'LV','SD':'LAC','STL':'LA'})
     state=refresh(args.data,schedule,roster,now=now,force=args.force)
-    def fresh(h):
-        try:return not h['news'].get('error') and not h['news'].get('article_errors') and dt.timedelta(0)<=dt.datetime.now(UTC)-utc(h['news']['last_success_utc'])<=dt.timedelta(minutes=MAX_AGE_MINUTES)
-        except (KeyError,ValueError):return False
-    count=sum(fresh(h) for h in state['teams'].values())
     readiness=lock_readiness(state,dt.datetime.now(UTC))
     blocked=[r for r in readiness if not r['ready']]
-    print(json.dumps(dict(teams=len(state['teams']),news_fresh=count,
+    print(json.dumps(dict(teams=len(state['teams']),rss_enabled=False,
         lock_readiness=readiness,pending_games=len({h.get('game_id') for h in state['teams'].values()}-{None}),**validate_store(args.data)),sort_keys=True))
     for r in blocked:print('::error::'+r['game_id']+' '+r['team']+': '+'; '.join(r['issues']))
     summary=os.environ.get('GITHUB_STEP_SUMMARY')
     if summary:
-        lines=['Official availability collection','',f'Fresh team news: {count}/32. Unpublished reports remain incomplete.','',
-               '| Team | News | Injury report | Inactives |','|---|---|---|---|']
+        lines=['Official injury reports and inactives','', 'RSS retired. Unpublished reports remain incomplete.','',
+               '| Team | Injury report | Inactives |','|---|---|---|']
         for team,h in sorted(state['teams'].items()):
-            cells=[team,'fresh' if fresh(h) else 'stale or unavailable']
+            cells=[team]
             for kind in ('report','inactives'):
                 item=h[kind]
                 cells.append('no upcoming game' if not h.get('game_id') else 'complete' if item.get('complete') else 'pending')
             lines.append('| '+' | '.join(cells)+' |')
         lines+=['','Near-game lock blockers:']+[r['game_id']+' '+r['team']+': '+'; '.join(r['issues']) for r in blocked]
         with Path(summary).open('a') as out:out.write('\n'.join(lines)+'\n')
-    return 0 if count==32 and not blocked else 1
+    return 0 if not blocked else 1
 
 
 def load_inputs(nfl,season,sleep=time.sleep):
