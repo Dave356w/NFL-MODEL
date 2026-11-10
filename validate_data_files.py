@@ -8,6 +8,7 @@ import csv
 import json
 import re
 import sys
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -274,6 +275,20 @@ def validate_data_dir(data_dir="data"):
 
 def main():
     try:
+        # Include tracked configuration/research JSON outside data/, without
+        # scanning dependency folders or generated scratch outputs.
+        tracked = subprocess.run(['git', 'ls-files', '-z', '*.json'],
+                                 capture_output=True, text=True, check=True)
+        for name in filter(None, tracked.stdout.split('\0')):
+            path = Path(name)
+            if path.exists():
+                text = path.read_text(encoding='utf-8')
+                if any(line.lstrip().startswith(CONFLICT_MARKERS) for line in text.splitlines()):
+                    raise ValueError(f'{path}: unresolved Git conflict marker')
+                try:
+                    json.loads(text)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f'{path}: not JSON ({exc})') from exc
         paths = validate_data_dir()
     except (OSError, ValueError) as exc:
         print(f"data validation failed: {exc}", file=sys.stderr)
