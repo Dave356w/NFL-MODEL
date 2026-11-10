@@ -10,6 +10,7 @@
     {
       "game_id": "2026_09_BUF_MIN",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "MIN: report: source check stale or after forecast",
         "MIN: inactives: no successful source check",
         "MIN: inactives: complete official list/report missing",
@@ -18,7 +19,7 @@
         "BUF: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-10T00:15:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_09_CIN_ATL",
@@ -94,5 +95,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-10T00:05:01.297698+00:00"
+  "updated_utc": "2026-11-10T00:15:20.445532+00:00"
 }
