@@ -22,12 +22,6 @@
       "state": "missed cutoff"
     },
     {
-      "game_id": "2026_09_CIN_ATL",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T13:30:00+00:00",
-      "state": "locked"
-    },
-    {
       "game_id": "2026_09_CLE_NO",
       "issues": [],
       "lock_at_utc": "2026-11-08T17:00:00+00:00",
@@ -95,5 +89,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-10T00:16:16.330396+00:00"
+  "updated_utc": "2026-11-10T16:05:47.560532+00:00"
 }
