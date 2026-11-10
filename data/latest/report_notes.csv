@@ -1,213 +1,106 @@
 team,gsis_id,player,position,unit,snap_share,prev_week,prev_status,prev_injury,this_week,counted,report_state
-ARI,00-0033119,Jacoby Brissett,QB,QB,0.8892508143322475,,,,CUT (A01) on wk 9 roster,1.0,final
-ARI,00-0037157,Bam Knight,RB,RB,0.32142857142857145,,,,Out,1.0,final
-ARI,00-0038559,Michael Wilson,WR,WRTE,0.21639344262295082,,,,practice: Limited Participation in Practice,0.0,final
-ARI,00-0035258,Hjalte Froholdt,C,OL,0.19909208819714655,8.0,Questionable,Knee,practice: Full Participation in Practice,0.0,final
-ARI,00-0041113,Jayden Williams,T,OL,0.17833981841763943,,,,Out,1.0,final
-ARI,00-0041027,Jeremiyah Love,RB,RB,0.16558441558441558,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-ARI,00-0040706,Walter Nolen,DT,DL,0.12168486739469579,8.0,Out,Ankle,Questionable,0.25,final
-ARI,00-0033307,Kendrick Bourne,WR,WRTE,0.12049180327868853,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-ARI,00-0038640,Jalen Brooks,WR,WRTE,0.10573770491803279,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-ARI,00-0039807,Max Melton,CB,DB,0.10084745762711865,8.0,Questionable,Knee,Questionable,0.25,final
-ARI,00-0038571,Jon Gaines II,G,OL,0.0940337224383917,8.0,Out,Ankle,Out,1.0,final
-ARI,00-0035378,Andrew Wingard,S,DB,0.06271186440677966,8.0,Questionable,Knee,not listed (cleared),0.0,final
-ATL,00-0036990,Divine Deablo,LB,LB,0.15905511811023623,8.0,Questionable,Forearm,Questionable,0.25,final
-ATL,00-0033945,Samson Ebukam,DE,DL,0.11255411255411256,8.0,Questionable,Hamstring,Reserve/Injured (IR) on wk 9 roster,1.0,final
-ATL,00-0037746,Brian Robinson,RB,RB,0.10084033613445378,8.0,Out,Hamstring,Reserve/Injured (IR) on wk 9 roster,1.0,final
-ATL,00-0041469,Avieon Terrell,CB,DB,0.09311424100156494,8.0,Questionable,Illness,not listed (cleared),0.0,final
-ATL,00-0035208,Olamide Zaccheaus,WR,WRTE,0.08025343189017951,8.0,Questionable,Shoulder,not listed (cleared),0.0,final
-ATL,00-0041044,Zachariah Branch,WR,WRTE,0.06230200633579725,,,,Out,1.0,final
-BAL,00-0035993,Tyler Huntley,QB,QB,0.995260663507109,,,,RES (A01) on wk 9 roster,1.0,final
-BAL,00-0039232,Nate Wiggins,CB,DB,0.17909300538047657,,,,Questionable,0.25,final
-BAL,00-0040866,Olaivavega Ioane,G,OL,0.11778656126482213,8.0,Out,Knee,practice: Full Participation in Practice,0.0,final
-BAL,00-0038505,Tavius Robinson,LB,LB,0.07955689828801611,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-BAL,00-0036302,Jaylinn Hawkins,S,DB,0.07148347425057648,8.0,Out,Knee,Out,1.0,final
-BAL,00-0034796,Lamar Jackson,QB,QB,0.004739336492890996,,,,RES (A01) on wk 9 roster,1.0,final
-BUF,00-0033904,Dion Dawkins,OL,OL,0.2441016333938294,,,,Questionable,0.25,final
-BUF,00-0038933,Dalton Kincaid,TE,WRTE,0.16117216117216118,8.0,Questionable,Chest,"listed, no status",0.0,final
-BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.13914373088685014,,,,Reserve/Non-football illness on wk 8 roster,1.0,final
-BUF,00-0036976,Spencer Brown,OL,OL,0.1297640653357532,8.0,Questionable,Back,"listed, no status",0.0,final
-BUF,00-0035667,Greg Gaines,DL,DL,0.12693498452012383,8.0,Questionable,Calf,Questionable,0.25,final
-BUF,00-0041036,TJ Parker,LB,LB,0.09626168224299066,8.0,Questionable,Knee,"listed, no status",0.0,final
-BUF,00-0034827,DJ Moore,WR,WRTE,0.07051282051282051,8.0,Questionable,Shoulder,"listed, no status",0.0,final
-BUF,00-0036988,Josh Palmer,WR,WRTE,0.05402930402930403,,,,Out,1.0,final
-BUF,00-0037034,Dee Alford,DB,DB,0.05122324159021407,8.0,Questionable,Ankle,"listed, no status",0.0,final
-CAR,00-0035687,Bobby Okereke,LB,LB,0.22574626865671643,,,,Out,1.0,final
-CAR,00-0041063,Will Lee III,CB,DB,0.17109375,,,,Out,1.0,final
-CAR,00-0038101,Akayleb Evans,CB,DB,0.15390625,8.0,Out,Triceps,RES (A01) on wk 8 roster,1.0,final
-CAR,00-0036903,Bobby Brown III,DT,DL,0.12307692307692308,8.0,Questionable,Hand,practice: Full Participation in Practice,0.0,final
-CAR,00-0039242,Corey Bullock,G,OL,0.09071729957805907,,,,Questionable,0.25,final
-CAR,00-0036417,Damien Lewis,G,OL,0.08579465541490858,8.0,Out,Knee,Out,1.0,final
-CAR,00-0033284,Taylor Moton,OL,OL,0.07172995780590717,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-CAR,00-0036934,Jaelan Phillips,LB,LB,0.06529850746268656,8.0,Out,Hamstring,Out,1.0,final
-CHI,00-0037271,D'Marco Jackson,LB,LB,0.26763110307414106,8.0,Questionable,Ankle,practice: Full Participation in Practice,0.0,final
-CHI,00-0039071,Tyrique Stevenson,CB,DB,0.11121239744758432,,,,Questionable,0.25,final
-CHI,00-0036290,Cole Kmet,TE,WRTE,0.10867659947414549,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-CHI,00-0041060,Malik Muhammad,CB,DB,0.10300820419325434,8.0,Questionable,Toe,Questionable,0.25,final
-CHI,00-0034320,Kentavius Street,DL,DL,0.09080962800875274,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-CIN,00-0035683,Dexter Lawrence,DT,DL,0.16346153846153846,,,,practice: Did Not Participate In Practice,0.0,final
-CIN,00-0033523,Jonathan Allen,DT,DL,0.14248251748251747,,,,practice: Limited Participation in Practice,0.0,final
-CIN,00-0034800,B.J. Hill,DT,DL,0.08391608391608392,,,,practice: Did Not Participate In Practice,0.0,final
-CIN,00-0041546,Cashius Howell,DL,DL,0.08216783216783216,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-CIN,00-0039814,Erick All,TE,WRTE,0.05826170009551098,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-CLE,00-0033537,Deshaun Watson,QB,QB,0.985239852398524,,,,Questionable,0.25,final
-CLE,00-0035680,Quincy Williams,LB,LB,0.4801587301587302,,,,practice: Limited Participation in Practice,0.0,final
-CLE,00-0040663,Harold Fannin Jr.,TE,WRTE,0.22358490566037736,,,,practice: Limited Participation in Practice,0.0,final
-CLE,00-0035234,Tytus Howard,T,OL,0.15719557195571957,8.0,Questionable,Concussion,not listed (cleared),0.0,final
-CLE,00-0033131,Maliek Collins,DT,DL,0.15308151093439365,,,,Out,1.0,final
-CLE,00-0039417,Myles Harden,CB,DB,0.11300813008130081,8.0,Questionable,Hamstring,practice: Full Participation in Practice,0.0,final
-CLE,00-0041471,Emmanuel McNeil-Warren,S,DB,0.108130081300813,,,,practice: Limited Participation in Practice,0.0,final
-CLE,00-0040466,Raheim Sanders,RB,RB,0.06779661016949153,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-DAL,00-0033120,Kenny Clark,DT,DL,0.2870229007633588,8.0,Questionable,Back,practice: Full Participation in Practice,0.0,final
-DAL,00-0037247,George Pickens,WR,WRTE,0.19212746016869728,8.0,Questionable,Shoulder,Questionable,0.25,final
-DAL,00-0038041,Jake Ferguson,TE,WRTE,0.12558575445173384,,,,Questionable,0.25,final
-DAL,00-0041537,Malachi Lawrence,LB,LB,0.11584327086882454,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-DAL,00-0039167,Joey Porter Jr.,CB,DB,0.0876068376068376,,,,Questionable,0.25,final
-DAL,00-0038556,DeMarvion Overshown,LB,LB,0.0868824531516184,,,,Questionable,0.25,final
-DAL,00-0038625,Dee Winters,LB,LB,0.05281090289608177,8.0,Out,Calf,practice: Full Participation in Practice,0.0,final
-DAL,00-0027940,Von Miller,LB,LB,0.05025553662691652,,,,practice: Did Not Participate In Practice,0.0,final
-DEN,00-0035248,Zach Allen,DE,DL,0.2779329608938548,8.0,Questionable,Hamstring,practice: Full Participation in Practice,0.0,final
-DEN,00-0040730,RJ Harvey,RB,RB,0.23247232472324722,8.0,Out,Knee,Reserve/Injured (IR) on wk 8 roster,1.0,final
-DEN,00-0038106,Eyioma Uwazurike,DE,DL,0.21927374301675978,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-DEN,00-0033538,Garett Bolles,T,OL,0.19553072625698323,8.0,Questionable,Hip,not listed (cleared),0.0,final
-DEN,00-0036221,Brandon Jones,S,DB,0.17687543014452856,8.0,Questionable,Hamstring,Out,1.0,final
-DEN,00-0036613,Jaylen Waddle,WR,WRTE,0.15226781857451405,8.0,Questionable,Chest,practice: Full Participation in Practice,0.0,final
-DEN,00-0039371,Kris Abrams-Draine,CB,DB,0.1231933929800413,,,,Out,1.0,final
-DEN,00-0037799,Dondrea Tillman,LB,LB,0.10754553339115351,,,,Questionable,0.25,final
-DEN,00-0039809,Jonah Elliss,LB,LB,0.06504770164787511,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-DET,00-0039018,Jack Campbell,LB,LB,0.3956723338485317,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-DET,00-0039364,Sione Vaki,RB,RB,0.2222222222222222,,,,Questionable,0.25,final
-DET,00-0036963,Amon-Ra St. Brown,WR,WRTE,0.21415270018621974,,,,Questionable,0.25,final
-DET,00-0038125,Roger McCreary,CB,DB,0.21018062397372742,8.0,Questionable,Foot,not listed (cleared),0.0,final
-DET,00-0034384,D.J. Reed,CB,DB,0.20525451559934318,,,,Out,1.0,final
-DET,00-0036335,DJ Wonnum,DE,DL,0.12557710064635272,,,,Out,1.0,final
-DET,00-0037297,Cade Mays,C,OL,0.06405693950177936,,,,Out,1.0,final
-GB,00-0039811,MarShawn Lloyd,RB,RB,0.3382352941176471,,,,Questionable,0.25,final
-GB,00-0034431,Zaire Franklin,LB,LB,0.2513274336283186,8.0,Out,Shin,Out,1.0,final
-GB,00-0040667,Matthew Golden,WR,WRTE,0.20772058823529413,8.0,Questionable,Shoulder,not listed (cleared),0.0,final
-GB,00-0035133,Keisean Nixon,CB,DB,0.20130340333091962,,,,Questionable,0.25,final
-GB,00-0038124,Christian Watson,WR,WRTE,0.18658088235294118,,,,practice: Limited Participation in Practice,0.0,final
-GB,00-0039867,Javon Bullard,S,DB,0.1549601737871108,,,,practice: Did Not Participate In Practice,0.0,final
-GB,00-0039819,Travis Glover,G,OL,0.14926470588235294,8.0,Out,Knee,Out,1.0,final
-GB,00-0037075,Devonte Wyatt,DT,DL,0.11547911547911548,8.0,Questionable,Ankle,not listed (cleared),0.0,final
-GB,00-0038463,Brenton Cox Jr.,LB,DL,0.11547911547911548,8.0,Questionable,Quadricep,not listed (cleared),0.0,final
-GB,00-0037076,Sean Rhyan,C,OL,0.10294117647058823,8.0,Out,Ankle,Out,1.0,final
-GB,00-0040689,Anthony Campbell,DT,DL,0.06961506961506962,8.0,Questionable,Ankle,not listed (cleared),0.0,final
-GB,00-0036551,Aaron Banks,G,OL,0.05073529411764706,,,,practice: Limited Participation in Practice,0.0,final
-HOU,00-0035685,David Montgomery,RB,RB,0.16326530612244897,7.0,Out,Groin,Out,1.0,final
-HOU,00-0037130,Reed Blankenship,S,DB,0.12795125666412796,7.0,Out,Concussion,Out,1.0,final
-HOU,00-0040138,Jaylin Noel,WR,WRTE,0.1254125412541254,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-HOU,00-0037246,Jalen Pitre,S,DB,0.08834729626808835,7.0,Out,Shoulder,practice: Full Participation in Practice,0.0,final
-IND,00-0036298,Akeem Davis-Gaither,LB,LB,0.4260089686098655,,,,Out,1.0,final
-IND,00-0040163,Jalen Travis,T,OL,0.1963898916967509,,,,Questionable,0.25,final
-IND,00-0041043,A.J. Haulcy,S,DB,0.19571567672833495,,,,Out,1.0,final
-IND,00-0034342,Quenton Nelson,OL,OL,0.1552346570397112,,,,not on wk 8 roster (left team),1.0,final
-IND,00-0040139,Justin Walley,CB,DB,0.11976630963972736,8.0,Out,Knee,Out,1.0,final
-IND,00-0037292,Andrew Ogletree,TE,WRTE,0.09107468123861566,8.0,Questionable,Knee,practice: Full Participation in Practice,0.0,final
-IND,00-0038394,Will Mallory,TE,WRTE,0.06648451730418943,,,,practice: Did Not Participate In Practice,0.0,final
-IND,00-0041518,Bryce Boettcher,LB,LB,0.06502242152466367,8.0,Questionable,Groin,practice: Full Participation in Practice,0.0,final
-IND,00-0037753,Cam Taylor-Britt,DB,DB,0.05063291139240506,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-JAX,00-0040719,Bhayshul Tuten,RB,RB,0.5953307392996109,,,,Questionable,0.25,final
-JAX,00-0038611,Chris Rodriguez Jr.,RB,RB,0.22178988326848248,,,,practice: Limited Participation in Practice,0.0,final
-JAX,00-0039353,Jarrian Jones,CB,DB,0.20445736434108527,,,,practice: Limited Participation in Practice,0.0,final
-JAX,00-0037235,Travon Walker,DE,DL,0.20422535211267606,,,,Questionable,0.25,final
-JAX,00-0034960,Jakobi Meyers,WR,WRTE,0.18940137389597644,8.0,Questionable,Hamstring,practice: Limited Participation in Practice,0.0,final
-JAX,00-0036327,Ezra Cleveland,G,OL,0.17101226993865032,,,,practice: Limited Participation in Practice,0.0,final
-JAX,00-0038596,Antonio Johnson,S,DB,0.15794573643410853,8.0,Out,Ankle,practice: Limited Participation in Practice,0.0,final
-JAX,00-0033038,Eric Murray,S,DB,0.10368217054263566,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-JAX,00-0036262,DaVon Hamilton,DT,DL,0.1006036217303823,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-JAX,00-0038934,Anton Harrison,OL,OL,0.0789877300613497,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-JAX,00-0040326,Branson Combs,LB,LB,0.06754530477759473,,,,practice: Limited Participation in Practice,0.0,final
-KC,00-0041543,Mansoor Delane,CB,DB,0.15406976744186046,8.0,Questionable,Shoulder,Out,1.0,final
-KC,00-0041501,R Mason Thomas,DE,DL,0.10559006211180125,8.0,Questionable,Not injury related - personal matter,not listed (cleared),0.0,final
-KC,WOO547869,,,DL,0.08429458740017746,,,,not on wk 8 roster (left team),1.0,final
-KC,00-0036374,L'Jarius Sneed,CB,DB,0.07994186046511628,8.0,Questionable,Knee,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0031388,Aaron Donald,DT,DL,0.2708978328173375,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0039137,Byron Young,LB,LB,0.25443786982248523,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0039075,Puka Nacua,WR,WRTE,0.22024367385192128,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0034114,Coleman Shelton,C,OL,0.2,8.0,Questionable,Hip,not listed (cleared),0.0,final
-LA,00-0033110,Tyler Higbee,TE,WRTE,0.18837863167760074,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0036349,Kam Curl,S,DB,0.1853932584269663,,,,Questionable,0.25,final
-LA,00-0037195,Jaylen Watson,CB,DB,0.1699438202247191,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-LA,00-0036603,Alaric Jackson,T,OL,0.15413533834586465,,,,practice: Did Not Participate In Practice,0.0,final
-LA,00-0036244,Colby Parkinson,TE,WRTE,0.1302717900656045,8.0,Questionable,Rib,Questionable,0.25,final
-LA,00-0039138,Kobie Turner,DL,DL,0.1021671826625387,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0031381,Davante Adams,WR,WRTE,0.09653233364573571,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0034234,Poona Ford,DL,DL,0.08359133126934984,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LA,00-0037191,Trent McDuffie,CB,DB,0.07935393258426966,8.0,Questionable,Groin,Questionable,0.25,final
-LAC,00-0035125,Alec Ingold,RB,RB,0.10106382978723404,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.08,,,,not on wk 8 roster (left team),1.0,final
-LAC,00-0037320,Deane Leonard,CB,DB,0.05235137533274179,8.0,Out,Concussion,Out,1.0,final
-LV,00-0040641,Darien Porter,CB,DB,0.11203633610900833,,,,Questionable,0.25,final
-LV,00-0037262,Thomas Booker,DT,DL,0.08303249097472924,,,,Out,1.0,final
-MIA,00-0039156,Julius Brents,CB,DB,0.1765195670274771,8.0,Questionable,Neck,not listed (cleared),0.0,final
-MIA,00-0041521,Kadyn Proctor,T,OL,0.1437024513947591,8.0,Out,Concussion,practice: Full Participation in Practice,0.0,final
-MIA,00-0039874,Jaylen Wright,RB,RB,0.12091503267973856,,,,Questionable,0.25,final
-MIA,00-0036682,Malik Herring,DE,DL,0.06978967495219886,,,,Questionable,0.25,final
-MIN,00-0035228,Kyler Murray,QB,QB,1.0,,,,Out,1.0,final
-MIN,00-0036259,Jauan Jennings,WR,WRTE,0.18800813008130082,,,,Out,1.0,final
-MIN,00-0037301,Theo Jackson,DB,DB,0.11777301927194861,,,,Questionable,0.25,final
-NE,00-0036813,Christian Elliss,LB,LB,0.24453280318091453,8.0,Questionable,Chest,not listed (cleared),0.0,final
-NE,00-0033132,Kevin Byard,S,DB,0.1981981981981982,,,,Questionable,0.25,final
-NE,00-0040734,TreVeyon Henderson,RB,RB,0.15355805243445692,8.0,Questionable,Illness,Out,1.0,final
-NE,00-0031330,Morgan Moses,T,OL,0.15301391035548687,,,,Questionable,0.25,final
-NE,00-0033090,Hunter Henry,TE,WRTE,0.14767096134786917,,,,Questionable,0.25,final
-NE,00-0035676,A.J. Brown,WR,WRTE,0.10009910802775025,8.0,Questionable,Ankle,Out,1.0,final
-NE,00-0036979,Alijah Vera-Tucker,OL,OL,0.07496136012364761,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-NE,00-0037816,Romeo Doubs,WR,WRTE,0.06342913776015857,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-NE,00-0034778,Carlton Davis III,CB,DB,0.051597051597051594,8.0,Questionable,Neck,Questionable,0.25,final
-NO,00-0038551,Kendre Miller,RB,RB,0.3438735177865613,,,,Waived on wk 9 roster,1.0,final
-NO,00-0041326,CJ Donaldson,RB,RB,0.2964426877470356,,,,Out,1.0,final
-NO,00-0038601,Asim Richards,T,OL,0.19580983078162773,,,,Questionable,0.25,final
-NO,00-0036408,Cesar Ruiz,G,OL,0.11925866236905722,7.0,Questionable,Knee,practice: Full Participation in Practice,0.0,final
-NO,00-0037250,Martin Emerson,CB,DB,0.10625,,,,Questionable,0.25,final
-NYG,00-0040715,Cam Skattebo,RB,RB,0.35858585858585856,,,,Doubtful,1.0,final
-NYG,00-0034673,Tremaine Edmunds,LB,LB,0.18382352941176472,7.0,Out,Shoulder,Reserve/Injured (IR) on wk 7 roster,1.0,final
-NYG,00-0039384,Tyrone Tracy Jr.,RB,RB,0.1717171717171717,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-NYG,00-0036998,Jevon Holland,S,DB,0.16220600162206,7.0,Out,Concussion,not listed (cleared),0.0,final
-NYG,00-0036996,Greg Newsome II,CB,DB,0.13706407137064072,7.0,Out,Concussion,not listed (cleared),0.0,final
-NYG,00-0033290,Jermaine Eluemunor,T,OL,0.11792138574283811,7.0,Questionable,Calf,practice: Full Participation in Practice,0.0,final
-NYG,00-0036893,Najee Harris,RB,RB,0.09848484848484848,,,,CUT (A01) on wk 7 roster,1.0,final
-NYG,00-0040181,Marcus Mbow,T,OL,0.08127914723517655,7.0,Questionable,Knee,practice: Full Participation in Practice,0.0,final
-NYG,00-0039861,Tyler Nubin,S,DB,0.0705596107055961,7.0,Questionable,Neck,not listed (cleared),0.0,final
-NYG,00-0039847,Theo Johnson,TE,WRTE,0.05941499085923217,7.0,Doubtful,Neck,practice: Full Participation in Practice,0.0,final
-NYJ,00-0037740,Garrett Wilson,WR,WRTE,0.22551928783382788,,,,Out,1.0,final
-NYJ,00-0041026,David Bailey,DE,DL,0.1602787456445993,8.0,Doubtful,Groin,practice: Full Participation in Practice,0.0,final
-NYJ,00-0034782,Harrison Phillips,DT,DL,0.13066202090592335,,,,Questionable,0.25,final
-NYJ,00-0039886,T'Vondre Sweat,DT,DL,0.08536585365853659,8.0,Out,Knee,Reserve/Injured (IR) on wk 8 roster,1.0,final
-NYJ,00-0037255,Dylan Parham,G,OL,0.05019607843137255,8.0,Questionable,Knee,not listed (cleared),0.0,final
-PHI,00-0038400,Tanner McKee,QB,QB,0.7624521072796935,,,,Questionable,0.25,final
-PHI,00-0037258,Dameon Pierce,RB,RB,0.5807692307692308,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-PHI,00-0036389,Jalen Hurts,QB,QB,0.23754789272030652,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-PHI,00-0040708,Jihaad Campbell,LB,LB,0.13523459061637536,8.0,Out,Hamstring,Out,1.0,final
-PHI,00-0034844,Saquon Barkley,RB,RB,0.12307692307692308,,,,practice: Limited Participation in Practice,0.0,final
-PHI,00-0038393,Dontayvion Wicks,WR,WRTE,0.08829174664107485,8.0,Out,Ankle,Out,1.0,final
-PHI,00-0039740,Jalyx Hunt,LB,LB,0.07083716651333946,,,,practice: Limited Participation in Practice,0.0,final
-PHI,00-0039746,Will Shipley,RB,RB,0.05,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-SEA,00-0034869,Sam Darnold,QB,QB,1.0,,,,Out,1.0,final
-SEA,00-0031933,Leonard Williams,DT,DL,0.3062283737024221,,,,Out,1.0,final
-SEA,00-0037821,Charles Cross,T,OL,0.14621968616262482,8.0,Out,Ankle,Out,1.0,final
-SEA,00-0034350,Uchenna Nwosu,LB,LB,0.1099290780141844,8.0,Doubtful,Ankle,Out,1.0,final
-SEA,00-0041512,Jadarian Price,RB,RB,0.09404388714733543,,,,"IR, designated to return on wk 8 roster",1.0,final
-SEA,00-0037545,Rashid Shaheed,WR,WRTE,0.08341056533827618,8.0,Out,Knee,Out,1.0,final
-SEA,00-0039839,Christian Haynes,OL,OL,0.06562054208273894,,,,not on wk 8 roster (left team),1.0,final
-SEA,00-0037745,Velus Jones Jr.,RB,RB,0.05642633228840126,8.0,Out,Hamstring,practice: Limited Participation in Practice,0.0,final
-SEA,00-0035704,Drew Lock,QB,QB,0.0,8.0,Questionable,Elbow,practice: Limited Participation in Practice,0.0,final
-SF,00-0031408,Mike Evans,WR,WRTE,0.11159737417943107,7.0,Out,Ribs,Out,1.0,final
-SF,00-0040152,Upton Stout,CB,DB,0.07749381698268755,7.0,Questionable,Shoulder,Questionable,0.25,final
-SF,00-0035719,Deebo Samuel Sr.,WR,WRTE,0.07658643326039387,7.0,Out,Hamstring,Out,1.0,final
-TB,00-0036919,Kenny Gainwell,RB,RB,0.3173431734317343,8.0,Questionable,Hip,practice: Full Participation in Practice,0.0,final
-TB,00-0036406,Tristan Wirfs,T,OL,0.19287833827893175,,,,practice: Limited Participation in Practice,0.0,final
-TB,00-0037835,Luke Goedeke,T,OL,0.15281899109792285,8.0,Questionable,Calf,not listed (cleared),0.0,final
-TB,00-0040129,Emeka Egbuka,WR,WRTE,0.11951447245564893,8.0,Out,Foot,Questionable,0.25,final
-TB,00-0039068,Yaya Diaby,LB,LB,0.1111111111111111,,,,Out,1.0,final
-WAS,00-0034333,Daron Payne,DT,DL,0.24856321839080459,8.0,Out,Foot,Reserve/Injured (IR) on wk 9 roster,1.0,final
-WAS,00-0040242,Jacory Croskey-Merritt,RB,RB,0.20078740157480315,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-WAS,00-0036260,Javon Kinlaw,DT,DL,0.19540229885057472,8.0,Out,Knee,Reserve/Injured (IR) on wk 9 roster,1.0,final
-WAS,00-0037742,Treylon Burks,WR,WRTE,0.15857284440039643,8.0,Questionable,Foot,Out,1.0,final
-WAS,00-0035409,Shy Tuttle,DT,DL,0.15804597701149425,,,,practice: Limited Participation in Practice,0.0,final
-WAS,00-0033947,Deatrich Wise,DE,DL,0.1235632183908046,,,,practice: Limited Participation in Practice,0.0,final
-WAS,00-0031588,Stefon Diggs,WR,WRTE,0.12091179385530228,,,,practice: Did Not Participate In Practice,0.0,final
-WAS,00-0036626,Dyami Brown,WR,WRTE,0.10604558969276512,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-WAS,00-0036628,John Bates,TE,WRTE,0.10009910802775025,8.0,Questionable,Shoulder,practice: Limited Participation in Practice,0.0,final
-WAS,00-0033955,Jeremy McNichols,RB,RB,0.09448818897637795,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
+ARI,00-0033119,Jacoby Brissett,QB,QB,0.6968641114982579,,,,CUT (A01) on wk 9 roster,1.0,none
+ARI,00-0037157,Bam Knight,RB,RB,0.3240418118466899,9.0,Out,Concussion,not on a week-10 report yet,0.0,none
+ARI,00-0041113,Jayden Williams,T,OL,0.1404728789986092,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+ARI,00-0040706,Walter Nolen,DT,DL,0.11838006230529595,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+ARI,00-0039807,Max Melton,CB,DB,0.11129991503823279,9.0,Questionable,Knee,not on a week-10 report yet,0.0,none
+ARI,00-0033307,Kendrick Bourne,WR,WRTE,0.09694323144104804,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+ARI,00-0038640,Jalen Brooks,WR,WRTE,0.07860262008733625,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+ARI,00-0041027,Jeremiyah Love,RB,RB,0.05226480836236934,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+ARI,00-0038571,Jon Gaines II,G,OL,0.05006954102920723,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+ATL,00-0036990,Divine Deablo,LB,LB,0.09401709401709402,9.0,Questionable,Forearm,not on a week-10 report yet,0.0,none
+ATL,00-0033945,Samson Ebukam,DL,DL,0.06710158434296365,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+BAL,00-0035993,Tyler Huntley,QB,QB,0.7015706806282722,9.0,Out,Toe,RES (A01) on wk 9 roster,1.0,none
+BAL,00-0039232,Nate Wiggins,CB,DB,0.13402061855670103,9.0,Questionable,Stinger,not on a week-10 report yet,0.0,none
+BAL,00-0034796,Lamar Jackson,QB,QB,0.005235602094240838,9.0,Out,Thumb,RES (A01) on wk 9 roster,1.0,none
+BUF,00-0033904,Dion Dawkins,T,OL,0.16587677725118483,9.0,Questionable,Rib,not on a week-10 report yet,0.0,none
+BUF,00-0035667,Greg Gaines,DT,DL,0.09205776173285199,9.0,Questionable,Calf,not on a week-10 report yet,0.0,none
+BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.08774834437086093,,,,not on wk 9 roster (left team),1.0,none
+CAR,00-0035687,Bobby Okereke,LB,LB,0.17403314917127072,9.0,Out,Foot,not on a week-10 report yet,0.0,none
+CAR,00-0041063,Will Lee III,CB,DB,0.11499611499611499,9.0,Out,Hamstring,not on a week-10 report yet,0.0,none
+CAR,00-0038101,Akayleb Evans,DB,DB,0.0979020979020979,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+CAR,00-0036417,Damien Lewis,G,OL,0.08853410740203194,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+CAR,00-0033284,Taylor Moton,OL,OL,0.07402031930333818,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+CAR,00-0040541,Torricelli Simpkins III,G,OL,0.05587808417997097,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+CIN,00-0041546,Cashius Howell,DL,DL,0.06713164777680906,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+CIN,00-0039814,Erick All,TE,WRTE,0.05,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+CLE,00-0033537,Deshaun Watson,QB,QB,0.7210144927536232,9.0,Questionable,Concussion,not on a week-10 report yet,0.0,none
+CLE,00-0033131,Maliek Collins,DT,DL,0.10926829268292683,9.0,Out,Elbow,not on a week-10 report yet,0.0,none
+CLE,00-0039373,Audric Estimé,RB,RB,0.06188925081433225,,,,not on wk 9 roster (left team),1.0,none
+DAL,00-0037247,George Pickens,WR,WRTE,0.13427561837455831,9.0,Questionable,Hamstring,not on a week-10 report yet,0.0,none
+DAL,00-0038041,Jake Ferguson,TE,WRTE,0.0980565371024735,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+DAL,00-0041537,Malachi Lawrence,LB,LB,0.09511343804537521,9.0,Out,Ankle,Reserve/Injured (IR) on wk 9 roster,1.0,none
+DAL,00-0039167,Joey Porter Jr.,CB,DB,0.09024211298606016,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+DAL,00-0038556,DeMarvion Overshown,LB,LB,0.08900523560209424,9.0,Questionable,Hamstring,not on a week-10 report yet,0.0,none
+DET,00-0039018,Jack Campbell,LB,LB,0.30267558528428096,9.0,Out,Neck,Reserve/Injured (IR) on wk 9 roster,1.0,none
+DET,00-0039364,Sione Vaki,RB,RB,0.2581818181818182,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+DET,00-0036963,Amon-Ra St. Brown,WR,WRTE,0.20038910505836577,9.0,Questionable,Rib,not on a week-10 report yet,0.0,none
+DET,00-0034384,D.J. Reed,CB,DB,0.1532399299474606,9.0,Out,Hip,not on a week-10 report yet,0.0,none
+DET,00-0036335,DJ Wonnum,DE,DL,0.09900990099009901,9.0,Out,Concussion,not on a week-10 report yet,0.0,none
+DET,00-0037297,Cade Mays,C,OL,0.06696428571428571,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+GB,00-0039811,MarShawn Lloyd,RB,RB,0.23465703971119134,9.0,Questionable,Knee,not on a week-10 report yet,0.0,none
+GB,00-0035133,Keisean Nixon,CB,DB,0.19910846953937592,9.0,Questionable,Groin,not on a week-10 report yet,0.0,none
+GB,00-0034431,Zaire Franklin,LB,LB,0.1407942238267148,9.0,Out,Shin,not on a week-10 report yet,0.0,none
+GB,00-0039819,Travis Glover,G,OL,0.10252707581227437,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+GB,00-0037076,Sean Rhyan,C,OL,0.05703971119133574,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+HOU,00-0040138,Jaylin Noel,WR,WRTE,0.08247422680412371,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+HOU,00-0037130,Reed Blankenship,S,DB,0.07587859424920128,9.0,Out,Concussion,not on a week-10 report yet,0.0,none
+IND,00-0036298,Akeem Davis-Gaither,LB,LB,0.28105906313645623,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+IND,00-0040163,Jalen Travis,T,OL,0.1714922048997773,9.0,Questionable,Thumb,not on a week-10 report yet,0.0,none
+IND,00-0041043,A.J. Haulcy,S,DB,0.12934879571810884,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+IND,00-0034342,Quenton Nelson,OL,OL,0.10690423162583519,,,,not on wk 9 roster (left team),1.0,none
+IND,00-0032378,DeForest Buckner,DL,DL,0.09145129224652088,,,,not on wk 9 roster (left team),1.0,none
+IND,00-0040139,Justin Walley,CB,DB,0.07404103479036575,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+JAX,00-0040719,Bhayshul Tuten,RB,RB,0.5436507936507936,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+JAX,00-0037235,Travon Walker,DE,DL,0.1900647948164147,9.0,Questionable,Rib,not on a week-10 report yet,0.0,none
+JAX,00-0036262,DaVon Hamilton,DL,DL,0.07451403887688984,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+JAX,00-0033038,Eric Murray,DB,DB,0.06609808102345416,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+KC,00-0041543,Mansoor Delane,CB,DB,0.10651828298887123,9.0,Out,Shoulder,not on a week-10 report yet,0.0,none
+KC,WOO547869,,,DL,0.06417624521072797,,,,not on wk 9 roster (left team),1.0,none
+LA,00-0036349,Kam Curl,S,DB,0.18257839721254354,9.0,Questionable,Foot,not on a week-10 report yet,0.0,none
+LA,00-0036244,Colby Parkinson,TE,WRTE,0.13570741097208855,9.0,Questionable,Ribs,not on a week-10 report yet,0.0,none
+LA,00-0037195,Jaylen Watson,CB,DB,0.1240418118466899,9.0,Out,Shoulder,Reserve/Injured (IR) on wk 9 roster,1.0,none
+LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.05230125523012552,,,,not on wk 9 roster (left team),1.0,none
+LV,00-0040641,Darien Porter,CB,DB,0.10510046367851623,9.0,Questionable,Groin,not on a week-10 report yet,0.0,none
+MIA,00-0039874,Jaylen Wright,RB,RB,0.07621951219512195,9.0,Questionable,Quadricep,not on a week-10 report yet,0.0,none
+MIA,00-0036682,Malik Herring,DE,DL,0.05447070914696814,9.0,Questionable,Neck,not on a week-10 report yet,0.0,none
+MIN,00-0035228,Kyler Murray,QB,QB,0.7922077922077922,9.0,Out,Hamstring,not on a week-10 report yet,0.0,none
+MIN,00-0036259,Jauan Jennings,WR,WRTE,0.12627986348122866,9.0,Out,Calf,not on a week-10 report yet,0.0,none
+MIN,00-0037301,Theo Jackson,S,DB,0.08288288288288288,9.0,Questionable,Quadricep,not on a week-10 report yet,0.0,none
+NE,00-0033132,Kevin Byard,S,DB,0.20272435897435898,9.0,Questionable,Chest,not on a week-10 report yet,0.0,none
+NE,00-0031330,Morgan Moses,T,OL,0.1407766990291262,9.0,Questionable,Foot,not on a week-10 report yet,0.0,none
+NE,00-0033090,Hunter Henry,TE,WRTE,0.13692946058091288,9.0,Questionable,Foot,not on a week-10 report yet,0.0,none
+NE,00-0040734,TreVeyon Henderson,RB,RB,0.116,9.0,Out,Illness,not on a week-10 report yet,0.0,none
+NE,00-0035676,A.J. Brown,WR,WRTE,0.10477178423236515,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+NE,00-0034778,Carlton Davis III,CB,DB,0.07852564102564102,9.0,Questionable,Neck,not on a week-10 report yet,0.0,none
+NO,00-0038551,Kendre Miller,RB,RB,0.2677165354330709,,,,Waived on wk 9 roster,1.0,none
+NO,00-0041326,CJ Donaldson,RB,RB,0.18503937007874016,9.0,Out,Shoulder,not on a week-10 report yet,0.0,none
+NO,00-0037250,Martin Emerson,CB,DB,0.14963503649635038,9.0,Questionable,Shin,not on a week-10 report yet,0.0,none
+NO,00-0038601,Asim Richards,T,OL,0.13509192645883294,9.0,Questionable,Thumb,not on a week-10 report yet,0.0,none
+NO,00-0040125,Kelvin Banks Jr.,T,OL,0.05995203836930456,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+NYG,00-0040715,Cam Skattebo,RB,RB,0.25647668393782386,9.0,Doubtful,Hamstring,not on a week-10 report yet,0.0,none
+NYG,00-0039384,Tyrone Tracy Jr.,RB,RB,0.14507772020725387,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+NYG,00-0034673,Tremaine Edmunds,LB,LB,0.11932324131789848,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+NYG,00-0036893,Najee Harris,RB,RB,0.06994818652849741,,,,not on wk 9 roster (left team),1.0,none
+NYJ,00-0037740,Garrett Wilson,WR,WRTE,0.16615698267074414,9.0,Out,Concussion,not on a week-10 report yet,0.0,none
+NYJ,00-0034782,Harrison Phillips,DT,DL,0.1269296740994854,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
+NYJ,00-0039886,T'Vondre Sweat,DL,DL,0.0548885077186964,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+PIT,00-0034810,Sebastian Joseph-Day,DL,DL,0.08614864864864864,,,,Reserve/Injured (IR) on wk 8 roster,1.0,none
+SEA,00-0034869,Sam Darnold,QB,QB,0.7640845070422535,9.0,Out,Quadricep,not on a week-10 report yet,0.0,none
+SEA,00-0031933,Leonard Williams,DT,DL,0.23665480427046262,9.0,Out,Stinger,not on a week-10 report yet,0.0,none
+SEA,00-0037821,Charles Cross,T,OL,0.09943977591036414,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+SEA,00-0034350,Uchenna Nwosu,LB,LB,0.06527093596059114,9.0,Out,Ankle,not on a week-10 report yet,0.0,none
+SEA,00-0037545,Rashid Shaheed,WR,WRTE,0.056169429097605895,9.0,Out,Knee,not on a week-10 report yet,0.0,none
+SF,00-0040152,Upton Stout,CB,DB,0.08326029798422437,9.0,Questionable,Shoulder,not on a week-10 report yet,0.0,none
+SF,00-0031408,Mike Evans,WR,WRTE,0.06774193548387097,9.0,Out,Ribs,not on a week-10 report yet,0.0,none
+TEN,00-0039032,Tyjae Spears,RB,RB,0.17857142857142858,8.0,Out,Knee,not on a week-10 report yet,0.0,none
+TEN,00-0035643,Jeffery Simmons,DL,DL,0.16453537936913895,,,,not on wk 8 roster (left team),1.0,none
+TEN,00-0041438,Carnell Tate,WR,WRTE,0.13953488372093023,8.0,Out,Shoulder,not on a week-10 report yet,0.0,none
+TEN,00-0034805,John Franklin-Myers,DE,DL,0.12702472293265132,8.0,Questionable,Groin,not on a week-10 report yet,0.0,none
+TEN,00-0034837,Calvin Ridley,WR,WRTE,0.10414560161779575,8.0,Questionable,Hip,not on a week-10 report yet,0.0,none
+WAS,00-0034333,Daron Payne,DL,DL,0.16201117318435754,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+WAS,00-0037742,Treylon Burks,WR,WRTE,0.12212212212212212,9.0,Out,Foot,not on a week-10 report yet,0.0,none
+WAS,00-0036260,Javon Kinlaw,DL,DL,0.11592178770949721,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+WAS,00-0033955,Jeremy McNichols,RB,RB,0.09486166007905138,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+WAS,00-0040242,Jacory Croskey-Merritt,RB,RB,0.08695652173913043,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
+WAS,00-0036626,Dyami Brown,WR,WRTE,0.07107107107107107,9.0,Out,Calf,Reserve/Injured (IR) on wk 9 roster,1.0,none

@@ -1,11 +1,11 @@
 season,method,games,opportunities,bets,selected,policy_version,calibration_method,wins,losses,pushes,skips,selection_rate,units,roi
-All,Original spread,937,937,937,937,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,455,457,25,0,1.0,-43.363636363636374,-0.04627922770932377
-All,Fixed bands,937,937,937,937,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,524,388,25,0,1.0,88.36363636363632,0.0943048413699427
+All,Original spread,952,952,952,952,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,465,462,25,0,1.0,-39.27272727272731,-0.041252864782276584
+All,Fixed bands,952,952,952,952,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,532,395,25,0,1.0,88.63636363636357,0.09310542398777685
 2023,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,118,140,14,0,1.0,-32.727272727272734,-0.12032085561497328
 2023,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,141,117,14,0,1.0,11.181818181818159,0.04110962566844911
 2024,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,133,135,4,0,1.0,-14.090909090909108,-0.05180481283422466
 2024,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,165,103,4,0,1.0,47.0,0.17279411764705882
 2025,Original spread,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,145,126,1,0,1.0,5.818181818181813,0.021390374331550784
 2025,Fixed bands,272,272,272,272,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,151,120,1,0,1.0,17.272727272727252,0.06350267379679136
-2026,Original spread,121,121,121,121,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,59,56,6,0,1.0,-2.363636363636367,-0.019534184823441048
-2026,Fixed bands,121,121,121,121,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,67,48,6,0,1.0,12.909090909090907,0.10668670172802402
+2026,Original spread,136,136,136,136,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,69,61,6,0,1.0,1.7272727272727195,0.012700534759358232
+2026,Fixed bands,136,136,136,136,median-mov-weekly-decay-2026-11-04-v2,weighted_median_signed_mov_weekly_decay,75,55,6,0,1.0,13.181818181818173,0.0969251336898395

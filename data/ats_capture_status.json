@@ -1,93 +1,315 @@
 {
-  "forecast_utc": "2026-11-09T19:52:32.062048+00:00",
+  "forecast_utc": "2026-11-10T17:46:53.777246+00:00",
   "games": [
     {
-      "game_id": "2026_09_ARI_SEA",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T20:25:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_BUF_NYJ",
+      "issues": [
+        "NYJ: automatic source checks incomplete or stale",
+        "NYJ: final report incomplete",
+        "NYJ: report: injury report does not identify the forecast week",
+        "NYJ: report: no successful source check",
+        "NYJ: report: complete official list/report missing",
+        "NYJ: inactives: no successful source check",
+        "NYJ: inactives: complete official list/report missing",
+        "BUF: automatic source checks incomplete or stale",
+        "BUF: final report incomplete",
+        "BUF: report: injury report does not identify the forecast week",
+        "BUF: report: no successful source check",
+        "BUF: report: complete official list/report missing",
+        "BUF: inactives: no successful source check",
+        "BUF: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_BUF_MIN",
+      "game_id": "2026_10_CAR_NO",
       "issues": [
-        "current board cannot be captured before the cutoff",
-        "MIN: report: source check stale or after forecast",
+        "NO: automatic source checks incomplete or stale",
+        "NO: final report incomplete",
+        "NO: report: injury report does not identify the forecast week",
+        "NO: report: no successful source check",
+        "NO: report: complete official list/report missing",
+        "NO: inactives: no successful source check",
+        "NO: inactives: complete official list/report missing",
+        "CAR: automatic source checks incomplete or stale",
+        "CAR: final report incomplete",
+        "CAR: report: injury report does not identify the forecast week",
+        "CAR: report: no successful source check",
+        "CAR: report: complete official list/report missing",
+        "CAR: inactives: no successful source check",
+        "CAR: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_HOU_CLE",
+      "issues": [
+        "CLE: automatic source checks incomplete or stale",
+        "CLE: final report incomplete",
+        "CLE: report: injury report does not identify the forecast week",
+        "CLE: report: no successful source check",
+        "CLE: report: complete official list/report missing",
+        "CLE: inactives: no successful source check",
+        "CLE: inactives: complete official list/report missing",
+        "HOU: automatic source checks incomplete or stale",
+        "HOU: final report incomplete",
+        "HOU: report: injury report does not identify the forecast week",
+        "HOU: report: no successful source check",
+        "HOU: report: complete official list/report missing",
+        "HOU: inactives: no successful source check",
+        "HOU: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_JAX_TEN",
+      "issues": [
+        "TEN: automatic source checks incomplete or stale",
+        "TEN: final report incomplete",
+        "TEN: report: injury report for both scheduled opponents not yet published",
+        "TEN: report: no successful source check",
+        "TEN: report: complete official list/report missing",
+        "TEN: inactives: no successful source check",
+        "TEN: inactives: complete official list/report missing",
+        "JAX: automatic source checks incomplete or stale",
+        "JAX: final report incomplete",
+        "JAX: report: injury report does not identify the forecast week",
+        "JAX: report: no successful source check",
+        "JAX: report: complete official list/report missing",
+        "JAX: inactives: no successful source check",
+        "JAX: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_KC_ATL",
+      "issues": [
+        "ATL: automatic source checks incomplete or stale",
+        "ATL: final report incomplete",
+        "ATL: report: injury report does not identify the forecast week",
+        "ATL: report: no successful source check",
+        "ATL: report: complete official list/report missing",
+        "ATL: inactives: no successful source check",
+        "ATL: inactives: complete official list/report missing",
+        "KC: automatic source checks incomplete or stale",
+        "KC: final report incomplete",
+        "KC: report: injury report does not identify the forecast week",
+        "KC: report: no successful source check",
+        "KC: report: complete official list/report missing",
+        "KC: inactives: no successful source check",
+        "KC: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_LAC_BAL",
+      "issues": [
+        "BAL: automatic source checks incomplete or stale",
+        "BAL: final report incomplete",
+        "BAL: report: injury report does not identify the forecast week",
+        "BAL: report: no successful source check",
+        "BAL: report: complete official list/report missing",
+        "BAL: inactives: no successful source check",
+        "BAL: inactives: complete official list/report missing",
+        "LAC: automatic source checks incomplete or stale",
+        "LAC: final report incomplete",
+        "LAC: report: injury report does not identify the forecast week",
+        "LAC: report: no successful source check",
+        "LAC: report: complete official list/report missing",
+        "LAC: inactives: no successful source check",
+        "LAC: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-17T00:15:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_LA_ARI",
+      "issues": [
+        "ARI: automatic source checks incomplete or stale",
+        "ARI: final report incomplete",
+        "ARI: report: injury report does not identify the forecast week",
+        "ARI: report: no successful source check",
+        "ARI: report: complete official list/report missing",
+        "ARI: inactives: no successful source check",
+        "ARI: inactives: complete official list/report missing",
+        "LA: automatic source checks incomplete or stale",
+        "LA: final report incomplete",
+        "LA: report: injury report does not identify the forecast week",
+        "LA: report: no successful source check",
+        "LA: report: complete official list/report missing",
+        "LA: inactives: no successful source check",
+        "LA: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T20:05:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_MIA_IND",
+      "issues": [
+        "IND: automatic source checks incomplete or stale",
+        "IND: final report incomplete",
+        "IND: report: injury report does not identify the forecast week",
+        "IND: report: no successful source check",
+        "IND: report: complete official list/report missing",
+        "IND: inactives: no successful source check",
+        "IND: inactives: complete official list/report missing",
+        "MIA: automatic source checks incomplete or stale",
+        "MIA: final report incomplete",
+        "MIA: report: injury report does not identify the forecast week",
+        "MIA: report: no successful source check",
+        "MIA: report: complete official list/report missing",
+        "MIA: inactives: no successful source check",
+        "MIA: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_MIN_GB",
+      "issues": [
+        "GB: automatic source checks incomplete or stale",
+        "GB: final report incomplete",
+        "GB: report: injury report does not identify the forecast week",
+        "GB: report: no successful source check",
+        "GB: report: complete official list/report missing",
+        "GB: inactives: no successful source check",
+        "GB: inactives: complete official list/report missing",
+        "MIN: automatic source checks incomplete or stale",
+        "MIN: final report incomplete",
+        "MIN: report: injury report does not identify the forecast week",
+        "MIN: report: no successful source check",
+        "MIN: report: complete official list/report missing",
         "MIN: inactives: no successful source check",
         "MIN: inactives: complete official list/report missing",
-        "BUF: report: source check stale or after forecast",
-        "BUF: inactives: no successful source check",
-        "BUF: inactives: complete official list/report missing"
+        "forecast availability validation failed"
       ],
-      "lock_at_utc": "2026-11-10T00:15:00+00:00",
-      "state": "missed cutoff"
+      "lock_at_utc": "2026-11-15T17:00:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_CLE_NO",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_NE_DET",
+      "issues": [
+        "DET: automatic source checks incomplete or stale",
+        "DET: final report incomplete",
+        "DET: report: injury report does not identify the forecast week",
+        "DET: report: no successful source check",
+        "DET: report: complete official list/report missing",
+        "DET: inactives: no successful source check",
+        "DET: inactives: complete official list/report missing",
+        "NE: automatic source checks incomplete or stale",
+        "NE: final report incomplete",
+        "NE: report: injury report does not identify the forecast week",
+        "NE: report: no successful source check",
+        "NE: report: complete official list/report missing",
+        "NE: inactives: no successful source check",
+        "NE: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T13:30:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_DAL_IND",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_PIT_CIN",
+      "issues": [
+        "CIN: automatic source checks incomplete or stale",
+        "CIN: final report incomplete",
+        "CIN: report: injury report does not identify the forecast week",
+        "CIN: report: no successful source check",
+        "CIN: report: complete official list/report missing",
+        "CIN: inactives: no successful source check",
+        "CIN: inactives: complete official list/report missing",
+        "PIT: automatic source checks incomplete or stale",
+        "PIT: final report incomplete",
+        "PIT: report: injury report for both scheduled opponents not yet published",
+        "PIT: report: no successful source check",
+        "PIT: report: complete official list/report missing",
+        "PIT: inactives: no successful source check",
+        "PIT: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-16T00:20:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_DEN_CAR",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_SEA_LV",
+      "issues": [
+        "LV: automatic source checks incomplete or stale",
+        "LV: final report incomplete",
+        "LV: report: injury report does not identify the forecast week",
+        "LV: report: no successful source check",
+        "LV: report: complete official list/report missing",
+        "LV: inactives: no successful source check",
+        "LV: inactives: complete official list/report missing",
+        "SEA: automatic source checks incomplete or stale",
+        "SEA: final report incomplete",
+        "SEA: report: injury report does not identify the forecast week",
+        "SEA: report: no successful source check",
+        "SEA: report: complete official list/report missing",
+        "SEA: inactives: no successful source check",
+        "SEA: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T20:05:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_DET_MIA",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_SF_DAL",
+      "issues": [
+        "DAL: automatic source checks incomplete or stale",
+        "DAL: final report incomplete",
+        "DAL: report: injury report does not identify the forecast week",
+        "DAL: report: no successful source check",
+        "DAL: report: complete official list/report missing",
+        "DAL: inactives: no successful source check",
+        "DAL: inactives: complete official list/report missing",
+        "SF: automatic source checks incomplete or stale",
+        "SF: final report incomplete",
+        "SF: report: injury report does not identify the forecast week",
+        "SF: report: no successful source check",
+        "SF: report: complete official list/report missing",
+        "SF: inactives: no successful source check",
+        "SF: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T20:25:00+00:00",
+      "state": "awaiting candidate"
     },
     {
-      "game_id": "2026_09_GB_NE",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T20:25:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_HOU_LAC",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T20:05:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_LA_WAS",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_LV_SF",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T20:05:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_NYG_PHI",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_NYJ_KC",
-      "issues": [],
-      "lock_at_utc": "2026-11-08T17:00:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_09_TB_CHI",
-      "issues": [],
-      "lock_at_utc": "2026-11-09T00:20:00+00:00",
-      "state": "locked"
+      "game_id": "2026_10_WAS_NYG",
+      "issues": [
+        "NYG: automatic source checks incomplete or stale",
+        "NYG: final report incomplete",
+        "NYG: report: injury report does not identify the forecast week",
+        "NYG: report: no successful source check",
+        "NYG: report: complete official list/report missing",
+        "NYG: inactives: no successful source check",
+        "NYG: inactives: complete official list/report missing",
+        "WAS: automatic source checks incomplete or stale",
+        "WAS: final report incomplete",
+        "WAS: report: injury report does not identify the forecast week",
+        "WAS: report: no successful source check",
+        "WAS: report: complete official list/report missing",
+        "WAS: inactives: no successful source check",
+        "WAS: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-13T00:15:00+00:00",
+      "state": "awaiting candidate"
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-10T16:05:47.560532+00:00"
+  "updated_utc": "2026-11-10T17:46:56.939730+00:00"
 }
