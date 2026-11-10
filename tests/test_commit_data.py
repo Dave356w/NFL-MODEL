@@ -161,6 +161,34 @@ def _explode_api(*args, **kwargs):
     raise RuntimeError("graphql exploded")
 
 
+def test_collision_never_enters_git_fallback(monkeypatch):
+    monkeypatch.setattr(commit_data, 'changed_paths', lambda paths: (['x'], []))
+    monkeypatch.setattr(commit_data, 'file_changes', lambda a, d: {'additions': [], 'deletions': []})
+    monkeypatch.setenv('GITHUB_TOKEN', 't')
+    monkeypatch.setenv('GITHUB_REPOSITORY', 'o/r')
+    def collide(*args, **kwargs):
+        raise commit_data.BranchCollision('concurrent write')
+    monkeypatch.setattr(commit_data, 'api_commit', collide)
+    monkeypatch.setattr(commit_data, 'git_commit_and_push', _explode)
+    with pytest.raises(commit_data.BranchCollision):
+        commit_data.main(['--branch', 'main', '--message', 'm'])
+
+
+def test_failed_rebase_is_aborted_before_return(monkeypatch):
+    calls = []
+    def git(*args, **kwargs):
+        calls.append(args)
+        if args[0] == 'pull':
+            raise RuntimeError('conflict')
+        return ''
+    monkeypatch.setattr(commit_data, 'git', git)
+    monkeypatch.setattr(commit_data.subprocess, 'run', lambda *a, **k: type('R', (), {'returncode': 0})())
+    with pytest.raises(RuntimeError, match='conflict'):
+        commit_data.git_commit_and_push('main', 'm')
+    assert calls[-1] == ('rebase', '--abort')
+    assert not any(c[0] == 'push' for c in calls)
+
+
 def test_no_fallback_flag_lets_the_failure_surface(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(

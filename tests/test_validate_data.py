@@ -5,6 +5,20 @@ import pytest
 import validate_data_files as v
 
 
+@pytest.mark.parametrize('body', ['{\n<<<<<<< HEAD\n}', '{"broken":}'])
+def test_json_state_corruption_is_rejected(tmp_path, body):
+    (tmp_path / 'availability_collection_status.json').write_text(body)
+    with pytest.raises(ValueError):
+        v.validate_data_dir(tmp_path)
+
+
+def test_nested_json_is_validated(tmp_path):
+    (tmp_path / 'latest').mkdir()
+    path = tmp_path / 'latest/manifest.json'
+    path.write_text('{"revision":"test"}')
+    assert path in v.validate_data_dir(tmp_path)
+
+
 def rec(gid, gen="2026-10-10T12:00:00+00:00", ko="2026-10-11T17:00:00+00:00", exp="e"):
     return json.dumps({"experiment": exp, "game_id": gid, "generated_utc": gen, "kickoff_utc": ko, "model_wp": .6})
 

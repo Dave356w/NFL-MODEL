@@ -221,10 +221,20 @@ def validate_h5(path):
 def validate_data_dir(data_dir="data"):
     """Validate every CSV under data_dir, the forward ledger and Kalshi captures; return checked paths."""
     data_dir = Path(data_dir)
+    json_paths = sorted(data_dir.rglob("*.json"))
+    for path in json_paths:
+        text = path.read_text(encoding="utf-8")
+        if any(line.startswith(CONFLICT_MARKERS) for line in text.splitlines()):
+            raise ValueError(f"{path}: unresolved Git conflict marker")
+        try:
+            json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"{path}: not JSON ({exc})") from exc
     paths = sorted(data_dir.rglob("*.csv"))
     for path in paths:
         validate_csv(path)
         if path.name=="personnel_events.csv": validate_personnel_events(path)
+    paths.extend(json_paths)
     ledger = data_dir / LEDGER_NAME
     if ledger.exists():
         validate_ledger(ledger)

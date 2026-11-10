@@ -46,6 +46,10 @@ import requests
 
 API_URL = "https://api.github.com/graphql"
 
+
+class BranchCollision(RuntimeError):
+    """Concurrent writes require a fresh computation, never a rebase."""
+
 MUTATION = """
 mutation ($input: CreateCommitOnBranchInput!) {
   createCommitOnBranch(input: $input) {
@@ -176,13 +180,15 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
             data = graphql(token, MUTATION, variables)
         except RuntimeError as exc:
             moved = remote_head(branch)
-            if moved == head or attempt == attempts:
+            if moved == head:
                 raise
+            if attempt == attempts:
+                raise BranchCollision(f"{branch} kept moving; refusing git fallback") from exc
             ours = [a["path"] for a in changes["additions"]]
             ours += [d["path"] for d in changes["deletions"]]
             clash = touches_ours(head, moved, ours)
             if clash:
-                raise RuntimeError(
+                raise BranchCollision(
                     f"{branch} moved from {head[:7]} to {moved[:7]} and the new "
                     f"commit wrote {', '.join(clash)} -- refusing to overwrite"
                 ) from exc
@@ -204,7 +210,13 @@ def git_commit_and_push(branch, message):
     ).returncode == 0
     if not nothing_staged:
         git("commit", "-m", message)
-    git("pull", "--rebase", "origin", branch)
+    try:
+        git("pull", "--rebase", "origin", branch)
+    except Exception:
+        # Leave the saved local commit intact and remove conflict text before
+        # the ATS watcher can attempt another collection/commit.
+        git("rebase", "--abort")
+        raise
     # The rebase is the one step that can introduce conflict-marker text into
     # a CSV, which is why the old sequence validated a second time here. The
     # API path has no rebase and validates once; this path keeps both.
@@ -241,6 +253,8 @@ def main(argv=None):
             raise RuntimeError("GITHUB_TOKEN / GITHUB_REPOSITORY not set")
         commit = api_commit(token, repo, args.branch, args.message, changes,
                             base=local_head())
+    except BranchCollision:
+        raise
     except Exception as exc:  # noqa: BLE001
         if args.no_fallback:
             raise
