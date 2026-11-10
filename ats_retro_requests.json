@@ -60,6 +60,11 @@
     "reason": "Owner requested activation of today's missed locks on 2026-11-08. If no normal lock exists after the 12:25 Pacific cutoff, recover only the board committed at 20:18 UTC before T-60. Retain the original New England source and medical-clearance blockers, the saved model, market line and weekly map, and actual creation time. A normal existing lock remains authoritative."
   },
   {
+    "game_id": "2026_09_BUF_MIN",
+    "source_commit": "4331f0ee12391b83d440f8334ace2fb62f062f8b",
+    "reason": "Owner requested rescue of BUF-MIN's unavailable Monday selection on 2026-11-10 after cron/build failures. Use the last board committed before T-60: forecast 2026-11-09T19:52:32.062048Z, committed 19:52:46Z, cutoff 2026-11-10T00:15:00Z. Preserve MIN +3.5, the saved BUF -3 model margin and original weekly map and availability evidence. The saved forecast is several hours old; this is an explicit historical recovery, not a fresh v4 watcher lock. Retain actual recovery time; never use post-cutoff inputs or select an older favorable forecast."
+  },
+  {
     "game_id": "2026_09_TB_CHI",
     "source_commit": "b049776c391f7903623b7a2cd650f28eb198f44a",
     "reason": "Owner requested retirement of RSS and rescue of yesterday's missing picks on 2026-11-09. Recover this final pre-cutoff board committed at 2026-11-09T00:13:00Z before T-60 (00:20Z). Preserve Tampa Bay +6, the saved model and weekly map, original inactive-parser blockers and actual recovery time. Do not refit or use post-cutoff inputs."

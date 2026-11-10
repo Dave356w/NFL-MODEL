@@ -74,8 +74,11 @@ def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path)
     before=copy.deepcopy(records)
     selected=locks.current_records(records,m.REVISION)
     old=[r for r in records.values() if r['revision']=='boxscore-composite-v1.21']
-    assert len(selected)==len(old) and len(old)>=13
-    assert all(selected[(m.REVISION,r['game_id'])] is r for r in old)
+    own={key:row for key,row in records.items() if key[0]==m.REVISION}
+    expected={(m.REVISION,row['game_id']):row for row in old}
+    expected.update(own)
+    assert selected.keys()==expected.keys() and len(old)>=13
+    assert all(selected[key] is row for key,row in expected.items())
     assert records==before
     # Current-version saved selection wins over the inherited one.
     original=old[0]
