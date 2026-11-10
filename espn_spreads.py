@@ -92,7 +92,10 @@ def collect(event, get=fetch):
 
 
 def read(data='data'):
-    return locks.read(Path(data) / STORE)
+    rows = locks.read(Path(data) / STORE)
+    for path in sorted((Path(data)/'espn_captures').glob('*/*.json')):
+        rows.append(json.loads(path.read_text()))
+    return rows
 
 
 def validate(data='data'):
@@ -112,7 +115,7 @@ def validate(data='data'):
     return len(seen)
 
 
-def refresh(data='data', season=2026, get=fetch, now=None):
+def refresh(data='data', season=2026, get=fetch, now=None, game_ids=None, sharded=False):
     """Backfill completed games; refresh upcoming games inside two days.
 
     Completed successes are reused. Failed odds/movement requests are retried.
@@ -136,7 +139,7 @@ def refresh(data='data', season=2026, get=fetch, now=None):
                       and any(p.get('items') for p in prior['odds_pages'])
                       and not any(m.get('error') for m in prior['movements']))
         upcoming = now < locks.utc(event['kickoff_utc']) <= now + dt.timedelta(days=2)
-        if not same_final and (event['completed'] or upcoming):
+        if not same_final and (event['completed'] or upcoming) and (game_ids is None or event['game_id'] in game_ids):
             wanted.append(event)
     errors, saved = [], []
     with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
@@ -145,7 +148,13 @@ def refresh(data='data', season=2026, get=fetch, now=None):
             event = jobs[job]
             try:
                 row = job.result()
-                locks.append(Path(data) / STORE, [row])
+                if sharded:
+                    path = Path(data)/'espn_captures'/row['game_id']/(row['evidence_sha256']+'.json')
+                    path.parent.mkdir(parents=True, exist_ok=True)
+                    if not path.exists():
+                        path.write_text(json.dumps(row, sort_keys=True, allow_nan=False)+'\n')
+                else:
+                    locks.append(Path(data) / STORE, [row])
                 saved.append(row)
             except (OSError, ValueError, KeyError) as exc:
                 errors.append(dict(game_id=event['game_id'], error=str(exc)))

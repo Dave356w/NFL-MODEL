@@ -1,0 +1,30 @@
+name: Monitor ATS watcher health
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Independent ATS lock watcher]
+    types: [completed]
+  schedule:
+    - cron: '3,18,33,48 * * * *'
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ats-watcher-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Restart missing watcher or report stale heartbeat
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python lock_watchdog.py

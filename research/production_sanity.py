@@ -124,6 +124,10 @@ def inspect(data='data'):
     try:
         inventory = ats_locks.validate_store(data)
         timed = ats_locks.read(data / ats_locks.LOCKS)
+        for runtime in ats_locks.runtime_stores(data):
+            extra = ats_locks.validate_store(runtime)
+            inventory = {k: inventory[k]+extra[k] for k in inventory}
+            timed += ats_locks.read(runtime/ats_locks.LOCKS)
         capture = dict(policy=ats_locks.POLICY_VERSION, candidates=inventory['candidates'],
                        timed_locks=sum(not r.get('recovered_after_kickoff') for r in timed),
                        recovered_saved_forecasts=sum(bool(r.get('recovered_after_kickoff')) for r in timed),

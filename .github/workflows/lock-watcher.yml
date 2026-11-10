@@ -1,0 +1,49 @@
+name: Independent ATS lock watcher
+
+on:
+  workflow_dispatch:
+    inputs:
+      once:
+        description: 'One heartbeat only (verification)'
+        type: boolean
+        default: false
+  # Backup wakeups; the running watcher explicitly dispatches its successor.
+  schedule:
+    - cron: '7 * * * *'
+
+concurrency:
+  group: ats-lock-watcher
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          filter: blob:none
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Watch, save and finalize independently of site builds
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          NFL_STATE_DIR: data
+        run: python lock_watcher.py ${{ inputs.once && '--once' || '' }}
+      - name: Preserve uncommitted evidence after failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ats-lock-recovery-${{ github.run_id }}
+          path: data/lock_runtime
+          retention-days: 30

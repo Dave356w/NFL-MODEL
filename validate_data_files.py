@@ -264,8 +264,17 @@ def validate_data_dir(data_dir="data"):
     ac.validate_store(data_dir)
     import ats_locks
     ats_locks.validate_store(data_dir)
+    stores = ats_locks.runtime_stores(data_dir)
+    for runtime in stores:
+        ac.validate_store(runtime)
+        ats_locks.validate_store(runtime)
+        espn = __import__('espn_spreads')
+        espn.validate(runtime)
     import forecast_history
     forecast_history.validate(data_dir)
+    for runtime in stores:
+        forecast_history.validate(runtime)
+        forecast_history.validate_timing(runtime)
     import espn_spreads
     espn_spreads.validate(data_dir)
     paths.extend(data_dir / name for name in (ats_locks.CANDIDATES, ats_locks.LOCKS)

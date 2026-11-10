@@ -33,6 +33,11 @@ POLICIES = {'median-mov-ats-t60-2026-10-19-v1': False, 'median-mov-ats-t60-favti
             POLICY_VERSION: True}
 # Policy version -> the map method its saved rule must declare (v1/v2 rules predate the field).
 POLICY_METHODS = {POLICY_VERSION: 'weighted_median_signed_mov_weekly_decay'}
+WATCHER_POLICY = 'median-mov-weekly-decay-ats-t60-durable-2026-11-10-v4'
+POLICIES[WATCHER_POLICY] = True
+POLICY_METHODS[WATCHER_POLICY] = 'weighted_median_signed_mov_weekly_decay'
+RECEIPTS = 'candidate_receipts.jsonl'
+MAX_FORECAST_AGE_MINUTES = 10
 ADOPTED_UTC = dt.datetime.fromisoformat('2026-10-19T05:05:26+00:00')
 LEAD_MINUTES = 60
 FINALIZATION_GRACE_HOURS = 48
@@ -72,6 +77,11 @@ def append(path, rows):
             out.write(json.dumps(row, sort_keys=True, allow_nan=False) + '\n')
         out.flush()
         os.fsync(out.fileno())
+
+
+def runtime_stores(data):
+    root = Path(data)/'lock_runtime'
+    return ([root] + sorted(p for p in root.glob('*_week??') if p.is_dir())) if root.exists() else []
 
 
 def key(row):
@@ -144,6 +154,25 @@ def validate_store(data='data'):
             if (q['game_id'] != row['game_id'] or utc(q['captured_utc']) > observed
                     or espn_spreads.match(row, [q], allow_close=False).get('espn_quote') != q):
                 raise ValueError('ATS candidate ESPN price is not an exact pre-lock quote')
+        if row['policy_version'] == WATCHER_POLICY:
+            q = row.get('espn_quote')
+            if (not q or not dt.timedelta(0) <= cutoff-generated <= dt.timedelta(minutes=MAX_FORECAST_AGE_MINUTES)
+                    or not dt.timedelta(0) <= generated-utc(q['captured_utc']) <= dt.timedelta(minutes=5)):
+                raise ValueError('Watcher candidate needs fresh forecast and captured price')
+            audit = row.get('scoring_audit')
+            if row['revision'] == 'boxscore-composite-v1.22' and not audit:
+                raise ValueError('Watcher candidate is missing its prepared scoring audit')
+            if audit is not None:
+                import nfl_model as m
+                import pandas as pd
+                check = pd.DataFrame([audit['inputs']])
+                check['q'] = m.market_ml_wp(check)
+                fit = audit['fit']
+                if ((fit['fit_season'], fit['fit_week']) != (row['season'], row['week'])
+                        or (fit['training_max_season'], fit['training_max_week_in_latest_season']) >= (row['season'], row['week'])):
+                    raise ValueError('Watcher scoring fit uses current/future weeks')
+                if abs(float(m.apply_fit(check, audit['fit'])[0])-wp) > 1e-10:
+                    raise ValueError('Watcher probability differs from its prepared fit and quote')
         by_hash[h] = row
     locks = read(data / LOCKS)
     seen = set()
@@ -166,6 +195,14 @@ def validate_store(data='data'):
             raise ValueError('ATS lock finalized outside the allowed window or missing recovery metadata')
         eligible = [c for c in candidates if key(c) == key(row)
                     and c['kickoff_utc'] == row['kickoff_utc']]
+        if row['policy_version'] == WATCHER_POLICY:
+            eligible = durable_candidates(data, eligible)
+            receipt = next((r for r in read(data / RECEIPTS)
+                            if r['candidate_sha256'] == row['candidate_sha256']), None)
+            if receipt is None or row.get('durable_commit') != receipt['commit'] or row.get('durable_utc') != receipt['committed_utc']:
+                raise ValueError('Watcher lock has no confirmed pre-cutoff save')
+        if not eligible:
+            raise ValueError('No eligible persisted candidate')
         newest = max(eligible, key=lambda c: (utc(c['generated_utc']), utc(c['observed_utc'])))
         if newest['candidate_sha256'] != row['candidate_sha256']:
             raise ValueError('ATS lock did not use the latest pre-cutoff forecast')
@@ -215,12 +252,21 @@ def validate_availability(row):
         raise ValueError(f'ATS availability evidence invalid: {exc}') from exc
 
 
-def record(data='data', now=None):
+def durable_candidates(data, candidates):
+    receipts = {r['candidate_sha256']: r for r in read(Path(data) / RECEIPTS)}
+    return [c for c in candidates if c['policy_version'] != WATCHER_POLICY or (
+        c['candidate_sha256'] in receipts
+        and utc(c['observed_utc']) <= utc(receipts[c['candidate_sha256']]['committed_utc']) <= utc(c['lock_at_utc'])
+        and len(receipts[c['candidate_sha256']]['commit']) == 40)]
+
+
+def record(data='data', now=None, policy_version=None, finalize=True):
     """Save refreshes before T−60; finalize only already-persisted candidates."""
     import nfl_model as m
     from schedule_gate import kickoff
 
     data = Path(data)
+    policy_version = policy_version or POLICY_VERSION
     now = utc(now or dt.datetime.now(dt.timezone.utc))
     validate_store(data)
     candidates, locks = read(data / CANDIDATES), read(data / LOCKS)
@@ -273,25 +319,25 @@ def record(data='data', now=None):
                     continue
                 import fixed_bands
                 season, week = int(raw['season']), int(raw['week'])
-                weekly = POLICY_VERSION in POLICY_METHODS
+                weekly = policy_version in POLICY_METHODS
                 rule = fixed_bands.rule_for(rules, season, week, weekly=weekly)
                 if rule is None and history is not None:
                     rule = (fixed_bands.fit_weekly(history, season, week) if weekly
                             else fixed_bands.fit(history, season))
                 if not fixed_bands.trained_before(rule, season, week) or not 0 < wp < 1 or not math.isfinite(line):
                     continue
-                if rule.get('method') != POLICY_METHODS.get(POLICY_VERSION, fixed_bands.METHOD):
+                if rule.get('method') != POLICY_METHODS.get(policy_version, fixed_bands.METHOD):
                     raise ValueError('ATS lock rule does not match the lock policy\'s median map')
                 # Use the production conversion, including its exact floating-
                 # point behavior at 3/7/10, rather than a second inverse CDF.
                 x = float(m.implied_spread([wp])[0])
                 band = sum(abs(x) >= cut for cut in rule['cuts'])
                 mapped = (1 if x > 0 else -1 if x < 0 else 0) * rule['magnitudes'][band]
-                side = select(mapped, line, POLICIES[POLICY_VERSION])
+                side = select(mapped, line, POLICIES[policy_version])
                 row = dict(revision=manifest['revision'], game_id=raw['game_id'],
                            season=int(raw['season']), week=int(raw['week']), home=raw['home'], away=raw['away'],
                            generated_utc=generated.isoformat(), observed_utc=now.isoformat(), kickoff_utc=ko.isoformat(),
-                           lock_at_utc=cutoff.isoformat(), lock_lead_minutes=LEAD_MINUTES, policy_version=POLICY_VERSION,
+                           lock_at_utc=cutoff.isoformat(), lock_lead_minutes=LEAD_MINUTES, policy_version=policy_version,
                            model_wp=wp, raw_spread=x, market_spread=line, fixed_band_spread=float(mapped),
                            selected_side=side, skip_reason='zero_edge' if not side else None,
                            fixed_rule=rule, config_signature=manifest.get('config_signature'),
@@ -303,13 +349,29 @@ def record(data='data', now=None):
                     validate_availability(row)
                 row['espn_quote'] = espn_spreads.candidate_quote(row, data)
                 row['espn_quote_status'] = 'captured_prelock' if row['espn_quote'] else 'no_matching_prelock_price'
+                if policy_version == WATCHER_POLICY:
+                    if raw.get('score_quote'):
+                        quote = json.loads(raw['score_quote'])
+                        row['espn_quote'] = espn_spreads.match(row, [quote], allow_close=False).get('espn_quote')
+                    q = row['espn_quote']
+                    if (not q or cutoff-generated > dt.timedelta(minutes=MAX_FORECAST_AGE_MINUTES)
+                            or not dt.timedelta(0) <= generated-utc(q['captured_utc']) <= dt.timedelta(minutes=5)):
+                        continue
+                    if manifest.get('fit'):
+                        fit = manifest['fit']
+                        columns = set(fit['names']) | set(m.PRODUCT_CONTEXT_NAMES) | {'home_moneyline', 'away_moneyline'}
+                        inputs = {c: float(raw[c]) if raw.get(c) and math.isfinite(float(raw[c])) else None for c in columns}
+                        row['scoring_audit'] = dict(fit=fit, inputs=inputs,
+                            prepared_bundle_sha256=manifest['prepared_bundle_sha256'])
+                    elif manifest['revision'] == 'boxscore-composite-v1.22':
+                        continue
                 row['candidate_sha256'] = digest(row)
                 added.append(row)
                 seen.add(candidate_id)
     append(data / CANDIDATES, added)
     candidates.extend(added)
     grouped = {}
-    for row in candidates:
+    for row in durable_candidates(data, candidates) if finalize else []:
         scheduled_ko = scheduled.get(key(row), utc(row['kickoff_utc']))
         if (key(row) not in locked and scheduled_ko == utc(row['kickoff_utc'])
                 and utc(row['lock_at_utc']) <= now <= scheduled_ko + dt.timedelta(hours=FINALIZATION_GRACE_HOURS)):
@@ -320,6 +382,9 @@ def record(data='data', now=None):
         # contains the kickoff and deadline known when its candidate was saved.
         row = max(rows, key=lambda r: (utc(r['generated_utc']), utc(r['observed_utc'])))
         lock = dict(row, finalized_utc=now.isoformat())
+        if row['policy_version'] == WATCHER_POLICY:
+            receipt = next(r for r in read(data / RECEIPTS) if r['candidate_sha256'] == row['candidate_sha256'])
+            lock.update(durable_commit=receipt['commit'], durable_utc=receipt['committed_utc'])
         if now >= utc(row['kickoff_utc']):
             lock.update(recovered_after_kickoff=True, finalization_policy_version=RECOVERY_POLICY)
         frozen.append(lock)
@@ -389,6 +454,12 @@ def display_records(data='data'):
     data = Path(data)
     validate_store(data)
     out = {key(r): r for r in read(data / LOCKS)}
+    for runtime in runtime_stores(data):
+        validate_store(runtime)
+        for row in read(runtime / LOCKS):
+            if key(row) in out and out[key(row)] != row:
+                raise ValueError('Conflicting immutable ATS selections')
+            out[key(row)] = row
     for row in read(data / 'ats_forward_shadow.jsonl'):
         if key(row) in out or deadline(row['kickoff_utc']) >= ADOPTED_UTC:
             continue
@@ -416,12 +487,18 @@ def current_records(records, revision):
 
 def report(data='data'):
     info = validate_store(data)
+    stores = runtime_stores(data)
+    for runtime in stores:
+        extra = validate_store(runtime)
+        info = {k: info[k]+extra[k] for k in info}
     lines = ['ATS capture: latest saved forecast at or before kickoff minus 60 minutes.',
-             f'Policy: {POLICY_VERSION}; adopted {ADOPTED_UTC.isoformat()}.',
+             f'Watcher policy: {WATCHER_POLICY}; legacy policies retain their original rows.',
              'A zero edge takes the market favorite; a pick\'em line with a zero mapped spread skips. '
              'Rows saved under the v1 policy keep their bytes and validate as skips; grading backfills '
              'them as favorite bets, labelled separately.',
-             'Five-minute scheduled polls refresh forecasts near the deadline; scheduler delivery can be delayed.',
+             'An independent watcher refreshes prepared weekly inputs; cron is a backup wakeup only. '
+             'New locks require a forecast within 10 minutes of T-60, a captured quote within 5 minutes '
+             'of that forecast, complete official availability and confirmed pre-cutoff repository persistence.',
              'Both generated and observed timestamps must be at or before the cutoff. No post-cutoff input is eligible.',
              f'An already-saved candidate may be finalized up to {FINALIZATION_GRACE_HOURS} hours after kickoff '
              f'under {RECOVERY_POLICY}; its actual finalization time and recovery flag are retained.',
@@ -431,7 +508,7 @@ def report(data='data'):
              'and pooled results, with source hashes, original blockers and actual creation times retained.',
              'The moneyline ledger and earlier ATS shadow archive retain their original timing and records.',
              f'Store validation: PASS; {info["candidates"]} saved candidates, {info["locks"]} finalized saved decisions.']
-    for row in read(Path(data) / LOCKS):
+    for row in read(Path(data) / LOCKS) + [row for runtime in stores for row in read(runtime/LOCKS)]:
         lag = (utc(row['lock_at_utc']) - utc(row['generated_utc'])).total_seconds() / 60
         lines.append(f'{row["game_id"]}: {row["selected_side"] or "skip"}; cutoff {row["lock_at_utc"]}; '
                      f'forecast {row["generated_utc"]} ({lag:.1f} min before cutoff); finalized {row["finalized_utc"]}; '

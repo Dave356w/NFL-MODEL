@@ -445,7 +445,15 @@ var n=d==='dark'?'light':'dark';r.setAttribute('data-theme',n);try{localStorage.
 FILTER_JS = """<script>(function(){var bar=document.querySelector('.seg[data-filter]');if(!bar)return;
 bar.hidden=false;bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
 var f=b.getAttribute('data-show');bar.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
-document.querySelectorAll('.card[data-state]').forEach(function(c){c.hidden=f!=='all'&&c.getAttribute('data-state')!==f;});});})();</script>"""
+document.querySelectorAll('.card[data-state]').forEach(function(c){c.hidden=f!=='all'&&c.getAttribute('data-state')!==f;});});})();
+(function(){function expire(){document.querySelectorAll('[data-provisional-cutoff]').forEach(function(c){
+if(Date.now()<Date.parse(c.dataset.provisionalCutoff))return;
+c.removeAttribute('data-provisional-cutoff');
+c.querySelectorAll('.picked').forEach(function(t){t.classList.remove('picked');});
+var p=c.querySelector('.pk');if(p)p.textContent='Refresh for saved selection';
+var n=c.querySelector('.g-note');if(n)n.textContent='Lock time passed · provisional forecast expired';
+var b=c.querySelector('.badge.live');if(b)b.textContent='Awaiting saved pick';
+});}expire();setInterval(expire,1000);})();</script>"""
 
 THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
               "<circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
@@ -989,7 +997,7 @@ def render_index(latest, ledger, built, now=None):
         elif state['status'] == 'unavailable':
             status = "<span class='badge'>No pick</span>"
         else:
-            status = "<span class='badge live'>Not locked</span>"
+            status = "<span class='badge live'>Provisional</span>"
         flags = []
         if state['result']:
             result = 'Skip' if state['result'] == 'S' else state['result']
@@ -1046,7 +1054,9 @@ def render_index(latest, ledger, built, now=None):
             detail.append(report_notes_html(latest.get('report_notes'), (away, home), int(row['week'])))
         detail.append('</div>')
         tone = ' picked-card' if state['selected_side'] else ''
-        cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'>"
+        cutoff_attr = (f" data-provisional-cutoff='{ats_locks.deadline(m.kickoff_utc(row)).isoformat()}'"
+                       if state['status'] == 'provisional' and m.kickoff_utc(row) is not None else '')
+        cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if latest.get('ats_locks') else ''
@@ -1582,14 +1592,16 @@ def main(argv=None):
         forecast_history.record(DATA, load_latest(DATA / 'latest'))
         # Finalize persisted inputs before the expensive model refresh. Even a
         # later model failure must not strand an eligible pre-cutoff candidate.
-        print(f"ATS saved capture: {ats_locks.record(DATA)}")
+        if os.environ.get('NFL_LOCK_OWNER') != 'watcher':
+            print(f"ATS saved capture: {ats_locks.record(DATA)}")
         espn_spreads.safe_refresh(DATA)
         outdir = run_model()
         season, week = snapshot(outdir)
         print(f"Pregame forecast refreshes saved: {forecast_history.record(DATA, load_latest(DATA / 'latest'))}")
         print(f"snapshot: {season} week {week} -> {LATEST}")
         espn_spreads.safe_refresh(DATA)
-        print(f"ATS timed capture: {ats_locks.record(DATA)}")
+        if os.environ.get('NFL_LOCK_OWNER') != 'watcher':
+            print(f"ATS timed capture: {ats_locks.record(DATA)}")
         kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build

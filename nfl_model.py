@@ -3922,6 +3922,9 @@ def main():
         save(prior_board,f'week{int(wk)}_board.csv')
     save(roi_table(gw[gw.week<cur]),'season_roi.csv')
     retro=retrospective_ledger(oof,gw,recipe,schedules,season,cur); save(retro,'retro_ledger.csv')
+    if os.environ.get('NFL_PREPARE_LOCK_CONTEXT') == '1':
+        import lock_refresh
+        lock_refresh.prepare(state_dir(), fit, gw, avail, qb, a, targets, schedules, events, retro)
     save(roi_table(retro,by='season'),'retro_roi_by_season.csv'); save(roi_table(retro),'retro_roi_bands.csv')
     sel_window=attach_moneylines(oof[oof.season<season],schedules)
     save(candidate_roi(sel_window),'candidate_roi.csv')

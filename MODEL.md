@@ -1,5 +1,10 @@
 # The model and its pipeline
 
+[LOCKING.md](LOCKING.md) defines the independent controller and v4 durability
+and freshness policy adopted 2026-11-10. It supersedes descriptions of the
+build-held `ats_wait.py` workflow below. The fit, weekly map, side-selection
+rule and T−60 deadline remain unchanged; prior saved policies stay authoritative.
+
 `nfl_model.py` is the single source of truth. Its module docstring is the
 version history (v1 to v1.22), newest first; this page describes what the code
 does **today** and how the repository runs it.

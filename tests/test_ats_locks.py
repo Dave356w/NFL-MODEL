@@ -364,7 +364,8 @@ class TimedATS(unittest.TestCase):
                 result = sg.decision('schedule', sg.ATS_CRON, now, games=[game], recorded=set())
                 self.assertEqual(result[0], due)
         workflow = (Path(__file__).resolve().parents[1]/'.github/workflows/build.yml').read_text()
-        self.assertIn(f"cron: '{sg.ATS_CRON}'",workflow)
+        self.assertNotIn(f"cron: '{sg.ATS_CRON}'",workflow)
+        self.assertIn('NFL_LOCK_OWNER: watcher', workflow)
         self.assertIn('cancel-in-progress: false',workflow)
 
 

@@ -1,5 +1,11 @@
 # NFL ATS
 
+Locking update (2026-11-10): [LOCKING.md](LOCKING.md) supersedes the older
+build-held timing description below. An independent watcher uses prepared
+weekly inputs, requires confirmed pre-cutoff persistence, and owns all new
+T−60 decisions. Page publication is a separate serialized workflow; timing
+shadows never change official selections.
+
 NFL against-the-spread picks and results, built and published as a static site
 by GitHub Actions. Picks, Results and Performance show ATS selections, projected
 and market spreads, lock status, cover rates, units and ROI. The historical

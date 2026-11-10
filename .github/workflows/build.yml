@@ -23,10 +23,7 @@ on:
       timezone: America/New_York
     - cron: '41 * * * *'
       timezone: America/New_York
-    # The plan job gates these polls to T-540..T-15. Full builds refresh
-    # candidates before T-60 and finalize only inputs saved by that cutoff.
-    - cron: '*/5 * * * *'
-      timezone: America/New_York
+    # Deadline refreshes belong to lock-watcher.yml, not full model builds.
 
 # One build at a time, queued not cancelled, so overlapping runs cannot
 # interleave ledger commits.
@@ -39,6 +36,10 @@ permissions:
   contents: write   # commit data/ (ledger, frozen recipe, snapshots)
   pages: write
   id-token: write
+
+env:
+  NFL_LOCK_OWNER: watcher
+  NFL_PREPARE_LOCK_CONTEXT: '1'
 
 jobs:
   plan:
@@ -62,9 +63,8 @@ jobs:
     needs: plan
     if: needs.plan.outputs.should_run == 'true'
     runs-on: ubuntu-latest
-    # GitHub's six-hour job limit: 75 minutes for setup/build, then a bounded
-    # four-hour watch plus 45 minutes for refresh/render/commit work.
-    timeout-minutes: 360
+    # Deadline capture runs independently; no runner sleeps inside this build.
+    timeout-minutes: 75
     environment:
       name: github-pages
     steps:
@@ -134,68 +134,6 @@ jobs:
           python validate_data_files.py
           python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
 
-      # Publish the current board before a long wait. Locks are published again
-      # after the watch; an early run must not keep the site stale for four hours.
-      - name: Publish current board artifact
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        continue-on-error: true
-        uses: actions/upload-pages-artifact@v3
-        with:
-          name: initial-github-pages
-          path: public
-
-      - name: Publish current board
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        continue-on-error: true
-        uses: actions/deploy-pages@v4
-        with:
-          artifact_name: initial-github-pages
-
-      # GitHub drops and delays scheduled runs, so polls cannot be trusted to
-      # land between T-60 and kickoff. Watch scheduled games even without a
-      # candidate, hand off within four hours, refresh at T-80 (retry T-70),
-      # and publish after the first cutoff. Only saved pre-cutoff inputs lock.
-      - name: Hold for the 60-minute ATS cutoff
-        if: ${{ !cancelled() }}
-        timeout-minutes: 285
-        # A failed hold must not block deploying the build it follows; the
-        # next step still commits whatever it wrote.
-        continue-on-error: true
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          NFL_STATE_DIR: data
-          NFL_CACHE_DIR: .nfl_cache
-          NFL_OUTPUT_ROOT: runs
-          NFL_SEASON: ${{ github.event.inputs.season }}
-          NFL_WEEK: ${{ github.event.inputs.week }}
-          OUT_DIR: public
-        run: python ats_wait.py
-
-      # Safety net: commit anything the hold step wrote before failing. Sync
-      # first so the signed commit is pinned to main's tip, not this job's
-      # stale checkout (the sync never discards uncommitted data/).
-      - name: Commit ATS locks
-        if: ${{ !cancelled() }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          python ats_wait.py --sync-only
-          python validate_data_files.py
-          python commit_data.py --branch main --message "ledger $(date -u +%FT%H:%MZ)"
-
-      - name: Upload Pages artifact
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-
   deploy:
     needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    uses: ./.github/workflows/publish.yml

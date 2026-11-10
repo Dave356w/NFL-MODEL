@@ -226,26 +226,18 @@ def test_held_build_records_a_pregame_lock_not_a_recovery(tmp_path):
     a.validate_store(tmp_path)
 
 
-def test_workflow_holds_after_committing_and_still_deploys():
-    text = (Path(__file__).resolve().parents[1] / '.github/workflows/build.yml').read_text()
-    build = text.split('\n  build:\n', 1)[1].split('\n  deploy:\n', 1)[0]
-    order = ['python build_site.py', 'Commit ledger and snapshots', 'python ats_wait.py',
-             'Commit ATS locks', 'Upload Pages artifact']
-    assert [build.index(s) for s in order] == sorted(build.index(s) for s in order)
-    hold = build.split('Hold for the 60-minute ATS cutoff', 1)[1].split('- name:', 1)[0]
-    assert 'continue-on-error: true' in hold and 'GITHUB_TOKEN' in hold and '!cancelled()' in hold
-    timeout = int(build.split('timeout-minutes: ', 1)[1].split()[0])
-    hold_timeout = int(hold.split('timeout-minutes: ', 1)[1].split()[0])
-    # The hold step needs room after the last cutoff to refresh pages and commit.
-    assert hold_timeout >= w.MAX_WAIT_MINUTES + 20
-    assert timeout >= 75 + hold_timeout
-    assert build.index('name: Publish current board\n') < build.index('Hold for the 60-minute ATS cutoff')
-    # Default GitHub concurrency replaces the pending run. Both journal writers
-    # must retain the queue so an availability poll cannot discard the handoff.
-    root = Path(__file__).resolve().parents[1]
-    for workflow in ('build.yml', 'availability.yml'):
-        source = (root / '.github/workflows' / workflow).read_text()
-        assert 'group: site-build' in source and 'queue: max' in source
+def test_workflow_separates_deadline_capture_from_build_and_publication():
+    root = Path(__file__).resolve().parents[1] / '.github/workflows'
+    build = (root/'build.yml').read_text()
+    watcher = (root/'lock-watcher.yml').read_text()
+    publisher = (root/'publish.yml').read_text()
+    assert 'NFL_LOCK_OWNER: watcher' in build and 'NFL_PREPARE_LOCK_CONTEXT' in build
+    assert 'python ats_wait.py' not in build
+    assert 'uses: ./.github/workflows/publish.yml' in build
+    assert 'group: ats-lock-watcher' in watcher and 'group: site-build' not in watcher
+    assert 'actions: write' in watcher and 'python lock_watcher.py' in watcher
+    assert 'group: nfl-page-publication' in publisher and 'ref: main' in publisher
+    assert '--pages-only' in publisher and 'deploy-pages' in publisher
 
 
 def test_default_hold_reaches_a_cutoff_150_minutes_out_and_no_further(tmp_path):
