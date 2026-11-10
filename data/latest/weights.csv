@@ -1,11 +1,11 @@
 feature,label,coefficient per scaled unit,training scale,training missing fraction
-site,Home field,-0.04974494814459541,1.0,0.0
-d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.04606926354378177,2.3666610576018003,0.0
-d__for__rates_core__interception_pct,Offense: interception %,0.11068597047004895,0.6990152091192199,0.0
-d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.06276527180679903,1.861144045760055,0.0
-d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.0739893526459212,0.7290465298074387,0.0
-d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.08731367324974908,6.481658234152661,0.0
-d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.0430691175099448,0.38117157354149656,0.0
-pass_product,Pass matchup product,0.0609510837946793,1.2490076338856104,0.0
-pass_1sd_pn,Pass matchup 1 SD context PN,-0.0388523111693832,0.11231514621645161,0.0
-pass_1sd_np,Pass matchup 1 SD context NP,0.076422849110029,0.05585037092279299,0.0
+site,Home field,-0.06173621912836157,1.0,0.0
+d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.06234756681732991,2.3786881257979395,0.0
+d__for__rates_core__interception_pct,Offense: interception %,0.09861406864134828,0.7031944818440485,0.0
+d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.06049125378882475,1.8712578472724464,0.0
+d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.07513832404939698,0.730052860855025,0.0
+d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.08500053817825647,6.452538499303902,0.0
+d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.04610858101170818,0.3800450767445477,0.0
+pass_product,Pass matchup product,0.06810043212396781,1.2614201646265684,0.0
+pass_1sd_pn,Pass matchup 1 SD context PN,-0.030958630689986836,0.11666676130560959,0.0
+pass_1sd_np,Pass matchup 1 SD context NP,0.07555055153153352,0.055404084253614955,0.0
