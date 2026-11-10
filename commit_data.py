@@ -264,6 +264,11 @@ def main(argv=None):
         git_commit_and_push(args.branch, args.message)
         return 0
     log(f"commit: signed {commit['oid'][:7]} {commit['url']}")
+    # API writes do not advance this checkout. Advance the index/base while
+    # preserving every working-tree byte, including files generated afterward.
+    git('fetch', '--quiet', 'origin', commit['oid'], check=False)
+    if git('rev-parse', 'FETCH_HEAD', check=False).strip() == commit['oid']:
+        git('reset', '--mixed', commit['oid'])
     return 0
 
 
