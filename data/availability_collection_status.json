@@ -13,7 +13,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "ATL": {
@@ -25,7 +25,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "BAL": {
@@ -37,7 +37,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "BUF": {
@@ -49,7 +49,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "CAR": {
@@ -61,7 +61,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "CHI": {
@@ -79,7 +79,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "CLE": {
@@ -91,7 +91,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "DAL": {
@@ -103,7 +103,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "DEN": {
@@ -121,7 +121,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "GB": {
@@ -132,8 +132,12 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-11T22:17:14.876641+00:00",
+        "last_success_utc": "2026-11-11T22:17:14.876641+00:00",
+        "source_capture_sha256": "9a70bbb3d8145d48362feb792500a4a5378785f98627c95140773953e0001b89"
       }
     },
     "HOU": {
@@ -145,7 +149,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "IND": {
@@ -157,7 +161,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "JAX": {
@@ -168,8 +172,12 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-11T22:17:14.741591+00:00",
+        "last_success_utc": "2026-11-11T22:17:14.741591+00:00",
+        "source_capture_sha256": "d1d411baf9248c502128b0bf427bae4d8bd45cf7fd5737a1ca4316b4de82bbbe"
       }
     },
     "KC": {
@@ -181,7 +189,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "LA": {
@@ -193,7 +201,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "LAC": {
@@ -205,7 +213,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "LV": {
@@ -217,7 +225,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "MIA": {
@@ -229,7 +237,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "MIN": {
@@ -240,8 +248,12 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-11T22:17:14.877434+00:00",
+        "last_success_utc": "2026-11-11T22:17:14.877434+00:00",
+        "source_capture_sha256": "91db45a5cccb10b22493e4e1e125bf29be01ab43bb8eb56adda1a66aec5e7a86"
       }
     },
     "NE": {
@@ -253,7 +265,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "NO": {
@@ -264,8 +276,12 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-11T22:17:14.937561+00:00",
+        "last_success_utc": "2026-11-11T22:17:14.937561+00:00",
+        "source_capture_sha256": "f06ace25e0e7b7fa102ff9d395390df641065758d22063c2a19f1d171f179c49"
       }
     },
     "NYG": {
@@ -279,8 +295,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-11T21:30:12.407569+00:00",
-        "last_success_utc": "2026-11-11T21:30:12.407569+00:00",
+        "last_attempt_utc": "2026-11-11T22:17:14.934483+00:00",
+        "last_success_utc": "2026-11-11T22:17:14.934483+00:00",
         "source_capture_sha256": "c8f6212df773158a26221bb037bfa9ca341341544cbf7ec003a54c020bbdc89a"
       }
     },
@@ -293,7 +309,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "PHI": {
@@ -311,7 +327,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "SEA": {
@@ -323,7 +339,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "SF": {
@@ -335,7 +351,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "last_attempt_utc": "2026-11-11T22:17:12.368931+00:00"
       }
     },
     "TB": {
@@ -352,8 +368,12 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-11T21:30:07.581713+00:00"
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-11T22:17:15.030192+00:00",
+        "last_success_utc": "2026-11-11T22:17:15.030192+00:00",
+        "source_capture_sha256": "3b821bf46d81135f84b74c5259197cccd4b27d33a7679dfb983b6cb35ad3bd4d"
       }
     },
     "WAS": {
@@ -367,11 +387,11 @@
         "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-11T21:30:12.445313+00:00",
-        "last_success_utc": "2026-11-11T21:30:12.445313+00:00",
+        "last_attempt_utc": "2026-11-11T22:17:15.032300+00:00",
+        "last_success_utc": "2026-11-11T22:17:15.032300+00:00",
         "source_capture_sha256": "b8b2d4489c84fbf89415841671372b762bcef1568aa432fb811f5a2c4a4b3170"
       }
     }
   },
-  "updated_utc": "2026-11-11T21:30:12.445313+00:00"
+  "updated_utc": "2026-11-11T22:17:15.032300+00:00"
 }
