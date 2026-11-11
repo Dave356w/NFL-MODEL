@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-11T21:17:41.233733+00:00",
+  "forecast_utc": "2026-11-11T21:32:22.141666+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -290,10 +290,7 @@
     {
       "game_id": "2026_10_WAS_NYG",
       "issues": [
-        "NYG: automatic source checks incomplete or stale",
-        "NYG: final report incomplete",
         "NYG: report: source check stale or after forecast",
-        "NYG: report: complete official list/report missing",
         "NYG: inactives: no successful source check",
         "NYG: inactives: complete official list/report missing",
         "WAS: automatic source checks incomplete or stale",
@@ -309,5 +306,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-11T21:17:44.391678+00:00"
+  "updated_utc": "2026-11-11T21:32:30.215108+00:00"
 }
