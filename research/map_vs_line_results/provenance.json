@@ -1,0 +1,10 @@
+{
+  "research/map_vs_line.py": "6ffda31e4208ea5a5f0765d8416caee6c8d9e8c61610cd1d90dc2c7c51004919",
+  "research/MAP_VS_LINE.md": "dc7c58ebaeecbb0ee93cdeb89b17805543a8189250ca41f8a5b79e2c271698be",
+  "research/market_implied.py": "e27d1922bc5ba22b8091f04aeb10b84c3b4ce0f5ec7697e0bc2cb11c3cdeab37",
+  "nfl_model.py": "ad42313edd8df2213b8b40af3c735d0a1cddf8ac8561fbae546c30f1a8a03d2a",
+  "fixed_bands.py": "0b0e2ba16862b165ce0cbd390978f3ebcdf1b9119bc8a0b1554ca1b88f2a458c",
+  "data/latest/fixed_band_ledger.csv": "eadd527c105ea616b60ebe62cfd8a616edaf5653edb91456caa1cc7a6f2741aa",
+  "data/latest/fixed_band_rules.json": "eab1cbdc745c4efe9327ba15369c0ca6d1ba370beea6d2657f53c90d533780fb",
+  "research/market_implied_inputs/schedule_scores.csv": "1ec4b90d19a0a2e9980d83acdca0d951fa34b23787bcb7505795a4b052fec4be"
+}
