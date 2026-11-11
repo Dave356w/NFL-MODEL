@@ -2140,3 +2140,37 @@ and −24.0u; always home −114.2u and −35.5u.
 **Reading.** Keep the annual fit. Linear trends make the map worse, and weekly refitting does not make the band numbers
 more accurate. D's ATS result is worth watching as a reporting-only arm on native v1.19 locks, but its gains come from
 key-number ties in two seasons and point in opposite directions in the two periods. No policy change.
+
+### Test 60: the model's band versus the line's own band through the same map, 2016–22 (2026-11-11): unresolved; the production map loses about 1% on 2016–22
+
+Protocol [`MAP_VS_LINE.md`](MAP_VS_LINE.md), pushed (`b91ca42`) before the line-only arm was scored on any season
+before 2023. Script `map_vs_line.py`; results `map_vs_line_results/` (REPORT.md). Owner request after a review of the
+median-band theory: the band numbers sit near the middle of each band's lines, so the rule is largely "favorite below
+the band number, underdog above", and the model mostly contributes the band. Arms on the v1.19 replay (Test 51's
+harness): the model spread and the market line each through the weekly decayed map (D, production) and the annual map
+(A), plus the raw spread. Checks passed: the replay reproduces v1.19, Test 59's 2017–22 records for D and A match
+exactly, and the 2023–26 contrast reproduces the ledger report (+55.36u on 139 of 952).
+
+| Basis | D model | D line-only | Raw | Always favorite | D model − D line-only |
+|---|---:|---:|---:|---:|---:|
+| Test 2016–22 (n 1,822) | 920-856-46, −19.6u, −1.1% ± 2.2, cover 51.8% | −63.4u, −3.5% ± 2.2 | −78.8u, −4.3% ± 2.2 | −162.6u, −8.9% ± 2.2 | **+43.7u ± 31.4 (z +1.39), sides differ on 289, model 149-125-15 there** |
+| Discovery 2023–26 (n 952) | 532-395-25, +88.6u, +9.3% ± 3.0, cover 57.4% | +33.3u, +3.5% ± 3.0 | −39.3u, −4.1% ± 3.1 | −14.5u, −1.5% ± 3.1 | +55.4u ± 22.3 (z +2.48), 139, 83-54-2 |
+
+- **Primary: unresolved.** The model's band beats the line's own band by +43.7u ± 31.4 on 2016–22. The sign matches
+  2023–26, but the interval crosses zero, and +43.9u of it comes from 2020–21; 2016–19 and 2022 sum to −0.2u.
+- **The production map does not show a profit on 2016–22.** −1.1% ± 2.2 with a 51.8% cover rate, below the 52.4%
+  break-even. It loses less than every baseline on the same rows (favorite −8.9%, home −7.2%, raw −4.3%), so it is
+  the best of these rules in both periods, but only 2023–26 is above break-even.
+- **Weekly decay over the annual map repeats (Test 59, with 2016 added):** +76.4u ± 35.3 (z +2.17) on 2016–22 and
+  +55.4u ± 26.7 (z +2.07) on 2023–26. Test 59's caution stands: the flips point at underdogs in one period and
+  favorites in the other, and two seasons carry most of it.
+- **The line-only map is not a stable rule.** D line-only is −3.5% on 2016–22 and +3.5% on 2023–26; A line-only is
+  −7.0% and +0.1%.
+
+**Reading.** The 2023–26 record of +9.3% is not reproduced earlier: seven prior seasons give about −1%. What does
+repeat in sign is the ordering (decayed map ≥ line-only and raw ≥ favorite), which is evidence the rule is less bad
+than its controls, not that it clears the vig. Both bases are exposed (v1.19's terms were chosen on 2019–25; the map
+policy on 2023–26). No policy change; the native comparison of map, raw and line-only at 100 decided locks remains the
+deciding evidence. `market_implied.reproduction`'s third check (annual map against production's `fixed_band_spread`)
+has failed since production moved to the weekly map on 2026-11-04, so `hybrid_band.py` and other callers no longer run
+unchanged; this script repeats the two forecast checks and checks the production map against the ledger instead.

@@ -407,9 +407,12 @@ def write_capture_status(data='data', now=None):
         return
     manifest = json.loads((latest / 'manifest.json').read_text())
     generated = utc(manifest['generated_utc'])
-    records = {key(r): r for r in read(data / LOCKS)}
+    # The watcher keeps its candidates and locks in its own runtime stores.
+    stores = [data] + runtime_stores(data)
+    records = {key(r): r for store in stores for r in read(store / LOCKS)}
     locked = set(current_records(records, manifest['revision']))
-    candidates = {key(r) for r in read(data / CANDIDATES)}
+    candidates = {key(r) for store in stores
+                  for r in durable_candidates(store, read(store / CANDIDATES))}
     games = []
     with (latest / 'board.csv').open(newline='') as src:
         for raw in csv.DictReader(src):

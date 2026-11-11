@@ -1602,6 +1602,13 @@ def main(argv=None):
         espn_spreads.safe_refresh(DATA)
         if os.environ.get('NFL_LOCK_OWNER') != 'watcher':
             print(f"ATS timed capture: {ats_locks.record(DATA)}")
+        else:
+            # The watcher owns candidates and locks; the build only refreshes the
+            # read-only status so it never describes an older board.
+            try:
+                ats_locks.write_capture_status(DATA)
+            except Exception as exc:
+                print(f'::warning::ATS capture status not refreshed: {exc}')
         kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build

@@ -1,0 +1,36 @@
+{
+  "protocol": "research/MAP_VS_LINE.md",
+  "protocol_commit": "b91ca42",
+  "reproduction_max_error": {
+    "v1.19 retro_ledger 2021-25": 2.220446049250313e-16,
+    "Test 50 S3 2014-20 (6-digit CSV)": 4.997278759688584e-07
+  },
+  "checks": {
+    "annual_map_matches_harness": 0.0,
+    "discovery_map_matches_ledger": 0.0,
+    "discovery_units": 55.363636363636374,
+    "discovery_differ": 139,
+    "discovery_n": 952,
+    "discovery_reproduced": true,
+    "test59_records": {
+      "D model": "785-740-41",
+      "A model": "741-784-41"
+    },
+    "test59_expected": {
+      "D model": "785-740-41",
+      "A model": "741-784-41"
+    }
+  },
+  "primary": {
+    "basis": "test",
+    "period": "2016-2022",
+    "contrast": "D model - D line-only",
+    "n": 1822,
+    "differ": 289,
+    "units": 43.727272727272734,
+    "se": 31.416893744847762,
+    "z": 1.3918394696306926,
+    "first_arm_record_on_differing": "149-125-15"
+  },
+  "verdict": "unresolved"
+}
