@@ -78,10 +78,11 @@ NO,00-0041326,CJ Donaldson,RB,RB,0.18503937007874016,9.0,Out,Shoulder,not on a w
 NO,00-0037250,Martin Emerson,CB,DB,0.14963503649635038,9.0,Questionable,Shin,not on a week-10 report yet,0.0,none
 NO,00-0038601,Asim Richards,T,OL,0.13509192645883294,9.0,Questionable,Thumb,not on a week-10 report yet,0.0,none
 NO,00-0040125,Kelvin Banks Jr.,T,OL,0.05995203836930456,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
-NYG,00-0040715,Cam Skattebo,RB,RB,0.25647668393782386,9.0,Doubtful,Hamstring,not on a week-10 report yet,0.0,none
-NYG,00-0039384,Tyrone Tracy Jr.,RB,RB,0.14507772020725387,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-NYG,00-0034673,Tremaine Edmunds,LB,LB,0.11932324131789848,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-NYG,00-0036893,Najee Harris,RB,RB,0.06994818652849741,,,,not on wk 9 roster (left team),1.0,none
+NYG,00-0040715,Cam Skattebo,RB,RB,0.25647668393782386,9.0,Doubtful,Hamstring,practice: Full Participation in Practice,0.0,practice
+NYG,00-0040677,Abdul Carter,LB,LB,0.18788958147818344,,,,practice: Limited Participation in Practice,0.0,practice
+NYG,00-0039384,Tyrone Tracy Jr.,RB,RB,0.14507772020725387,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+NYG,00-0034673,Tremaine Edmunds,LB,LB,0.11932324131789848,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+NYG,00-0036893,Najee Harris,RB,RB,0.06994818652849741,,,,not on wk 9 roster (left team),1.0,practice
 NYJ,00-0037740,Garrett Wilson,WR,WRTE,0.16615698267074414,9.0,Out,Concussion,not on a week-10 report yet,0.0,none
 NYJ,00-0034782,Harrison Phillips,DT,DL,0.1269296740994854,9.0,Questionable,Ankle,not on a week-10 report yet,0.0,none
 NYJ,00-0039886,T'Vondre Sweat,DL,DL,0.0548885077186964,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
@@ -98,9 +99,10 @@ TEN,00-0035643,Jeffery Simmons,DL,DL,0.16453537936913895,,,,not on wk 8 roster (
 TEN,00-0041438,Carnell Tate,WR,WRTE,0.13953488372093023,8.0,Out,Shoulder,not on a week-10 report yet,0.0,none
 TEN,00-0034805,John Franklin-Myers,DE,DL,0.12702472293265132,8.0,Questionable,Groin,not on a week-10 report yet,0.0,none
 TEN,00-0034837,Calvin Ridley,WR,WRTE,0.10414560161779575,8.0,Questionable,Hip,not on a week-10 report yet,0.0,none
-WAS,00-0034333,Daron Payne,DL,DL,0.16201117318435754,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-WAS,00-0037742,Treylon Burks,WR,WRTE,0.12212212212212212,9.0,Out,Foot,not on a week-10 report yet,0.0,none
-WAS,00-0036260,Javon Kinlaw,DL,DL,0.11592178770949721,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-WAS,00-0033955,Jeremy McNichols,RB,RB,0.09486166007905138,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-WAS,00-0040242,Jacory Croskey-Merritt,RB,RB,0.08695652173913043,,,,Reserve/Injured (IR) on wk 9 roster,1.0,none
-WAS,00-0036626,Dyami Brown,WR,WRTE,0.07107107107107107,9.0,Out,Calf,Reserve/Injured (IR) on wk 9 roster,1.0,none
+WAS,00-0033082,Lucas Patrick,C,OL,0.17170111287758347,,,,practice: Did Not Participate In Practice,0.0,practice
+WAS,00-0034333,Daron Payne,DL,DL,0.16201117318435754,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+WAS,00-0037742,Treylon Burks,WR,WRTE,0.12212212212212212,9.0,Out,Foot,practice: Limited Participation in Practice,0.0,practice
+WAS,00-0036260,Javon Kinlaw,DL,DL,0.11592178770949721,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+WAS,00-0033955,Jeremy McNichols,RB,RB,0.09486166007905138,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+WAS,00-0040242,Jacory Croskey-Merritt,RB,RB,0.08695652173913043,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
+WAS,00-0036626,Dyami Brown,WR,WRTE,0.07107107107107107,9.0,Out,Calf,Reserve/Injured (IR) on wk 9 roster,1.0,practice
