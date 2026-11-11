@@ -29,7 +29,7 @@ python validate_data_files.py                  # includes hashes and fact-to-sou
 | `availability_auto_observations.jsonl` | Confirmed game/player facts linked to saved source evidence |
 | `availability_review.jsonl` | Uncertain announcements, unknown players and unsupported formats |
 | `availability_collection_status.json` | Latest checks, failures and report/inactive completeness per team/game |
-| `ats_capture_status.json` | Each game's candidate/lock state and reasons a forecast cannot lock |
+| `ats_capture_status.json` | Each game's candidate/lock state (including the watcher's `lock_runtime` stores) and reasons the latest full-build board cannot lock; rewritten by every full build. `lock_runtime/watcher_status.json` is the watcher's own live heartbeat |
 | `forecast_refreshes.jsonl` | Immutable pregame board refreshes, including blocked projections, their map and injury evidence |
 
 The first four files are append-only; only operational health is replaced atomically. Rechecking

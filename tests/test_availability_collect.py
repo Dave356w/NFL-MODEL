@@ -556,3 +556,26 @@ def test_capture_status_explains_missing_lists_without_creating_lock(tmp_path):
     locks.record(tmp_path,c.utc(EVENT['kickoff_utc'])-dt.timedelta(minutes=59))
     assert json.loads((tmp_path/'ats_capture_status.json').read_text())['games'][0]['state']=='missed cutoff'
     assert locks.read(tmp_path/locks.LOCKS)==[]
+
+
+def test_capture_status_reads_watcher_runtime_stores(tmp_path):
+    source=Sources();source.inactives=False
+    state=collect(tmp_path,source)
+    save_board(tmp_path,resolved(tmp_path,state,asof=source.now),generated=source.now)
+    manifest=json.loads((tmp_path/'latest'/'manifest.json').read_text())
+    def state_now():
+        locks.write_capture_status(tmp_path,source.now)
+        return json.loads((tmp_path/'ats_capture_status.json').read_text())['games'][0]['state']
+    store=tmp_path/'lock_runtime'/'2026_week10';store.mkdir(parents=True)
+    cutoff=locks.deadline(EVENT['kickoff_utc'])
+    candidate=dict(revision=manifest['revision'],game_id=EVENT['game_id'],policy_version=locks.WATCHER_POLICY,
+        candidate_sha256='a'*64,observed_utc=source.now.isoformat(),lock_at_utc=cutoff.isoformat())
+    locks.append(store/locks.CANDIDATES,[candidate])
+    # A watcher candidate without a pre-cutoff repository receipt is not saved yet.
+    assert state_now()=='awaiting candidate'
+    locks.append(store/locks.RECEIPTS,[dict(candidate_sha256='a'*64,commit='b'*40,
+        committed_utc=source.now.isoformat())])
+    assert state_now()=='candidate saved; awaiting finalization'
+    locks.append(store/locks.LOCKS,[dict(candidate,finalized_utc=cutoff.isoformat())])
+    assert state_now()=='locked'
+    assert locks.read(tmp_path/locks.LOCKS)==[]
