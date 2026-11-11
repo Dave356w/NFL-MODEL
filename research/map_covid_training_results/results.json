@@ -1,0 +1,29 @@
+{
+  "protocol": "research/MAP_COVID_TRAINING.md",
+  "protocol_commit": "e3db8c8",
+  "reproduction_max_error": {
+    "v1.19 retro_ledger 2021-25": 2.220446049250313e-16,
+    "Test 50 S3 2014-20 (6-digit CSV)": 4.997278759688584e-07,
+    "model spread, replay vs ledger 2021-25": 1.4210854715202004e-14
+  },
+  "checks": {
+    "P_record_2023_26": "532-395-25",
+    "P_expected": "532-395-25",
+    "P_reproduced": true,
+    "excluded_seasons_in_X_training": false,
+    "n_2022": 271,
+    "n_2023_26": 952
+  },
+  "primary": {
+    "basis": "2023-2026",
+    "period": "2023-2026",
+    "contrast": "X model - F model",
+    "n": 952,
+    "differ": 75,
+    "units": 13.363636363636367,
+    "se": 16.31409909360192,
+    "z": 0.819146450377841,
+    "first_arm_record_on_differing": "40-33-2"
+  },
+  "verdict": "unresolved"
+}
