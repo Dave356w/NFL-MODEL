@@ -2174,3 +2174,35 @@ policy on 2023–26). No policy change; the native comparison of map, raw and li
 deciding evidence. `market_implied.reproduction`'s third check (annual map against production's `fixed_band_spread`)
 has failed since production moved to the weekly map on 2026-11-04, so `hybrid_band.py` and other callers no longer run
 unchanged; this script repeats the two forecast checks and checks the production map against the ledger instead.
+
+### Test 61: the median map with 2020–21 excluded from its training (2026-11-11): unresolved; the 2023–26 record does not depend on those seasons' band numbers
+
+Protocol [`MAP_COVID_TRAINING.md`](MAP_COVID_TRAINING.md), pushed (`e3db8c8`) before any such map was fitted. Script
+`map_covid_training.py`; results `map_covid_training_results/` (REPORT.md). Owner view after Test 60: the Covid seasons
+are noisy. Test 60's post-hoc cut had shown that all of the model-versus-line-only gain on 2016–22 (+43.7u) came from
+2020–21, but the maps scored after them were still trained on them. Arms, all the production weekly decayed map on one
+v1.19 history (replay 2014–25 plus the ledger's 2026): X trained without 2020–21, F on everything from 2014, P
+production (history from 2021). Checks passed: the replay reproduces v1.19 and the ledger's model spreads, and P
+reproduces 532-395-25.
+
+| Basis | X (no 2020–21) | F (2014+) | P (production) | Raw | X − F | X model − X line-only |
+|---|---:|---:|---:|---:|---:|---:|
+| 2023–26 (n 952) | 530-397-25, +84.8u, +8.9% ± 3.0, cover 57.2% | 523-404-25, +71.5u, +7.5% ± 3.0 | 532-395-25, +88.6u, +9.3% ± 3.0 | −4.1% ± 3.1 | **+13.4u ± 16.3 (z +0.82), sides differ on 75** | +40.1u ± 21.0 (z +1.91), 121 |
+| 2022 (n 271) | 139-122-10, +4.4u, +1.6% ± 5.7, cover 53.3% | 136-125-10, −1.4u, −0.5% ± 5.7 | n/a | −1.9% ± 5.7 | +5.7u ± 17.4 (z +0.33), 88 | +13.4u ± 9.5 (z +1.40), 25 |
+
+- **Primary: unresolved, and small.** Dropping 2020–21 from training changes the side on 75 of 952 games and the
+  total by +13.4u ± 16.3. X is within 4u of production (X − P −3.8u ± 15.0 on 64 games).
+- **The 2023–26 record is not a product of band numbers learned from 2020–21.** From 2024 on the three maps' week-1
+  numbers are nearly identical; the decay has already discounted those seasons.
+- **2020–21 did distort the map nearest to them.** F's week-1 number for the under-3 band in 2022 is −2 (it would bet
+  against the model's own side there); X's is 3. On 2022 X is +1.6% against F's −0.5%, within noise on 271 games.
+- **The model's band over the line's own band keeps its sign without those seasons in training** (+40.1u ± 21.0 on
+  2023–26, +13.4u ± 9.5 on 2022), but only on exposed seasons.
+- **Production's short history window matters on few games:** F − P is −17.2u ± 6.3 (z −2.72), all of it from 11 games
+  where production's map went 10-1. That is too few games to read as a mechanism.
+
+**Reading.** Excluding the Covid seasons neither removes nor explains the 2023–26 result. Together with Test 60 the
+picture is: on the ordinary seasons before 2023 (2016–19, 2022) the map loses about the vig and the model's band adds
+nothing over the line's (Test 60's post-hoc cut); from 2023 it is +9% whichever training window is used. The open
+question is unchanged and is about the era, not the training rows: whether 2023–26 is a real change or a favourable
+draw. Only native locks can answer that. No policy change.
