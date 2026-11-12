@@ -156,8 +156,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-12T23:00:55.523359+00:00",
-        "last_success_utc": "2026-11-12T23:00:55.523359+00:00",
+        "last_attempt_utc": "2026-11-12T23:02:26.533159+00:00",
+        "last_success_utc": "2026-11-12T23:02:26.533159+00:00",
         "source_capture_sha256": "be5601da9e22a42576359e3d7176207f92cbdd5a3ac34f634e22561b875f2a7b"
       }
     },
@@ -217,11 +217,11 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-12T23:00:55.530767+00:00",
-        "last_success_utc": "2026-11-12T23:00:55.530767+00:00",
+        "last_attempt_utc": "2026-11-12T23:02:26.907977+00:00",
+        "last_success_utc": "2026-11-12T23:02:26.907977+00:00",
         "source_capture_sha256": "3cfbd23c13768fa288d1ee06b17472056c50df72eb5807a7aab97ccd8e0874b8"
       }
     }
   },
-  "updated_utc": "2026-11-12T23:00:55.530767+00:00"
+  "updated_utc": "2026-11-12T23:02:26.907977+00:00"
 }
