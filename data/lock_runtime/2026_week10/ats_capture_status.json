@@ -1,14 +1,12 @@
 {
-  "forecast_utc": "2026-11-12T23:39:02.994014+00:00",
+  "forecast_utc": "2026-11-12T23:40:34.036098+00:00",
   "games": [
     {
       "game_id": "2026_10_WAS_NYG",
       "issues": [
-        "NYG: report: source check stale or after forecast",
         "NYG: inactives: official inactive list not found",
         "NYG: inactives: no successful source check",
         "NYG: inactives: complete official list/report missing",
-        "WAS: report: source check stale or after forecast",
         "WAS: inactives: official inactive list not found",
         "WAS: inactives: no successful source check",
         "WAS: inactives: complete official list/report missing"
@@ -18,5 +16,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-12T23:39:23.288659+00:00"
+  "updated_utc": "2026-11-12T23:40:54.597690+00:00"
 }
