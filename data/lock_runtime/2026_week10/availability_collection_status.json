@@ -1,0 +1,227 @@
+{
+  "articles": {},
+  "max_age_minutes": 35,
+  "policy": "official-reports-inactives-2026-11-09-v2",
+  "rss_enabled": false,
+  "teams": {
+    "ARI": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "ATL": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "BAL": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "BUF": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "CAR": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "CHI": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "CIN": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "CLE": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "DAL": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "DEN": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "DET": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "GB": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "HOU": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "IND": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "JAX": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "KC": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "LA": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "LAC": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "LV": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "MIA": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "MIN": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "NE": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "NO": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "NYG": {
+      "game_id": "2026_10_WAS_NYG",
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-12T22:15:29.502659+00:00"
+      },
+      "kickoff_utc": "2026-11-13T01:15:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "complete": true,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-12T22:15:34.480668+00:00",
+        "last_success_utc": "2026-11-12T22:15:34.480668+00:00",
+        "source_capture_sha256": "be5601da9e22a42576359e3d7176207f92cbdd5a3ac34f634e22561b875f2a7b"
+      }
+    },
+    "NYJ": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "PHI": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "PIT": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "SEA": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "SF": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "TB": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "TEN": {
+      "game_id": null,
+      "inactives": {},
+      "news": {},
+      "report": {}
+    },
+    "WAS": {
+      "game_id": "2026_10_WAS_NYG",
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-12T22:15:29.502659+00:00"
+      },
+      "kickoff_utc": "2026-11-13T01:15:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "complete": true,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-12T22:15:34.524782+00:00",
+        "last_success_utc": "2026-11-12T22:15:34.524782+00:00",
+        "source_capture_sha256": "3cfbd23c13768fa288d1ee06b17472056c50df72eb5807a7aab97ccd8e0874b8"
+      }
+    }
+  },
+  "updated_utc": "2026-11-12T22:15:34.524782+00:00"
+}
