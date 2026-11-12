@@ -45,7 +45,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-12T18:53:34.921472+00:00"
+        "last_attempt_utc": "2026-11-12T19:01:42.934343+00:00"
       }
     },
     "BUF": {
@@ -127,7 +127,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-12T18:53:34.921472+00:00"
+        "last_attempt_utc": "2026-11-12T19:01:42.934343+00:00"
       }
     },
     "DEN": {
@@ -257,7 +257,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-12T18:53:34.921472+00:00"
+        "last_attempt_utc": "2026-11-12T19:01:42.934343+00:00"
       }
     },
     "LV": {
@@ -465,5 +465,5 @@
       }
     }
   },
-  "updated_utc": "2026-11-12T18:53:41.951175+00:00"
+  "updated_utc": "2026-11-12T19:01:42.934343+00:00"
 }
