@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-12T21:11:13.193801+00:00",
+  "forecast_utc": "2026-11-13T16:37:02.496618+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -106,15 +106,13 @@
       "issues": [
         "BAL: automatic source checks incomplete or stale",
         "BAL: final report incomplete",
-        "BAL: report: injury report for both scheduled opponents not yet published",
-        "BAL: report: no successful source check",
+        "BAL: report: source check stale or after forecast",
         "BAL: report: complete official list/report missing",
         "BAL: inactives: no successful source check",
         "BAL: inactives: complete official list/report missing",
         "LAC: automatic source checks incomplete or stale",
         "LAC: final report incomplete",
-        "LAC: report: injury report for both scheduled opponents not yet published",
-        "LAC: report: no successful source check",
+        "LAC: report: source check stale or after forecast",
         "LAC: report: complete official list/report missing",
         "LAC: inactives: no successful source check",
         "LAC: inactives: complete official list/report missing",
@@ -266,18 +264,11 @@
     },
     {
       "game_id": "2026_10_WAS_NYG",
-      "issues": [
-        "NYG: report: source check stale or after forecast",
-        "NYG: inactives: no successful source check",
-        "NYG: inactives: complete official list/report missing",
-        "WAS: report: source check stale or after forecast",
-        "WAS: inactives: no successful source check",
-        "WAS: inactives: complete official list/report missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-13T00:15:00+00:00",
-      "state": "awaiting candidate"
+      "state": "locked"
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-12T21:11:17.591893+00:00"
+  "updated_utc": "2026-11-13T16:37:05.594808+00:00"
 }
