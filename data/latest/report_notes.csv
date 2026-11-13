@@ -33,12 +33,12 @@ BUF,00-0038933,Dalton Kincaid,TE,WRTE,0.15391156462585034,,,,practice: Limited P
 BUF,00-0036976,Spencer Brown,T,OL,0.12717219589257503,,,,practice: Did Not Participate In Practice,0.0,practice
 BUF,00-0035667,Greg Gaines,DT,DL,0.09205776173285199,9.0,Questionable,Calf,practice: Full Participation in Practice,0.0,practice
 BUF,00-0035253,C.J. Gardner-Johnson,DB,DB,0.08774834437086093,,,,not on wk 9 roster (left team),1.0,practice
-CAR,00-0035687,Bobby Okereke,LB,LB,0.17403314917127072,9.0,Out,Foot,practice: Did Not Participate In Practice,0.0,practice
-CAR,00-0041063,Will Lee III,CB,DB,0.11499611499611499,9.0,Out,Hamstring,practice: Full Participation in Practice,0.0,practice
-CAR,00-0038101,Akayleb Evans,DB,DB,0.0979020979020979,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
-CAR,00-0036417,Damien Lewis,G,OL,0.08853410740203194,9.0,Out,Knee,practice: Limited Participation in Practice,0.0,practice
-CAR,00-0033284,Taylor Moton,OL,OL,0.07402031930333818,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
-CAR,00-0040541,Torricelli Simpkins III,G,OL,0.05587808417997097,9.0,Questionable,Ankle,practice: Full Participation in Practice,0.0,practice
+CAR,00-0035687,Bobby Okereke,LB,LB,0.17403314917127072,9.0,Out,Foot,Out,1.0,final
+CAR,00-0041063,Will Lee III,DB,DB,0.11499611499611499,9.0,Out,Hamstring,Questionable,0.25,final
+CAR,00-0038101,Akayleb Evans,DB,DB,0.0979020979020979,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
+CAR,00-0036417,Damien Lewis,OL,OL,0.08853410740203194,9.0,Out,Knee,"listed, no status",0.0,final
+CAR,00-0033284,Taylor Moton,OL,OL,0.07402031930333818,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
+CAR,00-0040541,Torricelli Simpkins III,OL,OL,0.05587808417997097,9.0,Questionable,Ankle,"listed, no status",0.0,final
 CIN,00-0033523,Jonathan Allen,DT,DL,0.13862249346120314,,,,practice: Did Not Participate In Practice,0.0,practice
 CIN,00-0034800,B.J. Hill,DT,DL,0.10636442894507411,,,,practice: Limited Participation in Practice,0.0,practice
 CIN,00-0041546,Cashius Howell,DL,DL,0.06713164777680906,,,,Reserve/Injured (IR) on wk 9 roster,1.0,practice
@@ -68,11 +68,11 @@ DAL,00-0035227,P.J. Locke,S,DB,0.08143800440205429,,,,practice: Did Not Particip
 DAL,00-0039062,Jonathan Mingo,WR,WRTE,0.07332155477031801,,,,practice: Did Not Participate In Practice,0.0,practice
 DAL,00-0027940,Von Miller,LB,LB,0.059336823734729496,,,,practice: Did Not Participate In Practice,0.0,practice
 DET,00-0039018,Jack Campbell,LB,LB,0.30267558528428096,9.0,Out,Neck,Reserve/Injured (IR) on wk 9 roster,1.0,final
-DET,00-0039364,Sione Vaki,RB,RB,0.2581818181818182,9.0,Questionable,Ankle,practice: Did Not Participate In Practice,0.0,final
-DET,00-0036963,Amon-Ra St. Brown,WR,WRTE,0.20038910505836577,9.0,Questionable,Rib,practice: Limited Participation in Practice,0.0,final
-DET,00-0034384,D.J. Reed,CB,DB,0.1532399299474606,9.0,Out,Hip,Out,1.0,final
-DET,00-0036335,DJ Wonnum,DE,DL,0.09900990099009901,9.0,Out,Concussion,practice: Full Participation in Practice,0.0,final
-DET,00-0037297,Cade Mays,C,OL,0.06696428571428571,9.0,Out,Ankle,Out,1.0,final
+DET,00-0039364,Sione Vaki,RB,RB,0.2581818181818182,9.0,Questionable,Ankle,Questionable,0.25,final
+DET,00-0036963,Amon-Ra St. Brown,WR,WRTE,0.20038910505836577,9.0,Questionable,Rib,Questionable,0.25,final
+DET,00-0034384,D.J. Reed,DB,DB,0.1532399299474606,9.0,Out,Hip,Out,1.0,final
+DET,00-0036335,DJ Wonnum,LB,DL,0.09900990099009901,9.0,Out,Concussion,"listed, no status",0.0,final
+DET,00-0037297,Cade Mays,OL,OL,0.06696428571428571,9.0,Out,Ankle,Out,1.0,final
 GB,00-0035700,Josh Jacobs,RB,RB,0.33935018050541516,,,,practice: Did Not Participate In Practice,0.0,practice
 GB,00-0039812,Ty'Ron Hopper,LB,LB,0.30324909747292417,,,,practice: Limited Participation in Practice,0.0,practice
 GB,00-0039811,MarShawn Lloyd,RB,RB,0.23465703971119134,9.0,Questionable,Knee,not on the week-10 practice report,0.0,practice
@@ -142,15 +142,15 @@ MIN,00-0036259,Jauan Jennings,WR,WRTE,0.12627986348122866,9.0,Out,Calf,practice:
 MIN,00-0037301,Theo Jackson,S,DB,0.08288288288288288,9.0,Questionable,Quadricep,practice: Full Participation in Practice,0.0,practice
 MIN,00-0031360,Kyle Van Noy,LB,LB,0.08262108262108261,,,,practice: Did Not Participate In Practice,0.0,practice
 NE,00-0036875,Rhamondre Stevenson,RB,RB,0.648,,,,Questionable,0.25,final
-NE,00-0033132,Kevin Byard,S,DB,0.20272435897435898,9.0,Questionable,Chest,Questionable,0.25,final
-NE,00-0031330,Morgan Moses,T,OL,0.1407766990291262,9.0,Questionable,Foot,practice: Full Participation in Practice,0.0,final
-NE,00-0033090,Hunter Henry,TE,WRTE,0.13692946058091288,9.0,Questionable,Foot,practice: Limited Participation in Practice,0.0,final
+NE,00-0033132,Kevin Byard,DB,DB,0.20272435897435898,9.0,Questionable,Chest,Questionable,0.25,final
+NE,00-0031330,Morgan Moses,OL,OL,0.1407766990291262,9.0,Questionable,Foot,"listed, no status",0.0,final
+NE,00-0033090,Hunter Henry,TE,WRTE,0.13692946058091288,9.0,Questionable,Foot,"listed, no status",0.0,final
 NE,00-0040734,TreVeyon Henderson,RB,RB,0.116,9.0,Out,Illness,Out,1.0,final
 NE,00-0035676,A.J. Brown,WR,WRTE,0.10477178423236515,9.0,Out,Ankle,Questionable,0.25,final
-NE,00-0039828,Walter Rouse,T,OL,0.10194174757281553,,,,Questionable,0.25,final
-NE,00-0037413,Ben Brown,C,OL,0.09627831715210355,,,,Out,1.0,final
-NE,00-0034778,Carlton Davis III,CB,DB,0.07852564102564102,9.0,Questionable,Neck,Out,1.0,final
-NE,00-0039770,Charles Woods,CB,DB,0.0641025641025641,,,,Questionable,0.25,final
+NE,00-0039828,Walter Rouse,OL,OL,0.10194174757281553,,,,Questionable,0.25,final
+NE,00-0037413,Ben Brown,OL,OL,0.09627831715210355,,,,Out,1.0,final
+NE,00-0034778,Carlton Davis III,DB,DB,0.07852564102564102,9.0,Questionable,Neck,Out,1.0,final
+NE,00-0039770,Charles Woods,DB,DB,0.0641025641025641,,,,Questionable,0.25,final
 NO,00-0038551,Kendre Miller,RB,RB,0.2677165354330709,,,,Waived on wk 9 roster,1.0,practice
 NO,00-0035668,David Edwards,G,OL,0.19904076738609114,,,,practice: Limited Participation in Practice,0.0,practice
 NO,00-0039339,Taliese Fuaga,T,OL,0.19904076738609114,,,,practice: Limited Participation in Practice,0.0,practice

@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-13T16:37:02.496618+00:00",
+  "forecast_utc": "2026-11-13T18:34:57.864197+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -30,10 +30,7 @@
         "NO: report: complete official list/report missing",
         "NO: inactives: no successful source check",
         "NO: inactives: complete official list/report missing",
-        "CAR: automatic source checks incomplete or stale",
-        "CAR: final report incomplete",
         "CAR: report: source check stale or after forecast",
-        "CAR: report: complete official list/report missing",
         "CAR: inactives: no successful source check",
         "CAR: inactives: complete official list/report missing",
         "forecast availability validation failed"
@@ -184,19 +181,12 @@
     {
       "game_id": "2026_10_NE_DET",
       "issues": [
-        "DET: automatic source checks incomplete or stale",
-        "DET: final report incomplete",
         "DET: report: source check stale or after forecast",
-        "DET: report: complete official list/report missing",
         "DET: inactives: no successful source check",
         "DET: inactives: complete official list/report missing",
-        "NE: automatic source checks incomplete or stale",
-        "NE: final report incomplete",
         "NE: report: source check stale or after forecast",
-        "NE: report: complete official list/report missing",
         "NE: inactives: no successful source check",
-        "NE: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "NE: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T13:30:00+00:00",
       "state": "awaiting candidate"
@@ -270,5 +260,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-13T16:37:05.594808+00:00"
+  "updated_utc": "2026-11-13T18:35:01.733773+00:00"
 }
