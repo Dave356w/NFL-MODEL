@@ -1656,7 +1656,10 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
     if audit is not None:
         audit.append({'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**stats,
             'off_roster_snap_share':stats['off_roster_snaps']/stats['window_snaps'] if stats['window_snaps'] else None})
-    return pd.DataFrame(rows)
+    result=pd.DataFrame(rows)
+    if 'qb_projected_id' in result:
+        result['qb_projected_id']=result.qb_projected_id.astype(object).where(result.qb_projected_id.notna(),None)
+    return result
 
 AVAIL_STAT_KEYS=('team_weeks','no_reference_roster','reference_older_than_prior_week','membership_skipped_as_data_gap',
                  'qb_projected_from_backup_prior','qb_projected_from_other_team_history','qb_projected_not_last_starter',
@@ -1711,8 +1714,8 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None,e
         parts.append(df); stats+=st
     if audit is not None: audit.append({**combine_avail_stats(stats),**info})
     out=pd.concat(parts,ignore_index=True)
-    for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report'):  # same dtype and missing marker however seasons were combined
-        out[c]=out[c].astype(object).where(out[c].notna(),None)
+    for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report','qb_projected_id'):  # stable across pandas versions and season concatenation
+        if c in out:out[c]=out[c].astype(object).where(out[c].notna(),None)
     return out,info
 
 
