@@ -1,20 +1,15 @@
 {
-  "forecast_utc": "2026-11-12T23:59:01.255577+00:00",
+  "forecast_utc": "2026-11-13T00:00:36.522597+00:00",
   "games": [
     {
       "game_id": "2026_10_WAS_NYG",
       "issues": [
-        "NYG: inactives: official inactive list not found",
-        "NYG: inactives: no successful source check",
-        "NYG: inactives: complete official list/report missing",
-        "WAS: inactives: official inactive list not found",
-        "WAS: inactives: no successful source check",
-        "WAS: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-13T00:15:00+00:00",
       "state": "awaiting candidate"
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-12T23:59:21.933196+00:00"
+  "updated_utc": "2026-11-13T00:00:57.164458+00:00"
 }
