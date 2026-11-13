@@ -243,7 +243,9 @@ def bootstrap(base, arm, reps=10000):
 
 
 def write_report(output, label, metrics, comparisons):
-    title = 'Pressure allowed/generated and matchup' if label=='pressure' else 'Scoring opportunities and finishing'
+    title = {'pressure':'Pressure allowed/generated and matchup','scoring':'Scoring opportunities and finishing',
+             'punts':'Punts per possession and defensive forced-punt rate',
+             'ppp':'Points per possession for and allowed'}[label]
     candidate='model_'+label
     lines=[f'# {title}: earlier-season margin study', '',
            '**Decision: retain for research; no production adoption supported.**', '',
@@ -274,7 +276,8 @@ def write_report(output, label, metrics, comparisons):
             lines.append(f"| {cohort} | {arm} | {r['mae']:.4f} | {r['log_loss']:.6f} | {r['wins']}-{r['losses']}-{r['pushes']} |")
     lines += ['', '## Increment over the intercept-only control', '',
               'Positive gain favors the new statistics. Paired whole-week bootstrap within season, 10,000 draws.',
-              'These are nominal 95% intervals, not corrected for both feature families or prior research selection.', '',
+              ('These are nominal 95% intervals, not corrected for the multiple feature families or prior research selection.' if label in ['punts','ppp']
+               else 'These are nominal 95% intervals, not corrected for both feature families or prior research selection.'), '',
               '| Cohort | Offset | MAE gain [95%] | Cover LL gain [95%] |', '|---|---|---|---|']
     for r in comparisons:
         if r['lag']!=2 or r['cohort'] not in ['2024-25','2026']:continue
@@ -297,11 +300,21 @@ def write_report(output, label, metrics, comparisons):
     if label=='scoring':
         lines += ['Fourth-down decision features measure contextual aggressiveness, not optimal go/punt/FG regret.',
                   'Fourth-down execution conditions on selected attempts. True counterfactual decision values remain unimplemented.', '']
-    else:
+    elif label=='pressure':
         lines += ['The three pressure coefficients and standardization values are in fits.json. The matchup coefficient changes sign',
                   'between annual fits; its contribution is not independently established by this joint three-term experiment.', '']
+    elif label=='punts':
+        lines += ['This is a two-feature drive-stall study: offensive punts per possession and defensive punts forced per opponent possession.',
+                  'It does not measure punt quality, return value, kicking accuracy or starting field position.',
+                  'Turnovers and failed fourth downs can lower offensive punt rate without improving the offense.', '']
+    elif label=='ppp':
+        lines += ['This isolates offensive points per possession and opponent offensive points allowed per opponent possession.',
+                  'It excludes defensive/return touchdowns and is not adjusted for opponents, game state or starting field position.',
+                  'It is separate from the earlier finishing bundle, which also fitted red-zone and fourth-down terms.', '']
+    command={'pressure':'pressure_margin.py','scoring':'scoring_finishing.py','punts':'punts_per_possession.py',
+             'ppp':'points_per_possession.py'}[label]
     lines += ['## Reproduce', '', '```sh',
-              'python research/pressure_margin.py' if label=='pressure' else 'python research/scoring_finishing.py',
+              'python research/'+command,
               '```', '', 'This uses committed frozen aggregate inputs. See the protocol for raw reconstruction and source definitions.', '']
     (output/'REPORT.md').write_text('\n'.join(lines))
 
