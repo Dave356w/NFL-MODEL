@@ -13,6 +13,7 @@ from pathlib import Path
 
 MODEL = Path("nfl_model.py")
 COLLECTOR = Path("availability_collect.py")
+REPLACEMENT = Path("qb_replacement.py")
 NOTEBOOK = Path("notebooks/NFL_C_B_MODEL.ipynb")
 
 
@@ -26,7 +27,13 @@ def source(model=MODEL):
              "_nfl_sys.modules['availability_collect'] = _nfl_collector\n"
              f"exec(compile({collector!r}, 'availability_collect.py', 'exec'), _nfl_collector.__dict__)\n"
              "del _nfl_collector, _nfl_types, _nfl_sys\n\n")
-    return prelude+model.read_text(encoding='utf-8')
+    replacement=(model.parent/REPLACEMENT).read_text(encoding='utf-8')
+    extra=("import sys as _qr_sys, types as _qr_types\n"
+           "_qr_module = _qr_types.ModuleType('qb_replacement')\n"
+           "_qr_sys.modules['qb_replacement'] = _qr_module\n"
+           f"exec(compile({replacement!r}, 'qb_replacement.py', 'exec'), _qr_module.__dict__)\n"
+           "del _qr_module, _qr_types, _qr_sys\n\n")
+    return prelude+extra+model.read_text(encoding='utf-8')
 
 
 def sync(model=MODEL, notebook=NOTEBOOK):

@@ -92,6 +92,7 @@ SNAPSHOT = {
     "version_archived.csv": "version_archived.csv",
     "version_native.csv": "version_native.csv",
     "market_target_fit_audit.csv": "market_target_fit_audit.csv",
+    "replacement_adjustments.csv": "replacement_adjustments.csv",
 }
 BOARD_COLS = ["game_id", "season", "week", "away", "home", "gameday", "gametime", "site",
               "result", "away_score", "home_score", "home won", "ready", "spread_line",
@@ -168,7 +169,8 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
     board = pd.read_csv(outdir / f"week{week}_board.csv")
     avail = [c for c in board.columns if c.startswith(("home__avail__", "away__avail__"))]
     evidence = [c for c in board.columns if c == 'availability_policy' or '_availability_evidence' in c]
-    compact = board[[c for c in BOARD_COLS if c in board.columns] + avail + evidence]
+    replacement=[c for c in board if c.startswith(('home_qb_','away_qb_','qb_replacement_'))]
+    compact = board[list(dict.fromkeys([c for c in BOARD_COLS if c in board.columns] + avail + evidence + replacement))]
     compact.to_csv(latest / "board.csv", index=False, float_format="%.6g")
     Path(projections).mkdir(parents=True, exist_ok=True)
     for prior in outdir.glob("week*_board.csv"):
@@ -178,6 +180,7 @@ def snapshot(outdir, latest=LATEST, projections=PROJECTIONS):
         prior_week = int(prior.stem.removeprefix("week").removesuffix("_board"))
         fields = [c for c in BOARD_COLS if c in full] + [c for c in full if c.startswith(("home__avail__", "away__avail__"))
                   or c == 'availability_policy' or '_availability_evidence' in c]
+        fields=list(dict.fromkeys(fields+[c for c in full if c.startswith(('home_qb_','away_qb_','qb_replacement_'))]))
         full[fields].to_csv(Path(projections) / f"{season}_week{prior_week:02d}.csv", index=False, float_format="%.6g")
     compact.to_csv(Path(projections) / f"{season}_week{week:02d}.csv", index=False, float_format="%.6g")
     html = outdir / f"week{week}_board.html"
@@ -212,6 +215,7 @@ def load_latest(latest=LATEST):
         out[name[:-4]] = read_csv_or_empty(p)
     out["board_html"] = (latest / "board.html").exists()
     fixed_bands.prepare(out)
+    season_ats.prepare_replacement_views(out,remapped=True)
     out['espn_archive'] = espn_spreads.read(latest.parent)
     return out
 
@@ -875,6 +879,7 @@ def ats_card_state(latest, row, now):
     ms, line = num(row.get('fixed_band_spread')), num(row.get('spread_line'))
     saved = ats_locks.current_records(latest.get('ats_locks', {}), rev).get((rev, row['game_id']))
     completed = None
+    pooled_row = None
     display_row = dict(row)
     pool = public_ats(latest)
     if len(pool):
@@ -883,6 +888,7 @@ def ats_card_state(latest, row, now):
             raise ValueError('Duplicate public ATS game')
         if len(matches):
             candidate = matches.iloc[0]
+            pooled_row = candidate
             if candidate.ats_status == 'graded' and math.isfinite(num(candidate.get('result'))):
                 display_row.update({name: candidate.get(name) for name in ('result', 'home_score', 'away_score')})
                 if (saved is None and candidate.ats_basis in {'Historical replay', 'Replayed pregame forecast'}
@@ -1059,7 +1065,7 @@ def render_index(latest, ledger, built, now=None):
         cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if latest.get('ats_locks') else ''
+    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if has_public_saved_picks(latest) else ''
     parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
                  f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
                  "<p><a href='grades.html'>View ATS results →</a></p>")
@@ -1269,11 +1275,19 @@ def render_ats_games(latest):
     return ''.join(parts)
 
 
+def has_public_saved_picks(latest):
+    if not latest:return False
+    records=latest.get('ats_locks',{})
+    if season_ats.replacement_enabled(latest):
+        return bool(ats_locks.current_records(records,latest['manifest']['revision']))
+    return bool(records)
+
+
 def downloads(latest):
     links = []
     if len(public_ats(latest)):
         links.append("<a href='ats_2026_results.csv'>2026 per-game results (CSV)</a>")
-    if (latest or {}).get('ats_locks'):
+    if has_public_saved_picks(latest):
         links.append("<a href='ats_locked_picks.csv'>Saved spread picks (CSV)</a>")
     if (latest or {}).get('board') is not None and len(latest['board']):
         links.append("<a href='fixed_band_board.csv'>This week’s board (CSV)</a>")
@@ -1471,6 +1485,7 @@ def render_all(out_dir, data=DATA, now=None):
     ledger = load_ledger(data)
     if latest is not None:
         latest['pooled_ats'] = season_ats.build(latest, ledger)
+        season_ats.align_calibration_2026(latest,latest['pooled_ats'])
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     season_results = public_ats(latest)
@@ -1490,17 +1505,23 @@ def render_all(out_dir, data=DATA, now=None):
     if latest is not None and latest['ats_locks']:
         locked_rows = []
         for row in latest['ats_locks'].values():
-            side = ats_locks.select(row['fixed_band_spread'], row['market_spread'], True)
+            if season_ats.replacement_enabled(latest) and row.get('revision')!=latest['manifest']['revision']:
+                continue
+            margin,market=row['fixed_band_spread'],row['market_spread']
             pricing = season_results.loc[season_results.game_id.eq(row['game_id'])]
             pricing = pricing.iloc[0] if len(pricing) else {}
+            if season_ats.replacement_enabled(latest) and int(row['season'])==2026 and len(pricing):
+                margin,market=pricing.get('fixed_band_spread',margin),pricing.get('spread_line',market)
+            side = ats_locks.select(margin, market, True)
             locked_rows.append(dict(game_id=row['game_id'], season=row['season'],
                 home=row['home'], away=row['away'], kickoff_utc=row['kickoff_utc'],
                 forecast_utc=row['generated_utc'], lock_at_utc=row['lock_at_utc'],
-                model_spread=row['fixed_band_spread'], market_spread=row['market_spread'],
+                model_spread=margin, market_spread=market,
                 selected_side=side, selected_team=row[side] if side else '',
-                handicap=(-row['market_spread'] if side == 'home' else row['market_spread']) if side else None,
+                handicap=(-market if side == 'home' else market) if side else None,
                 **{name: pricing.get(name) for name in ('ats_price', 'ats_price_basis', 'ats_book', 'ats_quote_utc')}))
-        pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
+        if locked_rows:pd.DataFrame(locked_rows).to_csv(out / 'ats_locked_picks.csv', index=False)
+        else:(out / 'ats_locked_picks.csv').unlink(missing_ok=True)
     else:
         (out / 'ats_locked_picks.csv').unlink(missing_ok=True)
     if latest is not None and 'fixed_band_ledger' in latest:
@@ -1583,6 +1604,11 @@ def main(argv=None):
     ap.add_argument("--pages-only", action="store_true", help="render from committed data/ without running the model")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR", "public"))
     args = ap.parse_args(argv)
+    if args.pages_only and m.REVISION==season_ats.REPLACEMENT_REVISION:
+        manifest=DATA/'latest'/'manifest.json'
+        saved=json.loads(manifest.read_text()) if manifest.exists() else {}
+        if saved.get('revision')!=m.REVISION or not (DATA/'latest'/'replacement_adjustments.csv').exists():
+            raise ValueError('v1.24 pages require a fresh v1.24 model snapshot with replacement classifications; keep the last published site')
     # A held job may pick up a repair while already running. Pages-only
     # finalization must apply the same explicit requests as a fresh workflow.
     import retro_lock

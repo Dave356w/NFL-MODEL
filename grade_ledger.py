@@ -61,7 +61,7 @@ H1_MIN_GAP = .17
 # research/PREREGISTRATION.md, addendum 2026-10-15: H9 (moneyline vs spread disagreement), one row per
 # game from the first production snapshot (v1.18 on; prices only, so a model change does not end it).
 # Append-only: add every new production REVISION here, never remove one (a test checks m.REVISION).
-H9_PRODUCTION = ("boxscore-composite-v1.18", "boxscore-composite-v1.19", "boxscore-composite-v1.20", "boxscore-composite-v1.21", "boxscore-composite-v1.22")
+H9_PRODUCTION = ("boxscore-composite-v1.18", "boxscore-composite-v1.19", "boxscore-composite-v1.20", "boxscore-composite-v1.21", "boxscore-composite-v1.22", "boxscore-composite-v1.23", "boxscore-composite-v1.24")
 H9_FROM = (2026, 6)
 H9_T = 0.11133        # 75th percentile of |dis| on 2013-2026, outcome-free (research/ML_SPREAD_2006_12.md)
 H9_CLIP = 1e-4

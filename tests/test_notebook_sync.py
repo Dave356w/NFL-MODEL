@@ -28,11 +28,16 @@ def test_colab_embeds_the_exact_collector_without_running_the_model():
     compile(src,'Colab','exec')
     scope={}
     original=sys.modules.get('availability_collect')
+    original_replacement=sys.modules.get('qb_replacement')
     try:
         exec(prelude,scope)
         import availability_collect as ac
         assert isinstance(ac,types.ModuleType) and len(ac.TEAMS)==32
         assert ac.POLICY=='official-availability-collection-2026-11-04-v1'
+        import qb_replacement as qr
+        assert qr.POLICY=='replacement-team-margin-minus2-2026-11-13-v1'
     finally:
         if original is None:sys.modules.pop('availability_collect',None)
         else:sys.modules['availability_collect']=original
+        if original_replacement is None:sys.modules.pop('qb_replacement',None)
+        else:sys.modules['qb_replacement']=original_replacement

@@ -1,4 +1,4 @@
-"""NFL box-score composite W/L model — v1.22 (official reports and inactives; RSS retired).
+"""NFL box-score composite W/L model — v1.24 (replacement-starter final-margin adjustment).
 Run notebooks/NFL_C_B_MODEL.ipynb in Colab; or python nfl_model.py from the checkout.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
@@ -14,6 +14,23 @@ v1.19.1 (reporting only, owner decision 2026-11-04): retro_ledger and the curren
 the schedule's home/away spread prices (attach_spread_prices) so the Calibration tab grades its
 spread-band ROI at actual prices. Never a model input; recipe, fits and config signature unchanged.
 The same day the ATS median map moved to weekly refits (fixed_bands map policy v2, lock policy v3).
+
+v1.24 (owner request 2026-11-13; new REVISION/OUTPUT_NAME and signature):
+Apply an additional two-point team penalty to the final mapped ATS margin when
+its projected QB differs from the still-rostered incumbent with at least two
+strictly earlier starts this season (most starts, ties by latest). Two replacements
+cancel in relative margin; unresolved/blended identities keep the original margin.
+The fitted probability, raw projection and median-map training are unchanged.
+Public 2026 history is replayed under this updated model and pooled with its own
+future forward games. Original snapshots, picks and earlier experiments remain
+immutable backend evidence. The v1.16 shadow keeps its original inputs.
+
+v1.23 (owner request 2026-11-13; new REVISION/OUTPUT_NAME and signature):
+Historical QB starters use the earliest actual QB-position dropback, never a gadget
+passer or stale schedule QB ID. Unknown/conflicting roster positions stay unresolved. Confirmed game starters
+are not blended with backups merely because their report still says Questionable.
+Earlier revisions and the v1.16 shadow retain their original behavior. Saved picks
+and journals stay immutable; QB penalties and the ten-term recipe are unchanged.
 
 v1.22 (owner request 2026-11-09; new REVISION/OUTPUT_NAME and signature):
 RSS polling and automatic team-news facts are retired. Only official game injury tables and
@@ -510,11 +527,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.22'
+REVISION='boxscore-composite-v1.24'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_22'  # same ten-term fit; RSS retired
+OUTPUT_NAME='nfl_boxscore_output_v1_24'  # replacement-starter final-margin policy
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -545,7 +562,7 @@ STATE_DIR=None   # frozen recipes + forward ledger; None -> OUTPUT_ROOT (Colab/D
 CACHE_DIR=None   # caches; None -> OUTPUT_ROOT/cache
 REUSE_CACHE=True
 WRITE_FORWARD_LEDGER=True
-DIAGNOSTICS='v1.20 sourced game availability (2026-11-04); v1.19 v1.18 fitted on ten core terms (2026-11-03); v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
+DIAGNOSTICS='v1.24 replacement-starter final-margin policy (2026-11-13); v1.23 QB starter label and confirmed-starter repairs (2026-11-13); v1.20 sourced game availability (2026-11-04); v1.19 v1.18 fitted on ten core terms (2026-11-03); v1.18 favorite-penalized v1.16 with a v1.16 shadow lock (2026-10-13); v1.16 restored production (2026-10-12); v1.16.2 favorite-confidence penalty (reporting only); v1.17 retained as archived research; v1.16 fixed market-offset Product + 1 SD contexts; v1.15 the game week\'s own reserve list counts out; v1.14 separate offensive and defensive sack-rate regressors removed; v1.13 largest lead and deficit replace final MOV; v1.12.4 realized margin on the calibration page (reporting only); v1.12.3 H4 pass-matchup term at lock (reporting only); v1.12.2 Kalshi quotes at lock (reporting only); v1.12.1 model-implied spread (reporting only); v1.12 dated personnel events; v1.11 depth-chart QB projection and questionable-starter blend; v1.9.1 flat 1u moneyline ROI headline (reporting only); v1.9 roster codes; v1.8 report gate and QB projection'
 CAL_BAND_EDGES=(0.,.2,.3,.4,.5,.6,.7,.8,1.)  # home-win probability bands shared by model and market
 PICK_BAND_EDGES=(.5,.55,.6,.65,.7,.75,.8,1.)  # pick-confidence bands shared by model and market
 PICK_BAND_LABELS=('50-55%','55-60%','60-65%','65-70%','70-75%','75-80%','80%+')
@@ -920,6 +937,60 @@ def validate_boxes(box):
     return box.sort_values(['season','week','game_id','team']).reset_index(drop=True)
 
 
+def label_qb_starters(q, rost):
+    """Earliest actual QB passer in each completed team-game, using roster position.
+
+    Schedule QB IDs can retain pregame projections after a late change and are
+    deliberately ignored. Game-week roster positions annotate historical outcomes;
+    before() still excludes a target game's own rows from forecasting features.
+    Unknown/conflicting positions before the first identifiable QB, or missing
+    play order with multiple QB candidates, leave the starter unresolved.
+    """
+    out=q.copy()
+    if 'starter_first_dropback' not in out:
+        out['starter_first_dropback']=out.get('starter',False)
+    out['starter']=False
+    out['starter_label_source']='unresolved'
+    required={'season','week','team','gsis_id','position'}
+    if rost is None or not required.issubset(rost.columns) or out.empty: return out
+    positions={}
+    for key,g in rost.groupby(['season','week','team']):
+        positions[key]={pid:set(p.dropna().astype(str).str.strip().str.upper())
+                        for pid,p in g.groupby('gsis_id').position}
+    for key,g in out.groupby(['season','week','team','game_id']):
+        pos=positions.get(key[:3],{})
+        # A conflicting QB/non-QB position is unknown, never an assumed gadget.
+        state={pid:('QB' if pp=={'QB'} else 'other' if pp and 'QB' not in pp else 'unknown')
+               for pid,pp in pos.items()}
+        qb_idx=[i for i,pid in g.gsis_id.items() if state.get(pid,'unknown')=='QB']
+        if not qb_idx: continue
+        starter=None; source=None
+        if 'first_dropback_id' in g:
+            order=pd.to_numeric(g.first_dropback_id,errors='coerce')
+            # Missing play order could conceal an earlier quarterback.
+            relevant=g.index[[state.get(pid,'unknown')!='other' for pid in g.gsis_id]]
+            if order.loc[relevant].isna().any(): continue
+            first=order.loc[qb_idx].min()
+            candidates=order.loc[qb_idx][order.loc[qb_idx].eq(first)].index
+            unknown=[i for i,pid in g.gsis_id.items() if state.get(pid,'unknown')=='unknown']
+            if len(candidates)!=1 or (unknown and order.loc[unknown].le(first).any()): continue
+            starter=candidates[0]; source='first_qb_dropback'
+        else:
+            # Compatibility for old audit caches lacking per-passer play IDs.
+            first=g[g.starter_first_dropback.fillna(False).astype(bool)]
+            if len(first)!=1: continue
+            first_i=first.index[0]
+            if first_i in qb_idx:
+                starter=first_i; source='first_passer_is_qb'
+            elif (state.get(first.gsis_id.iloc[0],'unknown')=='other' and len(qb_idx)==1
+                  and all(state.get(pid,'unknown')!='unknown' for pid in g.gsis_id)):
+                starter=qb_idx[0]; source='only_qb_passer'
+        if starter is not None:
+            out.loc[starter,'starter']=True
+            out.loc[g.index,'starter_label_source']=source
+    return out
+
+
 def aggregate_qb(p,schedule):
     """Passer-level dropbacks and net yards per team-game (sacks included)."""
     p=p[(p.season_type=='REG')&(numeric(p,'two_point_attempt')!=1)]
@@ -936,6 +1007,12 @@ def aggregate_qb(p,schedule):
     first=db.sort_values('play_id').drop_duplicates(['game_id','posteam'])
     starters=set(zip(first.game_id,first.posteam,first.passer_player_id))
     q['starter']=[k in starters for k in zip(q.game_id,q.team,q.gsis_id)]
+    if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24'):
+        q['starter_first_dropback']=q.starter
+        earliest=db.groupby(['game_id','posteam','passer_player_id']).play_id.min()
+        q['first_dropback_id']=[earliest.loc[k] for k in zip(q.game_id,q.team,q.gsis_id)]
+        # Roster positions load later; do not label a gadget opener as a QB.
+        q['starter']=False
     return q
 
 
@@ -947,7 +1024,8 @@ def load_boxes(year,schedule):
         m=json.loads(meta.read_text())
         age=(now_utc()-dt.datetime.fromisoformat(m['generated_utc'])).total_seconds()/3600
         max_age=CACHE_MAX_AGE_HOURS if schedule.result.isna().any() else COMPLETED_CACHE_MAX_AGE_HOURS
-        if (0<=age<max_age and m['schedule_hash']==schedule_hash and qbpath.exists()
+        qb_schema_ok=(REVISION not in ('boxscore-composite-v1.23','boxscore-composite-v1.24') or m.get('qb_order_schema')=='first_dropback_id-v1')
+        if (qb_schema_ok and 0<=age<max_age and m['schedule_hash']==schedule_hash and qbpath.exists()
                 and m['sha256']==hashlib.sha256(path.read_bytes()).hexdigest()):
             AUDIT.append({'cache':str(path),**m}); return pd.read_csv(path),pd.read_csv(qbpath)
     if schedule.result.notna().sum()==0: return pd.DataFrame(columns=['game_id','season','week','team','opponent',*COUNTS]),None
@@ -968,6 +1046,7 @@ def load_boxes(year,schedule):
     path.parent.mkdir(parents=True,exist_ok=True); box.to_csv(path,index=False); qb.to_csv(qbpath,index=False)
     m={'generated_utc':now_utc().isoformat(),'schedule_hash':schedule_hash,'pbp_sha256':source_hash,
        'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'aggregation_audit':AUDIT[-1]}
+    if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24'): m['qb_order_schema']='first_dropback_id-v1'
     dump(meta,m); return box,qb
 
 
@@ -1370,6 +1449,9 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
     v1.15 (GAME_WEEK_RESERVE): from week 2, roster-out rows on the game week's own roster
     (the reserve list, cut, traded) also count out; nothing on that roster clears an out.
     Optional events/gameday preserve callers."""
+    if (REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24') and qb is not None
+            and 'first_dropback_id' in qb and 'starter_label_source' not in qb):
+        qb=label_qb_starters(qb,rost)
     dates=personnel_gamedays(gameday)
     inj=injury_weights(inj)
     # Questionable and not also listed Out/Doubtful that week.
@@ -1462,6 +1544,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
         rec={'season':y,'week':w,'team':t,'qb_expected':None,'qb_usual':None,'qb_source':None,'qb_depth_chart_utc':None,
              'injury_report':rep_state,
              'roster_reference_week':ref_week if ref is not None else np.nan,'off_roster_snap_share':np.nan}
+        if REVISION=='boxscore-composite-v1.24':rec['qb_projected_id']=None
         g=by_team.get(t); h=None; hcs=None
         if g is not None:
             past=g[before(g,y,w)]
@@ -1556,7 +1639,7 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
                     if source=='other_team': stats['qb_projected_from_other_team_history']+=1
                     elif not starters or pid!=starters[0]: stats['qb_projected_not_last_starter']+=1
                     if source=='depth_chart': stats['qb_projected_from_depth_chart']+=1
-                    if pid in q_status.get((y,w,t),()):
+                    if pid in q_status.get((y,w,t),()) and (confirmed is None or REVISION not in ('boxscore-composite-v1.23','boxscore-composite-v1.24')):
                         # Questionable starter: a coin flip between him and the next candidate
                         # (the league backup prior when there is none).
                         alt=order[1] if len(order)>1 else None
@@ -1567,11 +1650,16 @@ def availability_table(targets,qb,snaps,inj,rost,audit=None,depth=None,events=No
                     proj,name=prior,NO_QB_LABEL; stats['qb_projected_from_backup_prior']+=1
                 rec['qb_delta']=proj-mix
                 rec['qb_expected']=name; rec['qb_source']=source
+                if REVISION=='boxscore-composite-v1.24':
+                    rec['qb_projected_id']=order[0] if order and ' (Q) / ' not in name else None
         rows.append(rec)
     if audit is not None:
         audit.append({'source':'availability_roster_membership','rule':ROSTER_MEMBERSHIP,'qb_rule':QB_RULE,**stats,
             'off_roster_snap_share':stats['off_roster_snaps']/stats['window_snaps'] if stats['window_snaps'] else None})
-    return pd.DataFrame(rows)
+    result=pd.DataFrame(rows)
+    if 'qb_projected_id' in result:
+        result['qb_projected_id']=result.qb_projected_id.astype(object).where(result.qb_projected_id.notna(),None)
+    return result
 
 AVAIL_STAT_KEYS=('team_weeks','no_reference_roster','reference_older_than_prior_week','membership_skipped_as_data_gap',
                  'qb_projected_from_backup_prior','qb_projected_from_other_team_history','qb_projected_not_last_starter',
@@ -1626,8 +1714,8 @@ def availability_cached(targets,qb,snaps,inj,rost,season,audit=None,depth=None,e
         parts.append(df); stats+=st
     if audit is not None: audit.append({**combine_avail_stats(stats),**info})
     out=pd.concat(parts,ignore_index=True)
-    for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report'):  # same dtype and missing marker however seasons were combined
-        out[c]=out[c].astype(object).where(out[c].notna(),None)
+    for c in ('qb_expected','qb_usual','qb_source','qb_depth_chart_utc','injury_report','qb_projected_id'):  # stable across pandas versions and season concatenation
+        if c in out:out[c]=out[c].astype(object).where(out[c].notna(),None)
     return out,info
 
 
@@ -1725,7 +1813,7 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
     """
     asof=availability_utc(asof if asof is not None else now_utc())
     observations=[validate_availability_observation(r) for r in observations
-                  if REVISION!='boxscore-composite-v1.22' or r.get('source_kind')!='official_team_news']
+                  if REVISION not in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') or r.get('source_kind')!='official_team_news']
     indexed=base.set_index(['season','week','team'])
     output=[]
     for target in targets.to_dict('records'):
@@ -1840,7 +1928,11 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
             availability_evidence=json.dumps(evidence,sort_keys=True,allow_nan=False),
             availability_evidence_sha256=availability_evidence_digest(evidence))
         output.append(record)
-    return pd.DataFrame(output)
+    result=pd.DataFrame(output)
+    if REVISION=='boxscore-composite-v1.24' and len(result):
+        import qb_replacement as qr
+        result=qr.annotate_availability(result,qb,rost)
+    return result
 
 
 def apply_game_availability(frame,resolved):
@@ -1853,6 +1945,10 @@ def apply_game_availability(frame,resolved):
             key=(row.game_id,row[side])
             if key not in lookup.index: continue
             rec=lookup.loc[key]; touched=True
+            if REVISION=='boxscore-composite-v1.24':
+                import qb_replacement as qr
+                for c in qr.META_COLUMNS:
+                    out.loc[i,f'{side}_{c}']=rec.get(c)
             for c in ALL_AVAIL_COLS: out.loc[i,f'{side}__avail__{c}']=rec[c]
             for c in ('qb_expected','qb_usual','injury_report','availability_evidence','availability_evidence_sha256'):
                 out.loc[i,f'{side}_{c}']=rec[c]
@@ -2017,6 +2113,9 @@ def lagged_features(box,schedules,half_life,avail=None,profile_families=None):
                 row=av.loc[key] if av is not None and key in av.index else None
                 for c in ALL_AVAIL_COLS: r[f'{side}__avail__{c}']=float(row[c]) if row is not None else np.nan
                 for c in ('qb_expected','qb_usual','injury_report'): r[f'{side}_{c}']=row[c] if row is not None else None
+                if REVISION=='boxscore-composite-v1.24':
+                    import qb_replacement as qr
+                    for c in qr.META_COLUMNS:r[f'{side}_{c}']=row.get(c) if row is not None else None
             for c in ALL_AVAIL_COLS: r['d__avail__'+c]=r['home__avail__'+c]-r['away__avail__'+c]
             records.append(r)
     return pd.DataFrame(records).sort_values(['season','week','game_id']).reset_index(drop=True)
@@ -2993,7 +3092,7 @@ def shadow_fit(train,fit,year,week):
     return fit_composite(train,SHADOW_RECIPE,year,week) if term_restricted(fit) else fit
 
 
-def current_predictions(features,recipe,year,through_week,shadow_out=None,availability=None):
+def current_predictions(features,recipe,year,through_week,shadow_out=None,availability=None,shadow_features=None):
     """Weekly walk-forward forecasts for this season. shadow_out (a dict) receives the v1.16 shadow
     fit for through_week under 'fit'."""
     f=features[recipe['half_life']]; rows=[]; current_fit=None
@@ -3006,8 +3105,10 @@ def current_predictions(features,recipe,year,through_week,shadow_out=None,availa
             fit['market_target_fit']=features['market_target_fits'][f'{year}_{week}']
             fit['market_target_selection']=[r for r in features['market_target_selections'] if r['season']==year]
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
-        sfit=shadow_fit(tr,fit,year,week)
-        shadow_board=te.copy()
+        sf=f if shadow_features is None else shadow_features[recipe['half_life']]
+        str_=sf[before(sf,year,week)]
+        sfit=shadow_fit(str_,fit,year,week)
+        shadow_board=sf[(sf.season==year)&(sf.week==week)].copy()
         shadow_board['model_wp_v116']=apply_fit(shadow_board,sfit,raw=True)
         shadow_board['homefield_wp']=apply_fit(shadow_board,baseline)
         te=apply_game_availability(te,availability)
@@ -3095,18 +3196,27 @@ def config_signature():
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         cfg['evaluation_ties']='graded as pushes; excluded from binary fitting/scoring'
         cfg['market_targets']={'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'}
-    if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22'):
+    if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
         cfg['availability_observations']={'policy':AVAILABILITY_POLICY,'fields':AVAILABILITY_FIELDS,
             'rule':'confirmed, game-scoped, captured/published/effective by forecast; unresolved conflicts block locks; historical and shadow inputs unchanged'}
     if REVISION=='boxscore-composite-v1.21':
         import availability_collect as ac
         cfg['automatic_availability']={'policy':ac.POLICY,'sources':'32 official club RSS feeds, official game injury tables and inactive announcements',
             'max_source_age_minutes':ac.MAX_AGE_MINUTES,'ats':'both complete official inactive lists required before saving a candidate'}
-    if REVISION=='boxscore-composite-v1.22':
+    if REVISION in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
         import availability_collect as ac
         cfg['automatic_availability']={'policy':ac.REPORTS_POLICY,'sources':'official game injury tables and inactive announcements; RSS retired',
             'max_source_age_minutes':ac.MAX_AGE_MINUTES,'ats':'both complete official inactive lists required before saving a candidate',
             'news_observations':'excluded'}
+    if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24'):
+        cfg['qb_starter_policy']={'historical':'earliest QB-position dropback; unknown/conflicting positions unresolved',
+                                  'confirmed':'no Questionable blend'}
+    if REVISION=='boxscore-composite-v1.24':
+        import qb_replacement as qr
+        cfg['replacement_margin']={'policy':qr.POLICY,'points':qr.PENALTY_POINTS,
+            'definition':'projected QB differs from still-rostered incumbent with >=2 earlier season starts; most starts then latest',
+            'stage':'after final ATS median map; both sides cancel; unknown unchanged',
+            'reporting':'updated 2026 replay pooled with own forward results'}
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -3809,12 +3919,21 @@ def main():
     if any(f in AVAIL_FAMILIES for f in FEATURE_FAMILIES):
         print('  Player availability: injury reports, weekly rosters, snap counts')
         a=load_availability(years,season)
+        if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24') and qb is not None:
+            qb=label_qb_starters(qb,a['rost'])
+            labels=qb[['game_id','team','starter_label_source']].drop_duplicates()
+            AUDIT.append({'source':'historical_qb_starters','rule':'earliest rostered QB dropback',
+                          'resolved_team_games':int(labels.starter_label_source.ne('unresolved').sum()),
+                          'unresolved_team_games':int(labels.starter_label_source.eq('unresolved').sum())})
         events=load_personnel_events()
         targets=availability_targets(schedules)  # kickoff (v1.11 depth chart) and gameday (v1.12 personnel events)
         avail,ainfo=availability_cached(targets,qb,a['snaps'],a['inj'],a['rost'],season,
                                         audit=AUDIT,depth=a.get('depth'),events=events,gameday=targets)
         print(f'  Availability features: {len(ainfo["cached_seasons"])} completed seasons from cache, '
               f'rebuilt {", ".join(map(str,ainfo["rebuilt_seasons"])) or "none"}')
+        if REVISION=='boxscore-composite-v1.24':
+            import qb_replacement as qr
+            avail=qr.annotate_availability(avail,qb,a['rost'])
         save(avail,'availability_features.csv')
         cr=avail[(avail.season==season)&(avail.week==cur)]
         mem=AUDIT[-1]
@@ -3835,16 +3954,16 @@ def main():
                   f'{", ".join(f"{t} ({src})" for t,src in zip(nochart.team,nochart.qb_source))}')
         pend=cr[cr.injury_report!='final']
         if len(pend):
-            fallback='' if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22') else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
+            fallback='' if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
             print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
                   f'{", ".join(f"{t} ({st})" for t,st in zip(pend.team,pend.injury_report))}. '
                   f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
                   f'ledger until game statuses publish{fallback}.')
         else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
-        if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22'):
+        if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
             observations=load_availability_observations()
             collection=None
-            if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+            if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
                 import availability_collect as ac
                 collection=ac.refresh(state_dir(),schedules,a['rost'],force=True,legacy_news=REVISION=='boxscore-composite-v1.21')
                 observations+=load_availability_observations(state_dir()/ac.AUTO)
@@ -3852,6 +3971,21 @@ def main():
             resolved_availability=resolve_game_availability(targets,avail,qb,a['snaps'],a['inj'],a['rost'],
                 depth=a.get('depth'),events=events,observations=observations,asof=now_utc(),collection=collection)
             if len(resolved_availability): save(resolved_availability,'resolved_availability.csv')
+    if REVISION=='boxscore-composite-v1.24' and avail is not None:
+        import qb_replacement as qr
+        adjustment_avail=avail.copy()
+        if resolved_availability is not None and len(resolved_availability):
+            ix=['season','week','team']
+            existing=adjustment_avail.set_index(ix)
+            for rr in resolved_availability.to_dict('records'):
+                key=tuple(rr[k] for k in ix)
+                if key in existing.index:
+                    for c in ['qb_expected',*qr.META_COLUMNS]:existing.loc[key,c]=rr.get(c)
+            adjustment_avail=existing.reset_index()
+        adjustment_table=targets[['game_id','season','week','team']].merge(
+            adjustment_avail[['season','week','team','qb_expected',*qr.META_COLUMNS]],
+            on=['season','week','team'],how='left',validate='one_to_one')
+        save(adjustment_table,'replacement_adjustments.csv')
     notes=None
     if avail is not None:
         wk=schedules[(schedules.season==season)&(schedules.week==cur)]
@@ -3908,9 +4042,21 @@ def main():
     print('Best validation log loss by family (lower is better):'); print(fam_best.round(5).to_string())
     dump(outdir/'frozen_recipe.json',recipe_rec)
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
-    shadow_out={}
-    gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability)
-    if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+    shadow_out={}; shadow_features=None
+    if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24') and qb is not None:
+        if 'starter_first_dropback' not in qb:
+            raise ValueError('v1.23 shadow requires original first-dropback labels')
+        with revision_identity(SHADOW_REVISION,SHADOW_RECIPE):
+            legacy_qb=qb.assign(starter=qb.starter_first_dropback)
+            legacy_avail=availability_table(targets,legacy_qb,a['snaps'],a['inj'],a['rost'],
+                depth=a.get('depth'),events=events,gameday=targets)
+            half=recipe['half_life']
+            shadow_features={half:lagged_features(box,schedules,half,legacy_avail,
+                profile_families=('rates_core',) if profile_mode=='production' else None)}
+            prepare_product_features(shadow_features,schedules)
+    gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability,
+                               shadow_features=shadow_features)
+    if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
         # Collection occurs during this run. The run-start time would predate
         # that evidence and make every otherwise valid automatic candidate fail.
         now=now_utc()

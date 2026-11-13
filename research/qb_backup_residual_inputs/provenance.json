@@ -1,0 +1,10 @@
+{
+  "data/latest/retro_ledger.csv": "d8f7b2af1cd6ecfed12981293cb8a2415e09195fff627daed51e28a5e4dd66e3",
+  "data/lock_inputs/availability.parquet": "1d22cd19364bf78454e864aa018ceaaefc0bf500b20de18879a578ecd5d71f19",
+  "data/lock_inputs/schedules.parquet": "7eeeb405d30239b68c96fceded6ecd534bc51d854b83c28efd2104dc69feb125",
+  "data/lock_inputs/rost.parquet": "e19d6aefe2550388b1ccccd8ee6a969b240f009c83bdebb383f33930d4311a00",
+  "data/lock_inputs/qb.parquet": "e075b5c145ce3bc6b1d1e1d1f8e60e276784f3fe1352ad1190cc0737283462c5",
+  "data/lock_inputs/depth.parquet": "785c4e8aca6075efeb10d1ef586943578c06ec28971b60afad4abc3f23e56c94",
+  "research/qb_saved_pick_audit_inputs/qb_play_order.csv": "a5987238cc0f25c6f5876520c1836e7449be8a4c2e6068c7d164f0571721ebe6",
+  "research/qb_saved_pick_audit_inputs/pbp_provenance.json": "654ce255f42f44c46086ab4e6cdee7813f36967a396b9616d4efbc14f24d15b9"
+}

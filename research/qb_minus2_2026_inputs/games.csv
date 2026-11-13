@@ -1,0 +1,183 @@
+pool,game_id,revision,season,week,home,away,result,spread_line,fixed_band_spread,model_spread,original_selected_side,ats_basis,ats_home_odds,ats_away_odds,ats_price_basis,home_chart,home_replacement,home_correct,home_qb,away_chart,away_replacement,away_correct,away_qb
+published 2026,2026_01_NE_SEA,historical replay,2026,1,SEA,NE,3.0,3.0,4.0,3.8179930645926,home,Historical replay,-120.0,100.0,closing_estimate,0.0,0.0,True,S.Darnold,0.0,0.0,True,D.Maye
+published 2026,2026_01_SF_LA,historical replay,2026,1,LA,SF,-20.0,3.5,4.0,4.729420537685848,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,M.Stafford,0.0,0.0,True,B.Purdy
+published 2026,2026_01_ATL_PIT,historical replay,2026,1,PIT,ATL,7.0,6.5,4.0,6.498260101208354,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,A.Rodgers,1.0,0.0,True,C.Rush
+published 2026,2026_01_BAL_IND,historical replay,2026,1,IND,BAL,-18.0,-3.0,-3.0,-2.73845852731122,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,D.Jones,0.0,0.0,True,L.Jackson
+published 2026,2026_01_BUF_HOU,historical replay,2026,1,HOU,BUF,-5.0,-1.5,-3.0,-0.2326981624241634,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,C.Stroud,0.0,0.0,True,J.Allen
+published 2026,2026_01_CHI_CAR,historical replay,2026,1,CAR,CHI,-22.0,-3.0,-4.0,-3.358397839472321,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,B.Young,0.0,0.0,True,C.Williams
+published 2026,2026_01_CLE_JAX,historical replay,2026,1,JAX,CLE,24.0,8.5,8.0,9.266496970261342,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,T.Lawrence,0.0,0.0,True,D.Watson
+published 2026,2026_01_NO_DET,historical replay,2026,1,DET,NO,1.0,7.0,8.0,7.741223970592334,home,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,J.Goff,0.0,0.0,True,T.Shough
+published 2026,2026_01_NYJ_TEN,historical replay,2026,1,TEN,NYJ,-13.0,1.5,-4.0,-4.3775035042831805,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,C.Ward,0.0,0.0,True,G.Smith
+published 2026,2026_01_TB_CIN,historical replay,2026,1,CIN,TB,6.0,3.5,4.0,4.756218662445193,home,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,J.Burrow,0.0,0.0,True,B.Mayfield
+published 2026,2026_01_ARI_LAC,historical replay,2026,1,LAC,ARI,-12.0,8.5,8.0,9.063151658775624,away,Historical replay,-120.0,100.0,closing_estimate,0.0,0.0,True,J.Herbert,0.0,0.0,True,J.Brissett
+published 2026,2026_01_GB_MIN,historical replay,2026,1,MIN,GB,17.0,1.5,3.0,1.2723265119531897,home,Historical replay,,,assumed_minus110,0.0,0.0,True,K.Murray,0.0,0.0,True,J.Love
+published 2026,2026_01_MIA_LV,historical replay,2026,1,LV,MIA,14.0,3.0,3.0,1.5561765808054546,home,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,K.Cousins,0.0,0.0,True,M.Willis
+published 2026,2026_01_WAS_PHI,historical replay,2026,1,PHI,WAS,2.0,6.0,4.0,5.670239207219818,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,J.Hurts,0.0,0.0,True,J.Daniels
+published 2026,2026_01_DAL_NYG,historical replay,2026,1,NYG,DAL,8.0,-3.0,-4.0,-3.352544091605092,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,J.Dart,0.0,0.0,True,D.Prescott
+published 2026,2026_01_DEN_KC,historical replay,2026,1,KC,DEN,21.0,2.5,3.0,1.5160925081572638,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,P.Mahomes,0.0,0.0,True,B.Nix
+published 2026,2026_02_DET_BUF,historical replay,2026,2,BUF,DET,10.0,5.5,4.0,5.659378517639077,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,J.Allen,0.0,0.0,True,J.Goff
+published 2026,2026_02_CAR_ATL,historical replay,2026,2,ATL,CAR,-31.0,-2.5,-3.0,-2.8468157638115588,away,Historical replay,-102.0,-118.0,closing_estimate,1.0,0.0,True,C.Rush,0.0,0.0,True,B.Young
+published 2026,2026_02_CIN_HOU,historical replay,2026,2,HOU,CIN,-14.0,3.0,3.0,0.2675557718807727,home,Historical replay,-102.0,-118.0,closing_estimate,0.0,0.0,True,C.Stroud,,,False,J.Burrow (Q) / J.Flacco
+published 2026,2026_02_CLE_TB,historical replay,2026,2,TB,CLE,-4.0,8.5,7.0,9.450519561959393,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,B.Mayfield,0.0,0.0,True,D.Watson
+published 2026,2026_02_GB_NYJ,historical replay,2026,2,NYJ,GB,-3.0,-3.5,-4.0,-3.391048798167404,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,G.Smith,0.0,0.0,True,J.Love
+published 2026,2026_02_MIN_CHI,historical replay,2026,2,CHI,MIN,-6.0,4.5,4.0,5.256006097898717,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,C.Williams,1.0,0.0,True,C.Wentz
+published 2026,2026_02_NO_BAL,historical replay,2026,2,BAL,NO,-7.0,8.5,7.0,8.675488761777386,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,L.Jackson,0.0,0.0,True,T.Shough
+published 2026,2026_02_PHI_TEN,historical replay,2026,2,TEN,PHI,-4.0,-7.0,-7.0,-7.093649545537287,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,C.Ward,0.0,0.0,True,J.Hurts
+published 2026,2026_02_PIT_NE,historical replay,2026,2,NE,PIT,17.0,4.5,4.0,5.4156014464724045,away,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,D.Maye,0.0,0.0,True,A.Rodgers
+published 2026,2026_02_JAX_DEN,historical replay,2026,2,DEN,JAX,7.0,2.5,3.0,2.2539384549646795,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,B.Nix,0.0,0.0,True,T.Lawrence
+published 2026,2026_02_LV_LAC,historical replay,2026,2,LAC,LV,-12.0,6.5,7.0,7.018961901116939,home,Historical replay,-122.0,102.0,closing_estimate,0.0,0.0,True,J.Herbert,0.0,0.0,True,K.Cousins
+published 2026,2026_02_MIA_SF,historical replay,2026,2,SF,MIA,22.0,12.5,13.0,13.375579089239604,home,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,B.Purdy,0.0,0.0,True,M.Willis
+published 2026,2026_02_SEA_ARI,historical replay,2026,2,ARI,SEA,-24.0,-3.5,-4.0,-4.465953530784435,away,Historical replay,100.0,-120.0,closing_estimate,0.0,0.0,True,J.Brissett,1.0,0.0,True,D.Lock
+published 2026,2026_02_WAS_DAL,historical replay,2026,2,DAL,WAS,17.0,3.5,4.0,5.170418204671737,home,Historical replay,,,assumed_minus110,0.0,0.0,True,D.Prescott,0.0,0.0,True,J.Daniels
+published 2026,2026_02_IND_KC,historical replay,2026,2,KC,IND,3.0,6.0,4.0,4.360022461314779,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,P.Mahomes,0.0,0.0,True,D.Jones
+published 2026,2026_02_NYG_LA,historical replay,2026,2,LA,NYG,22.0,6.5,7.0,7.364323028511053,home,Historical replay,,,assumed_minus110,0.0,0.0,True,M.Stafford,0.0,0.0,True,J.Dart
+published 2026,2026_03_ATL_GB,historical replay,2026,3,GB,ATL,-21.0,4.5,3.0,2.1975665743274915,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,J.Love,0.0,1.0,True,M.Penix
+published 2026,2026_03_CAR_CLE,historical replay,2026,3,CLE,CAR,3.0,-2.5,-3.0,-1.7780018585439794,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,D.Watson,0.0,0.0,True,B.Young
+published 2026,2026_03_CIN_PIT,historical replay,2026,3,PIT,CIN,3.0,-3.5,-4.0,-3.9928541314659376,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,A.Rodgers,0.0,0.0,True,J.Burrow
+published 2026,2026_03_HOU_IND,historical replay,2026,3,IND,HOU,2.0,-1.5,3.0,1.340654047226888,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,D.Jones,0.0,0.0,True,C.Stroud
+published 2026,2026_03_KC_MIA,historical replay,2026,3,MIA,KC,-14.0,-10.0,-13.0,-10.149969415388124,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,M.Willis,0.0,0.0,True,P.Mahomes
+published 2026,2026_03_LAC_BUF,historical replay,2026,3,BUF,LAC,8.0,7.0,4.0,6.80353272740574,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,J.Allen,0.0,0.0,True,J.Herbert
+published 2026,2026_03_NE_JAX,historical replay,2026,3,JAX,NE,29.0,3.0,3.0,2.315840576296895,home,Historical replay,-102.0,-118.0,closing_estimate,0.0,0.0,True,T.Lawrence,0.0,0.0,True,D.Maye
+published 2026,2026_03_NYJ_DET,historical replay,2026,3,DET,NYJ,7.0,7.0,7.0,7.945655168435439,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,J.Goff,0.0,0.0,True,G.Smith
+published 2026,2026_03_SEA_WAS,historical replay,2026,3,WAS,SEA,2.0,-8.5,-7.0,-9.51236883024749,home,Historical replay,-115.0,-105.0,closing_estimate,1.0,1.0,True,M.Mariota,0.0,0.0,True,S.Darnold
+published 2026,2026_03_TEN_NYG,historical replay,2026,3,NYG,TEN,5.0,2.5,3.0,1.3576628908276975,home,Historical replay,-118.0,-102.0,closing_estimate,0.0,1.0,True,J.Winston,0.0,0.0,True,C.Ward
+published 2026,2026_03_ARI_SF,historical replay,2026,3,SF,ARI,6.0,7.5,7.0,9.282867129241518,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,B.Purdy,0.0,0.0,True,J.Brissett
+published 2026,2026_03_MIN_TB,historical replay,2026,3,TB,MIN,-7.0,-1.5,3.0,0.6251783100983681,home,Historical replay,,,assumed_minus110,0.0,0.0,True,B.Mayfield,0.0,0.0,True,K.Murray
+published 2026,2026_03_BAL_DAL,historical replay,2026,3,DAL,BAL,-3.0,-3.0,-4.0,-3.7542220495563656,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,D.Prescott,0.0,0.0,True,L.Jackson
+published 2026,2026_03_LV_NO,historical replay,2026,3,NO,LV,-8.0,3.5,3.0,1.913944557523072,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,T.Shough,0.0,0.0,True,K.Cousins
+published 2026,2026_03_LA_DEN,historical replay,2026,3,DEN,LA,4.0,1.5,3.0,1.884201813753222,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,B.Nix,0.0,0.0,True,M.Stafford
+published 2026,2026_03_PHI_CHI,historical replay,2026,3,CHI,PHI,20.0,-3.5,-4.0,-4.562102064596783,away,Historical replay,,,assumed_minus110,,,False,T.Bagent (Q) / C.Keenum,0.0,0.0,True,J.Hurts
+published 2026,2026_04_PIT_CLE,historical replay,2026,4,CLE,PIT,3.0,-2.5,-3.0,-2.328922981471065,away,Historical replay,100.0,-120.0,closing_estimate,0.0,0.0,True,D.Watson,0.0,0.0,True,A.Rodgers
+published 2026,2026_04_IND_WAS,historical replay,2026,4,WAS,IND,-17.0,-4.5,-4.0,-5.621063268143646,home,Historical replay,-102.0,-118.0,closing_estimate,1.0,1.0,True,M.Mariota,0.0,0.0,True,D.Jones
+published 2026,2026_04_ARI_NYG,historical replay,2026,4,NYG,ARI,12.0,-2.5,-3.0,-1.9760009639825955,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,1.0,True,J.Winston,0.0,0.0,True,J.Brissett
+published 2026,2026_04_DAL_HOU,historical replay,2026,4,HOU,DAL,-4.0,3.0,3.0,1.0366214884913194,home,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,C.Stroud,0.0,0.0,True,D.Prescott
+published 2026,2026_04_GB_TB,historical replay,2026,4,TB,GB,-3.0,-3.0,-3.0,-2.690660924177973,away,Historical replay,,,assumed_minus110,1.0,1.0,True,J.Daniels,0.0,0.0,True,J.Love
+published 2026,2026_04_JAX_CIN,historical replay,2026,4,CIN,JAX,-5.0,2.5,3.0,1.5165650362560426,home,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,J.Burrow,0.0,0.0,True,T.Lawrence
+published 2026,2026_04_LA_PHI,historical replay,2026,4,PHI,LA,-4.0,-3.5,-4.0,-4.382658591912076,away,Historical replay,,,assumed_minus110,0.0,0.0,True,J.Hurts,0.0,0.0,True,M.Stafford
+published 2026,2026_04_NE_BUF,historical replay,2026,4,BUF,NE,-3.0,7.0,4.0,6.908956329450366,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,J.Allen,0.0,0.0,True,D.Maye
+published 2026,2026_04_NYJ_CHI,historical replay,2026,4,CHI,NYJ,11.0,3.5,4.0,3.910685825307093,home,Historical replay,-110.0,-110.0,closing_estimate,1.0,1.0,True,T.Bagent,0.0,0.0,True,G.Smith
+published 2026,2026_04_TEN_BAL,historical replay,2026,4,BAL,TEN,6.0,11.5,13.0,13.398745649552986,home,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,L.Jackson,0.0,0.0,True,C.Ward
+published 2026,2026_04_MIA_MIN,historical replay,2026,4,MIN,MIA,5.0,10.0,7.0,7.365619917946575,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,K.Murray,0.0,0.0,True,M.Willis
+published 2026,2026_04_DEN_SF,historical replay,2026,4,SF,DEN,10.0,3.0,-7.0,-8.306762246409674,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,B.Purdy,0.0,0.0,True,B.Nix
+published 2026,2026_04_KC_LV,historical replay,2026,4,LV,KC,-3.0,-4.5,-4.0,-3.8995659522604265,home,Historical replay,,,assumed_minus110,0.0,0.0,True,K.Cousins,0.0,0.0,True,P.Mahomes
+published 2026,2026_04_LAC_SEA,historical replay,2026,4,SEA,LAC,7.0,7.0,7.0,7.43540859529305,home,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,S.Darnold,0.0,0.0,True,J.Herbert
+published 2026,2026_04_DET_CAR,historical replay,2026,4,CAR,DET,6.0,-4.5,-4.0,-5.309293651781982,home,Historical replay,,,assumed_minus110,0.0,0.0,True,B.Young,0.0,0.0,True,J.Goff
+published 2026,2026_04_ATL_NO,historical replay,2026,4,NO,ATL,-21.0,1.5,-3.0,-1.0842725128893764,away,Historical replay,100.0,-120.0,closing_estimate,0.0,0.0,True,T.Shough,0.0,1.0,True,M.Penix
+published 2026,2026_05_TB_DAL,historical replay,2026,5,DAL,TB,-8.0,9.5,13.0,10.830326951926384,home,Historical replay,,,assumed_minus110,0.0,0.0,True,D.Prescott,1.0,1.0,True,J.Daniels
+published 2026,2026_05_PHI_JAX,historical replay,2026,5,JAX,PHI,2.0,7.5,7.0,8.795736386738115,away,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,T.Lawrence,0.0,0.0,True,J.Hurts
+published 2026,2026_05_CHI_GB,historical replay,2026,5,GB,CHI,24.0,-1.5,-3.0,-1.0399525449371794,away,Historical replay,-102.0,-118.0,closing_estimate,0.0,0.0,True,J.Love,,,False,C.Williams (Q) / T.Bagent
+published 2026,2026_05_CIN_MIA,historical replay,2026,5,MIA,CIN,-7.0,-7.0,-7.0,-8.27658705648534,away,Historical replay,,,assumed_minus110,0.0,0.0,True,M.Willis,0.0,0.0,True,J.Burrow
+published 2026,2026_05_CLE_NYJ,historical replay,2026,5,NYJ,CLE,5.0,2.5,3.0,1.4698650608315602,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,G.Smith,0.0,0.0,True,D.Watson
+published 2026,2026_05_HOU_TEN,historical replay,2026,5,TEN,HOU,-23.0,-6.5,-7.0,-7.308559743074694,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,C.Ward,0.0,0.0,True,C.Stroud
+published 2026,2026_05_IND_PIT,historical replay,2026,5,PIT,IND,12.0,3.0,3.0,2.0088083118658737,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,A.Rodgers,0.0,0.0,True,D.Jones
+published 2026,2026_05_LV_NE,historical replay,2026,5,NE,LV,28.0,3.5,4.0,3.514127283243005,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,D.Maye,0.0,0.0,True,K.Cousins
+published 2026,2026_05_MIN_NO,historical replay,2026,5,NO,MIN,-10.0,-2.5,-3.0,-1.22583152620621,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,T.Shough,0.0,0.0,True,K.Murray
+published 2026,2026_05_NYG_WAS,historical replay,2026,5,WAS,NYG,0.0,3.5,4.0,3.328007998075318,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,1.0,True,J.Daniels,0.0,0.0,True,J.Winston
+published 2026,2026_05_DEN_LAC,historical replay,2026,5,LAC,DEN,-6.0,-3.5,-4.0,-3.077082545841181,away,Historical replay,,,assumed_minus110,0.0,0.0,True,J.Herbert,0.0,0.0,True,B.Nix
+published 2026,2026_05_DET_ARI,historical replay,2026,5,ARI,DET,-24.0,-5.5,-4.0,-6.435587760572583,home,Historical replay,,,assumed_minus110,0.0,0.0,True,J.Brissett,0.0,0.0,True,J.Goff
+published 2026,2026_05_SF_SEA,historical replay,2026,5,SEA,SF,-3.0,3.0,4.0,6.4144163029569405,home,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,S.Darnold,0.0,0.0,True,B.Purdy
+published 2026,2026_05_BAL_ATL,historical replay,2026,5,ATL,BAL,-7.0,3.5,4.0,4.128768938831444,home,Historical replay,,,assumed_minus110,0.0,0.0,True,M.Penix,1.0,1.0,True,T.Huntley
+published 2026,2026_05_BUF_LA,historical replay,2026,5,LA,BUF,-3.0,3.5,4.0,4.356278189646146,home,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,M.Stafford,0.0,0.0,True,J.Allen
+published 2026,2026_06_SEA_DEN,historical replay,2026,6,DEN,SEA,3.0,-2.5,-3.0,-1.8983071707052133,away,Historical replay,,,assumed_minus110,0.0,0.0,True,B.Nix,0.0,0.0,True,S.Darnold
+published 2026,2026_06_HOU_JAX,historical replay,2026,6,JAX,HOU,-3.0,2.5,3.0,2.308387916722827,home,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,T.Lawrence,0.0,0.0,True,C.Stroud
+published 2026,2026_06_BAL_CLE,historical replay,2026,6,CLE,BAL,3.0,-3.0,-3.0,-2.432936270570234,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,D.Watson,1.0,1.0,True,T.Huntley
+published 2026,2026_06_CAR_PHI,historical replay,2026,6,PHI,CAR,-11.0,-3.0,-4.0,-3.208333414341936,away,Historical replay,-105.0,-115.0,closing_estimate,1.0,1.0,True,T.McKee,0.0,0.0,True,B.Young
+published 2026,2026_06_CHI_ATL,historical replay,2026,6,ATL,CHI,-8.0,-1.5,-3.0,-0.0053418094428559,away,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,M.Penix,,,False,C.Williams (Q) / T.Bagent
+published 2026,2026_06_NO_NYG,historical replay,2026,6,NYG,NO,-7.0,-1.5,-3.0,-0.6283034816586472,away,Historical replay,-125.0,105.0,closing_estimate,0.0,0.0,True,J.Winston,0.0,0.0,True,T.Shough
+published 2026,2026_06_NYJ_NE,historical replay,2026,6,NE,NYJ,7.0,7.5,7.0,8.230909587036045,away,Historical replay,-102.0,-118.0,closing_estimate,0.0,0.0,True,D.Maye,0.0,0.0,True,G.Smith
+published 2026,2026_06_PIT_TB,historical replay,2026,6,TB,PIT,-7.0,-2.5,-3.0,-1.4310508111578872,away,Historical replay,-105.0,-115.0,closing_estimate,1.0,1.0,True,J.Daniels,0.0,0.0,True,A.Rodgers
+published 2026,2026_06_TEN_IND,historical replay,2026,6,IND,TEN,-6.0,6.5,7.0,7.199062611478958,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,D.Jones,0.0,0.0,True,C.Ward
+published 2026,2026_06_ARI_LA,historical replay,2026,6,LA,ARI,-2.0,12.5,13.0,12.339572455144925,home,Historical replay,,,assumed_minus110,0.0,0.0,True,M.Stafford,0.0,0.0,True,J.Brissett
+published 2026,2026_06_BUF_LV,historical replay,2026,6,LV,BUF,-3.0,-5.5,-4.0,-5.962202046968135,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,K.Cousins,0.0,0.0,True,J.Allen
+published 2026,2026_06_LAC_KC,historical replay,2026,6,KC,LAC,16.0,7.5,7.0,9.050028783019954,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,P.Mahomes,0.0,0.0,True,J.Herbert
+published 2026,2026_06_DAL_GB,historical replay,2026,6,GB,DAL,10.0,-1.5,3.0,2.216819160832147,home,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,J.Love,0.0,0.0,True,D.Prescott
+published 2026,2026_06_WAS_SF,historical replay,2026,6,SF,WAS,6.0,7.5,7.0,9.16028860885456,away,Historical replay,-102.0,-118.0,closing_estimate,0.0,0.0,True,B.Purdy,0.0,0.0,True,J.Daniels
+published 2026,2026_07_NE_CHI,historical replay,2026,7,CHI,NE,6.0,3.0,3.0,1.285638069579056,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,C.Williams,0.0,0.0,True,D.Maye
+published 2026,2026_07_PIT_NO,historical replay,2026,7,NO,PIT,-6.0,-3.0,-3.0,-2.0203866229605465,away,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,T.Shough,0.0,0.0,True,A.Rodgers
+published 2026,2026_07_CIN_BAL,historical replay,2026,7,BAL,CIN,-22.0,-3.0,-4.0,-3.2566522580983133,away,Historical replay,-112.0,-108.0,closing_estimate,1.0,1.0,True,T.Huntley,0.0,0.0,True,J.Burrow
+published 2026,2026_07_CLE_TEN,historical replay,2026,7,TEN,CLE,-3.0,-1.5,-3.0,-0.717956998578184,away,Historical replay,,,assumed_minus110,0.0,0.0,True,C.Ward,0.0,0.0,True,D.Watson
+published 2026,2026_07_IND_MIN,historical replay,2026,7,MIN,IND,6.0,6.5,4.0,5.549704018949924,away,Historical replay,-120.0,100.0,closing_estimate,0.0,0.0,True,K.Murray,0.0,0.0,True,D.Jones
+published 2026,2026_07_MIA_NYJ,historical replay,2026,7,NYJ,MIA,-3.0,3.5,4.0,3.084191376617167,home,Historical replay,-120.0,100.0,closing_estimate,0.0,0.0,True,G.Smith,0.0,0.0,True,M.Willis
+published 2026,2026_07_NYG_HOU,historical replay,2026,7,HOU,NYG,-6.0,10.0,7.0,8.296474150957396,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,C.Stroud,0.0,1.0,True,J.McCarthy
+published 2026,2026_07_SF_ATL,historical replay,2026,7,ATL,SF,9.0,-2.5,-3.0,-2.342135353882905,away,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,M.Penix,0.0,0.0,True,B.Purdy
+published 2026,2026_07_TB_CAR,historical replay,2026,7,CAR,TB,-30.0,3.0,3.0,1.6198865428205786,home,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,B.Young,,,False,B.Mayfield (Q) / J.Daniels
+published 2026,2026_07_DEN_ARI,historical replay,2026,7,ARI,DEN,-14.0,-4.5,-3.0,-2.027085911033923,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,J.Brissett,0.0,0.0,True,B.Nix
+published 2026,2026_07_GB_DET,historical replay,2026,7,DET,GB,3.0,3.5,3.0,2.648893667507954,away,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,J.Goff,0.0,0.0,True,J.Love
+published 2026,2026_07_LA_LV,historical replay,2026,7,LV,LA,-14.0,-3.5,-4.0,-3.866530241052729,away,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,K.Cousins,0.0,0.0,True,M.Stafford
+published 2026,2026_07_KC_SEA,historical replay,2026,7,SEA,KC,17.0,3.0,3.0,2.974437644361002,home,Historical replay,-108.0,-112.0,closing_estimate,0.0,0.0,True,S.Darnold,0.0,0.0,True,P.Mahomes
+published 2026,2026_07_DAL_PHI,historical replay,2026,7,PHI,DAL,-17.0,-4.5,-4.0,-5.725271890226048,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,1.0,True,T.McKee,0.0,0.0,True,D.Prescott
+published 2026,2026_08_CAR_GB,historical replay,2026,8,GB,CAR,8.0,3.5,4.0,3.6000856726034605,home,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,J.Love,0.0,0.0,True,B.Young
+published 2026,2026_08_ARI_DAL,historical replay,2026,8,DAL,ARI,-3.0,7.0,4.0,6.910388442332761,away,Historical replay,-118.0,-102.0,closing_estimate,0.0,0.0,True,D.Prescott,0.0,0.0,True,J.Brissett
+published 2026,2026_08_ATL_TB,historical replay,2026,8,TB,ATL,16.0,2.5,3.0,1.4156522805442149,home,Historical replay,-105.0,-115.0,closing_estimate,0.0,0.0,True,B.Mayfield,0.0,0.0,True,M.Penix
+published 2026,2026_08_BAL_BUF,historical replay,2026,8,BUF,BAL,26.0,3.0,3.0,2.978892535675555,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,J.Allen,0.0,0.0,True,L.Jackson
+published 2026,2026_08_CLE_PIT,historical replay,2026,8,PIT,CLE,21.0,3.5,4.0,4.177092710590054,home,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,A.Rodgers,0.0,0.0,True,D.Watson
+published 2026,2026_08_IND_JAX,historical replay,2026,8,JAX,IND,35.0,10.0,13.0,10.261294608895618,home,Historical replay,,,assumed_minus110,0.0,0.0,True,T.Lawrence,0.0,0.0,True,D.Jones
+published 2026,2026_08_LV_NYJ,historical replay,2026,8,NYJ,LV,-5.0,1.5,3.0,0.2975040299393899,home,Historical replay,-112.0,-108.0,closing_estimate,0.0,0.0,True,G.Smith,0.0,0.0,True,K.Cousins
+published 2026,2026_08_MIN_DET,historical replay,2026,8,DET,MIN,4.0,3.0,-3.0,-0.2629555150540051,away,Historical replay,,,assumed_minus110,0.0,0.0,True,J.Goff,0.0,0.0,True,K.Murray
+published 2026,2026_08_TEN_CIN,historical replay,2026,8,CIN,TEN,7.0,13.5,13.0,13.783841903901818,away,Historical replay,-115.0,-105.0,closing_estimate,0.0,0.0,True,J.Burrow,0.0,0.0,True,C.Ward
+published 2026,2026_08_LAC_LA,historical replay,2026,8,LA,LAC,15.0,6.5,4.0,6.269291241601802,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,M.Stafford,0.0,0.0,True,J.Herbert
+published 2026,2026_08_KC_DEN,historical replay,2026,8,DEN,KC,4.0,1.5,-3.0,-1.7746977458880415,away,Historical replay,100.0,-120.0,closing_estimate,0.0,0.0,True,B.Nix,0.0,0.0,True,P.Mahomes
+published 2026,2026_08_NE_MIA,historical replay,2026,8,MIA,NE,-5.0,-7.0,-7.0,-8.276599214970172,away,Historical replay,-110.0,-110.0,closing_estimate,0.0,0.0,True,M.Willis,0.0,0.0,True,D.Maye
+published 2026,2026_08_PHI_WAS,historical replay,2026,8,WAS,PHI,17.0,6.0,4.0,6.890698014920702,away,Historical replay,,,assumed_minus110,0.0,0.0,True,J.Daniels,0.0,1.0,True,T.McKee
+published 2026,2026_08_CHI_SEA,historical replay,2026,8,SEA,CHI,-17.0,3.0,4.0,3.321239968757258,home,Historical replay,-120.0,100.0,closing_estimate,0.0,0.0,True,S.Darnold,0.0,0.0,True,C.Williams
+published 2026,2026_09_JAX_BAL,boxscore-composite-v1.21,2026,9,BAL,JAX,-23.0,-10.0,-13.0,-11.195255989268036,away,Owner-requested retro lock,,,assumed_minus110,1.0,1.0,True,Joe Fagnano,0.0,0.0,True,T.Lawrence
+published 2026,2026_09_CIN_ATL,boxscore-composite-v1.21,2026,9,ATL,CIN,-17.0,-3.0,-3.0,-2.857005091366356,away,Owner-requested retro lock,100.0,-120.0,captured_prelock,0.0,0.0,True,M.Penix,0.0,0.0,True,J.Burrow
+published 2026,2026_09_CLE_NO,boxscore-composite-v1.21,2026,9,NO,CLE,1.0,3.0,5.0,3.473267056782508,home,Owner-requested retro lock,-120.0,100.0,captured_prelock,0.0,0.0,True,T.Shough,1.0,1.0,True,Shedeur Sanders
+published 2026,2026_09_DAL_IND,boxscore-composite-v1.21,2026,9,IND,DAL,-4.0,-5.5,-5.0,-5.024284096361703,home,Owner-requested retro lock,-115.0,-105.0,captured_prelock,0.0,0.0,True,D.Jones,0.0,0.0,True,D.Prescott
+published 2026,2026_09_DEN_CAR,boxscore-composite-v1.21,2026,9,CAR,DEN,-5.0,-2.5,-3.0,-0.5211025545756828,away,Owner-requested retro lock,100.0,-120.0,captured_prelock,0.0,0.0,True,B.Young,0.0,0.0,True,B.Nix
+published 2026,2026_09_DET_MIA,boxscore-composite-v1.21,2026,9,MIA,DET,-10.0,-6.5,-6.0,-7.319208885115612,home,Owner-requested retro lock,-108.0,-112.0,captured_prelock,0.0,0.0,True,M.Willis,0.0,0.0,True,J.Goff
+published 2026,2026_09_LA_WAS,boxscore-composite-v1.21,2026,9,WAS,LA,-7.0,-4.5,-5.0,-6.035544336962416,away,Owner-requested retro lock,100.0,-120.0,captured_prelock,0.0,0.0,True,J.Daniels,0.0,0.0,True,M.Stafford
+published 2026,2026_09_NYG_PHI,boxscore-composite-v1.21,2026,9,PHI,NYG,-8.0,-3.0,-5.0,-3.348523246519857,away,Owner-requested retro lock,-105.0,-115.0,captured_prelock,0.0,1.0,True,J.Milton,0.0,1.0,True,J.McCarthy
+published 2026,2026_09_NYJ_KC,boxscore-composite-v1.21,2026,9,KC,NYJ,23.0,9.5,13.0,10.64841499021538,home,Owner-requested retro lock,-115.0,-105.0,captured_prelock,0.0,0.0,True,P.Mahomes,0.0,0.0,True,G.Smith
+published 2026,2026_09_HOU_LAC,boxscore-composite-v1.21,2026,9,LAC,HOU,-22.0,-5.5,-5.0,-3.22456814344217,home,Owner-requested retro lock,-112.0,-108.0,captured_prelock,0.0,0.0,True,J.Herbert,0.0,0.0,True,C.Stroud
+published 2026,2026_09_LV_SF,boxscore-composite-v1.21,2026,9,SF,LV,21.0,8.5,6.0,9.71449223185508,away,Owner-requested retro lock,-108.0,-112.0,closing_estimate,0.0,0.0,True,B.Purdy,0.0,0.0,True,K.Cousins
+published 2026,2026_09_ARI_SEA,boxscore-composite-v1.21,2026,9,SEA,ARI,14.0,8.5,6.0,9.062230189966698,away,60-minute lock,-110.0,-110.0,captured_prelock,1.0,1.0,True,Drew Lock,0.0,1.0,True,G.Minshew
+published 2026,2026_09_GB_NE,boxscore-composite-v1.21,2026,9,NE,GB,-18.0,3.0,3.0,1.464962807876898,home,Owner-requested retro lock,-120.0,100.0,captured_prelock,0.0,0.0,True,D.Maye,0.0,0.0,True,J.Love
+published 2026,2026_09_TB_CHI,boxscore-composite-v1.21,2026,9,CHI,TB,3.0,6.0,5.0,5.08266198864164,away,Owner-requested retro lock,-118.0,-102.0,captured_prelock,0.0,0.0,True,C.Williams,0.0,0.0,True,B.Mayfield
+published 2026,2026_09_BUF_MIN,boxscore-composite-v1.22,2026,9,MIN,BUF,-17.0,-3.5,-3.0,-2.346371496176804,home,Owner-requested retro lock,-115.0,-105.0,captured_prelock,1.0,1.0,True,C.Wentz,0.0,0.0,True,J.Allen
+published 2026,2026_10_WAS_NYG,boxscore-composite-v1.22,2026,10,NYG,WAS,-3.0,1.5,3.0,0.5341635104483008,home,60-minute lock,-110.0,-110.0,captured_prelock,0.0,1.0,True,J.McCarthy,0.0,0.0,True,J.Daniels
+archived saved decisions,2026_06_WAS_SF,boxscore-composite-v1.18,2026,6,SF,WAS,6.0,7.5,7.0,9.270655937097954,away,native saved lock,,,,0.0,0.0,True,B.Purdy,0.0,0.0,True,J.Daniels
+archived saved decisions,2026_07_NE_CHI,boxscore-composite-v1.18,2026,7,CHI,NE,6.0,3.0,3.0,2.8158450792040304,home,native saved lock,,,,0.0,0.0,True,C.Williams,0.0,0.0,True,D.Maye
+archived saved decisions,2026_07_PIT_NO,boxscore-composite-v1.18,2026,7,NO,PIT,-6.0,-3.0,-3.0,-0.5254784541528121,away,native saved lock,,,,0.0,0.0,True,T.Shough,0.0,0.0,True,A.Rodgers
+archived saved decisions,2026_07_CLE_TEN,boxscore-composite-v1.18,2026,7,TEN,CLE,-3.0,-2.5,-3.0,-1.4856359442514315,away,native saved lock,,,,0.0,0.0,True,C.Ward,0.0,0.0,True,D.Watson
+archived saved decisions,2026_07_IND_MIN,boxscore-composite-v1.18,2026,7,MIN,IND,6.0,6.5,4.0,6.718200050598241,away,native saved lock,,,,0.0,0.0,True,K.Murray,0.0,0.0,True,D.Jones
+archived saved decisions,2026_07_MIA_NYJ,boxscore-composite-v1.18,2026,7,NYJ,MIA,-3.0,3.5,4.0,3.4728477610645805,home,native saved lock,,,,0.0,0.0,True,G.Smith,0.0,0.0,True,M.Willis
+archived saved decisions,2026_07_NYG_HOU,boxscore-composite-v1.18,2026,7,HOU,NYG,-6.0,10.5,7.0,9.44775847454258,away,native saved lock,,,,0.0,0.0,True,C.Stroud,0.0,1.0,True,J.McCarthy
+archived saved decisions,2026_07_SF_ATL,boxscore-composite-v1.18,2026,7,ATL,SF,9.0,-2.5,-3.0,-1.935323037424,away,native saved lock,,,,0.0,0.0,True,M.Penix,0.0,0.0,True,B.Purdy
+archived saved decisions,2026_07_TB_CAR,boxscore-composite-v1.18,2026,7,CAR,TB,-30.0,3.0,3.0,2.3244025724890096,home,native saved lock,,,,0.0,0.0,True,B.Young,,,False,B.Mayfield (Q) / J.Daniels
+archived saved decisions,2026_07_CIN_BAL,boxscore-composite-v1.18,2026,7,BAL,CIN,-22.0,-3.0,-3.0,-2.546365816296058,away,native saved lock,,,,1.0,1.0,True,T.Huntley,0.0,0.0,True,J.Burrow
+archived saved decisions,2026_07_DEN_ARI,boxscore-composite-v1.18,2026,7,ARI,DEN,-14.0,-4.5,-3.0,-2.9801344489923984,home,native saved lock,,,,0.0,0.0,True,J.Brissett,0.0,0.0,True,B.Nix
+archived saved decisions,2026_07_GB_DET,boxscore-composite-v1.18,2026,7,DET,GB,3.0,3.5,3.0,1.2510912880197838,away,native saved lock,,,,0.0,0.0,True,J.Goff,0.0,0.0,True,J.Love
+archived saved decisions,2026_07_LA_LV,boxscore-composite-v1.18,2026,7,LV,LA,-14.0,-3.5,-3.0,-2.405528866752704,home,native saved lock,,,,0.0,0.0,True,K.Cousins,0.0,0.0,True,M.Stafford
+archived saved decisions,2026_07_KC_SEA,boxscore-composite-v1.18,2026,7,SEA,KC,17.0,3.0,3.0,2.915600550003876,home,native saved lock,,,,0.0,0.0,True,S.Darnold,0.0,0.0,True,P.Mahomes
+archived saved decisions,2026_07_DAL_PHI,boxscore-composite-v1.18,2026,7,PHI,DAL,-17.0,-4.5,-4.0,-5.634149205008816,home,native saved lock,,,,0.0,1.0,True,T.McKee,0.0,0.0,True,D.Prescott
+archived saved decisions,2026_08_CAR_GB,boxscore-composite-v1.18,2026,8,GB,CAR,8.0,3.5,4.0,3.5585967656480566,home,native saved lock,,,,0.0,0.0,True,J.Love,0.0,0.0,True,B.Young
+archived saved decisions,2026_08_ARI_DAL,boxscore-composite-v1.18,2026,8,DAL,ARI,-3.0,7.0,7.0,7.550103875449367,home,native saved lock,,,,0.0,0.0,True,D.Prescott,0.0,0.0,True,J.Brissett
+archived saved decisions,2026_08_ATL_TB,boxscore-composite-v1.18,2026,8,TB,ATL,16.0,2.5,3.0,1.2417106853059865,home,native saved lock,,,,0.0,0.0,True,B.Mayfield,0.0,0.0,True,M.Penix
+archived saved decisions,2026_08_BAL_BUF,boxscore-composite-v1.18,2026,8,BUF,BAL,26.0,3.0,4.0,3.035769422145939,home,native saved lock,,,,0.0,0.0,True,J.Allen,0.0,0.0,True,L.Jackson
+archived saved decisions,2026_08_CLE_PIT,boxscore-composite-v1.18,2026,8,PIT,CLE,21.0,3.5,3.0,2.9952986960219308,away,native saved lock,,,,0.0,0.0,True,A.Rodgers,0.0,0.0,True,D.Watson
+archived saved decisions,2026_08_IND_JAX,boxscore-composite-v1.18,2026,8,JAX,IND,35.0,10.0,14.0,10.541069726511632,home,native saved lock,,,,0.0,0.0,True,T.Lawrence,0.0,0.0,True,D.Jones
+archived saved decisions,2026_08_LV_NYJ,boxscore-composite-v1.18,2026,8,NYJ,LV,-5.0,1.5,3.0,0.5188680778495681,home,native saved lock,,,,0.0,0.0,True,G.Smith,0.0,0.0,True,K.Cousins
+archived saved decisions,2026_08_MIN_DET,boxscore-composite-v1.18,2026,8,DET,MIN,4.0,3.0,-3.0,-1.2067188798938762,away,native saved lock,,,,0.0,0.0,True,J.Goff,0.0,0.0,True,K.Murray
+archived saved decisions,2026_08_TEN_CIN,boxscore-composite-v1.18,2026,8,CIN,TEN,7.0,13.5,14.0,14.06327820520079,home,native saved lock,,,,0.0,0.0,True,J.Burrow,0.0,0.0,True,C.Ward
+archived saved decisions,2026_08_LAC_LA,boxscore-composite-v1.18,2026,8,LA,LAC,15.0,6.5,4.0,4.655827463526775,away,native saved lock,,,,0.0,0.0,True,M.Stafford,0.0,0.0,True,J.Herbert
+archived saved decisions,2026_08_KC_DEN,boxscore-composite-v1.18,2026,8,DEN,KC,4.0,-1.5,-3.0,-0.5032582433813606,away,native saved lock,,,,0.0,0.0,True,B.Nix,0.0,0.0,True,P.Mahomes
+archived saved decisions,2026_08_NE_MIA,boxscore-composite-v1.18,2026,8,MIA,NE,-5.0,-7.0,-4.0,-4.013763044823842,home,native saved lock,,,,0.0,0.0,True,M.Willis,0.0,0.0,True,D.Maye
+archived saved decisions,2026_08_PHI_WAS,boxscore-composite-v1.18,2026,8,WAS,PHI,17.0,6.0,4.0,6.939489019849848,away,native saved lock,,,,0.0,0.0,True,J.Daniels,0.0,1.0,True,T.McKee
+archived saved decisions,2026_08_CHI_SEA,boxscore-composite-v1.18,2026,8,SEA,CHI,-17.0,3.5,4.0,3.764635037776392,home,native saved lock,,,,0.0,0.0,True,S.Darnold,0.0,0.0,True,C.Williams
+archived saved decisions,2026_09_JAX_BAL,boxscore-composite-v1.21,2026,9,BAL,JAX,-23.0,-10.0,-13.0,-11.195255989268036,away,recovered saved board,,,,1.0,1.0,True,Joe Fagnano,0.0,0.0,True,T.Lawrence
+archived saved decisions,2026_09_CIN_ATL,boxscore-composite-v1.21,2026,9,ATL,CIN,-17.0,-3.0,-3.0,-2.857005091366356,away,recovered saved board,,,,0.0,0.0,True,M.Penix,0.0,0.0,True,J.Burrow
+archived saved decisions,2026_09_CLE_NO,boxscore-composite-v1.21,2026,9,NO,CLE,1.0,3.0,5.0,3.473267056782508,home,recovered saved board,,,,0.0,0.0,True,T.Shough,1.0,1.0,True,Shedeur Sanders
+archived saved decisions,2026_09_DAL_IND,boxscore-composite-v1.21,2026,9,IND,DAL,-4.0,-5.5,-5.0,-5.024284096361703,home,recovered saved board,,,,0.0,0.0,True,D.Jones,0.0,0.0,True,D.Prescott
+archived saved decisions,2026_09_DEN_CAR,boxscore-composite-v1.21,2026,9,CAR,DEN,-5.0,-2.5,-3.0,-0.5211025545756828,away,recovered saved board,,,,0.0,0.0,True,B.Young,0.0,0.0,True,B.Nix
+archived saved decisions,2026_09_DET_MIA,boxscore-composite-v1.21,2026,9,MIA,DET,-10.0,-6.5,-6.0,-7.319208885115612,home,recovered saved board,,,,0.0,0.0,True,M.Willis,0.0,0.0,True,J.Goff
+archived saved decisions,2026_09_LA_WAS,boxscore-composite-v1.21,2026,9,WAS,LA,-7.0,-4.5,-5.0,-6.035544336962416,away,recovered saved board,,,,0.0,0.0,True,J.Daniels,0.0,0.0,True,M.Stafford
+archived saved decisions,2026_09_NYG_PHI,boxscore-composite-v1.21,2026,9,PHI,NYG,-8.0,-3.0,-5.0,-3.348523246519857,away,recovered saved board,,,,0.0,1.0,True,J.Milton,0.0,1.0,True,J.McCarthy
+archived saved decisions,2026_09_NYJ_KC,boxscore-composite-v1.21,2026,9,KC,NYJ,23.0,9.5,13.0,10.64841499021538,home,recovered saved board,,,,0.0,0.0,True,P.Mahomes,0.0,0.0,True,G.Smith
+archived saved decisions,2026_09_ARI_SEA,boxscore-composite-v1.21,2026,9,SEA,ARI,14.0,8.5,6.0,9.062230189966698,away,native saved lock,,,,1.0,1.0,True,Drew Lock,0.0,1.0,True,G.Minshew
+archived saved decisions,2026_09_HOU_LAC,boxscore-composite-v1.21,2026,9,LAC,HOU,-22.0,-5.5,-5.0,-3.22456814344217,home,recovered saved board,,,,0.0,0.0,True,J.Herbert,0.0,0.0,True,C.Stroud
+archived saved decisions,2026_09_LV_SF,boxscore-composite-v1.21,2026,9,SF,LV,21.0,8.5,6.0,9.71449223185508,away,recovered saved board,,,,0.0,0.0,True,B.Purdy,0.0,0.0,True,K.Cousins
+archived saved decisions,2026_09_GB_NE,boxscore-composite-v1.21,2026,9,NE,GB,-18.0,3.0,3.0,1.464962807876898,home,recovered saved board,,,,0.0,0.0,True,D.Maye,0.0,0.0,True,J.Love
+archived saved decisions,2026_09_TB_CHI,boxscore-composite-v1.21,2026,9,CHI,TB,3.0,6.0,5.0,5.08266198864164,away,recovered saved board,,,,0.0,0.0,True,C.Williams,0.0,0.0,True,B.Mayfield
+archived saved decisions,2026_09_BUF_MIN,boxscore-composite-v1.22,2026,9,MIN,BUF,-17.0,-3.5,-3.0,-2.346371496176804,home,recovered saved board,,,,1.0,1.0,True,C.Wentz,0.0,0.0,True,J.Allen
+archived saved decisions,2026_10_WAS_NYG,boxscore-composite-v1.22,2026,10,NYG,WAS,-3.0,1.5,3.0,0.5341635104483008,home,native saved lock,,,,0.0,1.0,True,J.McCarthy,0.0,0.0,True,J.Daniels

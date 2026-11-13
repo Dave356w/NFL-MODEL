@@ -119,6 +119,9 @@ def score(data, now=None, clock=None):
     resolved = m.resolve_game_availability(targets, frames['availability'], frames.get('qb'),
         frames['snaps'], frames['inj'], frames['rost'], depth=frames.get('depth'),
         events=frames.get('events'), observations=observations, asof=generated, collection=collection)
+    if manifest.get('revision')=='boxscore-composite-v1.24':
+        import qb_replacement
+        resolved=qb_replacement.annotate_availability(resolved,frames.get('qb'),frames['rost'])
     board = m.apply_game_availability(board, resolved)
     for i, row in board.iterrows():
         offer = offers.get(row.game_id)
@@ -133,6 +136,12 @@ def score(data, now=None, clock=None):
     board['model_wp'] = m.apply_fit(board, manifest['fit'])
     board['model_spread'] = m.implied_spread(board.model_wp)
     board['fixed_band_spread'] = fixed_bands.apply(board.model_spread, manifest['rule'])
+    if manifest.get('revision')=='boxscore-composite-v1.24':
+        # The base map was freshly recomputed above; discard old overlay state.
+        import qb_replacement
+        board=board.drop(columns=[c for c in ('qb_replacement_base_margin','qb_replacement_margin_adjustment',
+            'qb_replacement_policy','qb_replacement_applied','qb_replacement_overlay_status') if c in board])
+        board=qb_replacement.overlay(board)
     board['generated_utc'] = generated.isoformat()
     board['prepared_bundle_sha256'] = manifest['sha256']
     board['quote_ready'] = [game in offers for game in board.game_id]

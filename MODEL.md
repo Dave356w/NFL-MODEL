@@ -6,10 +6,47 @@ build-held `ats_wait.py` workflow below. The fit, weekly map, side-selection
 rule and T−60 deadline remain unchanged; prior saved policies stay authoritative.
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.22), newest first; this page describes what the code
+version history (v1 to v1.24), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.22`
+## The current model: `boxscore-composite-v1.24`
+
+By owner decision on 2026-11-13, the broader replacement-starter rule applies
+an additional **−2 team-margin points after the ATS median mapping**. The
+projected QB is a replacement when he differs from the team's incumbent with
+at least two strictly earlier starts that season and the most prior starts
+(latest start breaks ties), while that incumbent remains at QB on the latest
+earlier roster. Two replacements cancel in the home-minus-away margin.
+Unknown identities or Questionable blends retain the unadjusted margin.
+The fitted probability, raw spread, original QB term and median-map fitting
+are unchanged. This is not a raw-margin adjustment or a fading penalty.
+
+All 2026 games before adoption are replayed with the updated model. Public Picks,
+Results, Performance, Calibration and exports pool this history with v1.24's own
+live forward results, without earlier-version or source labels. Old saved rows
+stay immutable backend evidence; they are not inherited as v1.24 forward picks.
+The replay cutoff is 2026-11-14 00:00 UTC. New T−60 candidates use lock policy v5,
+which audits the original mapped margin, binary replacement flags and exactly
+one final adjustment while retaining v4 freshness/durability safeguards.
+The output directory is `nfl_boxscore_output_v1_24` with a new signature. The
+v1.16 shadow retains its original labels, features and probability series.
+
+## v1.23 QB starter repairs
+
+v1.23 repairs QB starter labels and confirmed-starter valuation (owner request
+2026-11-13). Historical starters are the earliest actual QB-position passers, identified
+from play order and game-week roster position. Gadget passers are excluded;
+missing or conflicting position/order evidence remains unresolved. Schedule
+QB IDs can be stale and are not accepted as actual starter labels.
+Confirmed starters retain their full efficiency estimate despite a lingering
+Questionable tag. Unconfirmed Questionable starters retain the existing blend.
+No backup penalty, shrinkage setting or model recipe is increased. The new output
+is `nfl_boxscore_output_v1_23`; previous signatures, saved decisions and append-only
+journals stay intact. The v1.16 shadow is fit and scored from its original labels.
+Existing v1.22 decisions (including its inherited v1.21 decisions) before
+2026-11-14 00:00 UTC remain authoritative; new forecasts have a separate identity.
+
+## v1.22 availability safeguards
 
 v1.22 preserves the v1.19 ten-term fit and collects official game injury reports and inactive lists. RSS polling, team-news observations and news-freshness lock requirements are retired by owner request on 2026-11-09. The new revision, output name (`nfl_boxscore_output_v1_22`) and configuration signature keep earlier experiments intact. Both complete official inactive lists and fresh report checks remain required before a candidate is saved. Already-saved v1.21 selections from before retirement remain authoritative in normal public results; no stored row is rewritten or relabelled as a new native forecast. Historical training features, earlier signatures and the v1.16 shadow remain unchanged. See [AVAILABILITY.md](AVAILABILITY.md).
 

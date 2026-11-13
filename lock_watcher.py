@@ -159,7 +159,8 @@ def tick(data, now=None):
     for store in stores:
         recover_receipts(data, store)
         before = len(locks.read(store/locks.LOCKS))
-        locks.record(store, now, policy_version=locks.WATCHER_POLICY)
+        locks.record(store, now, policy_version=locks.policy_for_revision(
+            json.loads((store/'latest/manifest.json').read_text()).get('revision')) if (store/'latest/manifest.json').exists() else locks.WATCHER_POLICY)
         changed |= len(locks.read(store/locks.LOCKS)) > before
         checkpoints(store, now)
     if changed:
@@ -191,7 +192,7 @@ def tick(data, now=None):
                             config_signature=manifest['config_signature']), board=board,
                             fixed_band_rules=[manifest['rule']])
             forecast_history.record(store, snapshot, sharded=True)
-            locks.record(store, dt.datetime.now(UTC), policy_version=locks.WATCHER_POLICY, finalize=False)
+            locks.record(store, dt.datetime.now(UTC), policy_version=locks.policy_for_revision(manifest['revision']), finalize=False)
             for row in board.to_dict('records'):
                 reasons = []
                 for side in ('home', 'away'):

@@ -75,7 +75,7 @@ def _timed_store(data, original_skip=False):
     annual=dict(training_max_season=2025,cuts=[3.,7.,10.],magnitudes=[3.,4.,7.,14.])
     weekly=dict(season=2026,week=7,training_max_season=2026,training_max_week=6,cuts=[3.,7.,10.],
                 magnitudes=[3.,4.,7.,14.],method=a.POLICY_METHODS[a.POLICY_VERSION])
-    row=dict(revision=s.m.REVISION, game_id='2026_07_TEN_IND', season=2026, week=7,
+    row=dict(revision='boxscore-composite-v1.22', game_id='2026_07_TEN_IND', season=2026, week=7,
         generated_utc='2026-10-25T15:58:00+00:00', observed_utc='2026-10-25T15:59:00+00:00',
         kickoff_utc='2026-10-25T17:00:00+00:00', lock_at_utc='2026-10-25T16:00:00+00:00',
         policy_version=legacy if original_skip else a.POLICY_VERSION, lock_lead_minutes=60,

@@ -1,0 +1,328 @@
+{
+  "definition": "fixed two-start half-life, current team-stint",
+  "half_life_starts": 2.0,
+  "n": 1257,
+  "seasons": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "intercept": 0.9748827633601992,
+  "fade_beta": -1.035059890476654,
+  "ci95": [
+    [
+      0.26930494481572176,
+      -2.9784154335411874
+    ],
+    [
+      1.6417324575321146,
+      0.91585876701978
+    ]
+  ],
+  "folds": [
+    {
+      "test_season": 2023,
+      "n": 498,
+      "train_max_season": 2022,
+      "intercept": 1.000199666083241,
+      "fade_beta": 0.956577072431859,
+      "blanket_beta": 0.49497322096895496
+    },
+    {
+      "test_season": 2024,
+      "n": 748,
+      "train_max_season": 2023,
+      "intercept": 1.181502792070724,
+      "fade_beta": 0.8192107270665453,
+      "blanket_beta": 0.4905777559960769
+    },
+    {
+      "test_season": 2025,
+      "n": 1001,
+      "train_max_season": 2024,
+      "intercept": 0.9962073209982717,
+      "fade_beta": -0.9437737648454502,
+      "blanket_beta": -0.6535557696363631
+    }
+  ],
+  "scores": [
+    {
+      "cohort": "all eligible",
+      "arm": "raw_margin",
+      "n": 759,
+      "mean_home_residual": 0.976799777976177,
+      "mae": 9.71762761470633,
+      "mse": 158.70844233153042,
+      "brier": 0.20877095291149778,
+      "ats": {
+        "n": 759,
+        "WLP": "369-376-14",
+        "units": -40.54545454545454,
+        "roi": -0.053419571206132464,
+        "roi_se": 0.034348921777804214
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "intercept_margin",
+      "n": 759,
+      "mean_home_residual": -0.08111966564154625,
+      "mae": 9.74115821269768,
+      "mse": 157.82543860982517,
+      "brier": 0.2096437958249389,
+      "ats": {
+        "n": 759,
+        "WLP": "392-353-14",
+        "units": 3.3636363636363704,
+        "roi": 0.004431668463289026,
+        "roi_se": 0.034302317190355355
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "blanket_margin",
+      "n": 759,
+      "mean_home_residual": -0.07428486437823854,
+      "mae": 9.751721318931539,
+      "mse": 158.08092369362546,
+      "brier": 0.2098926177888943,
+      "ats": {
+        "n": 759,
+        "WLP": "390-355-14",
+        "units": -0.4545454545454497,
+        "roi": -0.0005988741166606716,
+        "roi_se": 0.03431148100266051
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "fade_margin",
+      "n": 759,
+      "mean_home_residual": -0.08033967542431614,
+      "mae": 9.754086786490108,
+      "mse": 158.18020950772254,
+      "brier": 0.20981323733602503,
+      "ats": {
+        "n": 759,
+        "WLP": "387-358-14",
+        "units": -6.18181818181818,
+        "roi": -0.008144687986585217,
+        "roi_se": 0.03432339840666805
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "market_margin",
+      "n": 759,
+      "mean_home_residual": 0.8274044795783926,
+      "mae": 9.766798418972332,
+      "mse": 159.82411067193675,
+      "brier": 0.2100757396617118,
+      "ats": {
+        "n": 759,
+        "WLP": "386-359-14",
+        "units": -8.090909090909085,
+        "roi": -0.010659959276560058,
+        "roi_se": 0.03432688366787389
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "paired MSE gain",
+      "n": 759,
+      "gain_over_intercept": -0.3547708978973378,
+      "ci95_intercept": [
+        -1.0164794988195476,
+        0.28816571813260483
+      ],
+      "gain_over_blanket": -0.09928581409704444,
+      "ci95_blanket": [
+        -0.3906301737575658,
+        0.21980680076329664
+      ]
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "always favorite",
+      "n": 759,
+      "WLP": "386-359-14",
+      "units": -8.090909090909085,
+      "roi": -0.010659959276560058,
+      "roi_se": 0.03432688366787389
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "always home",
+      "n": 759,
+      "WLP": "376-369-14",
+      "units": -27.18181818181818,
+      "roi": -0.035812672176308534,
+      "roi_se": 0.03434835479782667
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "raw_margin",
+      "n": 224,
+      "mean_home_residual": 1.5766681027138392,
+      "mae": 10.06841707735066,
+      "mse": 158.5848609941223,
+      "brier": 0.21074759044245633,
+      "ats": {
+        "n": 224,
+        "WLP": "104-113-7",
+        "units": -18.454545454545453,
+        "roi": -0.08238636363636363,
+        "roi_se": 0.06286807222538873
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "intercept_margin",
+      "n": 224,
+      "mean_home_residual": 0.5278933268337278,
+      "mae": 10.01362534276514,
+      "mse": 156.39807536843333,
+      "brier": 0.2096232386687952,
+      "ats": {
+        "n": 224,
+        "WLP": "124-93-7",
+        "units": 19.727272727272727,
+        "roi": 0.08806818181818181,
+        "roi_se": 0.06227811250188933
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "blanket_margin",
+      "n": 224,
+      "mean_home_residual": 0.5489310450996114,
+      "mae": 10.049330123370579,
+      "mse": 157.25847939533202,
+      "brier": 0.21046569960059852,
+      "ats": {
+        "n": 224,
+        "WLP": "122-95-7",
+        "units": 15.90909090909091,
+        "roi": 0.07102272727272728,
+        "roi_se": 0.062431342695578075
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "fade_margin",
+      "n": 224,
+      "mean_home_residual": 0.534198949907195,
+      "mae": 10.056558731007955,
+      "mse": 157.58765316130544,
+      "brier": 0.21018002552247841,
+      "ats": {
+        "n": 224,
+        "WLP": "120-97-7",
+        "units": 12.090909090909093,
+        "roi": 0.05397727272727274,
+        "roi_se": 0.06256337584711395
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "market_margin",
+      "n": 224,
+      "mean_home_residual": 1.4799107142857142,
+      "mae": 10.055803571428571,
+      "mse": 158.8984375,
+      "brier": 0.20986544396327192,
+      "ats": {
+        "n": 224,
+        "WLP": "111-106-7",
+        "units": -5.090909090909093,
+        "roi": -0.022727272727272735,
+        "roi_se": 0.06289828806152281
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "paired MSE gain",
+      "n": 224,
+      "gain_over_intercept": -1.1895777928720987,
+      "ci95_intercept": [
+        -3.3358069449515027,
+        1.0616057201194793
+      ],
+      "gain_over_blanket": -0.3291737659733937,
+      "ci95_blanket": [
+        -1.2927331929977386,
+        0.7340407299853887
+      ]
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "always favorite",
+      "n": 224,
+      "WLP": "111-106-7",
+      "units": -5.090909090909093,
+      "roi": -0.022727272727272735,
+      "roi_se": 0.06289828806152281
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "always home",
+      "n": 224,
+      "WLP": "117-100-7",
+      "units": 6.363636363636365,
+      "roi": 0.028409090909090915,
+      "roi_se": 0.06272196806947858
+    }
+  ],
+  "start_groups": [
+    {
+      "start_number": 1,
+      "n": 109,
+      "raw_residual": -0.24099880210601923,
+      "market_residual": -0.7385321100917431
+    },
+    {
+      "start_number": 2,
+      "n": 139,
+      "raw_residual": -1.718681779707622,
+      "market_residual": -2.097122302158273
+    },
+    {
+      "start_number": 3,
+      "n": 70,
+      "raw_residual": 0.4794395170186604,
+      "market_residual": 0.2714285714285714
+    },
+    {
+      "start_number": 4,
+      "n": 37,
+      "raw_residual": -1.8496059253377242,
+      "market_residual": -1.837837837837838
+    },
+    {
+      "start_number": 5,
+      "n": 25,
+      "raw_residual": 2.2773233536259583,
+      "market_residual": 2.2
+    },
+    {
+      "start_number": 6,
+      "n": 15,
+      "raw_residual": 0.9858105042091837,
+      "market_residual": 1.1
+    },
+    {
+      "start_number": 7,
+      "n": 5,
+      "raw_residual": 4.060955696130634,
+      "market_residual": 4.1
+    },
+    {
+      "start_number": 8,
+      "n": 2,
+      "raw_residual": -10.160096825861093,
+      "market_residual": -10.0
+    }
+  ]
+}
