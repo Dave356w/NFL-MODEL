@@ -1,0 +1,18 @@
+{
+  "source_sha256": {
+    "research/form_windows_inputs/boxes.csv": "0bdc25496b1ce99448e61ad298fe034c273a2267e39020f1595c0b361a8deba9",
+    "data/lock_inputs/schedules.parquet": "7eeeb405d30239b68c96fceded6ecd534bc51d854b83c28efd2104dc69feb125",
+    "data/lock_inputs/snaps.parquet": "27e580ba858ab9930b525be5249a8b4cb0dd95db27233c9f9df185860300e36b",
+    "data/lock_inputs/inj.parquet": "80fd2d4d7c1e9bb791c254f6b770c30e4ac1bd11dc4c1917df3e06ab50334332",
+    "data/lock_inputs/availability.parquet": "1d22cd19364bf78454e864aa018ceaaefc0bf500b20de18879a578ecd5d71f19",
+    "data/forward_predictions.jsonl": "04ec03a5306b5f668e753bc962761d5163438b6d061d6559d63ae16a2ae9a0de",
+    "data/latest/fixed_band_rules.json": "eab1cbdc745c4efe9327ba15369c0ca6d1ba370beea6d2657f53c90d533780fb",
+    "research/injury_weight_inputs/selected_reports.jsonl": "0172bdf20734034eb030837248a828adb680a4c27f0b951efeafac22deb63f4d",
+    "research/injury_weight_inputs/saved_reports_2026.csv": "888552b61b63c03f4b8d19b6e90e1841218955fb5a3a7aeec0005fc3ffd1cd11",
+    "research/INJURY_EFFICIENCY.md": "f51e0c23218c991c0ab05993c692dc7919f9d9476ff002bff07baf407b9350e6",
+    "research/injury_efficiency.py": "8915e58845a90507bef829b173fad90ff4eb36e7252c35d17128caec51642107",
+    "research/injury_efficiency_results/boxes_2026.csv.gz": "d98922e5c10d03b547418c1497755347ece27a4f1058f664a358a5f48f7f54b3"
+  },
+  "historical_publication_times_verified": false,
+  "individual_replacement_quality_estimated": false
+}

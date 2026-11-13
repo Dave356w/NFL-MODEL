@@ -1,0 +1,26 @@
+{
+  "training_team_games": 2348,
+  "training_max_season": 2025,
+  "scores": [
+    {
+      "arm": "baseline",
+      "n": 12,
+      "wins": 5,
+      "losses": 7,
+      "pushes": 0,
+      "units": -2.454545454545454,
+      "mae": 7.916666666666667
+    },
+    {
+      "arm": "adjusted",
+      "n": 12,
+      "wins": 6,
+      "losses": 6,
+      "pushes": 0,
+      "units": -0.5454545454545452,
+      "mae": 7.5
+    }
+  ],
+  "median_changes": 2,
+  "pick_changes": 1
+}
