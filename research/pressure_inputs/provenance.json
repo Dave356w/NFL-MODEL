@@ -1,0 +1,158 @@
+{
+  "base_repository_commit": "d02f3a5d8f4ddf779bcb64aa347c6958271e2997",
+  "captured_utc": "2026-11-13T19:34:55.201303+00:00",
+  "public_2026_snapshot_url": "https://dave356w.github.io/NFL-MODEL/ats_2026_results.csv",
+  "sources": [
+    {
+      "name": "advstats_week_pass_2018.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2018.csv",
+      "sha256": "f4c376cf515deb38fa1d0e516770bea242a30055be1e9c5657129971ba0523a9",
+      "asset_created_at": "2022-03-08T18:20:04Z",
+      "asset_updated_at": "2022-03-08T18:20:04Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2018.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2018.csv.gz",
+      "sha256": "d37899610b397b96a90da6902827de5b46c5457b93e0e16d5f95a8eb524e4a7d",
+      "asset_created_at": "2025-04-30T06:39:19Z",
+      "asset_updated_at": "2025-04-30T06:39:20Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2019.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2019.csv",
+      "sha256": "a585b3cf16823aa949e0cfac1fd44c2ea8289c71c4a241c740f9ad93aa12511e",
+      "asset_created_at": "2022-03-08T18:20:22Z",
+      "asset_updated_at": "2022-03-08T18:20:22Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2019.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2019.csv.gz",
+      "sha256": "b764668137052be23745953cbc33fa17e537a70c81e9b73785a19a15e7288216",
+      "asset_created_at": "2025-07-31T18:17:00Z",
+      "asset_updated_at": "2025-07-31T18:17:18Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2020.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2020.csv",
+      "sha256": "fa469611e88bd4006d108a29724dabe07f2d2c91e863ad28fbc66671c9c750d4",
+      "asset_created_at": "2022-03-08T18:20:39Z",
+      "asset_updated_at": "2022-03-08T18:20:40Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2020.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2020.csv.gz",
+      "sha256": "bc954b5780e325df4faa255fac092585c981a4de5d2f553a8a4e0a3c8b3a3cf2",
+      "asset_created_at": "2026-08-26T07:33:09Z",
+      "asset_updated_at": "2026-08-26T07:33:10Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2021.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2021.csv",
+      "sha256": "e7ccb91d7c52d324303d3a8330e0b6edece87699cd0b5e83ebcb31734a6b9be5",
+      "asset_created_at": "2022-03-08T18:19:37Z",
+      "asset_updated_at": "2022-03-08T18:19:37Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2021.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2021.csv.gz",
+      "sha256": "e8743a568f99667a8bdcd29ba12224ee1782ad2b7916bee78ee335c099383739",
+      "asset_created_at": "2026-01-08T13:13:12Z",
+      "asset_updated_at": "2026-01-08T13:13:13Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2022.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2022.csv",
+      "sha256": "cb4c9703ea178f42cb2ea8c0cf7eba02817fa47c52921399bc60a5802840b385",
+      "asset_created_at": "2023-08-28T08:28:37Z",
+      "asset_updated_at": "2023-08-28T08:28:37Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2022.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2022.csv.gz",
+      "sha256": "0c69a71eb39498956c7b1d5c1ca52ce7fe679934a95d1af249facb5ea9829ea4",
+      "asset_created_at": "2026-02-12T10:25:23Z",
+      "asset_updated_at": "2026-02-12T10:25:24Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2023.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2023.csv",
+      "sha256": "49c06072012f206781838c4af18d5eba988f716c059009714de51e3c9a59f070",
+      "asset_created_at": "2024-02-15T07:13:05Z",
+      "asset_updated_at": "2024-02-15T07:13:05Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2023.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2023.csv.gz",
+      "sha256": "4649804ee0f0a40b41e51ec75a1ce921949d7fab5459213488656b92f78560e8",
+      "asset_created_at": "2026-02-12T10:24:50Z",
+      "asset_updated_at": "2026-02-12T10:24:52Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2024.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2024.csv",
+      "sha256": "64f466fdf19d7da0e6c2057c758d1709fd23666a3a07941c709f40680b112033",
+      "asset_created_at": "2025-02-13T07:17:28Z",
+      "asset_updated_at": "2025-02-13T07:17:28Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2024.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2024.csv.gz",
+      "sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06",
+      "asset_created_at": "2026-08-13T12:26:26Z",
+      "asset_updated_at": "2026-08-13T12:26:27Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2025.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2025.csv",
+      "sha256": "79cd92f9a3b46a3fcc50904b3199b39303f7cab8b484040a1cb2b2c3bf51bd40",
+      "asset_created_at": "2026-02-11T13:24:09Z",
+      "asset_updated_at": "2026-02-11T13:24:09Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2025.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.csv.gz",
+      "sha256": "2f135887790a013fd004e609e37096bb4816d5cc80b9f19122e1bad478961978",
+      "asset_created_at": "2026-08-13T12:26:08Z",
+      "asset_updated_at": "2026-08-13T12:26:09Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "advstats_week_pass_2026.csv",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pfr_advstats/advstats_week_pass_2026.csv",
+      "sha256": "7b86deb592ddba977e1ca5518c7f72af862934590135c40f07211fb6da9f70e5",
+      "asset_created_at": "2026-11-12T12:02:53Z",
+      "asset_updated_at": "2026-11-12T12:02:53Z",
+      "original_row_published_at": null
+    },
+    {
+      "name": "play_by_play_2026.csv.gz",
+      "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2026.csv.gz",
+      "sha256": "eb81745dd0991364db3f9885f8037f7a0ad295da60ef77ee07c41e5f11f43a2b",
+      "asset_created_at": "2026-11-13T17:11:43Z",
+      "asset_updated_at": "2026-11-13T17:11:44Z",
+      "original_row_published_at": null
+    }
+  ],
+  "frozen_input_sha256": {
+    "research/pressure_inputs/base_forecasts.csv": "337efa13df62bf0eb3e16e8d5def1765d4ce22f6b75006120f7b072c0e85ad7c",
+    "research/pressure_inputs/team_games.csv.gz": "e1f60a270416069d61a67bba00339b72c375599300bead918e4d8e733b5940c4",
+    "research/scoring_inputs/team_games.csv.gz": "53983c050a1f7127ad112b89926548b759f97ecbdb5d9cd0378bc0663fc99c5b",
+    "research/pressure_inputs/ats_2026_results.csv": "02fb03fcd75924fbb53bf04e08ac6e974a4e32b070f6a505624970242aacfa7c"
+  },
+  "publication_audit": "Unavailable: GitHub asset timestamps describe whole revised files, not first per-row availability. Historical reconstruction only; lag does not verify point-in-time publication."
+}

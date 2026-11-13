@@ -1,0 +1,650 @@
+[
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_pressure",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 13.107605366656648,
+    "coef": [
+      1.349264705882353,
+      -1.831506115086699,
+      -0.5343315176535762,
+      -0.5253428370966987
+    ],
+    "mu": [
+      -0.021717009375134065,
+      -0.008943325460091979,
+      -0.0007464857650144971
+    ],
+    "scale": [
+      0.6777182677061638,
+      0.5015786479248014,
+      0.3081148221707356
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_pressure",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 13.006115772818802,
+    "coef": [
+      1.025735294117647,
+      -1.5546046055321001,
+      -0.6746921435853895,
+      -0.2678975013458365
+    ],
+    "mu": [
+      -0.021717009375134065,
+      -0.008943325460091979,
+      -0.0007464857650144971
+    ],
+    "scale": [
+      0.6777182677061638,
+      0.5015786479248014,
+      0.3081148221707356
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_pressure",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.72520053335511,
+    "coef": [
+      1.0073529411764706,
+      -1.3770791353860188,
+      -0.11774071922298006,
+      0.15986131697928208
+    ],
+    "mu": [
+      -0.010013610090561368,
+      -0.00762050637194349,
+      0.013991207462745011
+    ],
+    "scale": [
+      0.656966868695047,
+      0.5386630924060174,
+      0.29449262649126295
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_pressure",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.774884720475056,
+    "coef": [
+      0.7003676470588235,
+      -1.3176224767049611,
+      -0.3471019158915938,
+      0.2878654028025537
+    ],
+    "mu": [
+      -0.010013610090561368,
+      -0.00762050637194349,
+      0.013991207462745011
+    ],
+    "scale": [
+      0.656966868695047,
+      0.5386630924060174,
+      0.29449262649126295
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_pressure",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.664271914704294,
+    "coef": [
+      0.9767156862745098,
+      -0.7536371951353381,
+      -0.20595888227111273,
+      0.5034439217690714
+    ],
+    "mu": [
+      -0.010635918589601685,
+      -0.006294015698963874,
+      0.00959470241105954
+    ],
+    "scale": [
+      0.6359414926717195,
+      0.5738305824725437,
+      0.2967581254458367
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_pressure",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.610674411085286,
+    "coef": [
+      0.6574754901960784,
+      -0.7217003678714358,
+      -0.40738769736520286,
+      0.6879200725207159
+    ],
+    "mu": [
+      -0.010635918589601685,
+      -0.006294015698963874,
+      0.00959470241105954
+    ],
+    "scale": [
+      0.6359414926717195,
+      0.5738305824725437,
+      0.2967581254458367
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_pressure",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 13.138240213788526,
+    "coef": [
+      1.349264705882353,
+      -1.5425969727283657,
+      -0.4838249266675075,
+      -0.8684260969841354
+    ],
+    "mu": [
+      -0.012967513287574867,
+      0.004925219841470516,
+      -0.01129782464651748
+    ],
+    "scale": [
+      0.6864172852355346,
+      0.5162585434563095,
+      0.31466611294830715
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_pressure",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 13.036820252454461,
+    "coef": [
+      1.025735294117647,
+      -1.2750904906924057,
+      -0.5938765522239922,
+      -0.6691032170808849
+    ],
+    "mu": [
+      -0.012967513287574867,
+      0.004925219841470516,
+      -0.01129782464651748
+    ],
+    "scale": [
+      0.6864172852355346,
+      0.5162585434563095,
+      0.31466611294830715
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_pressure",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.74502267895319,
+    "coef": [
+      1.0073529411764706,
+      -1.2674734001221395,
+      -0.1609825197100493,
+      -0.10691927656418006
+    ],
+    "mu": [
+      0.0046190918697973935,
+      -0.003929491163617336,
+      0.008774909599793948
+    ],
+    "scale": [
+      0.6633476644963964,
+      0.5463006339245191,
+      0.30146266682328265
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_pressure",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.79757809798917,
+    "coef": [
+      0.7003676470588235,
+      -1.2157393924041207,
+      -0.3539944863925881,
+      -0.029946527657092947
+    ],
+    "mu": [
+      0.0046190918697973935,
+      -0.003929491163617336,
+      0.008774909599793948
+    ],
+    "scale": [
+      0.6633476644963964,
+      0.5463006339245191,
+      0.30146266682328265
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_pressure",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.675199235998246,
+    "coef": [
+      0.9767156862745098,
+      -0.7753674492301235,
+      -0.15001198716512626,
+      0.2675114923309559
+    ],
+    "mu": [
+      0.0038280920347615443,
+      -0.0033142568186953453,
+      0.007238337556128311
+    ],
+    "scale": [
+      0.6457602854639578,
+      0.5830277912985272,
+      0.3084441888659319
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_pressure",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "pressure_allowed_diff",
+      "pressure_generated_diff",
+      "pressure_matchup"
+    ],
+    "sigma": 12.62719160976703,
+    "coef": [
+      0.6574754901960784,
+      -0.7552845477195567,
+      -0.3067106222182423,
+      0.4058290766589606
+    ],
+    "mu": [
+      0.0038280920347615443,
+      -0.0033142568186953453,
+      0.007238337556128311
+    ],
+    "scale": [
+      0.6457602854639578,
+      0.5830277912985272,
+      0.3084441888659319
+    ]
+  }
+]
