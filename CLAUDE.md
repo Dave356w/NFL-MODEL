@@ -156,3 +156,17 @@ limitations.
 Owner activation follow-up (2026-11-08): GB-NE may also be recovered from the
 pinned 20:17 UTC board after its 12:25 Pacific cutoff when no native lock exists.
 The original collection/medical blockers remain in its source evidence.
+
+
+Production v1.23 (owner request 2026-11-13): injury → team efficiency → the
+unchanged ten-term win model → existing weekly ATS median map. Frozen ridge
+weights use 2020–25 only. Current snap-weighted medical burden minus the burden
+already represented in the h8 profile adjusts offensive/defensive first-down
+and interception rates, plus defensive penalty yards. QB logic remains separate.
+Both sides need complete resolved reports and at least 90% prior medical coverage.
+Missing evidence blocks a new candidate. Repeated refreshes restore original
+inputs before applying current facts. v1.22 and inherited v1.21 locks before
+2026-11-13 21:32:30 UTC remain authoritative and are never rewritten. The
+historical replay deadline remains unchanged. Research replay is separate;
+see research/injury_efficiency_2026/REPORT.md. This is an owner-directed trial,
+not established ATS improvement; mapped medians can jump at band boundaries.

@@ -26,6 +26,12 @@ def source(model=MODEL):
              "_nfl_sys.modules['availability_collect'] = _nfl_collector\n"
              f"exec(compile({collector!r}, 'availability_collect.py', 'exec'), _nfl_collector.__dict__)\n"
              "del _nfl_collector, _nfl_types, _nfl_sys\n\n")
+    adapter=(model.parent/'injury_efficiency.py').read_text(encoding='utf-8')
+    prelude+=("import sys as _ie_sys, types as _ie_types\n"
+              "_ie_module = _ie_types.ModuleType('injury_efficiency')\n"
+              "_ie_sys.modules['injury_efficiency'] = _ie_module\n"
+              f"exec(compile({adapter!r}, 'injury_efficiency.py', 'exec'), _ie_module.__dict__)\n"
+              "del _ie_module, _ie_types, _ie_sys\n")
     return prelude+model.read_text(encoding='utf-8')
 
 

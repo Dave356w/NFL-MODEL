@@ -31,6 +31,7 @@ REPLAY_UNTIL = {'boxscore-composite-v1.19': dt.datetime.fromisoformat('2026-11-0
 REPLAY_UNTIL['boxscore-composite-v1.20']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.21']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.22']=REPLAY_UNTIL['boxscore-composite-v1.19']
+REPLAY_UNTIL['boxscore-composite-v1.23']=REPLAY_UNTIL['boxscore-composite-v1.19']
 
 
 def replay_cutoff(revision):

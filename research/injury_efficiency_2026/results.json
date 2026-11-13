@@ -1,0 +1,72 @@
+{
+  "policy": {
+    "policy": "injury-efficiency-2026-11-13-v1",
+    "training_max_season": 2025,
+    "sha256": "ea878d5e19e1815aa4488efb6b60a5f5b8678254aa9b6f4ef23a94721c9290f6"
+  },
+  "total_games": 137,
+  "eligible_games": 97,
+  "unavailable_games": 40,
+  "scores": [
+    {
+      "sample": "all_reconstructed",
+      "arm": "baseline",
+      "n": 97,
+      "wins": 48,
+      "losses": 44,
+      "pushes": 5,
+      "units": -0.3636363636363651,
+      "roi": -0.003748828491096547,
+      "mae": 9.360824742268042,
+      "median_residual": 0.0
+    },
+    {
+      "sample": "all_reconstructed",
+      "arm": "adjusted",
+      "n": 97,
+      "wins": 48,
+      "losses": 44,
+      "pushes": 5,
+      "units": -0.36363636363636287,
+      "roi": -0.0037488284910965246,
+      "mae": 9.381443298969073,
+      "median_residual": 0.0
+    },
+    {
+      "sample": "complete_saved_pair_ids",
+      "arm": "baseline",
+      "n": 12,
+      "wins": 5,
+      "losses": 7,
+      "pushes": 0,
+      "units": -2.454545454545454,
+      "roi": -0.2045454545454545,
+      "mae": 7.916666666666667,
+      "median_residual": -3.5
+    },
+    {
+      "sample": "complete_saved_pair_ids",
+      "arm": "adjusted",
+      "n": 12,
+      "wins": 5,
+      "losses": 7,
+      "pushes": 0,
+      "units": -2.454545454545454,
+      "roi": -0.2045454545454545,
+      "mae": 7.916666666666667,
+      "median_residual": -3.5
+    }
+  ],
+  "median_changes": 3,
+  "pick_changes": 2,
+  "basis": "Reconstructed archived final medical tables, not timestamp-verified historical executions. Saved report pair flag marks IDs only; this run uses archived final tables for every row. Core fits strictly prior weeks; injury weights frozen through 2025; weekly median maps held fixed. Original locks unchanged.",
+  "all_games_with_unadjusted_fallback": {
+    "n": 137,
+    "wins": 75,
+    "losses": 56,
+    "pushes": 6,
+    "units": 12.181818181818183,
+    "mae": 9.364963503649635,
+    "fallback_count": 40
+  }
+}
