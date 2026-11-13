@@ -17,12 +17,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.235192+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.235192+00:00",
-        "source_capture_sha256": "8e020fc23ce330f394f212e4702aca22b8ceef6cfb9b23cd13a3dc4f8f6be083"
+        "last_attempt_utc": "2026-11-13T23:48:54.661148+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.661148+00:00",
+        "source_capture_sha256": "5b49bc15b7e91e1eebbd936e4b1fdac94ecc4c95df8b6cbd913073778e5eb050"
       }
     },
     "ATL": {
@@ -36,8 +36,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.233431+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.233431+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:54.669807+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.669807+00:00",
         "source_capture_sha256": "761f47da4ff038fbacedb425d37202899b2df13c35ecc2ecf9b03fbb26396a9c"
       }
     },
@@ -52,8 +52,8 @@
         "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.198623+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.198623+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:54.701372+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.701372+00:00",
         "source_capture_sha256": "3d6576a4fec7e4a1a0f107e118425b8ef2a7abb3147a27a2ce3987002a7b2fac"
       }
     },
@@ -65,12 +65,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.171130+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.171130+00:00",
-        "source_capture_sha256": "929902c723a2d19c313e3d3b3ae7b86c06526fea483526efe011dd9403483338"
+        "last_attempt_utc": "2026-11-13T23:48:54.671542+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.671542+00:00",
+        "source_capture_sha256": "695fb38d7f19cc79c01857434ea9ad6fccfbb975a75b5f1b3d2255f7ef8dd7bd"
       }
     },
     "CAR": {
@@ -84,8 +84,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.230603+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.230603+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:55.101592+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.101592+00:00",
         "source_capture_sha256": "6808cf8a2ca9c3bb246e9fa711b73076516700618f3c355ecad946dd6cf08012"
       }
     },
@@ -106,8 +106,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.214752+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.214752+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:54.724631+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.724631+00:00",
         "source_capture_sha256": "c902685738a5953ed2c7b69e5663bd7e0c7a844b4ed5aa72d2a225529e0df312"
       }
     },
@@ -119,12 +119,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.169892+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.169892+00:00",
-        "source_capture_sha256": "82fb7a29ded6a5043f20eec784f1427ab6fbc7437464e192a3756469ace62f18"
+        "last_attempt_utc": "2026-11-13T23:48:54.983358+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.983358+00:00",
+        "source_capture_sha256": "caa4a05b82b028f104a926a4acb53a1b0ba90bf04fb7b65508816180820d6c96"
       }
     },
     "DAL": {
@@ -136,7 +136,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-13T20:36:12.697773+00:00"
+        "last_attempt_utc": "2026-11-13T23:48:50.910354+00:00"
       }
     },
     "DEN": {
@@ -156,8 +156,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.368634+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.368634+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:56.506925+00:00",
+        "last_success_utc": "2026-11-13T23:48:56.506925+00:00",
         "source_capture_sha256": "c03ffb6c648f5a7d43559e8e963748d0a4bac01d14ca043d8ee42fafbcfa0970"
       }
     },
@@ -169,12 +169,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.344867+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.344867+00:00",
-        "source_capture_sha256": "dfa05298027db98af608c5e3b3a36a099eb4e55e7f8802d708cd74862985d412"
+        "last_attempt_utc": "2026-11-13T23:48:54.899449+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.899449+00:00",
+        "source_capture_sha256": "00c119170833ce411e3f94186109aa344ac2f4c541a51f6c03fbd4aec57589b1"
       }
     },
     "HOU": {
@@ -185,12 +185,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.340525+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.340525+00:00",
-        "source_capture_sha256": "47ab09b64755878726ebf55216b1dc58c6fddc21dbecfeeba8aa662235ca4d07"
+        "last_attempt_utc": "2026-11-13T23:48:54.982438+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.982438+00:00",
+        "source_capture_sha256": "9fc084304a80e042534afac1cd5591319c98913e6ede54ba70226f9c66692ed1"
       }
     },
     "IND": {
@@ -201,12 +201,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.348533+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.348533+00:00",
-        "source_capture_sha256": "26559e56ffa36a46993602ce55112038482d6e08d38314cfddfc9c56e9117c92"
+        "last_attempt_utc": "2026-11-13T23:48:54.984126+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.984126+00:00",
+        "source_capture_sha256": "88cc4e1a9717fc86fd068ac392be30ac336d0eae63f9382ef8338f15a900b595"
       }
     },
     "JAX": {
@@ -217,12 +217,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.349611+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.349611+00:00",
-        "source_capture_sha256": "96db37a2b06f728096e424042b3af91bf5a7a06e556c489001b8d8fffde8aaea"
+        "last_attempt_utc": "2026-11-13T23:48:54.999452+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.999452+00:00",
+        "source_capture_sha256": "43920a9b78710126f49867568cf2f87758998ea8254488975fbf1435f8a3ba11"
       }
     },
     "KC": {
@@ -236,9 +236,9 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.440295+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.440295+00:00",
-        "source_capture_sha256": "4ec8ad82317a521dd84149b6256920abe1341ea0ae04714e0cb30c1664de5a4e"
+        "last_attempt_utc": "2026-11-13T23:48:54.939656+00:00",
+        "last_success_utc": "2026-11-13T23:48:54.939656+00:00",
+        "source_capture_sha256": "83d97b4c5b55e3cbceabcdcc9069c18de4a25e80724a0d61cca05100aaa0dc58"
       }
     },
     "LA": {
@@ -249,12 +249,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.378916+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.378916+00:00",
-        "source_capture_sha256": "1e5a4bb4c93d2a8a46511854bca214973fc1690b26441bf14e624ff352cb2658"
+        "last_attempt_utc": "2026-11-13T23:48:55.088007+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.088007+00:00",
+        "source_capture_sha256": "49310e7c1d76b809232b0c573d986ccb95d7e4afb38826b3667909444b094a14"
       }
     },
     "LAC": {
@@ -268,9 +268,9 @@
         "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.396547+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.396547+00:00",
-        "source_capture_sha256": "7ca47ef2866069fd8dc3d5a22443db5b8b91e6189b64b0a48c46792b67106bb4"
+        "last_attempt_utc": "2026-11-13T23:48:55.163212+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.163212+00:00",
+        "source_capture_sha256": "aa317148eebcb653d19525625beaa44196e53d06716b580749ed0c9172a5e6d9"
       }
     },
     "LV": {
@@ -284,8 +284,8 @@
         "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.542296+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.542296+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:55.211501+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.211501+00:00",
         "source_capture_sha256": "7857b3a2902f44589f859525913cdb1eac446e568648a71a1bcf6972a208b694"
       }
     },
@@ -297,12 +297,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.523365+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.523365+00:00",
-        "source_capture_sha256": "87776cdd5b240f44ad5d9dffe157912070e947040de5b874b56b3bb9995e3526"
+        "last_attempt_utc": "2026-11-13T23:48:57.746993+00:00",
+        "last_success_utc": "2026-11-13T23:48:57.746993+00:00",
+        "source_capture_sha256": "24da1b46f7844d63cd038a126e103c67227de842e3c67f4a0b5d89247f377e9a"
       }
     },
     "MIN": {
@@ -313,12 +313,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.508901+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.508901+00:00",
-        "source_capture_sha256": "91db45a5cccb10b22493e4e1e125bf29be01ab43bb8eb56adda1a66aec5e7a86"
+        "last_attempt_utc": "2026-11-13T23:48:55.207692+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.207692+00:00",
+        "source_capture_sha256": "4c0b0bbb7fd26a86e1dbd8736f6ccf986323cd931d747b9eabaa1ced812a7061"
       }
     },
     "NE": {
@@ -332,8 +332,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.519158+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.519158+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:55.193182+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.193182+00:00",
         "source_capture_sha256": "76272d192015b7b0bc00da8769c38fa09f96917dc9b300570a5d5808ea26a257"
       }
     },
@@ -348,8 +348,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.518381+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.518381+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:55.321175+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.321175+00:00",
         "source_capture_sha256": "27d2e84cd8b01c9ab4cf5b1fbf792b1c61fc54322a3be3cfa268dedbe60df82d"
       }
     },
@@ -370,12 +370,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.504373+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.504373+00:00",
-        "source_capture_sha256": "603006e8f01f5c0227bc10e12d5927311b7e4a98497cd3e761836824b8139e74"
+        "last_attempt_utc": "2026-11-13T23:48:55.313911+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.313911+00:00",
+        "source_capture_sha256": "b1aba845f2e4b49fed2594ac742d9cf1eab3b6385db119af366da682ad3cbd6f"
       }
     },
     "PHI": {
@@ -395,8 +395,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.564610+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.564610+00:00",
+        "last_attempt_utc": "2026-11-13T23:48:55.363402+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.363402+00:00",
         "source_capture_sha256": "894259231bb4d3fc00752a30cca424ddc63e8639bd26cef6d8a6a025367779fc"
       }
     },
@@ -408,12 +408,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.602754+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.602754+00:00",
-        "source_capture_sha256": "6a0397011058f41b0147eccb3fab24c74b379740cb83260bd712018697524e6f"
+        "last_attempt_utc": "2026-11-13T23:48:55.394291+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.394291+00:00",
+        "source_capture_sha256": "8977b60c01f28a2835d2b5b66d5d7699ee11ceb2e97b4b0abdbe0450d87a6ea0"
       }
     },
     "SF": {
@@ -424,12 +424,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.692262+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.692262+00:00",
-        "source_capture_sha256": "75cc5940389322f99179f4e734d5cfbebdcf9c245a7df5760e398e5f345a7af9"
+        "last_attempt_utc": "2026-11-13T23:48:55.426365+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.426365+00:00",
+        "source_capture_sha256": "ae6a5460fdc2f97137be45fb7ddf2450a05b30e069c5078407c3d2a3dc24b497"
       }
     },
     "TB": {
@@ -446,12 +446,12 @@
         "article_errors": []
       },
       "report": {
-        "complete": false,
+        "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T20:36:14.640241+00:00",
-        "last_success_utc": "2026-11-13T20:36:14.640241+00:00",
-        "source_capture_sha256": "3b821bf46d81135f84b74c5259197cccd4b27d33a7679dfb983b6cb35ad3bd4d"
+        "last_attempt_utc": "2026-11-13T23:48:55.398061+00:00",
+        "last_success_utc": "2026-11-13T23:48:55.398061+00:00",
+        "source_capture_sha256": "58d658cd68fdec233662915eff01c7b349c11981596f3ea5db32e308b239ab7d"
       }
     },
     "WAS": {
@@ -464,5 +464,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-13T20:36:14.692262+00:00"
+  "updated_utc": "2026-11-13T23:48:57.746993+00:00"
 }
