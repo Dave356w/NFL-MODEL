@@ -65,7 +65,7 @@ def pending(data, now, horizon):
     latest=Path(data)/'latest'
     if (latest/'manifest.json').exists() and (latest/'board.csv').exists():
         manifest=json.loads((latest/'manifest.json').read_text())
-        if manifest.get('revision') in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
+        if manifest.get('revision') in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
             with (latest/'board.csv').open(newline='') as src:
                 for row in csv.DictReader(src):
                     ko=kickoff(row)

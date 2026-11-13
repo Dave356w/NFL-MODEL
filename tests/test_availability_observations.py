@@ -223,7 +223,7 @@ def test_overlay_changes_only_target_game_and_does_not_mutate_base():
 
 
 def test_v120_identity_keeps_old_frozen_signatures_and_ten_terms():
-    assert m.REVISION=='boxscore-composite-v1.23'
+    assert m.REVISION=='boxscore-composite-v1.24'
     sig20,cfg=m.config_signature()
     assert cfg['availability_observations']['policy']==m.AVAILABILITY_POLICY
     assert len(sum(m.model_terms(m.PRODUCT_RECIPE),[]))==10

@@ -167,6 +167,7 @@ def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_
     import retro_lock
     data=tmp_path/'data';data.mkdir();latest=data/'latest';latest.mkdir()
     recovered=[]
+    monkeypatch.setattr(m,'REVISION','boxscore-composite-v1.22')  # legacy report-finalization fixture
     monkeypatch.setattr(retro_lock,'apply',lambda path: recovered.append(path) or 0)
     monkeypatch.setattr(b,'DATA',data);monkeypatch.setattr(b,'LATEST',latest)
     monkeypatch.setattr(b,'run_model',lambda:tmp_path/'run')

@@ -20,6 +20,7 @@ import ats_locks
 import fixed_bands
 import nfl_model as m
 import espn_spreads
+import qb_replacement
 from schedule_gate import kickoff as scheduled_kickoff
 
 
@@ -32,6 +33,7 @@ REPLAY_UNTIL['boxscore-composite-v1.20']=REPLAY_UNTIL['boxscore-composite-v1.19'
 REPLAY_UNTIL['boxscore-composite-v1.21']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.23']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.22']=REPLAY_UNTIL['boxscore-composite-v1.19']
+REPLAY_UNTIL['boxscore-composite-v1.24']=dt.datetime.fromisoformat('2026-11-14T00:00:00+00:00')
 
 
 def replay_cutoff(revision):
@@ -69,6 +71,99 @@ def historical_before_adoption(row, cutoff=None):
     return ats_locks.deadline(next_midnight.to_pydatetime()) <= cutoff
 
 
+# The owner activated this final-margin policy for 2026 reporting, including
+# previously saved selections. The underlying append-only rows stay untouched.
+REPLACEMENT_REVISION='boxscore-composite-v1.24'
+REPLACEMENT_METADATA=('qb_replacement_base_margin','qb_replacement_margin_adjustment',
+                      'qb_replacement_policy','qb_replacement_applied')
+
+
+def replacement_enabled(latest):
+    return (latest or {}).get('manifest',{}).get('revision')==REPLACEMENT_REVISION
+
+
+def replacement_overlay(frame,latest):
+    """Apply the 2026 reporting view after original saved-decision priority.
+
+    A new-policy lock already contains its final margin and stays authoritative.
+    Old locks consume the model run's strictly pregame long-form classification
+    table. Missing classifications preserve their original margin.
+    """
+    out=frame.copy()
+    if out.empty or not replacement_enabled(latest) or 'fixed_band_spread' not in out:
+        return out
+    years=pd.to_numeric(out.get('season',pd.Series(np.nan,index=out.index)),errors='coerce')
+    existing=out.get('qb_replacement_policy',pd.Series('',index=out.index)).fillna('').eq(qb_replacement.POLICY)
+    pending=years.ge(2026)&~existing
+    if not pending.any(): return out
+    table=latest.get('replacement_adjustments',pd.DataFrame())
+    if len(table):
+        required={'game_id','team','qb_replacement'}
+        if not required.issubset(table):
+            raise ValueError('Replacement adjustment table lacks game/team/flag')
+        if table.duplicated(['game_id','team']).any():
+            raise ValueError('Duplicate replacement adjustment team-game')
+        lookup=table.set_index(['game_id','team'])
+        metadata=[c for c in table if c.startswith('qb_')]
+        for side in ('home','away'):
+            if side not in out: continue
+            keys=list(zip(out.game_id,out[side]))
+            for name in metadata:
+                col=f'{side}_{name}'
+                values=pd.Series([lookup.loc[k,name] if k in lookup.index else np.nan for k in keys],index=out.index)
+                if col not in out:out[col]=values
+                else:out[col]=out[col].where(out[col].notna(),values)
+    adjusted=qb_replacement.overlay(out.loc[pending].copy(),margin_column='fixed_band_spread')
+    for col in adjusted:
+        if col not in out:out[col]=pd.Series(index=out.index,dtype=adjusted[col].dtype)
+        out.loc[pending,col]=adjusted[col]
+    return out
+
+
+def prepare_replacement_views(latest,remapped=False):
+    """Update board/replay ATS margins once; retain raw WP and calibration fit."""
+    if latest is None or not replacement_enabled(latest):return
+    for name in ('board','fixed_band_ledger'):
+        frame=latest.get(name,pd.DataFrame())
+        if not len(frame):continue
+        if remapped:frame=frame.drop(columns=list(REPLACEMENT_METADATA),errors='ignore')
+        frame=replacement_overlay(frame,latest)
+        if name=='fixed_band_ledger':
+            frame['fixed_band_ats_result'],frame['fixed_band_ats_units']=fixed_bands.grade(frame,frame.fixed_band_spread)
+            side=fixed_bands.pick(frame.fixed_band_spread,frame.spread_line)
+            frame['fixed_band_ats_side']=np.where(side>0,'home',np.where(side<0,'away',''))
+            selected=frame.fixed_band_ats_side
+            frame['fixed_band_ats_team']=np.where(selected.eq('home'),frame.home,np.where(selected.eq('away'),frame.away,''))
+            frame['fixed_band_ats_handicap']=np.where(selected.eq('home'),-frame.spread_line,np.where(selected.eq('away'),frame.spread_line,np.nan))
+        latest[name]=frame
+
+
+def align_calibration_2026(latest,pool):
+    """Keep current-season ATS calibration rows aligned with the public pool.
+
+    Historical WP fields remain the replay's probability series. Only selection
+    inputs, scores and matching side prices follow the newly regraded view.
+    """
+    if not replacement_enabled(latest) or pool.empty:return
+    history=latest.get('fixed_band_ledger',pd.DataFrame()).copy()
+    if history.empty:return
+    lookup=pool.set_index('game_id')
+    names=('fixed_band_spread','spread_line','result','home_score','away_score')
+    for i,row in history.loc[history.season.eq(2026)].iterrows():
+        if row.game_id not in lookup.index:continue
+        current=lookup.loc[row.game_id]
+        for name in names:
+            if name in current:history.loc[i,name]=current[name]
+        # Prices in the public pool already refer to its unchanged handicap.
+        for side in ('home','away'):
+            name=f'ats_{side}_odds'
+            if name in current:history.loc[i,f'{side}_spread_odds']=current[name]
+        for name in ('fixed_band_ats_result','fixed_band_ats_units','fixed_band_ats_side',
+                     'fixed_band_ats_team','fixed_band_ats_handicap',*REPLACEMENT_METADATA):
+            if name in current:history.loc[i,name]=current[name]
+    latest['fixed_band_ledger']=history
+
+
 def build(latest, ledger):
     if latest is None:
         return pd.DataFrame()
@@ -84,6 +179,16 @@ def build(latest, ledger):
                 row.update(spread_line=np.nan, fixed_band_spread=np.nan,
                            ats_basis='Awaiting ATS lock')
             rows[r['game_id']] = row
+    # The current week's completed rows may not yet be in retro_ledger. The
+    # owner authorized this revision's replay through adoption, including those
+    # games; outcomes below still come only from schedule/ESPN score evidence.
+    if replacement_enabled(latest):
+        for r in latest.get('board',pd.DataFrame()).to_dict('records'):
+            if int(r.get('season',0))!=2026 or not historical_before_adoption(r,replay_cutoff(revision)):
+                continue
+            if (r.get('game_id') not in rows and np.isfinite(pd.to_numeric(r.get('fixed_band_spread'),errors='coerce'))
+                    and np.isfinite(pd.to_numeric(r.get('spread_line'),errors='coerce'))):
+                rows[r['game_id']]=dict(r,ats_basis='Historical replay')
     # Actual scores may come from a newer board than the graded ledger. Only
     # outcomes are taken from the board, never postgame probabilities or lines.
     outcomes = {}
@@ -134,6 +239,7 @@ def build(latest, ledger):
             else 'Owner-requested retro lock' if saved.get('retro_locked')
             else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
             else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
+        rows[game].update({k:v for k,v in saved.items() if k in REPLACEMENT_METADATA or k.startswith(('home_qb_','away_qb_'))})
     # ESPN supplies final scores only. It cannot create or change a decision.
     # Completed games without a model row remain visible as unavailable.
     for event in latest.get('espn_archive', []):
@@ -155,6 +261,7 @@ def build(latest, ledger):
         if name not in frame:
             frame[name] = np.nan
         frame[name] = pd.to_numeric(frame[name], errors='coerce')
+    frame = replacement_overlay(frame,latest)
     grades, units = fixed_bands.grade(frame, frame.fixed_band_spread)
     # A pending zero-edge selection is not a completed skip yet.
     complete = np.isfinite(frame.result)

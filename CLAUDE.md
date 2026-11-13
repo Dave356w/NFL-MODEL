@@ -167,3 +167,17 @@ shadow labels/features, old saved selections and all journals are preserved.
 Existing v1.22/inherited v1.21 locks with deadlines before 2026-11-14 00:00 UTC
 remain authoritative. The saved-pick audit and prior-season residual experiment
 are research only; neither increases the QB penalty or changes the recipe.
+
+
+**v1.24 production activation (owner request 2026-11-13, supersedes v1.23).**
+Apply the broader replacement-starter proxy and an extra −2 team-margin points
+AFTER the final ATS map; the owner explicitly chose after mapping. Both-backup
+adjustments cancel; unknown/blended classifications retain the original margin.
+Use new revision/output/signature and audited durable lock policy v5. Publicly
+show ONLY the updated model: all earlier 2026 games are replayed under v1.24,
+pooled with v1.24's own live forward games after 2026-11-14 00:00 UTC. Preserve old
+journals and source/version distinctions in backend reports only. Update all
+2026 grades, cards, running units, page aggregates, calibration and CSV exports
+consistently and reprice flipped picks on their new side. The owner explicitly
+authorized merging all changes and publishing when ready. Existing earlier
+model picks remain archive evidence, not public v1.24 selections.

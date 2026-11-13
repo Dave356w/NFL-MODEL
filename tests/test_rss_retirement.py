@@ -38,7 +38,8 @@ def test_no_rss_requests_or_news_facts_and_failed_news_cannot_block(tmp_path):
     assert any('inactives' in issue for issue in c.readiness_issues(snap,NOW,True))
 
 
-def test_old_news_journals_retained_but_not_applied_to_new_forecasts(tmp_path):
+def test_old_news_journals_retained_but_not_applied_to_new_forecasts(tmp_path,monkeypatch):
+    monkeypatch.setattr(m,'REVISION','boxscore-composite-v1.22')  # original RSS-retirement contract
     collect(tmp_path)
     names=[c.NEWS,c.AUTO,c.SOURCES]
     before={n:(tmp_path/n).read_bytes() for n in names}
@@ -57,8 +58,8 @@ def test_old_news_journals_retained_but_not_applied_to_new_forecasts(tmp_path):
 
 
 def test_prior_signatures_are_frozen_and_retirement_has_a_new_identity():
-    assert m.REVISION=='boxscore-composite-v1.23'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_23'
+    assert m.REVISION=='boxscore-composite-v1.24'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_24'
     with m.revision_identity('boxscore-composite-v1.21',m.PRODUCT_RECIPE):
         prior,_=m.config_signature()
     assert prior=='9eb27acbe2f14789d9a4b90b214122354d1fee7bf1d15fa736d5138af88d1c67'
@@ -68,7 +69,8 @@ def test_prior_signatures_are_frozen_and_retirement_has_a_new_identity():
     assert len(sum(m.model_terms(m.PRODUCT_RECIPE),[]))==10
 
 
-def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path):
+def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path,monkeypatch):
+    monkeypatch.setattr(m,'REVISION','boxscore-composite-v1.23')  # v1.23 inherits prior locks; v1.24 replays
     root=Path(__file__).resolve().parents[1]
     records=locks.display_records(root/'data')
     before=copy.deepcopy(records)
@@ -104,7 +106,7 @@ def test_rescue_uses_exact_last_committed_sunday_night_board():
                         method=locks.POLICY_METHODS[locks.POLICY_VERSION],cuts=[3,7,10],magnitudes=[3,5,6,13]))
     row=retro_lock.decision(source)
     assert (row['selected_side'],row['market_spread'],row['fixed_band_spread'])==('away',6.,5.)
-    latest=dict(manifest=dict(revision=m.REVISION),ats_locks={locks.key(row):row},
+    latest=dict(manifest=dict(revision='boxscore-composite-v1.22'),ats_locks={locks.key(row):row},
                 board=pd.DataFrame([dict(game_id=request['game_id'],result=-7.,home_score=17.,away_score=24.)]))
     row.update(finalized_utc='2026-11-09T20:00:00Z',retro_locked=True)
     pool=season_ats.build(latest,pd.DataFrame())
