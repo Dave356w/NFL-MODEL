@@ -2,8 +2,8 @@
   "articles": {
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-13T00:11:26.099875+00:00",
-      "last_success_utc": "2026-11-13T00:11:26.099875+00:00"
+      "last_attempt_utc": "2026-11-13T00:12:59.313590+00:00",
+      "last_success_utc": "2026-11-13T00:12:59.313590+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -153,8 +153,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-13T00:11:26.099875+00:00",
-        "last_success_utc": "2026-11-13T00:11:26.099875+00:00",
+        "last_attempt_utc": "2026-11-13T00:12:59.313590+00:00",
+        "last_success_utc": "2026-11-13T00:12:59.313590+00:00",
         "source_capture_sha256": "e06a4ffb57d3468a8363affa96107ff9f0e9c62c288d74f40cea546a5aeb8d2f",
         "url": "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants"
       },
@@ -166,8 +166,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T00:11:25.801436+00:00",
-        "last_success_utc": "2026-11-13T00:11:25.801436+00:00",
+        "last_attempt_utc": "2026-11-13T00:12:59.020228+00:00",
+        "last_success_utc": "2026-11-13T00:12:59.020228+00:00",
         "source_capture_sha256": "be5601da9e22a42576359e3d7176207f92cbdd5a3ac34f634e22561b875f2a7b"
       }
     },
@@ -218,8 +218,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-13T00:11:26.099875+00:00",
-        "last_success_utc": "2026-11-13T00:11:26.099875+00:00",
+        "last_attempt_utc": "2026-11-13T00:12:59.313590+00:00",
+        "last_success_utc": "2026-11-13T00:12:59.313590+00:00",
         "source_capture_sha256": "31c679c81e9097de220d34e484a6e8510078b05e830c44489bd1f712696eec23",
         "url": "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants"
       },
@@ -231,11 +231,11 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-13T00:11:25.835277+00:00",
-        "last_success_utc": "2026-11-13T00:11:25.835277+00:00",
+        "last_attempt_utc": "2026-11-13T00:12:59.015105+00:00",
+        "last_success_utc": "2026-11-13T00:12:59.015105+00:00",
         "source_capture_sha256": "3cfbd23c13768fa288d1ee06b17472056c50df72eb5807a7aab97ccd8e0874b8"
       }
     }
   },
-  "updated_utc": "2026-11-13T00:11:26.099875+00:00"
+  "updated_utc": "2026-11-13T00:12:59.313590+00:00"
 }
