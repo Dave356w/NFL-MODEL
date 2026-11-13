@@ -1,0 +1,62 @@
+pool,cohort,game_id,revision,team,qb,both_backups,before_residual,after_residual,market_residual
+published 2026,chart,2026_01_ATL_PIT,historical replay,ATL,C.Rush,False,-3.0,-1.0,-0.5
+published 2026,chart,2026_02_CAR_ATL,historical replay,ATL,C.Rush,False,-28.0,-26.0,-28.5
+published 2026,chart,2026_02_MIN_CHI,historical replay,MIN,C.Wentz,False,10.0,12.0,10.5
+published 2026,chart,2026_02_SEA_ARI,historical replay,SEA,D.Lock,False,20.0,22.0,20.5
+published 2026,chart,2026_03_SEA_WAS,historical replay,WAS,M.Mariota,False,9.0,11.0,10.5
+published 2026,chart,2026_04_IND_WAS,historical replay,WAS,M.Mariota,False,-13.0,-11.0,-12.5
+published 2026,chart,2026_04_GB_TB,historical replay,TB,J.Daniels,False,0.0,2.0,0.0
+published 2026,chart,2026_04_NYJ_CHI,historical replay,CHI,T.Bagent,False,7.0,9.0,7.5
+published 2026,chart,2026_05_TB_DAL,historical replay,TB,J.Daniels,False,21.0,23.0,17.5
+published 2026,chart,2026_05_BAL_ATL,historical replay,BAL,T.Huntley,False,11.0,13.0,10.5
+published 2026,chart,2026_06_BAL_CLE,historical replay,BAL,T.Huntley,False,-6.0,-4.0,-6.0
+published 2026,chart,2026_06_CAR_PHI,historical replay,PHI,T.McKee,False,-7.0,-5.0,-8.0
+published 2026,chart,2026_06_PIT_TB,historical replay,TB,J.Daniels,False,-4.0,-2.0,-4.5
+published 2026,chart,2026_07_CIN_BAL,historical replay,BAL,T.Huntley,False,-18.0,-16.0,-19.0
+published 2026,chart,2026_09_JAX_BAL,boxscore-composite-v1.21,BAL,Joe Fagnano,False,-10.0,-8.0,-13.0
+published 2026,chart,2026_09_CLE_NO,boxscore-composite-v1.21,CLE,Shedeur Sanders,False,4.0,6.0,2.0
+published 2026,chart,2026_09_ARI_SEA,boxscore-composite-v1.21,SEA,Drew Lock,False,8.0,10.0,5.5
+published 2026,chart,2026_09_BUF_MIN,boxscore-composite-v1.22,MIN,C.Wentz,False,-14.0,-12.0,-13.5
+published 2026,replacement,2026_03_ATL_GB,historical replay,ATL,M.Penix,False,24.0,26.0,25.5
+published 2026,replacement,2026_03_SEA_WAS,historical replay,WAS,M.Mariota,False,9.0,11.0,10.5
+published 2026,replacement,2026_03_TEN_NYG,historical replay,NYG,J.Winston,False,2.0,4.0,2.5
+published 2026,replacement,2026_04_IND_WAS,historical replay,WAS,M.Mariota,False,-13.0,-11.0,-12.5
+published 2026,replacement,2026_04_ARI_NYG,historical replay,NYG,J.Winston,False,15.0,17.0,14.5
+published 2026,replacement,2026_04_GB_TB,historical replay,TB,J.Daniels,False,0.0,2.0,0.0
+published 2026,replacement,2026_04_NYJ_CHI,historical replay,CHI,T.Bagent,False,7.0,9.0,7.5
+published 2026,replacement,2026_04_ATL_NO,historical replay,ATL,M.Penix,False,18.0,20.0,22.5
+published 2026,replacement,2026_05_TB_DAL,historical replay,TB,J.Daniels,False,21.0,23.0,17.5
+published 2026,replacement,2026_05_NYG_WAS,historical replay,WAS,J.Daniels,False,-4.0,-2.0,-3.5
+published 2026,replacement,2026_05_BAL_ATL,historical replay,BAL,T.Huntley,False,11.0,13.0,10.5
+published 2026,replacement,2026_06_BAL_CLE,historical replay,BAL,T.Huntley,False,-6.0,-4.0,-6.0
+published 2026,replacement,2026_06_CAR_PHI,historical replay,PHI,T.McKee,False,-7.0,-5.0,-8.0
+published 2026,replacement,2026_06_PIT_TB,historical replay,TB,J.Daniels,False,-4.0,-2.0,-4.5
+published 2026,replacement,2026_07_CIN_BAL,historical replay,BAL,T.Huntley,False,-18.0,-16.0,-19.0
+published 2026,replacement,2026_07_NYG_HOU,historical replay,NYG,J.McCarthy,False,13.0,15.0,16.0
+published 2026,replacement,2026_07_DAL_PHI,historical replay,PHI,T.McKee,False,-13.0,-11.0,-12.5
+published 2026,replacement,2026_08_PHI_WAS,historical replay,PHI,T.McKee,False,-13.0,-11.0,-11.0
+published 2026,replacement,2026_09_JAX_BAL,boxscore-composite-v1.21,BAL,Joe Fagnano,False,-10.0,-8.0,-13.0
+published 2026,replacement,2026_09_CLE_NO,boxscore-composite-v1.21,CLE,Shedeur Sanders,False,4.0,6.0,2.0
+published 2026,replacement,2026_09_NYG_PHI,boxscore-composite-v1.21,PHI,J.Milton,True,-3.0,-3.0,-5.0
+published 2026,replacement,2026_09_NYG_PHI,boxscore-composite-v1.21,NYG,J.McCarthy,True,3.0,3.0,5.0
+published 2026,replacement,2026_09_ARI_SEA,boxscore-composite-v1.21,SEA,Drew Lock,True,8.0,8.0,5.5
+published 2026,replacement,2026_09_ARI_SEA,boxscore-composite-v1.21,ARI,G.Minshew,True,-8.0,-8.0,-5.5
+published 2026,replacement,2026_09_BUF_MIN,boxscore-composite-v1.22,MIN,C.Wentz,False,-14.0,-12.0,-13.5
+published 2026,replacement,2026_10_WAS_NYG,boxscore-composite-v1.22,NYG,J.McCarthy,False,-6.0,-4.0,-4.5
+archived saved decisions,chart,2026_07_CIN_BAL,boxscore-composite-v1.18,BAL,T.Huntley,False,-19.0,-17.0,-19.0
+archived saved decisions,chart,2026_09_JAX_BAL,boxscore-composite-v1.21,BAL,Joe Fagnano,False,-10.0,-8.0,-13.0
+archived saved decisions,chart,2026_09_CLE_NO,boxscore-composite-v1.21,CLE,Shedeur Sanders,False,4.0,6.0,2.0
+archived saved decisions,chart,2026_09_ARI_SEA,boxscore-composite-v1.21,SEA,Drew Lock,False,8.0,10.0,5.5
+archived saved decisions,chart,2026_09_BUF_MIN,boxscore-composite-v1.22,MIN,C.Wentz,False,-14.0,-12.0,-13.5
+archived saved decisions,replacement,2026_07_NYG_HOU,boxscore-composite-v1.18,NYG,J.McCarthy,False,13.0,15.0,16.5
+archived saved decisions,replacement,2026_07_CIN_BAL,boxscore-composite-v1.18,BAL,T.Huntley,False,-19.0,-17.0,-19.0
+archived saved decisions,replacement,2026_07_DAL_PHI,boxscore-composite-v1.18,PHI,T.McKee,False,-13.0,-11.0,-12.5
+archived saved decisions,replacement,2026_08_PHI_WAS,boxscore-composite-v1.18,PHI,T.McKee,False,-13.0,-11.0,-11.0
+archived saved decisions,replacement,2026_09_JAX_BAL,boxscore-composite-v1.21,BAL,Joe Fagnano,False,-10.0,-8.0,-13.0
+archived saved decisions,replacement,2026_09_CLE_NO,boxscore-composite-v1.21,CLE,Shedeur Sanders,False,4.0,6.0,2.0
+archived saved decisions,replacement,2026_09_NYG_PHI,boxscore-composite-v1.21,PHI,J.Milton,True,-3.0,-3.0,-5.0
+archived saved decisions,replacement,2026_09_NYG_PHI,boxscore-composite-v1.21,NYG,J.McCarthy,True,3.0,3.0,5.0
+archived saved decisions,replacement,2026_09_ARI_SEA,boxscore-composite-v1.21,SEA,Drew Lock,True,8.0,8.0,5.5
+archived saved decisions,replacement,2026_09_ARI_SEA,boxscore-composite-v1.21,ARI,G.Minshew,True,-8.0,-8.0,-5.5
+archived saved decisions,replacement,2026_09_BUF_MIN,boxscore-composite-v1.22,MIN,C.Wentz,False,-14.0,-12.0,-13.5
+archived saved decisions,replacement,2026_10_WAS_NYG,boxscore-composite-v1.22,NYG,J.McCarthy,False,-6.0,-4.0,-4.5

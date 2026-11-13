@@ -1,0 +1,3848 @@
+[
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "all completed",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "75-56-6",
+      "wins": 75,
+      "losses": 56,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5725190839694656,
+      "units": 12.181818181818182,
+      "roi": 0.0889183808891838,
+      "roi_se": 0.07920964091374441
+    },
+    "after": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "74-57-6",
+      "wins": 74,
+      "losses": 57,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5648854961832062,
+      "units": 10.272727272727273,
+      "roi": 0.07498341074983411,
+      "roi_se": 0.07937427735199333
+    },
+    "favorite": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "67-64-6",
+      "wins": 67,
+      "losses": 64,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5114503816793893,
+      "units": -3.090909090909089,
+      "roi": -0.022561380225613787,
+      "roi_se": 0.08001924067248962
+    },
+    "home": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "56-75-6",
+      "wins": 56,
+      "losses": 75,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.42748091603053434,
+      "units": -24.090909090909086,
+      "roi": -0.1758460517584605,
+      "roi_se": 0.07925855304926747
+    },
+    "paired": {
+      "n": 137,
+      "priced_n": 137,
+      "flips": 7,
+      "flip_before": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "4-3-0",
+        "wins": 4,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 0.6363636363636362,
+        "roi": 0.0909090909090909,
+        "roi_se": 0.38569460791993493
+      },
+      "flip_after": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "3-4-0",
+        "wins": 3,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.42857142857142855,
+        "units": -1.2727272727272725,
+        "roi": -0.1818181818181818,
+        "roi_se": 0.38569460791993493
+      },
+      "units_gain": -1.9090909090909092,
+      "mean_gain_per_game": -0.013934970139349702,
+      "mean_gain_se": 0.03698446516957531
+    },
+    "before_margin": {
+      "n": 137,
+      "mean_home_residual": -1.3211678832116789,
+      "MAE": 9.364963503649635,
+      "MSE": 141.72992700729927
+    },
+    "after_margin": {
+      "n": 137,
+      "mean_home_residual": -1.2627737226277371,
+      "MAE": 9.364963503649635,
+      "MSE": 141.87591240875912
+    },
+    "market_margin": {
+      "n": 137,
+      "mean_home_residual": -1.6715328467153285,
+      "MAE": 9.430656934306569,
+      "MSE": 143.4817518248175
+    },
+    "paired_gain_ci95": [
+      -0.0862310050653159,
+      0.05656565656565657
+    ],
+    "paired_side_prices": {
+      "n": 116,
+      "before": {
+        "n": 116,
+        "priced_n": 116,
+        "WLP": "65-47-4",
+        "wins": 65,
+        "losses": 47,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5803571428571429,
+        "units": 11.87832457100956,
+        "roi": 0.10239934975008241,
+        "roi_se": 0.08626199357510159
+      },
+      "after": {
+        "n": 116,
+        "priced_n": 116,
+        "WLP": "64-48-4",
+        "wins": 64,
+        "losses": 48,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 10.066173690693608,
+        "roi": 0.0867773594025311,
+        "roi_se": 0.08656171414259571
+      }
+    },
+    "raw_sensitivity": {
+      "n": 137,
+      "before": {
+        "n": 137,
+        "priced_n": 137,
+        "WLP": "70-61-6",
+        "wins": 70,
+        "losses": 61,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5343511450381679,
+        "units": 2.6363636363636367,
+        "roi": 0.019243530192435306,
+        "roi_se": 0.07985082522883935
+      },
+      "after": {
+        "n": 137,
+        "priced_n": 137,
+        "WLP": "70-61-6",
+        "wins": 70,
+        "losses": 61,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5343511450381679,
+        "units": 2.6363636363636376,
+        "roi": 0.019243530192435312,
+        "roi_se": 0.07985082522883935
+      },
+      "before_margin": {
+        "n": 137,
+        "mean_home_residual": -1.5679846929372554,
+        "MAE": 9.501952551903024,
+        "MSE": 142.4032116648294
+      },
+      "after_margin": {
+        "n": 137,
+        "mean_home_residual": -1.5095905323533136,
+        "MAE": 9.519309063222533,
+        "MSE": 142.41557359433133
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "known lineups",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "74-52-6",
+      "wins": 74,
+      "losses": 52,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5873015873015873,
+      "units": 15.272727272727273,
+      "roi": 0.11570247933884298,
+      "roi_se": 0.08026022201210037
+    },
+    "after": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "73-53-6",
+      "wins": 73,
+      "losses": 53,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5793650793650794,
+      "units": 13.363636363636362,
+      "roi": 0.10123966942148759,
+      "roi_se": 0.08047167810851721
+    },
+    "favorite": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "66-60-6",
+      "wins": 66,
+      "losses": 60,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5238095238095238,
+      "units": -8.881784197001252e-16,
+      "roi": -6.7286243916676156e-18,
+      "roi_se": 0.08138911320568029
+    },
+    "home": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "54-72-6",
+      "wins": 54,
+      "losses": 72,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.42857142857142855,
+      "units": -22.90909090909091,
+      "roi": -0.17355371900826447,
+      "roi_se": 0.08071367320238747
+    },
+    "paired": {
+      "n": 132,
+      "priced_n": 132,
+      "flips": 7,
+      "flip_before": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "4-3-0",
+        "wins": 4,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 0.6363636363636362,
+        "roi": 0.0909090909090909,
+        "roi_se": 0.38569460791993493
+      },
+      "flip_after": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "3-4-0",
+        "wins": 3,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.42857142857142855,
+        "units": -1.2727272727272725,
+        "roi": -0.1818181818181818,
+        "roi_se": 0.38569460791993493
+      },
+      "units_gain": -1.9090909090909092,
+      "mean_gain_per_game": -0.014462809917355372,
+      "mean_gain_se": 0.03838997957495001
+    },
+    "before_margin": {
+      "n": 132,
+      "mean_home_residual": -1.3409090909090908,
+      "MAE": 8.916666666666666,
+      "MSE": 126.58333333333333
+    },
+    "after_margin": {
+      "n": 132,
+      "mean_home_residual": -1.2803030303030303,
+      "MAE": 8.916666666666666,
+      "MSE": 126.73484848484848
+    },
+    "market_margin": {
+      "n": 132,
+      "mean_home_residual": -1.678030303030303,
+      "MAE": 8.988636363636363,
+      "MSE": 129.0473484848485
+    },
+    "paired_gain_ci95": [
+      -0.09029484029484029,
+      0.05829285218598196
+    ],
+    "paired_side_prices": {
+      "n": 112,
+      "before": {
+        "n": 112,
+        "priced_n": 112,
+        "WLP": "64-44-4",
+        "wins": 64,
+        "losses": 44,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5925925925925926,
+        "units": 13.897932414146814,
+        "roi": 0.12408868226916799,
+        "roi_se": 0.0873218366781655
+      },
+      "after": {
+        "n": 112,
+        "priced_n": 112,
+        "WLP": "63-45-4",
+        "wins": 63,
+        "losses": 45,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5833333333333334,
+        "units": 12.085781533830865,
+        "roi": 0.10790876369491843,
+        "roi_se": 0.0876751218636921
+      }
+    },
+    "raw_sensitivity": {
+      "n": 132,
+      "before": {
+        "n": 132,
+        "priced_n": 132,
+        "WLP": "67-59-6",
+        "wins": 67,
+        "losses": 59,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5317460317460317,
+        "units": 1.9090909090909078,
+        "roi": 0.014462809917355362,
+        "roi_se": 0.08131761408718506
+      },
+      "after": {
+        "n": 132,
+        "priced_n": 132,
+        "WLP": "67-59-6",
+        "wins": 67,
+        "losses": 59,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5317460317460317,
+        "units": 1.90909090909091,
+        "roi": 0.01446280991735538,
+        "roi_se": 0.08131761408718506
+      },
+      "before_margin": {
+        "n": 132,
+        "mean_home_residual": -1.5949534623990864,
+        "MAE": 9.077904124969105,
+        "MSE": 128.87612867067295
+      },
+      "after_margin": {
+        "n": 132,
+        "mean_home_residual": -1.5343474017930259,
+        "MAE": 9.0959180798992,
+        "MSE": 128.88895885508032
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "backup involved",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "9-8-1",
+      "wins": 9,
+      "losses": 8,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5294117647058824,
+      "units": 0.1818181818181812,
+      "roi": 0.010101010101010067,
+      "roi_se": 0.22459971642840665
+    },
+    "after": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "8-9-1",
+      "wins": 8,
+      "losses": 9,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.47058823529411764,
+      "units": -1.727272727272727,
+      "roi": -0.09595959595959595,
+      "roi_se": 0.22466985113610335
+    },
+    "favorite": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "11-6-1",
+      "wins": 11,
+      "losses": 6,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6470588235294118,
+      "units": 3.9999999999999996,
+      "roi": 0.2222222222222222,
+      "roi_se": 0.21543405191741674
+    },
+    "home": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "5-12-1",
+      "wins": 5,
+      "losses": 12,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.29411764705882354,
+      "units": -7.454545454545454,
+      "roi": -0.41414141414141414,
+      "roi_se": 0.2064720415692571
+    },
+    "paired": {
+      "n": 18,
+      "priced_n": 18,
+      "flips": 7,
+      "flip_before": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "4-3-0",
+        "wins": 4,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 0.6363636363636362,
+        "roi": 0.0909090909090909,
+        "roi_se": 0.38569460791993493
+      },
+      "flip_after": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "3-4-0",
+        "wins": 3,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.42857142857142855,
+        "units": -1.2727272727272725,
+        "roi": -0.1818181818181818,
+        "roi_se": 0.38569460791993493
+      },
+      "units_gain": -1.9090909090909092,
+      "mean_gain_per_game": -0.10606060606060606,
+      "mean_gain_se": 0.2875971978656427
+    },
+    "before_margin": {
+      "n": 18,
+      "mean_home_residual": -7.055555555555555,
+      "MAE": 10.722222222222221,
+      "MSE": 164.16666666666666
+    },
+    "after_margin": {
+      "n": 18,
+      "mean_home_residual": -6.611111111111111,
+      "MAE": 10.722222222222221,
+      "MSE": 165.27777777777777
+    },
+    "market_margin": {
+      "n": 18,
+      "mean_home_residual": -7.222222222222222,
+      "MAE": 10.555555555555555,
+      "MSE": 163.83333333333334
+    },
+    "paired_gain_ci95": [
+      -0.7424242424242424,
+      0.34710743801652894
+    ],
+    "paired_side_prices": {
+      "n": 14,
+      "before": {
+        "n": 14,
+        "priced_n": 14,
+        "WLP": "8-6-0",
+        "wins": 8,
+        "losses": 6,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 1.050429373568651,
+        "roi": 0.07503066954061792,
+        "roi_se": 0.2583056518388832
+      },
+      "after": {
+        "n": 14,
+        "priced_n": 14,
+        "WLP": "7-7-0",
+        "wins": 7,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5,
+        "units": -0.7617215067472991,
+        "roi": -0.054408679053378504,
+        "roi_se": 0.26237418808349
+      }
+    },
+    "raw_sensitivity": {
+      "n": 18,
+      "before": {
+        "n": 18,
+        "priced_n": 18,
+        "WLP": "9-8-1",
+        "wins": 9,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5294117647058824,
+        "units": 0.18181818181818166,
+        "roi": 0.010101010101010091,
+        "roi_se": 0.22459971642840665
+      },
+      "after": {
+        "n": 18,
+        "priced_n": 18,
+        "WLP": "9-8-1",
+        "wins": 9,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5294117647058824,
+        "units": 0.18181818181818155,
+        "roi": 0.010101010101010086,
+        "roi_se": 0.22459971642840665
+      },
+      "before_margin": {
+        "n": 18,
+        "mean_home_residual": -7.3417823669523825,
+        "MAE": 10.616685587434112,
+        "MSE": 163.83679774083578
+      },
+      "after_margin": {
+        "n": 18,
+        "mean_home_residual": -6.897337922507939,
+        "MAE": 10.74878792358815,
+        "MSE": 163.93088575982298
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "correct starters, backup involved",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "9-8-1",
+      "wins": 9,
+      "losses": 8,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5294117647058824,
+      "units": 0.1818181818181812,
+      "roi": 0.010101010101010067,
+      "roi_se": 0.22459971642840665
+    },
+    "after": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "8-9-1",
+      "wins": 8,
+      "losses": 9,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.47058823529411764,
+      "units": -1.727272727272727,
+      "roi": -0.09595959595959595,
+      "roi_se": 0.22466985113610335
+    },
+    "favorite": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "11-6-1",
+      "wins": 11,
+      "losses": 6,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6470588235294118,
+      "units": 3.9999999999999996,
+      "roi": 0.2222222222222222,
+      "roi_se": 0.21543405191741674
+    },
+    "home": {
+      "n": 18,
+      "priced_n": 18,
+      "WLP": "5-12-1",
+      "wins": 5,
+      "losses": 12,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.29411764705882354,
+      "units": -7.454545454545454,
+      "roi": -0.41414141414141414,
+      "roi_se": 0.2064720415692571
+    },
+    "paired": {
+      "n": 18,
+      "priced_n": 18,
+      "flips": 7,
+      "flip_before": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "4-3-0",
+        "wins": 4,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 0.6363636363636362,
+        "roi": 0.0909090909090909,
+        "roi_se": 0.38569460791993493
+      },
+      "flip_after": {
+        "n": 7,
+        "priced_n": 7,
+        "WLP": "3-4-0",
+        "wins": 3,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.42857142857142855,
+        "units": -1.2727272727272725,
+        "roi": -0.1818181818181818,
+        "roi_se": 0.38569460791993493
+      },
+      "units_gain": -1.9090909090909092,
+      "mean_gain_per_game": -0.10606060606060606,
+      "mean_gain_se": 0.2875971978656427
+    },
+    "before_margin": {
+      "n": 18,
+      "mean_home_residual": -7.055555555555555,
+      "MAE": 10.722222222222221,
+      "MSE": 164.16666666666666
+    },
+    "after_margin": {
+      "n": 18,
+      "mean_home_residual": -6.611111111111111,
+      "MAE": 10.722222222222221,
+      "MSE": 165.27777777777777
+    },
+    "market_margin": {
+      "n": 18,
+      "mean_home_residual": -7.222222222222222,
+      "MAE": 10.555555555555555,
+      "MSE": 163.83333333333334
+    },
+    "paired_gain_ci95": [
+      -0.7424242424242424,
+      0.34710743801652894
+    ],
+    "paired_side_prices": {
+      "n": 14,
+      "before": {
+        "n": 14,
+        "priced_n": 14,
+        "WLP": "8-6-0",
+        "wins": 8,
+        "losses": 6,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5714285714285714,
+        "units": 1.050429373568651,
+        "roi": 0.07503066954061792,
+        "roi_se": 0.2583056518388832
+      },
+      "after": {
+        "n": 14,
+        "priced_n": 14,
+        "WLP": "7-7-0",
+        "wins": 7,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5,
+        "units": -0.7617215067472991,
+        "roi": -0.054408679053378504,
+        "roi_se": 0.26237418808349
+      }
+    },
+    "raw_sensitivity": {
+      "n": 18,
+      "before": {
+        "n": 18,
+        "priced_n": 18,
+        "WLP": "9-8-1",
+        "wins": 9,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5294117647058824,
+        "units": 0.18181818181818166,
+        "roi": 0.010101010101010091,
+        "roi_se": 0.22459971642840665
+      },
+      "after": {
+        "n": 18,
+        "priced_n": 18,
+        "WLP": "9-8-1",
+        "wins": 9,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5294117647058824,
+        "units": 0.18181818181818155,
+        "roi": 0.010101010101010086,
+        "roi_se": 0.22459971642840665
+      },
+      "before_margin": {
+        "n": 18,
+        "mean_home_residual": -7.3417823669523825,
+        "MAE": 10.616685587434112,
+        "MSE": 163.83679774083578
+      },
+      "after_margin": {
+        "n": 18,
+        "mean_home_residual": -6.897337922507939,
+        "MAE": 10.74878792358815,
+        "MSE": 163.93088575982298
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "backup-team oriented residuals",
+    "n": 18,
+    "before_mean": -0.7222222222222222,
+    "after_mean": 1.2777777777777777,
+    "market_mean": -1.1666666666666667
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "source: 60-minute lock",
+    "before": {
+      "n": 2,
+      "priced_n": 2,
+      "WLP": "0-2-0",
+      "wins": 0,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.0,
+      "units": -2.0,
+      "roi": -1.0,
+      "roi_se": 0.0
+    },
+    "after": {
+      "n": 2,
+      "priced_n": 2,
+      "WLP": "0-2-0",
+      "wins": 0,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.0,
+      "units": -2.0,
+      "roi": -1.0,
+      "roi_se": 0.0
+    },
+    "paired": {
+      "n": 2,
+      "priced_n": 2,
+      "flips": 0,
+      "flip_before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "units_gain": 0.0,
+      "mean_gain_per_game": 0.0,
+      "mean_gain_se": 0.0
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "source: Historical replay",
+    "before": {
+      "n": 121,
+      "priced_n": 121,
+      "WLP": "67-48-6",
+      "wins": 67,
+      "losses": 48,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5826086956521739,
+      "units": 12.909090909090908,
+      "roi": 0.10668670172802404,
+      "roi_se": 0.08381185167012607
+    },
+    "after": {
+      "n": 121,
+      "priced_n": 121,
+      "WLP": "65-50-6",
+      "wins": 65,
+      "losses": 50,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5652173913043478,
+      "units": 9.090909090909093,
+      "roi": 0.0751314800901578,
+      "roi_se": 0.08423860690436746
+    },
+    "paired": {
+      "n": 121,
+      "priced_n": 121,
+      "flips": 6,
+      "flip_before": {
+        "n": 6,
+        "priced_n": 6,
+        "WLP": "4-2-0",
+        "wins": 4,
+        "losses": 2,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6666666666666666,
+        "units": 1.6363636363636362,
+        "roi": 0.2727272727272727,
+        "roi_se": 0.4024717022032483
+      },
+      "flip_after": {
+        "n": 6,
+        "priced_n": 6,
+        "WLP": "2-4-0",
+        "wins": 2,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.3333333333333333,
+        "units": -2.1818181818181817,
+        "roi": -0.3636363636363636,
+        "roi_se": 0.40247170220324835
+      },
+      "units_gain": -3.8181818181818183,
+      "mean_gain_per_game": -0.03155522163786627,
+      "mean_gain_se": 0.03870073516495766
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "chart",
+    "subset": "source: Owner-requested retro lock",
+    "before": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "8-6-0",
+      "wins": 8,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5714285714285714,
+      "units": 1.2727272727272725,
+      "roi": 0.0909090909090909,
+      "roi_se": 0.262027888044688
+    },
+    "after": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "9-5-0",
+      "wins": 9,
+      "losses": 5,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6428571428571429,
+      "units": 3.1818181818181817,
+      "roi": 0.22727272727272727,
+      "roi_se": 0.2537074116597446
+    },
+    "paired": {
+      "n": 14,
+      "priced_n": 14,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.13636363636363638,
+      "mean_gain_se": 0.13636363636363638
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "all completed",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "75-56-6",
+      "wins": 75,
+      "losses": 56,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5725190839694656,
+      "units": 12.181818181818182,
+      "roi": 0.0889183808891838,
+      "roi_se": 0.07920964091374441
+    },
+    "after": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "78-53-6",
+      "wins": 78,
+      "losses": 53,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5954198473282443,
+      "units": 17.909090909090907,
+      "roi": 0.1307232913072329,
+      "roi_se": 0.07860475373988983
+    },
+    "favorite": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "67-64-6",
+      "wins": 67,
+      "losses": 64,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5114503816793893,
+      "units": -3.090909090909089,
+      "roi": -0.022561380225613787,
+      "roi_se": 0.08001924067248962
+    },
+    "home": {
+      "n": 137,
+      "priced_n": 137,
+      "WLP": "56-75-6",
+      "wins": 56,
+      "losses": 75,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.42748091603053434,
+      "units": -24.090909090909086,
+      "roi": -0.1758460517584605,
+      "roi_se": 0.07925855304926747
+    },
+    "paired": {
+      "n": 137,
+      "priced_n": 137,
+      "flips": 11,
+      "flip_before": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "4-7-0",
+        "wins": 4,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.36363636363636365,
+        "units": -3.3636363636363638,
+        "roi": -0.3057851239669422,
+        "roi_se": 0.29041091830108406
+      },
+      "flip_after": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "7-4-0",
+        "wins": 7,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6363636363636364,
+        "units": 2.3636363636363633,
+        "roi": 0.21487603305785122,
+        "roi_se": 0.29041091830108406
+      },
+      "units_gain": 5.727272727272729,
+      "mean_gain_per_game": 0.04180491041804912,
+      "mean_gain_se": 0.046247950860113046
+    },
+    "before_margin": {
+      "n": 137,
+      "mean_home_residual": -1.3211678832116789,
+      "MAE": 9.364963503649635,
+      "MSE": 141.72992700729927
+    },
+    "after_margin": {
+      "n": 137,
+      "mean_home_residual": -1.2335766423357664,
+      "MAE": 9.364963503649635,
+      "MSE": 142.83941605839416
+    },
+    "market_margin": {
+      "n": 137,
+      "mean_home_residual": -1.6715328467153285,
+      "MAE": 9.430656934306569,
+      "MSE": 143.4817518248175
+    },
+    "paired_gain_ci95": [
+      -0.07342657342657342,
+      0.1427357689039932
+    ],
+    "paired_side_prices": {
+      "n": 116,
+      "before": {
+        "n": 116,
+        "priced_n": 116,
+        "WLP": "65-47-4",
+        "wins": 65,
+        "losses": 47,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5803571428571429,
+        "units": 11.87832457100956,
+        "roi": 0.10239934975008241,
+        "roi_se": 0.08626199357510159
+      },
+      "after": {
+        "n": 116,
+        "priced_n": 116,
+        "WLP": "67-45-4",
+        "wins": 67,
+        "losses": 45,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5982142857142857,
+        "units": 15.806378401237302,
+        "roi": 0.13626188276928708,
+        "roi_se": 0.08579041163703928
+      }
+    },
+    "raw_sensitivity": {
+      "n": 137,
+      "before": {
+        "n": 137,
+        "priced_n": 137,
+        "WLP": "70-61-6",
+        "wins": 70,
+        "losses": 61,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5343511450381679,
+        "units": 2.6363636363636367,
+        "roi": 0.019243530192435306,
+        "roi_se": 0.07985082522883935
+      },
+      "after": {
+        "n": 137,
+        "priced_n": 137,
+        "WLP": "69-62-6",
+        "wins": 69,
+        "losses": 62,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5267175572519084,
+        "units": 0.7272727272727284,
+        "roi": 0.005308560053085609,
+        "roi_se": 0.07992486966237451
+      },
+      "before_margin": {
+        "n": 137,
+        "mean_home_residual": -1.5679846929372554,
+        "MAE": 9.501952551903024,
+        "MSE": 142.4032116648294
+      },
+      "after_margin": {
+        "n": 137,
+        "mean_home_residual": -1.4803934520613429,
+        "MAE": 9.497436652985915,
+        "MSE": 143.6917489648425
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "known lineups",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "74-52-6",
+      "wins": 74,
+      "losses": 52,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5873015873015873,
+      "units": 15.272727272727273,
+      "roi": 0.11570247933884298,
+      "roi_se": 0.08026022201210037
+    },
+    "after": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "77-49-6",
+      "wins": 77,
+      "losses": 49,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6111111111111112,
+      "units": 21.0,
+      "roi": 0.1590909090909091,
+      "roi_se": 0.07950207005651941
+    },
+    "favorite": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "66-60-6",
+      "wins": 66,
+      "losses": 60,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5238095238095238,
+      "units": -8.881784197001252e-16,
+      "roi": -6.7286243916676156e-18,
+      "roi_se": 0.08138911320568029
+    },
+    "home": {
+      "n": 132,
+      "priced_n": 132,
+      "WLP": "54-72-6",
+      "wins": 54,
+      "losses": 72,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.42857142857142855,
+      "units": -22.90909090909091,
+      "roi": -0.17355371900826447,
+      "roi_se": 0.08071367320238747
+    },
+    "paired": {
+      "n": 132,
+      "priced_n": 132,
+      "flips": 11,
+      "flip_before": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "4-7-0",
+        "wins": 4,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.36363636363636365,
+        "units": -3.3636363636363638,
+        "roi": -0.3057851239669422,
+        "roi_se": 0.29041091830108406
+      },
+      "flip_after": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "7-4-0",
+        "wins": 7,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6363636363636364,
+        "units": 2.3636363636363633,
+        "roi": 0.21487603305785122,
+        "roi_se": 0.29041091830108406
+      },
+      "units_gain": 5.727272727272729,
+      "mean_gain_per_game": 0.04338842975206613,
+      "mean_gain_se": 0.04800099016377841
+    },
+    "before_margin": {
+      "n": 132,
+      "mean_home_residual": -1.3409090909090908,
+      "MAE": 8.916666666666666,
+      "MSE": 126.58333333333333
+    },
+    "after_margin": {
+      "n": 132,
+      "mean_home_residual": -1.25,
+      "MAE": 8.916666666666666,
+      "MSE": 127.73484848484848
+    },
+    "market_margin": {
+      "n": 132,
+      "mean_home_residual": -1.678030303030303,
+      "MAE": 8.988636363636363,
+      "MSE": 129.0473484848485
+    },
+    "paired_gain_ci95": [
+      -0.07538397129186603,
+      0.1481191222570533
+    ],
+    "paired_side_prices": {
+      "n": 112,
+      "before": {
+        "n": 112,
+        "priced_n": 112,
+        "WLP": "64-44-4",
+        "wins": 64,
+        "losses": 44,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5925925925925926,
+        "units": 13.897932414146814,
+        "roi": 0.12408868226916799,
+        "roi_se": 0.0873218366781655
+      },
+      "after": {
+        "n": 112,
+        "priced_n": 112,
+        "WLP": "66-42-4",
+        "wins": 66,
+        "losses": 42,
+        "pushes": 4,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6111111111111112,
+        "units": 17.825986244374562,
+        "roi": 0.15916059146763,
+        "roi_se": 0.08674071801187112
+      }
+    },
+    "raw_sensitivity": {
+      "n": 132,
+      "before": {
+        "n": 132,
+        "priced_n": 132,
+        "WLP": "67-59-6",
+        "wins": 67,
+        "losses": 59,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5317460317460317,
+        "units": 1.9090909090909078,
+        "roi": 0.014462809917355362,
+        "roi_se": 0.08131761408718506
+      },
+      "after": {
+        "n": 132,
+        "priced_n": 132,
+        "WLP": "66-60-6",
+        "wins": 66,
+        "losses": 60,
+        "pushes": 6,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5238095238095238,
+        "units": 8.881784197001252e-16,
+        "roi": 6.7286243916676156e-18,
+        "roi_se": 0.08138911320568028
+      },
+      "before_margin": {
+        "n": 132,
+        "mean_home_residual": -1.5949534623990864,
+        "MAE": 9.077904124969105,
+        "MSE": 128.87612867067295
+      },
+      "after_margin": {
+        "n": 132,
+        "mean_home_residual": -1.5040443714899956,
+        "MAE": 9.073217169274832,
+        "MSE": 130.21347420174718
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "backup involved",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "11-12-1",
+      "wins": 11,
+      "losses": 12,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4782608695652174,
+      "units": -2.0,
+      "roi": -0.08333333333333333,
+      "roi_se": 0.19469523947904194
+    },
+    "after": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "14-9-1",
+      "wins": 14,
+      "losses": 9,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6086956521739131,
+      "units": 3.727272727272727,
+      "roi": 0.1553030303030303,
+      "roi_se": 0.19030577599707701
+    },
+    "favorite": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "12-11-1",
+      "wins": 12,
+      "losses": 11,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5217391304347826,
+      "units": -0.09090909090909083,
+      "roi": -0.0037878787878787845,
+      "roi_se": 0.19466159329590302
+    },
+    "home": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "7-16-1",
+      "wins": 7,
+      "losses": 16,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.30434782608695654,
+      "units": -9.636363636363637,
+      "roi": -0.40151515151515155,
+      "roi_se": 0.1801568256108808
+    },
+    "paired": {
+      "n": 24,
+      "priced_n": 24,
+      "flips": 11,
+      "flip_before": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "4-7-0",
+        "wins": 4,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.36363636363636365,
+        "units": -3.3636363636363638,
+        "roi": -0.3057851239669422,
+        "roi_se": 0.29041091830108406
+      },
+      "flip_after": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "7-4-0",
+        "wins": 7,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6363636363636364,
+        "units": 2.3636363636363633,
+        "roi": 0.21487603305785122,
+        "roi_se": 0.29041091830108406
+      },
+      "units_gain": 5.7272727272727275,
+      "mean_gain_per_game": 0.23863636363636365,
+      "mean_gain_se": 0.264863150177511
+    },
+    "before_margin": {
+      "n": 24,
+      "mean_home_residual": -5.125,
+      "MAE": 10.125,
+      "MSE": 139.95833333333334
+    },
+    "after_margin": {
+      "n": 24,
+      "mean_home_residual": -4.625,
+      "MAE": 10.125,
+      "MSE": 146.29166666666666
+    },
+    "market_margin": {
+      "n": 24,
+      "mean_home_residual": -5.520833333333333,
+      "MAE": 10.3125,
+      "MSE": 148.73958333333334
+    },
+    "paired_gain_ci95": [
+      -0.39772727272727276,
+      0.8484848484848485
+    ],
+    "paired_side_prices": {
+      "n": 19,
+      "before": {
+        "n": 19,
+        "priced_n": 19,
+        "WLP": "10-9-0",
+        "wins": 10,
+        "losses": 9,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5263157894736842,
+        "units": -0.1540794831141188,
+        "roi": -0.008109446479690462,
+        "roi_se": 0.2218635636931945
+      },
+      "after": {
+        "n": 19,
+        "priced_n": 19,
+        "WLP": "12-7-0",
+        "wins": 12,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.631578947368421,
+        "units": 3.773974347113625,
+        "roi": 0.19863022879545394,
+        "roi_se": 0.21589708172177816
+      }
+    },
+    "raw_sensitivity": {
+      "n": 24,
+      "before": {
+        "n": 24,
+        "priced_n": 24,
+        "WLP": "16-7-1",
+        "wins": 16,
+        "losses": 7,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6956521739130435,
+        "units": 7.545454545454545,
+        "roi": 0.3143939393939394,
+        "roi_se": 0.17982930370902225
+      },
+      "after": {
+        "n": 24,
+        "priced_n": 24,
+        "WLP": "15-8-1",
+        "wins": 15,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6521739130434783,
+        "units": 5.636363636363636,
+        "roi": 0.23484848484848483,
+        "roi_se": 0.18588313861806213
+      },
+      "before_margin": {
+        "n": 24,
+        "mean_home_residual": -5.257545426107118,
+        "MAE": 9.982547854755296,
+        "MSE": 136.25831444058278
+      },
+      "after_margin": {
+        "n": 24,
+        "mean_home_residual": -4.757545426107118,
+        "MAE": 9.956769598436793,
+        "MSE": 143.61371486149085
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "correct starters, backup involved",
+    "known_games": 132,
+    "unknown_unchanged": 5,
+    "before": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "11-12-1",
+      "wins": 11,
+      "losses": 12,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4782608695652174,
+      "units": -2.0,
+      "roi": -0.08333333333333333,
+      "roi_se": 0.19469523947904194
+    },
+    "after": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "14-9-1",
+      "wins": 14,
+      "losses": 9,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6086956521739131,
+      "units": 3.727272727272727,
+      "roi": 0.1553030303030303,
+      "roi_se": 0.19030577599707701
+    },
+    "favorite": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "12-11-1",
+      "wins": 12,
+      "losses": 11,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5217391304347826,
+      "units": -0.09090909090909083,
+      "roi": -0.0037878787878787845,
+      "roi_se": 0.19466159329590302
+    },
+    "home": {
+      "n": 24,
+      "priced_n": 24,
+      "WLP": "7-16-1",
+      "wins": 7,
+      "losses": 16,
+      "pushes": 1,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.30434782608695654,
+      "units": -9.636363636363637,
+      "roi": -0.40151515151515155,
+      "roi_se": 0.1801568256108808
+    },
+    "paired": {
+      "n": 24,
+      "priced_n": 24,
+      "flips": 11,
+      "flip_before": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "4-7-0",
+        "wins": 4,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.36363636363636365,
+        "units": -3.3636363636363638,
+        "roi": -0.3057851239669422,
+        "roi_se": 0.29041091830108406
+      },
+      "flip_after": {
+        "n": 11,
+        "priced_n": 11,
+        "WLP": "7-4-0",
+        "wins": 7,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6363636363636364,
+        "units": 2.3636363636363633,
+        "roi": 0.21487603305785122,
+        "roi_se": 0.29041091830108406
+      },
+      "units_gain": 5.7272727272727275,
+      "mean_gain_per_game": 0.23863636363636365,
+      "mean_gain_se": 0.264863150177511
+    },
+    "before_margin": {
+      "n": 24,
+      "mean_home_residual": -5.125,
+      "MAE": 10.125,
+      "MSE": 139.95833333333334
+    },
+    "after_margin": {
+      "n": 24,
+      "mean_home_residual": -4.625,
+      "MAE": 10.125,
+      "MSE": 146.29166666666666
+    },
+    "market_margin": {
+      "n": 24,
+      "mean_home_residual": -5.520833333333333,
+      "MAE": 10.3125,
+      "MSE": 148.73958333333334
+    },
+    "paired_gain_ci95": [
+      -0.39772727272727276,
+      0.8484848484848485
+    ],
+    "paired_side_prices": {
+      "n": 19,
+      "before": {
+        "n": 19,
+        "priced_n": 19,
+        "WLP": "10-9-0",
+        "wins": 10,
+        "losses": 9,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5263157894736842,
+        "units": -0.1540794831141188,
+        "roi": -0.008109446479690462,
+        "roi_se": 0.2218635636931945
+      },
+      "after": {
+        "n": 19,
+        "priced_n": 19,
+        "WLP": "12-7-0",
+        "wins": 12,
+        "losses": 7,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.631578947368421,
+        "units": 3.773974347113625,
+        "roi": 0.19863022879545394,
+        "roi_se": 0.21589708172177816
+      }
+    },
+    "raw_sensitivity": {
+      "n": 24,
+      "before": {
+        "n": 24,
+        "priced_n": 24,
+        "WLP": "16-7-1",
+        "wins": 16,
+        "losses": 7,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6956521739130435,
+        "units": 7.545454545454545,
+        "roi": 0.3143939393939394,
+        "roi_se": 0.17982930370902225
+      },
+      "after": {
+        "n": 24,
+        "priced_n": 24,
+        "WLP": "15-8-1",
+        "wins": 15,
+        "losses": 8,
+        "pushes": 1,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6521739130434783,
+        "units": 5.636363636363636,
+        "roi": 0.23484848484848483,
+        "roi_se": 0.18588313861806213
+      },
+      "before_margin": {
+        "n": 24,
+        "mean_home_residual": -5.257545426107118,
+        "MAE": 9.982547854755296,
+        "MSE": 136.25831444058278
+      },
+      "after_margin": {
+        "n": 24,
+        "mean_home_residual": -4.757545426107118,
+        "MAE": 9.956769598436793,
+        "MSE": 143.61371486149085
+      }
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "backup-team oriented residuals",
+    "n": 26,
+    "before_mean": 0.6153846153846154,
+    "after_mean": 2.3076923076923075,
+    "market_mean": 0.8076923076923077
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "source: 60-minute lock",
+    "before": {
+      "n": 2,
+      "priced_n": 2,
+      "WLP": "0-2-0",
+      "wins": 0,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.0,
+      "units": -2.0,
+      "roi": -1.0,
+      "roi_se": 0.0
+    },
+    "after": {
+      "n": 2,
+      "priced_n": 2,
+      "WLP": "1-1-0",
+      "wins": 1,
+      "losses": 1,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5,
+      "units": -0.09090909090909094,
+      "roi": -0.04545454545454547,
+      "roi_se": 0.9545454545454546
+    },
+    "paired": {
+      "n": 2,
+      "priced_n": 2,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.9545454545454546,
+      "mean_gain_se": 0.9545454545454546
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "source: Historical replay",
+    "before": {
+      "n": 121,
+      "priced_n": 121,
+      "WLP": "67-48-6",
+      "wins": 67,
+      "losses": 48,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5826086956521739,
+      "units": 12.909090909090908,
+      "roi": 0.10668670172802404,
+      "roi_se": 0.08381185167012607
+    },
+    "after": {
+      "n": 121,
+      "priced_n": 121,
+      "WLP": "68-47-6",
+      "wins": 68,
+      "losses": 47,
+      "pushes": 6,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.591304347826087,
+      "units": 14.81818181818182,
+      "roi": 0.1224643125469572,
+      "roi_se": 0.08356042693099232
+    },
+    "paired": {
+      "n": 121,
+      "priced_n": 121,
+      "flips": 9,
+      "flip_before": {
+        "n": 9,
+        "priced_n": 9,
+        "WLP": "4-5-0",
+        "wins": 4,
+        "losses": 5,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.4444444444444444,
+        "units": -1.3636363636363638,
+        "roi": -0.15151515151515152,
+        "roi_se": 0.3353930851693736
+      },
+      "flip_after": {
+        "n": 9,
+        "priced_n": 9,
+        "WLP": "5-4-0",
+        "wins": 5,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5555555555555556,
+        "units": 0.5454545454545453,
+        "roi": 0.06060606060606059,
+        "roi_se": 0.3353930851693736
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.015777610818933134,
+      "mean_gain_se": 0.047507815798319156
+    }
+  },
+  {
+    "pool": "published 2026",
+    "cohort": "replacement",
+    "subset": "source: Owner-requested retro lock",
+    "before": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "8-6-0",
+      "wins": 8,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5714285714285714,
+      "units": 1.2727272727272725,
+      "roi": 0.0909090909090909,
+      "roi_se": 0.262027888044688
+    },
+    "after": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "9-5-0",
+      "wins": 9,
+      "losses": 5,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6428571428571429,
+      "units": 3.1818181818181817,
+      "roi": 0.22727272727272727,
+      "roi_se": 0.2537074116597446
+    },
+    "paired": {
+      "n": 14,
+      "priced_n": 14,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.13636363636363638,
+      "mean_gain_se": 0.13636363636363638
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "all completed",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "22-23-0",
+      "wins": 22,
+      "losses": 23,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4888888888888889,
+      "units": -3.0,
+      "roi": -0.06666666666666667,
+      "roi_se": 0.1438676057026572
+    },
+    "after": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "23-22-0",
+      "wins": 23,
+      "losses": 22,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5111111111111111,
+      "units": -1.0909090909090908,
+      "roi": -0.02424242424242424,
+      "roi_se": 0.1438676057026572
+    },
+    "favorite": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "27-18-0",
+      "wins": 27,
+      "losses": 18,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6,
+      "units": 6.545454545454546,
+      "roi": 0.14545454545454548,
+      "roi_se": 0.14099570784905383
+    },
+    "home": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "17-28-0",
+      "wins": 17,
+      "losses": 28,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.37777777777777777,
+      "units": -12.545454545454545,
+      "roi": -0.27878787878787875,
+      "roi_se": 0.13953759515799313
+    },
+    "paired": {
+      "n": 45,
+      "priced_n": 45,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.04242424242424243,
+      "mean_gain_se": 0.04242424242424243
+    },
+    "before_margin": {
+      "n": 45,
+      "mean_home_residual": -1.6888888888888889,
+      "MAE": 9.733333333333333,
+      "MSE": 147.11111111111111
+    },
+    "after_margin": {
+      "n": 45,
+      "mean_home_residual": -1.5555555555555556,
+      "MAE": 9.688888888888888,
+      "MSE": 144.8
+    },
+    "market_margin": {
+      "n": 45,
+      "mean_home_residual": -1.8888888888888888,
+      "MAE": 9.577777777777778,
+      "MSE": 148.46666666666667
+    },
+    "paired_gain_ci95": [
+      0.0,
+      0.11570247933884298
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 45,
+      "before": {
+        "n": 45,
+        "priced_n": 45,
+        "WLP": "24-21-0",
+        "wins": 24,
+        "losses": 21,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5333333333333333,
+        "units": 0.8181818181818183,
+        "roi": 0.018181818181818184,
+        "roi_se": 0.1435830008627041
+      },
+      "after": {
+        "n": 45,
+        "priced_n": 45,
+        "WLP": "25-20-0",
+        "wins": 25,
+        "losses": 20,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5555555555555556,
+        "units": 2.7272727272727275,
+        "roi": 0.060606060606060615,
+        "roi_se": 0.14301209203765736
+      },
+      "before_margin": {
+        "n": 45,
+        "mean_home_residual": -1.9767338151850424,
+        "MAE": 9.723140399575527,
+        "MSE": 148.7519451661674
+      },
+      "after_margin": {
+        "n": 45,
+        "mean_home_residual": -1.8434004818517091,
+        "MAE": 9.678695955131083,
+        "MSE": 145.77408118115017
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "known lineups",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "22-22-0",
+      "wins": 22,
+      "losses": 22,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5,
+      "units": -2.0,
+      "roi": -0.045454545454545456,
+      "roi_se": 0.1455668171356681
+    },
+    "after": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "23-21-0",
+      "wins": 23,
+      "losses": 21,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5227272727272727,
+      "units": -0.09090909090909105,
+      "roi": -0.002066115702479342,
+      "roi_se": 0.1454163604369255
+    },
+    "favorite": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "27-17-0",
+      "wins": 27,
+      "losses": 17,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6136363636363636,
+      "units": 7.545454545454545,
+      "roi": 0.1714876033057851,
+      "roi_se": 0.14175750083797617
+    },
+    "home": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "17-27-0",
+      "wins": 17,
+      "losses": 27,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.38636363636363635,
+      "units": -11.545454545454545,
+      "roi": -0.26239669421487605,
+      "roi_se": 0.14175750083797617
+    },
+    "paired": {
+      "n": 44,
+      "priced_n": 44,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.04338842975206612,
+      "mean_gain_se": 0.04338842975206612
+    },
+    "before_margin": {
+      "n": 44,
+      "mean_home_residual": -0.9772727272727273,
+      "MAE": 9.204545454545455,
+      "MSE": 125.70454545454545
+    },
+    "after_margin": {
+      "n": 44,
+      "mean_home_residual": -0.8409090909090909,
+      "MAE": 9.159090909090908,
+      "MSE": 123.3409090909091
+    },
+    "market_margin": {
+      "n": 44,
+      "mean_home_residual": -1.1818181818181819,
+      "MAE": 9.045454545454545,
+      "MSE": 127.0909090909091
+    },
+    "paired_gain_ci95": [
+      0.0,
+      0.11570247933884298
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 44,
+      "before": {
+        "n": 44,
+        "priced_n": 44,
+        "WLP": "23-21-0",
+        "wins": 23,
+        "losses": 21,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5227272727272727,
+        "units": -0.09090909090909027,
+        "roi": -0.0020661157024793246,
+        "roi_se": 0.1454163604369255
+      },
+      "after": {
+        "n": 44,
+        "priced_n": 44,
+        "WLP": "24-20-0",
+        "wins": 24,
+        "losses": 20,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5454545454545454,
+        "units": 1.8181818181818183,
+        "roi": 0.04132231404958678,
+        "roi_se": 0.14496405339897267
+      },
+      "before_margin": {
+        "n": 44,
+        "mean_home_residual": -1.2870140707008613,
+        "MAE": 9.20947535019113,
+        "MSE": 128.38569388202723
+      },
+      "after_margin": {
+        "n": 44,
+        "mean_home_residual": -1.1506504343372248,
+        "MAE": 9.164020804736586,
+        "MSE": 125.34015117007783
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "backup involved",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "2-3-0",
+      "wins": 2,
+      "losses": 3,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4,
+      "units": -1.1818181818181819,
+      "roi": -0.2363636363636364,
+      "roi_se": 0.46762985998587947
+    },
+    "after": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "3-2-0",
+      "wins": 3,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6,
+      "units": 0.7272727272727272,
+      "roi": 0.14545454545454545,
+      "roi_se": 0.46762985998587947
+    },
+    "favorite": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "4-1-0",
+      "wins": 4,
+      "losses": 1,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.8,
+      "units": 2.6363636363636362,
+      "roi": 0.5272727272727272,
+      "roi_se": 0.3818181818181818
+    },
+    "home": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "1-4-0",
+      "wins": 1,
+      "losses": 4,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.2,
+      "units": -3.090909090909091,
+      "roi": -0.6181818181818182,
+      "roi_se": 0.3818181818181818
+    },
+    "paired": {
+      "n": 5,
+      "priced_n": 5,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.38181818181818183,
+      "mean_gain_se": 0.3818181818181818
+    },
+    "before_margin": {
+      "n": 5,
+      "mean_home_residual": -7.8,
+      "MAE": 11.0,
+      "MSE": 147.4
+    },
+    "after_margin": {
+      "n": 5,
+      "mean_home_residual": -6.6,
+      "MAE": 10.6,
+      "MSE": 126.6
+    },
+    "market_margin": {
+      "n": 5,
+      "mean_home_residual": -8.4,
+      "MAE": 10.6,
+      "MSE": 149.3
+    },
+    "paired_gain_ci95": [
+      0.0,
+      0.4772727272727273
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 5,
+      "before": {
+        "n": 5,
+        "priced_n": 5,
+        "WLP": "2-3-0",
+        "wins": 2,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.4,
+        "units": -1.1818181818181817,
+        "roi": -0.23636363636363633,
+        "roi_se": 0.46762985998587947
+      },
+      "after": {
+        "n": 5,
+        "priced_n": 5,
+        "WLP": "3-2-0",
+        "wins": 3,
+        "losses": 2,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6,
+        "units": 0.7272727272727272,
+        "roi": 0.14545454545454545,
+        "roi_se": 0.46762985998587947
+      },
+      "before_margin": {
+        "n": 5,
+        "mean_home_residual": -8.689500789001661,
+        "MAE": 10.664608713014982,
+        "MSE": 152.60466261427763
+      },
+      "after_margin": {
+        "n": 5,
+        "mean_home_residual": -7.489500789001662,
+        "MAE": 10.264608713014983,
+        "MSE": 125.803886749123
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "correct starters, backup involved",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "2-3-0",
+      "wins": 2,
+      "losses": 3,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4,
+      "units": -1.1818181818181819,
+      "roi": -0.2363636363636364,
+      "roi_se": 0.46762985998587947
+    },
+    "after": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "3-2-0",
+      "wins": 3,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6,
+      "units": 0.7272727272727272,
+      "roi": 0.14545454545454545,
+      "roi_se": 0.46762985998587947
+    },
+    "favorite": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "4-1-0",
+      "wins": 4,
+      "losses": 1,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.8,
+      "units": 2.6363636363636362,
+      "roi": 0.5272727272727272,
+      "roi_se": 0.3818181818181818
+    },
+    "home": {
+      "n": 5,
+      "priced_n": 5,
+      "WLP": "1-4-0",
+      "wins": 1,
+      "losses": 4,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.2,
+      "units": -3.090909090909091,
+      "roi": -0.6181818181818182,
+      "roi_se": 0.3818181818181818
+    },
+    "paired": {
+      "n": 5,
+      "priced_n": 5,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.38181818181818183,
+      "mean_gain_se": 0.3818181818181818
+    },
+    "before_margin": {
+      "n": 5,
+      "mean_home_residual": -7.8,
+      "MAE": 11.0,
+      "MSE": 147.4
+    },
+    "after_margin": {
+      "n": 5,
+      "mean_home_residual": -6.6,
+      "MAE": 10.6,
+      "MSE": 126.6
+    },
+    "market_margin": {
+      "n": 5,
+      "mean_home_residual": -8.4,
+      "MAE": 10.6,
+      "MSE": 149.3
+    },
+    "paired_gain_ci95": [
+      0.0,
+      0.4772727272727273
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 5,
+      "before": {
+        "n": 5,
+        "priced_n": 5,
+        "WLP": "2-3-0",
+        "wins": 2,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.4,
+        "units": -1.1818181818181817,
+        "roi": -0.23636363636363633,
+        "roi_se": 0.46762985998587947
+      },
+      "after": {
+        "n": 5,
+        "priced_n": 5,
+        "WLP": "3-2-0",
+        "wins": 3,
+        "losses": 2,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.6,
+        "units": 0.7272727272727272,
+        "roi": 0.14545454545454545,
+        "roi_se": 0.46762985998587947
+      },
+      "before_margin": {
+        "n": 5,
+        "mean_home_residual": -8.689500789001661,
+        "MAE": 10.664608713014982,
+        "MSE": 152.60466261427763
+      },
+      "after_margin": {
+        "n": 5,
+        "mean_home_residual": -7.489500789001662,
+        "MAE": 10.264608713014983,
+        "MSE": 125.803886749123
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "backup-team oriented residuals",
+    "n": 5,
+    "before_mean": -6.2,
+    "after_mean": -4.2,
+    "market_mean": -7.6
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "source: native saved lock",
+    "before": {
+      "n": 31,
+      "priced_n": 31,
+      "WLP": "14-17-0",
+      "wins": 14,
+      "losses": 17,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.45161290322580644,
+      "units": -4.2727272727272725,
+      "roi": -0.1378299120234604,
+      "roi_se": 0.1734573738650361
+    },
+    "after": {
+      "n": 31,
+      "priced_n": 31,
+      "WLP": "14-17-0",
+      "wins": 14,
+      "losses": 17,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.45161290322580644,
+      "units": -4.2727272727272725,
+      "roi": -0.1378299120234604,
+      "roi_se": 0.1734573738650361
+    },
+    "paired": {
+      "n": 31,
+      "priced_n": 31,
+      "flips": 0,
+      "flip_before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "units_gain": 0.0,
+      "mean_gain_per_game": 0.0,
+      "mean_gain_se": 0.0
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "chart",
+    "subset": "source: recovered saved board",
+    "before": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "8-6-0",
+      "wins": 8,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5714285714285714,
+      "units": 1.2727272727272725,
+      "roi": 0.0909090909090909,
+      "roi_se": 0.262027888044688
+    },
+    "after": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "9-5-0",
+      "wins": 9,
+      "losses": 5,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6428571428571429,
+      "units": 3.1818181818181817,
+      "roi": 0.22727272727272727,
+      "roi_se": 0.2537074116597446
+    },
+    "paired": {
+      "n": 14,
+      "priced_n": 14,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.13636363636363638,
+      "mean_gain_se": 0.13636363636363638
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "all completed",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "22-23-0",
+      "wins": 22,
+      "losses": 23,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4888888888888889,
+      "units": -3.0,
+      "roi": -0.06666666666666667,
+      "roi_se": 0.1438676057026572
+    },
+    "after": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "26-19-0",
+      "wins": 26,
+      "losses": 19,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5777777777777777,
+      "units": 4.636363636363637,
+      "roi": 0.10303030303030304,
+      "roi_se": 0.14215142970564718
+    },
+    "favorite": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "27-18-0",
+      "wins": 27,
+      "losses": 18,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6,
+      "units": 6.545454545454546,
+      "roi": 0.14545454545454548,
+      "roi_se": 0.14099570784905383
+    },
+    "home": {
+      "n": 45,
+      "priced_n": 45,
+      "WLP": "17-28-0",
+      "wins": 17,
+      "losses": 28,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.37777777777777777,
+      "units": -12.545454545454545,
+      "roi": -0.27878787878787875,
+      "roi_se": 0.13953759515799313
+    },
+    "paired": {
+      "n": 45,
+      "priced_n": 45,
+      "flips": 4,
+      "flip_before": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "0-4-0",
+        "wins": 0,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -4.0,
+        "roi": -1.0,
+        "roi_se": 0.0
+      },
+      "flip_after": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "4-0-0",
+        "wins": 4,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 3.6363636363636362,
+        "roi": 0.9090909090909091,
+        "roi_se": 0.0
+      },
+      "units_gain": 7.636363636363637,
+      "mean_gain_per_game": 0.1696969696969697,
+      "mean_gain_se": 0.0819048617471995
+    },
+    "before_margin": {
+      "n": 45,
+      "mean_home_residual": -1.6888888888888889,
+      "MAE": 9.733333333333333,
+      "MSE": 147.11111111111111
+    },
+    "after_margin": {
+      "n": 45,
+      "mean_home_residual": -1.6,
+      "MAE": 9.555555555555555,
+      "MSE": 142.66666666666666
+    },
+    "market_margin": {
+      "n": 45,
+      "mean_home_residual": -1.8888888888888888,
+      "MAE": 9.577777777777778,
+      "MSE": 148.46666666666667
+    },
+    "paired_gain_ci95": [
+      0.12316715542521994,
+      0.42424242424242425
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 45,
+      "before": {
+        "n": 45,
+        "priced_n": 45,
+        "WLP": "24-21-0",
+        "wins": 24,
+        "losses": 21,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5333333333333333,
+        "units": 0.8181818181818183,
+        "roi": 0.018181818181818184,
+        "roi_se": 0.1435830008627041
+      },
+      "after": {
+        "n": 45,
+        "priced_n": 45,
+        "WLP": "25-20-0",
+        "wins": 25,
+        "losses": 20,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5555555555555556,
+        "units": 2.727272727272728,
+        "roi": 0.06060606060606062,
+        "roi_se": 0.14301209203765736
+      },
+      "before_margin": {
+        "n": 45,
+        "mean_home_residual": -1.9767338151850424,
+        "MAE": 9.723140399575527,
+        "MSE": 148.7519451661674
+      },
+      "after_margin": {
+        "n": 45,
+        "mean_home_residual": -1.8878449262961536,
+        "MAE": 9.54536262179775,
+        "MSE": 144.75625570372083
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "known lineups",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "22-22-0",
+      "wins": 22,
+      "losses": 22,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5,
+      "units": -2.0,
+      "roi": -0.045454545454545456,
+      "roi_se": 0.1455668171356681
+    },
+    "after": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "26-18-0",
+      "wins": 26,
+      "losses": 18,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5909090909090909,
+      "units": 5.636363636363636,
+      "roi": 0.128099173553719,
+      "roi_se": 0.14314053359692944
+    },
+    "favorite": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "27-17-0",
+      "wins": 27,
+      "losses": 17,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6136363636363636,
+      "units": 7.545454545454545,
+      "roi": 0.1714876033057851,
+      "roi_se": 0.14175750083797617
+    },
+    "home": {
+      "n": 44,
+      "priced_n": 44,
+      "WLP": "17-27-0",
+      "wins": 17,
+      "losses": 27,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.38636363636363635,
+      "units": -11.545454545454545,
+      "roi": -0.26239669421487605,
+      "roi_se": 0.14175750083797617
+    },
+    "paired": {
+      "n": 44,
+      "priced_n": 44,
+      "flips": 4,
+      "flip_before": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "0-4-0",
+        "wins": 0,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -4.0,
+        "roi": -1.0,
+        "roi_se": 0.0
+      },
+      "flip_after": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "4-0-0",
+        "wins": 4,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 3.6363636363636362,
+        "roi": 0.9090909090909091,
+        "roi_se": 0.0
+      },
+      "units_gain": 7.636363636363637,
+      "mean_gain_per_game": 0.17355371900826447,
+      "mean_gain_se": 0.08369503525271615
+    },
+    "before_margin": {
+      "n": 44,
+      "mean_home_residual": -0.9772727272727273,
+      "MAE": 9.204545454545455,
+      "MSE": 125.70454545454545
+    },
+    "after_margin": {
+      "n": 44,
+      "mean_home_residual": -0.8863636363636364,
+      "MAE": 9.022727272727273,
+      "MSE": 121.1590909090909
+    },
+    "market_margin": {
+      "n": 44,
+      "mean_home_residual": -1.1818181818181819,
+      "MAE": 9.045454545454545,
+      "MSE": 127.0909090909091
+    },
+    "paired_gain_ci95": [
+      0.12316715542521994,
+      0.42424242424242425
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 44,
+      "before": {
+        "n": 44,
+        "priced_n": 44,
+        "WLP": "23-21-0",
+        "wins": 23,
+        "losses": 21,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5227272727272727,
+        "units": -0.09090909090909027,
+        "roi": -0.0020661157024793246,
+        "roi_se": 0.1454163604369255
+      },
+      "after": {
+        "n": 44,
+        "priced_n": 44,
+        "WLP": "24-20-0",
+        "wins": 24,
+        "losses": 20,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.5454545454545454,
+        "units": 1.8181818181818188,
+        "roi": 0.04132231404958679,
+        "roi_se": 0.14496405339897267
+      },
+      "before_margin": {
+        "n": 44,
+        "mean_home_residual": -1.2870140707008613,
+        "MAE": 9.20947535019113,
+        "MSE": 128.38569388202723
+      },
+      "after_margin": {
+        "n": 44,
+        "mean_home_residual": -1.1961049797917704,
+        "MAE": 9.027657168372949,
+        "MSE": 124.29919329543418
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "backup involved",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "4-6-0",
+      "wins": 4,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4,
+      "units": -2.3636363636363638,
+      "roi": -0.2363636363636364,
+      "roi_se": 0.3117532399905863
+    },
+    "after": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "8-2-0",
+      "wins": 8,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.8,
+      "units": 5.2727272727272725,
+      "roi": 0.5272727272727272,
+      "roi_se": 0.2545454545454545
+    },
+    "favorite": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "7-3-0",
+      "wins": 7,
+      "losses": 3,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.7,
+      "units": 3.3636363636363633,
+      "roi": 0.3363636363636363,
+      "roi_se": 0.2916184533153716
+    },
+    "home": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "2-8-0",
+      "wins": 2,
+      "losses": 8,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.2,
+      "units": -6.181818181818182,
+      "roi": -0.6181818181818182,
+      "roi_se": 0.2545454545454545
+    },
+    "paired": {
+      "n": 10,
+      "priced_n": 10,
+      "flips": 4,
+      "flip_before": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "0-4-0",
+        "wins": 0,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -4.0,
+        "roi": -1.0,
+        "roi_se": 0.0
+      },
+      "flip_after": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "4-0-0",
+        "wins": 4,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 3.6363636363636362,
+        "roi": 0.9090909090909091,
+        "roi_se": 0.0
+      },
+      "units_gain": 7.636363636363637,
+      "mean_gain_per_game": 0.7636363636363637,
+      "mean_gain_se": 0.3117532399905863
+    },
+    "before_margin": {
+      "n": 10,
+      "mean_home_residual": -6.1,
+      "MAE": 10.3,
+      "MSE": 128.9
+    },
+    "after_margin": {
+      "n": 10,
+      "mean_home_residual": -5.7,
+      "MAE": 9.5,
+      "MSE": 108.9
+    },
+    "market_margin": {
+      "n": 10,
+      "mean_home_residual": -6.95,
+      "MAE": 10.25,
+      "MSE": 134.125
+    },
+    "paired_gain_ci95": [
+      0.4772727272727273,
+      1.9090909090909092
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 10,
+      "before": {
+        "n": 10,
+        "priced_n": 10,
+        "WLP": "7-3-0",
+        "wins": 7,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.7,
+        "units": 3.3636363636363633,
+        "roi": 0.3363636363636363,
+        "roi_se": 0.2916184533153716
+      },
+      "after": {
+        "n": 10,
+        "priced_n": 10,
+        "WLP": "8-2-0",
+        "wins": 8,
+        "losses": 2,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.8,
+        "units": 5.2727272727272725,
+        "roi": 0.5272727272727272,
+        "roi_se": 0.2545454545454545
+      },
+      "before_margin": {
+        "n": 10,
+        "mean_home_residual": -6.838624249832035,
+        "MAE": 9.838280407868726,
+        "MSE": 126.61795481416641
+      },
+      "after_margin": {
+        "n": 10,
+        "mean_home_residual": -6.438624249832036,
+        "MAE": 9.038280407868728,
+        "MSE": 108.63735223315697
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "correct starters, backup involved",
+    "known_games": 44,
+    "unknown_unchanged": 1,
+    "before": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "4-6-0",
+      "wins": 4,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.4,
+      "units": -2.3636363636363638,
+      "roi": -0.2363636363636364,
+      "roi_se": 0.3117532399905863
+    },
+    "after": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "8-2-0",
+      "wins": 8,
+      "losses": 2,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.8,
+      "units": 5.2727272727272725,
+      "roi": 0.5272727272727272,
+      "roi_se": 0.2545454545454545
+    },
+    "favorite": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "7-3-0",
+      "wins": 7,
+      "losses": 3,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.7,
+      "units": 3.3636363636363633,
+      "roi": 0.3363636363636363,
+      "roi_se": 0.2916184533153716
+    },
+    "home": {
+      "n": 10,
+      "priced_n": 10,
+      "WLP": "2-8-0",
+      "wins": 2,
+      "losses": 8,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.2,
+      "units": -6.181818181818182,
+      "roi": -0.6181818181818182,
+      "roi_se": 0.2545454545454545
+    },
+    "paired": {
+      "n": 10,
+      "priced_n": 10,
+      "flips": 4,
+      "flip_before": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "0-4-0",
+        "wins": 0,
+        "losses": 4,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -4.0,
+        "roi": -1.0,
+        "roi_se": 0.0
+      },
+      "flip_after": {
+        "n": 4,
+        "priced_n": 4,
+        "WLP": "4-0-0",
+        "wins": 4,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 3.6363636363636362,
+        "roi": 0.9090909090909091,
+        "roi_se": 0.0
+      },
+      "units_gain": 7.636363636363637,
+      "mean_gain_per_game": 0.7636363636363637,
+      "mean_gain_se": 0.3117532399905863
+    },
+    "before_margin": {
+      "n": 10,
+      "mean_home_residual": -6.1,
+      "MAE": 10.3,
+      "MSE": 128.9
+    },
+    "after_margin": {
+      "n": 10,
+      "mean_home_residual": -5.7,
+      "MAE": 9.5,
+      "MSE": 108.9
+    },
+    "market_margin": {
+      "n": 10,
+      "mean_home_residual": -6.95,
+      "MAE": 10.25,
+      "MSE": 134.125
+    },
+    "paired_gain_ci95": [
+      0.4772727272727273,
+      1.9090909090909092
+    ],
+    "paired_side_prices": {
+      "n": 0,
+      "before": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      },
+      "after": {
+        "n": 0,
+        "priced_n": 0,
+        "WLP": "0-0-0",
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": null,
+        "units": null,
+        "roi": null,
+        "roi_se": null
+      }
+    },
+    "raw_sensitivity": {
+      "n": 10,
+      "before": {
+        "n": 10,
+        "priced_n": 10,
+        "WLP": "7-3-0",
+        "wins": 7,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.7,
+        "units": 3.3636363636363633,
+        "roi": 0.3363636363636363,
+        "roi_se": 0.2916184533153716
+      },
+      "after": {
+        "n": 10,
+        "priced_n": 10,
+        "WLP": "8-2-0",
+        "wins": 8,
+        "losses": 2,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.8,
+        "units": 5.2727272727272725,
+        "roi": 0.5272727272727272,
+        "roi_se": 0.2545454545454545
+      },
+      "before_margin": {
+        "n": 10,
+        "mean_home_residual": -6.838624249832035,
+        "MAE": 9.838280407868726,
+        "MSE": 126.61795481416641
+      },
+      "after_margin": {
+        "n": 10,
+        "mean_home_residual": -6.438624249832036,
+        "MAE": 9.038280407868728,
+        "MSE": 108.63735223315697
+      }
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "backup-team oriented residuals",
+    "n": 12,
+    "before_mean": -4.833333333333333,
+    "after_mean": -3.5,
+    "market_mean": -4.583333333333333
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "source: native saved lock",
+    "before": {
+      "n": 31,
+      "priced_n": 31,
+      "WLP": "14-17-0",
+      "wins": 14,
+      "losses": 17,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.45161290322580644,
+      "units": -4.2727272727272725,
+      "roi": -0.1378299120234604,
+      "roi_se": 0.1734573738650361
+    },
+    "after": {
+      "n": 31,
+      "priced_n": 31,
+      "WLP": "17-14-0",
+      "wins": 17,
+      "losses": 14,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5483870967741935,
+      "units": 1.4545454545454546,
+      "roi": 0.0469208211143695,
+      "roi_se": 0.1734573738650361
+    },
+    "paired": {
+      "n": 31,
+      "priced_n": 31,
+      "flips": 3,
+      "flip_before": {
+        "n": 3,
+        "priced_n": 3,
+        "WLP": "0-3-0",
+        "wins": 0,
+        "losses": 3,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -3.0,
+        "roi": -1.0,
+        "roi_se": 0.0
+      },
+      "flip_after": {
+        "n": 3,
+        "priced_n": 3,
+        "WLP": "3-0-0",
+        "wins": 3,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 2.727272727272727,
+        "roi": 0.9090909090909091,
+        "roi_se": 0.0
+      },
+      "units_gain": 5.7272727272727275,
+      "mean_gain_per_game": 0.18475073313782991,
+      "mean_gain_se": 0.10304903552619113
+    }
+  },
+  {
+    "pool": "archived saved decisions",
+    "cohort": "replacement",
+    "subset": "source: recovered saved board",
+    "before": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "8-6-0",
+      "wins": 8,
+      "losses": 6,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.5714285714285714,
+      "units": 1.2727272727272725,
+      "roi": 0.0909090909090909,
+      "roi_se": 0.262027888044688
+    },
+    "after": {
+      "n": 14,
+      "priced_n": 14,
+      "WLP": "9-5-0",
+      "wins": 9,
+      "losses": 5,
+      "pushes": 0,
+      "skips": 0,
+      "unresolved": 0,
+      "cover_rate": 0.6428571428571429,
+      "units": 3.1818181818181817,
+      "roi": 0.22727272727272727,
+      "roi_se": 0.2537074116597446
+    },
+    "paired": {
+      "n": 14,
+      "priced_n": 14,
+      "flips": 1,
+      "flip_before": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "0-1-0",
+        "wins": 0,
+        "losses": 1,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 0.0,
+        "units": -1.0,
+        "roi": -1.0,
+        "roi_se": null
+      },
+      "flip_after": {
+        "n": 1,
+        "priced_n": 1,
+        "WLP": "1-0-0",
+        "wins": 1,
+        "losses": 0,
+        "pushes": 0,
+        "skips": 0,
+        "unresolved": 0,
+        "cover_rate": 1.0,
+        "units": 0.9090909090909091,
+        "roi": 0.9090909090909091,
+        "roi_se": null
+      },
+      "units_gain": 1.9090909090909092,
+      "mean_gain_per_game": 0.13636363636363638,
+      "mean_gain_se": 0.13636363636363638
+    }
+  }
+]

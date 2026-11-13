@@ -1,0 +1,13 @@
+{
+  "data/latest/ats_pricing_results.csv": "bba60d42978e6cc88d6624d3130d04a87de4fd83e054be56ccf5e4f50936599e",
+  "research/qb_saved_pick_audit_results/games.csv": "d08e786e45a5c3445a7adca290a075e390d77cdfb0d3d8b4e8287d99664ebb25",
+  "research/qb_saved_pick_audit_results/team_qbs.csv": "33b3e84789dc2658d2bce10f10a435d92372f06d4f386b08d838f4adaf6955e9",
+  "research/qb_saved_pick_audit_inputs/qb_play_order.csv": "a5987238cc0f25c6f5876520c1836e7449be8a4c2e6068c7d164f0571721ebe6",
+  "data/lock_inputs/schedules.parquet": "7eeeb405d30239b68c96fceded6ecd534bc51d854b83c28efd2104dc69feb125",
+  "data/lock_inputs/availability.parquet": "1d22cd19364bf78454e864aa018ceaaefc0bf500b20de18879a578ecd5d71f19",
+  "data/lock_inputs/rost.parquet": "e19d6aefe2550388b1ccccd8ee6a969b240f009c83bdebb383f33930d4311a00",
+  "data/lock_inputs/qb.parquet": "e075b5c145ce3bc6b1d1e1d1f8e60e276784f3fe1352ad1190cc0737283462c5",
+  "data/lock_inputs/depth.parquet": "785c4e8aca6075efeb10d1ef586943578c06ec28971b60afad4abc3f23e56c94",
+  "data/ats_locks.jsonl": "7eae02683f3d95aa09433568a4752b214f9aa12353a18fdb5377fbb088109ac2",
+  "data/lock_runtime/2026_week10/ats_locks.jsonl": "3eb9bd4f76e312c77b9c3e3c3ea67bbf0b18aa26a0fa2211a90f76f492d863cd"
+}
