@@ -1,15 +1,13 @@
 {
-  "forecast_utc": "2026-11-13T00:05:11.862738+00:00",
+  "forecast_utc": "2026-11-13T00:06:45.655323+00:00",
   "games": [
     {
       "game_id": "2026_10_WAS_NYG",
-      "issues": [
-        "candidate rejected; check market line and fitted map"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-13T00:15:00+00:00",
-      "state": "awaiting candidate"
+      "state": "candidate saved; awaiting finalization"
     }
   ],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-13T00:05:32.390079+00:00"
+  "updated_utc": "2026-11-13T00:07:06.332341+00:00"
 }
