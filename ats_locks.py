@@ -160,7 +160,7 @@ def validate_store(data='data'):
                     or not dt.timedelta(0) <= generated-utc(q['captured_utc']) <= dt.timedelta(minutes=5)):
                 raise ValueError('Watcher candidate needs fresh forecast and captured price')
             audit = row.get('scoring_audit')
-            if row['revision'] == 'boxscore-composite-v1.22' and not audit:
+            if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23') and not audit:
                 raise ValueError('Watcher candidate is missing its prepared scoring audit')
             if audit is not None:
                 import nfl_model as m
@@ -230,13 +230,13 @@ def validate_availability(row):
                         or utc(fact['published_utc'])>utc(fact['observed_utc'])
                         or any(utc(fact[c])>utc(evidence['asof_utc']) for c in ('published_utc','observed_utc','effective_utc'))):
                     raise ValueError('observation is not a confirmed pre-forecast fact')
-            if row['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+            if row['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
                 import availability_collect as ac
                 collection=evidence.get('collection',{})
-                expected_policy=ac.REPORTS_POLICY if row['revision']=='boxscore-composite-v1.22' else ac.POLICY
+                expected_policy=ac.REPORTS_POLICY if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23') else ac.POLICY
                 if collection.get('policy')!=expected_policy:
                     raise ValueError('collection policy does not match the saved revision')
-                if row['revision']=='boxscore-composite-v1.22' and any(
+                if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23') and any(
                         f.get('source_kind')=='official_team_news' for f in evidence['observations']):
                     raise ValueError('RSS/news is retired for v1.22')
                 if (collection.get('team')!=row[side] or collection.get('game_id')!=row['game_id']
@@ -299,7 +299,9 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 candidate_id = (*identity, generated.isoformat())
                 if identity in locked or candidate_id in seen or not ADOPTED_UTC <= generated <= now <= cutoff:
                     continue
-                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22') and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
+                if manifest['revision']=='boxscore-composite-v1.23' and str(raw.get('injury_efficiency_ready'))!='True':
+                    continue
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23') and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
                     continue  # no v1.20 lock from a legacy board that lost its evidence columns
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
@@ -307,11 +309,11 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
                     availability=m.availability_snapshot(raw,ko,generated)
                     if availability is None: continue
-                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
                     import availability_collect as ac
                     if not availability or any(not ac.collection_ready(e.get('collection',{}),cutoff,require_inactives=True)
                                                for e in availability.values()):continue
-                    expected=ac.REPORTS_POLICY if manifest['revision']=='boxscore-composite-v1.22' else ac.POLICY
+                    expected=ac.REPORTS_POLICY if manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23') else ac.POLICY
                     if any(e.get('collection',{}).get('policy')!=expected for e in availability.values()):continue
                 try:
                     wp, line = float(raw['model_wp']), float(raw['spread_line'])
@@ -363,8 +365,10 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                         inputs = {c: float(raw[c]) if raw.get(c) and math.isfinite(float(raw[c])) else None for c in columns}
                         row['scoring_audit'] = dict(fit=fit, inputs=inputs,
                             prepared_bundle_sha256=manifest['prepared_bundle_sha256'])
-                    elif manifest['revision'] == 'boxscore-composite-v1.22':
+                    elif manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23'):
                         continue
+                if manifest['revision']=='boxscore-composite-v1.23':
+                    row['injury_efficiency_audit']=json.loads(raw['injury_efficiency_audit'])
                 row['candidate_sha256'] = digest(row)
                 added.append(row)
                 seen.add(candidate_id)
@@ -430,7 +434,9 @@ def write_capture_status(data='data', now=None):
                 state = 'missed cutoff' if now >= cutoff else 'awaiting candidate'
                 if raw.get('ready') != 'True':issues.append('model history not ready')
                 if not generated <= now <= cutoff:issues.append('current board cannot be captured before the cutoff')
-                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22'):
+                if manifest['revision']=='boxscore-composite-v1.23' and str(raw.get('injury_efficiency_ready'))!='True':
+                    issues.append('injury efficiency inputs unresolved')
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
                     if raw.get('availability_policy') != m.AVAILABILITY_POLICY:
                         issues.append('forecast availability evidence missing')
                     else:
@@ -439,7 +445,7 @@ def write_capture_status(data='data', now=None):
                                 e = json.loads(raw[side+'_availability_evidence'])
                                 issues.extend(raw[side]+': '+str(b) for b in e.get('blockers',[]))
                                 if not e.get('report_complete'):issues.append(raw[side]+': final report incomplete')
-                                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+                                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
                                     issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,True))
                             except (KeyError,ValueError,TypeError):
                                 issues.append(raw[side]+': forecast availability evidence invalid')
@@ -481,6 +487,10 @@ def current_records(records, revision):
     are unchanged. No future v1.21 decision can substitute for a v1.22 lock.
     """
     out = {k: r for k, r in records.items() if k[0] == revision}
+    if revision == 'boxscore-composite-v1.23':
+        for (rev,game),row in current_records(records,'boxscore-composite-v1.22').items():
+            if utc(row['lock_at_utc']) < utc('2026-11-13T21:32:30+00:00'):
+                out.setdefault((revision,game),row)
     if revision == 'boxscore-composite-v1.22':
         for (rev, game), row in records.items():
             if rev == 'boxscore-composite-v1.21' and utc(row['lock_at_utc']) < RSS_RETIRED_UTC:

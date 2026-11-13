@@ -1,4 +1,4 @@
-"""NFL box-score composite W/L model — v1.22 (official reports and inactives; RSS retired).
+"""NFL box-score composite W/L model — v1.23 (official reports and inactives; RSS retired).
 Run notebooks/NFL_C_B_MODEL.ipynb in Colab; or python nfl_model.py from the checkout.
 Offline checks: python nfl_model.py --self-test
 GitHub Actions: build_site.py runs main() with NFL_OUTPUT_ROOT, NFL_STATE_DIR
@@ -14,6 +14,11 @@ v1.19.1 (reporting only, owner decision 2026-11-04): retro_ledger and the curren
 the schedule's home/away spread prices (attach_spread_prices) so the Calibration tab grades its
 spread-band ROI at actual prices. Never a model input; recipe, fits and config signature unchanged.
 The same day the ATS median map moved to weekly refits (fixed_bands map policy v2, lock policy v3).
+
+v1.23 (owner request 2026-11-13): frozen pre-2026 positional injury stage adjusts
+  five efficiency inputs before the unchanged ten-term fit and weekly median map.
+  Prior report burden is removed; incomplete references block new ATS candidates.
+  Refreshes restore original inputs; historical locks and v1.16 stay unchanged.
 
 v1.22 (owner request 2026-11-09; new REVISION/OUTPUT_NAME and signature):
 RSS polling and automatic team-news facts are retired. Only official game injury tables and
@@ -510,11 +515,11 @@ pd.set_option('display.max_columns',30)
 pd.set_option('display.width',240)
 
 # Configuration. Change these before the first run, not in response to one week.
-REVISION='boxscore-composite-v1.22'
+REVISION='boxscore-composite-v1.23'
 SEASON=None
 CURRENT_WEEK=None
 TIMEZONE='America/Los_Angeles'
-OUTPUT_NAME='nfl_boxscore_output_v1_22'  # same ten-term fit; RSS retired
+OUTPUT_NAME='nfl_boxscore_output_v1_23'  # same ten-term fit; RSS retired
 USE_GOOGLE_DRIVE=True        # in Colab: keep outputs, caches, frozen recipe and ledger on Google Drive
 DRIVE_MOUNT='/content/drive'
 DRIVE_FOLDER='nfl_boxscore'  # folder under MyDrive
@@ -1725,7 +1730,7 @@ def resolve_game_availability(targets,base,qb,snaps,inj,rost,depth=None,events=N
     """
     asof=availability_utc(asof if asof is not None else now_utc())
     observations=[validate_availability_observation(r) for r in observations
-                  if REVISION!='boxscore-composite-v1.22' or r.get('source_kind')!='official_team_news']
+                  if REVISION not in ('boxscore-composite-v1.22','boxscore-composite-v1.23') or r.get('source_kind')!='official_team_news']
     indexed=base.set_index(['season','week','team'])
     output=[]
     for target in targets.to_dict('records'):
@@ -1859,6 +1864,9 @@ def apply_game_availability(frame,resolved):
         if touched:
             out.loc[i,'availability_policy']=AVAILABILITY_POLICY
             for c in ALL_AVAIL_COLS: out.loc[i,'d__avail__'+c]=out.loc[i,'home__avail__'+c]-out.loc[i,'away__avail__'+c]
+    if REVISION=='boxscore-composite-v1.23':
+        import injury_efficiency as ie
+        out=ie.apply(out)
     return out
 
 
@@ -3095,18 +3103,21 @@ def config_signature():
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
         cfg['evaluation_ties']='graded as pushes; excluded from binary fitting/scoring'
         cfg['market_targets']={'price_features':MARKET_TARGET_PRICE_NAMES,'residual_rules':MARKET_RESIDUAL_RULES,'offseason_retention':.5,'max_prior_seasons':3,'first_oof_season':2020,'dispersion_min_oof':80,'dispersion_floor':3.,'mean_ridge':.1,'total_reference':45.,'point_unit':10.,'selection':'all strictly earlier season OOF integer-bin NLL'}
-    if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22'):
+    if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
         cfg['availability_observations']={'policy':AVAILABILITY_POLICY,'fields':AVAILABILITY_FIELDS,
             'rule':'confirmed, game-scoped, captured/published/effective by forecast; unresolved conflicts block locks; historical and shadow inputs unchanged'}
     if REVISION=='boxscore-composite-v1.21':
         import availability_collect as ac
         cfg['automatic_availability']={'policy':ac.POLICY,'sources':'32 official club RSS feeds, official game injury tables and inactive announcements',
             'max_source_age_minutes':ac.MAX_AGE_MINUTES,'ats':'both complete official inactive lists required before saving a candidate'}
-    if REVISION=='boxscore-composite-v1.22':
+    if REVISION in ('boxscore-composite-v1.22','boxscore-composite-v1.23'):
         import availability_collect as ac
         cfg['automatic_availability']={'policy':ac.REPORTS_POLICY,'sources':'official game injury tables and inactive announcements; RSS retired',
             'max_source_age_minutes':ac.MAX_AGE_MINUTES,'ats':'both complete official inactive lists required before saving a candidate',
             'news_observations':'excluded'}
+    if REVISION=='boxscore-composite-v1.23':
+        import injury_efficiency as ie
+        cfg['injury_efficiency']=ie.identity()
     return hashlib.sha256(json.dumps(cfg,sort_keys=True).encode()).hexdigest(),json.loads(json.dumps(cfg))
 
 
@@ -3252,6 +3263,8 @@ def record_forward(board,fit,recipe_record,asof=None):
             record['availability']=availability_snapshot(r,ko,asof)
         if fit.get('market_offset'):
             record['market_no_vig_wp']=float(r['q'])
+            if REVISION=='boxscore-composite-v1.23' and r.get('injury_efficiency_audit'):
+                record['injury_efficiency_audit']=json.loads(r['injury_efficiency_audit'])
             record['model_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in fit['names']}
             record['pass_context_inputs']={name:float(r[name]) if np.isfinite(r[name]) else None for name in ('pass_ho','pass_ad','pass_ao','pass_hd')}
             if fit.get('recipe',{}).get('architecture')=='market_pass_predicted_total':
@@ -3835,16 +3848,16 @@ def main():
                   f'{", ".join(f"{t} ({src})" for t,src in zip(nochart.team,nochart.qb_source))}')
         pend=cr[cr.injury_report!='final']
         if len(pend):
-            fallback='' if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22') else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
+            fallback='' if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23') else f' (or practice-only teams are within {FINAL_REPORT_HOURS:g}h of kickoff)'
             print(f'  WARNING: week {cur} injury report not final for {len(pend)} of {len(cr)} teams: '
                   f'{", ".join(f"{t} ({st})" for t,st in zip(pend.team,pend.injury_report))}. '
                   f'Their availability inputs treat unlisted players as healthy; those games wait out of the forward '
                   f'ledger until game statuses publish{fallback}.')
         else: print(f'  Week {cur} injury reports: game statuses published for all {len(cr)} teams.')
-        if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22'):
+        if REVISION in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
             observations=load_availability_observations()
             collection=None
-            if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+            if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
                 import availability_collect as ac
                 collection=ac.refresh(state_dir(),schedules,a['rost'],force=True,legacy_news=REVISION=='boxscore-composite-v1.21')
                 observations+=load_availability_observations(state_dir()/ac.AUTO)
@@ -3866,6 +3879,10 @@ def main():
         features[half]=lagged_features(box,schedules,half,avail,
             profile_families=('rates_core',) if profile_mode=='production' else None)
         save(features[half],f'pregame_features_half_life_{half:g}.csv')
+    if REVISION=='boxscore-composite-v1.23':
+        import injury_efficiency as ie
+        refs=ie.references(box,a['snaps'],a['inj'],avail,targets[(targets.season==season)&(targets.week==cur)])
+        features[8.]=ie.attach(features[8.],refs)
     context_audit=prepare_product_features(features,schedules)
     save(context_audit,'pass_context_reference_audit.csv')
     if PRODUCT_RECIPE.get('architecture')=='market_pass_predicted_total':
@@ -3910,7 +3927,7 @@ def main():
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
     shadow_out={}
     gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability)
-    if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22'):
+    if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23'):
         # Collection occurs during this run. The run-start time would predate
         # that evidence and make every otherwise valid automatic candidate fail.
         now=now_utc()

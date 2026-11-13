@@ -7,7 +7,7 @@ from test_product_production import fixture
 
 
 def test_identity_and_terms():
-    assert m.REVISION == 'boxscore-composite-v1.22' and m.OUTPUT_NAME == 'nfl_boxscore_output_v1_22'
+    assert m.REVISION == 'boxscore-composite-v1.23' and m.OUTPUT_NAME == 'nfl_boxscore_output_v1_23'
     assert m.PRODUCT_RECIPE == dict(m.V118_RECIPE, terms=list(m.CORE_TERMS))
     main, ctx = m.model_terms(m.PRODUCT_RECIPE)
     assert len(main)+len(ctx) == 10 and main[0] == 'site' and set(main+ctx) == set(m.CORE_TERMS)
