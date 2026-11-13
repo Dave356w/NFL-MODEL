@@ -101,3 +101,14 @@ def test_pages_only_rejects_old_snapshot_under_new_code(tmp_path,monkeypatch):
     (tmp_path/'latest').mkdir()
     (tmp_path/'latest/manifest.json').write_text(json.dumps(dict(revision='boxscore-composite-v1.22')))
     with pytest.raises(ValueError,match='fresh v1.24'):build_site.main(['--pages-only'])
+
+
+def test_public_downloads_exclude_archived_versions():
+    x=latest();old=dict(revision='boxscore-composite-v1.22',game_id='old')
+    x['ats_locks']={locks.key(old):old}
+    assert not build_site.has_public_saved_picks(x)
+    assert 'ats_locked_picks.csv' not in build_site.downloads(x)
+    own=dict(revision=m.REVISION,game_id='own')
+    x['ats_locks'][locks.key(own)]=own
+    assert build_site.has_public_saved_picks(x)
+    assert 'ats_locked_picks.csv' in build_site.downloads(x)

@@ -1065,7 +1065,7 @@ def render_index(latest, ledger, built, now=None):
         cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if latest.get('ats_locks') else ''
+    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if has_public_saved_picks(latest) else ''
     parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
                  f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
                  "<p><a href='grades.html'>View ATS results →</a></p>")
@@ -1275,11 +1275,19 @@ def render_ats_games(latest):
     return ''.join(parts)
 
 
+def has_public_saved_picks(latest):
+    if not latest:return False
+    records=latest.get('ats_locks',{})
+    if season_ats.replacement_enabled(latest):
+        return bool(ats_locks.current_records(records,latest['manifest']['revision']))
+    return bool(records)
+
+
 def downloads(latest):
     links = []
     if len(public_ats(latest)):
         links.append("<a href='ats_2026_results.csv'>2026 per-game results (CSV)</a>")
-    if (latest or {}).get('ats_locks'):
+    if has_public_saved_picks(latest):
         links.append("<a href='ats_locked_picks.csv'>Saved spread picks (CSV)</a>")
     if (latest or {}).get('board') is not None and len(latest['board']):
         links.append("<a href='fixed_band_board.csv'>This week’s board (CSV)</a>")
