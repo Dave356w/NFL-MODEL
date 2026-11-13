@@ -245,7 +245,9 @@ def bootstrap(base, arm, reps=10000):
 def write_report(output, label, metrics, comparisons):
     title = {'pressure':'Pressure allowed/generated and matchup','scoring':'Scoring opportunities and finishing',
              'punts':'Punts per possession and defensive forced-punt rate',
-             'ppp':'Points per possession for and allowed'}[label]
+             'ppp':'Points per possession for and allowed',
+             'offensive_pressure':'Offensive pressure allowed only',
+             'additive_pressure':'Offensive allowed and defensive forced pressure, additive'}[label]
     candidate='model_'+label
     lines=[f'# {title}: earlier-season margin study', '',
            '**Decision: retain for research; no production adoption supported.**', '',
@@ -276,7 +278,7 @@ def write_report(output, label, metrics, comparisons):
             lines.append(f"| {cohort} | {arm} | {r['mae']:.4f} | {r['log_loss']:.6f} | {r['wins']}-{r['losses']}-{r['pushes']} |")
     lines += ['', '## Increment over the intercept-only control', '',
               'Positive gain favors the new statistics. Paired whole-week bootstrap within season, 10,000 draws.',
-              ('These are nominal 95% intervals, not corrected for the multiple feature families or prior research selection.' if label in ['punts','ppp']
+              ('These are nominal 95% intervals, not corrected for the multiple feature families or prior research selection.' if label in ['punts','ppp','offensive_pressure','additive_pressure']
                else 'These are nominal 95% intervals, not corrected for both feature families or prior research selection.'), '',
               '| Cohort | Offset | MAE gain [95%] | Cover LL gain [95%] |', '|---|---|---|---|']
     for r in comparisons:
@@ -311,8 +313,15 @@ def write_report(output, label, metrics, comparisons):
         lines += ['This isolates offensive points per possession and opponent offensive points allowed per opponent possession.',
                   'It excludes defensive/return touchdowns and is not adjusted for opponents, game state or starting field position.',
                   'It is separate from the earlier finishing bundle, which also fitted red-zone and fourth-down terms.', '']
+    elif label=='offensive_pressure':
+        lines += ['Only offensive pressure allowed is fitted. Defensive pressure generated and the matchup interaction are excluded.',
+                  'This ablation was requested after examining the full-pressure LAC/PHI results; its selection is post-hoc.', '']
+    elif label=='additive_pressure':
+        lines += ['Offensive pressure allowed and defensive pressure forced have separate additive coefficients; no matchup interaction is fitted.',
+                  'This follow-up was selected after the original pressure and offensive-only diagnostics; it is not independent confirmation.', '']
     command={'pressure':'pressure_margin.py','scoring':'scoring_finishing.py','punts':'punts_per_possession.py',
-             'ppp':'points_per_possession.py'}[label]
+             'ppp':'points_per_possession.py','offensive_pressure':'offensive_pressure_only.py',
+             'additive_pressure':'additive_pressure.py'}[label]
     lines += ['## Reproduce', '', '```sh',
               'python research/'+command,
               '```', '', 'This uses committed frozen aggregate inputs. See the protocol for raw reconstruction and source definitions.', '']
