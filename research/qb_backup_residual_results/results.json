@@ -1,0 +1,609 @@
+{
+  "fits": [
+    {
+      "cohort": "replacement proxy",
+      "projection": "raw_margin",
+      "n": 1257,
+      "seasons": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 402,
+      "intercept": 0.978594143294961,
+      "backup_coefficient": -0.6960175865905668,
+      "ci95": [
+        [
+          0.27136378052160204,
+          -2.0266664209616745
+        ],
+        [
+          1.6424987285640489,
+          0.727782590874274
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy",
+      "projection": "mapped_margin",
+      "n": 759,
+      "seasons": [
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 253,
+      "intercept": 1.1648819664151868,
+      "backup_coefficient": -1.7616208323192992,
+      "ci95": [
+        [
+          0.2695374802368078,
+          -3.34500654705844
+        ],
+        [
+          2.0740002822400503,
+          -0.1275455193189711
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy",
+      "projection": "market_margin",
+      "n": 1257,
+      "seasons": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 402,
+      "intercept": 0.6842508071505685,
+      "backup_coefficient": -1.0896735411735485,
+      "ci95": [
+        [
+          -0.0031080701733516244,
+          -2.4423379209001292
+        ],
+        [
+          1.3454953632845088,
+          0.3157069942962797
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy; mapped-eligible rows",
+      "projection": "raw_margin",
+      "n": 759,
+      "seasons": [
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 253,
+      "intercept": 0.959919163483112,
+      "backup_coefficient": -1.4235984889152011,
+      "ci95": [
+        [
+          0.042396223345606374,
+          -3.041378498787231
+        ],
+        [
+          1.8949049876191788,
+          0.25544232328711425
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy; mapped-eligible rows",
+      "projection": "market_margin",
+      "n": 759,
+      "seasons": [
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 253,
+      "intercept": 0.8058327249127928,
+      "backup_coefficient": -1.8192179767988976,
+      "ci95": [
+        [
+          -0.08037920180389496,
+          -3.4215043995818855
+        ],
+        [
+          1.7100263347454294,
+          -0.1657085804307775
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy; both starters matched",
+      "projection": "raw_margin",
+      "n": 1114,
+      "seasons": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 296,
+      "intercept": 0.8527267457708555,
+      "backup_coefficient": -0.5996553141790656,
+      "ci95": [
+        [
+          0.07780493770366484,
+          -2.2195730283009976
+        ],
+        [
+          1.5949496867052562,
+          1.094533782534094
+        ]
+      ]
+    },
+    {
+      "cohort": "replacement proxy; both starters matched",
+      "projection": "market_margin",
+      "n": 1114,
+      "seasons": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "backup_team_games": 296,
+      "intercept": 0.562212015486758,
+      "backup_coefficient": -0.9195814747751336,
+      "ci95": [
+        [
+          -0.19839289458083026,
+          -2.565423052599343
+        ],
+        [
+          1.3115630807398957,
+          0.7987998711384648
+        ]
+      ]
+    },
+    {
+      "cohort": "2025 strict chart",
+      "projection": "raw_margin",
+      "n": 256,
+      "seasons": [
+        2025
+      ],
+      "backup_team_games": 33,
+      "intercept": 0.9657752572372447,
+      "backup_coefficient": 2.9576167862270677,
+      "ci95": [
+        [
+          -0.731190215520157,
+          -1.5975978000960078
+        ],
+        [
+          2.5892869084552954,
+          7.814064050400102
+        ]
+      ]
+    },
+    {
+      "cohort": "2025 strict chart",
+      "projection": "mapped_margin",
+      "n": 256,
+      "seasons": [
+        2025
+      ],
+      "backup_team_games": 33,
+      "intercept": 1.279947762080019,
+      "backup_coefficient": 3.1333254184969745,
+      "ci95": [
+        [
+          -0.3796803016044055,
+          -1.5818802785447457
+        ],
+        [
+          2.886059722011735,
+          8.112111532833364
+        ]
+      ]
+    },
+    {
+      "cohort": "2025 strict chart",
+      "projection": "market_margin",
+      "n": 256,
+      "seasons": [
+        2025
+      ],
+      "backup_team_games": 33,
+      "intercept": 0.8775376944081683,
+      "backup_coefficient": 2.329929953698208,
+      "ci95": [
+        [
+          -0.7665963203463203,
+          -2.2431091140667427
+        ],
+        [
+          2.486359442991188,
+          7.165819829746952
+        ]
+      ]
+    }
+  ],
+  "annual": [
+    {
+      "definition": "2025 strict chart",
+      "season": 2025,
+      "correct": false,
+      "n": 2,
+      "raw_residual": 14.714422520689727,
+      "mapped_residual": 15.0,
+      "market_residual": 15.0
+    },
+    {
+      "definition": "2025 strict chart",
+      "season": 2025,
+      "correct": true,
+      "n": 31,
+      "raw_residual": 2.043342987675083,
+      "mapped_residual": 2.161290322580645,
+      "market_residual": 1.3709677419354838
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2021,
+      "correct": false,
+      "n": 25,
+      "raw_residual": -1.8304117260307993,
+      "mapped_residual": null,
+      "market_residual": -2.44
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2021,
+      "correct": true,
+      "n": 44,
+      "raw_residual": -1.7039486710299172,
+      "mapped_residual": null,
+      "market_residual": -2.1704545454545454
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2022,
+      "correct": false,
+      "n": 18,
+      "raw_residual": 0.17071908793580082,
+      "mapped_residual": null,
+      "market_residual": -0.1111111111111111
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2022,
+      "correct": true,
+      "n": 62,
+      "raw_residual": 2.831719440010752,
+      "mapped_residual": null,
+      "market_residual": 2.7661290322580645
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2023,
+      "correct": false,
+      "n": 23,
+      "raw_residual": 1.2562044859245487,
+      "mapped_residual": 0.5217391304347826,
+      "market_residual": 0.4782608695652174
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2023,
+      "correct": true,
+      "n": 70,
+      "raw_residual": -0.0037181636353719023,
+      "mapped_residual": -0.3,
+      "market_residual": 0.0
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2024,
+      "correct": false,
+      "n": 17,
+      "raw_residual": -4.685209283178292,
+      "mapped_residual": -5.176470588235294,
+      "market_residual": -5.264705882352941
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2024,
+      "correct": true,
+      "n": 53,
+      "raw_residual": -3.3022751771855776,
+      "mapped_residual": -3.4716981132075473,
+      "market_residual": -3.311320754716981
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2025,
+      "correct": false,
+      "n": 1,
+      "raw_residual": 12.32353864586846,
+      "mapped_residual": 11.0,
+      "market_residual": 11.5
+    },
+    {
+      "definition": "replacement proxy",
+      "season": 2025,
+      "correct": true,
+      "n": 89,
+      "raw_residual": -0.8149191682314898,
+      "mapped_residual": -0.9438202247191011,
+      "market_residual": -1.3426966292134832
+    }
+  ],
+  "yearly_walk_forward": [
+    {
+      "season": 2023,
+      "n": 250,
+      "replacement_games": 80,
+      "mse_gain": 2.120043653576459,
+      "incremental_mse_gain": 0.060620411310694164
+    },
+    {
+      "season": 2024,
+      "n": 253,
+      "replacement_games": 63,
+      "mse_gain": -1.2280663875983142,
+      "incremental_mse_gain": -1.0170627435245065
+    },
+    {
+      "season": 2025,
+      "n": 256,
+      "replacement_games": 81,
+      "mse_gain": 1.0038145657739028,
+      "incremental_mse_gain": 0.18847106515470305
+    }
+  ],
+  "walk_forward_fits": [
+    {
+      "test_season": 2023,
+      "training_seasons": [
+        2021,
+        2022
+      ],
+      "n": 498,
+      "intercept": 0.9962991078809671,
+      "intercept_only": 0.9953051857505072,
+      "backup_coefficient": 0.49497322096895496
+    },
+    {
+      "test_season": 2024,
+      "training_seasons": [
+        2021,
+        2022,
+        2023
+      ],
+      "n": 748,
+      "intercept": 1.1773791765142894,
+      "intercept_only": 1.1747557660544166,
+      "backup_coefficient": 0.4905777559960769
+    },
+    {
+      "test_season": 2025,
+      "training_seasons": [
+        2021,
+        2022,
+        2023,
+        2024
+      ],
+      "n": 1001,
+      "intercept": 0.9970700043653433,
+      "intercept_only": 1.0035990330330384,
+      "backup_coefficient": -0.6535557696363631
+    }
+  ],
+  "scores": [
+    {
+      "cohort": "all eligible",
+      "arm": "raw_margin",
+      "n": 759,
+      "mean_home_residual": 0.976799777976177,
+      "mae": 9.71762761470633,
+      "mse": 158.70844233153042,
+      "brier": 0.20877095291149778,
+      "ats": {
+        "n": 759,
+        "WLP": "369-376-14",
+        "units": -40.54545454545454,
+        "roi": -0.053419571206132464,
+        "roi_se": 0.034348921777804214
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "adjusted_margin",
+      "n": 759,
+      "mean_home_residual": -0.07428486437823854,
+      "mae": 9.751721318931539,
+      "mse": 158.08092369362546,
+      "brier": 0.2098926177888943,
+      "ats": {
+        "n": 759,
+        "WLP": "390-355-14",
+        "units": -0.4545454545454497,
+        "roi": -0.0005988741166606716,
+        "roi_se": 0.03431148100266051
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "intercept_margin",
+      "n": 759,
+      "mean_home_residual": -0.08111966564154625,
+      "mae": 9.74115821269768,
+      "mse": 157.82543860982517,
+      "brier": 0.2096437958249389,
+      "ats": {
+        "n": 759,
+        "WLP": "392-353-14",
+        "units": 3.3636363636363704,
+        "roi": 0.004431668463289026,
+        "roi_se": 0.034302317190355355
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "market_margin",
+      "n": 759,
+      "mean_home_residual": 0.8274044795783926,
+      "mae": 9.766798418972332,
+      "mse": 159.82411067193675,
+      "brier": 0.2100757396617118,
+      "ats": {
+        "n": 759,
+        "WLP": "386-359-14",
+        "units": -8.090909090909085,
+        "roi": -0.010659959276560058,
+        "roi_se": 0.03432688366787389
+      }
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "paired MSE gain",
+      "n": 759,
+      "gain": 0.6275186379049549,
+      "ci95": [
+        -1.2538641799228043,
+        2.5329193302330593
+      ],
+      "incremental_gain_over_intercept": -0.25548508380029333,
+      "incremental_ci95": [
+        -0.7487526906873099,
+        0.23536986222706666
+      ]
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "always favorite",
+      "n": 759,
+      "WLP": "386-359-14",
+      "units": -8.090909090909085,
+      "roi": -0.010659959276560058,
+      "roi_se": 0.03432688366787389
+    },
+    {
+      "cohort": "all eligible",
+      "arm": "always home",
+      "n": 759,
+      "WLP": "376-369-14",
+      "units": -27.18181818181818,
+      "roi": -0.035812672176308534,
+      "roi_se": 0.03434835479782667
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "raw_margin",
+      "n": 224,
+      "mean_home_residual": 1.5766681027138392,
+      "mae": 10.06841707735066,
+      "mse": 158.5848609941223,
+      "brier": 0.21074759044245633,
+      "ats": {
+        "n": 224,
+        "WLP": "104-113-7",
+        "units": -18.454545454545453,
+        "roi": -0.08238636363636363,
+        "roi_se": 0.06286807222538873
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "adjusted_margin",
+      "n": 224,
+      "mean_home_residual": 0.5489310450996114,
+      "mae": 10.049330123370579,
+      "mse": 157.25847939533202,
+      "brier": 0.21046569960059852,
+      "ats": {
+        "n": 224,
+        "WLP": "122-95-7",
+        "units": 15.90909090909091,
+        "roi": 0.07102272727272728,
+        "roi_se": 0.062431342695578075
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "intercept_margin",
+      "n": 224,
+      "mean_home_residual": 0.5278933268337278,
+      "mae": 10.01362534276514,
+      "mse": 156.39807536843333,
+      "brier": 0.2096232386687952,
+      "ats": {
+        "n": 224,
+        "WLP": "124-93-7",
+        "units": 19.727272727272727,
+        "roi": 0.08806818181818181,
+        "roi_se": 0.06227811250188933
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "market_margin",
+      "n": 224,
+      "mean_home_residual": 1.4799107142857142,
+      "mae": 10.055803571428571,
+      "mse": 158.8984375,
+      "brier": 0.20986544396327192,
+      "ats": {
+        "n": 224,
+        "WLP": "111-106-7",
+        "units": -5.090909090909093,
+        "roi": -0.022727272727272735,
+        "roi_se": 0.06289828806152281
+      }
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "paired MSE gain",
+      "n": 224,
+      "gain": 1.3263815987902643,
+      "ci95": [
+        -1.6333792119917327,
+        4.159981191278699
+      ],
+      "incremental_gain_over_intercept": -0.8604040268987052,
+      "incremental_ci95": [
+        -2.4838145601325126,
+        0.8024094770942504
+      ]
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "always favorite",
+      "n": 224,
+      "WLP": "111-106-7",
+      "units": -5.090909090909093,
+      "roi": -0.022727272727272735,
+      "roi_se": 0.06289828806152281
+    },
+    {
+      "cohort": "replacement involved",
+      "arm": "always home",
+      "n": 224,
+      "WLP": "117-100-7",
+      "units": 6.363636363636365,
+      "roi": 0.028409090909090915,
+      "roi_se": 0.06272196806947858
+    }
+  ],
+  "coverage": {
+    "total_games": 1359,
+    "eligible": 1257,
+    "unresolved": 102,
+    "chart2025": 256
+  }
+}

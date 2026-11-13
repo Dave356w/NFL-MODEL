@@ -156,3 +156,14 @@ limitations.
 Owner activation follow-up (2026-11-08): GB-NE may also be recovered from the
 pinned 20:17 UTC board after its 12:25 Pacific cutoff when no native lock exists.
 The original collection/medical blockers remain in its source evidence.
+
+
+**v1.23 QB starter repairs (owner request 2026-11-13).** Confirmed starters do not
+receive the Questionable blend. Historical QB starters use earliest actual
+QB-position dropbacks and game-week roster position, excluding gadget passers;
+schedule QB IDs can be stale and are not outcome evidence. Uncertain positions
+or play order stay unresolved. New revision/output/signature, original v1.16
+shadow labels/features, old saved selections and all journals are preserved.
+Existing v1.22/inherited v1.21 locks with deadlines before 2026-11-14 00:00 UTC
+remain authoritative. The saved-pick audit and prior-season residual experiment
+are research only; neither increases the QB penalty or changes the recipe.

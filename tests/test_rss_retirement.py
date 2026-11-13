@@ -57,8 +57,8 @@ def test_old_news_journals_retained_but_not_applied_to_new_forecasts(tmp_path):
 
 
 def test_prior_signatures_are_frozen_and_retirement_has_a_new_identity():
-    assert m.REVISION=='boxscore-composite-v1.22'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_22'
+    assert m.REVISION=='boxscore-composite-v1.23'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_23'
     with m.revision_identity('boxscore-composite-v1.21',m.PRODUCT_RECIPE):
         prior,_=m.config_signature()
     assert prior=='9eb27acbe2f14789d9a4b90b214122354d1fee7bf1d15fa736d5138af88d1c67'
@@ -73,7 +73,7 @@ def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path)
     records=locks.display_records(root/'data')
     before=copy.deepcopy(records)
     selected=locks.current_records(records,m.REVISION)
-    old=[r for r in records.values() if r['revision']=='boxscore-composite-v1.21']
+    old=list(locks.current_records(records,'boxscore-composite-v1.22').values())
     own={key:row for key,row in records.items() if key[0]==m.REVISION}
     expected={(m.REVISION,row['game_id']):row for row in old}
     expected.update(own)
@@ -85,7 +85,7 @@ def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path)
     replacement=dict(original,revision=m.REVISION)
     records[locks.key(replacement)]=replacement
     assert locks.current_records(records,m.REVISION)[locks.key(replacement)] is replacement
-    later=dict(original,game_id='future',lock_at_utc=(locks.RSS_RETIRED_UTC+dt.timedelta(seconds=1)).isoformat())
+    later=dict(original,revision='boxscore-composite-v1.22',game_id='future',lock_at_utc=(locks.QB_REPAIRS_UTC+dt.timedelta(seconds=1)).isoformat())
     records[locks.key(later)]=later
     assert (m.REVISION,'future') not in locks.current_records(records,m.REVISION)
 
