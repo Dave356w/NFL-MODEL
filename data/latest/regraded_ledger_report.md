@@ -2,16 +2,16 @@
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 158; unique games: 84. Repeated snapshots are not independent games.
+Snapshots: 169; unique games: 85. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     84       11    50      22       1  1.965569  0.026926 0.081918        -0.040942        4.514278      0.062698            72  0.610084         0.600641 0.209258      0.204410
+        All unique games     85       12    50      22       1  1.965569  0.026926 0.081918        -0.040942        4.514278      0.062698            72  0.610084         0.600641 0.209258      0.204410
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.573241         1.567153 0.628259      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.615592         1.609438 0.641965      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.657296         1.651078 0.655041      0.653118
-boxscore-composite-v1.16     73        1    50      21       1  2.970961  0.041263 0.081797        -0.040961        5.519670      0.077742            71  0.596243         0.586712 0.203207      0.198301
+boxscore-composite-v1.16     84       12    50      21       1  2.970961  0.041263 0.081797        -0.040961        5.519670      0.077742            71  0.596243         0.586712 0.203207      0.198301
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.617719         0.574300 0.215195      0.194824
 boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.030224 0.115655        -0.041048        1.279323      0.031203            42  0.643787         0.645515 0.224279      0.224255
 boxscore-composite-v1.21     12        0    11       1       0  3.401299  0.283442 0.127535        -0.040811        3.401299      0.283442            12  0.432219         0.416427 0.129110      0.121994
@@ -177,3 +177,14 @@ boxscore-composite-v1.24  2026_10_MIN_GB           0.515058  0.515058           
 boxscore-composite-v1.24  2026_10_NE_DET           0.546285  0.546285                   NaN
 boxscore-composite-v1.24 2026_10_PIT_CIN           0.627452  0.627452                   NaN
 boxscore-composite-v1.24  2026_10_SEA_LV           0.273960  0.273960                   NaN
+boxscore-composite-v1.16 2026_10_BUF_NYJ           0.182726  0.214737                   NaN
+boxscore-composite-v1.16  2026_10_CAR_NO           0.496025  0.512090                   NaN
+boxscore-composite-v1.16 2026_10_HOU_CLE           0.377700  0.354031                   NaN
+boxscore-composite-v1.16 2026_10_JAX_TEN           0.127959  0.151011                   NaN
+boxscore-composite-v1.16  2026_10_KC_ATL           0.411407  0.415221                   NaN
+boxscore-composite-v1.16  2026_10_LA_ARI           0.149868  0.186300                   NaN
+boxscore-composite-v1.16 2026_10_MIA_IND           0.610944  0.618580                   NaN
+boxscore-composite-v1.16  2026_10_MIN_GB           0.549786  0.503860                   NaN
+boxscore-composite-v1.16 2026_10_PIT_CIN           0.654657  0.627452                   NaN
+boxscore-composite-v1.16  2026_10_SEA_LV           0.269398  0.273960                   NaN
+boxscore-composite-v1.16  2026_10_SF_DAL           0.234848  0.319923                   NaN

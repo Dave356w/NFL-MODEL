@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-11-14 00:28 UTC
+NFL forward ledger report -- 2026-11-14 17:09 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -7,7 +7,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
 == boxscore-composite-v1.24: 11 snapshots, 0 graded, 11 pending, 0 ties
   No graded bets with a saved moneyline yet.
 
-== boxscore-composite-v1.16: 73 snapshots, 71 graded, 1 pending, 1 ties
+== boxscore-composite-v1.16: 84 snapshots, 71 graded, 12 pending, 1 ties
   HEADLINE flat 1u, model's side at the snapshot moneyline: 49-20-1, +3.06u, ROI +4.4% +/- 8.2 (1 SE)
     win 71.0% vs no-vig q 64.7% (excess +6.3pp); market-correct null ROI -4.1%
     same rows, market favorite every game: +6.52u, ROI +9.3%
@@ -28,7 +28,7 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   Diagnostic, not the goal metric: alt-line rule at Kalshi prices: 22-11, +4.09u, ROI +12.4% +/- 14.5
     same rows, favorite at its Kalshi game-winner ask: +3.51u, ROI +10.6%
   Pre-registered H3, not the goal metric: Kalshi ladder priced from 2006-2024 margins (edge >= $0.03/contract after fee): 4-12, -3.22u, ROI -20.1% +/- 39.0
-    Kalshi-mid null -8.3% on the same bets; 16 games qualified so far
+    Kalshi-mid null -8.3% on the same bets; 17 games qualified so far
   Diagnostic, not the goal metric: closing-line value against nflverse's moneyline after the game (its closing line; no independent quote timestamp)
     model's side, n=71: the no-vig price moved +0.20 pts +/- 0.17 on average (positive = toward the model's side); on its underdog picks (n=2) -0.33 pts
     line move vs the model's departure from the lock price: slope -0.003 +/- 0.025 (positive = the market moved toward the model)
@@ -302,10 +302,10 @@ Log loss/Brier market: the probability saved in each original snapshot; no-vig m
   n=72 graded games, partial r -0.008 [-0.183, +0.189] (95%): unresolved
 
 == Pre-registered H1/H2/H6 (sample: first boxscore-composite-v1.16 snapshots, config 9dad9b9a, for games from 2026 week 6 on; addenda 2026-10-13 in research/PREREGISTRATION.md)
-  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 59 priced rows; verdict: no qualifying graded rows
+  H1, |model - q| > 0.17 with q from the snapshot moneylines: 0 qualifying graded bets of 70 priced rows; verdict: no qualifying graded rows
   H2, log-loss gain vs q, weeks 14-18 against weeks 5-13: weeks 5-13 n=58 -0.0032; weeks 14-18 n=0; 14-17 n=0; 18 n=0; verdict: no late-season rows
   H2 secondary, flat 1u ROI: weeks 5-13 n=57 +6.3% +/- 9.1 (null -4.1%, favorite +11.0%); weeks 14-18 n=0
-  H6, the model backs the market underdog (its side's no-vig q < 0.5): 2 graded bets of 59 priced rows; 0-2-0, -2.00u, ROI -100.0% +/- 0.0, null -4.3%, same-row favorite +72.9%, log-loss gain vs q -0.1895; verdict: no verdict before 10 graded bets
+  H6, the model backs the market underdog (its side's no-vig q < 0.5): 2 graded bets of 70 priced rows; 0-2-0, -2.00u, ROI -100.0% +/- 0.0, null -4.3%, same-row favorite +72.9%, log-loss gain vs q -0.1895; verdict: no verdict before 10 graded bets
   Judged only at the season checkpoints; interim numbers are not acted on.
 
 == Pre-registered H9 (one row per game, first production snapshot from 2026 week 6; prices only): moneyline vs spread disagreement
@@ -344,7 +344,7 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.12 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.03% | 1.034360 | 1.402440 |
 | boxscore-composite-v1.13 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.00% | 1.002170 | 1.402440 |
 | boxscore-composite-v1.14 | 1 | 0-1-0 | -1.00 | -100.00% ± — | -1.00 | -4.08% | 0.965520 | 1.508470 |
-| boxscore-composite-v1.16 | 73 | 49-20-1 | +3.06 | +4.37% ± 8.19 | +6.52 | -4.09% | 0.624936 | 0.586712 |
+| boxscore-composite-v1.16 | 84 | 49-20-1 | +3.06 | +4.37% ± 8.19 | +6.52 | -4.09% | 0.624936 | 0.586712 |
 | boxscore-composite-v1.17 | 14 | 8-5-1 | -1.34 | -9.56% ± 19.32 | +0.40 | -4.08% | 0.765942 | 0.574300 |
 | boxscore-composite-v1.18 | 42 | 26-14-0 | -1.18 | -2.95% ± 11.66 | +2.28 | -4.09% | 0.655953 | 0.645515 |
 | boxscore-composite-v1.21 | 12 | 11-1-0 | +3.40 | +28.34% ± 12.75 | +3.40 | -4.08% | 0.432218 | 0.416427 |
@@ -483,16 +483,16 @@ Appendix B: original snapshots replayed with the current model (from data/latest
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 158; unique games: 84. Repeated snapshots are not independent games.
+Snapshots: 169; unique games: 85. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     84       11    50      22       1  1.965569  0.026926 0.081918        -0.040942        4.514278      0.062698            72  0.610084         0.600641 0.209258      0.204410
+        All unique games     85       12    50      22       1  1.965569  0.026926 0.081918        -0.040942        4.514278      0.062698            72  0.610084         0.600641 0.209258      0.204410
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.573241         1.567153 0.628259      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.615592         1.609438 0.641965      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.657296         1.651078 0.655041      0.653118
-boxscore-composite-v1.16     73        1    50      21       1  2.970961  0.041263 0.081797        -0.040961        5.519670      0.077742            71  0.596243         0.586712 0.203207      0.198301
+boxscore-composite-v1.16     84       12    50      21       1  2.970961  0.041263 0.081797        -0.040961        5.519670      0.077742            71  0.596243         0.586712 0.203207      0.198301
 boxscore-composite-v1.17     14        0     9       4       1  0.401868  0.028705 0.188371        -0.040787        0.401868      0.028705            13  0.617719         0.574300 0.215195      0.194824
 boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.030224 0.115655        -0.041048        1.279323      0.031203            42  0.643787         0.645515 0.224279      0.224255
 boxscore-composite-v1.21     12        0    11       1       0  3.401299  0.283442 0.127535        -0.040811        3.401299      0.283442            12  0.432219         0.416427 0.129110      0.121994
@@ -658,6 +658,17 @@ boxscore-composite-v1.24  2026_10_MIN_GB           0.515058  0.515058           
 boxscore-composite-v1.24  2026_10_NE_DET           0.546285  0.546285                   NaN
 boxscore-composite-v1.24 2026_10_PIT_CIN           0.627452  0.627452                   NaN
 boxscore-composite-v1.24  2026_10_SEA_LV           0.273960  0.273960                   NaN
+boxscore-composite-v1.16 2026_10_BUF_NYJ           0.182726  0.214737                   NaN
+boxscore-composite-v1.16  2026_10_CAR_NO           0.496025  0.512090                   NaN
+boxscore-composite-v1.16 2026_10_HOU_CLE           0.377700  0.354031                   NaN
+boxscore-composite-v1.16 2026_10_JAX_TEN           0.127959  0.151011                   NaN
+boxscore-composite-v1.16  2026_10_KC_ATL           0.411407  0.415221                   NaN
+boxscore-composite-v1.16  2026_10_LA_ARI           0.149868  0.186300                   NaN
+boxscore-composite-v1.16 2026_10_MIA_IND           0.610944  0.618580                   NaN
+boxscore-composite-v1.16  2026_10_MIN_GB           0.549786  0.503860                   NaN
+boxscore-composite-v1.16 2026_10_PIT_CIN           0.654657  0.627452                   NaN
+boxscore-composite-v1.16  2026_10_SEA_LV           0.269398  0.273960                   NaN
+boxscore-composite-v1.16  2026_10_SF_DAL           0.234848  0.319923                   NaN
 
 
 Appendix C: current production sanity checks
