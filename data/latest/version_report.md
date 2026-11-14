@@ -1,7 +1,7 @@
 # Production restoration and all competing-model results
 
-Current production: **boxscore-composite-v1.22**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
-Configuration: `4e60b8110e719b1388a7ef57e53a72ed373e761eeb0a965d4fc13121994ac1c1`. Owner decision 2026-10-13.
+Current production: **boxscore-composite-v1.24**, the v1.16 recipe with the favorite-confidence penalty (lambda 0.2); v1.16 continues as a shadow lock for its pre-registered tests.
+Configuration: `642b5f2feb99bedcf1058a27246b5f835daec29b70fc6a8cc6f2a29069ee605c`. Owner decision 2026-10-13.
 Original forecasts and frozen recipes remain unchanged. This report grades existing predictions; it does not retune or select a candidate.
 
 ## Native forward results
@@ -18,6 +18,7 @@ Each experiment contains one original pregame forecast per game. Different revis
 | boxscore-composite-v1.18 | 42 | 26-14-0 | -1.18 | -2.95% ± 11.66 | +2.28 | -4.09% | 0.655953 | 0.645515 |
 | boxscore-composite-v1.21 | 12 | 11-1-0 | +3.40 | +28.34% ± 12.75 | +3.40 | -4.08% | 0.432218 | 0.416427 |
 | boxscore-composite-v1.22 | 3 | 1-1-0 | -0.49 | -24.75% ± 75.25 | -0.49 | -4.06% | 0.673979 | 0.640043 |
+| boxscore-composite-v1.24 | 10 | 0-0-0 | +0.00 | —% ± — | +0.00 | —% | — | — |
 
 ## Frozen archived-input counterfactuals
 

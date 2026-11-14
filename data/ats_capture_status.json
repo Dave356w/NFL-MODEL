@@ -1,22 +1,15 @@
 {
-  "forecast_utc": "2026-11-13T18:34:57.864197+00:00",
+  "forecast_utc": "2026-11-14T00:13:13.414654+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
-        "NYJ: automatic source checks incomplete or stale",
-        "NYJ: final report incomplete",
         "NYJ: report: source check stale or after forecast",
-        "NYJ: report: complete official list/report missing",
         "NYJ: inactives: no successful source check",
         "NYJ: inactives: complete official list/report missing",
-        "BUF: automatic source checks incomplete or stale",
-        "BUF: final report incomplete",
         "BUF: report: source check stale or after forecast",
-        "BUF: report: complete official list/report missing",
         "BUF: inactives: no successful source check",
-        "BUF: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "BUF: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -24,16 +17,12 @@
     {
       "game_id": "2026_10_CAR_NO",
       "issues": [
-        "NO: automatic source checks incomplete or stale",
-        "NO: final report incomplete",
         "NO: report: source check stale or after forecast",
-        "NO: report: complete official list/report missing",
         "NO: inactives: no successful source check",
         "NO: inactives: complete official list/report missing",
         "CAR: report: source check stale or after forecast",
         "CAR: inactives: no successful source check",
-        "CAR: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "CAR: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -41,19 +30,12 @@
     {
       "game_id": "2026_10_HOU_CLE",
       "issues": [
-        "CLE: automatic source checks incomplete or stale",
-        "CLE: final report incomplete",
         "CLE: report: source check stale or after forecast",
-        "CLE: report: complete official list/report missing",
         "CLE: inactives: no successful source check",
         "CLE: inactives: complete official list/report missing",
-        "HOU: automatic source checks incomplete or stale",
-        "HOU: final report incomplete",
         "HOU: report: source check stale or after forecast",
-        "HOU: report: complete official list/report missing",
         "HOU: inactives: no successful source check",
-        "HOU: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "HOU: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -61,19 +43,12 @@
     {
       "game_id": "2026_10_JAX_TEN",
       "issues": [
-        "TEN: automatic source checks incomplete or stale",
-        "TEN: final report incomplete",
         "TEN: report: source check stale or after forecast",
-        "TEN: report: complete official list/report missing",
         "TEN: inactives: no successful source check",
         "TEN: inactives: complete official list/report missing",
-        "JAX: automatic source checks incomplete or stale",
-        "JAX: final report incomplete",
         "JAX: report: source check stale or after forecast",
-        "JAX: report: complete official list/report missing",
         "JAX: inactives: no successful source check",
-        "JAX: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "JAX: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -81,19 +56,12 @@
     {
       "game_id": "2026_10_KC_ATL",
       "issues": [
-        "ATL: automatic source checks incomplete or stale",
-        "ATL: final report incomplete",
         "ATL: report: source check stale or after forecast",
-        "ATL: report: complete official list/report missing",
         "ATL: inactives: no successful source check",
         "ATL: inactives: complete official list/report missing",
-        "KC: automatic source checks incomplete or stale",
-        "KC: final report incomplete",
         "KC: report: source check stale or after forecast",
-        "KC: report: complete official list/report missing",
         "KC: inactives: no successful source check",
-        "KC: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "KC: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -121,19 +89,12 @@
     {
       "game_id": "2026_10_LA_ARI",
       "issues": [
-        "ARI: automatic source checks incomplete or stale",
-        "ARI: final report incomplete",
         "ARI: report: source check stale or after forecast",
-        "ARI: report: complete official list/report missing",
         "ARI: inactives: no successful source check",
         "ARI: inactives: complete official list/report missing",
-        "LA: automatic source checks incomplete or stale",
-        "LA: final report incomplete",
         "LA: report: source check stale or after forecast",
-        "LA: report: complete official list/report missing",
         "LA: inactives: no successful source check",
-        "LA: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "LA: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
@@ -141,19 +102,12 @@
     {
       "game_id": "2026_10_MIA_IND",
       "issues": [
-        "IND: automatic source checks incomplete or stale",
-        "IND: final report incomplete",
         "IND: report: source check stale or after forecast",
-        "IND: report: complete official list/report missing",
         "IND: inactives: no successful source check",
         "IND: inactives: complete official list/report missing",
-        "MIA: automatic source checks incomplete or stale",
-        "MIA: final report incomplete",
         "MIA: report: source check stale or after forecast",
-        "MIA: report: complete official list/report missing",
         "MIA: inactives: no successful source check",
-        "MIA: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "MIA: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -161,19 +115,12 @@
     {
       "game_id": "2026_10_MIN_GB",
       "issues": [
-        "GB: automatic source checks incomplete or stale",
-        "GB: final report incomplete",
         "GB: report: source check stale or after forecast",
-        "GB: report: complete official list/report missing",
         "GB: inactives: no successful source check",
         "GB: inactives: complete official list/report missing",
-        "MIN: automatic source checks incomplete or stale",
-        "MIN: final report incomplete",
         "MIN: report: source check stale or after forecast",
-        "MIN: report: complete official list/report missing",
         "MIN: inactives: no successful source check",
-        "MIN: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "MIN: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -194,19 +141,12 @@
     {
       "game_id": "2026_10_PIT_CIN",
       "issues": [
-        "CIN: automatic source checks incomplete or stale",
-        "CIN: final report incomplete",
         "CIN: report: source check stale or after forecast",
-        "CIN: report: complete official list/report missing",
         "CIN: inactives: no successful source check",
         "CIN: inactives: complete official list/report missing",
-        "PIT: automatic source checks incomplete or stale",
-        "PIT: final report incomplete",
         "PIT: report: source check stale or after forecast",
-        "PIT: report: complete official list/report missing",
         "PIT: inactives: no successful source check",
-        "PIT: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "PIT: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-16T00:20:00+00:00",
       "state": "awaiting candidate"
@@ -220,10 +160,7 @@
         "LV: report: complete official list/report missing",
         "LV: inactives: no successful source check",
         "LV: inactives: complete official list/report missing",
-        "SEA: automatic source checks incomplete or stale",
-        "SEA: final report incomplete",
         "SEA: report: source check stale or after forecast",
-        "SEA: report: complete official list/report missing",
         "SEA: inactives: no successful source check",
         "SEA: inactives: complete official list/report missing",
         "forecast availability validation failed"
@@ -241,10 +178,7 @@
         "DAL: report: complete official list/report missing",
         "DAL: inactives: no successful source check",
         "DAL: inactives: complete official list/report missing",
-        "SF: automatic source checks incomplete or stale",
-        "SF: final report incomplete",
         "SF: report: source check stale or after forecast",
-        "SF: report: complete official list/report missing",
         "SF: inactives: no successful source check",
         "SF: inactives: complete official list/report missing",
         "forecast availability validation failed"
@@ -254,11 +188,14 @@
     },
     {
       "game_id": "2026_10_WAS_NYG",
-      "issues": [],
+      "issues": [
+        "current board cannot be captured before the cutoff",
+        "forecast availability evidence missing"
+      ],
       "lock_at_utc": "2026-11-13T00:15:00+00:00",
-      "state": "locked"
+      "state": "missed cutoff"
     }
   ],
-  "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-13T18:35:01.733773+00:00"
+  "revision": "boxscore-composite-v1.24",
+  "updated_utc": "2026-11-14T00:13:17.419548+00:00"
 }
