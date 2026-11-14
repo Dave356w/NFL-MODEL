@@ -214,6 +214,9 @@ LIVE_MAPS = {
 LIVE_MAPS['boxscore-composite-v1.20'] = LIVE_MAPS['boxscore-composite-v1.19']
 LIVE_MAPS['boxscore-composite-v1.21'] = LIVE_MAPS['boxscore-composite-v1.19']
 LIVE_MAPS['boxscore-composite-v1.22'] = LIVE_MAPS['boxscore-composite-v1.19']
+# The v1.24 replay retains these annual medians. Its replacement-QB adjustment
+# is a separate final-margin step, not a change to median-map fitting.
+LIVE_MAPS['boxscore-composite-v1.24'] = LIVE_MAPS['boxscore-composite-v1.19']
 
 
 def test_live_median_maps_match_the_recorded_targets_for_their_revision():
@@ -335,12 +338,19 @@ def test_live_export_matches_the_map_policy_it_declares():
     root = Path(__file__).resolve().parents[1]
     led = pd.read_csv(root / 'data/latest/fixed_band_ledger.csv', low_memory=False)
     if led.get('map_policy_version', pd.Series(dtype=object)).dropna().eq(f.MAP_POLICY_VERSION).all() and 'map_policy_version' in led:
-        import nfl_model as m
-        h = pd.read_csv(root / 'data/latest/retro_ledger.csv')
-        h['model_spread'] = m.implied_spread(h.model_wp)
-        for (season, week), g in led.groupby(['season', 'week']):
-            rule = f.fit_weekly(h, int(season), int(week))
-            np.testing.assert_array_equal(g.fixed_band_spread.to_numpy(float), f.apply(g.model_spread, rule))
+        import ats_locks
+        import build_site
+        import season_ats
+        # Rebuild from raw replay inputs, not the exported mapped margins. Apply
+        # the post-map adjustment and authoritative saved-lock priority just as
+        # publication does; a lock may differ from a later historical replay.
+        latest = build_site.load_latest(root / 'data/latest')
+        latest['ats_locks'] = ats_locks.display_records(root / 'data')
+        pool = season_ats.build(latest, build_site.load_ledger(root / 'data'))
+        season_ats.align_calibration_2026(latest, pool)
+        expected = latest['fixed_band_ledger'].set_index('game_id').reindex(led.game_id)
+        np.testing.assert_array_equal(led.fixed_band_spread, expected.fixed_band_spread)
+        np.testing.assert_array_equal(led.fixed_band_ats_result.fillna(''), expected.fixed_band_ats_result.fillna(''))
 
 
 def test_spread_prices_attach_by_game_and_never_enter_the_fit():

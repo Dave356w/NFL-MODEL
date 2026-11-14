@@ -1,5 +1,6 @@
 from pathlib import Path
 import json
+import shutil
 import numpy as np
 import pandas as pd
 import pytest
@@ -35,6 +36,157 @@ def test_independent_median_uses_losses_ties_and_only_prior_seasons():
     assert s.median_rule(pd.concat([d,poison]),2023)==rule
     tied=d.assign(result=0.)
     assert s.median_rule(pd.concat([d,tied]),2023)['magnitudes']==[1.5,3.,5.,7.]
+
+
+def _replacement_export(home=1., away=0., season=2026):
+    history = pd.DataFrame([dict(season=season, week=4)])
+    known = np.isfinite(home) and np.isfinite(away)
+    adjustment = -2. * home + 2. * away if known else 0.
+    row = dict(qb_replacement_policy=s.REPLACEMENT_POLICY, qb_replacement_base_margin=3.,
+               qb_replacement_margin_adjustment=adjustment, qb_replacement_applied=known,
+               qb_replacement_overlay_status='classified' if known else 'unresolved; original margin retained')
+    for side, flag in [('home', home), ('away', away)]:
+        resolved = np.isfinite(flag)
+        metadata = dict(qb_replacement=flag, qb_replacement_policy=s.REPLACEMENT_POLICY,
+            qb_replacement_status=('replacement starter' if flag == 1. else 'incumbent starter')
+                if resolved else 'questionable quarterback blend',
+            qb_projected_id=('backup' if flag == 1. else 'incumbent') if resolved else np.nan,
+            qb_incumbent_id='incumbent' if resolved else np.nan,
+            qb_incumbent_starts=3 if resolved else 0, qb_incumbent_last_week=3 if resolved else np.nan,
+            qb_replacement_reference_week=3)
+        row.update({side + '_' + key: value for key, value in metadata.items()})
+    return history, pd.DataFrame([row])
+
+
+@pytest.mark.parametrize('home,away,expected', [(1., 0., 1.), (0., 1., 5.), (1., 1., 3.),
+    (0., 0., 3.), (np.nan, 1., 3.), (1., np.nan, 3.)])
+def test_independent_replacement_adjustment_is_post_map_and_preserves_unresolved(home, away, expected):
+    history, saved = _replacement_export(home, away)
+    before = saved.copy(deep=True)
+    mapped = np.array([3.])
+    np.testing.assert_array_equal(s.replacement_predictions(history, mapped, saved, s.REPLACEMENT_REVISION), [expected])
+    np.testing.assert_array_equal(mapped, [3.])
+    pd.testing.assert_frame_equal(saved, before)
+
+
+@pytest.mark.parametrize('revision,season', [('boxscore-composite-v1.23', 2026), (s.REPLACEMENT_REVISION, 2025)])
+def test_replacement_audit_keeps_earlier_revisions_and_seasons_unadjusted(revision, season):
+    history, _ = _replacement_export(season=season)
+    np.testing.assert_array_equal(s.replacement_predictions(history, [3.], None, revision), [3.])
+
+
+@pytest.mark.parametrize('field,value', [
+    ('qb_replacement_policy', 'old policy'), ('home_qb_replacement_policy', ''),
+    ('home_qb_replacement', 2.), ('home_qb_projected_id', np.nan),
+    ('home_qb_projected_id', 'incumbent'), ('home_qb_incumbent_starts', 1),
+    ('home_qb_incumbent_last_week', 4), ('home_qb_replacement_reference_week', 4),
+    ('qb_replacement_base_margin', 1.), ('qb_replacement_margin_adjustment', -4.),
+    ('qb_replacement_margin_adjustment', 0.), ('qb_replacement_margin_adjustment', 2.),
+    ('qb_replacement_margin_adjustment', np.nan),
+    ('qb_replacement_applied', False), ('qb_replacement_overlay_status', 'unresolved'),
+])
+def test_replacement_audit_rejects_corrupt_or_postgame_evidence(field, value):
+    history, saved = _replacement_export()
+    saved.loc[0, field] = value
+    with pytest.raises(ValueError):
+        s.replacement_predictions(history, [3.], saved, s.REPLACEMENT_REVISION)
+
+
+@pytest.mark.parametrize('missing', ['home_qb_replacement', 'qb_replacement_margin_adjustment'])
+def test_replacement_audit_requires_metadata_even_when_both_replacements_cancel(missing):
+    history, saved = _replacement_export(1., 1.)
+    with pytest.raises(ValueError, match='missing replacement evidence'):
+        s.replacement_predictions(history, [3.], None, s.REPLACEMENT_REVISION)
+    with pytest.raises(KeyError):
+        s.replacement_predictions(history, [3.], saved.drop(columns=missing), s.REPLACEMENT_REVISION)
+
+
+@pytest.mark.parametrize('field', ['qb_replacement_margin_adjustment', 'fixed_band_spread', 'fixed_band_ats_result'])
+def test_standalone_audit_rejects_replacement_export_tampering(tmp_path, field):
+    latest = tmp_path/'latest'; latest.mkdir()
+    source = Path(__file__).resolve().parents[1]/'data/latest'
+    for name in ['manifest.json', 'retro_ledger.csv', 'fixed_band_ledger.csv', 'fixed_band_rules.json']:
+        shutil.copyfile(source/name, latest/name)
+    path = latest/'fixed_band_ledger.csv'
+    saved = pd.read_csv(path)
+    i = saved.index[saved.qb_replacement_margin_adjustment.abs().eq(2.)][0]
+    if field == 'fixed_band_ats_result':
+        saved.loc[i, field] = 'W' if saved.loc[i, field] != 'W' else 'L'
+    else:
+        saved.loc[i, field] += 2.
+    saved.to_csv(path, index=False)
+    before = path.read_bytes()
+    audit = s.inspect(tmp_path)
+    assert audit['status'] == 'FAIL'
+    name = {'qb_replacement_margin_adjustment': 'exported_replacement_margin_evidence',
+            'fixed_band_spread': 'exported_median_predictions', 'fixed_band_ats_result': 'exported_ats_grades'}[field]
+    assert audit['checks'][name] is False
+    assert path.read_bytes() == before
+
+
+def _native_replacement_export(applied_marker=False):
+    """A validated frozen decision in a different band than the replay WP."""
+    from scipy.special import ndtr
+    history, replay = _replacement_export(0., 0.)
+    history = history.assign(game_id='g', week=10, home='H', away='A',
+                             gameday='2026-11-15', spread_line=2.5, result=4.)
+    _, frozen = _replacement_export(1., 0.)
+    lock = frozen.iloc[0].to_dict()
+    lock.update(game_id='g', revision=s.REPLACEMENT_REVISION, season=2026, week=10, home='H', away='A',
+        model_wp=float(ndtr(8./12.37)), raw_spread=8., market_spread=4.5,
+        fixed_rule=dict(cuts=[3., 7., 10.], magnitudes=[3., 4., 7., 14.]),
+        qb_replacement_base_margin=7., fixed_band_spread=5.)
+    # Runtime locks freeze flags and their source evidence; older v1.24 locks
+    # omit the convenience applied/status fields that historical overlays carry.
+    lock.pop('qb_replacement_overlay_status')
+    if not applied_marker:
+        lock.pop('qb_replacement_applied')
+    lock.update(s.ats_locks.replacement_payload(lock, 7.))
+    assert s.ats_locks.validate_replacement(lock, 7.) == 5.
+    replay = replay.assign(fixed_band_spread=5., spread_line=4.5,
+        qb_replacement_base_margin=7., qb_replacement_margin_adjustment=-2.,
+        qb_replacement_applied=True if applied_marker else np.nan)
+    return history, replay, {(s.REPLACEMENT_REVISION, 'g'): lock}
+
+
+@pytest.mark.parametrize('applied_marker', [False, True])
+def test_native_replacement_audit_uses_frozen_band_line_and_team_flags(applied_marker):
+    history, saved, records = _native_replacement_export(applied_marker)
+    predicted, lines = s.replacement_export_basis(history, [3.], saved, records)
+    np.testing.assert_array_equal(predicted, [5.])
+    np.testing.assert_array_equal(lines, [4.5])
+    # At the replay line this game would win; at the saved handicap it lost.
+    assert s.independent_grades(predicted, lines, history.result).tolist() == ['L']
+    assert saved.home_qb_replacement.tolist() == [0.]  # replay annotation is deliberately retained
+
+
+@pytest.mark.parametrize('field,value', [('fixed_band_spread', 3.), ('spread_line', 2.5),
+    ('qb_replacement_base_margin', 3.), ('qb_replacement_margin_adjustment', 0.),
+    ('qb_replacement_applied', False)])
+def test_native_replacement_audit_rejects_altered_export(field, value):
+    history, saved, records = _native_replacement_export(applied_marker=True)
+    saved.loc[0, field] = value
+    with pytest.raises(ValueError):
+        s.replacement_export_basis(history, [3.], saved, records)
+
+
+@pytest.mark.parametrize('gameday,native', [('2026-11-15', False), ('2026-10-04', True)])
+def test_missing_native_lock_does_not_authorize_historical_fallback(gameday, native):
+    history, saved = _replacement_export()
+    history = history.assign(game_id='g', gameday=gameday, spread_line=2.5, result=4.)
+    saved = saved.assign(fixed_band_spread=np.nan, spread_line=np.nan)
+    predicted, lines = s.replacement_export_basis(history, [3.], saved, {}, {'g'} if native else set())
+    assert np.isnan(predicted[0]) and np.isnan(lines[0])
+    assert s.independent_grades(predicted, lines, history.result).tolist() == ['']
+
+
+@pytest.mark.parametrize('time,available', [('19:59', True), ('20:00', False)])
+def test_replay_cutoff_uses_known_eastern_kickoff_before_date_only_bound(time, available):
+    history, saved = _replacement_export()
+    history = history.assign(game_id='g', gameday='2026-11-13', gametime=time, spread_line=2.5, result=4.)
+    saved = saved.assign(fixed_band_spread=1. if available else np.nan, spread_line=2.5 if available else np.nan)
+    predicted, _ = s.replacement_export_basis(history, [3.], saved, {})
+    assert bool(np.isfinite(predicted[0])) == available
 
 
 def test_current_production_snapshot_passes_independent_audit():
