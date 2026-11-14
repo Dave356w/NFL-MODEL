@@ -90,10 +90,16 @@
       }
     },
     "CHI": {
-      "game_id": null,
+      "game_id": "2026_11_NO_CHI",
       "inactives": {},
-      "news": {},
-      "report": {}
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-14T19:41:28.801148+00:00"
+      }
     },
     "CIN": {
       "game_id": "2026_10_PIT_CIN",
@@ -136,7 +142,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-14T19:31:09.929990+00:00"
+        "last_attempt_utc": "2026-11-14T19:41:28.801148+00:00"
       }
     },
     "DEN": {
@@ -354,13 +360,16 @@
       }
     },
     "NYG": {
-      "game_id": null,
+      "game_id": "2026_11_JAX_NYG",
       "inactives": {},
-      "kickoff_utc": "2026-11-13T01:15:00+00:00",
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-14T19:41:28.801148+00:00"
+      }
     },
     "NYJ": {
       "game_id": "2026_10_BUF_NYJ",
@@ -433,10 +442,16 @@
       }
     },
     "TB": {
-      "game_id": null,
+      "game_id": "2026_11_TB_DET",
       "inactives": {},
-      "news": {},
-      "report": {}
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-14T19:41:28.801148+00:00"
+      }
     },
     "TEN": {
       "game_id": "2026_10_JAX_TEN",
@@ -464,5 +479,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-14T19:31:15.461518+00:00"
+  "updated_utc": "2026-11-14T19:41:28.801148+00:00"
 }
