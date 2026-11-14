@@ -1,0 +1,13 @@
+{
+  "parent_research_commit": "7e74f06a3b34485bae941886a938adae5c3e8da8",
+  "source_provenance": "../pressure_inputs/provenance.json",
+  "original_publication_timestamps_verified": false,
+  "primary_source_lag_weeks": 2,
+  "sensitivity_source_lag_weeks": 1,
+  "sha256": {
+    "research/punt_inputs/team_games.csv.gz": "e37443afaa1933fa789ecbde700fe8630dfebc00aafb81f13174fe372b9608ba",
+    "research/punt_inputs/coverage.json": "bf9ad80b4b03e15f32ab692b4d4b847d993467ca6aa043eb624d533a3f37faf2",
+    "research/pressure_inputs/base_forecasts.csv": "337efa13df62bf0eb3e16e8d5def1765d4ce22f6b75006120f7b072c0e85ad7c",
+    "research/PUNTS_PER_POSSESSION.md": "6ed8ada9b00ba1701c391bf1b7f94414611fd6fcd724c61189d6f86558252491"
+  }
+}

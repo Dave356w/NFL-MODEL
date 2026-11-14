@@ -1,0 +1,162 @@
+[
+  {
+    "cohort": "saved_vectors",
+    "baseline": "original",
+    "challenger": "prior_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 6
+  },
+  {
+    "cohort": "saved_vectors",
+    "baseline": "prior_median_control",
+    "challenger": "prior_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 6
+  },
+  {
+    "cohort": "saved_vectors",
+    "baseline": "original",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0013576875708700017,
+    "log_loss_gain_ci95": [
+      -0.0026434412244679462,
+      0.005091847971571643
+    ],
+    "evaluation_weeks": 6
+  },
+  {
+    "cohort": "saved_vectors",
+    "baseline": "rolling_median_control",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 6
+  },
+  {
+    "cohort": "saved_vectors",
+    "baseline": "prior_injury",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0013576875708700017,
+    "log_loss_gain_ci95": [
+      -0.0026434412244679462,
+      0.005091847971571643
+    ],
+    "evaluation_weeks": 6
+  },
+  {
+    "cohort": "official_reports",
+    "baseline": "original",
+    "challenger": "prior_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 2
+  },
+  {
+    "cohort": "official_reports",
+    "baseline": "prior_median_control",
+    "challenger": "prior_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 2
+  },
+  {
+    "cohort": "official_reports",
+    "baseline": "original",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0009256114713136199,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.011107337655763438
+    ],
+    "evaluation_weeks": 2
+  },
+  {
+    "cohort": "official_reports",
+    "baseline": "rolling_median_control",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "evaluation_weeks": 2
+  },
+  {
+    "cohort": "official_reports",
+    "baseline": "prior_injury",
+    "challenger": "rolling_injury",
+    "mae_gain": 0.0,
+    "mae_gain_ci95": [
+      0.0,
+      0.0
+    ],
+    "log_loss_gain": 0.0009256114713136199,
+    "log_loss_gain_ci95": [
+      0.0,
+      0.011107337655763438
+    ],
+    "evaluation_weeks": 2
+  }
+]

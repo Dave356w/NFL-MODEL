@@ -1,0 +1,101 @@
+{
+  "map_checks": [
+    {
+      "rules": 64,
+      "reproduced": true,
+      "weighted_L1_optimal": true,
+      "no_target_future_labels": true
+    }
+  ],
+  "public": {
+    "n": 137,
+    "record": {
+      "W": 75,
+      "L": 56,
+      "P": 6,
+      "S": 0
+    },
+    "minus110_units": 12.181818181818182,
+    "mixed_price_units": 11.969233661918654
+  },
+  "zero_edge": {
+    "n": 20,
+    "record": {
+      "W": 9,
+      "L": 7,
+      "P": 4,
+      "S": 0
+    },
+    "minus110_units": 1.1818181818181817
+  },
+  "line_only_map": {
+    "W": 71,
+    "L": 60,
+    "P": 6,
+    "S": 0,
+    "units": 4.545454545454545,
+    "same_picks": 115
+  },
+  "research_checks": [
+    {
+      "folder": "pressure_margin_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    },
+    {
+      "folder": "scoring_finishing_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    },
+    {
+      "folder": "punt_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    },
+    {
+      "folder": "ppp_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    },
+    {
+      "folder": "offensive_pressure_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    },
+    {
+      "folder": "additive_pressure_results",
+      "rows": 9534,
+      "canonical_pick_and_grade_match": true
+    }
+  ],
+  "earlier_season_intercepts": [
+    {
+      "evaluation_season": 2024,
+      "training_n": 272,
+      "mean_residual": 1.349264705882353,
+      "median_residual": 0.0
+    },
+    {
+      "evaluation_season": 2025,
+      "training_n": 544,
+      "mean_residual": 1.0073529411764706,
+      "median_residual": 0.0
+    },
+    {
+      "evaluation_season": 2026,
+      "training_n": 816,
+      "mean_residual": 0.9767156862745098,
+      "median_residual": 0.0
+    }
+  ],
+  "source_timing": "Reconstructed/exposed history; no verified first-publication times or native-forward claim",
+  "source_sha256": {
+    "data/latest/retro_ledger.csv": "d8f7b2af1cd6ecfed12981293cb8a2415e09195fff627daed51e28a5e4dd66e3",
+    "data/latest/fixed_band_rules.json": "eab1cbdc745c4efe9327ba15369c0ca6d1ba370beea6d2657f53c90d533780fb",
+    "data/latest/fixed_band_ledger.csv": "eadd527c105ea616b60ebe62cfd8a616edaf5653edb91456caa1cc7a6f2741aa",
+    "research/pressure_inputs/base_forecasts.csv": "337efa13df62bf0eb3e16e8d5def1765d4ce22f6b75006120f7b072c0e85ad7c",
+    "research/pressure_inputs/ats_2026_results.csv": "02fb03fcd75924fbb53bf04e08ac6e974a4e32b070f6a505624970242aacfa7c"
+  },
+  "historical_mapped_grades_checked": 952,
+  "all_exported_maps_monotonic": true
+}

@@ -1,0 +1,578 @@
+[
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_ppp",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 13.208808364808963,
+    "coef": [
+      1.349264705882353,
+      0.33670931800043374,
+      -0.5457115644777232
+    ],
+    "mu": [
+      0.004099146920571658,
+      -0.005275994157341833
+    ],
+    "scale": [
+      0.37708886453925916,
+      0.2644645379844792
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_ppp",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 13.09584595061005,
+    "coef": [
+      1.025735294117647,
+      0.12058862285068989,
+      -0.3775932885946689
+    ],
+    "mu": [
+      0.004099146920571658,
+      -0.005275994157341833
+    ],
+    "scale": [
+      0.37708886453925916,
+      0.2644645379844792
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_ppp",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.752324508500632,
+    "coef": [
+      1.0073529411764706,
+      1.0569667580028819,
+      -0.19419248335889183
+    ],
+    "mu": [
+      0.006244765014914845,
+      0.0011348755764618089
+    ],
+    "scale": [
+      0.3880472247926703,
+      0.2745021909851098
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_ppp",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.813617788921267,
+    "coef": [
+      0.7003676470588235,
+      1.0248727598107987,
+      0.13585266823686096
+    ],
+    "mu": [
+      0.006244765014914845,
+      0.0011348755764618089
+    ],
+    "scale": [
+      0.3880472247926703,
+      0.2745021909851098
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_ppp",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.674116379744078,
+    "coef": [
+      0.9767156862745098,
+      0.4515029146573881,
+      -0.6370798000182206
+    ],
+    "mu": [
+      0.004396523855553702,
+      -0.0016121713041348234
+    ],
+    "scale": [
+      0.3861628545460956,
+      0.2770459646592514
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_ppp",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.637504016430666,
+    "coef": [
+      0.6574754901960784,
+      0.6145952480336798,
+      -0.3619730583287607
+    ],
+    "mu": [
+      0.004396523855553702,
+      -0.0016121713041348234
+    ],
+    "scale": [
+      0.3861628545460956,
+      0.2770459646592514
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_ppp",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 13.218837531049031,
+    "coef": [
+      1.349264705882353,
+      0.2382607740438848,
+      -0.37567905220324443
+    ],
+    "mu": [
+      -0.006480127362520664,
+      0.0007140733985408193
+    ],
+    "scale": [
+      0.384189243320297,
+      0.2602340306629716
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_ppp",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 13.099947985101457,
+    "coef": [
+      1.025735294117647,
+      0.04304264474736629,
+      -0.25750395489662
+    ],
+    "mu": [
+      -0.006480127362520664,
+      0.0007140733985408193
+    ],
+    "scale": [
+      0.384189243320297,
+      0.2602340306629716
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_ppp",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.743712759724824,
+    "coef": [
+      1.0073529411764706,
+      1.14640424278281,
+      -0.21306077591129038
+    ],
+    "mu": [
+      -0.0012177380449825358,
+      0.00423538985369938
+    ],
+    "scale": [
+      0.3963149881638488,
+      0.26800077942514466
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_ppp",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.806212367387623,
+    "coef": [
+      0.7003676470588235,
+      1.1135206490516618,
+      0.07348734644593521
+    ],
+    "mu": [
+      -0.0012177380449825358,
+      0.00423538985369938
+    ],
+    "scale": [
+      0.3963149881638488,
+      0.26800077942514466
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_ppp",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.677514231156106,
+    "coef": [
+      0.9767156862745098,
+      0.4559933198246918,
+      -0.5719485585895332
+    ],
+    "mu": [
+      -0.0027830788234322786,
+      0.0026831581621119724
+    ],
+    "scale": [
+      0.39352922363505694,
+      0.28047742808222176
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_ppp",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "offensive_points_per_possession_diff",
+      "defensive_points_allowed_per_possession_diff"
+    ],
+    "sigma": 12.636822110454782,
+    "coef": [
+      0.6574754901960784,
+      0.6388162570847755,
+      -0.3491181970063375
+    ],
+    "mu": [
+      -0.0027830788234322786,
+      0.0026831581621119724
+    ],
+    "scale": [
+      0.39352922363505694,
+      0.28047742808222176
+    ]
+  }
+]

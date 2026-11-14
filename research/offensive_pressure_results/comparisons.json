@@ -1,0 +1,242 @@
+[
+  {
+    "lag": 2,
+    "cohort": "2024",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.13356024587356996,
+    "mae_gain_ci95": [
+      -0.015085868333570795,
+      0.28128748152951644
+    ],
+    "log_loss_gain": 0.010012472358235684,
+    "log_loss_gain_ci95": [
+      -7.412627807239912e-05,
+      0.020003569009674947
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2024",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.11904859641915352,
+    "mae_gain_ci95": [
+      -0.024666120582810987,
+      0.27192565811836705
+    ],
+    "log_loss_gain": 0.01065164298926674,
+    "log_loss_gain_ci95": [
+      0.0009803517652210796,
+      0.02043589632909209
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2025",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": -0.0070758054029934165,
+    "mae_gain_ci95": [
+      -0.11782988572227976,
+      0.10208368878493425
+    ],
+    "log_loss_gain": -0.0029434679773043993,
+    "log_loss_gain_ci95": [
+      -0.01096158824227378,
+      0.005271308466129409
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2025",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": -0.028311127903400388,
+    "mae_gain_ci95": [
+      -0.14915629503045535,
+      0.09105888730835793
+    ],
+    "log_loss_gain": -0.002399610205945572,
+    "log_loss_gain_ci95": [
+      -0.010557888131141294,
+      0.005928077982946643
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2024-25",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.06324222023528828,
+    "mae_gain_ci95": [
+      -0.031327099849499,
+      0.15727844327845375
+    ],
+    "log_loss_gain": 0.003498446697880652,
+    "log_loss_gain_ci95": [
+      -0.00294611379606033,
+      0.01001978600429718
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2024-25",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.04536873425787656,
+    "mae_gain_ci95": [
+      -0.04873363383507126,
+      0.14263255065476294
+    ],
+    "log_loss_gain": 0.004089695649929938,
+    "log_loss_gain_ci95": [
+      -0.0022175249014977885,
+      0.010528061870890375
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2026",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.03459829215504084,
+    "mae_gain_ci95": [
+      -0.16439576229658637,
+      0.2126286912718769
+    ],
+    "log_loss_gain": 0.003668231598914425,
+    "log_loss_gain_ci95": [
+      -0.007568183468426083,
+      0.013955667138562097
+    ]
+  },
+  {
+    "lag": 2,
+    "cohort": "2026",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.020781031999938804,
+    "mae_gain_ci95": [
+      -0.19126162152332174,
+      0.22088598673963686
+    ],
+    "log_loss_gain": 0.0033387347552141637,
+    "log_loss_gain_ci95": [
+      -0.00896231684007736,
+      0.014233437064921289
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2024",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.10322383047610524,
+    "mae_gain_ci95": [
+      0.012876844274167765,
+      0.2017399889371744
+    ],
+    "log_loss_gain": 0.007465678591458672,
+    "log_loss_gain_ci95": [
+      0.0005965425705520942,
+      0.014225007912446781
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2024",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.09570159763534143,
+    "mae_gain_ci95": [
+      0.0026232838264648277,
+      0.19474998626492673
+    ],
+    "log_loss_gain": 0.007549708806918262,
+    "log_loss_gain_ci95": [
+      0.0015259667606742225,
+      0.013629350484460814
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2025",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.001308443275191496,
+    "mae_gain_ci95": [
+      -0.09709754840282274,
+      0.10114520203401331
+    ],
+    "log_loss_gain": -0.0020243557325128297,
+    "log_loss_gain_ci95": [
+      -0.008852686832755419,
+      0.004699992377795099
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2025",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": -0.028904848182278453,
+    "mae_gain_ci95": [
+      -0.12792851766878216,
+      0.07048537298895605
+    ],
+    "log_loss_gain": -0.001500228660510515,
+    "log_loss_gain_ci95": [
+      -0.008281217192695273,
+      0.005223435515243555
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2024-25",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.05226613687564837,
+    "mae_gain_ci95": [
+      -0.016440722573789028,
+      0.12138606254408608
+    ],
+    "log_loss_gain": 0.002694251315398789,
+    "log_loss_gain_ci95": [
+      -0.002153859621787295,
+      0.007562900902604135
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2024-25",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.03339837472653149,
+    "mae_gain_ci95": [
+      -0.03442089361756708,
+      0.1037653465930355
+    ],
+    "log_loss_gain": 0.002999554718470769,
+    "log_loss_gain_ci95": [
+      -0.0015665538837834198,
+      0.007620488891339101
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2026",
+    "comparison": "model_offensive_pressure_minus_control",
+    "mae_gain": 0.03522787453857057,
+    "mae_gain_ci95": [
+      -0.11377858291105594,
+      0.17831711876724868
+    ],
+    "log_loss_gain": 0.003664821340002673,
+    "log_loss_gain_ci95": [
+      -0.005141761574551528,
+      0.011607239568298764
+    ]
+  },
+  {
+    "lag": 1,
+    "cohort": "2026",
+    "comparison": "market_offensive_pressure_minus_control",
+    "mae_gain": 0.010406674481753373,
+    "mae_gain_ci95": [
+      -0.13982309882905336,
+      0.1604355839910927
+    ],
+    "log_loss_gain": 0.0032671632497734892,
+    "log_loss_gain_ci95": [
+      -0.006039852689604921,
+      0.01160164064005726
+    ]
+  }
+]

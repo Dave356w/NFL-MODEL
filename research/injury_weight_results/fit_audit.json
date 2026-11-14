@@ -1,0 +1,1202 @@
+[
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 5,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 5,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 5,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 5,
+    "arm": "rolling_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 5,
+    "arm": "rolling_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 6,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 6,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 6,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 6,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 5,
+    "intercept": 0.0,
+    "features": [],
+    "n": 830,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 6,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 5,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 830,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0013642789272718548,
+      0.0034454473542314874,
+      -0.004338841666028778,
+      0.005119206225724617,
+      0.004329558024784807,
+      -0.0014150380053105848,
+      0.0018364624820169568
+    ],
+    "scale": [
+      0.14917158072937511,
+      0.14626632098585907,
+      0.2504151444061635,
+      0.14667984921139035,
+      0.19763992795236487,
+      0.16112812246694458,
+      0.3958601162018589
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 7,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 7,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 7,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 7,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 6,
+    "intercept": 0.0,
+    "features": [],
+    "n": 844,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 7,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 6,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 844,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0008035545467325919,
+      0.0034813116322298054,
+      -0.005912996213119426,
+      0.004534975421210467,
+      0.004761841919305839,
+      -0.001090354471481642,
+      0.003136306672658173
+    ],
+    "scale": [
+      0.14884594038380586,
+      0.1460494638875965,
+      0.2519548982375603,
+      0.14626369945494835,
+      0.1972235597287363,
+      0.16115598798012112,
+      0.39537835551169426
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 8,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 8,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 8,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 8,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 7,
+    "intercept": 0.0,
+    "features": [],
+    "n": 858,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 8,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 7,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 858,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0006766056575288989,
+      0.00208961086381388,
+      -0.004511841382107801,
+      0.004143315701139307,
+      0.004200090093105867,
+      -0.0011940308473217657,
+      0.0018068491532779
+    ],
+    "scale": [
+      0.14891955002041068,
+      0.14654540019050658,
+      0.2509675384584501,
+      0.1466172887158167,
+      0.19757589884430266,
+      0.16011691902007927,
+      0.39460156355127884
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 9,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 9,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 9,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 9,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 8,
+    "intercept": 0.0,
+    "features": [],
+    "n": 872,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 9,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 8,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 872,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0005868007507297544,
+      0.002195682393426861,
+      -0.0055260123068032255,
+      0.0051790888718724545,
+      0.0041909891286151125,
+      -0.0014941346365830292,
+      0.0013458484871657116
+    ],
+    "scale": [
+      0.14843537033953022,
+      0.14572421509613917,
+      0.2501560853532977,
+      0.14770817759265667,
+      0.19647979911633243,
+      0.15923339682588053,
+      0.3923155919124327
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 10,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 10,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 816,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 10,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 10,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 9,
+    "intercept": 0.0,
+    "features": [],
+    "n": 887,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "saved_vectors",
+    "evaluation_week": 10,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 9,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 887,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0007494496622132473,
+      0.0025113473551339393,
+      -0.005543387491042781,
+      0.004888385612903515,
+      0.003974123360932192,
+      -0.001561019561484988,
+      -0.0009606232437901862
+    ],
+    "scale": [
+      0.14762261982898514,
+      0.14530275476716673,
+      0.2490332971037417,
+      0.1476738740635629,
+      0.19616189120048963,
+      0.1587187731234174,
+      0.3912645187414338
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "stage": "historical_prior",
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 816,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0009300445842746128,
+      0.0036485407458362582,
+      -0.005152797145748302,
+      0.005751482207715733,
+      0.0036112696753020923,
+      -0.0021104515127788803,
+      -4.789580209261632e-05
+    ],
+    "scale": [
+      0.14715435712525618,
+      0.14657990840779947,
+      0.2503647667363547,
+      0.14725250401169315,
+      0.19791235843881486,
+      0.16126211138498261,
+      0.3940725216058433
+    ]
+  },
+  {
+    "cohort": "saved_vectors",
+    "stage": "all_completed_2026_future_use_only",
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 888,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      0.0005552485782720339,
+      0.0023642308286888243,
+      -0.005499748850942993,
+      0.004569893105576084,
+      0.004146388628781415,
+      -0.0015601014225138416,
+      -0.0007534214354136935
+    ],
+    "scale": [
+      0.14765279957938182,
+      0.1452869999272692,
+      0.24889642943864665,
+      0.14789519953482133,
+      0.1961185274627465,
+      0.1586293816274016,
+      0.3910928387510683
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 9,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 783,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 9,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 783,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 9,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 783,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.0036366474331077335,
+      -0.0015811800592354574,
+      -0.008703191587215865,
+      -0.0007568366798267456,
+      -0.0012509183102385243,
+      -0.00448806775499035,
+      0.0037768674796197087
+    ],
+    "scale": [
+      0.10905524389079785,
+      0.11435158951675156,
+      0.18930736601827577,
+      0.09459299649572113,
+      0.13966774647682587,
+      0.1162832554092638,
+      0.3955205812837851
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 9,
+    "arm": "rolling_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 783,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 9,
+    "arm": "rolling_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 783,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.0036366474331077335,
+      -0.0015811800592354574,
+      -0.008703191587215865,
+      -0.0007568366798267456,
+      -0.0012509183102385243,
+      -0.00448806775499035,
+      0.0037768674796197087
+    ],
+    "scale": [
+      0.10905524389079785,
+      0.11435158951675156,
+      0.18930736601827577,
+      0.09459299649572113,
+      0.13966774647682587,
+      0.1162832554092638,
+      0.3955205812837851
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 10,
+    "arm": "original",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 783,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 10,
+    "arm": "prior_median_control",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [],
+    "n": 783,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 10,
+    "arm": "prior_injury",
+    "training_max_season": 2025,
+    "training_max_week": 18,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 783,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.0036366474331077335,
+      -0.0015811800592354574,
+      -0.008703191587215865,
+      -0.0007568366798267456,
+      -0.0012509183102385243,
+      -0.00448806775499035,
+      0.0037768674796197087
+    ],
+    "scale": [
+      0.10905524389079785,
+      0.11435158951675156,
+      0.18930736601827577,
+      0.09459299649572113,
+      0.13966774647682587,
+      0.1162832554092638,
+      0.3955205812837851
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 10,
+    "arm": "rolling_median_control",
+    "training_max_season": 2026,
+    "training_max_week": 9,
+    "intercept": 0.0,
+    "features": [],
+    "n": 794,
+    "beta": [],
+    "mu": [],
+    "scale": []
+  },
+  {
+    "cohort": "official_reports",
+    "evaluation_week": 10,
+    "arm": "rolling_injury",
+    "training_max_season": 2026,
+    "training_max_week": 9,
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 794,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.003645384134445201,
+      -0.0012534289913989844,
+      -0.00943836523559762,
+      -0.001249926187978203,
+      -0.0012285300744371219,
+      -0.004481645394184292,
+      0.001191943616537558
+    ],
+    "scale": [
+      0.10846460614187677,
+      0.11432744087237126,
+      0.1891919647097483,
+      0.09516488552933756,
+      0.13991474463302353,
+      0.11607031470699827,
+      0.39529767610913175
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "stage": "historical_prior",
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 783,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.0036366474331077335,
+      -0.0015811800592354574,
+      -0.008703191587215865,
+      -0.0007568366798267456,
+      -0.0012509183102385243,
+      -0.00448806775499035,
+      0.0037768674796197087
+    ],
+    "scale": [
+      0.10905524389079785,
+      0.11435158951675156,
+      0.18930736601827577,
+      0.09459299649572113,
+      0.13966774647682587,
+      0.1162832554092638,
+      0.3955205812837851
+    ]
+  },
+  {
+    "cohort": "official_reports",
+    "stage": "all_completed_2026_future_use_only",
+    "intercept": 0.0,
+    "features": [
+      "inj_OL",
+      "inj_WRTE",
+      "inj_RB",
+      "inj_DL",
+      "inj_LB",
+      "inj_DB",
+      "qb_delta"
+    ],
+    "n": 795,
+    "beta": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mu": [
+      -0.0038567749882101546,
+      -0.0012694800417418963,
+      -0.009426493078068567,
+      -0.0012483539537794883,
+      -0.0012255846404596322,
+      -0.004476008104380287,
+      0.0014206764957551677
+    ],
+    "scale": [
+      0.10855990669281441,
+      0.11425640939279885,
+      0.1890732345625219,
+      0.09510502488542105,
+      0.13982674488090677,
+      0.11599740030208393,
+      0.39510155660526064
+    ]
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "season": 2018,
+    "games": 256,
+    "drives": 5555,
+    "redzone_trips": 1676,
+    "fourth_opportunities": 3611,
+    "fourth_attempts": 535,
+    "pbp_sha256": "d37899610b397b96a90da6902827de5b46c5457b93e0e16d5f95a8eb524e4a7d"
+  },
+  {
+    "season": 2019,
+    "games": 256,
+    "drives": 5552,
+    "redzone_trips": 1662,
+    "fourth_opportunities": 3657,
+    "fourth_attempts": 593,
+    "pbp_sha256": "b764668137052be23745953cbc33fa17e537a70c81e9b73785a19a15e7288216"
+  },
+  {
+    "season": 2020,
+    "games": 256,
+    "drives": 5398,
+    "redzone_trips": 1801,
+    "fourth_opportunities": 3421,
+    "fourth_attempts": 655,
+    "pbp_sha256": "bc954b5780e325df4faa255fac092585c981a4de5d2f553a8a4e0a3c8b3a3cf2"
+  },
+  {
+    "season": 2021,
+    "games": 272,
+    "drives": 5699,
+    "redzone_trips": 1838,
+    "fourth_opportunities": 3800,
+    "fourth_attempts": 793,
+    "pbp_sha256": "e8743a568f99667a8bdcd29ba12224ee1782ad2b7916bee78ee335c099383739"
+  },
+  {
+    "season": 2022,
+    "games": 271,
+    "drives": 5723,
+    "redzone_trips": 1715,
+    "fourth_opportunities": 3906,
+    "fourth_attempts": 735,
+    "pbp_sha256": "0c69a71eb39498956c7b1d5c1ca52ce7fe679934a95d1af249facb5ea9829ea4"
+  },
+  {
+    "season": 2023,
+    "games": 272,
+    "drives": 5827,
+    "redzone_trips": 1728,
+    "fourth_opportunities": 4047,
+    "fourth_attempts": 793,
+    "pbp_sha256": "4649804ee0f0a40b41e51ec75a1ce921949d7fab5459213488656b92f78560e8"
+  },
+  {
+    "season": 2024,
+    "games": 272,
+    "drives": 5629,
+    "redzone_trips": 1806,
+    "fourth_opportunities": 3826,
+    "fourth_attempts": 764,
+    "pbp_sha256": "23370d5d10f8104d80d46a1fc5e61f4f6f5a3263fe96fe2dd629913cfcb08c06"
+  },
+  {
+    "season": 2025,
+    "games": 272,
+    "drives": 5520,
+    "redzone_trips": 1769,
+    "fourth_opportunities": 3793,
+    "fourth_attempts": 883,
+    "pbp_sha256": "2f135887790a013fd004e609e37096bb4816d5cc80b9f19122e1bad478961978"
+  },
+  {
+    "season": 2026,
+    "games": 137,
+    "drives": 2916,
+    "redzone_trips": 899,
+    "fourth_opportunities": 1958,
+    "fourth_attempts": 389,
+    "pbp_sha256": "eb81745dd0991364db3f9885f8037f7a0ad295da60ef77ee07c41e5f11f43a2b"
+  }
+]

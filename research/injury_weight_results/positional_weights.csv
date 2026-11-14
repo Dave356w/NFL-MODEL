@@ -1,0 +1,15 @@
+cohort,feature,unit,prior_points,updated_points,update_points,descriptive_bootstrap_lo,descriptive_bootstrap_hi,share_positive,share_negative
+saved_vectors,inj_OL,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.5750846599534246,0.0,0.005,0.29
+saved_vectors,inj_WRTE,per +10pp home-minus-away absence,0.0,0.0,0.0,0.0,0.14790534569560443,0.075,0.01
+saved_vectors,inj_RB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.26083630003868774,6.402890495642588e-05,0.025,0.18
+saved_vectors,inj_DL,per +10pp home-minus-away absence,0.0,0.0,0.0,0.0,0.1493107821671024,0.165,0.01
+saved_vectors,inj_LB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.1256147467499943,0.10698106480700749,0.065,0.14
+saved_vectors,inj_DB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.4512345344461182,0.11185021427144125,0.065,0.135
+saved_vectors,qb_delta,per +1 net yard/dropback,0.0,0.0,0.0,0.0,2.108514095633284,0.2,0.015
+official_reports,inj_OL,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.7436183460157787,0.0,0.005,0.5
+official_reports,inj_WRTE,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.3005187842520472,0.20548375091085913,0.065,0.07
+official_reports,inj_RB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.38912503192067205,0.0,0.0,0.535
+official_reports,inj_DL,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.12165271058538295,0.2494141882244275,0.185,0.04
+official_reports,inj_LB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.844462039016487,0.019739218235039675,0.035,0.335
+official_reports,inj_DB,per +10pp home-minus-away absence,0.0,0.0,0.0,-0.4235838257692652,0.42848719703737215,0.19,0.11
+official_reports,qb_delta,per +1 net yard/dropback,0.0,0.0,0.0,-0.2725659319453658,1.8143330682323133,0.285,0.03

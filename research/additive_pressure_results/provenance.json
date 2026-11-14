@@ -1,0 +1,17 @@
+{
+  "parent_research_commit": "7f3c4b4865f28e8a36f6f2a47ffc36b871990729",
+  "source_provenance": "../pressure_inputs/provenance.json",
+  "selected_exposed_followup": true,
+  "original_publication_times_verified": false,
+  "fitted_extra_features": [
+    "pressure_allowed_diff",
+    "pressure_generated_diff"
+  ],
+  "comparison": "Frozen offensive-only arm on identical games; no interaction",
+  "sha256": {
+    "research/pressure_inputs/base_forecasts.csv": "337efa13df62bf0eb3e16e8d5def1765d4ce22f6b75006120f7b072c0e85ad7c",
+    "research/pressure_inputs/team_games.csv.gz": "e1f60a270416069d61a67bba00339b72c375599300bead918e4d8e733b5940c4",
+    "research/ADDITIVE_PRESSURE.md": "78c3efc46f535d639a0276768c2df143461ea7a41eb05904be848099cd437642",
+    "research/additive_pressure.py": "9c964f81ffcb53f984542bb03bc329da5b9b7d6593f14f04d23ef5dae8f8cc44"
+  }
+}

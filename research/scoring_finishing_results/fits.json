@@ -1,0 +1,1010 @@
+[
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "model_scoring",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 13.32426764690999,
+    "coef": [
+      1.349264705882353,
+      0.39597219261903366,
+      0.30026988550569345,
+      0.030690422206338486,
+      -0.6936031256898382,
+      -0.34555079930387106,
+      -0.36765939059991626,
+      -0.15613018674262868,
+      -0.25448120952049164
+    ],
+    "mu": [
+      0.004049476780778892,
+      0.0006013340264087079,
+      -0.0010149343499168155,
+      -0.001640864197712181,
+      -0.00523791297509367,
+      -2.6446828736256524e-05,
+      0.00026069039373258576,
+      -0.003096943745183981
+    ],
+    "scale": [
+      0.3776225500553714,
+      0.06842182185907415,
+      0.04497422731058391,
+      0.09427829982104247,
+      0.2647110617326457,
+      0.07558775610848091,
+      0.03574685856325622,
+      0.09344123570185459
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2024,
+    "arm": "market_scoring",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 13.204156207641756,
+    "coef": [
+      1.025735294117647,
+      0.2765792680040864,
+      0.2432688508011908,
+      0.10382886833507723,
+      -0.8117692217016728,
+      -0.19891734520049006,
+      -0.3660828594013084,
+      -0.2876533210436091,
+      -0.1617141129280177
+    ],
+    "mu": [
+      0.004049476780778892,
+      0.0006013340264087079,
+      -0.0010149343499168155,
+      -0.001640864197712181,
+      -0.00523791297509367,
+      -2.6446828736256524e-05,
+      0.00026069039373258576,
+      -0.003096943745183981
+    ],
+    "scale": [
+      0.3776225500553714,
+      0.06842182185907415,
+      0.04497422731058391,
+      0.09427829982104247,
+      0.2647110617326457,
+      0.07558775610848091,
+      0.03574685856325622,
+      0.09344123570185459
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "model_scoring",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.772437446517594,
+    "coef": [
+      1.0073529411764706,
+      1.406740688076061,
+      -0.18963717346736783,
+      0.04651609783243643,
+      0.025617389185092352,
+      0.39030244465876157,
+      -1.0799403300151573,
+      -0.4745352958567026,
+      -0.195629947924161
+    ],
+    "mu": [
+      0.006211423803431776,
+      0.0002602655053742366,
+      1.3730680044988145e-05,
+      -0.000999630467671329,
+      0.0011518854314591118,
+      -0.0002094414523810661,
+      -0.00012260556218179127,
+      0.0010636924916330507
+    ],
+    "scale": [
+      0.38828037600136994,
+      0.06893151334798057,
+      0.042049109115536006,
+      0.09732360462174035,
+      0.2745648109460065,
+      0.06996081282579968,
+      0.03486158021217289,
+      0.08807279290063104
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2025,
+    "arm": "market_scoring",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.832983167322102,
+    "coef": [
+      0.7003676470588235,
+      1.409085091496193,
+      -0.2004473832003425,
+      0.13194303043876732,
+      0.07995900495638841,
+      0.6710101633611845,
+      -1.0211334980668931,
+      -0.5810638813490681,
+      -0.24563238261572107
+    ],
+    "mu": [
+      0.006211423803431776,
+      0.0002602655053742366,
+      1.3730680044988145e-05,
+      -0.000999630467671329,
+      0.0011518854314591118,
+      -0.0002094414523810661,
+      -0.00012260556218179127,
+      0.0010636924916330507
+    ],
+    "scale": [
+      0.38828037600136994,
+      0.06893151334798057,
+      0.042049109115536006,
+      0.09732360462174035,
+      0.2745648109460065,
+      0.06996081282579968,
+      0.03486158021217289,
+      0.08807279290063104
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "model_scoring",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.69802089122093,
+    "coef": [
+      0.9767156862745098,
+      0.7350850088276336,
+      -0.33102434437615924,
+      -0.20248979466936246,
+      0.36435462452817685,
+      -0.20223353536806052,
+      -0.4933395684763825,
+      -0.332772450955638,
+      -0.256355705782089
+    ],
+    "mu": [
+      0.004349549989006642,
+      0.0001892317087307808,
+      -0.00045335826906906494,
+      -0.000518772652273095,
+      -0.0015683516186481485,
+      -0.0003056627035441128,
+      -0.0004011217861315454,
+      0.00031498739003578316
+    ],
+    "scale": [
+      0.3864065855091915,
+      0.07023925434906267,
+      0.040999697425663166,
+      0.0964962959081607,
+      0.2772389401885845,
+      0.06861893248981264,
+      0.03373897591271448,
+      0.09101602121480412
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 2,
+    "season": 2026,
+    "arm": "market_scoring",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.658376731219034,
+    "coef": [
+      0.6574754901960784,
+      0.9449459738184544,
+      -0.3909574387601857,
+      -0.1265812637768582,
+      0.36713635634450564,
+      0.08272354174057374,
+      -0.5114697537843707,
+      -0.37767298801820753,
+      -0.3454232719707601
+    ],
+    "mu": [
+      0.004349549989006642,
+      0.0001892317087307808,
+      -0.00045335826906906494,
+      -0.000518772652273095,
+      -0.0015683516186481485,
+      -0.0003056627035441128,
+      -0.0004011217861315454,
+      0.00031498739003578316
+    ],
+    "scale": [
+      0.3864065855091915,
+      0.07023925434906267,
+      0.040999697425663166,
+      0.0964962959081607,
+      0.2772389401885845,
+      0.06861893248981264,
+      0.03373897591271448,
+      0.09101602121480412
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.178846386435868,
+    "coef": [
+      1.349264705882353
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "model_scoring",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 13.316237946401705,
+    "coef": [
+      1.349264705882353,
+      0.7163517564137306,
+      -0.32845036200091454,
+      0.05838135847958024,
+      -0.9632712595363077,
+      -0.22481068723139142,
+      -0.04116265939922413,
+      -0.3256808840435085,
+      -0.39449407709786555
+    ],
+    "mu": [
+      -0.0065889974115893235,
+      -0.000528868202152893,
+      -0.00017359327847339407,
+      -0.004064813690913473,
+      0.000719852977273804,
+      -0.0006135827735271738,
+      0.00028319347038072796,
+      0.0003762594127125536
+    ],
+    "scale": [
+      0.384716951023765,
+      0.06950192841886557,
+      0.04589872211176802,
+      0.09467761190435124,
+      0.260425870036695,
+      0.07346510450078947,
+      0.03815620666195925,
+      0.08860567065519499
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_control",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 13.054430452489965,
+    "coef": [
+      1.025735294117647
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2024,
+    "arm": "market_scoring",
+    "training_n": 272,
+    "training_max_season": 2023,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 13.19370120961476,
+    "coef": [
+      1.025735294117647,
+      0.5164894464631286,
+      -0.3212927053198331,
+      0.20652520975683913,
+      -1.0067487522731549,
+      -0.15235535147189017,
+      -0.09979795255120305,
+      -0.36642949569663863,
+      -0.33989155663600956
+    ],
+    "mu": [
+      -0.0065889974115893235,
+      -0.000528868202152893,
+      -0.00017359327847339407,
+      -0.004064813690913473,
+      0.000719852977273804,
+      -0.0006135827735271738,
+      0.00028319347038072796,
+      0.0003762594127125536
+    ],
+    "scale": [
+      0.384716951023765,
+      0.06950192841886557,
+      0.04589872211176802,
+      0.09467761190435124,
+      0.260425870036695,
+      0.07346510450078947,
+      0.03815620666195925,
+      0.08860567065519499
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.776732030451509,
+    "coef": [
+      1.0073529411764706
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "model_scoring",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.751336260633495,
+    "coef": [
+      1.0073529411764706,
+      1.4387192183451294,
+      -0.039468168402762766,
+      0.09014101548911713,
+      -0.03176788325785374,
+      0.39814790218268575,
+      -1.2352029285310702,
+      -0.4988861429927646,
+      -0.2030158903495847
+    ],
+    "mu": [
+      -0.0012817788775648677,
+      -0.0011825623481249584,
+      0.0001447014994399619,
+      -0.004123034585605919,
+      0.004237296899686165,
+      0.00014403589771382522,
+      4.8906000475835756e-05,
+      0.0018651314432947292
+    ],
+    "scale": [
+      0.39654837079961325,
+      0.06862490534576292,
+      0.04249776976795214,
+      0.0988313786658633,
+      0.26804762827076073,
+      0.06901121750727131,
+      0.0360480308310676,
+      0.08681810227204977
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_control",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.832728927419279,
+    "coef": [
+      0.7003676470588235
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2025,
+    "arm": "market_scoring",
+    "training_n": 544,
+    "training_max_season": 2024,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.814709117280417,
+    "coef": [
+      0.7003676470588235,
+      1.4430027536046628,
+      -0.07507080069588129,
+      0.14763940208328086,
+      0.031254089456880574,
+      0.656997884672445,
+      -1.1692178072823851,
+      -0.5631212444067307,
+      -0.3089243361662872
+    ],
+    "mu": [
+      -0.0012817788775648677,
+      -0.0011825623481249584,
+      0.0001447014994399619,
+      -0.004123034585605919,
+      0.004237296899686165,
+      0.00014403589771382522,
+      4.8906000475835756e-05,
+      0.0018651314432947292
+    ],
+    "scale": [
+      0.39654837079961325,
+      0.06862490534576292,
+      0.04249776976795214,
+      0.0988313786658633,
+      0.26804762827076073,
+      0.06901121750727131,
+      0.0360480308310676,
+      0.08681810227204977
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.684880986503812,
+    "coef": [
+      0.9767156862745098
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "model_scoring",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.70238993143458,
+    "coef": [
+      0.9767156862745098,
+      0.6291185224700443,
+      -0.22289603088340945,
+      -0.04909180232636555,
+      0.3101138570547191,
+      -0.15605919686742054,
+      -0.649464759887323,
+      -0.25746858529393896,
+      -0.09040507990862522
+    ],
+    "mu": [
+      -0.002825607199044967,
+      -0.000863855929427363,
+      -0.00014762961361913113,
+      -0.003370605653883736,
+      0.002715013661266566,
+      0.0008859255384453624,
+      0.00010622380787310934,
+      0.001966799262330479
+    ],
+    "scale": [
+      0.3937693247207364,
+      0.06959841792007185,
+      0.041538224495685554,
+      0.09781942934855319,
+      0.28065098920836334,
+      0.06856437579038141,
+      0.034820767424678226,
+      0.08969640015813378
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_control",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept"
+    ],
+    "sigma": 12.643920646878163,
+    "coef": [
+      0.6574754901960784
+    ],
+    "mu": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "lag": 1,
+    "season": 2026,
+    "arm": "market_scoring",
+    "training_n": 816,
+    "training_max_season": 2025,
+    "feature_names": [
+      "intercept",
+      "d__offense__points_per_drive",
+      "d__offense__redzone_above_expected",
+      "d__offense__fourth_go_above_expected",
+      "d__offense__fourth_conversion_above_expected",
+      "d__defense__points_per_drive",
+      "d__defense__redzone_above_expected",
+      "d__defense__fourth_go_above_expected",
+      "d__defense__fourth_conversion_above_expected"
+    ],
+    "sigma": 12.658442930094328,
+    "coef": [
+      0.6574754901960784,
+      0.866409189996311,
+      -0.29003596690749706,
+      0.018929202917480566,
+      0.307803912950939,
+      0.09932867175432324,
+      -0.6676089409119234,
+      -0.29464855636119613,
+      -0.2509000290767437
+    ],
+    "mu": [
+      -0.002825607199044967,
+      -0.000863855929427363,
+      -0.00014762961361913113,
+      -0.003370605653883736,
+      0.002715013661266566,
+      0.0008859255384453624,
+      0.00010622380787310934,
+      0.001966799262330479
+    ],
+    "scale": [
+      0.3937693247207364,
+      0.06959841792007185,
+      0.041538224495685554,
+      0.09781942934855319,
+      0.28065098920836334,
+      0.06856437579038141,
+      0.034820767424678226,
+      0.08969640015813378
+    ]
+  }
+]
