@@ -18,9 +18,9 @@ ATL,00-0039070,Gervon Dexter Sr.,DL,DL,0.14259086672879775,,,,Questionable,0.25,
 ATL,00-0034801,Josh Woods,LB,LB,0.13162393162393163,,,,Questionable,0.25,final
 ATL,00-0036990,Divine Deablo,LB,LB,0.09401709401709402,9.0,Questionable,Forearm,Doubtful,1.0,final
 ATL,00-0033945,Samson Ebukam,DL,DL,0.06710158434296365,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-BAL,00-0035993,Tyler Huntley,QB,QB,0.7015706806282722,9.0,Out,Toe,RES (A01) on wk 9 roster,1.0,practice
-BAL,00-0039232,Nate Wiggins,CB,DB,0.13402061855670103,9.0,Questionable,Stinger,practice: Full Participation in Practice,0.0,practice
-BAL,00-0034796,Lamar Jackson,QB,QB,0.005235602094240838,9.0,Out,Thumb,RES (A01) on wk 9 roster,1.0,practice
+BAL,00-0035993,Tyler Huntley,QB,QB,0.7015706806282722,9.0,Out,Toe,RES (A01) on wk 9 roster,1.0,final
+BAL,00-0039232,Nate Wiggins,DB,DB,0.13402061855670103,9.0,Questionable,Stinger,"listed, no status",0.0,final
+BAL,00-0034796,Lamar Jackson,QB,QB,0.005235602094240838,9.0,Out,Thumb,RES (A01) on wk 9 roster,1.0,final
 BUF,00-0037288,Christian Benford,DB,DB,0.1771523178807947,,,,Questionable,0.25,final
 BUF,00-0033904,Dion Dawkins,OL,OL,0.16587677725118483,9.0,Questionable,Rib,"listed, no status",0.0,final
 BUF,00-0036976,Spencer Brown,OL,OL,0.12717219589257503,,,,Doubtful,1.0,final
@@ -101,10 +101,9 @@ LA,00-0039058,Steve Avila,OL,OL,0.15366795366795366,,,,Out,1.0,final
 LA,00-0039074,Davis Allen,TE,WRTE,0.14436958614051973,,,,Questionable,0.25,final
 LA,00-0036244,Colby Parkinson,TE,WRTE,0.13570741097208855,9.0,Questionable,Ribs,"listed, no status",0.0,final
 LA,00-0037195,Jaylen Watson,CB,DB,0.1240418118466899,9.0,Out,Shoulder,Reserve/Injured (IR) on wk 9 roster,1.0,final
-LAC,00-0038454,Keaton Mitchell,RB,RB,0.20316622691292877,,,,practice: Limited Participation in Practice,0.0,practice
-LAC,00-0039835,Justin Eboigbe,DE,DL,0.15618661257606492,,,,practice: Limited Participation in Practice,0.0,practice
-LAC,00-0039915,Ladd McConkey,WR,WRTE,0.06589958158995816,,,,practice: Did Not Participate In Practice,0.0,practice
-LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.05230125523012552,,,,not on wk 9 roster (left team),1.0,practice
+LAC,00-0039835,Justin Eboigbe,DL,DL,0.15618661257606492,,,,Questionable,0.25,final
+LAC,00-0039915,Ladd McConkey,WR,WRTE,0.06589958158995816,,,,Questionable,0.25,final
+LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.05230125523012552,,,,not on wk 9 roster (left team),1.0,final
 LV,00-0040641,Darien Porter,CB,DB,0.10510046367851623,9.0,Questionable,Groin,not listed (cleared),0.0,final
 MIA,00-0038128,Malik Willis,QB,QB,1.0,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final
 MIA,00-0036171,Aaron Brewer,OL,OL,0.1988993710691824,,,,Out,1.0,final

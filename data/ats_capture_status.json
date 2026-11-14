@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-14T19:39:27.630179+00:00",
+  "forecast_utc": "2026-11-14T23:26:09.487055+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -69,19 +69,12 @@
     {
       "game_id": "2026_10_LAC_BAL",
       "issues": [
-        "BAL: automatic source checks incomplete or stale",
-        "BAL: final report incomplete",
         "BAL: report: source check stale or after forecast",
-        "BAL: report: complete official list/report missing",
         "BAL: inactives: no successful source check",
         "BAL: inactives: complete official list/report missing",
-        "LAC: automatic source checks incomplete or stale",
-        "LAC: final report incomplete",
         "LAC: report: source check stale or after forecast",
-        "LAC: report: complete official list/report missing",
         "LAC: inactives: no successful source check",
-        "LAC: inactives: complete official list/report missing",
-        "forecast availability validation failed"
+        "LAC: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-17T00:15:00+00:00",
       "state": "awaiting candidate"
@@ -193,5 +186,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-14T19:39:36.231046+00:00"
+  "updated_utc": "2026-11-14T23:26:13.775306+00:00"
 }
