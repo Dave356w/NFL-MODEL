@@ -84,14 +84,14 @@ IND,00-0034342,Quenton Nelson,OL,OL,0.10690423162583519,,,,not on wk 9 roster (l
 IND,00-0033217,Mo Alie-Cox,TE,WRTE,0.09319664492078285,,,,Out,1.0,final
 IND,00-0032378,DeForest Buckner,DL,DL,0.09145129224652088,,,,not on wk 9 roster (left team),1.0,final
 IND,00-0040139,Justin Walley,DB,DB,0.07404103479036575,9.0,Out,Knee,"listed, no status",0.0,final
-IND,00-0038394,Will Mallory,TE,WRTE,0.06803355079217148,,,,Questionable,0.25,final
+IND,00-0038394,Will Mallory,TE,WRTE,0.06803355079217148,,,,Out,1.0,final
 IND,00-0035674,Jerry Tillery,DL,DL,0.06560636182902585,,,,Out,1.0,final
 JAX,00-0040719,Bhayshul Tuten,RB,RB,0.5436507936507936,9.0,Questionable,Ankle,"listed, no status",0.0,final
 JAX,00-0037235,Travon Walker,DL,DL,0.1900647948164147,9.0,Questionable,Rib,"listed, no status",0.0,final
 JAX,00-0036985,Robert Hainsey,OL,OL,0.18925233644859812,,,,Questionable,0.25,final
 JAX,00-0036262,DaVon Hamilton,DL,DL,0.07451403887688984,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
 JAX,00-0033038,Eric Murray,DB,DB,0.06609808102345416,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-KC,00-0038134,Kenneth Walker III,RB,RB,0.7261904761904762,,,,Questionable,0.25,final
+KC,00-0038134,Kenneth Walker III,RB,RB,0.7261904761904762,,,,Out,1.0,final
 KC,00-0036557,Jaylon Moore,OL,OL,0.1135091926458833,,,,Out,1.0,final
 KC,00-0041543,Mansoor Delane,DB,DB,0.10651828298887123,9.0,Out,Shoulder,Questionable,0.25,final
 KC,WOO547869,,,DL,0.06417624521072797,,,,not on wk 9 roster (left team),1.0,final
@@ -149,6 +149,7 @@ NYJ,00-0034782,Harrison Phillips,DL,DL,0.1269296740994854,9.0,Questionable,Ankle
 NYJ,00-0039890,Adonai Mitchell,WR,WRTE,0.12334352701325178,,,,Questionable,0.25,final
 NYJ,00-0039372,Jarvis Brownlee Jr.,DB,DB,0.05490848585690516,,,,Questionable,0.25,final
 NYJ,00-0039886,T'Vondre Sweat,DL,DL,0.0548885077186964,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
+PIT,00-0036894,Pat Freiermuth,TE,WRTE,0.16497975708502025,,,,Questionable,0.25,final
 PIT,00-0034810,Sebastian Joseph-Day,DL,DL,0.08614864864864864,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
 SEA,00-0034869,Sam Darnold,QB,QB,0.7640845070422535,9.0,Out,Quadricep,Out,1.0,final
 SEA,00-0031933,Leonard Williams,DL,DL,0.23665480427046262,9.0,Out,Stinger,Out,1.0,final

@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-11-14 17:09 UTC
+NFL forward ledger report -- 2026-11-14 17:49 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Headline: 1u flat on the model's side at the moneyline saved in the snapshot (not necessarily the close).
@@ -674,7 +674,7 @@ boxscore-composite-v1.16  2026_10_SF_DAL           0.234848  0.319923           
 Appendix C: current production sanity checks
 
 Production sanity check: boxscore-composite-v1.24 and the median ATS map
-Status: FAIL
+Status: PASS
 Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.
 ATS map policy v2: weekly weighted medians of signed pick margins (one-season half-life), including losses and tied finals; games before the forecast week only.
 Grading: forecast-minus-market chooses side; equality within 1e-10 takes the market favorite (a pick'em line skips) before push grading.
@@ -690,9 +690,10 @@ Source prices have no independent quote timestamp; historical ATS returns are pr
   PASS 2024_prior_only_weekly_medians
   PASS 2025_prior_only_weekly_medians
   PASS 2026_prior_only_weekly_medians
-  FAIL exported_median_predictions
+  PASS exported_replacement_margin_evidence
+  PASS exported_median_predictions
   PASS exported_selection_rule_known
-  FAIL exported_ats_grades
+  PASS exported_ats_grades
   PASS production_grading_matches_independent
   PASS exported_rule_schema
   PASS exported_prior_season_maps
@@ -705,6 +706,7 @@ Source prices have no independent quote timestamp; historical ATS returns are pr
   PASS median_archive_before_kickoff
   PASS median_archive_unique_games
   PASS median_archive_prior_season_fit
+  v1.24 final margin (2026 onward): median map - 2 × home replacement + 2 × away replacement; either unresolved flag retains the original map.
   Exported ATS selection rule: favorite-on-zero-edge-2026-10-19-v1
 
 Weekly maps, last week of each season (training ends before the forecast week):
@@ -714,7 +716,7 @@ Weekly maps, last week of each season (training ends before the forecast week):
   2026 week 9: [3.0, 5.0, 6.0, 13.0]; prior n=1480, band counts=[522, 530, 266, 162], through 2026 week 8; 9 weekly rules this season
 
 Historical replay: median ATS versus moneyline on identical game opportunities:
-  All: ATS 532-395-25, 0 skips, 952/952 selected, +88.64u, ROI +9.31% +/- 3.02pp (1 SE)
+  All: ATS 533-394-25, 0 skips, 952/952 selected, +90.55u, ROI +9.51% +/- 3.02pp (1 SE)
     ML 656-294-2, +23.04u, ROI +2.42% +/- 2.32pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=948 (excludes market pick'ems for both): model +21.32u, ROI +2.25%; favorite +1.26u, ROI +0.13%
     Binary proper scores n=950: log loss 0.608018, market 0.610090; Brier 0.209992; tied finals excluded from binary scoring.
@@ -730,7 +732,7 @@ Historical replay: median ATS versus moneyline on identical game opportunities:
     ML 180-91-1, -11.11u, ROI -4.09% +/- 4.33pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=271 (excludes market pick'ems for both): model -12.02u, ROI -4.44%; favorite -18.05u, ROI -6.66%
     Binary proper scores n=271: log loss 0.603379, market 0.609383; Brier 0.209141; tied finals excluded from binary scoring.
-  2026: ATS 75-55-6, 0 skips, 136/136 selected, +13.18u, ROI +9.69% +/- 7.94pp (1 SE)
+  2026: ATS 76-54-6, 0 skips, 136/136 selected, +15.09u, ROI +11.10% +/- 7.92pp (1 SE)
     ML 93-42-1, +3.99u, ROI +2.93% +/- 6.13pp (1 SE); market-correct null -4.10%
     Common-row ML/favorite control n=136 (excludes market pick'ems for both): model +3.99u, ROI +2.93%; favorite +1.08u, ROI +0.79%
     Binary proper scores n=135: log loss 0.626206, market 0.622275; Brier 0.217001; tied finals excluded from binary scoring.
