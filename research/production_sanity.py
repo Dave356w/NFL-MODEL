@@ -3,6 +3,8 @@
 Each exported ledger is checked against the map policy it declares: the weekly decayed map
 (map policy v2, owner decision 2026-11-04) or, for an export without the column, the annual
 prior-season map.
+For v1.24, the final 2026-onward margin also includes the independently
+recomputed replacement-starter adjustment after that map.
 
 No snapshots, recipes, probabilities, or grading policies are changed. The report
 is regenerated from current data by build_site and stays in the repository.
@@ -21,9 +23,12 @@ from scipy.special import ndtri
 import fixed_bands
 import nfl_model as m
 import ats_locks
+from schedule_gate import kickoff as scheduled_kickoff
 
 CUTS = [3., 7., 10.]
 EPS = 1e-10
+REPLACEMENT_REVISION = 'boxscore-composite-v1.24'
+REPLACEMENT_POLICY = 'replacement-team-margin-minus2-2026-11-13-v1'
 
 
 def median_rule(history, year):
@@ -91,6 +96,161 @@ def independent_grades(predicted, lines, margins, favorite_on_tie=True):
     return out
 
 
+def replacement_predictions(history, mapped, saved, revision):
+    """Audit the saved post-map policy without calling the production overlay.
+
+    Earlier revisions and seasons retain their original map. Current exports
+    must retain enough evidence to verify the binary flags, their pregame
+    provenance, the original map and exactly one final two-point adjustment.
+    Unresolved classifications are valid evidence, but never authorize a penalty.
+    """
+    predicted = np.asarray(mapped, float).copy()
+    active = history.season.ge(2026).to_numpy() if revision == REPLACEMENT_REVISION else np.zeros(len(history), bool)
+    if not active.any():
+        return predicted
+    if saved is None:
+        raise ValueError('v1.24 historical export is missing replacement evidence')
+
+    def number(row, name):
+        value = row[name]
+        if pd.isna(value) or str(value).strip() == '':
+            return np.nan
+        value = float(value)
+        if not np.isfinite(value):
+            raise ValueError(f'invalid {name}')
+        return value
+
+    def identity(row, name):
+        value = row[name]
+        return '' if pd.isna(value) else str(value).strip()
+
+    for i in np.flatnonzero(active):
+        row = saved.iloc[i]
+        if row['qb_replacement_policy'] != REPLACEMENT_POLICY:
+            raise ValueError('unknown or missing replacement margin policy')
+        flags = []
+        for side in ('home', 'away'):
+            field = side + '_'
+            flag = number(row, field + 'qb_replacement')
+            status = identity(row, field + 'qb_replacement_status')
+            if row[field + 'qb_replacement_policy'] != REPLACEMENT_POLICY:
+                raise ValueError('replacement team policy missing')
+            if np.isnan(flag):
+                if not status or status in ('replacement starter', 'incumbent starter', 'no established incumbent',
+                                             'incumbent no longer rostered at quarterback'):
+                    raise ValueError('unresolved replacement flag has inconsistent status')
+            else:
+                if flag not in (0., 1.):
+                    raise ValueError('replacement flags must be binary or unresolved')
+                projected = identity(row, field + 'qb_projected_id')
+                incumbent = identity(row, field + 'qb_incumbent_id')
+                starts = number(row, field + 'qb_incumbent_starts')
+                if not projected or not np.isfinite(starts) or starts < 0 or starts != int(starts):
+                    raise ValueError('resolved replacement flag lacks quarterback evidence')
+                if status == 'no established incumbent':
+                    if flag != 0. or starts >= 2 or incumbent:
+                        raise ValueError('no-incumbent classification is inconsistent')
+                elif status in ('replacement starter', 'incumbent starter', 'incumbent no longer rostered at quarterback'):
+                    if not incumbent or starts < 2:
+                        raise ValueError('replacement classification lacks an established incumbent')
+                    if ((status == 'replacement starter') != (flag == 1.)
+                            or status == 'replacement starter' and projected == incumbent
+                            or status == 'incumbent starter' and projected != incumbent):
+                        raise ValueError('replacement flag disagrees with quarterback identities')
+                    week = float(history.iloc[i].week)
+                    last = number(row, field + 'qb_incumbent_last_week')
+                    reference = number(row, field + 'qb_replacement_reference_week')
+                    if not (0 < last < week and 0 < reference < week):
+                        raise ValueError('replacement incumbent evidence is not strictly before the game')
+                else:
+                    raise ValueError('resolved replacement flag has unknown status')
+            flags.append(flag)
+        known = all(np.isfinite(flags))
+        adjustment = -2. * flags[0] + 2. * flags[1] if known else 0.
+        if not np.isclose(number(row, 'qb_replacement_base_margin'), predicted[i], atol=EPS, rtol=0, equal_nan=True):
+            raise ValueError('replacement base does not match the independent median map')
+        if not np.isclose(number(row, 'qb_replacement_margin_adjustment'), adjustment, atol=EPS, rtol=0):
+            raise ValueError('replacement adjustment is not exactly two points per replacement')
+        applied = known and np.isfinite(predicted[i])
+        if str(row['qb_replacement_applied']).lower() != str(applied).lower():
+            raise ValueError('replacement application marker disagrees with classification')
+        status = 'classified' if known else 'unresolved; original margin retained'
+        if row['qb_replacement_overlay_status'] != status:
+            raise ValueError('replacement overlay status disagrees with classification')
+        predicted[i] += adjustment
+    return predicted
+
+
+def replacement_export_basis(history, mapped, saved, records, native_games=()):
+    """Use immutable v1.24 decisions ahead of replay, with their own map/line.
+
+    Calibration keeps replay WP and team annotations even when a saved lock
+    supplies its ATS decision. Only the frozen lock's replacement evidence can
+    audit that decision. Games without a lock cannot acquire a replay after
+    adoption, and a native forecast also blocks historical fallback.
+    """
+    base = np.asarray(mapped, float).copy()
+    lines = history.spread_line.to_numpy(float).copy()
+    evidence = saved.astype(object).copy() if saved is not None else None
+    unavailable = np.zeros(len(history), bool)
+    cutoff = pd.Timestamp('2026-11-14T00:00:00Z')
+    for i, row in enumerate(history.to_dict('records')):
+        if int(row['season']) != 2026:
+            continue
+        lock = records.get((REPLACEMENT_REVISION, row['game_id']))
+        if lock is not None:
+            if any(str(lock[name]) != str(row[name]) for name in ('game_id', 'home', 'away')) or any(
+                    int(lock[name]) != int(row[name]) for name in ('season', 'week')):
+                raise ValueError('frozen ATS lock identity differs from historical game')
+            rule = lock['fixed_rule']
+            raw = 12.37 * ndtri(np.clip(float(lock['model_wp']), .005, .995))
+            base[i] = np.sign(raw) * rule['magnitudes'][np.searchsorted(rule['cuts'], abs(raw), side='right')]
+            lines[i] = float(lock['market_spread'])
+            if evidence is None:
+                raise ValueError('v1.24 native ATS export is missing')
+            for name in ('qb_replacement_base_margin', 'qb_replacement_margin_adjustment'):
+                if not np.isclose(float(saved.iloc[i][name]), float(lock[name]), atol=EPS, rtol=0):
+                    raise ValueError('exported replacement metadata differs from its frozen lock')
+            if saved.iloc[i]['qb_replacement_policy'] != lock['qb_replacement_policy']:
+                raise ValueError('exported replacement policy differs from its frozen lock')
+            marker = lock.get('qb_replacement_applied')
+            exported_marker = saved.iloc[i]['qb_replacement_applied']
+            if not (pd.isna(marker) and pd.isna(exported_marker)) and str(marker).lower() != str(exported_marker).lower():
+                raise ValueError('exported replacement application marker differs from its frozen lock')
+            if not np.isclose(float(saved.iloc[i].fixed_band_spread), float(lock['fixed_band_spread']), atol=EPS, rtol=0):
+                raise ValueError('exported ATS margin differs from its frozen lock')
+            for name, value in lock.items():
+                if name.startswith(('home_qb_', 'away_qb_')) or name in (
+                        'qb_replacement_base_margin', 'qb_replacement_margin_adjustment', 'qb_replacement_policy'):
+                    if name not in evidence:
+                        evidence[name] = pd.Series(index=evidence.index, dtype=object)
+                    evidence.iloc[i, evidence.columns.get_loc(name)] = np.nan if value is None else value
+            known = all(lock.get(side + '_qb_replacement') in (0., 1.) for side in ('home', 'away'))
+            evidence.iloc[i, evidence.columns.get_loc('qb_replacement_applied')] = known and np.isfinite(base[i])
+            evidence.iloc[i, evidence.columns.get_loc('qb_replacement_overlay_status')] = (
+                'classified' if known else 'unresolved; original margin retained')
+        else:
+            # A date-only historical row authorizes replay only when *every*
+            # possible kickoff's deadline on that Eastern date predates adoption.
+            kickoff = pd.to_datetime(row.get('kickoff_utc'), utc=True, errors='coerce')
+            if pd.isna(kickoff):
+                kickoff = scheduled_kickoff(row)
+            if pd.notna(kickoff):
+                before = kickoff - pd.Timedelta(hours=1) < cutoff
+            else:
+                day = pd.to_datetime(row.get('gameday'), format='%Y-%m-%d', errors='coerce')
+                before = pd.notna(day) and ((day.normalize() + pd.Timedelta(days=1)).tz_localize(
+                    'America/New_York') - pd.Timedelta(hours=1) <= cutoff)
+            if row['game_id'] in native_games or not before:
+                unavailable[i] = True
+                lines[i] = np.nan
+    if saved is not None and not np.allclose(saved.spread_line, lines, atol=EPS, rtol=0, equal_nan=True):
+        raise ValueError('exported ATS line differs from its replay or frozen lock')
+    predicted = replacement_predictions(history, base, evidence, REPLACEMENT_REVISION)
+    predicted[unavailable] = np.nan
+    return predicted, lines
+
+
 def independent_moneyline(frame):
     """American-price arithmetic and W/L/push settlement from source columns."""
     p=frame.model_wp.to_numpy(float);y=frame['home won'].to_numpy(float)
@@ -121,6 +281,7 @@ def inspect(data='data'):
     # Primary ATS capture is independent of historical exports. A standalone
     # sanity check must reject corrupt timed-lock evidence even on an otherwise
     # empty data directory; validation never rewrites either append-only store.
+    timed = []; records = {}
     try:
         inventory = ats_locks.validate_store(data)
         timed = ats_locks.read(data / ats_locks.LOCKS)
@@ -128,6 +289,11 @@ def inspect(data='data'):
             extra = ats_locks.validate_store(runtime)
             inventory = {k: inventory[k]+extra[k] for k in inventory}
             timed += ats_locks.read(runtime/ats_locks.LOCKS)
+        for row in timed:
+            key = ats_locks.key(row)
+            if key in records and records[key] != row:
+                raise ValueError('Conflicting immutable ATS selections')
+            records[key] = row
         capture = dict(policy=ats_locks.POLICY_VERSION, candidates=inventory['candidates'],
                        timed_locks=sum(not r.get('recovered_after_kickoff') for r in timed),
                        recovered_saved_forecasts=sum(bool(r.get('recovered_after_kickoff')) for r in timed),
@@ -188,7 +354,22 @@ def inspect(data='data'):
                 production['magnitudes'] == rule['magnitudes'] and
                 production['training_band_counts'] == rule['training_band_counts'] and
                 production['training_max_season'] < year)
-    grades = independent_grades(predicted, d.spread_line, d.result)
+    manifest_path = latest/'manifest.json'
+    revision = json.loads(manifest_path.read_text()).get('revision') if manifest_path.exists() else None
+    replacement_error = None
+    ats_history = d.copy()
+    raw_path = data/'forward_predictions.jsonl'
+    snapshots = [json.loads(line) for line in raw_path.read_text().splitlines() if line.strip()] if raw_path.exists() else []
+    if revision == REPLACEMENT_REVISION:
+        try:
+            native_games = {r['game_id'] for r in snapshots if r['revision'] == revision}
+            predicted, lines = replacement_export_basis(d, predicted, saved, records, native_games)
+            ats_history['spread_line'] = lines
+            checks['exported_replacement_margin_evidence'] = True
+        except (ValueError, KeyError, TypeError, OverflowError) as exc:
+            replacement_error = str(exc)
+            checks['exported_replacement_margin_evidence'] = False
+    grades = independent_grades(predicted, ats_history.spread_line, d.result)
     if saved is not None:
         checks['exported_median_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
         # Each export is checked against the selection rule it declares; an export
@@ -197,9 +378,9 @@ def inspect(data='data'):
         export_rule = declared[0] if declared else 'zero-edge skip (before 2026-10-19)'
         checks['exported_selection_rule_known'] = (len(declared) <= 1 and
             export_rule in (fixed_bands.SELECTION_VERSION, 'zero-edge skip (before 2026-10-19)'))
-        expected = grades if declared else independent_grades(predicted, d.spread_line, d.result, False)
+        expected = grades if declared else independent_grades(predicted, ats_history.spread_line, d.result, False)
         checks['exported_ats_grades'] = bool(np.array_equal(saved.fixed_band_ats_result.fillna('').to_numpy(), expected))
-    production_grades, _ = fixed_bands.grade(d, predicted)
+    production_grades, _ = fixed_bands.grade(ats_history, predicted)
     checks['production_grading_matches_independent'] = bool(np.array_equal(grades, production_grades))
     saved_rules=latest/'fixed_band_rules.json'
     if saved_rules.exists():
@@ -237,9 +418,8 @@ def inspect(data='data'):
         item['market_log_loss'] = float(-(y*np.log(q)+(1-y)*np.log1p(-q)).mean())
         item['brier'] = float(((p-y)**2).mean())
         historical.append(item)
-    native = {}; snapshots = []; raw_path = data/'forward_predictions.jsonl'
+    native = {}
     if raw_path.exists():
-        snapshots = [json.loads(line) for line in raw_path.read_text().splitlines() if line.strip()]
         snaps = [r for r in snapshots if r['revision'] == m.REVISION]
         checks['unique_production_snapshot_keys'] = len({(r['experiment'],r['game_id']) for r in snaps}) == len(snaps)
         checks['production_snapshots_before_kickoff'] = all(pd.Timestamp(r['generated_utc']) < pd.Timestamp(r['kickoff_utc']) for r in snaps)
@@ -283,7 +463,7 @@ def inspect(data='data'):
         archive['original_skips'] = len(rows)-archive['original_selections']
         archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
     return dict(checks=checks,rules=rules,weekly=weekly,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
-                export_selection=export_rule if exported.exists() else None,
+                export_selection=export_rule if exported.exists() else None, replacement_error=replacement_error,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
 
@@ -299,6 +479,11 @@ def report(data='data'):
              'Returns: 1u risk at assumed -110, wins +1/1.1, losses -1, pushes 0; skips excluded from ROI stakes.',
              'Source prices have no independent quote timestamp; historical ATS returns are proxy reconstructions.', '']
     for name, ok in audit['checks'].items():lines.append(f"  {'PASS' if ok else 'FAIL'} {name}")
+    if 'exported_replacement_margin_evidence' in audit['checks']:
+        lines.append('  v1.24 final margin (2026 onward): median map - 2 × home replacement '
+                     '+ 2 × away replacement; either unresolved flag retains the original map.')
+    if audit.get('replacement_error'):
+        lines.append(f"  Replacement margin evidence: {audit['replacement_error']}")
     if audit.get('export_selection'):
         lines.append(f"  Exported ATS selection rule: {audit['export_selection']}")
     if audit.get('weekly'):
