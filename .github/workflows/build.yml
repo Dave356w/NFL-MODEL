@@ -40,6 +40,7 @@ permissions:
 env:
   NFL_LOCK_OWNER: watcher
   NFL_PREPARE_LOCK_CONTEXT: '1'
+  NFL_PROFILE_MODE: production  # exact same retained values; omit unused h4/opponent-adjusted profiles
 
 jobs:
   plan:
