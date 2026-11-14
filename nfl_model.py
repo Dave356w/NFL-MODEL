@@ -3293,6 +3293,14 @@ class revision_identity:
         g=globals(); g['REVISION'],g['PRODUCT_RECIPE']=self.saved
 
 
+def prepare_legacy_shadow_features(box,schedules,availability,profile_mode='full'):
+    """The legacy product needs h8 main profiles and h16 pass contexts."""
+    features={half:lagged_features(box,schedules,half,availability,
+        profile_families=('rates_core',)) for half in (8.,16.)}
+    prepare_product_features(features,schedules)
+    return features
+
+
 def record_shadow(board,fit,oof,season,asof=None):
     """v1.18 shadow lock: the unpenalized v1.16 forecast for the same games, under v1.16's own
     frozen recipe and config signature, so the pre-registered v1.16 sample (H1/H2/H6) and the
@@ -4050,10 +4058,7 @@ def main():
             legacy_qb=qb.assign(starter=qb.starter_first_dropback)
             legacy_avail=availability_table(targets,legacy_qb,a['snaps'],a['inj'],a['rost'],
                 depth=a.get('depth'),events=events,gameday=targets)
-            half=recipe['half_life']
-            shadow_features={half:lagged_features(box,schedules,half,legacy_avail,
-                profile_families=('rates_core',) if profile_mode=='production' else None)}
-            prepare_product_features(shadow_features,schedules)
+            shadow_features=prepare_legacy_shadow_features(box,schedules,legacy_avail,profile_mode)
     gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability,
                                shadow_features=shadow_features)
     if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
