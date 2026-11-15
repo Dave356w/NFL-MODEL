@@ -1,18 +1,6 @@
 {
-  "forecast_utc": "2026-11-15T21:03:35.222124+00:00",
+  "forecast_utc": "2026-11-15T21:05:18.296943+00:00",
   "games": [
-    {
-      "game_id": "2026_10_LA_ARI",
-      "issues": [],
-      "lock_at_utc": "2026-11-15T20:05:00+00:00",
-      "state": "locked"
-    },
-    {
-      "game_id": "2026_10_SEA_LV",
-      "issues": [],
-      "lock_at_utc": "2026-11-15T20:05:00+00:00",
-      "state": "locked"
-    },
     {
       "diagnostic_generated_utc": "2026-11-15T20:23:14.492504+00:00",
       "diagnostic_snapshot_sha256": "8f6ce889dfd40b5b9198e58a8d78b3ff6ac4572d936e1847cfca594dacedc105",
@@ -31,5 +19,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T21:04:05.960354+00:00"
+  "updated_utc": "2026-11-15T21:05:29.085781+00:00"
 }
