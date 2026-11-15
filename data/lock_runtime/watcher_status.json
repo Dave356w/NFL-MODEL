@@ -1,14 +1,8 @@
 {
-  "heartbeat_utc": "2026-11-15T14:29:34.406731+00:00",
+  "heartbeat_utc": "2026-11-15T14:31:02.176022+00:00",
   "run_id": "43714167460",
   "errors": [],
   "prepared_bundle_sha256": "7e91bc39d8517147b3e0b207b82a5add492ff6fce6100c334a5e0c97ed8b59bb",
-  "games": [
-    {
-      "game_id": "2026_10_NE_DET",
-      "cutoff_utc": "2026-11-15T13:30:00+00:00",
-      "blockers": []
-    }
-  ],
-  "updated_utc": "2026-11-15T14:29:58.852450+00:00"
+  "games": [],
+  "updated_utc": "2026-11-15T14:31:02.642422+00:00"
 }
