@@ -1,8 +1,8 @@
 {
-  "heartbeat_utc": "2026-11-15T17:47:58.354619+00:00",
+  "heartbeat_utc": "2026-11-15T17:51:44.741382+00:00",
   "run_id": "43738743777",
   "errors": [],
-  "prepared_bundle_sha256": "7e91bc39d8517147b3e0b207b82a5add492ff6fce6100c334a5e0c97ed8b59bb",
+  "prepared_bundle_sha256": "ccef5c9a8f6e593f902798582d592e89220fc518d1d475dbb0f6879c750bf936",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -50,5 +50,5 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T17:50:40.695014+00:00"
+  "updated_utc": "2026-11-15T17:54:25.704076+00:00"
 }
