@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-      "last_success_utc": "2026-11-15T20:04:06.802815+00:00"
+      "last_attempt_utc": "2026-11-15T21:57:31.861964+00:00",
+      "last_success_utc": "2026-11-15T21:57:31.861964+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T20:04:06.764912+00:00",
-      "last_success_utc": "2026-11-15T20:04:06.764912+00:00"
+      "last_attempt_utc": "2026-11-15T21:57:31.876434+00:00",
+      "last_success_utc": "2026-11-15T21:57:31.876434+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -16,26 +16,15 @@
   "rss_enabled": false,
   "teams": {
     "ARI": {
-      "game_id": "2026_10_LA_ARI",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "f1e991e50f22ddbaa177880dee70fad91e839e8c7fb1ac4793e7e49541639f99",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
-      "kickoff_utc": "2026-11-15T21:05:00+00:00",
+      "game_id": "2026_11_ARI_KC",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
       "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.771866+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.771866+00:00",
-        "source_capture_sha256": "5b49bc15b7e91e1eebbd936e4b1fdac94ecc4c95df8b6cbd913073778e5eb050"
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
       }
     },
     "ATL": {
@@ -58,41 +47,53 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.757852+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.757852+00:00",
+        "last_attempt_utc": "2026-11-15T21:57:28.093153+00:00",
+        "last_success_utc": "2026-11-15T21:57:28.093153+00:00",
         "source_capture_sha256": "29ba7571e2bab91db34a9c45e3b5405088f8a49c54f6ed1c399263e1600dd831"
       }
     },
     "BUF": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "CAR": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "CHI": {
-      "game_id": null,
+      "game_id": "2026_11_MIA_BUF",
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "CAR": {
+      "game_id": "2026_11_BAL_CAR",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "CHI": {
+      "game_id": "2026_11_NO_CHI",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "CIN": {
       "game_id": "2026_10_PIT_CIN",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      },
       "kickoff_utc": "2026-11-16T01:20:00+00:00",
       "news": {
         "article_errors": []
@@ -101,8 +102,8 @@
         "complete": false,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.782266+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.782266+00:00",
+        "last_attempt_utc": "2026-11-15T21:57:28.148528+00:00",
+        "last_success_utc": "2026-11-15T21:57:28.148528+00:00",
         "source_capture_sha256": "aca62d5dd927e9bec083a56f77ab1ad2ab56642b35f92294b06b640e51ced4db"
       }
     },
@@ -116,41 +117,40 @@
       "report": {}
     },
     "DAL": {
-      "game_id": "2026_10_SF_DAL",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "d1ed504bbb3981c1dab53bfe82aeb6cd42f3b89b2ac75e0aae8e3af3fc679067",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
-      "kickoff_utc": "2026-11-15T21:25:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T20:04:01.988702+00:00"
-      }
-    },
-    "DEN": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-22T21:25:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "DET": {
-      "game_id": null,
+      "game_id": "2026_11_TEN_DAL",
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "DEN": {
+      "game_id": "2026_11_LV_DEN",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T21:25:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "DET": {
+      "game_id": "2026_11_TB_DET",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "GB": {
       "game_id": null,
@@ -162,63 +162,61 @@
       "report": {}
     },
     "HOU": {
-      "game_id": null,
+      "game_id": "2026_11_IND_HOU",
       "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "IND": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "JAX": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "KC": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "LA": {
-      "game_id": "2026_10_LA_ARI",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "e51b4e0c95e358457409d44fa8ee4d65c7acd1165102191b7c64ea7929eca5ae",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
-      "kickoff_utc": "2026-11-15T21:05:00+00:00",
+      "kickoff_utc": "2026-11-20T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
       "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.772389+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.772389+00:00",
-        "source_capture_sha256": "49310e7c1d76b809232b0c573d986ccb95d7e4afb38826b3667909444b094a14"
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
       }
+    },
+    "IND": {
+      "game_id": "2026_11_IND_HOU",
+      "inactives": {},
+      "kickoff_utc": "2026-11-20T01:15:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "JAX": {
+      "game_id": "2026_11_JAX_NYG",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "KC": {
+      "game_id": "2026_11_ARI_KC",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "LA": {
+      "game_id": null,
+      "inactives": {},
+      "kickoff_utc": "2026-11-15T21:05:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {}
     },
     "LAC": {
       "game_id": "2026_10_LAC_BAL",
@@ -231,51 +229,46 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.756425+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.756425+00:00",
+        "last_attempt_utc": "2026-11-15T21:57:28.297511+00:00",
+        "last_success_utc": "2026-11-15T21:57:28.297511+00:00",
         "source_capture_sha256": "679091365e2e9f7a322c77bb9e974dbaffcef166e0d75f0641dc39fa8b23148c"
       }
     },
     "LV": {
-      "game_id": "2026_10_SEA_LV",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "4f3ddd32743910e22af6e59ff308d7d0d39d596d90d8f8e525e64aa96f738c42",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
-      "kickoff_utc": "2026-11-15T21:05:00+00:00",
+      "game_id": "2026_11_LV_DEN",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
       "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.788974+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.788974+00:00",
-        "source_capture_sha256": "6ddbbe7cd94c318062d932e30370cb67d1be278a44296ac233583c15c3df98cf"
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
       }
     },
     "MIA": {
-      "game_id": null,
+      "game_id": "2026_11_MIA_BUF",
       "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "MIN": {
-      "game_id": null,
+      "game_id": "2026_11_MIN_SF",
       "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
+      "kickoff_utc": "2026-11-23T01:20:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "NE": {
       "game_id": null,
@@ -287,44 +280,59 @@
       "report": {}
     },
     "NO": {
-      "game_id": null,
-      "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
-      "news": {
-        "article_errors": []
-      },
-      "report": {}
-    },
-    "NYG": {
-      "game_id": null,
+      "game_id": "2026_11_NO_CHI",
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
-    "NYJ": {
-      "game_id": null,
+    "NYG": {
+      "game_id": "2026_11_JAX_NYG",
       "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
+    },
+    "NYJ": {
+      "game_id": "2026_11_NYJ_LAC",
+      "inactives": {},
+      "kickoff_utc": "2026-11-22T21:05:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "PHI": {
-      "game_id": null,
+      "game_id": "2026_11_PIT_PHI",
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "PIT": {
       "game_id": "2026_10_PIT_CIN",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      },
       "kickoff_utc": "2026-11-16T01:20:00+00:00",
       "news": {
         "article_errors": []
@@ -333,74 +341,55 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.790404+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.790404+00:00",
+        "last_attempt_utc": "2026-11-15T21:57:28.541678+00:00",
+        "last_success_utc": "2026-11-15T21:57:28.541678+00:00",
         "source_capture_sha256": "8c6a2617463be1ca36a5a2c1a04d65279f50990b549cd63bf8a2b90efa36f965"
       }
     },
     "SEA": {
-      "game_id": "2026_10_SEA_LV",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "dbe2bf23dbdd8488fbca30221b58748b90e675aee1ef23c99e64ecb1aea3a827",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-15T21:05:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.935359+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.935359+00:00",
-        "source_capture_sha256": "8977b60c01f28a2835d2b5b66d5d7699ee11ceb2e97b4b0abdbe0450d87a6ea0"
-      }
+      "report": {}
     },
     "SF": {
-      "game_id": "2026_10_SF_DAL",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T20:04:06.802815+00:00",
-        "last_success_utc": "2026-11-15T20:04:06.802815+00:00",
-        "source_capture_sha256": "03b1a947d44d2adb31e88dab9f1654a2ba5f136f1ca6fc1aec2ac331f028edee",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
-      "kickoff_utc": "2026-11-15T21:25:00+00:00",
+      "game_id": "2026_11_MIN_SF",
+      "inactives": {},
+      "kickoff_utc": "2026-11-23T01:20:00+00:00",
       "news": {
         "article_errors": []
       },
       "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T20:04:05.924607+00:00",
-        "last_success_utc": "2026-11-15T20:04:05.924607+00:00",
-        "source_capture_sha256": "ae6a5460fdc2f97137be45fb7ddf2450a05b30e069c5078407c3d2a3dc24b497"
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
       }
     },
     "TB": {
-      "game_id": null,
+      "game_id": "2026_11_TB_DET",
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report for both scheduled opponents not yet published",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "TEN": {
-      "game_id": null,
+      "game_id": "2026_11_TEN_DAL",
       "inactives": {},
-      "kickoff_utc": "2026-11-15T18:00:00+00:00",
+      "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {}
+      "report": {
+        "error": "injury report does not identify the forecast week",
+        "last_attempt_utc": "2026-11-15T21:57:25.946543+00:00"
+      }
     },
     "WAS": {
       "game_id": null,
@@ -412,5 +401,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T20:04:06.802815+00:00"
+  "updated_utc": "2026-11-15T21:57:31.876434+00:00"
 }
