@@ -1,14 +1,11 @@
 {
-  "forecast_utc": "2026-11-15T18:06:39.823756+00:00",
+  "forecast_utc": "2026-11-15T19:59:30.361367+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "missed cutoff"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_CAR_NO",
@@ -18,21 +15,15 @@
     },
     {
       "game_id": "2026_10_HOU_CLE",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "missed cutoff"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_JAX_TEN",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "missed cutoff"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_KC_ATL",
@@ -56,35 +47,22 @@
     {
       "game_id": "2026_10_LA_ARI",
       "issues": [
-        "ARI: report: source check stale or after forecast",
-        "ARI: inactives: official inactive list not found",
-        "ARI: inactives: no successful source check",
-        "ARI: inactives: complete official list/report missing",
-        "LA: report: source check stale or after forecast",
-        "LA: inactives: official inactive list not found",
-        "LA: inactives: no successful source check",
-        "LA: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
     },
     {
       "game_id": "2026_10_MIA_IND",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "missed cutoff"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_MIN_GB",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "missed cutoff"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_NE_DET",
@@ -112,14 +90,7 @@
     {
       "game_id": "2026_10_SEA_LV",
       "issues": [
-        "LV: report: source check stale or after forecast",
-        "LV: inactives: official inactive list not found",
-        "LV: inactives: no successful source check",
-        "LV: inactives: complete official list/report missing",
-        "SEA: report: source check stale or after forecast",
-        "SEA: inactives: official inactive list not found",
-        "SEA: inactives: no successful source check",
-        "SEA: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
@@ -135,7 +106,6 @@
         "DAL: inactives: official inactive list not found",
         "DAL: inactives: no successful source check",
         "DAL: inactives: complete official list/report missing",
-        "SF: report: source check stale or after forecast",
         "SF: inactives: official inactive list not found",
         "SF: inactives: no successful source check",
         "SF: inactives: complete official list/report missing",
@@ -146,5 +116,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T18:06:47.705158+00:00"
+  "updated_utc": "2026-11-15T19:59:38.356931+00:00"
 }
