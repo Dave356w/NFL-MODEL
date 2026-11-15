@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-15T16:50:48.348452+00:00",
+  "forecast_utc": "2026-11-15T16:53:45.625153+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -13,11 +13,9 @@
     },
     {
       "game_id": "2026_10_CAR_NO",
-      "issues": [
-        "candidate rejected; check market line and fitted map"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "candidate saved; awaiting finalization"
     },
     {
       "game_id": "2026_10_HOU_CLE",
@@ -41,11 +39,9 @@
     },
     {
       "game_id": "2026_10_KC_ATL",
-      "issues": [
-        "candidate rejected; check market line and fitted map"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "candidate saved; awaiting finalization"
     },
     {
       "game_id": "2026_10_MIA_IND",
@@ -72,5 +68,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T16:52:30.321366+00:00"
+  "updated_utc": "2026-11-15T16:55:27.579515+00:00"
 }
