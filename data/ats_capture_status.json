@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-14T23:26:09.487055+00:00",
+  "forecast_utc": "2026-11-15T03:08:54.571410+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -174,17 +174,8 @@
       ],
       "lock_at_utc": "2026-11-15T20:25:00+00:00",
       "state": "awaiting candidate"
-    },
-    {
-      "game_id": "2026_10_WAS_NYG",
-      "issues": [
-        "current board cannot be captured before the cutoff",
-        "forecast availability evidence missing"
-      ],
-      "lock_at_utc": "2026-11-13T00:15:00+00:00",
-      "state": "missed cutoff"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-14T23:26:13.775306+00:00"
+  "updated_utc": "2026-11-15T03:08:58.983210+00:00"
 }
