@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-15T16:41:51.317421+00:00",
+  "heartbeat_utc": "2026-11-15T16:44:48.449236+00:00",
   "run_id": "43714167460",
   "errors": [],
   "prepared_bundle_sha256": "7e91bc39d8517147b3e0b207b82a5add492ff6fce6100c334a5e0c97ed8b59bb",
@@ -14,9 +14,7 @@
     {
       "game_id": "2026_10_CAR_NO",
       "cutoff_utc": "2026-11-15T17:00:00+00:00",
-      "blockers": [
-        "complete current official availability required"
-      ]
+      "blockers": []
     },
     {
       "game_id": "2026_10_HOU_CLE",
@@ -35,9 +33,7 @@
     {
       "game_id": "2026_10_KC_ATL",
       "cutoff_utc": "2026-11-15T17:00:00+00:00",
-      "blockers": [
-        "complete current official availability required"
-      ]
+      "blockers": []
     },
     {
       "game_id": "2026_10_MIA_IND",
@@ -54,5 +50,5 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T16:43:44.717956+00:00"
+  "updated_utc": "2026-11-15T16:46:41.493662+00:00"
 }
