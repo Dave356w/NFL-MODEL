@@ -1,13 +1,10 @@
 {
-  "forecast_utc": "2026-11-15T16:41:57.560027+00:00",
+  "forecast_utc": "2026-11-15T16:44:54.730562+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
-        "NYJ: inactives: official inactive list not found",
-        "NYJ: inactives: no successful source check",
-        "NYJ: inactives: complete official list/report missing",
-        "BUF: inactives: official inactive list not found",
+        "BUF: inactives: unresolved inactive player: Mike Danna",
         "BUF: inactives: no successful source check",
         "BUF: inactives: complete official list/report missing"
       ],
@@ -17,12 +14,7 @@
     {
       "game_id": "2026_10_CAR_NO",
       "issues": [
-        "NO: inactives: official inactive list not found",
-        "NO: inactives: no successful source check",
-        "NO: inactives: complete official list/report missing",
-        "CAR: inactives: official inactive list not found",
-        "CAR: inactives: no successful source check",
-        "CAR: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -30,10 +22,7 @@
     {
       "game_id": "2026_10_HOU_CLE",
       "issues": [
-        "CLE: inactives: official inactive list not found",
-        "CLE: inactives: no successful source check",
-        "CLE: inactives: complete official list/report missing",
-        "HOU: inactives: official inactive list not found",
+        "HOU: inactives: unparsed inactive line: C/G Keylan Rutledge",
         "HOU: inactives: no successful source check",
         "HOU: inactives: complete official list/report missing"
       ],
@@ -43,12 +32,9 @@
     {
       "game_id": "2026_10_JAX_TEN",
       "issues": [
-        "TEN: inactives: official inactive list not found",
+        "TEN: inactives: unresolved inactive player: Nick Singleton",
         "TEN: inactives: no successful source check",
-        "TEN: inactives: complete official list/report missing",
-        "JAX: inactives: official inactive list not found",
-        "JAX: inactives: no successful source check",
-        "JAX: inactives: complete official list/report missing"
+        "TEN: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -56,12 +42,7 @@
     {
       "game_id": "2026_10_KC_ATL",
       "issues": [
-        "ATL: inactives: official inactive list not found",
-        "ATL: inactives: no successful source check",
-        "ATL: inactives: complete official list/report missing",
-        "KC: inactives: official inactive list not found",
-        "KC: inactives: no successful source check",
-        "KC: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -69,10 +50,7 @@
     {
       "game_id": "2026_10_MIA_IND",
       "issues": [
-        "IND: inactives: official inactive list not found",
-        "IND: inactives: no successful source check",
-        "IND: inactives: complete official list/report missing",
-        "MIA: inactives: official inactive list not found",
+        "MIA: inactives: unparsed inactive line: G/T Caedan Wallace",
         "MIA: inactives: no successful source check",
         "MIA: inactives: complete official list/report missing"
       ],
@@ -82,10 +60,10 @@
     {
       "game_id": "2026_10_MIN_GB",
       "issues": [
-        "GB: inactives: official inactive list not found",
+        "GB: inactives: unparsed inactive line: G/T Donovan Jennings",
         "GB: inactives: no successful source check",
         "GB: inactives: complete official list/report missing",
-        "MIN: inactives: official inactive list not found",
+        "MIN: inactives: unresolved inactive player: Tyroin Ingram-Dawkins",
         "MIN: inactives: no successful source check",
         "MIN: inactives: complete official list/report missing"
       ],
@@ -94,5 +72,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T16:43:40.358722+00:00"
+  "updated_utc": "2026-11-15T16:46:36.848642+00:00"
 }
