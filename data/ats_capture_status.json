@@ -1,70 +1,59 @@
 {
-  "forecast_utc": "2026-11-15T11:39:20.035963+00:00",
+  "forecast_utc": "2026-11-15T17:48:19.205817+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "NYJ: report: source check stale or after forecast",
-        "NYJ: inactives: no successful source check",
-        "NYJ: inactives: complete official list/report missing",
+        "NYJ: inactives: source check stale or after forecast",
         "BUF: report: source check stale or after forecast",
+        "BUF: inactives: unresolved inactive player: Mike Danna",
         "BUF: inactives: no successful source check",
         "BUF: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_CAR_NO",
-      "issues": [
-        "NO: report: source check stale or after forecast",
-        "NO: inactives: no successful source check",
-        "NO: inactives: complete official list/report missing",
-        "CAR: report: source check stale or after forecast",
-        "CAR: inactives: no successful source check",
-        "CAR: inactives: complete official list/report missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_HOU_CLE",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "CLE: report: source check stale or after forecast",
-        "CLE: inactives: no successful source check",
-        "CLE: inactives: complete official list/report missing",
+        "CLE: inactives: source check stale or after forecast",
         "HOU: report: source check stale or after forecast",
+        "HOU: inactives: unparsed inactive line: C/G Keylan Rutledge",
         "HOU: inactives: no successful source check",
         "HOU: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_JAX_TEN",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "TEN: report: source check stale or after forecast",
+        "TEN: inactives: unresolved inactive player: Nick Singleton",
         "TEN: inactives: no successful source check",
         "TEN: inactives: complete official list/report missing",
         "JAX: report: source check stale or after forecast",
-        "JAX: inactives: no successful source check",
-        "JAX: inactives: complete official list/report missing"
+        "JAX: inactives: source check stale or after forecast"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_KC_ATL",
-      "issues": [
-        "ATL: report: source check stale or after forecast",
-        "ATL: inactives: no successful source check",
-        "ATL: inactives: complete official list/report missing",
-        "KC: report: source check stale or after forecast",
-        "KC: inactives: no successful source check",
-        "KC: inactives: complete official list/report missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_LAC_BAL",
@@ -83,9 +72,11 @@
       "game_id": "2026_10_LA_ARI",
       "issues": [
         "ARI: report: source check stale or after forecast",
+        "ARI: inactives: official inactive list not found",
         "ARI: inactives: no successful source check",
         "ARI: inactives: complete official list/report missing",
         "LA: report: source check stale or after forecast",
+        "LA: inactives: official inactive list not found",
         "LA: inactives: no successful source check",
         "LA: inactives: complete official list/report missing"
       ],
@@ -95,53 +86,52 @@
     {
       "game_id": "2026_10_MIA_IND",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "IND: report: source check stale or after forecast",
-        "IND: inactives: no successful source check",
-        "IND: inactives: complete official list/report missing",
+        "IND: inactives: source check stale or after forecast",
         "MIA: report: source check stale or after forecast",
+        "MIA: inactives: unparsed inactive line: G/T Caedan Wallace",
         "MIA: inactives: no successful source check",
         "MIA: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_MIN_GB",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "GB: report: source check stale or after forecast",
+        "GB: inactives: unparsed inactive line: G/T Donovan Jennings",
         "GB: inactives: no successful source check",
         "GB: inactives: complete official list/report missing",
         "MIN: report: source check stale or after forecast",
+        "MIN: inactives: unresolved inactive player: Tyroin Ingram-Dawkins",
         "MIN: inactives: no successful source check",
         "MIN: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_NE_DET",
-      "issues": [
-        "DET: report: source check stale or after forecast",
-        "DET: inactives: official inactive list not found",
-        "DET: inactives: no successful source check",
-        "DET: inactives: complete official list/report missing",
-        "NE: report: source check stale or after forecast",
-        "NE: inactives: official inactive list not found",
-        "NE: inactives: no successful source check",
-        "NE: inactives: complete official list/report missing"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-15T13:30:00+00:00",
-      "state": "awaiting candidate"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_PIT_CIN",
       "issues": [
+        "CIN: automatic source checks incomplete or stale",
+        "CIN: final report incomplete",
         "CIN: report: source check stale or after forecast",
+        "CIN: report: complete official list/report missing",
         "CIN: inactives: no successful source check",
         "CIN: inactives: complete official list/report missing",
         "PIT: report: source check stale or after forecast",
         "PIT: inactives: no successful source check",
-        "PIT: inactives: complete official list/report missing"
+        "PIT: inactives: complete official list/report missing",
+        "forecast availability validation failed"
       ],
       "lock_at_utc": "2026-11-16T00:20:00+00:00",
       "state": "awaiting candidate"
@@ -150,9 +140,11 @@
       "game_id": "2026_10_SEA_LV",
       "issues": [
         "LV: report: source check stale or after forecast",
+        "LV: inactives: official inactive list not found",
         "LV: inactives: no successful source check",
         "LV: inactives: complete official list/report missing",
         "SEA: report: source check stale or after forecast",
+        "SEA: inactives: official inactive list not found",
         "SEA: inactives: no successful source check",
         "SEA: inactives: complete official list/report missing"
       ],
@@ -167,9 +159,11 @@
         "DAL: report: injury report for both scheduled opponents not yet published",
         "DAL: report: no successful source check",
         "DAL: report: complete official list/report missing",
+        "DAL: inactives: official inactive list not found",
         "DAL: inactives: no successful source check",
         "DAL: inactives: complete official list/report missing",
         "SF: report: source check stale or after forecast",
+        "SF: inactives: official inactive list not found",
         "SF: inactives: no successful source check",
         "SF: inactives: complete official list/report missing",
         "forecast availability validation failed"
@@ -179,5 +173,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T11:39:28.925867+00:00"
+  "updated_utc": "2026-11-15T17:48:25.365763+00:00"
 }
