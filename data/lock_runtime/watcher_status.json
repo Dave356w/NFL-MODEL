@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-15T20:17:42.124344+00:00",
+  "heartbeat_utc": "2026-11-15T20:19:25.801873+00:00",
   "run_id": "43755500464",
   "errors": [],
   "prepared_bundle_sha256": "74e85cf95811620b54e8305c2a32a72b617cca887b4d0b31b0e429a9f166089a",
@@ -29,6 +29,8 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T20:18:22.724805+00:00",
-  "coverage_alerts": []
+  "updated_utc": "2026-11-15T20:20:06.575918+00:00",
+  "coverage_alerts": [
+    "2026_10_SF_DAL: cutoff within five minutes; no eligible durable candidate"
+  ]
 }
