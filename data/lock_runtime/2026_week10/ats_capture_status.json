@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-15T20:23:14.492504+00:00",
+  "forecast_utc": "2026-11-15T20:24:57.314853+00:00",
   "games": [
     {
       "game_id": "2026_10_LA_ARI",
@@ -14,8 +14,11 @@
       "state": "locked"
     },
     {
+      "diagnostic_generated_utc": "2026-11-15T20:23:14.492504+00:00",
+      "diagnostic_snapshot_sha256": "8f6ce889dfd40b5b9198e58a8d78b3ff6ac4572d936e1847cfca594dacedc105",
       "game_id": "2026_10_SF_DAL",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "DAL: automatic source checks incomplete or stale",
         "DAL: final report incomplete",
         "DAL: report: injury report for both scheduled opponents not yet published",
@@ -24,9 +27,9 @@
         "forecast availability validation failed"
       ],
       "lock_at_utc": "2026-11-15T20:25:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T20:23:45.226411+00:00"
+  "updated_utc": "2026-11-15T20:25:27.940365+00:00"
 }
