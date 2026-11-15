@@ -16,7 +16,7 @@
       "game_id": "2026_10_CAR_NO",
       "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "candidate saved; awaiting finalization"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_HOU_CLE",
@@ -44,7 +44,7 @@
       "game_id": "2026_10_KC_ATL",
       "issues": [],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "candidate saved; awaiting finalization"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_MIA_IND",
@@ -73,5 +73,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T17:01:20.799346+00:00"
+  "updated_utc": "2026-11-15T17:02:12.554458+00:00"
 }
