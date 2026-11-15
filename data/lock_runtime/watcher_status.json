@@ -1,8 +1,23 @@
 {
-  "heartbeat_utc": "2026-11-15T18:02:59.662516+00:00",
+  "heartbeat_utc": "2026-11-15T18:08:04.345258+00:00",
   "run_id": "43738743777",
   "errors": [],
-  "prepared_bundle_sha256": "ccef5c9a8f6e593f902798582d592e89220fc518d1d475dbb0f6879c750bf936",
-  "games": [],
-  "updated_utc": "2026-11-15T18:03:00.369385+00:00"
+  "prepared_bundle_sha256": "125b372288e0877c43a35d5b9d14d8c7c58e30e4413d57759fdc054974679d51",
+  "games": [
+    {
+      "game_id": "2026_10_LA_ARI",
+      "cutoff_utc": "2026-11-15T20:05:00+00:00",
+      "blockers": [
+        "complete current official availability required"
+      ]
+    },
+    {
+      "game_id": "2026_10_SEA_LV",
+      "cutoff_utc": "2026-11-15T20:05:00+00:00",
+      "blockers": [
+        "complete current official availability required"
+      ]
+    }
+  ],
+  "updated_utc": "2026-11-15T18:09:03.959627+00:00"
 }
