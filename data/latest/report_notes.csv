@@ -1,20 +1,19 @@
 team,gsis_id,player,position,unit,snap_share,prev_week,prev_status,prev_injury,this_week,counted,report_state
 ARI,00-0033119,Jacoby Brissett,QB,QB,0.6968641114982579,,,,CUT (A01) on wk 9 roster,1.0,final
-ARI,00-0037157,Bam Knight,RB,RB,0.3240418118466899,9.0,Out,Concussion,"listed, no status",0.0,final
+ARI,00-0037157,Bam Knight,RB,RB,0.3240418118466899,9.0,Out,Concussion,practice: Full Participation in Practice,0.0,final
 ARI,00-0035289,Gardner Minshew,QB,QB,0.30313588850174217,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final
 ARI,00-0038559,Michael Wilson,WR,WRTE,0.21572052401746725,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final
-ARI,00-0035258,Hjalte Froholdt,OL,OL,0.1995827538247566,,,,Inactive (official list),1.0,final
-ARI,00-0039854,Darius Robinson,DL,DL,0.1557632398753894,,,,Questionable,0.25,final
-ARI,00-0041113,Jayden Williams,OL,OL,0.1404728789986092,9.0,Out,Knee,Inactive (official list),1.0,final
-ARI,00-0036568,Roy Lopez,DL,DL,0.1277258566978193,,,,Questionable,0.25,final
-ARI,00-0035378,Andrew Wingard,DB,DB,0.11979609175870858,,,,Questionable,0.25,final
+ARI,00-0035258,Hjalte Froholdt,C,OL,0.1995827538247566,,,,Out,1.0,final
+ARI,00-0039854,Darius Robinson,DT,DL,0.1557632398753894,,,,Questionable,0.25,final
+ARI,00-0041113,Jayden Williams,T,OL,0.1404728789986092,9.0,Out,Knee,Questionable,0.25,final
+ARI,00-0036568,Roy Lopez,DT,DL,0.1277258566978193,,,,Questionable,0.25,final
+ARI,00-0035378,Andrew Wingard,S,DB,0.11979609175870858,,,,Questionable,0.25,final
 ARI,00-0040706,Walter Nolen,DT,DL,0.11838006230529595,9.0,Questionable,Ankle,not listed (cleared),0.0,final
-ARI,00-0039807,Max Melton,DB,DB,0.11129991503823279,9.0,Questionable,Knee,Questionable,0.25,final
+ARI,00-0039807,Max Melton,CB,DB,0.11129991503823279,9.0,Questionable,Knee,Questionable,0.25,final
 ARI,00-0033307,Kendrick Bourne,WR,WRTE,0.09694323144104804,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
 ARI,00-0038640,Jalen Brooks,WR,WRTE,0.07860262008733625,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
 ARI,00-0041027,Jeremiyah Love,RB,RB,0.05226480836236934,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
-ARI,00-0038571,Jon Gaines II,OL,OL,0.05006954102920723,9.0,Out,Ankle,Inactive (official list),1.0,final
-ARI,00-0041203,Joey Aguilar,QB,QB,0.0,,,,Inactive (official list),1.0,final
+ARI,00-0038571,Jon Gaines II,G,OL,0.05006954102920723,9.0,Out,Ankle,Out,1.0,final
 ATL,00-0031279,Jake Matthews,T,OL,0.1975103734439834,,,,practice: Limited Participation in Practice,0.0,final
 ATL,00-0035237,Jawaan Taylor,T,OL,0.1975103734439834,,,,practice: Limited Participation in Practice,0.0,final
 ATL,00-0039070,Gervon Dexter Sr.,DT,DL,0.14259086672879775,,,,Questionable,0.25,final
@@ -108,13 +107,16 @@ KC,00-0038134,Kenneth Walker III,RB,RB,0.7261904761904762,,,,Questionable,0.25,f
 KC,00-0036557,Jaylon Moore,T,OL,0.1135091926458833,,,,Out,1.0,final
 KC,00-0041543,Mansoor Delane,CB,DB,0.10651828298887123,9.0,Out,Shoulder,Questionable,0.25,final
 KC,WOO547869,,,DL,0.06417624521072797,,,,not on wk 9 roster (left team),1.0,final
+LA,00-0031388,Aaron Donald,DT,DL,0.2905844155844156,,,,practice: Did Not Participate In Practice,0.0,final
+LA,00-0039734,Braden Fiske,DT,DL,0.2792207792207792,,,,practice: Did Not Participate In Practice,0.0,final
+LA,00-0039137,Byron Young,LB,LB,0.2505938242280285,,,,practice: Did Not Participate In Practice,0.0,final
 LA,00-0039075,Puka Nacua,WR,WRTE,0.22617901828681425,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final
-LA,00-0036349,Kam Curl,DB,DB,0.18257839721254354,9.0,Questionable,Foot,Questionable,0.25,final
-LA,00-0039058,Steve Avila,OL,OL,0.15366795366795366,,,,Inactive (official list),1.0,final
+LA,00-0033110,Tyler Higbee,TE,WRTE,0.19826756496631376,,,,practice: Limited Participation in Practice,0.0,final
+LA,00-0036349,Kam Curl,S,DB,0.18257839721254354,9.0,Questionable,Foot,Questionable,0.25,final
+LA,00-0039058,Steve Avila,G,OL,0.15366795366795366,,,,Out,1.0,final
 LA,00-0039074,Davis Allen,TE,WRTE,0.14436958614051973,,,,Questionable,0.25,final
-LA,00-0036244,Colby Parkinson,TE,WRTE,0.13570741097208855,9.0,Questionable,Ribs,"listed, no status",0.0,final
+LA,00-0036244,Colby Parkinson,TE,WRTE,0.13570741097208855,9.0,Questionable,Ribs,practice: Full Participation in Practice,0.0,final
 LA,00-0037195,Jaylen Watson,CB,DB,0.1240418118466899,9.0,Out,Shoulder,Reserve/Injured (IR) on wk 9 roster,1.0,final
-LA,00-0041568,Ty Simpson,QB,QB,0.0,,,,Inactive (official list),1.0,final
 LAC,00-0039835,Justin Eboigbe,DL,DL,0.15618661257606492,,,,Questionable,0.25,final
 LAC,00-0039915,Ladd McConkey,WR,WRTE,0.06589958158995816,,,,Out,1.0,final
 LAC,00-0034272,Marquez Valdes-Scantling,WR,WRTE,0.05230125523012552,,,,not on wk 9 roster (left team),1.0,final
@@ -166,21 +168,20 @@ NYJ,00-0039372,Jarvis Brownlee Jr.,CB,DB,0.05490848585690516,,,,Questionable,0.2
 NYJ,00-0039886,T'Vondre Sweat,DL,DL,0.0548885077186964,,,,Reserve/Injured (IR) on wk 9 roster,1.0,final
 PIT,00-0036894,Pat Freiermuth,TE,WRTE,0.16497975708502025,,,,Questionable,0.25,final
 PIT,00-0034810,Sebastian Joseph-Day,DL,DL,0.08614864864864864,,,,Reserve/Injured (IR) on wk 8 roster,1.0,final
-SEA,00-0034869,Sam Darnold,QB,QB,0.7640845070422535,9.0,Out,Quadricep,Inactive (official list),1.0,final
-SEA,00-0031933,Leonard Williams,DL,DL,0.23665480427046262,9.0,Out,Stinger,Inactive (official list),1.0,final
-SEA,00-0038797,Emanuel Wilson,RB,RB,0.18404907975460122,,,,Inactive (official list),1.0,final
-SEA,00-0037821,Charles Cross,OL,OL,0.09943977591036414,9.0,Out,Ankle,Inactive (official list),1.0,final
-SEA,00-0034350,Uchenna Nwosu,LB,LB,0.06527093596059114,9.0,Out,Ankle,"listed, no status",0.0,final
-SEA,00-0037545,Rashid Shaheed,WR,WRTE,0.056169429097605895,9.0,Out,Knee,"listed, no status",0.0,final
+SEA,00-0034869,Sam Darnold,QB,QB,0.7640845070422535,9.0,Out,Quadricep,Out,1.0,final
+SEA,00-0031933,Leonard Williams,DT,DL,0.23665480427046262,9.0,Out,Stinger,Out,1.0,final
+SEA,00-0035704,Drew Lock,QB,QB,0.23591549295774647,,,,practice: Limited Participation in Practice,0.0,final
+SEA,00-0039047,Derick Hall,LB,LB,0.16009852216748768,,,,practice: Did Not Participate In Practice,0.0,final
+SEA,00-0037821,Charles Cross,T,OL,0.09943977591036414,9.0,Out,Ankle,Out,1.0,final
+SEA,00-0034350,Uchenna Nwosu,LB,LB,0.06527093596059114,9.0,Out,Ankle,practice: Full Participation in Practice,0.0,final
+SEA,00-0037545,Rashid Shaheed,WR,WRTE,0.056169429097605895,9.0,Out,Knee,practice: Full Participation in Practice,0.0,final
 SF,00-0034982,Dre Greenlaw,LB,LB,0.2395104895104895,,,,Questionable,0.25,final
-SF,00-0039345,Renardo Green,DB,DB,0.21034180543382996,,,,Questionable,0.25,final
-SF,00-0036563,Deommodore Lenoir,DB,DB,0.21034180543382996,,,,Questionable,0.25,final
-SF,00-0027857,Trent Williams,OL,OL,0.19540229885057472,,,,Questionable,0.25,final
-SF,00-0031236,Brandin Cooks,WR,WRTE,0.14301075268817204,,,,Inactive (official list),1.0,final
+SF,00-0036563,Deommodore Lenoir,CB,DB,0.21034180543382996,,,,Questionable,0.25,final
+SF,00-0039345,Renardo Green,CB,DB,0.21034180543382996,,,,Questionable,0.25,final
+SF,00-0027857,Trent Williams,T,OL,0.19540229885057472,,,,Questionable,0.25,final
 SF,00-0041557,Gracen Halton,DL,DL,0.10816125860373647,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final
-SF,00-0040152,Upton Stout,DB,DB,0.08326029798422437,9.0,Questionable,Shoulder,Questionable,0.25,final
-SF,00-0031408,Mike Evans,WR,WRTE,0.06774193548387097,9.0,Out,Ribs,Inactive (official list),1.0,final
-SF,00-0040589,Kurtis Rourke,QB,QB,0.0,,,,Inactive (official list),1.0,final
+SF,00-0040152,Upton Stout,CB,DB,0.08326029798422437,9.0,Questionable,Shoulder,Questionable,0.25,final
+SF,00-0031408,Mike Evans,WR,WRTE,0.06774193548387097,9.0,Out,Ribs,Out,1.0,final
 TEN,00-0041479,Anthony Hill Jr.,LB,LB,0.4723127035830619,,,,Out,1.0,final
 TEN,00-0035672,Cody Barton,LB,LB,0.30293159609120524,,,,Out,1.0,final
 TEN,00-0039034,Peter Skoronski,G,OL,0.18574859887910328,,,,Reserve/Injured (IR) on wk 10 roster,1.0,final

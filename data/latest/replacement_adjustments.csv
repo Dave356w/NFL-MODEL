@@ -4032,7 +4032,7 @@ game_id,season,week,team,qb_expected,qb_replacement,qb_replacement_status,qb_pro
 2026_10_KC_ATL,2026,10,KC,P.Mahomes,0.0,incumbent starter,00-0033873,00-0033873,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_HOU_CLE,2026,10,HOU,C.Stroud,0.0,incumbent starter,00-0039163,00-0039163,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_MIN_GB,2026,10,MIN,C.Wentz,1.0,replacement starter,00-0032950,00-0035228,6,8.0,9,replacement-team-margin-minus2-2026-11-13-v1
-2026_10_MIA_IND,2026,10,MIA,Kyle McCord,1.0,replacement starter,00-0040014,00-0038128,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
+2026_10_MIA_IND,2026,10,MIA,K.McCord,1.0,replacement starter,00-0040014,00-0038128,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_CAR_NO,2026,10,CAR,B.Young,0.0,incumbent starter,00-0039150,00-0039150,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_BUF_NYJ,2026,10,BUF,J.Allen,0.0,incumbent starter,00-0034857,00-0034857,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_JAX_TEN,2026,10,JAX,T.Lawrence,0.0,incumbent starter,00-0036971,00-0036971,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1

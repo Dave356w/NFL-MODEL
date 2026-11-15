@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-15T20:07:54.112493+00:00",
+  "forecast_utc": "2026-11-15T23:17:32.208947+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
@@ -48,7 +48,7 @@
       "game_id": "2026_10_LA_ARI",
       "issues": [],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
-      "state": "candidate saved; awaiting finalization"
+      "state": "locked"
     },
     {
       "game_id": "2026_10_MIA_IND",
@@ -75,9 +75,11 @@
         "CIN: final report incomplete",
         "CIN: report: source check stale or after forecast",
         "CIN: report: complete official list/report missing",
+        "CIN: inactives: official inactive list not found",
         "CIN: inactives: no successful source check",
         "CIN: inactives: complete official list/report missing",
         "PIT: report: source check stale or after forecast",
+        "PIT: inactives: official inactive list not found",
         "PIT: inactives: no successful source check",
         "PIT: inactives: complete official list/report missing",
         "forecast availability validation failed"
@@ -89,11 +91,14 @@
       "game_id": "2026_10_SEA_LV",
       "issues": [],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
-      "state": "candidate saved; awaiting finalization"
+      "state": "locked"
     },
     {
+      "diagnostic_generated_utc": "2026-11-15T20:23:14.492504+00:00",
+      "diagnostic_snapshot_sha256": "8f6ce889dfd40b5b9198e58a8d78b3ff6ac4572d936e1847cfca594dacedc105",
       "game_id": "2026_10_SF_DAL",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "DAL: automatic source checks incomplete or stale",
         "DAL: final report incomplete",
         "DAL: report: injury report for both scheduled opponents not yet published",
@@ -102,9 +107,9 @@
         "forecast availability validation failed"
       ],
       "lock_at_utc": "2026-11-15T20:25:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T20:07:59.716467+00:00"
+  "updated_utc": "2026-11-15T23:17:40.656005+00:00"
 }
