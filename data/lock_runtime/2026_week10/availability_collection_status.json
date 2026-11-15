@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T19:02:33.623877+00:00",
-      "last_success_utc": "2026-11-15T19:02:33.623877+00:00"
+      "last_attempt_utc": "2026-11-15T19:04:41.273765+00:00",
+      "last_success_utc": "2026-11-15T19:04:41.273765+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T19:02:33.645776+00:00",
-      "last_success_utc": "2026-11-15T19:02:33.645776+00:00"
+      "last_attempt_utc": "2026-11-15T19:04:41.223806+00:00",
+      "last_success_utc": "2026-11-15T19:04:41.223806+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -29,8 +29,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T19:02:32.651005+00:00",
-        "last_success_utc": "2026-11-15T19:02:32.651005+00:00",
+        "last_attempt_utc": "2026-11-15T19:04:40.720042+00:00",
+        "last_success_utc": "2026-11-15T19:04:40.720042+00:00",
         "source_capture_sha256": "5e8b0ed03a28347cbe01970c65d6dd44724fb5b19b48b52639e5c806ab176661"
       }
     },
@@ -100,7 +100,7 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T19:02:27.718082+00:00"
+        "last_attempt_utc": "2026-11-15T19:04:35.739001+00:00"
       }
     },
     "DEN": {
@@ -177,8 +177,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T19:02:32.656040+00:00",
-        "last_success_utc": "2026-11-15T19:02:32.656040+00:00",
+        "last_attempt_utc": "2026-11-15T19:04:40.735129+00:00",
+        "last_success_utc": "2026-11-15T19:04:40.735129+00:00",
         "source_capture_sha256": "4d4d1ad2347364d54a335bc23a993a43608e92a022ccdb94ad934802eab779a4"
       }
     },
@@ -202,8 +202,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T19:02:32.671207+00:00",
-        "last_success_utc": "2026-11-15T19:02:32.671207+00:00",
+        "last_attempt_utc": "2026-11-15T19:04:40.714699+00:00",
+        "last_success_utc": "2026-11-15T19:04:40.714699+00:00",
         "source_capture_sha256": "6e32d72248397a63bbadd0b34255be1bf4cd2c923b8ac504fceafbc6e2eb19e6"
       }
     },
@@ -287,8 +287,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T19:02:32.650011+00:00",
-        "last_success_utc": "2026-11-15T19:02:32.650011+00:00",
+        "last_attempt_utc": "2026-11-15T19:04:40.719891+00:00",
+        "last_success_utc": "2026-11-15T19:04:40.719891+00:00",
         "source_capture_sha256": "1cf25ba765b613dbe586ad6e3c6ace32638dac0eba30f78d945906f654a1ce71"
       }
     },
@@ -306,8 +306,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T19:02:32.652873+00:00",
-        "last_success_utc": "2026-11-15T19:02:32.652873+00:00",
+        "last_attempt_utc": "2026-11-15T19:04:40.720512+00:00",
+        "last_success_utc": "2026-11-15T19:04:40.720512+00:00",
         "source_capture_sha256": "51064b1c48c50824bb9e559d4b1a6861aceff95a985ec1b9327cbc3eba6a7636"
       }
     },
@@ -336,5 +336,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T19:02:33.645776+00:00"
+  "updated_utc": "2026-11-15T19:04:41.273765+00:00"
 }
