@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-15T18:23:59.876071+00:00",
+  "forecast_utc": "2026-11-15T18:25:58.389354+00:00",
   "games": [
     {
       "game_id": "2026_10_LA_ARI",
@@ -30,8 +30,28 @@
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
+    },
+    {
+      "game_id": "2026_10_SF_DAL",
+      "issues": [
+        "DAL: automatic source checks incomplete or stale",
+        "DAL: final report incomplete",
+        "DAL: report: injury report for both scheduled opponents not yet published",
+        "DAL: report: no successful source check",
+        "DAL: report: complete official list/report missing",
+        "DAL: inactives: official inactive list not found",
+        "DAL: inactives: no successful source check",
+        "DAL: inactives: complete official list/report missing",
+        "SF: report: source check stale or after forecast",
+        "SF: inactives: official inactive list not found",
+        "SF: inactives: no successful source check",
+        "SF: inactives: complete official list/report missing",
+        "forecast availability validation failed"
+      ],
+      "lock_at_utc": "2026-11-15T20:25:00+00:00",
+      "state": "awaiting candidate"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T18:24:43.043698+00:00"
+  "updated_utc": "2026-11-15T18:26:52.166981+00:00"
 }
