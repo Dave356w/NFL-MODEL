@@ -1,6 +1,22 @@
 {
-  "forecast_utc": "2026-11-13T01:13:47.282117+00:00",
-  "games": [],
-  "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-15T11:26:05.618103+00:00"
+  "forecast_utc": "2026-11-15T11:31:14.367136+00:00",
+  "games": [
+    {
+      "game_id": "2026_10_NE_DET",
+      "issues": [
+        "DET: report: source check stale or after forecast",
+        "DET: inactives: official inactive list not found",
+        "DET: inactives: no successful source check",
+        "DET: inactives: complete official list/report missing",
+        "NE: report: source check stale or after forecast",
+        "NE: inactives: official inactive list not found",
+        "NE: inactives: no successful source check",
+        "NE: inactives: complete official list/report missing"
+      ],
+      "lock_at_utc": "2026-11-15T13:30:00+00:00",
+      "state": "awaiting candidate"
+    }
+  ],
+  "revision": "boxscore-composite-v1.24",
+  "updated_utc": "2026-11-15T11:31:25.470760+00:00"
 }
