@@ -1,15 +1,16 @@
 {
-  "forecast_utc": "2026-11-15T16:56:42.410767+00:00",
+  "forecast_utc": "2026-11-15T16:59:38.771062+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "BUF: inactives: unresolved inactive player: Mike Danna",
         "BUF: inactives: no successful source check",
         "BUF: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_CAR_NO",
@@ -20,22 +21,24 @@
     {
       "game_id": "2026_10_HOU_CLE",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "HOU: inactives: unparsed inactive line: C/G Keylan Rutledge",
         "HOU: inactives: no successful source check",
         "HOU: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_JAX_TEN",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "TEN: inactives: unresolved inactive player: Nick Singleton",
         "TEN: inactives: no successful source check",
         "TEN: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_KC_ATL",
@@ -46,16 +49,18 @@
     {
       "game_id": "2026_10_MIA_IND",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "MIA: inactives: unparsed inactive line: G/T Caedan Wallace",
         "MIA: inactives: no successful source check",
         "MIA: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     },
     {
       "game_id": "2026_10_MIN_GB",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "GB: inactives: unparsed inactive line: G/T Donovan Jennings",
         "GB: inactives: no successful source check",
         "GB: inactives: complete official list/report missing",
@@ -64,9 +69,9 @@
         "MIN: inactives: complete official list/report missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T16:58:24.241468+00:00"
+  "updated_utc": "2026-11-15T17:01:20.799346+00:00"
 }
