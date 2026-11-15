@@ -1,13 +1,6 @@
 {
   "forecast_utc": "2026-11-13T01:13:47.282117+00:00",
-  "games": [
-    {
-      "game_id": "2026_10_WAS_NYG",
-      "issues": [],
-      "lock_at_utc": "2026-11-13T00:15:00+00:00",
-      "state": "locked"
-    }
-  ],
+  "games": [],
   "revision": "boxscore-composite-v1.22",
-  "updated_utc": "2026-11-15T01:12:02.677814+00:00"
+  "updated_utc": "2026-11-15T01:17:06.512366+00:00"
 }
