@@ -110,3 +110,9 @@ Automatic fallback remains the newest eligible, durably saved pre-T-60
 candidate, even if a later refresh or provider request fails. Earlier blocked
 snapshots never silently become native locks; this incident's explicit recovery
 is separate from that production contract.
+
+Long-running watchers also refresh the builder-owned lock journal and schedule
+from the same fetched main commit. This makes concurrent recoveries visible to
+coverage monitoring without waiting for the next process restart. The lock
+journal must extend its local prefix; a rewrite fails closed. Watcher-owned
+runtime candidates, receipts and pending evidence are never replaced.

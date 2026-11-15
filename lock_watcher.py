@@ -31,6 +31,7 @@ def refresh_prepared(data):
     """Adopt a complete prepared bundle from main without resetting local evidence."""
     git('fetch', '--quiet', 'origin', 'main')
     ref = git('rev-parse', 'origin/main').decode().strip()
+    refresh_reporting_inputs(data, ref)
     path = f'{data}/{lock_refresh.INPUTS}/manifest.json'
     raw = git('show', f'{ref}:{path}')
     manifest = json.loads(raw)
@@ -42,6 +43,25 @@ def refresh_prepared(data):
         (root/f'{name}.parquet').write_bytes(git('show', f'{ref}:{data}/{lock_refresh.INPUTS}/{name}.parquet'))
     (root/'manifest.json').write_bytes(raw)
     lock_refresh.load(data)  # hash/identity/training audit before any scoring
+
+
+def refresh_reporting_inputs(data, ref):
+    """Adopt builder-owned read-only inputs, including concurrent recoveries.
+
+    A long-running runner otherwise keeps reporting a missed lock after another
+    job has saved its authorized recovery. These paths are never included in
+    this watcher's commits. Runtime candidates and receipts are never reset.
+    """
+    for name in ('ats_locks.jsonl','latest/manifest.json','latest/board.csv'):
+        path=Path(data)/name
+        blob=git('rev-parse',f'{ref}:{path}').decode().strip()
+        if path.exists() and git('hash-object',str(path)).decode().strip()==blob:
+            continue
+        raw=git('show',f'{ref}:{path}')
+        if name=='ats_locks.jsonl' and path.exists() and not raw.startswith(path.read_bytes()):
+            raise ValueError('Builder-owned ATS lock history was rewritten; refusing reporting refresh')
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_bytes(raw)
 
 
 def persist(data, message):

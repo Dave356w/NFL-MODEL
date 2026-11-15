@@ -146,3 +146,24 @@ def test_missed_status_preserves_original_parser_error_after_rolling_board_loses
     assert status['diagnostic_snapshot_sha256']==snapshot['snapshot_sha256']
     assert any('Mike Danna' in issue for issue in status['issues'])
     assert not any('evidence missing' in issue for issue in status['issues'])
+
+
+def test_running_watcher_adopts_concurrent_recoveries_without_resetting_runtime(tmp_path,monkeypatch):
+    import lock_watcher as watcher
+    root=tmp_path/'data';(root/'latest').mkdir(parents=True)
+    runtime=root/'lock_runtime';runtime.mkdir()
+    (runtime/a.CANDIDATES).write_text('local-unsent-evidence\n')
+    (root/a.LOCKS).write_bytes(b'old\n')
+    saved={str(root/a.LOCKS):b'old\nrecovered\n',str(root/'latest/manifest.json'):b'{"revision":"new"}',
+           str(root/'latest/board.csv'):b'new schedule\n'}
+    def git(*args):
+        if args[0]=='rev-parse':return b'new-blob\n'
+        if args[0]=='hash-object':return b'old-blob\n'
+        if args[0]=='show':return saved[args[1].split(':',1)[1]]
+        raise AssertionError(args)
+    monkeypatch.setattr(watcher,'git',git)
+    watcher.refresh_reporting_inputs(root,'main-sha')
+    assert (root/a.LOCKS).read_bytes()==b'old\nrecovered\n'
+    assert (runtime/a.CANDIDATES).read_text()=='local-unsent-evidence\n'
+    saved[str(root/a.LOCKS)]=b'rewritten\n'
+    with pytest.raises(ValueError,match='rewritten'):watcher.refresh_reporting_inputs(root,'main-sha')
