@@ -1,14 +1,12 @@
 {
-  "forecast_utc": "2026-11-15T16:24:08.064536+00:00",
+  "forecast_utc": "2026-11-15T16:27:05.443613+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
-        "NYJ: report: source check stale or after forecast",
         "NYJ: inactives: official inactive list not found",
         "NYJ: inactives: no successful source check",
         "NYJ: inactives: complete official list/report missing",
-        "BUF: report: source check stale or after forecast",
         "BUF: inactives: official inactive list not found",
         "BUF: inactives: no successful source check",
         "BUF: inactives: complete official list/report missing"
@@ -19,11 +17,9 @@
     {
       "game_id": "2026_10_CAR_NO",
       "issues": [
-        "NO: report: source check stale or after forecast",
         "NO: inactives: official inactive list not found",
         "NO: inactives: no successful source check",
         "NO: inactives: complete official list/report missing",
-        "CAR: report: source check stale or after forecast",
         "CAR: inactives: official inactive list not found",
         "CAR: inactives: no successful source check",
         "CAR: inactives: complete official list/report missing"
@@ -34,11 +30,9 @@
     {
       "game_id": "2026_10_HOU_CLE",
       "issues": [
-        "CLE: report: source check stale or after forecast",
         "CLE: inactives: official inactive list not found",
         "CLE: inactives: no successful source check",
         "CLE: inactives: complete official list/report missing",
-        "HOU: report: source check stale or after forecast",
         "HOU: inactives: official inactive list not found",
         "HOU: inactives: no successful source check",
         "HOU: inactives: complete official list/report missing"
@@ -49,11 +43,9 @@
     {
       "game_id": "2026_10_JAX_TEN",
       "issues": [
-        "TEN: report: source check stale or after forecast",
         "TEN: inactives: official inactive list not found",
         "TEN: inactives: no successful source check",
         "TEN: inactives: complete official list/report missing",
-        "JAX: report: source check stale or after forecast",
         "JAX: inactives: official inactive list not found",
         "JAX: inactives: no successful source check",
         "JAX: inactives: complete official list/report missing"
@@ -64,11 +56,9 @@
     {
       "game_id": "2026_10_KC_ATL",
       "issues": [
-        "ATL: report: source check stale or after forecast",
         "ATL: inactives: official inactive list not found",
         "ATL: inactives: no successful source check",
         "ATL: inactives: complete official list/report missing",
-        "KC: report: source check stale or after forecast",
         "KC: inactives: official inactive list not found",
         "KC: inactives: no successful source check",
         "KC: inactives: complete official list/report missing"
@@ -79,11 +69,9 @@
     {
       "game_id": "2026_10_MIA_IND",
       "issues": [
-        "IND: report: source check stale or after forecast",
         "IND: inactives: official inactive list not found",
         "IND: inactives: no successful source check",
         "IND: inactives: complete official list/report missing",
-        "MIA: report: source check stale or after forecast",
         "MIA: inactives: official inactive list not found",
         "MIA: inactives: no successful source check",
         "MIA: inactives: complete official list/report missing"
@@ -94,11 +82,9 @@
     {
       "game_id": "2026_10_MIN_GB",
       "issues": [
-        "GB: report: source check stale or after forecast",
         "GB: inactives: official inactive list not found",
         "GB: inactives: no successful source check",
         "GB: inactives: complete official list/report missing",
-        "MIN: report: source check stale or after forecast",
         "MIN: inactives: official inactive list not found",
         "MIN: inactives: no successful source check",
         "MIN: inactives: complete official list/report missing"
@@ -108,5 +94,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T16:25:50.531763+00:00"
+  "updated_utc": "2026-11-15T16:28:46.980385+00:00"
 }
