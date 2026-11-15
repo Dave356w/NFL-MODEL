@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T15:19:13.169621+00:00",
-      "last_success_utc": "2026-11-15T15:19:13.169621+00:00"
+      "last_attempt_utc": "2026-11-15T15:22:09.985301+00:00",
+      "last_success_utc": "2026-11-15T15:22:09.985301+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T15:19:13.167763+00:00",
-      "last_success_utc": "2026-11-15T15:19:13.167763+00:00"
+      "last_attempt_utc": "2026-11-15T15:22:09.982025+00:00",
+      "last_success_utc": "2026-11-15T15:22:09.982025+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -35,8 +35,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.102381+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.102381+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.326151+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.326151+00:00",
         "source_capture_sha256": "9617cb73adb4fcfc2e5bd9b1533cd3dc348db9e01c28283a82962e76e98a335a"
       }
     },
@@ -60,8 +60,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.076633+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.076633+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.323801+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.323801+00:00",
         "source_capture_sha256": "4264738fd7e432428023c1acf38f64556b3d39735e02e1afe39dce7eb93e9adc"
       }
     },
@@ -79,8 +79,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.052622+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.052622+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.333264+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.333264+00:00",
         "source_capture_sha256": "e85e9e78c7b59182ad6ed0b83a625da1fa5ba4b10bdc7f3136a8d3217d44d7e9"
       }
     },
@@ -110,8 +110,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.075843+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.075843+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.329949+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.329949+00:00",
         "source_capture_sha256": "d91df546588f2244c17a9845f7b28d650368e1ea4c939d0e5a0a0611c0e84224"
       }
     },
@@ -150,8 +150,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.050040+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.050040+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.641585+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.641585+00:00",
         "source_capture_sha256": "30dcec6727d6a50514e257aab0d8061ccf72afdb4771f94aa9059910663d0b71"
       }
     },
@@ -169,8 +169,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.063219+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.063219+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.331729+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.331729+00:00",
         "source_capture_sha256": "9c4cbafecf87877bc1aecf5ff8e80a8b26269ffc9d06ef6bdd23ee29efb29c2b"
       }
     },
@@ -188,8 +188,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.050764+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.050764+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:09.026113+00:00",
+        "last_success_utc": "2026-11-15T15:22:09.026113+00:00",
         "source_capture_sha256": "1cd6b187f32f379a4c5d3e454270d6de6989af3d72d86697a212d0008dd82018"
       }
     },
@@ -207,8 +207,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.054801+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.054801+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.335560+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.335560+00:00",
         "source_capture_sha256": "361d43d1e810a55255f80b1ce5bd3b691ead1ddae3bb4711e78b191d9fb7e2b3"
       }
     },
@@ -226,8 +226,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.097314+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.097314+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.370881+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.370881+00:00",
         "source_capture_sha256": "1c6480d3acaf9c0411c4a074e0716b37ad45252da974e2a3d09f968ed69eebee"
       }
     },
@@ -263,8 +263,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.087767+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.087767+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.371346+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.371346+00:00",
         "source_capture_sha256": "3bf0f2daa14ba2a626c76eb89450cc58eba62685f02486ef7b3f99640856a8ae"
       }
     },
@@ -282,8 +282,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.090642+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.090642+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.373814+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.373814+00:00",
         "source_capture_sha256": "cceb21ea47c17d114307d187c67ed174bb2757ce69c5e347675351e65333f0c4"
       }
     },
@@ -310,8 +310,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.097067+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.097067+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.369213+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.369213+00:00",
         "source_capture_sha256": "c5412c235fc72c34cf33e662e1b9e498eed3e2c354875df4e022192c993a9d60"
       }
     },
@@ -338,8 +338,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.109168+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.109168+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.372003+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.372003+00:00",
         "source_capture_sha256": "642748b464ac135a23ddaa0d4a1065235618537669291a81d39196f32d7e8ec4"
       }
     },
@@ -387,8 +387,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T15:19:12.182432+00:00",
-        "last_success_utc": "2026-11-15T15:19:12.182432+00:00",
+        "last_attempt_utc": "2026-11-15T15:22:08.380399+00:00",
+        "last_success_utc": "2026-11-15T15:22:08.380399+00:00",
         "source_capture_sha256": "130f1236611488b538cabd86826092ff0f3a8c56a2e173b0178c6df989761b5d"
       }
     },
@@ -402,5 +402,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T15:19:13.169621+00:00"
+  "updated_utc": "2026-11-15T15:22:09.985301+00:00"
 }
