@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-15T20:02:02.658826+00:00",
+  "heartbeat_utc": "2026-11-15T20:03:40.391169+00:00",
   "run_id": "43755500464",
   "errors": [],
   "prepared_bundle_sha256": "6689bb353e88bd4d902416acae3ba8116c339b8e424d590b6b1b8644641c68da",
@@ -21,20 +21,14 @@
       "revision": "boxscore-composite-v1.24",
       "cutoff_utc": "2026-11-15T20:25:00+00:00",
       "blockers": [
-        "DAL: inactives: complete official list/report missing",
-        "DAL: inactives: no successful source check",
-        "DAL: inactives: official inactive list not found",
         "DAL: report: complete official list/report missing",
         "DAL: report: injury report for both scheduled opponents not yet published",
         "DAL: report: no successful source check",
-        "SF: inactives: complete official list/report missing",
-        "SF: inactives: no successful source check",
-        "SF: inactives: official inactive list not found",
         "automatic source checks incomplete or stale",
         "complete current official availability required"
       ]
     }
   ],
-  "updated_utc": "2026-11-15T20:02:37.073943+00:00",
+  "updated_utc": "2026-11-15T20:04:20.799073+00:00",
   "coverage_alerts": []
 }
