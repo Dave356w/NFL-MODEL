@@ -1,8 +1,8 @@
 {
-  "heartbeat_utc": "2026-11-15T20:07:16.505734+00:00",
+  "heartbeat_utc": "2026-11-15T20:09:03.148292+00:00",
   "run_id": "43755500464",
   "errors": [],
-  "prepared_bundle_sha256": "6689bb353e88bd4d902416acae3ba8116c339b8e424d590b6b1b8644641c68da",
+  "prepared_bundle_sha256": "74e85cf95811620b54e8305c2a32a72b617cca887b4d0b31b0e429a9f166089a",
   "games": [
     {
       "game_id": "2026_10_LA_ARI",
@@ -29,6 +29,6 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T20:07:56.060219+00:00",
+  "updated_utc": "2026-11-15T20:09:48.474259+00:00",
   "coverage_alerts": []
 }
