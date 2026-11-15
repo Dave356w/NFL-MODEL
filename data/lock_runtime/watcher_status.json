@@ -1,8 +1,8 @@
 {
-  "heartbeat_utc": "2026-11-15T19:57:08.984000+00:00",
-  "run_id": "43754662776",
+  "heartbeat_utc": "2026-11-15T20:00:17.568022+00:00",
+  "run_id": "43755500464",
   "errors": [],
-  "prepared_bundle_sha256": "125b372288e0877c43a35d5b9d14d8c7c58e30e4413d57759fdc054974679d51",
+  "prepared_bundle_sha256": "6689bb353e88bd4d902416acae3ba8116c339b8e424d590b6b1b8644641c68da",
   "games": [
     {
       "game_id": "2026_10_LA_ARI",
@@ -35,12 +35,6 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T19:58:04.607661+00:00",
-  "coverage_alerts": [
-    "2026_10_BUF_NYJ: MISSED CUTOFF; no eligible durable candidate",
-    "2026_10_HOU_CLE: MISSED CUTOFF; no eligible durable candidate",
-    "2026_10_JAX_TEN: MISSED CUTOFF; no eligible durable candidate",
-    "2026_10_MIA_IND: MISSED CUTOFF; no eligible durable candidate",
-    "2026_10_MIN_GB: MISSED CUTOFF; no eligible durable candidate"
-  ]
+  "updated_utc": "2026-11-15T20:00:59.375716+00:00",
+  "coverage_alerts": []
 }
