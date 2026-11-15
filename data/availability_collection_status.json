@@ -1,8 +1,9 @@
 {
   "articles": {
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
-      "error": "HTTP Error 404: Not Found",
-      "last_attempt_utc": "2026-11-12T23:58:39.197780+00:00"
+      "error": null,
+      "last_attempt_utc": "2026-11-15T11:31:02.683308+00:00",
+      "last_success_utc": "2026-11-15T11:31:02.683308+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -20,8 +21,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:24.729185+00:00",
-        "last_success_utc": "2026-11-15T10:19:24.729185+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.651558+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.651558+00:00",
         "source_capture_sha256": "5b49bc15b7e91e1eebbd936e4b1fdac94ecc4c95df8b6cbd913073778e5eb050"
       }
     },
@@ -36,8 +37,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.872407+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.872407+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.629391+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.629391+00:00",
         "source_capture_sha256": "761f47da4ff038fbacedb425d37202899b2df13c35ecc2ecf9b03fbb26396a9c"
       }
     },
@@ -52,8 +53,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.069804+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.069804+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.669324+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.669324+00:00",
         "source_capture_sha256": "29ba7571e2bab91db34a9c45e3b5405088f8a49c54f6ed1c399263e1600dd831"
       }
     },
@@ -68,8 +69,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:24.725168+00:00",
-        "last_success_utc": "2026-11-15T10:19:24.725168+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.649359+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.649359+00:00",
         "source_capture_sha256": "695fb38d7f19cc79c01857434ea9ad6fccfbb975a75b5f1b3d2255f7ef8dd7bd"
       }
     },
@@ -84,22 +85,19 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:24.852187+00:00",
-        "last_success_utc": "2026-11-15T10:19:24.852187+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.646970+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.646970+00:00",
         "source_capture_sha256": "6808cf8a2ca9c3bb246e9fa711b73076516700618f3c355ecad946dd6cf08012"
       }
     },
     "CHI": {
-      "game_id": "2026_11_NO_CHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
-      }
+      "report": {}
     },
     "CIN": {
       "game_id": "2026_10_PIT_CIN",
@@ -112,8 +110,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.954162+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.954162+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.607550+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.607550+00:00",
         "source_capture_sha256": "5f084d1c7b129f4f6fd5368a812e4f05067ea1f549e4f9ee1f4ced236d6cb86b"
       }
     },
@@ -128,8 +126,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:24.727205+00:00",
-        "last_success_utc": "2026-11-15T10:19:24.727205+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.624398+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.624398+00:00",
         "source_capture_sha256": "caa4a05b82b028f104a926a4acb53a1b0ba90bf04fb7b65508816180820d6c96"
       }
     },
@@ -142,24 +140,24 @@
       },
       "report": {
         "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
+        "last_attempt_utc": "2026-11-15T11:30:55.015551+00:00"
       }
     },
     "DEN": {
-      "game_id": "2026_11_LV_DEN",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
-      }
+      "report": {}
     },
     "DET": {
       "game_id": "2026_10_NE_DET",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T11:30:55.015551+00:00"
+      },
       "kickoff_utc": "2026-11-15T14:30:00+00:00",
       "news": {
         "article_errors": []
@@ -168,8 +166,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:24.806032+00:00",
-        "last_success_utc": "2026-11-15T10:19:24.806032+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.803273+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.803273+00:00",
         "source_capture_sha256": "c03ffb6c648f5a7d43559e8e963748d0a4bac01d14ca043d8ee42fafbcfa0970"
       }
     },
@@ -184,8 +182,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.431757+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.431757+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.786039+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.786039+00:00",
         "source_capture_sha256": "00c119170833ce411e3f94186109aa344ac2f4c541a51f6c03fbd4aec57589b1"
       }
     },
@@ -200,8 +198,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:26.764150+00:00",
-        "last_success_utc": "2026-11-15T10:19:26.764150+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.849498+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.849498+00:00",
         "source_capture_sha256": "9fc084304a80e042534afac1cd5591319c98913e6ede54ba70226f9c66692ed1"
       }
     },
@@ -216,8 +214,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:26.054828+00:00",
-        "last_success_utc": "2026-11-15T10:19:26.054828+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.847166+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.847166+00:00",
         "source_capture_sha256": "ca30f7c3079dcbd1aaf2fd4f25d26bb9b5f865aba7baa3a74efa650fecdd516e"
       }
     },
@@ -232,8 +230,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.285837+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.285837+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.831049+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.831049+00:00",
         "source_capture_sha256": "43920a9b78710126f49867568cf2f87758998ea8254488975fbf1435f8a3ba11"
       }
     },
@@ -248,8 +246,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.064313+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.064313+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.874083+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.874083+00:00",
         "source_capture_sha256": "90ca158b73d3ce8ea947bf04a77e4302540b291a780bbd582658d24b560c70aa"
       }
     },
@@ -264,8 +262,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.185737+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.185737+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.857091+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.857091+00:00",
         "source_capture_sha256": "49310e7c1d76b809232b0c573d986ccb95d7e4afb38826b3667909444b094a14"
       }
     },
@@ -280,8 +278,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.144848+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.144848+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.859226+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.859226+00:00",
         "source_capture_sha256": "596017c02324bc20d47604f0ac9458d167f1690cb695863bd57007f7fdac2ce4"
       }
     },
@@ -296,8 +294,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.413046+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.413046+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.974203+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.974203+00:00",
         "source_capture_sha256": "6ddbbe7cd94c318062d932e30370cb67d1be278a44296ac233583c15c3df98cf"
       }
     },
@@ -312,8 +310,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.946727+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.946727+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.015467+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.015467+00:00",
         "source_capture_sha256": "b7d960c16002e8cbd60ce85df9d4bdb0ba7fd16feb032878bfd5b2268edeba0b"
       }
     },
@@ -328,14 +326,17 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:27.410149+00:00",
-        "last_success_utc": "2026-11-15T10:19:27.410149+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.964012+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.964012+00:00",
         "source_capture_sha256": "4c0b0bbb7fd26a86e1dbd8736f6ccf986323cd931d747b9eabaa1ced812a7061"
       }
     },
     "NE": {
       "game_id": "2026_10_NE_DET",
-      "inactives": {},
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T11:30:55.015551+00:00"
+      },
       "kickoff_utc": "2026-11-15T14:30:00+00:00",
       "news": {
         "article_errors": []
@@ -344,8 +345,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:25.713154+00:00",
-        "last_success_utc": "2026-11-15T10:19:25.713154+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.028999+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.028999+00:00",
         "source_capture_sha256": "76272d192015b7b0bc00da8769c38fa09f96917dc9b300570a5d5808ea26a257"
       }
     },
@@ -360,22 +361,19 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:26.032407+00:00",
-        "last_success_utc": "2026-11-15T10:19:26.032407+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.024289+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.024289+00:00",
         "source_capture_sha256": "27d2e84cd8b01c9ab4cf5b1fbf792b1c61fc54322a3be3cfa268dedbe60df82d"
       }
     },
     "NYG": {
-      "game_id": "2026_11_JAX_NYG",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
-      }
+      "report": {}
     },
     "NYJ": {
       "game_id": "2026_10_BUF_NYJ",
@@ -388,22 +386,19 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:26.095932+00:00",
-        "last_success_utc": "2026-11-15T10:19:26.095932+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.016898+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.016898+00:00",
         "source_capture_sha256": "b1aba845f2e4b49fed2594ac742d9cf1eab3b6385db119af366da682ad3cbd6f"
       }
     },
     "PHI": {
-      "game_id": "2026_11_PIT_PHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
-      }
+      "report": {}
     },
     "PIT": {
       "game_id": "2026_10_PIT_CIN",
@@ -416,8 +411,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:26.759258+00:00",
-        "last_success_utc": "2026-11-15T10:19:26.759258+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.027743+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.027743+00:00",
         "source_capture_sha256": "8c6a2617463be1ca36a5a2c1a04d65279f50990b549cd63bf8a2b90efa36f965"
       }
     },
@@ -432,8 +427,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:27.135518+00:00",
-        "last_success_utc": "2026-11-15T10:19:27.135518+00:00",
+        "last_attempt_utc": "2026-11-15T11:30:59.999168+00:00",
+        "last_success_utc": "2026-11-15T11:30:59.999168+00:00",
         "source_capture_sha256": "8977b60c01f28a2835d2b5b66d5d7699ee11ceb2e97b4b0abdbe0450d87a6ea0"
       }
     },
@@ -448,22 +443,19 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:28.186917+00:00",
-        "last_success_utc": "2026-11-15T10:19:28.186917+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.128337+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.128337+00:00",
         "source_capture_sha256": "ae6a5460fdc2f97137be45fb7ddf2450a05b30e069c5078407c3d2a3dc24b497"
       }
     },
     "TB": {
-      "game_id": "2026_11_TB_DET",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T10:19:23.390713+00:00"
-      }
+      "report": {}
     },
     "TEN": {
       "game_id": "2026_10_JAX_TEN",
@@ -476,8 +468,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T10:19:27.841836+00:00",
-        "last_success_utc": "2026-11-15T10:19:27.841836+00:00",
+        "last_attempt_utc": "2026-11-15T11:31:00.128746+00:00",
+        "last_success_utc": "2026-11-15T11:31:00.128746+00:00",
         "source_capture_sha256": "58d658cd68fdec233662915eff01c7b349c11981596f3ea5db32e308b239ab7d"
       }
     },
@@ -491,5 +483,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T10:19:28.186917+00:00"
+  "updated_utc": "2026-11-15T11:31:02.683308+00:00"
 }
