@@ -1,16 +1,11 @@
 {
-  "forecast_utc": "2026-11-15T17:48:19.205817+00:00",
+  "forecast_utc": "2026-11-15T18:06:39.823756+00:00",
   "games": [
     {
       "game_id": "2026_10_BUF_NYJ",
       "issues": [
         "current board cannot be captured before the cutoff",
-        "NYJ: report: source check stale or after forecast",
-        "NYJ: inactives: source check stale or after forecast",
-        "BUF: report: source check stale or after forecast",
-        "BUF: inactives: unresolved inactive player: Mike Danna",
-        "BUF: inactives: no successful source check",
-        "BUF: inactives: complete official list/report missing"
+        "forecast availability evidence missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "missed cutoff"
@@ -25,12 +20,7 @@
       "game_id": "2026_10_HOU_CLE",
       "issues": [
         "current board cannot be captured before the cutoff",
-        "CLE: report: source check stale or after forecast",
-        "CLE: inactives: source check stale or after forecast",
-        "HOU: report: source check stale or after forecast",
-        "HOU: inactives: unparsed inactive line: C/G Keylan Rutledge",
-        "HOU: inactives: no successful source check",
-        "HOU: inactives: complete official list/report missing"
+        "forecast availability evidence missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "missed cutoff"
@@ -39,12 +29,7 @@
       "game_id": "2026_10_JAX_TEN",
       "issues": [
         "current board cannot be captured before the cutoff",
-        "TEN: report: source check stale or after forecast",
-        "TEN: inactives: unresolved inactive player: Nick Singleton",
-        "TEN: inactives: no successful source check",
-        "TEN: inactives: complete official list/report missing",
-        "JAX: report: source check stale or after forecast",
-        "JAX: inactives: source check stale or after forecast"
+        "forecast availability evidence missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "missed cutoff"
@@ -87,12 +72,7 @@
       "game_id": "2026_10_MIA_IND",
       "issues": [
         "current board cannot be captured before the cutoff",
-        "IND: report: source check stale or after forecast",
-        "IND: inactives: source check stale or after forecast",
-        "MIA: report: source check stale or after forecast",
-        "MIA: inactives: unparsed inactive line: G/T Caedan Wallace",
-        "MIA: inactives: no successful source check",
-        "MIA: inactives: complete official list/report missing"
+        "forecast availability evidence missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "missed cutoff"
@@ -101,14 +81,7 @@
       "game_id": "2026_10_MIN_GB",
       "issues": [
         "current board cannot be captured before the cutoff",
-        "GB: report: source check stale or after forecast",
-        "GB: inactives: unparsed inactive line: G/T Donovan Jennings",
-        "GB: inactives: no successful source check",
-        "GB: inactives: complete official list/report missing",
-        "MIN: report: source check stale or after forecast",
-        "MIN: inactives: unresolved inactive player: Tyroin Ingram-Dawkins",
-        "MIN: inactives: no successful source check",
-        "MIN: inactives: complete official list/report missing"
+        "forecast availability evidence missing"
       ],
       "lock_at_utc": "2026-11-15T17:00:00+00:00",
       "state": "missed cutoff"
@@ -173,5 +146,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T17:48:25.365763+00:00"
+  "updated_utc": "2026-11-15T18:06:47.705158+00:00"
 }
