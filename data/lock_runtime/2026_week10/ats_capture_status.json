@@ -1,15 +1,10 @@
 {
-  "forecast_utc": "2026-11-15T19:43:49.893825+00:00",
+  "forecast_utc": "2026-11-15T19:45:58.982260+00:00",
   "games": [
     {
       "game_id": "2026_10_LA_ARI",
       "issues": [
-        "ARI: inactives: official inactive list not found",
-        "ARI: inactives: no successful source check",
-        "ARI: inactives: complete official list/report missing",
-        "LA: inactives: official inactive list not found",
-        "LA: inactives: no successful source check",
-        "LA: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
@@ -17,12 +12,7 @@
     {
       "game_id": "2026_10_SEA_LV",
       "issues": [
-        "LV: inactives: official inactive list not found",
-        "LV: inactives: no successful source check",
-        "LV: inactives: complete official list/report missing",
-        "SEA: inactives: official inactive list not found",
-        "SEA: inactives: no successful source check",
-        "SEA: inactives: complete official list/report missing"
+        "candidate rejected; check market line and fitted map"
       ],
       "lock_at_utc": "2026-11-15T20:05:00+00:00",
       "state": "awaiting candidate"
@@ -49,5 +39,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T19:44:43.202747+00:00"
+  "updated_utc": "2026-11-15T19:46:52.993654+00:00"
 }
