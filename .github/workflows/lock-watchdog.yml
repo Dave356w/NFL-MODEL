@@ -1,6 +1,17 @@
 name: Monitor ATS watcher health
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'lock_watcher.py'
+      - 'lock_refresh.py'
+      - 'ats_locks.py'
+      - 'availability_collect.py'
+      - 'espn_spreads.py'
+      - 'forecast_history.py'
+      - 'nfl_model.py'
+      - 'qb_replacement.py'
   workflow_dispatch:
   workflow_run:
     workflows: [Independent ATS lock watcher]
@@ -24,7 +35,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          fetch-depth: 0
       - name: Restart missing watcher or report stale heartbeat
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python lock_watchdog.py
+        run: python lock_watchdog.py --restart-outdated

@@ -535,13 +535,25 @@ def write_capture_status(data='data', now=None):
             identity = (manifest['revision'], raw['game_id'])
             cutoff = deadline(ko)
             issues = []
+            diagnostic = None
             if identity in locked:
                 state = 'locked'
             elif identity in candidates:
                 state = 'candidate saved; awaiting finalization'
             else:
                 state = 'missed cutoff' if now >= cutoff else 'awaiting candidate'
-                if raw.get('ready') != 'True':issues.append('model history not ready')
+                # The rolling full-build board drops evidence after kickoff.
+                # Diagnose a missed deadline from the last observation actually
+                # saved before it, retaining the original parser/source errors.
+                if now >= cutoff:
+                    import forecast_history
+                    observations = [r for store in stores for r in forecast_history.timing_rows(store)
+                                    if (r['revision'],r['game_id'])==identity
+                                    and utc(r['observed_utc'])<=cutoff]
+                    if observations:
+                        diagnostic=max(observations,key=lambda r:utc(r['observed_utc']))
+                        raw=diagnostic['board']
+                if raw.get('ready') not in (True,'True'):issues.append('model history not ready')
                 if not generated <= now <= cutoff:issues.append('current board cannot be captured before the cutoff')
                 if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
                     if raw.get('availability_policy') != m.AVAILABILITY_POLICY:
@@ -556,10 +568,14 @@ def write_capture_status(data='data', now=None):
                                     issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,True))
                             except (KeyError,ValueError,TypeError):
                                 issues.append(raw[side]+': forecast availability evidence invalid')
-                        if m.availability_snapshot(raw,ko,generated) is None:
+                        if m.availability_snapshot(raw,ko,utc(diagnostic['generated_utc']) if diagnostic else generated) is None:
                             issues.append('forecast availability validation failed')
                 if not issues:issues.append('candidate rejected; check market line and fitted map')
-            games.append(dict(game_id=raw['game_id'],state=state,lock_at_utc=cutoff.isoformat(),issues=issues))
+            status=dict(game_id=raw['game_id'],state=state,lock_at_utc=cutoff.isoformat(),issues=issues)
+            if diagnostic:
+                status.update(diagnostic_generated_utc=diagnostic['generated_utc'],
+                              diagnostic_snapshot_sha256=diagnostic['snapshot_sha256'])
+            games.append(status)
     payload=dict(updated_utc=now.isoformat(),revision=manifest['revision'],forecast_utc=generated.isoformat(),games=games)
     path=data/'ats_capture_status.json'
     temporary=path.with_suffix('.tmp');temporary.write_text(json.dumps(payload,sort_keys=True,indent=2)+'\n');temporary.replace(path)

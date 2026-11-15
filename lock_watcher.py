@@ -199,11 +199,14 @@ def tick(data, now=None):
                     evidence = row.get(side+'_availability_evidence')
                     evidence = json.loads(evidence) if isinstance(evidence, str) else evidence or {}
                     reasons.extend(evidence.get('blockers', []))
+                    import availability_collect as ac
+                    reasons.extend(row[side]+': '+issue for issue in ac.readiness_issues(
+                        evidence.get('collection',{}), generated, require_inactives=True))
                 if not row.get('ready'):
                     reasons.append('fresh paired quote or base features unavailable')
                 if not row.get('availability_ready'):
                     reasons.append('complete current official availability required')
-                health['games'].append(dict(game_id=row['game_id'],
+                health['games'].append(dict(game_id=row['game_id'], revision=manifest['revision'],
                     cutoff_utc=locks.deadline(row['kickoff_utc'] if row.get('kickoff_utc') else __import__('nfl_model').kickoff_utc(row)).isoformat(),
                     blockers=sorted(set(reasons))))
             commit = persist(data, f'ATS candidates and sources {dt.datetime.now(UTC).isoformat()}')
@@ -217,6 +220,10 @@ def tick(data, now=None):
     if sum(len(locks.read(p/CHECKPOINTS)) for p in stores) > old_checkpoints:
         (runtime/'publish_pending.json').write_text(json.dumps(dict(pending=True))+'\n')
     health['updated_utc'] = dt.datetime.now(UTC).isoformat()
+    import lock_watchdog
+    health['coverage_alerts'] = lock_watchdog.coverage_issues(data, dt.datetime.now(UTC))
+    for alert in health['coverage_alerts']:
+        print('::error::'+alert, flush=True)
     (runtime/'watcher_status.json').write_text(json.dumps(health, indent=2)+'\n')
     persist(data, 'ATS durability receipts and heartbeat')
     pending = runtime/'publish_pending.json'

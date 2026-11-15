@@ -68,5 +68,35 @@
     "game_id": "2026_09_TB_CHI",
     "source_commit": "b049776c391f7903623b7a2cd650f28eb198f44a",
     "reason": "Owner requested retirement of RSS and rescue of yesterday's missing picks on 2026-11-09. Recover this final pre-cutoff board committed at 2026-11-09T00:13:00Z before T-60 (00:20Z). Preserve Tampa Bay +6, the saved model and weekly map, original inactive-parser blockers and actual recovery time. Do not refit or use post-cutoff inputs."
+  },
+  {
+    "game_id": "2026_10_BUF_NYJ",
+    "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_BUF_NYJ/e834526395bef23b8eede0cc327f66bb9224998bc3fd1a144a6008e90436f7c1.json",
+    "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_HOU_CLE",
+    "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_HOU_CLE/3bc26fc10d7e9ce8dcbfe82a92fcb5be60b489adbbb389e77734379ba9032136.json",
+    "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_JAX_TEN",
+    "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_JAX_TEN/21e65de85044768fafbe28abaaf5439c9316c271141bfc4b3c88a2cf89c364f1.json",
+    "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_MIA_IND",
+    "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_MIA_IND/fb3fadcdef6bbe1710a85b925b0be35c9f28f04a22713d76dbc3a47f762d7b8d.json",
+    "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_MIN_GB",
+    "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_MIN_GB/b274361dab1fc0a87927d90ff0c5c75128fe9d6ec0089e73246167529274a084.json",
+    "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
   }
 ]

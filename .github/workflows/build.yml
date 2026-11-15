@@ -34,6 +34,7 @@ concurrency:
 
 permissions:
   contents: write   # commit data/ (ledger, frozen recipe, snapshots)
+  actions: write    # publish authorized saved recoveries before the slow model refresh
   pages: write
   id-token: write
 
@@ -103,7 +104,16 @@ jobs:
           pip install -r requirements.txt
 
       - name: Apply owner-requested retro locks from saved pregame commits
-        run: python retro_lock.py
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python retro_lock.py
+          if ! git diff --quiet -- data/ats_locks.jsonl; then
+            python validate_data_files.py
+            python commit_data.py --branch main --no-fallback --path data/ats_locks.jsonl --message "Preserve authorized pre-cutoff lock recoveries before model refresh"
+            gh workflow run publish.yml --ref main
+          fi
 
       - name: Validate committed data
         run: python validate_data_files.py

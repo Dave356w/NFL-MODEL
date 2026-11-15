@@ -78,3 +78,35 @@ For one operational heartbeat use the watcher's `once` dispatch input.
 For a publication retry dispatch `publish.yml`. Dispatch `lock-watchdog.yml`
 to check or restart the continuous watcher. Do not run the old build-held
 `ats_wait.py` concurrently as an additional journal writer.
+
+## November 15 parser incident and recovery
+
+The T-60 controller was running, but five 18:00 UTC games never produced an
+eligible candidate. Their saved observations failed on C/G and G/T positions,
+Mike/Michael Danna, Nick/Nicholas Singleton, and the official-list spelling
+Tyroin/Tyrion Ingram-Dawkins. Compound positions now accept only known position
+codes. Name exceptions require an exact GSIS ID and canonical roster name;
+unknown or ambiguous players still block completeness.
+
+The owner explicitly requested recovery on November 15. Five pinned timing
+observations, generated at 16:56:42 UTC and committed at 16:58:26 UTC (before
+the 17:00 UTC cutoff), are authorized in `ats_retro_requests.json`. Recovery
+preserves the exact captured price, saved weekly map, original collection
+errors, and v1.24 replacement-QB overlay. No current inputs or scores select
+the picks. These join ordinary pooled results, while backend provenance remains
+`Owner-requested retro lock`, outside native forward evidence. Existing native
+locks in any runtime store take precedence. Nothing is backdated or rewritten.
+
+The monitor now requires actual durable candidate coverage by T-65, reports
+missed deadlines and late finalization independently of heartbeat health,
+and the watcher records team-specific source/parser blockers. Missed-game
+capture status references the last saved pre-cutoff observation rather than
+a post-kickoff board that has lost its availability columns. A controller
+code change stops the old serialized watcher, waits for it to finish, and
+requests a new process from main; ordinary data commits do not restart it.
+Authorized recoveries are committed before a full model refresh can fail.
+
+Automatic fallback remains the newest eligible, durably saved pre-T-60
+candidate, even if a later refresh or provider request fails. Earlier blocked
+snapshots never silently become native locks; this incident's explicit recovery
+is separate from that production contract.

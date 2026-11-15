@@ -54,6 +54,14 @@ UNCERTAIN=re.compile(r'\b(could|may|might|potential|possibly|reportedly|expected
 NEGATION=re.compile(r"\b(?:not|never|no longer|cannot|unable|instead of|rather than|in place of|ruled out|benched)\b|n[\u2019']t\b",re.I)
 RELEVANT=re.compile(r'inactiv|injur|quarterback|\bQB\b|start|signs?|signed|waiv|releas|activat|elevat|trad|reserve',re.I)
 
+# Exact official-list aliases observed on 2026-11-15. Each alias is bound to
+# a GSIS ID AND its canonical roster name; never guess nicknames or fuzzy names.
+OFFICIAL_NAME_ALIASES={
+    '00-0036378': ('Michael Danna', ('Mike Danna',)),
+    '00-0040886': ('Nicholas Singleton', ('Nick Singleton',)),
+    '00-0040173': ('Tyrion Ingram-Dawkins', ('Tyroin Ingram-Dawkins',)),
+}
+
 
 def utc(value):
     if isinstance(value,dt.datetime): out=value
@@ -129,6 +137,11 @@ class PlayerIndex:
                 if isinstance(first,str) and isinstance(last,str):aliases.add(first+' '+last)
             player['aliases']=sorted(aliases);self.players[pid]=player
             for alias in aliases:self.names.setdefault(norm(alias),set()).add(pid)
+        for pid,(canonical,aliases) in OFFICIAL_NAME_ALIASES.items():
+            player=self.players.get(pid)
+            if player and norm(player['player'])==norm(canonical):
+                player['aliases']=sorted(set(player['aliases'])|set(aliases))
+                for alias in aliases:self.names.setdefault(norm(alias),set()).add(pid)
 
     def resolve(self,name,team,position=None,allow_transfer=False):
         ids=set(self.names.get(norm(name),()))
@@ -261,7 +274,8 @@ class InactiveIdentityMismatch(ValueError):
 
 
 INACTIVE_POSITIONS=r'QB|RB|HB|FB|WR|TE|OL|OT|OG|IOL|LT|RT|LG|RG|C|G|T|DL|DE|DT|NT|IDL|EDGE|LB|OLB|ILB|MLB|CB|DB|NB|S|SAF|FS|SS|K|PK|P|LS'
-INACTIVE_ROW=re.compile(r'^(?:\d+\s*[-.:)]?\s*)?(?:[-•*·–—]\s*)?('+INACTIVE_POSITIONS+r')\s*[:\-–—.,]?\s+(.+)$',re.I)
+INACTIVE_POSITION=r'(?:'+INACTIVE_POSITIONS+r')(?:\s*/\s*(?:'+INACTIVE_POSITIONS+r'))*'
+INACTIVE_ROW=re.compile(r'^(?:\d+\s*[-.:)]?\s*)?(?:[-•*·–—]\s*)?('+INACTIVE_POSITION+r')\s*[:\-–—.,]?\s+(.+)$',re.I)
 # A short line with no sentence ending is list-shaped; it must parse exactly or the list is not complete.
 LIST_SHAPED=re.compile(r'^(?!.*[.!?]["\u201d\u2019]?$)(?:\S+\s+){0,7}\S+$')
 
