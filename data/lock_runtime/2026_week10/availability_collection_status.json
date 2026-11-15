@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T14:04:47.600519+00:00",
-      "last_success_utc": "2026-11-15T14:04:47.600519+00:00"
+      "last_attempt_utc": "2026-11-15T14:06:14.882945+00:00",
+      "last_success_utc": "2026-11-15T14:06:14.882945+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T14:04:47.598303+00:00",
-      "last_success_utc": "2026-11-15T14:04:47.598303+00:00"
+      "last_attempt_utc": "2026-11-15T14:06:14.882246+00:00",
+      "last_success_utc": "2026-11-15T14:06:14.882246+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -80,8 +80,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-15T14:04:47.600519+00:00",
-        "last_success_utc": "2026-11-15T14:04:47.600519+00:00",
+        "last_attempt_utc": "2026-11-15T14:06:14.882945+00:00",
+        "last_success_utc": "2026-11-15T14:06:14.882945+00:00",
         "source_capture_sha256": "3f40c4b97002881d4b1c7c9d0648fbc96aa318b08a9e1226a81ca2adc25fe1c4",
         "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
       },
@@ -93,8 +93,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T14:04:47.286626+00:00",
-        "last_success_utc": "2026-11-15T14:04:47.286626+00:00",
+        "last_attempt_utc": "2026-11-15T14:06:14.669274+00:00",
+        "last_success_utc": "2026-11-15T14:06:14.669274+00:00",
         "source_capture_sha256": "ca5b4842803cd814a0e12737603d3d20d80a4a1076013da820d6662bc569da57"
       }
     },
@@ -163,8 +163,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-15T14:04:47.600519+00:00",
-        "last_success_utc": "2026-11-15T14:04:47.600519+00:00",
+        "last_attempt_utc": "2026-11-15T14:06:14.882945+00:00",
+        "last_success_utc": "2026-11-15T14:06:14.882945+00:00",
         "source_capture_sha256": "de25c3d2bb084cd81af9a084a432d8bbe500b8008efa1ac0e8cd41bfe0f600f2",
         "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
       },
@@ -176,8 +176,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T14:04:47.416202+00:00",
-        "last_success_utc": "2026-11-15T14:04:47.416202+00:00",
+        "last_attempt_utc": "2026-11-15T14:06:14.667383+00:00",
+        "last_success_utc": "2026-11-15T14:06:14.667383+00:00",
         "source_capture_sha256": "9dd7bbe466f792accdc3a6c5d7d975f8d4f75b0128d02a16ef3334d9c35821ae"
       }
     },
@@ -248,5 +248,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T14:04:47.600519+00:00"
+  "updated_utc": "2026-11-15T14:06:14.882945+00:00"
 }
