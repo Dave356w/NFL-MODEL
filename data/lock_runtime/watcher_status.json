@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-15T19:53:06.156635+00:00",
+  "heartbeat_utc": "2026-11-15T19:55:04.142725+00:00",
   "run_id": "43754662776",
   "errors": [],
   "prepared_bundle_sha256": "125b372288e0877c43a35d5b9d14d8c7c58e30e4413d57759fdc054974679d51",
@@ -35,7 +35,7 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-15T19:54:00.080963+00:00",
+  "updated_utc": "2026-11-15T19:55:58.558658+00:00",
   "coverage_alerts": [
     "2026_10_BUF_NYJ: MISSED CUTOFF; no eligible durable candidate",
     "2026_10_HOU_CLE: MISSED CUTOFF; no eligible durable candidate",
