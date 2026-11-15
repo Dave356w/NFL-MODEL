@@ -2,8 +2,8 @@
   "articles": {
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T13:08:51.786124+00:00",
-      "last_success_utc": "2026-11-15T13:08:51.786124+00:00"
+      "last_attempt_utc": "2026-11-15T13:10:18.966857+00:00",
+      "last_success_utc": "2026-11-15T13:10:18.966857+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -84,8 +84,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T13:08:51.574658+00:00",
-        "last_success_utc": "2026-11-15T13:08:51.574658+00:00",
+        "last_attempt_utc": "2026-11-15T13:10:18.744086+00:00",
+        "last_success_utc": "2026-11-15T13:10:18.744086+00:00",
         "source_capture_sha256": "ca5b4842803cd814a0e12737603d3d20d80a4a1076013da820d6662bc569da57"
       }
     },
@@ -163,8 +163,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-15T13:08:51.578275+00:00",
-        "last_success_utc": "2026-11-15T13:08:51.578275+00:00",
+        "last_attempt_utc": "2026-11-15T13:10:18.753825+00:00",
+        "last_success_utc": "2026-11-15T13:10:18.753825+00:00",
         "source_capture_sha256": "9dd7bbe466f792accdc3a6c5d7d975f8d4f75b0128d02a16ef3334d9c35821ae"
       }
     },
@@ -235,5 +235,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T13:08:51.786124+00:00"
+  "updated_utc": "2026-11-15T13:10:18.966857+00:00"
 }
