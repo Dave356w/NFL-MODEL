@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T21:24:35.736275+00:00",
-      "last_success_utc": "2026-11-15T21:24:35.736275+00:00"
+      "last_attempt_utc": "2026-11-15T22:21:47.100188+00:00",
+      "last_success_utc": "2026-11-15T22:21:47.100188+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-15T21:24:35.683462+00:00",
-      "last_success_utc": "2026-11-15T21:24:35.683462+00:00"
+      "last_attempt_utc": "2026-11-15T22:21:47.075551+00:00",
+      "last_success_utc": "2026-11-15T22:21:47.075551+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -64,10 +64,23 @@
       "report": {}
     },
     "CIN": {
-      "game_id": null,
-      "inactives": {},
-      "news": {},
-      "report": {}
+      "game_id": "2026_10_PIT_CIN",
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T22:21:43.415396+00:00"
+      },
+      "kickoff_utc": "2026-11-16T01:20:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "complete": false,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-15T22:21:46.853860+00:00",
+        "last_success_utc": "2026-11-15T22:21:46.853860+00:00",
+        "source_capture_sha256": "3bb82b13435a574c72eaa37fe94bdff2653d959958c5b3f2d43d6608a2af33b6"
+      }
     },
     "CLE": {
       "game_id": null,
@@ -79,23 +92,13 @@
       "report": {}
     },
     "DAL": {
-      "game_id": "2026_10_SF_DAL",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T21:24:35.736275+00:00",
-        "last_success_utc": "2026-11-15T21:24:35.736275+00:00",
-        "source_capture_sha256": "ef38788ab229d2aa6b1c4dde4d00259dd8e3df88a93faf6dcc8783d79f06bfcb",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-15T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-15T21:24:32.005750+00:00"
-      }
+      "report": {}
     },
     "DEN": {
       "game_id": null,
@@ -242,10 +245,23 @@
       "report": {}
     },
     "PIT": {
-      "game_id": null,
-      "inactives": {},
-      "news": {},
-      "report": {}
+      "game_id": "2026_10_PIT_CIN",
+      "inactives": {
+        "error": "official inactive list not found",
+        "last_attempt_utc": "2026-11-15T22:21:43.415396+00:00"
+      },
+      "kickoff_utc": "2026-11-16T01:20:00+00:00",
+      "news": {
+        "article_errors": []
+      },
+      "report": {
+        "complete": true,
+        "error": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-15T22:21:46.855426+00:00",
+        "last_success_utc": "2026-11-15T22:21:46.855426+00:00",
+        "source_capture_sha256": "85367360af1834f21f1f5395aced1729e23733ec38485cbf34f4799e5f306d1c"
+      }
     },
     "SEA": {
       "game_id": null,
@@ -257,27 +273,13 @@
       "report": {}
     },
     "SF": {
-      "game_id": "2026_10_SF_DAL",
-      "inactives": {
-        "complete": true,
-        "error": null,
-        "last_attempt_utc": "2026-11-15T21:24:35.736275+00:00",
-        "last_success_utc": "2026-11-15T21:24:35.736275+00:00",
-        "source_capture_sha256": "091032f46c346b6dc6f462c729b73086d4d0d10d7a9fab8f1df2ab618e4b337b",
-        "url": "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-15T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-15T21:24:35.466263+00:00",
-        "last_success_utc": "2026-11-15T21:24:35.466263+00:00",
-        "source_capture_sha256": "51064b1c48c50824bb9e559d4b1a6861aceff95a985ec1b9327cbc3eba6a7636"
-      }
+      "report": {}
     },
     "TB": {
       "game_id": null,
@@ -304,5 +306,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-15T21:24:35.736275+00:00"
+  "updated_utc": "2026-11-15T22:21:47.100188+00:00"
 }

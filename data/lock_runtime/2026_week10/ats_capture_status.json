@@ -1,23 +1,26 @@
 {
-  "forecast_utc": "2026-11-15T21:24:36.758399+00:00",
+  "forecast_utc": "2026-11-15T22:21:48.144219+00:00",
   "games": [
     {
-      "diagnostic_generated_utc": "2026-11-15T20:23:14.492504+00:00",
-      "diagnostic_snapshot_sha256": "8f6ce889dfd40b5b9198e58a8d78b3ff6ac4572d936e1847cfca594dacedc105",
-      "game_id": "2026_10_SF_DAL",
+      "game_id": "2026_10_PIT_CIN",
       "issues": [
-        "current board cannot be captured before the cutoff",
-        "DAL: automatic source checks incomplete or stale",
-        "DAL: final report incomplete",
-        "DAL: report: injury report for both scheduled opponents not yet published",
-        "DAL: report: no successful source check",
-        "DAL: report: complete official list/report missing",
+        "CIN: automatic source checks incomplete or stale",
+        "CIN: final report incomplete",
+        "CIN: report: source check stale or after forecast",
+        "CIN: report: complete official list/report missing",
+        "CIN: inactives: official inactive list not found",
+        "CIN: inactives: no successful source check",
+        "CIN: inactives: complete official list/report missing",
+        "PIT: report: source check stale or after forecast",
+        "PIT: inactives: official inactive list not found",
+        "PIT: inactives: no successful source check",
+        "PIT: inactives: complete official list/report missing",
         "forecast availability validation failed"
       ],
-      "lock_at_utc": "2026-11-15T20:25:00+00:00",
-      "state": "missed cutoff"
+      "lock_at_utc": "2026-11-16T00:20:00+00:00",
+      "state": "awaiting candidate"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-15T22:16:39.459400+00:00"
+  "updated_utc": "2026-11-15T22:21:58.903897+00:00"
 }
