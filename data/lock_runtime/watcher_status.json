@@ -1,10 +1,27 @@
 {
-  "heartbeat_utc": "2026-11-15T22:16:39.459400+00:00",
+  "heartbeat_utc": "2026-11-15T22:21:43.415396+00:00",
   "run_id": "43755500464",
   "errors": [],
   "prepared_bundle_sha256": "74e85cf95811620b54e8305c2a32a72b617cca887b4d0b31b0e429a9f166089a",
-  "games": [],
-  "updated_utc": "2026-11-15T22:16:40.209518+00:00",
+  "games": [
+    {
+      "game_id": "2026_10_PIT_CIN",
+      "revision": "boxscore-composite-v1.24",
+      "cutoff_utc": "2026-11-16T00:20:00+00:00",
+      "blockers": [
+        "CIN: inactives: complete official list/report missing",
+        "CIN: inactives: no successful source check",
+        "CIN: inactives: official inactive list not found",
+        "CIN: report: complete official list/report missing",
+        "PIT: inactives: complete official list/report missing",
+        "PIT: inactives: no successful source check",
+        "PIT: inactives: official inactive list not found",
+        "automatic source checks incomplete or stale",
+        "complete current official availability required"
+      ]
+    }
+  ],
+  "updated_utc": "2026-11-15T22:22:03.149296+00:00",
   "coverage_alerts": [
     "2026_10_SF_DAL: MISSED CUTOFF; no eligible durable candidate"
   ]
