@@ -182,7 +182,11 @@ def replacement_predictions(history, mapped, saved, revision):
     return predicted
 
 
-def replacement_export_basis(history, mapped, saved, records, native_games=()):
+# Public display policies an export may declare in its lock_policy_version column.
+CONTINUITY_POLICY = 'lock-continuity-2026-11-15-v1'
+
+
+def replacement_export_basis(history, mapped, saved, records, native_games=(), policy=None):
     """Use every revision's immutable decisions ahead of replay, with its own map/line.
 
     Calibration keeps replay WP and team annotations even when a saved lock
@@ -195,7 +199,10 @@ def replacement_export_basis(history, mapped, saved, records, native_games=()):
     evidence = saved.astype(object).copy() if saved is not None else None
     unavailable = np.zeros(len(history), bool)
     inherited = np.zeros(len(history), bool)
-    records = ats_locks.current_records(records, REPLACEMENT_REVISION)
+    # Audit each export under the display policy it declares: 2026-11-15 lock
+    # continuity (any revision's saved lock) or the 2026-11-16 current-revision regrade.
+    select = ats_locks.current_records if policy == CONTINUITY_POLICY else ats_locks.public_records
+    records = select(records, REPLACEMENT_REVISION)
     cutoff = pd.Timestamp('2026-11-14T00:00:00Z')
     for i, row in enumerate(history.to_dict('records')):
         if int(row['season']) != 2026:
@@ -420,7 +427,12 @@ def inspect(data='data'):
     if revision == REPLACEMENT_REVISION:
         try:
             native_games = {r['game_id'] for r in snapshots if r['revision'] == revision}
-            predicted, lines = replacement_export_basis(d, predicted, saved, records, native_games)
+            declared = (saved.loc[saved.season.eq(2026), 'lock_policy_version'].dropna().unique()
+                        if saved is not None and 'lock_policy_version' in saved else [])
+            if len(declared) > 1:
+                raise ValueError('export declares more than one lock policy')
+            predicted, lines = replacement_export_basis(d, predicted, saved, records, native_games,
+                                                        declared[0] if len(declared) else None)
             ats_history['spread_line'] = lines
             checks['exported_replacement_margin_evidence'] = True
         except (ValueError, KeyError, TypeError, OverflowError) as exc:

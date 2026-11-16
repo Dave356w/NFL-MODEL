@@ -185,8 +185,9 @@ def _inherited_lock_export():
 
 
 def test_inherited_lock_audit_uses_earliest_saved_revision_without_new_qb_overlay():
+    # Exports declaring 2026-11-15 lock continuity are audited under that policy.
     history, saved, records = _inherited_lock_export()
-    predicted, lines = s.replacement_export_basis(history, [3.], saved, records)
+    predicted, lines = s.replacement_export_basis(history, [3.], saved, records, policy=s.CONTINUITY_POLICY)
     np.testing.assert_array_equal(predicted, [7.])
     np.testing.assert_array_equal(lines, [4.5])
 
@@ -196,7 +197,17 @@ def test_inherited_lock_audit_rejects_export_changes(field, value):
     history, saved, records = _inherited_lock_export()
     saved.loc[0, field] = value
     with pytest.raises(ValueError):
+        s.replacement_export_basis(history, [3.], saved, records, policy=s.CONTINUITY_POLICY)
+
+
+def test_regrade_audit_uses_the_current_revisions_own_lock_not_an_earlier_one():
+    # Owner decision 2026-11-16: the earlier v1.22 lock is not shown; v1.24's own lock is.
+    history, saved, records = _inherited_lock_export()
+    with pytest.raises(ValueError):  # an export still showing the inherited 7 points fails
         s.replacement_export_basis(history, [3.], saved, records)
+    predicted, lines = s.replacement_export_basis(history, [3.], saved.assign(fixed_band_spread=5.), records)
+    np.testing.assert_array_equal(predicted, [5.])
+    np.testing.assert_array_equal(lines, [4.5])
 
 
 def test_inherited_lock_audit_recomputes_margin_instead_of_trusting_saved_number():
@@ -204,7 +215,7 @@ def test_inherited_lock_audit_recomputes_margin_instead_of_trusting_saved_number
     records[('boxscore-composite-v1.22', 'g')]['fixed_band_spread'] = 14.
     saved.loc[0, 'fixed_band_spread'] = 14.
     with pytest.raises(ValueError, match='inherited frozen lock'):
-        s.replacement_export_basis(history, [3.], saved, records)
+        s.replacement_export_basis(history, [3.], saved, records, policy=s.CONTINUITY_POLICY)
 
 
 def test_corrected_scores_audit_preserves_fitted_maps_and_rejects_export_tampering(tmp_path):

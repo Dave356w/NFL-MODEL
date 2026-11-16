@@ -200,3 +200,12 @@ revision's saved lock as coverage, flags AT RISK from T-90 with the latest saved
 keeps missed games visible for 24 hours after kickoff. Owner follow-up the same night ("Repair all lost picks")
 authorizes SF-DAL and PIT-CIN retro locks from their last pre-T-60 committed watcher observations
 (`ats_retro_requests.json`); this is not authorization to reconstruct other future misses.
+
+**Public regrade (owner decision 2026-11-16, supersedes the 2026-11-15 lock-continuity display rule).**
+Public Picks, Results, Performance, Calibration and CSVs show the current production revision's
+2026 regrade: v1.24's own saved locks stay the bet at their lock line and price; every other game,
+including games locked by earlier revisions, shows v1.24's walk-forward replay
+(`ats_locks.public_records`, `season_ats.LOCK_POLICY_VERSION = current-revision-regrade-2026-11-16-v1`).
+Capture and watchdog coverage still count any revision's saved lock, so nothing is relocked. Journals
+and earlier locks are unchanged and remain native forward evidence in backend reports
+(`research/regrade_2026_results/`). The independent audit checks each export under the policy it declares.

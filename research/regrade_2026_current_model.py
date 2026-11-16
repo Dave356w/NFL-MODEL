@@ -1,7 +1,7 @@
 """Regrade every 2026 game with the current production model (owner request 2026-11-16).
 
-Research/backend view only. The public pages keep lock continuity (owner decision
-2026-11-15): a saved pregame lock stays the game's decision. This script replays the
+The owner switched the public pages to this regrade on 2026-11-16 (superseding the
+2026-11-15 lock-continuity display). This script replays the
 current revision (manifest in data/latest) over every completed 2026 game with its
 own walk-forward forecast, weekly decayed median map and post-map QB overlay, then
 grades it ATS beside the public decision and same-row baselines. The recipe, map
@@ -37,7 +37,14 @@ def load(data='data'):
     latest['ats_locks'] = ats_locks.display_records(data)
     ledger = b.score_updates.overlay(b.load_ledger(data), latest['final_scores'])
     pool = season_ats.build(latest, ledger)
-    return latest, pool
+    # The superseded 2026-11-15 view: every revision's saved lock is the decision.
+    shown = ats_locks.public_records
+    ats_locks.public_records = ats_locks.current_records
+    try:
+        continuity = season_ats.build(latest, ledger)
+    finally:
+        ats_locks.public_records = shown
+    return latest, pool, continuity
 
 
 def replay(latest, pool):
@@ -116,10 +123,11 @@ def baseline_table(frame, line, mapped, raw, line_mapped):
 
 
 def main(data='data'):
-    latest, pool = load(data)
+    latest, pool, continuity = load(data)
     revision = latest['manifest']['revision']
     frame = replay(latest, pool)
-    pub = pool.set_index('game_id')
+    published = record(pool.fixed_band_ats_result, pool.fixed_band_ats_units)
+    pub = continuity.set_index('game_id')
     frame['public_basis'] = frame.game_id.map(pub.ats_basis)
     frame['public_side'] = frame.game_id.map(pub.fixed_band_ats_side)
     frame['public_line'] = frame.game_id.map(pub.spread_line)
@@ -153,12 +161,15 @@ def main(data='data'):
              'forecast uses only earlier games, the weekly decayed median map is fitted before that week, and '
              'the −2 replacement-QB adjustment is applied after mapping. This is a reconstruction (evidence '
              'basis 3 in CLAUDE.md: diagnostic), not native forward evidence. The replay line is the replay '
-             'ledger\'s market line, which can differ from a saved lock\'s T-60 line. Public pages are unchanged '
-             '(lock continuity, 2026-11-15).', '',
+             'ledger\'s market line, which can differ from a saved lock\'s T-60 line. The owner switched the public '
+             'pages to this regrade on 2026-11-16; v1.24\'s own saved locks stay the bet at their lock line and price, '
+             'so the public row differs slightly. "Public decision" columns below are the superseded 2026-11-15 '
+             'lock-continuity record.', '',
              '## Headline', '', HEAD,
              f'| {revision} replay, priced | ' + fmt(v) + ' |',
              f'| {revision} replay, flat −110 | ' + fmt(flat) + ' |',
-             f'| Public decisions, same games | ' + fmt(pubv) + ' |', '',
+             f'| Public pages from 2026-11-16 (own v1.24 locks at lock price, else replay) | ' + fmt(published) + ' |',
+             f'| Superseded lock-continuity record, same games | ' + fmt(pubv) + ' |', '',
              f"Break-even cover at −110: {100*BREAK_EVEN:.1f}%. ROI ± 1 SE; pushes stay in the denominator.",
              f"Replay pricing: {basis.get('captured_prelock', 0)} ESPN quotes captured by T-60, "
              f"{basis.get('closing_estimate', 0)} closing estimates at the exact handicap, "
@@ -168,7 +179,7 @@ def main(data='data'):
                                frame.model_spread.to_numpy(float), frame.line_mapped.to_numpy(float))
     lines += t + [''] + paired + ['']
 
-    lines += ['## Agreement with the public decision', '',
+    lines += ['## Agreement with the superseded lock-continuity record', '',
               f"Same side on {int(frame.same_side.sum())} of {len(frame)} games. Where the replay and the public "
               'decision differ, the public decision is a saved lock (different revision, line or inputs) or a '
               'replay under the same recipe with a different line.', '',
@@ -195,7 +206,7 @@ def main(data='data'):
         lines.append(f"| {int(week)} | {a['w']}-{a['l']}-{a['p']} | {a['units']:+.2f} | {int(g.same_side.sum())}/{len(g)} |")
 
     # Native forward evidence: pregame-finalized 60-minute locks only, on their own lock lines.
-    native = pool.loc[pool.ats_basis.eq('60-minute lock') & pool.result.notna()].copy()
+    native = continuity.loc[continuity.ats_basis.eq('60-minute lock') & continuity.result.notna()].copy()
     locks = ats_locks.current_records(latest['ats_locks'], revision)
     native['raw'] = [pd.to_numeric(locks.get((revision, g), {}).get('raw_spread'), errors='coerce') for g in native.game_id]
     native['line_mapped'] = [float(fixed_bands.apply([r.spread_line], locks.get((revision, r.game_id), {}).get('fixed_rule')

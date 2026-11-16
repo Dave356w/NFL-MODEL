@@ -75,9 +75,10 @@ def historical_before_adoption(row, cutoff=None):
 # The owner activated this final-margin policy for 2026 reporting, including
 # previously saved selections. The underlying append-only rows stay untouched.
 REPLACEMENT_REVISION='boxscore-composite-v1.24'
-# Owner decision 2026-11-15: every saved pregame lock stays the game's decision
-# across revisions (ats_locks.current_records); replay fills only unlocked games.
-LOCK_POLICY_VERSION='lock-continuity-2026-11-15-v1'
+# Owner decision 2026-11-16 (supersedes 2026-11-15 lock continuity for display):
+# public results are the current revision's regrade. Its own saved locks stay the
+# bet (ats_locks.public_records); earlier revisions' locks are replaced by replay.
+LOCK_POLICY_VERSION='current-revision-regrade-2026-11-16-v1'
 REPLACEMENT_METADATA=('qb_replacement_base_margin','qb_replacement_margin_adjustment',
                       'qb_replacement_policy','qb_replacement_applied')
 
@@ -99,8 +100,8 @@ def replacement_overlay(frame,latest):
         return out
     years=pd.to_numeric(out.get('season',pd.Series(np.nan,index=out.index)),errors='coerce')
     existing=out.get('qb_replacement_policy',pd.Series('',index=out.index)).fillna('').eq(qb_replacement.POLICY)
-    # Lock continuity (owner decision 2026-11-15): a saved decision is the bet and
-    # keeps its saved margin, whichever revision saved it. Only replays are overlaid.
+    # A publicly shown saved lock (the current revision's own, owner decision
+    # 2026-11-16) keeps its saved margin. Only replays are overlaid.
     saved=out.get('saved_decision',pd.Series(False,index=out.index)).fillna(False).astype(bool)
     pending=years.ge(2026)&~existing&~saved
     if not pending.any(): return out
@@ -234,7 +235,7 @@ def build(latest, ledger):
                     ats_basis='Replayed pregame forecast')
         rows[r['game_id']] = row
     # Immutable ATS archives replace BOTH history and any snapshot replay.
-    for (rev, game), saved in ats_locks.current_records(latest.get('ats_locks', {}), revision).items():
+    for (rev, game), saved in ats_locks.public_records(latest.get('ats_locks', {}), revision).items():
         if rev != revision or int(saved['season']) != 2026:
             continue
         rows[game] = dict(game_id=game, season=2026, week=int(saved['week']),
@@ -495,7 +496,7 @@ def _baseline_lines(sides, margin):
 def lock_baselines(latest, frame):
     """Timed locks graded beside same-row controls; backend reporting only."""
     revision = (latest or {}).get('manifest', {}).get('revision', m.REVISION)
-    locks = ats_locks.current_records((latest or {}).get('ats_locks', {}), revision)
+    locks = ats_locks.public_records((latest or {}).get('ats_locks', {}), revision)
     rules = [r for r in (latest or {}).get('fixed_band_rules', []) if r and 'season' in r]
     lines = ['ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; '
              'break-even cover 52.4%).',

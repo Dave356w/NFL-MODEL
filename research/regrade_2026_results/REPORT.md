@@ -2,7 +2,7 @@
 
 Snapshot: `data/latest` generated 2026-11-16T16:07:06.175073+00:00, config signature `642b5f2feb99…`. Graded games: 149 (weeks 1–10); pending games are excluded.
 
-**Basis.** Current-season walk-forward replay of the unchanged production recipe: each week's forecast uses only earlier games, the weekly decayed median map is fitted before that week, and the −2 replacement-QB adjustment is applied after mapping. This is a reconstruction (evidence basis 3 in CLAUDE.md: diagnostic), not native forward evidence. The replay line is the replay ledger's market line, which can differ from a saved lock's T-60 line. Public pages are unchanged (lock continuity, 2026-11-15).
+**Basis.** Current-season walk-forward replay of the unchanged production recipe: each week's forecast uses only earlier games, the weekly decayed median map is fitted before that week, and the −2 replacement-QB adjustment is applied after mapping. This is a reconstruction (evidence basis 3 in CLAUDE.md: diagnostic), not native forward evidence. The replay line is the replay ledger's market line, which can differ from a saved lock's T-60 line. The owner switched the public pages to this regrade on 2026-11-16; v1.24's own saved locks stay the bet at their lock line and price, so the public row differs slightly. "Public decision" columns below are the superseded 2026-11-15 lock-continuity record.
 
 ## Headline
 
@@ -10,7 +10,8 @@ Snapshot: `data/latest` generated 2026-11-16T16:07:06.175073+00:00, config signa
 |---|---|---|---|---|---|---|
 | boxscore-composite-v1.24 replay, priced | 86-57-6 | 0 | 149 | +20.97 | +14.1% ± 7.5 | 60.1% |
 | boxscore-composite-v1.24 replay, flat −110 | 86-57-6 | 0 | 149 | +21.18 | +14.2% ± 7.5 | 60.1% |
-| Public decisions, same games | 80-63-6 | 0 | 149 | +9.10 | +6.1% ± 7.6 | 55.9% |
+| Public pages from 2026-11-16 (own v1.24 locks at lock price, else replay) | 86-57-6 | 0 | 149 | +21.12 | +14.2% ± 7.5 | 60.1% |
+| Superseded lock-continuity record, same games | 80-63-6 | 0 | 149 | +9.10 | +6.1% ± 7.6 | 55.9% |
 
 Break-even cover at −110: 52.4%. ROI ± 1 SE; pushes stay in the denominator.
 Replay pricing: 30 ESPN quotes captured by T-60, 99 closing estimates at the exact handicap, 20 assumed −110 (no ESPN price at that handicap).
@@ -29,7 +30,7 @@ Replay pricing: 30 ESPN quotes captured by T-60, 99 closing estimates at the exa
 - Median map minus raw model spread: sides differ on 65 of 149; +11.45u, per game +0.077 ± 0.103 (1 SE).
 - Median map minus always favorite: sides differ on 49 of 149; +21.00u, per game +0.141 ± 0.089 (1 SE).
 
-## Agreement with the public decision
+## Agreement with the superseded lock-continuity record
 
 Same side on 139 of 149 games. Where the replay and the public decision differ, the public decision is a saved lock (different revision, line or inputs) or a replay under the same recipe with a different line.
 
