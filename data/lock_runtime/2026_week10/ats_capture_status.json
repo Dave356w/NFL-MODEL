@@ -1,18 +1,21 @@
 {
-  "forecast_utc": "2026-11-16T00:19:43.165921+00:00",
+  "forecast_utc": "2026-11-16T00:21:06.498537+00:00",
   "games": [
     {
+      "diagnostic_generated_utc": "2026-11-16T00:19:43.165921+00:00",
+      "diagnostic_snapshot_sha256": "031092df8ebebd84df86d4a848217db13419195fce1b5836b283a536b0c2d0ea",
       "game_id": "2026_10_PIT_CIN",
       "issues": [
+        "current board cannot be captured before the cutoff",
         "CIN: automatic source checks incomplete or stale",
         "CIN: final report incomplete",
         "CIN: report: complete official list/report missing",
         "forecast availability validation failed"
       ],
       "lock_at_utc": "2026-11-16T00:20:00+00:00",
-      "state": "awaiting candidate"
+      "state": "missed cutoff"
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-16T00:19:54.064352+00:00"
+  "updated_utc": "2026-11-16T00:21:17.809021+00:00"
 }
