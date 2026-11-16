@@ -222,12 +222,24 @@ statuses), grades the ledger, commits `data/` through `commit_data.py` and
 deploys `public/` to Pages. A failed model run deploys nothing, so the last
 good site stays up.
 
+`.github/workflows/scores.yml` polls every 15 minutes during the 24 hours after
+kickoff and reconciles final scores daily at 06:13 ET. It reads ESPN's completed
+regular-season scores into `data/final_scores.json`, commits that reporting-only
+overlay, and publishes saved state without rerunning the model. Failed provider
+requests retain saved finals; live scores never grade picks. Publication is
+retried on the next successful poll even when scores have not changed. Broad
+builder and collector commits exclude the independent score store and watcher
+runtime; their owners save those paths explicitly.
+Open tabs check publication state every minute and refresh when new saved picks
+or results are published, retaining their filter and expanded game cards.
+
 ## Local use
 
 ```bash
 pip install -r requirements.txt
 python build_site.py                 # full build into public/ (state in data/, caches in .nfl_cache/)
 python build_site.py --pages-only    # re-render pages from committed data/
+python score_updates.py --season 2026 # refresh reporting-only final scores
 python grade_ledger.py               # regrade data/forward_ledger.csv + ledger_report.txt
 python nfl_model.py --self-test      # synthetic regression suite
 

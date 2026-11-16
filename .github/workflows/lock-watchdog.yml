@@ -12,6 +12,9 @@ on:
       - 'forecast_history.py'
       - 'nfl_model.py'
       - 'qb_replacement.py'
+      - 'fixed_bands.py'
+      - 'schedule_gate.py'
+      - 'lock_watchdog.py'
   workflow_dispatch:
   workflow_run:
     workflows: [Independent ATS lock watcher]

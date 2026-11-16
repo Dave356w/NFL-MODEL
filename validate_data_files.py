@@ -277,6 +277,8 @@ def validate_data_dir(data_dir="data"):
         forecast_history.validate_timing(runtime)
     import espn_spreads
     espn_spreads.validate(data_dir)
+    import score_updates
+    score_updates.read(data_dir)
     paths.extend(data_dir / name for name in (ats_locks.CANDIDATES, ats_locks.LOCKS)
                  if (data_dir / name).exists())
     return paths

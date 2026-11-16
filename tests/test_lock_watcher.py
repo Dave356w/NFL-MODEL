@@ -151,6 +151,52 @@ def test_failed_publication_retries_until_deployment_succeeds(tmp_path, monkeypa
     assert json.loads(pending.read_text()) == dict(pending=False)
 
 
+def test_new_publication_intent_retains_active_run_and_publishes_newer_state(tmp_path, monkeypatch):
+    pending = tmp_path/'publish_pending.json'
+    pending.write_text(json.dumps(dict(pending=True, run_id=1)))
+    watcher.request_publication(pending)
+    watcher.request_publication(pending)
+    assert json.loads(pending.read_text()) == dict(pending=True, run_id=1, dirty=True)
+    status = dict(status='in_progress', conclusion=None)
+    monkeypatch.setattr(watcher.subprocess, 'check_output', lambda *a, **k: json.dumps(status).encode())
+    calls = []
+    monkeypatch.setattr(watcher, 'dispatch', lambda workflow: calls.append(workflow) or 2)
+    watcher.publish(pending)
+    assert not calls
+    status.update(status='completed', conclusion='success')
+    watcher.publish(pending)
+    assert calls == ['publish.yml']
+    assert json.loads(pending.read_text()) == dict(pending=True, run_id=2)
+    watcher.publish(pending)
+    assert calls == ['publish.yml']
+    assert json.loads(pending.read_text()) == dict(pending=False)
+
+
+@pytest.mark.parametrize('health,expected_interval', [
+    (dict(errors=[], games=[]), 300),
+    (dict(errors=[], games=[dict(game_id='g')]), 60),
+    (dict(errors=['provider outage']), 60),
+    (None, 60),
+])
+def test_watcher_loop_retries_failures_within_one_minute(tmp_path, monkeypatch, health, expected_interval):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path/'data/lock_runtime').mkdir(parents=True)
+    monkeypatch.setattr(watcher.sys, 'argv', ['lock_watcher.py', '--max-minutes', '1'])
+    clocks = iter([0, 0, 61])
+    monkeypatch.setattr(watcher.time, 'monotonic', lambda: next(clocks))
+    intervals = []
+    monkeypatch.setattr(watcher.time, 'sleep', intervals.append)
+    def tick(_data):
+        if health is None:
+            raise OSError('persistence outage')
+        return health
+    monkeypatch.setattr(watcher, 'tick', tick)
+    monkeypatch.setattr(watcher, 'handoff', lambda: 2)
+    monkeypatch.setattr(watcher, 'persist', lambda *_: None)
+    watcher.main()
+    assert intervals == [expected_interval]
+
+
 def test_recovery_receipt_uses_committed_blob_not_unsent_local_forecast(tmp_path, monkeypatch):
     runtime = tmp_path/'lock_runtime'
     committed = dict(candidate_sha256='saved', observed_utc=(CUTOFF-dt.timedelta(minutes=2)).isoformat())

@@ -30,6 +30,7 @@ never uploads an artifact and the last good site stays live.
 import argparse
 import base64
 import datetime as dt
+import hashlib
 import json
 import math
 import os
@@ -53,6 +54,7 @@ import forecast_history
 import season_ats
 import espn_spreads
 import historical_calibration
+import score_updates
 from research import version_report
 from research import ats_forward_shadow
 from research import production_sanity
@@ -213,6 +215,8 @@ def load_latest(latest=LATEST):
     for name in list(SNAPSHOT.values()) + ["board.csv"]:
         p = latest / name
         out[name[:-4]] = read_csv_or_empty(p)
+    out['final_scores'] = score_updates.read(latest.parent)
+    out['board'] = score_updates.overlay(out['board'], out['final_scores'])
     out["board_html"] = (latest / "board.html").exists()
     fixed_bands.prepare(out)
     season_ats.prepare_replacement_views(out,remapped=True)
@@ -459,6 +463,29 @@ var n=c.querySelector('.g-note');if(n)n.textContent='Lock time passed · provisi
 var b=c.querySelector('.badge.live');if(b)b.textContent='Awaiting saved pick';
 });}expire();setInterval(expire,1000);})();</script>"""
 
+# Check saved publication state, including in tabs left open across T-60 or a
+# final score. Never synthesize a lock or grade from the browser's clock/feed.
+REFRESH_JS = """<script>(function(){
+var meta=document.querySelector('meta[name="site-version"]');
+if(!meta||! /^[a-f0-9]{64}$/.test(meta.content))return;
+var key='nfl-view:'+location.pathname,busy=false;
+try{var saved=JSON.parse(sessionStorage.getItem(key)||'null');sessionStorage.removeItem(key);
+if(saved){(saved.open||[]).forEach(function(id){document.querySelectorAll('details[data-game-id]').forEach(function(c){if(c.dataset.gameId===id)c.open=true;});});
+var filter=document.querySelector('.seg button[data-show="'+saved.filter+'"]');if(filter)filter.click();
+window.addEventListener('load',function(){window.scrollTo(0,saved.scroll||0);},{once:true});}}catch(e){}
+async function check(){if(document.hidden||busy)return;busy=true;
+var controller=new AbortController(),timeout=setTimeout(function(){controller.abort();},10000);
+try{var response=await fetch('site-state.json',{cache:'no-store',signal:controller.signal});
+if(!response.ok)return;var state=await response.json();
+if(!state||! /^[a-f0-9]{64}$/.test(state.version)||state.version===meta.content)return;
+var selected=document.querySelector('.seg button[aria-pressed="true"]');
+try{sessionStorage.setItem(key,JSON.stringify({open:Array.from(document.querySelectorAll('details[data-game-id][open]')).map(function(c){return c.dataset.gameId;}),
+filter:selected?selected.dataset.show:'all',scroll:window.scrollY}));}catch(e){}
+var url=new URL(location.href);url.searchParams.set('_v',state.version);location.replace(url.href);
+}catch(e){}finally{clearTimeout(timeout);busy=false;}}
+setInterval(check,60000);document.addEventListener('visibilitychange',check);
+})();</script>"""
+
 THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
               "<circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
               "<svg class='moon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
@@ -486,6 +513,7 @@ def html_document(body, title, current, built, scripts="", extra_css=""):
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+            "<meta name='site-version' content='__NFL_SITE_VERSION__'>"
             f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, locked handicaps and season results'>"
             "<meta name='color-scheme' content='light dark'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}{extra_css}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
@@ -496,7 +524,7 @@ def html_document(body, title, current, built, scripts="", extra_css=""):
             f"<main id='main-content'>{body}</main>"
             f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span></span>"
             "<span>Flat 1-unit stakes. ESPN prices and assumed −110 prices are labelled; returns are estimates.</span>"
-            f"</footer></div>{scripts}</body></html>")
+            f"</footer></div>{scripts}{REFRESH_JS}</body></html>")
 
 
 def head(title, lead, eyebrow="", aside=""):
@@ -1062,7 +1090,7 @@ def render_index(latest, ledger, built, now=None):
         tone = ' picked-card' if state['selected_side'] else ''
         cutoff_attr = (f" data-provisional-cutoff='{ats_locks.deadline(m.kickoff_utc(row)).isoformat()}'"
                        if state['status'] == 'provisional' and m.kickoff_utc(row) is not None else '')
-        cards.append(f"<details class='card{tone}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
+        cards.append(f"<details class='card{tone}' data-game-id='{esc(row['game_id'])}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if has_public_saved_picks(latest) else ''
@@ -1484,6 +1512,7 @@ def render_all(out_dir, data=DATA, now=None):
         latest['ats_locks'] = ats_locks.display_records(data)
     ledger = load_ledger(data)
     if latest is not None:
+        ledger = score_updates.overlay(ledger, latest['final_scores'])
         latest['pooled_ats'] = season_ats.build(latest, ledger)
         season_ats.align_calibration_2026(latest,latest['pooled_ats'])
     out = Path(out_dir)
@@ -1555,8 +1584,13 @@ def render_all(out_dir, data=DATA, now=None):
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built),
              "historical-calibration.html": render_historical_calibration(latest, built, calibration_pack)}
+    # Retrying an unchanged publication must not reload a reader's tab merely
+    # because its footer timestamp advanced.
+    content = ''.join(pages.values()).replace(f"<span class='stamp'>{esc(built)}</span>", '')
+    version = hashlib.sha256(content.encode('utf-8')).hexdigest()
     for name, html in pages.items():
-        (out / name).write_text(html, encoding="utf-8")
+        (out / name).write_text(html.replace('__NFL_SITE_VERSION__', version), encoding="utf-8")
+    (out / 'site-state.json').write_text(json.dumps({'version': version}), encoding='utf-8')
     # Repository-only analyst report. Do not publish a second research surface.
     report_path = Path(data) / 'ledger_report.txt'
     report_path.parent.mkdir(parents=True, exist_ok=True)

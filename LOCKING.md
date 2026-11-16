@@ -63,6 +63,12 @@ full-build artifact. Lock commits and publication intents are saved together.
 Failed publication is retried until the deployment run succeeds. Provisional
 cards expire in an already-open browser at T−60; only backend saved decisions
 can appear as locked. A publisher failure cannot change a saved pick.
+New publication requests retain an active deployment's run ID and queue one
+follow-up after it finishes, ensuring that saved state created after its
+checkout is delivered. Provider and persistence failures retry after one
+minute; only a healthy watcher outside every game's collection window waits
+five minutes. Updates to the weekly map, kickoff parser and coverage monitor
+also restart a running controller so it cannot keep using imported old code.
 
 ## Timing diagnostics
 

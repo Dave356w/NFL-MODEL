@@ -45,6 +45,10 @@ import time
 import requests
 
 API_URL = "https://api.github.com/graphql"
+# Independent controllers own their evidence and final-score overlay. A mixed
+# reset after an API commit can leave their newer remote bytes absent locally;
+# broad builder/collector saves must never send those as changes or deletions.
+DEFAULT_PATHS = ["data", ":(exclude)data/lock_runtime", ":(exclude)data/final_scores.json"]
 
 
 class BranchCollision(RuntimeError):
@@ -146,9 +150,39 @@ def remote_head(branch):
 
 def touches_ours(old_oid, new_oid, ours):
     """Did the commit(s) between two tips write any file we are sending?"""
-    git("fetch", "--quiet", "origin", new_oid, check=False)
-    names = git("diff", "--name-only", old_oid, new_oid, check=False).split()
+    try:
+        git("fetch", "--quiet", "origin", new_oid)
+        names = git("diff", "--name-only", "-z", old_oid, new_oid).split("\0")
+    except RuntimeError as exc:
+        raise BranchCollision("Cannot verify intervening changes; refusing to overwrite") from exc
     return sorted(set(names) & set(ours))
+
+
+def without_saved_changes(commit, changes, touched):
+    """Confirm identical remote bytes after a lost reply; never merge differences."""
+    try:
+        remote = {}
+        for entry in filter(None, git('ls-tree', '-z', commit, '--', *touched).split('\0')):
+            metadata, path = entry.split('\t', 1)
+            _mode, kind, oid = metadata.split()
+            remote[path] = (kind, oid)
+        for addition in changes['additions']:
+            if addition['path'] not in touched:
+                continue
+            content = base64.b64decode(addition['contents'], validate=True)
+            hashed = subprocess.run(['git', 'hash-object', '--stdin'], input=content,
+                                    capture_output=True, check=True).stdout.decode().strip()
+            if remote.get(addition['path']) != ('blob', hashed):
+                raise BranchCollision(f"Remote bytes differ for {addition['path']}; refusing to overwrite")
+        for deletion in changes['deletions']:
+            if deletion['path'] in touched and deletion['path'] in remote:
+                raise BranchCollision(f"Remote path still exists: {deletion['path']}; refusing to overwrite")
+    except (RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
+        if isinstance(exc, BranchCollision):
+            raise
+        raise BranchCollision('Cannot verify saved remote bytes; refusing to overwrite') from exc
+    return {name: [row for row in rows if row['path'] not in touched]
+            for name, rows in changes.items()}
 
 
 def local_head():
@@ -165,8 +199,8 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
     migration once undid a site build's ledger rows. If the tip moved, the
     retry below checks everything between `base` and the tip for our files.
     """
+    head = base or remote_head(branch)
     for attempt in range(1, attempts + 1):
-        head = base if (attempt == 1 and base) else remote_head(branch)
         variables = {"input": {
             "branch": {
                 "repositoryNameWithOwner": repo,
@@ -178,33 +212,36 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
         }}
         try:
             data = graphql(token, MUTATION, variables)
-        except RuntimeError as exc:
+        except (RuntimeError, requests.RequestException) as exc:
             moved = remote_head(branch)
             if moved == head:
                 raise
-            if attempt == attempts:
-                raise BranchCollision(f"{branch} kept moving; refusing git fallback") from exc
             ours = [a["path"] for a in changes["additions"]]
             ours += [d["path"] for d in changes["deletions"]]
             clash = touches_ours(head, moved, ours)
             if clash:
-                raise BranchCollision(
-                    f"{branch} moved from {head[:7]} to {moved[:7]} and the new "
-                    f"commit wrote {', '.join(clash)} -- refusing to overwrite"
-                ) from exc
+                changes = without_saved_changes(moved, changes, clash)
+                if not changes['additions'] and not changes['deletions']:
+                    log(f'  confirmed requested bytes already saved at {moved[:7]}')
+                    return dict(oid=moved, url=f'https://github.com/{repo}/commit/{moved}')
+            if attempt == attempts:
+                raise BranchCollision(f"{branch} kept moving; refusing git fallback") from exc
             log(f"  {branch} moved to {moved[:7]} beneath us; retrying")
+            # Pin the next attempt to the head whose changes were just checked.
+            # A fresh unverified head could overwrite a write made during sleep.
+            head = moved
             time.sleep(2 ** attempt)
             continue
         return data["createCommitOnBranch"]["commit"]
     raise RuntimeError("unreachable")
 
 
-def git_commit_and_push(branch, message):
+def git_commit_and_push(branch, message, paths=None):
     """The pre-API sequence, kept verbatim as the fallback path."""
     git("config", "user.name", "github-actions[bot]")
     git("config", "user.email",
         "github-actions[bot]@users.noreply.github.com")
-    git("add", "data/")
+    git("add", "--", *(DEFAULT_PATHS if paths is None else paths))
     nothing_staged = subprocess.run(
         ["git", "diff", "--cached", "--quiet"], check=False
     ).returncode == 0
@@ -233,7 +270,7 @@ def main(argv=None):
     parser.add_argument("--no-fallback", action="store_true",
                         help="fail instead of falling back to git push")
     args = parser.parse_args(argv)
-    paths = args.path or ["data"]
+    paths = args.path or DEFAULT_PATHS
 
     adds, dels = changed_paths(paths)
     if not adds and not dels:
@@ -261,7 +298,7 @@ def main(argv=None):
         # Losing a pregame slate is irreversible; an unverified commit is not.
         log(f"::warning::signed commit failed ({exc}); "
             "falling back to an unverified git push")
-        git_commit_and_push(args.branch, args.message)
+        git_commit_and_push(args.branch, args.message, paths=paths)
         return 0
     log(f"commit: signed {commit['oid'][:7]} {commit['url']}")
     # API writes do not advance this checkout. Advance the index/base while

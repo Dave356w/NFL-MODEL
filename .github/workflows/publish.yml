@@ -12,6 +12,7 @@ permissions:
 concurrency:
   group: nfl-page-publication
   cancel-in-progress: false
+  queue: max
 
 jobs:
   publish:

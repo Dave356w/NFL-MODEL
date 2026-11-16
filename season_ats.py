@@ -21,6 +21,7 @@ import fixed_bands
 import nfl_model as m
 import espn_spreads
 import qb_replacement
+import score_updates
 from schedule_gate import kickoff as scheduled_kickoff
 
 
@@ -261,6 +262,21 @@ def build(latest, ledger):
         rows.setdefault(game, dict(game_id=game, season=2026, week=event['week'],
             home=event['home'], away=event['away'], spread_line=np.nan,
             fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock'))
+        rows[game].setdefault('kickoff_utc', event['kickoff_utc'])
+        outcomes[game] = dict(home_score=event['home_score'], away_score=event['away_score'],
+                              result=event['home_score'] - event['away_score'])
+    # The lightweight final-score writer is independent of odds collection and
+    # model reconstruction, so a newer final/correction wins over those caches.
+    for event in latest.get('final_scores', []):
+        score_updates.validate(event)
+        if event['season'] != 2026:
+            continue
+        game = event['game_id']
+        rows.setdefault(game, dict(game_id=game, season=2026, week=event['week'],
+            home=event['home'], away=event['away'], spread_line=np.nan,
+            fixed_band_spread=np.nan, ats_basis='Awaiting ATS lock'))
+        if rows[game]['home'] != event['home'] or rows[game]['away'] != event['away']:
+            raise ValueError('final score teams do not match saved ATS game')
         rows[game].setdefault('kickoff_utc', event['kickoff_utc'])
         outcomes[game] = dict(home_score=event['home_score'], away_score=event['away_score'],
                               result=event['home_score'] - event['away_score'])

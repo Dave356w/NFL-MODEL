@@ -97,3 +97,27 @@ def test_hourly_delivery_arms_london_watch_even_with_an_early_ledger_snapshot():
     run, _, reason = sg.decision('schedule', '41 * * * *', poll, games=games,
                                  recorded={'2026_09_CIN_ATL'})
     assert run and 'ATS lock watch' in reason
+
+
+def test_score_refresh_covers_live_and_recent_finals_without_full_model_builds():
+    for minutes, expected in [(1, False), (0, True), (-180, True), (-1440, True), (-1441, False)]:
+        for result in ('', '7'):
+            games = [game('g', ko_et(NOW, minutes), result=result)]
+            assert bool(sg.score_due_games(games, NOW)) is expected
+    assert not sg.score_due_games([dict(game('g', ko_et(NOW, -180)), game_type='WC')], NOW)
+
+
+def test_score_gate_has_manual_daily_fail_open_and_idle_paths(monkeypatch, tmp_path):
+    assert sg.score_decision('workflow_dispatch', '', NOW)[0]
+    assert sg.score_decision('schedule', sg.DAILY_CRON, NOW, games=[])[0]
+    assert not sg.score_decision('schedule', '*/15 * * * *', NOW, games=[])[0]
+    def boom():
+        raise OSError('source unavailable')
+    monkeypatch.setattr(sg, 'fetch_games', boom)
+    run, season, reason = sg.score_decision('schedule', '*/15 * * * *', NOW)
+    assert run and season == 2026 and 'fail-open' in reason
+    output = tmp_path / 'output'
+    monkeypatch.setenv('GITHUB_OUTPUT', str(output))
+    monkeypatch.setenv('EVENT_NAME', 'workflow_dispatch')
+    sg.main(['--scores'])
+    assert 'should_run=true' in output.read_text() and 'season=' in output.read_text()

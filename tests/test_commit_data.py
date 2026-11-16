@@ -10,6 +10,7 @@ the data rather than losing a forward snapshot.
 
 import base64
 import os
+import subprocess
 import sys
 
 import pytest
@@ -148,12 +149,12 @@ def test_api_failure_falls_back_to_the_push_that_cannot_lose_a_snapshot(
     pushed = []
     monkeypatch.setattr(
         commit_data, "git_commit_and_push",
-        lambda branch, message: pushed.append((branch, message)),
+        lambda branch, message, paths=None: pushed.append((branch, message, paths)),
     )
     monkeypatch.setenv("GITHUB_TOKEN", "tok")
     monkeypatch.setenv("GITHUB_REPOSITORY", "o/r")
     assert commit_data.main(["--branch", "main", "--message", "ledger"]) == 0
-    assert pushed == [("main", "ledger")]
+    assert pushed == [("main", "ledger", commit_data.DEFAULT_PATHS)]
     assert "::warning::" in capsys.readouterr().out
 
 
@@ -187,6 +188,182 @@ def test_failed_rebase_is_aborted_before_return(monkeypatch):
         commit_data.git_commit_and_push('main', 'm')
     assert calls[-1] == ('rebase', '--abort')
     assert not any(c[0] == 'push' for c in calls)
+
+
+@pytest.mark.parametrize('failure', ['fetch', 'diff'])
+def test_failed_history_comparison_refuses_overwrite(failure, monkeypatch):
+    def git(*args, **kwargs):
+        if args[0] == failure:
+            raise RuntimeError('history unavailable')
+        return ''
+    monkeypatch.setattr(commit_data, 'git', git)
+    with pytest.raises(commit_data.BranchCollision, match='Cannot verify'):
+        commit_data.touches_ours('old', 'new', ['data/ledger.csv'])
+
+
+def test_history_comparison_keeps_paths_with_spaces(monkeypatch):
+    monkeypatch.setattr(commit_data, 'git', lambda *args, **kwargs:
+                        '' if args[0] == 'fetch' else 'data/a file.csv\0data/other.csv\0')
+    assert commit_data.touches_ours('old', 'new', ['data/a file.csv']) == ['data/a file.csv']
+
+
+@pytest.fixture
+def response_loss_repo(tmp_path, monkeypatch):
+    """Keep a server commit object while the client's checkout stays at its base."""
+    monkeypatch.chdir(tmp_path)
+    def git(*args):
+        return subprocess.check_output(['git', *args], text=True).strip()
+    git('init', '-q')
+    git('config', 'user.name', 'Fixture')
+    git('config', 'user.email', 'fixture@example.test')
+    (tmp_path/'data').mkdir()
+    (tmp_path/'data'/'candidate').write_bytes(b'old\n')
+    (tmp_path/'data'/'obsolete').write_bytes(b'old\n')
+    git('add', 'data')
+    git('commit', '-qm', 'client checkout')
+    base = git('rev-parse', 'HEAD')
+    (tmp_path/'data'/'candidate').write_bytes(b'new\x00binary\xff\n')
+    (tmp_path/'data'/'obsolete').unlink()
+    changes = commit_data.file_changes(['data/candidate'], ['data/obsolete'])
+    state = dict(head=base)
+    def save():
+        git('add', 'data')
+        git('commit', '-qm', 'accepted server save')
+        state['head'] = git('rev-parse', 'HEAD')
+        git('reset', '--mixed', base)
+        return state['head']
+    monkeypatch.setattr(commit_data, 'remote_head', lambda branch: state['head'])
+    # Local commit objects provide the same immutable tree/diff reads as a
+    # successful fetch, with no network dependency in the fixture.
+    monkeypatch.setattr(commit_data, 'touches_ours', lambda old, new, ours:
+                        sorted(set(git('diff', '--name-only', old, new).splitlines()) & set(ours)))
+    monkeypatch.setattr(commit_data.time, 'sleep', lambda seconds: None)
+    return base, changes, save, git
+
+
+@pytest.mark.parametrize('when', ['lost_network_reply', 'next_persist'])
+def test_response_loss_confirms_saved_bytes_without_another_commit(response_loss_repo, monkeypatch, when):
+    base, changes, save, git = response_loss_repo
+    if when == 'next_persist':
+        saved = save()
+    calls = []
+    def graphql(*args, **kwargs):
+        nonlocal saved
+        calls.append(args[2]['input']['expectedHeadOid'])
+        if when == 'lost_network_reply':
+            saved = save()
+            raise commit_data.requests.ConnectionError('server reply lost after success')
+        raise RuntimeError('expected head oid mismatch')
+    monkeypatch.setattr(commit_data, 'graphql', graphql)
+    result = commit_data.api_commit('token', 'o/r', 'main', 'capture', changes, base=base)
+    assert result['oid'] == saved
+    assert calls == [base]
+    assert git('rev-parse', 'HEAD') == base  # caller can now adopt the confirmed save
+
+
+def test_response_loss_never_accepts_different_remote_bytes(response_loss_repo, monkeypatch):
+    base, changes, save, _git = response_loss_repo
+    def graphql(*args, **kwargs):
+        with open('data/candidate', 'wb') as target:
+            target.write(b'other writer\n')
+        save()
+        raise commit_data.requests.ConnectionError('reply lost')
+    monkeypatch.setattr(commit_data, 'graphql', graphql)
+    with pytest.raises(commit_data.BranchCollision, match='Remote bytes differ'):
+        commit_data.api_commit('token', 'o/r', 'main', 'capture', changes, base=base)
+
+
+def test_already_saved_paths_are_removed_before_retrying_remaining_changes(response_loss_repo, monkeypatch):
+    base, changes, save, _git = response_loss_repo
+    changes['additions'].append(dict(path='data/heartbeat', contents=base64.b64encode(b'next\n').decode()))
+    seen = []
+    def graphql(token, query, variables):
+        seen.append(variables['input']['fileChanges'])
+        if len(seen) == 1:
+            save()  # candidate/deletion saved, heartbeat still pending locally
+            raise RuntimeError('expected head mismatch')
+        return {'createCommitOnBranch': {'commit': {'oid': 'accepted', 'url': 'u'}}}
+    monkeypatch.setattr(commit_data, 'graphql', graphql)
+    result = commit_data.api_commit('t', 'o/r', 'main', 'm', changes, base=base)
+    assert result['oid'] == 'accepted'
+    assert seen[1] == {'additions': [changes['additions'][-1]], 'deletions': []}
+
+
+def test_network_failure_without_remote_save_remains_a_failure(monkeypatch):
+    monkeypatch.setattr(commit_data, 'remote_head', lambda branch: 'same')
+    monkeypatch.setattr(commit_data, 'touches_ours', _explode)
+    def disconnected(*args, **kwargs):
+        raise commit_data.requests.ConnectionError('save not confirmed')
+    monkeypatch.setattr(commit_data, 'graphql', disconnected)
+    with pytest.raises(commit_data.requests.ConnectionError, match='save not confirmed'):
+        commit_data.api_commit('t', 'o/r', 'main', 'm', {'additions': [], 'deletions': []}, base='same')
+
+
+def test_remote_byte_confirmation_fails_closed_when_tree_read_fails(monkeypatch):
+    def unavailable(*args, **kwargs):
+        raise RuntimeError('object read failed')
+    monkeypatch.setattr(commit_data, 'git', unavailable)
+    with pytest.raises(commit_data.BranchCollision, match='Cannot verify saved remote bytes'):
+        commit_data.without_saved_changes('head', {'additions': [], 'deletions': []}, ['data/candidate'])
+
+
+def test_retry_remains_pinned_to_the_head_that_was_compared(monkeypatch):
+    # A third remote head may have touched our files during the retry delay.
+    monkeypatch.setattr(commit_data, 'remote_head', _Moves('new', 'unchecked'))
+    monkeypatch.setattr(commit_data, 'touches_ours', lambda *args: [])
+    monkeypatch.setattr(commit_data.time, 'sleep', lambda seconds: None)
+    seen = []
+    def graphql(token, query, variables):
+        seen.append(variables['input']['expectedHeadOid'])
+        if len(seen) == 1:
+            raise RuntimeError('head mismatch')
+        return {'createCommitOnBranch': {'commit': {'oid': 'saved', 'url': 'u'}}}
+    monkeypatch.setattr(commit_data, 'graphql', graphql)
+    commit_data.api_commit('t', 'o/r', 'main', 'm', {'additions': [], 'deletions': []}, base='old')
+    assert seen == ['old', 'new']
+
+
+def test_default_save_cannot_erase_runtime_adopted_by_mixed_reset(tmp_path, monkeypatch):
+    """A builder can save twice while the independent watcher advances main."""
+    monkeypatch.chdir(tmp_path)
+    def git(*args):
+        return subprocess.check_output(['git', *args], text=True).strip()
+    git('init', '-q')
+    git('config', 'user.name', 'Fixture')
+    git('config', 'user.email', 'fixture@example.test')
+    runtime = tmp_path/'data'/'lock_runtime'
+    runtime.mkdir(parents=True)
+    (runtime/'locks.jsonl').write_text('first\n')
+    (tmp_path/'data'/'board.csv').write_text('old\n')
+    git('add', 'data')
+    git('commit', '-qm', 'builder checkout')
+    base = git('rev-parse', 'HEAD')
+    (runtime/'locks.jsonl').write_text('first\nsecond\n')
+    (runtime/'new-evidence.json').write_text('{}\n')
+    (tmp_path/'data'/'final_scores.json').write_text('{"new-final":true}\n')
+    git('add', 'data')
+    git('commit', '-qm', 'watcher saves while builder works')
+    server = git('rev-parse', 'HEAD')
+    git('reset', '--hard', base)
+    git('reset', '--mixed', server)
+    (tmp_path/'data'/'board.csv').write_text('new\n')
+    # Runtime bytes are stale/missing locally after the API reset. The broad
+    # save sends only builder outputs; explicit watcher ownership still works.
+    assert commit_data.changed_paths(commit_data.DEFAULT_PATHS) == (['data/board.csv'], [])
+    assert commit_data.changed_paths(['data/lock_runtime']) == (
+        ['data/lock_runtime/locks.jsonl'], ['data/lock_runtime/new-evidence.json'])
+    assert commit_data.changed_paths(['data/final_scores.json']) == (
+        [], ['data/final_scores.json'])
+
+
+def test_git_fallback_honors_explicit_path_scope(monkeypatch):
+    calls = []
+    monkeypatch.setattr(commit_data, 'git', lambda *args, **kwargs: calls.append(args) or '')
+    monkeypatch.setattr(commit_data.subprocess, 'run', lambda *args, **kwargs:
+                        type('R', (), {'returncode': 0})())
+    commit_data.git_commit_and_push('main', 'm', paths=['data/final_scores.json'])
+    assert ('add', '--', 'data/final_scores.json') in calls
+    assert not any(c[:2] == ('add', 'data/') for c in calls)
 
 
 def test_no_fallback_flag_lets_the_failure_surface(tmp_path, monkeypatch):
