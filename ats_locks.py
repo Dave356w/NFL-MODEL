@@ -40,7 +40,13 @@ REPLACEMENT_POLICY = 'median-mov-weekly-decay-ats-t60-durable-replacement-minus2
 QB_REPLACEMENT_POLICY = 'replacement-team-margin-minus2-2026-11-13-v1'
 POLICIES[REPLACEMENT_POLICY] = True
 POLICY_METHODS[REPLACEMENT_POLICY] = 'weighted_median_signed_mov_weekly_decay'
-DURABLE_POLICIES = (WATCHER_POLICY, REPLACEMENT_POLICY)
+# v6 (owner decision 2026-11-16, v1.25): v4/v5 durability and freshness without the
+# replacement-QB margin adjustment; the saved mapped margin is the median map itself.
+NO_REPLACEMENT_POLICY = 'median-mov-weekly-decay-ats-t60-durable-no-qb-adjustment-2026-11-16-v6'
+POLICIES[NO_REPLACEMENT_POLICY] = True
+POLICY_METHODS[NO_REPLACEMENT_POLICY] = 'weighted_median_signed_mov_weekly_decay'
+NO_REPLACEMENT_REVISION = 'boxscore-composite-v1.25'
+DURABLE_POLICIES = (WATCHER_POLICY, REPLACEMENT_POLICY, NO_REPLACEMENT_POLICY)
 REPLACEMENT_FIELDS = ('home_qb_replacement','away_qb_replacement',
     'qb_replacement_base_margin','qb_replacement_margin_adjustment','qb_replacement_policy')
 REPLACEMENT_TEAM_FIELDS = ('qb_replacement','qb_replacement_status','qb_projected_id',
@@ -50,7 +56,11 @@ REPLACEMENT_TEAM_FIELDS = ('qb_replacement','qb_replacement_status','qb_projecte
 
 def policy_for_revision(revision):
     # The active controller policy; old decisions retain their saved version.
-    return REPLACEMENT_POLICY if revision=='boxscore-composite-v1.24' else WATCHER_POLICY
+    if revision=='boxscore-composite-v1.24':
+        return REPLACEMENT_POLICY
+    if revision==NO_REPLACEMENT_REVISION:
+        return NO_REPLACEMENT_POLICY
+    return WATCHER_POLICY
 
 RECEIPTS = 'candidate_receipts.jsonl'
 MAX_FORECAST_AGE_MINUTES = 10
@@ -242,6 +252,13 @@ def validate_store(data='data'):
             mapped = validate_replacement(row, mapped)
         elif row['policy_version']==REPLACEMENT_POLICY:
             raise ValueError('Replacement lock policy requires v1.24')
+        if row['revision']==NO_REPLACEMENT_REVISION:
+            if row['policy_version']!=NO_REPLACEMENT_POLICY or row.get('availability_policy') is None:
+                raise ValueError('v1.25 requires lock policy v6 and availability evidence')
+            if any(row.get(k) is not None for k in ('qb_replacement_base_margin','qb_replacement_margin_adjustment')):
+                raise ValueError('v1.25 locks carry no replacement-QB margin adjustment')
+        elif row['policy_version']==NO_REPLACEMENT_POLICY:
+            raise ValueError('Lock policy v6 requires v1.25')
         side = select(mapped, line, POLICIES[row['policy_version']])
         if abs(mapped - row['fixed_band_spread']) > EPS or side != row['selected_side']:
             raise ValueError('ATS candidate does not match the saved map and line')
@@ -259,7 +276,7 @@ def validate_store(data='data'):
                     or not dt.timedelta(0) <= generated-utc(q['captured_utc']) <= dt.timedelta(minutes=5)):
                 raise ValueError('Watcher candidate needs fresh forecast and captured price')
             audit = row.get('scoring_audit')
-            if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') and not audit:
+            if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') and not audit:
                 raise ValueError('Watcher candidate is missing its prepared scoring audit')
             if audit is not None:
                 import nfl_model as m
@@ -329,13 +346,13 @@ def validate_availability(row):
                         or utc(fact['published_utc'])>utc(fact['observed_utc'])
                         or any(utc(fact[c])>utc(evidence['asof_utc']) for c in ('published_utc','observed_utc','effective_utc'))):
                     raise ValueError('observation is not a confirmed pre-forecast fact')
-            if row['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
+            if row['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                 import availability_collect as ac
                 collection=evidence.get('collection',{})
-                expected_policy=ac.REPORTS_POLICY if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') else ac.POLICY
+                expected_policy=ac.REPORTS_POLICY if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') else ac.POLICY
                 if collection.get('policy')!=expected_policy:
                     raise ValueError('collection policy does not match the saved revision')
-                if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') and any(
+                if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') and any(
                         f.get('source_kind')=='official_team_news' for f in evidence['observations']):
                     raise ValueError('RSS/news is retired for v1.22')
                 if (collection.get('team')!=row[side] or collection.get('game_id')!=row['game_id']
@@ -377,9 +394,10 @@ def record(data='data', now=None, policy_version=None, finalize=True):
     scheduled = {}
     if (latest / 'manifest.json').exists() and (latest / 'board.csv').exists():
         manifest = json.loads((latest / 'manifest.json').read_text())
-        policy_version = requested_policy or (policy_for_revision(manifest['revision']) if manifest['revision']=='boxscore-composite-v1.24' else POLICY_VERSION)
-        if manifest['revision']=='boxscore-composite-v1.24' and policy_version!=REPLACEMENT_POLICY:
-            raise ValueError('v1.24 candidates must use the replacement lock policy')
+        current = manifest['revision'] in ('boxscore-composite-v1.24', NO_REPLACEMENT_REVISION)
+        policy_version = requested_policy or (policy_for_revision(manifest['revision']) if current else POLICY_VERSION)
+        if current and policy_version!=policy_for_revision(manifest['revision']):
+            raise ValueError(f"{manifest['revision']} candidates must use lock policy {policy_for_revision(manifest['revision'])}")
         generated = utc(manifest['generated_utc'])
         rule_path = latest / 'fixed_band_rules.json'
         # The build can derive rules before render_all has exported them, and an export written
@@ -402,7 +420,7 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 candidate_id = (*identity, generated.isoformat())
                 if identity in locked or candidate_id in seen or not ADOPTED_UTC <= generated <= now <= cutoff:
                     continue
-                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') and raw.get('availability_policy')!=m.AVAILABILITY_POLICY:
                     continue  # no v1.20 lock from a legacy board that lost its evidence columns
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
@@ -410,11 +428,11 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
                     availability=m.availability_snapshot(raw,ko,generated)
                     if availability is None: continue
-                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
+                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                     import availability_collect as ac
                     if not availability or any(not ac.collection_ready(e.get('collection',{}),cutoff,require_inactives=True)
                                                for e in availability.values()):continue
-                    expected=ac.REPORTS_POLICY if manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24') else ac.POLICY
+                    expected=ac.REPORTS_POLICY if manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') else ac.POLICY
                     if any(e.get('collection',{}).get('policy')!=expected for e in availability.values()):continue
                 try:
                     wp, line = float(raw['model_wp']), float(raw['spread_line'])
@@ -476,7 +494,7 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                         inputs = {c: float(raw[c]) if raw.get(c) and math.isfinite(float(raw[c])) else None for c in columns}
                         row['scoring_audit'] = dict(fit=fit, inputs=inputs,
                             prepared_bundle_sha256=manifest['prepared_bundle_sha256'])
-                    elif manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
+                    elif manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                         continue
                 row['candidate_sha256'] = digest(row)
                 added.append(row)
@@ -555,7 +573,7 @@ def write_capture_status(data='data', now=None):
                         raw=diagnostic['board']
                 if raw.get('ready') not in (True,'True'):issues.append('model history not ready')
                 if not generated <= now <= cutoff:issues.append('current board cannot be captured before the cutoff')
-                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
+                if manifest['revision'] in ('boxscore-composite-v1.20','boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                     if raw.get('availability_policy') != m.AVAILABILITY_POLICY:
                         issues.append('forecast availability evidence missing')
                     else:
@@ -564,7 +582,7 @@ def write_capture_status(data='data', now=None):
                                 e = json.loads(raw[side+'_availability_evidence'])
                                 issues.extend(raw[side]+': '+str(b) for b in e.get('blockers',[]))
                                 if not e.get('report_complete'):issues.append(raw[side]+': final report incomplete')
-                                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
+                                if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                                     issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,True))
                             except (KeyError,ValueError,TypeError):
                                 issues.append(raw[side]+': forecast availability evidence invalid')
@@ -647,7 +665,7 @@ def public_records(records, revision):
 
 
 # Revisions whose public 2026 results are their own regrade (owner decision 2026-11-16).
-REGRADE_REVISIONS = frozenset({'boxscore-composite-v1.24'})
+REGRADE_REVISIONS = frozenset({'boxscore-composite-v1.24', NO_REPLACEMENT_REVISION})
 
 
 def report(data='data'):

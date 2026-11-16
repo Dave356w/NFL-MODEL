@@ -28,6 +28,12 @@ from schedule_gate import kickoff as scheduled_kickoff
 CUTS = [3., 7., 10.]
 EPS = 1e-10
 REPLACEMENT_REVISION = 'boxscore-composite-v1.24'
+# v1.25 (owner decision 2026-11-16): v1.24 without the replacement-QB margin adjustment.
+NO_REPLACEMENT_REVISION = 'boxscore-composite-v1.25'
+REGRADE_REVISIONS = (REPLACEMENT_REVISION, NO_REPLACEMENT_REVISION)
+# Replayed through each revision's own cutoff (T-60 deadline strictly before it).
+REPLAY_CUTOFF = {REPLACEMENT_REVISION: pd.Timestamp('2026-11-14T00:00:00Z'),
+                 NO_REPLACEMENT_REVISION: pd.Timestamp('2026-11-18T00:00:00Z')}
 REPLACEMENT_POLICY = 'replacement-team-margin-minus2-2026-11-13-v1'
 
 
@@ -185,7 +191,8 @@ def replacement_predictions(history, mapped, saved, revision):
 CONTINUITY_POLICY = 'lock-continuity-2026-11-15-v1'
 
 
-def replacement_export_basis(history, mapped, saved, records, native_games=(), policy=None):
+def replacement_export_basis(history, mapped, saved, records, native_games=(), policy=None,
+                             revision=REPLACEMENT_REVISION):
     """Use every revision's immutable decisions ahead of replay, with its own map/line.
 
     Calibration keeps replay WP and team annotations even when a saved lock
@@ -201,12 +208,12 @@ def replacement_export_basis(history, mapped, saved, records, native_games=(), p
     # Audit each export under the display policy it declares: 2026-11-15 lock
     # continuity (any revision's saved lock) or the 2026-11-16 current-revision regrade.
     select = ats_locks.current_records if policy == CONTINUITY_POLICY else ats_locks.public_records
-    records = select(records, REPLACEMENT_REVISION)
-    cutoff = pd.Timestamp('2026-11-14T00:00:00Z')
+    records = select(records, revision)
+    cutoff = REPLAY_CUTOFF[revision]
     for i, row in enumerate(history.to_dict('records')):
         if int(row['season']) != 2026:
             continue
-        lock = records.get((REPLACEMENT_REVISION, row['game_id']))
+        lock = records.get((revision, row['game_id']))
         if lock is not None:
             if any(str(lock[name]) != str(row[name]) for name in ('game_id', 'home', 'away')) or any(
                     int(lock[name]) != int(row[name]) for name in ('season', 'week')):
@@ -218,6 +225,8 @@ def replacement_export_basis(history, mapped, saved, records, native_games=(), p
             if evidence is None:
                 raise ValueError('v1.24 native ATS export is missing')
             if lock['revision'] != REPLACEMENT_REVISION:
+                # v1.25 locks and inherited earlier locks carry no overlay: the export
+                # must equal the lock's own frozen map exactly.
                 # Lock continuity: a later revision's QB overlay cannot alter
                 # an earlier saved decision. Recompute its own frozen map.
                 if not (np.isclose(float(lock['fixed_band_spread']), base[i], atol=EPS, rtol=0)
@@ -266,7 +275,7 @@ def replacement_export_basis(history, mapped, saved, records, native_games=(), p
     predicted = base.copy()
     active = ~inherited
     predicted[active] = replacement_predictions(history.iloc[active].reset_index(drop=True), base[active],
-        evidence.iloc[active].reset_index(drop=True) if evidence is not None else None, REPLACEMENT_REVISION)
+        evidence.iloc[active].reset_index(drop=True) if evidence is not None else None, revision)
     predicted[unavailable] = np.nan
     return predicted, lines
 
@@ -404,7 +413,7 @@ def inspect(data='data'):
     ats_history = reporting_outcomes(data, d, final_scores)
     raw_path = data/'forward_predictions.jsonl'
     snapshots = [json.loads(line) for line in raw_path.read_text().splitlines() if line.strip()] if raw_path.exists() else []
-    if revision == REPLACEMENT_REVISION:
+    if revision in REGRADE_REVISIONS:
         try:
             native_games = {r['game_id'] for r in snapshots if r['revision'] == revision}
             declared = (saved.loc[saved.season.eq(2026), 'lock_policy_version'].dropna().unique()
@@ -412,7 +421,7 @@ def inspect(data='data'):
             if len(declared) > 1:
                 raise ValueError('export declares more than one lock policy')
             predicted, lines = replacement_export_basis(d, predicted, saved, records, native_games,
-                                                        declared[0] if len(declared) else None)
+                                                        declared[0] if len(declared) else None, revision)
             ats_history['spread_line'] = lines
             checks['exported_replacement_margin_evidence'] = True
         except (ValueError, KeyError, TypeError, OverflowError) as exc:

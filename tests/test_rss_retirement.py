@@ -58,8 +58,8 @@ def test_old_news_journals_retained_but_not_applied_to_new_forecasts(tmp_path,mo
 
 
 def test_prior_signatures_are_frozen_and_retirement_has_a_new_identity():
-    assert m.REVISION=='boxscore-composite-v1.24'
-    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_24'
+    assert m.REVISION=='boxscore-composite-v1.25'
+    assert m.OUTPUT_NAME=='nfl_boxscore_output_v1_25'
     with m.revision_identity('boxscore-composite-v1.21',m.PRODUCT_RECIPE):
         prior,_=m.config_signature()
     assert prior=='9eb27acbe2f14789d9a4b90b214122354d1fee7bf1d15fa736d5138af88d1c67'

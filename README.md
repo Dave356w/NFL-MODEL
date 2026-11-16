@@ -17,7 +17,7 @@ game's captured spread price where one exists, else −110 (counted).
 
 ## Model
 
-Production is `boxscore-composite-v1.24` (`nfl_model.py`; `MODEL.md` describes
+Production is `boxscore-composite-v1.25` (`nfl_model.py`; `MODEL.md` describes
 current behavior and the version history):
 
 - **Probability:** no-vig moneyline log-odds as the baseline, plus ten fitted
@@ -28,8 +28,8 @@ current behavior and the version history):
   lists gate every ATS candidate (`availability_collect.py`, `AVAILABILITY.md`).
 - **Spread map:** the implied spread is banded and mapped to weekly decayed
   median signed margins of earlier games (one-season half-life; `fixed_bands.py`).
-- **QB replacement:** −2 points to a team starting a replacement QB, applied
-  after the map (`qb_replacement.py`).
+- **No post-map adjustment:** v1.24's −2 replacement-QB adjustment was removed in
+  v1.25 (owner decision 2026-11-16); the pick compares the mapped margin with the line.
 
 ## Locks and results
 
@@ -39,8 +39,8 @@ quote captured by the cutoff; `lock_watchdog.py` alerts on at-risk or missed
 games. Locks are append-only. Owner-authorized recoveries go through
 `retro_lock.py` and `ats_retro_requests.json`.
 
-Public 2026 results show the current revision's regrade: v1.24's own saved locks
-at their lock line and price, and v1.24's walk-forward replay for every other
+Public 2026 results show the current revision's regrade: v1.25's own saved locks
+at their lock line and price, and v1.25's walk-forward replay for every other
 game (`season_ats.py`). Spread prices come from ESPN evidence at the exact
 handicap (`espn_spreads.py`, `ESPN_SPREAD_PRICING.md`); final scores from
 `score_updates.py`.

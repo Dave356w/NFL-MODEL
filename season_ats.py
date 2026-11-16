@@ -35,6 +35,9 @@ REPLAY_UNTIL['boxscore-composite-v1.21']=REPLAY_UNTIL['boxscore-composite-v1.19'
 REPLAY_UNTIL['boxscore-composite-v1.23']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.22']=REPLAY_UNTIL['boxscore-composite-v1.19']
 REPLAY_UNTIL['boxscore-composite-v1.24']=dt.datetime.fromisoformat('2026-11-14T00:00:00+00:00')
+# v1.25 (owner decision 2026-11-16): replays every 2026 game through week 10, including Monday
+# night; week 11 onward needs v1.25's own 60-minute locks.
+REPLAY_UNTIL['boxscore-composite-v1.25']=dt.datetime.fromisoformat('2026-11-18T00:00:00+00:00')
 
 
 def replay_cutoff(revision):
@@ -84,7 +87,13 @@ REPLACEMENT_METADATA=('qb_replacement_base_margin','qb_replacement_margin_adjust
 
 
 def replacement_enabled(latest):
+    """The v1.24 replacement-QB margin overlay applies (v1.24 only; removed in v1.25)."""
     return (latest or {}).get('manifest',{}).get('revision')==REPLACEMENT_REVISION
+
+
+def regrade_enabled(latest):
+    """Public 2026 results are this revision's own regrade (owner decision 2026-11-16)."""
+    return (latest or {}).get('manifest',{}).get('revision') in ats_locks.REGRADE_REVISIONS
 
 
 def replacement_overlay(frame,latest):
@@ -153,7 +162,7 @@ def align_calibration_2026(latest,pool):
     Historical WP fields remain the replay's probability series. Only selection
     inputs, scores and matching side prices follow the newly regraded view.
     """
-    if not replacement_enabled(latest) or pool.empty:return
+    if not regrade_enabled(latest) or pool.empty:return
     history=latest.get('fixed_band_ledger',pd.DataFrame()).copy()
     if history.empty:return
     lookup=pool.set_index('game_id')
@@ -195,7 +204,7 @@ def build(latest, ledger):
     # The current week's completed rows may not yet be in retro_ledger. The
     # owner authorized this revision's replay through adoption, including those
     # games; outcomes below still come only from schedule/ESPN score evidence.
-    if replacement_enabled(latest):
+    if regrade_enabled(latest):
         for r in latest.get('board',pd.DataFrame()).to_dict('records'):
             if int(r.get('season',0))!=2026 or not historical_before_adoption(r,replay_cutoff(revision)):
                 continue

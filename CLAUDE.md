@@ -218,3 +218,12 @@ frozen recipes before v1.24) were deleted; they remain in git history. Earlier s
 mention them are history. The forward ledger keeps grading and proper scores. The production
 recipe, fit and `config_signature()` are unchanged. New research belongs outside this repository
 or in a separate branch unless the owner asks for it here.
+
+**v1.25 production (owner decision 2026-11-16, supersedes v1.24).** v1.24 without the
+replacement-QB −2 margin adjustment: the ATS margin is the weekly median map itself. New
+revision, output name (`nfl_boxscore_output_v1_25`) and configuration signature; T−60 locks use
+lock policy v6 (`ats_locks.NO_REPLACEMENT_POLICY`). Public pages show the v1.25 regrade: its replay
+for every 2026 game whose deadline precedes 2026-11-18 00:00 UTC (through week 10) and its own locks
+after. v1.24 code paths, locks and journals are preserved for validation. Evidence: on the 2023–2026
+replay the adjustment changed 93 picks, 35‑55‑3 with it vs 55‑35‑3 without (−38.2u); development
+history, not forward evidence.

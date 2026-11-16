@@ -970,7 +970,7 @@ def render_ats_games(latest):
 def has_public_saved_picks(latest):
     if not latest:return False
     records=latest.get('ats_locks',{})
-    if season_ats.replacement_enabled(latest):
+    if season_ats.regrade_enabled(latest):
         return bool(ats_locks.public_records(records,latest['manifest']['revision']))
     return bool(records)
 
@@ -1166,12 +1166,12 @@ def render_all(out_dir, data=DATA, now=None):
         # Owner decision 2026-11-16: the public locked-picks file lists the current
         # revision's own saved locks; earlier revisions' games show its replay.
         saved_rows = (ats_locks.public_records(latest['ats_locks'], latest['manifest']['revision']).values()
-                      if season_ats.replacement_enabled(latest) else latest['ats_locks'].values())
+                      if season_ats.regrade_enabled(latest) else latest['ats_locks'].values())
         for row in saved_rows:
             margin,market=row['fixed_band_spread'],row['market_spread']
             pricing = season_results.loc[season_results.game_id.eq(row['game_id'])]
             pricing = pricing.iloc[0] if len(pricing) else {}
-            if season_ats.replacement_enabled(latest) and int(row['season'])==2026 and len(pricing):
+            if season_ats.regrade_enabled(latest) and int(row['season'])==2026 and len(pricing):
                 margin,market=pricing.get('fixed_band_spread',margin),pricing.get('spread_line',market)
             side = ats_locks.select(margin, market, True)
             locked_rows.append(dict(game_id=row['game_id'], season=row['season'],
@@ -1266,11 +1266,14 @@ def main(argv=None):
     ap.add_argument("--pages-only", action="store_true", help="render from committed data/ without running the model")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR", "public"))
     args = ap.parse_args(argv)
-    if args.pages_only and m.REVISION==season_ats.REPLACEMENT_REVISION:
+    if args.pages_only and m.REVISION in ats_locks.REGRADE_REVISIONS:
         manifest=DATA/'latest'/'manifest.json'
         saved=json.loads(manifest.read_text()) if manifest.exists() else {}
-        if saved.get('revision')!=m.REVISION or not (DATA/'latest'/'replacement_adjustments.csv').exists():
-            raise ValueError('v1.24 pages require a fresh v1.24 model snapshot with replacement classifications; keep the last published site')
+        version=m.REVISION.rsplit('-',1)[-1]
+        if saved.get('revision')!=m.REVISION:
+            raise ValueError(f'{version} pages require a fresh {version} model snapshot; keep the last published site')
+        if m.REVISION==season_ats.REPLACEMENT_REVISION and not (DATA/'latest'/'replacement_adjustments.csv').exists():
+            raise ValueError(f'{version} pages require replacement classifications; keep the last published site')
     # A held job may pick up a repair while already running. Pages-only
     # finalization must apply the same explicit requests as a fresh workflow.
     import retro_lock
