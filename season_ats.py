@@ -313,15 +313,44 @@ def build(latest, ledger):
     return frame
 
 
+def pricing_timing(row, espn_kickoff):
+    """Quote-timing guard: price against the earlier of the saved and ESPN kickoffs.
+
+    A stale schedule kickoff must never admit in-game or post-cutoff quotes. The
+    saved decision, its cutoff and kickoff stay unchanged; only quote eligibility
+    tightens, and a disagreement is recorded for backend review.
+    """
+    try:
+        saved = ats_locks.utc(row.get('kickoff_utc'))
+    except (ValueError, TypeError):
+        saved = None
+    if espn_kickoff is None:
+        return row, 'no_espn_event' if saved is not None else 'no_kickoff'
+    if saved is None:
+        return dict(row, kickoff_utc=espn_kickoff.isoformat()), 'espn_only'
+    if saved == espn_kickoff:
+        return row, 'match'
+    timed = dict(row, kickoff_utc=min(saved, espn_kickoff).isoformat())
+    try:
+        cutoff = ats_locks.utc(row.get('lock_at_utc'))
+        timed['lock_at_utc'] = min(cutoff, ats_locks.deadline(espn_kickoff)).isoformat()
+    except (ValueError, TypeError):
+        pass
+    return timed, 'schedule_kickoff_differs'
+
+
 def price(frame, evidence, assume_unmatched=False):
     """Keep W/L/P and saved handicaps; replace proxy returns with matched prices."""
     frame = frame.copy()
     offers = espn_spreads.quotes(evidence)
+    kickoffs = espn_spreads.event_kickoffs(evidence)
     priced = []
     for row in frame.to_dict('records'):
-        info = espn_spreads.match(row, offers)
+        timed, check = pricing_timing(row, kickoffs.get(row.get('game_id')))
+        info = espn_spreads.match(timed, offers)
         info.pop('espn_quote', None)
         info['ats_match_status'] = info['ats_price_basis']
+        info['ats_kickoff_check'] = check
         if (assume_unmatched and 'ats_price' not in info
                 and row.get('fixed_band_ats_side') in ('home', 'away')
                 and espn_spreads.number(row.get('spread_line')) is not None):

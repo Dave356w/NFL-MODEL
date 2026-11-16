@@ -196,3 +196,50 @@ def test_candidate_capture_does_not_backdate_later_received_movement(tmp_path):
     assert e.candidate_quote(row, tmp_path) is None
     parsed = e.quotes([raw])
     assert e.match(row, parsed)['ats_price_basis'] == 'historical_prelock'
+
+
+def test_embedded_quote_from_another_game_is_rejected():
+    foreign = quote() | dict(game_id='2026_07_NYG_HOU')
+    row = pick(espn_quote=foreign)
+    assert 'ats_price' not in e.match(row, [])
+    # The same game's archive evidence still prices the pick on its own merits.
+    info = e.match(row, [quote()])
+    assert info['ats_price'] == -120 and info['espn_quote']['game_id'] == '2026_07_TEN_IND'
+
+
+def test_unmirrored_paired_handicaps_never_price():
+    torn = quote() | dict(away_handicap=2.5)
+    assert 'ats_price' not in e.match(pick(), [torn])
+    assert 'ats_price' not in e.match(pick(espn_quote=torn), [])
+    # One missing side is still a usable one-sided offer for the other side.
+    one_sided = quote() | dict(away_handicap=None, away_odds=None)
+    assert e.match(pick(), [one_sided])['ats_price'] == -120
+
+
+def test_event_kickoffs_keep_the_earliest_espn_time():
+    early, late = evidence(), evidence() | dict(kickoff_utc='2026-10-25T17:25:00Z')
+    assert e.event_kickoffs([late, early]) == {'2026_07_TEN_IND': ats_locks.utc('2026-10-25T17:00:00Z')}
+
+
+def test_stale_later_schedule_kickoff_cannot_admit_post_cutoff_quotes():
+    # Saved row believes kickoff is 18:00 (cutoff 17:00); ESPN shows 17:00.
+    row = pick(lock_at_utc='2026-10-25T17:00:00Z', kickoff_utc='2026-10-25T18:00:00Z',
+               fixed_band_ats_side='home', spread_line=3.)
+    late = quote() | dict(captured_utc='2026-10-25T16:30:00Z')
+    assert e.match(row, [late])['ats_price_basis'] == 'captured_prelock'  # the unguarded behaviour
+    timed, check = s.pricing_timing(row, ats_locks.utc('2026-10-25T17:00:00Z'))
+    assert check == 'schedule_kickoff_differs'
+    assert ats_locks.utc(timed['lock_at_utc']) == ats_locks.utc('2026-10-25T16:00:00Z')
+    assert 'ats_price' not in e.match(timed, [late])
+    # The saved row itself is unchanged.
+    assert row['lock_at_utc'] == '2026-10-25T17:00:00Z'
+
+
+def test_earlier_stale_schedule_kickoff_keeps_the_saved_cutoff():
+    row = pick(kickoff_utc='2026-10-25T17:00:00Z')
+    timed, check = s.pricing_timing(row, ats_locks.utc('2026-10-25T17:20:00Z'))
+    assert check == 'schedule_kickoff_differs'
+    assert ats_locks.utc(timed['lock_at_utc']) == ats_locks.utc(row['lock_at_utc'])
+    assert e.match(timed, [quote()])['ats_price'] == -120
+    assert s.pricing_timing(row, ats_locks.utc(row['kickoff_utc']))[1] == 'match'
+    assert s.pricing_timing(row, None)[1] == 'no_espn_event'

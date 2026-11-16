@@ -226,6 +226,24 @@ def quotes(evidence):
     return out
 
 
+def paired(q):
+    """Both handicaps present must describe one line from opposite sides."""
+    home, away = number(q.get('home_handicap')), number(q.get('away_handicap'))
+    return home is None or away is None or home == -away
+
+
+def event_kickoffs(evidence):
+    """Earliest ESPN kickoff per game, for the pricing timing guard."""
+    out = {}
+    for e in evidence:
+        try:
+            ko = locks.utc(e['kickoff_utc'])
+        except (KeyError, ValueError, TypeError):
+            continue
+        out[e['game_id']] = min(ko, out.get(e['game_id'], ko))
+    return out
+
+
 def match(row, offers, allow_close=True):
     """Exact game + selected side + handicap, with explicit price provenance."""
     side = row.get('fixed_band_ats_side') or row.get('selected_side')
@@ -245,11 +263,17 @@ def match(row, offers, allow_close=True):
         ko = locks.utc(ko)
     except (ValueError, TypeError):
         ko = None
-    offers = [q for q in offers if q['game_id'] == row['game_id']]
     # Prefer the immutable candidate's price over later recovered evidence.
+    # Identity guard: the saved quote passes the same game filter as archive
+    # evidence, and every paired quote must mirror its handicaps (home = -away).
     embedded = row.get('espn_quote')
     if isinstance(embedded, dict):
-        offers = [embedded] + offers
+        offers = [embedded] + list(offers)
+    else:
+        embedded = None
+    offers = [q for q in offers if q.get('game_id') == row['game_id'] and paired(q)]
+    if embedded is not None and not any(q is embedded for q in offers):
+        embedded = None
     eligible = []
     for q in offers:
         try:

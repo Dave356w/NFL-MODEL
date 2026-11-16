@@ -4,6 +4,11 @@ Research-only scripts and experiment records. Some import `nfl_model.py` and
 change settings inside their own process; the joint-score track below is
 standalone. They never write `data/`, the frozen recipe or the forward ledger.
 
+[2026 regrade with the current model](regrade_2026_results/REPORT.md) replays the
+production revision over every graded 2026 game (walk-forward, weekly map, post-map QB
+overlay) beside the public lock-continuity decisions and same-row baselines. Diagnostic
+only; public pages are unchanged. Run `python -m research.regrade_2026_current_model`.
+
 [Soft neighboring-band empirical distributions](soft_band_distribution_results/REPORT.md)
 tests one fixed interpolation of the production bands' complete prior-season
 margin distributions. It preserves observed margin atoms and derives line-specific

@@ -99,3 +99,12 @@ python -m pytest tests/ -q
 prices, priced stakes, cumulative returns and the −110 comparison. Public
 downloads expose spread prices and pricing basis without model probabilities.
 The unchanged raw forecast archives remain authoritative for original decisions.
+
+## Identity and timing guards (2026-11-16)
+
+A saved candidate quote passes the same game-identity filter as archive evidence, and
+any quote whose paired handicaps are not mirror images (home = −away) is never used.
+Pricing measures quote eligibility against the earlier of the saved kickoff and ESPN's
+event kickoff, tightening the cutoff to T−60 of the ESPN time when that is earlier. Saved
+decisions, cutoffs and kickoffs are not changed; `ats_kickoff_check` in the backend
+pricing table records any disagreement (2026_09_LV_SF: saved 21:05 UTC, ESPN 21:25).
