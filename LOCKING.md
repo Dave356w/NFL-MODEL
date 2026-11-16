@@ -141,3 +141,12 @@ owner-requested retro locks in `ats_retro_requests.json`, each from the last wat
 committed before its T-60 cutoff (SF-DAL `b1399660`, 20:23:47 UTC; PIT-CIN `f5d0539e`, 00:19:56 UTC),
 with its exact paired price, saved weekly map and v1.24 overlay. Original blockers are preserved. Every
 other 2026 game with a T-60 deadline after ATS adoption already has a saved lock.
+
+## Public regrade (2026-11-16)
+
+Owner decision: the public pages switch to the current model's 2026 regrade, superseding the
+display rule above. `ats_locks.public_records` shows only the current revision's own saved
+locks (v1.24, at their lock line and price); every other graded game, including games locked by
+v1.18–v1.22, shows v1.24's walk-forward replay. Capture and the watchdog still use
+`current_records`, so a game saved by any revision is never relocked. The journals are unchanged,
+and the continuity record stays in backend research (`research/regrade_2026_results/REPORT.md`).

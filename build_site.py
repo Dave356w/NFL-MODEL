@@ -905,7 +905,7 @@ def ats_card_state(latest, row, now):
     rev = latest['manifest']['revision']
     home, away = row['home'], row['away']
     ms, line = num(row.get('fixed_band_spread')), num(row.get('spread_line'))
-    saved = ats_locks.current_records(latest.get('ats_locks', {}), rev).get((rev, row['game_id']))
+    saved = ats_locks.public_records(latest.get('ats_locks', {}), rev).get((rev, row['game_id']))
     completed = None
     pooled_row = None
     display_row = dict(row)
@@ -1307,7 +1307,7 @@ def has_public_saved_picks(latest):
     if not latest:return False
     records=latest.get('ats_locks',{})
     if season_ats.replacement_enabled(latest):
-        return bool(ats_locks.current_records(records,latest['manifest']['revision']))
+        return bool(ats_locks.public_records(records,latest['manifest']['revision']))
     return bool(records)
 
 
@@ -1533,9 +1533,9 @@ def render_all(out_dir, data=DATA, now=None):
         (out / 'ats_2026_results.csv').unlink(missing_ok=True)
     if latest is not None and latest['ats_locks']:
         locked_rows = []
-        # Lock continuity (owner decision 2026-11-15): one saved decision per game
-        # from any revision; a revision change never drops an earlier saved pick.
-        saved_rows = (ats_locks.current_records(latest['ats_locks'], latest['manifest']['revision']).values()
+        # Owner decision 2026-11-16: the public locked-picks file lists the current
+        # revision's own saved locks; earlier revisions' games show its replay.
+        saved_rows = (ats_locks.public_records(latest['ats_locks'], latest['manifest']['revision']).values()
                       if season_ats.replacement_enabled(latest) else latest['ats_locks'].values())
         for row in saved_rows:
             margin,market=row['fixed_band_spread'],row['market_spread']

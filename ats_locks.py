@@ -636,6 +636,25 @@ def current_records(records, revision):
     return {(revision, game): row for game, row in best.items()}
 
 
+def public_records(records, revision):
+    """Saved decisions shown publicly: the current revision's own locks only.
+
+    Owner decision 2026-11-16 (supersedes 2026-11-15 lock continuity for display):
+    public pages show the current model's 2026 regrade. Locks saved by earlier
+    revisions are replaced by the current revision's replay; the current revision's
+    own saved locks stay the bet. Capture and watchdog coverage still use
+    current_records, so no game is relocked. Journals are unchanged.
+    """
+    if revision not in REGRADE_REVISIONS:
+        return current_records(records, revision)
+    own = {k: row for k, row in records.items() if (row.get('revision') or k[0]) == revision}
+    return current_records(own, revision)
+
+
+# Revisions whose public 2026 results are their own regrade (owner decision 2026-11-16).
+REGRADE_REVISIONS = frozenset({'boxscore-composite-v1.24'})
+
+
 def report(data='data'):
     info = validate_store(data)
     stores = runtime_stores(data)
