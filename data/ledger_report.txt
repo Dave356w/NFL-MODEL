@@ -1,4 +1,4 @@
-NFL forward ledger report -- 2026-11-16 17:42 UTC
+NFL forward ledger report -- 2026-11-16 18:18 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Proper scores against the market probability saved in each snapshot. ATS results follow below.
@@ -16,6 +16,8 @@ Proper scores against the market probability saved in each snapshot. ATS results
   Market picks 60-22 (.732)
   Log loss  model 0.6022  market 0.5757  gain -0.0265 +/- 0.0250 (1 SE; positive = model better)
   Brier     model 0.2035  market 0.1937
+
+== boxscore-composite-v1.25: 1 snapshots, 0 graded, 1 pending, 0 ties
 
 == boxscore-composite-v1.22: 3 snapshots, 3 graded, 0 pending, 0 ties
   Scored rows (graded, market present): 3
@@ -77,11 +79,11 @@ Repository analysis appendices
 Appendix B: original snapshots replayed with the current model (from data/latest/regraded_ledger_report.md)
 ==============================================================================
 
-# boxscore-composite-v1.24 retrospective ledger replay
+# boxscore-composite-v1.25 retrospective ledger replay
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 171; unique games: 86. Repeated snapshots are not independent games.
+Snapshots: 172; unique games: 86. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
@@ -96,6 +98,7 @@ boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.0302
 boxscore-composite-v1.21     12        0    11       1       0  3.401299  0.283442 0.127535        -0.040811        3.401299      0.283442            12  0.432219         0.416427 0.129110      0.121994
 boxscore-composite-v1.22      3        0     2       1       0  0.150212  0.050071 0.526591        -0.040664        0.150212      0.050071             3  0.644147         0.606555 0.225693      0.207752
 boxscore-composite-v1.24     12        1     8       3       0  0.152380  0.013853 0.202413        -0.040900        0.152380      0.013853            11  0.498878         0.520320 0.161782      0.171633
+boxscore-composite-v1.25      1        1     0       0       0  0.000000       NaN      NaN              NaN        0.000000           NaN             0       NaN              NaN      NaN           NaN
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.792628          L  -1.000000
@@ -269,6 +272,7 @@ boxscore-composite-v1.16  2026_10_SEA_LV           0.269398  0.273960          W
 boxscore-composite-v1.16  2026_10_SF_DAL           0.234848  0.319923          W   0.458716
 boxscore-composite-v1.24 2026_10_LAC_BAL           0.621610  0.621610                   NaN
 boxscore-composite-v1.16 2026_10_LAC_BAL           0.630053  0.621610                   NaN
+boxscore-composite-v1.25 2026_10_LAC_BAL           0.627263  0.627263                   NaN
 
 
 Appendix C: current production sanity checks
@@ -309,7 +313,7 @@ Weekly maps, last week of each season (training ends before the forecast week):
   2026 week 9: [3.0, 5.0, 6.0, 13.0]; prior n=1480, band counts=[522, 530, 266, 162], through 2026 week 8; 9 weekly rules this season
 
 Historical replay: median ATS on every game opportunity:
-  All: ATS 533-394-25, 0 skips, 952/952 selected, +90.55u, ROI +9.51% +/- 3.02pp (1 SE)
+  All: ATS 532-395-25, 0 skips, 952/952 selected, +88.64u, ROI +9.31% +/- 3.02pp (1 SE)
     Binary proper scores n=950: log loss 0.608018, market 0.610090; Brier 0.209992; tied finals excluded from binary scoring.
   2023: ATS 141-117-14, 0 skips, 272/272 selected, +11.18u, ROI +4.11% +/- 5.62pp (1 SE)
     Binary proper scores n=272: log loss 0.628927, market 0.627349; Brier 0.219490; tied finals excluded from binary scoring.
@@ -317,10 +321,10 @@ Historical replay: median ATS on every game opportunity:
     Binary proper scores n=272: log loss 0.582705, market 0.587489; Brier 0.197863; tied finals excluded from binary scoring.
   2025: ATS 151-120-1, 0 skips, 272/272 selected, +17.27u, ROI +6.35% +/- 5.75pp (1 SE)
     Binary proper scores n=271: log loss 0.603379, market 0.609383; Brier 0.209141; tied finals excluded from binary scoring.
-  2026: ATS 76-54-6, 0 skips, 136/136 selected, +15.09u, ROI +11.10% +/- 7.92pp (1 SE)
+  2026: ATS 75-55-6, 0 skips, 136/136 selected, +13.18u, ROI +9.69% +/- 7.94pp (1 SE)
     Binary proper scores n=135: log loss 0.626206, market 0.622275; Brier 0.217001; tied finals excluded from binary scoring.
 
-Native boxscore-composite-v1.25 forward snapshots: {"graded": 0, "pending": 0, "snapshots": 0, "ties": 0}
+Native boxscore-composite-v1.25 forward snapshots: {"graded": 0, "pending": 1, "snapshots": 1, "ties": 0}
 Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 320, "original_selections": 57, "original_skips": 0, "policy": "median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3", "recovered_saved_forecasts": 2, "timed_locks": 55}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
@@ -403,12 +407,10 @@ Store validation: PASS; 320 saved candidates, 57 finalized saved decisions.
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 86-57-6, 0 skips, 1 pending, 0 unavailable; +21.12u, ROI +14.18%.
-ESPN exact-handicap pricing: 12 pre-lock, 112 closing estimates, 25 assumed -110, 0 unpriced; ROI denominator 149 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
-  60-minute lock: 5-0-0, 0 skips, 0 pending, 0 unavailable; +4.28u
+Record 84-59-6, 0 skips, 1 pending, 0 unavailable; +17.39u, ROI +11.67%.
+ESPN exact-handicap pricing: 0 pre-lock, 121 closing estimates, 28 assumed -110, 0 unpriced; ROI denominator 149 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
   Awaiting ATS lock: 0-0-0, 0 skips, 1 pending, 0 unavailable; +0.00u
-  Historical replay: 77-54-6, 0 skips, 0 pending, 0 unavailable; +16.18u
-  Owner-requested retro lock: 4-3-0, 0 skips, 0 pending, 0 unavailable; +0.66u
+  Historical replay: 84-59-6, 0 skips, 0 pending, 0 unavailable; +17.39u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
 
 ATS same-row baselines
@@ -416,20 +418,13 @@ ATS same-row baselines
 ATS same-row baselines (backend reporting; every arm 1u at assumed -110, pushes in the ROI denominator; break-even cover 52.4%).
 Line-only map: the market line through the same median map (each saved lock's own rule; otherwise the weekly rule for that game's week), without model input. Median map minus line-only is what the model adds beyond the line's own band.
 Per-arm records are descriptive; the map-versus-raw review is at 100 decided locks.
-60-minute lock, boxscore-composite-v1.24: 5 graded, 0 pending
-  Median map (production)  5-0-0, 0 skips, +4.55u, ROI +90.9% +/- 0.0, cover 100.0%
-  Raw model spread         3-2-0, 0 skips, +0.73u, ROI +14.5% +/- 46.8, cover 60.0%
-  Line-only map            2-3-0, 0 skips, -1.18u, ROI -23.6% +/- 46.8, cover 40.0%
-  Always favorite          4-1-0, 0 skips, +2.64u, ROI +52.7% +/- 38.2, cover 80.0%
-  Always home              1-4-0, 0 skips, -3.09u, ROI -61.8% +/- 38.2, cover 20.0%
-  Paired, median map minus line-only map: sides differ on 3 of 5; +5.73u (per game +1.145 +/- 0.468, 1 SE)
-  Paired, median map minus raw model spread: sides differ on 2 of 5; +3.82u (per game +0.764 +/- 0.468, 1 SE)
-Recovered saved forecast, boxscore-composite-v1.24: 0 graded, 0 pending (reported separately from pregame-finalized locks)
+60-minute lock, boxscore-composite-v1.25: 0 graded, 0 pending
+Recovered saved forecast, boxscore-composite-v1.25: 0 graded, 0 pending (reported separately from pregame-finalized locks)
 Development history (replay, not forward evidence; backtest seasons share the recipe selection, the current season is walk-forward): 2023-2026, 952 graded
-  Median map (production)  533-394-25, 0 skips, +90.55u, ROI +9.5% +/- 3.0, cover 57.5%
+  Median map (production)  532-395-25, 0 skips, +88.64u, ROI +9.3% +/- 3.0, cover 57.4%
   Raw model spread         465-462-25, 0 skips, -39.27u, ROI -4.1% +/- 3.1, cover 50.2%
   Line-only map            503-424-25, 0 skips, +33.27u, ROI +3.5% +/- 3.0, cover 54.3%
   Always favorite          478-449-25, 0 skips, -14.45u, ROI -1.5% +/- 3.1, cover 51.6%
   Always home              456-471-25, 0 skips, -56.45u, ROI -5.9% +/- 3.1, cover 49.2%
-  Paired, median map minus line-only map: sides differ on 148 of 952; +57.27u (per game +0.060 +/- 0.024, 1 SE)
-  Paired, median map minus raw model spread: sides differ on 430 of 952; +129.82u (per game +0.136 +/- 0.041, 1 SE)
+  Paired, median map minus line-only map: sides differ on 139 of 952; +55.36u (per game +0.058 +/- 0.023, 1 SE)
+  Paired, median map minus raw model spread: sides differ on 435 of 952; +127.91u (per game +0.134 +/- 0.041, 1 SE)

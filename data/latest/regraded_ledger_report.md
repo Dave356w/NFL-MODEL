@@ -1,8 +1,8 @@
-# boxscore-composite-v1.24 retrospective ledger replay
+# boxscore-composite-v1.25 retrospective ledger replay
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 171; unique games: 86. Repeated snapshots are not independent games.
+Snapshots: 172; unique games: 86. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
@@ -17,6 +17,7 @@ boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.0302
 boxscore-composite-v1.21     12        0    11       1       0  3.401299  0.283442 0.127535        -0.040811        3.401299      0.283442            12  0.432219         0.416427 0.129110      0.121994
 boxscore-composite-v1.22      3        0     2       1       0  0.150212  0.050071 0.526591        -0.040664        0.150212      0.050071             3  0.644147         0.606555 0.225693      0.207752
 boxscore-composite-v1.24     12        1     8       3       0  0.152380  0.013853 0.202413        -0.040900        0.152380      0.013853            11  0.498878         0.520320 0.161782      0.171633
+boxscore-composite-v1.25      1        1     0       0       0  0.000000       NaN      NaN              NaN        0.000000           NaN             0       NaN              NaN      NaN           NaN
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.792628          L  -1.000000
@@ -190,3 +191,4 @@ boxscore-composite-v1.16  2026_10_SEA_LV           0.269398  0.273960          W
 boxscore-composite-v1.16  2026_10_SF_DAL           0.234848  0.319923          W   0.458716
 boxscore-composite-v1.24 2026_10_LAC_BAL           0.621610  0.621610                   NaN
 boxscore-composite-v1.16 2026_10_LAC_BAL           0.630053  0.621610                   NaN
+boxscore-composite-v1.25 2026_10_LAC_BAL           0.627263  0.627263                   NaN
