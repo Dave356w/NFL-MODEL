@@ -16,16 +16,13 @@
   "rss_enabled": false,
   "teams": {
     "ARI": {
-      "game_id": "2026_11_ARI_KC",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "ATL": {
       "game_id": null,
@@ -47,58 +44,46 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T01:36:02.453276+00:00",
-        "last_success_utc": "2026-11-16T01:36:02.453276+00:00",
+        "last_attempt_utc": "2026-11-16T05:42:49.505589+00:00",
+        "last_success_utc": "2026-11-16T05:42:49.505589+00:00",
         "source_capture_sha256": "29ba7571e2bab91db34a9c45e3b5405088f8a49c54f6ed1c399263e1600dd831"
       }
     },
     "BUF": {
-      "game_id": "2026_11_MIA_BUF",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "CAR": {
-      "game_id": "2026_11_BAL_CAR",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "CHI": {
-      "game_id": "2026_11_NO_CHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "CIN": {
-      "game_id": "2026_11_CIN_WAS",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-24T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "CLE": {
       "game_id": null,
@@ -110,40 +95,31 @@
       "report": {}
     },
     "DAL": {
-      "game_id": "2026_11_TEN_DAL",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "DEN": {
-      "game_id": "2026_11_LV_DEN",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "DET": {
-      "game_id": "2026_11_TB_DET",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "GB": {
       "game_id": null,
@@ -155,52 +131,40 @@
       "report": {}
     },
     "HOU": {
-      "game_id": "2026_11_IND_HOU",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-20T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "IND": {
-      "game_id": "2026_11_IND_HOU",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-20T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "JAX": {
-      "game_id": "2026_11_JAX_NYG",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "KC": {
-      "game_id": "2026_11_ARI_KC",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "LA": {
       "game_id": null,
@@ -222,46 +186,37 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T01:36:02.736319+00:00",
-        "last_success_utc": "2026-11-16T01:36:02.736319+00:00",
+        "last_attempt_utc": "2026-11-16T05:42:49.504677+00:00",
+        "last_success_utc": "2026-11-16T05:42:49.504677+00:00",
         "source_capture_sha256": "679091365e2e9f7a322c77bb9e974dbaffcef166e0d75f0641dc39fa8b23148c"
       }
     },
     "LV": {
-      "game_id": "2026_11_LV_DEN",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "MIA": {
-      "game_id": "2026_11_MIA_BUF",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "MIN": {
-      "game_id": "2026_11_MIN_SF",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-23T01:20:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "NE": {
       "game_id": null,
@@ -273,64 +228,49 @@
       "report": {}
     },
     "NO": {
-      "game_id": "2026_11_NO_CHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "NYG": {
-      "game_id": "2026_11_JAX_NYG",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "NYJ": {
-      "game_id": "2026_11_NYJ_LAC",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:05:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "PHI": {
-      "game_id": "2026_11_PIT_PHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "PIT": {
-      "game_id": "2026_11_PIT_PHI",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T21:25:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "SEA": {
       "game_id": null,
@@ -342,53 +282,41 @@
       "report": {}
     },
     "SF": {
-      "game_id": "2026_11_MIN_SF",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-23T01:20:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "TB": {
-      "game_id": "2026_11_TB_DET",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report for both scheduled opponents not yet published",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "TEN": {
-      "game_id": "2026_11_TEN_DAL",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-22T18:00:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     },
     "WAS": {
-      "game_id": "2026_11_CIN_WAS",
+      "game_id": null,
       "inactives": {},
       "kickoff_utc": "2026-11-24T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "error": "injury report does not identify the forecast week",
-        "last_attempt_utc": "2026-11-16T01:36:00.294627+00:00"
-      }
+      "report": {}
     }
   },
-  "updated_utc": "2026-11-16T01:36:02.736319+00:00"
+  "updated_utc": "2026-11-16T05:42:49.505589+00:00"
 }

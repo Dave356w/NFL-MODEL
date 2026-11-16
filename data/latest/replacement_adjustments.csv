@@ -2015,7 +2015,7 @@ game_id,season,week,team,qb_expected,qb_replacement,qb_replacement_status,qb_pro
 2026_10_CAR_NO,2026,10,NO,T.Shough,0.0,incumbent starter,00-0040743,00-0040743,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_BUF_NYJ,2026,10,NYJ,G.Smith,0.0,incumbent starter,00-0030565,00-0030565,9,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_JAX_TEN,2026,10,TEN,C.Ward,0.0,incumbent starter,00-0040676,00-0040676,8,8.0,8,replacement-team-margin-minus2-2026-11-13-v1
-2026_10_LA_ARI,2026,10,ARI,Carson Beck,1.0,replacement starter,00-0041561,00-0033119,8,8.0,9,replacement-team-margin-minus2-2026-11-13-v1
+2026_10_LA_ARI,2026,10,ARI,C.Beck,1.0,replacement starter,00-0041561,00-0033119,8,8.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_SEA_LV,2026,10,LV,F.Mendoza,1.0,replacement starter,00-0041562,00-0029604,9,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_SF_DAL,2026,10,DAL,D.Prescott,0.0,incumbent starter,00-0033077,00-0033077,9,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
 2026_10_PIT_CIN,2026,10,CIN,J.Burrow,0.0,incumbent starter,00-0036442,00-0036442,8,9.0,9,replacement-team-margin-minus2-2026-11-13-v1
