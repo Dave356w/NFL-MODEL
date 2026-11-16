@@ -2,13 +2,18 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-16T23:54:47.491867+00:00",
-      "last_success_utc": "2026-11-16T23:54:47.491867+00:00"
+      "last_attempt_utc": "2026-11-16T23:56:16.486135+00:00",
+      "last_success_utc": "2026-11-16T23:56:16.486135+00:00"
+    },
+    "https://www.nfl.com/news/week-10-monday-night-inactives-los-angeles-chargers-at-baltimore-ravens": {
+      "error": null,
+      "last_attempt_utc": "2026-11-16T23:56:16.568134+00:00",
+      "last_success_utc": "2026-11-16T23:56:16.568134+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-16T23:54:47.488815+00:00",
-      "last_success_utc": "2026-11-16T23:54:47.488815+00:00"
+      "last_attempt_utc": "2026-11-16T23:56:16.482066+00:00",
+      "last_success_utc": "2026-11-16T23:56:16.482066+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -36,8 +41,12 @@
     "BAL": {
       "game_id": "2026_10_LAC_BAL",
       "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-16T22:16:43.480794+00:00"
+        "complete": true,
+        "error": null,
+        "last_attempt_utc": "2026-11-16T23:56:16.568134+00:00",
+        "last_success_utc": "2026-11-16T23:56:16.568134+00:00",
+        "source_capture_sha256": "b37d9999e1e789c97591d31ea47ca864e58def68dbd1c3e4b57262f42c124feb",
+        "url": "https://www.nfl.com/news/week-10-monday-night-inactives-los-angeles-chargers-at-baltimore-ravens"
       },
       "kickoff_utc": "2026-11-17T01:15:00+00:00",
       "news": {
@@ -47,8 +56,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T23:54:47.238251+00:00",
-        "last_success_utc": "2026-11-16T23:54:47.238251+00:00",
+        "last_attempt_utc": "2026-11-16T23:56:16.288732+00:00",
+        "last_success_utc": "2026-11-16T23:56:16.288732+00:00",
         "source_capture_sha256": "8cdc9fb321fd04c15b21985a01067be25c9540d2a7e8508452dbba54e327de25"
       }
     },
@@ -175,8 +184,12 @@
     "LAC": {
       "game_id": "2026_10_LAC_BAL",
       "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-16T22:16:43.480794+00:00"
+        "complete": true,
+        "error": null,
+        "last_attempt_utc": "2026-11-16T23:56:16.568134+00:00",
+        "last_success_utc": "2026-11-16T23:56:16.568134+00:00",
+        "source_capture_sha256": "5241b0295f4cd33b8b56d614b56414b182d18df902c808a1bf02cc9540e198a7",
+        "url": "https://www.nfl.com/news/week-10-monday-night-inactives-los-angeles-chargers-at-baltimore-ravens"
       },
       "kickoff_utc": "2026-11-17T01:15:00+00:00",
       "news": {
@@ -186,8 +199,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T23:54:47.242258+00:00",
-        "last_success_utc": "2026-11-16T23:54:47.242258+00:00",
+        "last_attempt_utc": "2026-11-16T23:56:15.809794+00:00",
+        "last_success_utc": "2026-11-16T23:56:15.809794+00:00",
         "source_capture_sha256": "8233af3994de10c137281796765f4ce7e62c35b899849645370221e0e335dd80"
       }
     },
@@ -312,5 +325,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-16T23:54:47.491867+00:00"
+  "updated_utc": "2026-11-16T23:56:16.568134+00:00"
 }
