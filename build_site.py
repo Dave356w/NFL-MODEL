@@ -82,9 +82,6 @@ SNAPSHOT = {
     "report_notes.csv": "report_notes.csv",
     "regraded_ledger.csv": "regraded_ledger.csv",
     "regraded_summary.csv": "regraded_summary.csv",
-    "version_historical.csv": "version_historical.csv",
-    "version_archived.csv": "version_archived.csv",
-    "version_native.csv": "version_native.csv",
     "market_target_fit_audit.csv": "market_target_fit_audit.csv",
     "replacement_adjustments.csv": "replacement_adjustments.csv",
 }
