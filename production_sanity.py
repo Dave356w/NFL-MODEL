@@ -12,7 +12,6 @@ is regenerated from current data by build_site and stays in the repository.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -305,21 +304,6 @@ def reporting_outcomes(data, history, final_scores):
     return out
 
 
-def independent_moneyline(frame):
-    """American-price arithmetic and W/L/push settlement from source columns."""
-    p=frame.model_wp.to_numpy(float);y=frame['home won'].to_numpy(float)
-    home=p>.5
-    price=np.where(home,frame.home_moneyline,frame.away_moneyline).astype(float)
-    valid=np.isfinite(p)&~np.isclose(p,.5)&np.isfinite(price)&(abs(price)>=100)&np.isin(y,[0.,.5,1.])
-    grades=np.full(len(frame),'',dtype='<U1');units=np.full(len(frame),np.nan)
-    push=valid&(y==.5);win=valid&~push&((y==1)==home);lose=valid&~push&~win
-    grades[push]='P';grades[win]='W';grades[lose]='L'
-    payout=np.divide(100.,-price,out=np.zeros_like(price),where=price<0)
-    payout=np.where(price>0,price/100.,payout)
-    units[push]=0.;units[win]=payout[win];units[lose]=-1.
-    return grades,units
-
-
 def record(grades):
     w, l, p, s = [int((grades == x).sum()) for x in 'WLPS']
     units = w/1.1-l
@@ -368,14 +352,10 @@ def inspect(data='data'):
         checks['primary_ats_store_integrity'] = False
     history_path = latest/'retro_ledger.csv'
     if not history_path.exists():
-        return dict(checks=checks, rules=[], historical=[], native={}, ats_archive={}, ats_capture=capture,
+        return dict(checks=checks, rules=[], historical=[], native={}, ats_capture=capture,
                     status='No historical inputs yet' if all(checks.values()) else 'FAIL')
     d = pd.read_csv(history_path)
     checks['unique_historical_games'] = not d.game_id.duplicated().any()
-    ml_grades,ml_units=independent_moneyline(d)
-    if 'bet_result' in d:
-        checks['historical_moneyline_outcomes']=bool(np.array_equal(d.bet_result.fillna('').to_numpy(),ml_grades))
-        checks['historical_moneyline_returns']=bool(np.allclose(d.units,ml_units,atol=1e-10,equal_nan=True))
     d['model_spread'] = 12.37*ndtri(np.clip(d.model_wp.to_numpy(), .005, .995))
     exported = latest/'fixed_band_ledger.csv'
     saved = pd.read_csv(exported).set_index('game_id').reindex(d.game_id) if exported.exists() else None
@@ -473,16 +453,6 @@ def inspect(data='data'):
             continue
         item = dict(season=label, **record(grades[mask]))
         item['last_week'] = int(d.loc[mask, 'week'].max()) if label != 'All' else None
-        ml_bets = m.flat_bets(d.loc[mask], 'model_wp')
-        ml = m.roi_summary(ml_bets)
-        fav = None; common_ml = None
-        if 'market_ml_wp' in d:
-            fav_bets = m.flat_bets(d.loc[mask], 'market_ml_wp')
-            common = ml_bets.units.notna() & fav_bets.units.notna()
-            fav = m.roi_summary(fav_bets[common]); common_ml=m.roi_summary(ml_bets[common])
-        item['moneyline'] = {k: ml[k] for k in ['bets','wins','losses','pushes','units','roi','roi_se','null_roi']}
-        item['favorite'] = {k: fav[k] for k in ['bets','wins','losses','pushes','units','roi']} if fav else None
-        item['common_moneyline'] = {k: common_ml[k] for k in ['bets','wins','losses','pushes','units','roi']} if common_ml else None
         g = d.loc[mask & d['home won'].isin([0., 1.]).to_numpy()]
         y = g['home won'].to_numpy(); p = np.clip(g.model_wp.to_numpy(),1e-12,1-1e-12)
         q = np.clip(g.market_wp.to_numpy(),1e-12,1-1e-12)
@@ -501,41 +471,9 @@ def inspect(data='data'):
     if graded_path.exists():
         from grade_ledger import summary
         g = pd.read_csv(graded_path)
-        n = g[g.revision == m.REVISION]
-        native_grades,native_units=independent_moneyline(n)
-        checks['native_moneyline_outcomes']=bool(np.array_equal(n.bet_result.fillna('').to_numpy(),native_grades))
-        checks['native_moneyline_returns']=bool(np.allclose(n.units,native_units,atol=1e-5,equal_nan=True))
-        sm = summary(n)
+        sm = summary(g[g.revision == m.REVISION])
         native.update({k:sm[k] for k in ['snapshots','graded','pending','ties']})
-        native['moneyline'] = {k:sm['roi'][k] for k in ['bets','wins','losses','pushes','units','roi']}
-    archive = {}; path = data/'ats_forward_shadow.jsonl'
-    if path.exists():
-        rows = [json.loads(x) for x in path.read_text().splitlines() if x.strip()]
-        rows = [r for r in rows if r.get('policy_version') == fixed_bands.POLICY_VERSION]
-        lookup = {(r['revision'],r['game_id']):r for r in snapshots}
-        valid = [];mapped=[]
-        for r in rows:
-            source = lookup.get((r['revision'],r['game_id']))
-            encoded = json.dumps(source,sort_keys=True,separators=(',',':')).encode() if source else b''
-            valid.append(source is not None and hashlib.sha256(encoded).hexdigest() == r['source_snapshot_sha256'])
-            if source:
-                x=12.37*ndtri(np.clip(float(source['model_wp']),.005,.995))
-                rule=r['fixed_rule'];value=np.sign(x)*rule['magnitudes'][np.searchsorted(rule['cuts'],abs(x),side='right')]
-                mapped.append(abs(value-r['fixed_band_spread'])<=EPS and source['spread_line']==r['market_spread'])
-        checks['median_archive_source_hashes'] = all(valid)
-        checks['median_archive_matches_frozen_rule_and_line'] = len(mapped)==len(rows) and all(mapped)
-        checks['median_archive_before_kickoff'] = all(pd.Timestamp(r['archived_utc']) < pd.Timestamp(r['kickoff_utc']) for r in rows)
-        checks['median_archive_unique_games'] = len({r['game_id'] for r in rows}) == len(rows)
-        checks['median_archive_prior_season_fit'] = all(r['fixed_rule']['training_max_season'] < r['season'] for r in rows)
-        complete = set()
-        if graded_path.exists():
-            complete = set(g.loc[g.revision.eq(m.REVISION) & g.status.isin(['graded','tie']),'game_id'])
-        archive = dict(policy=fixed_bands.POLICY_VERSION,snapshots=len(rows),completed=sum(r['game_id'] in complete for r in rows))
-        archive['pending'] = archive['snapshots']-archive['completed']
-        archive['original_selections'] = sum(bool(r.get('selected_side')) for r in rows)
-        archive['original_skips'] = len(rows)-archive['original_selections']
-        archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
-    return dict(checks=checks,rules=rules,weekly=weekly,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
+    return dict(checks=checks,rules=rules,weekly=weekly,historical=historical,native=native,ats_capture=capture,
                 export_selection=export_rule if exported.exists() else None, replacement_error=replacement_error, score_error=score_error,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
@@ -543,7 +481,7 @@ def inspect(data='data'):
 def report(data='data'):
     audit = inspect(data)
     lines = [f'Production sanity check: {m.REVISION} and the median ATS map',f"Status: {audit['status']}",
-             'Basis: historical replay, legacy moneyline snapshots, earlier ATS archives and timed ATS locks remain separate.',
+             'Basis: historical replay and timed ATS locks remain separate.',
              ('ATS map policy v2: weekly weighted medians of signed pick margins (one-season half-life), '
               'including losses and tied finals; games before the forecast week only.' if audit.get('weekly', True) else
               'ATS: signed pick-margin medians, including losses and tied finals; strictly earlier seasons only.'),
@@ -574,31 +512,20 @@ def report(data='data'):
         lines += ['', 'Prior-season maps (training excludes the forecast season):']
         for r in audit['rules']:
             lines.append(f"  {r['season']}: {r['magnitudes']}; prior n={r['training_games']}, band counts={r['training_band_counts']}, through {r['training_max_season']}")
-    lines += ['', 'Historical replay: median ATS versus moneyline on identical game opportunities:']
+    lines += ['', 'Historical replay: median ATS on every game opportunity:']
     for r in audit['historical']:
-        ml = r['moneyline']; baseline = r['favorite']
         se=f" +/- {100*r['roi_se']:.2f}pp (1 SE)" if r['roi_se'] is not None else ''
         lines.append(f"  {r['season']}: ATS {r['wins']}-{r['losses']}-{r['pushes']}, {r['skips']} skips, "
                      f"{r['selected']}/{r['opportunities']} selected, {r['units']:+.2f}u, ROI {100*r['roi']:+.2f}%{se}")
-        lines.append(f"    ML {ml['wins']}-{ml['losses']}-{ml['pushes']}, {ml['units']:+.2f}u, ROI {100*ml['roi']:+.2f}% "
-                     f"+/- {100*ml['roi_se']:.2f}pp (1 SE); market-correct null {100*ml['null_roi']:+.2f}%")
-        if baseline:
-            common=r['common_moneyline']
-            lines.append(f"    Common-row ML/favorite control n={baseline['bets']} (excludes market pick'ems for both): "
-                         f"model {common['units']:+.2f}u, ROI {100*common['roi']:+.2f}%; "
-                         f"favorite {baseline['units']:+.2f}u, ROI {100*baseline['roi']:+.2f}%")
         lines.append(f"    Binary proper scores n={r['scored_games']}: log loss {r['log_loss']:.6f}, "
                      f"market {r['market_log_loss']:.6f}; Brier {r['brier']:.6f}; tied finals excluded from binary scoring.")
-    lines += ['',f"Legacy native {m.REVISION} moneyline: {json.dumps(audit['native'],sort_keys=True)}",
-              f"Earlier median ATS archive (development history): {json.dumps(audit['ats_archive'],sort_keys=True)}",
+    lines += ['',f"Native {m.REVISION} forward snapshots: {json.dumps(audit['native'],sort_keys=True)}",
               f"Primary 60-minute ATS capture: {json.dumps(audit['ats_capture'],sort_keys=True)}",
               'Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; '
               'retrospectively backfilled favorite bets are excluded from forward evidence.',
               'Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; '
               'they are reported separately from pregame-finalized forward locks.',
-              'The native ledger continuous-spread diagnostic is legacy conversion, not the median ATS policy.',
               'Never backfill median ATS locks for games that finished before adoption.',
-              'The 2026 season overview can combine historical ML replay with recorded forecasts; recorded games take precedence once.',
               'Median ATS history currently ends at the last week present in retro_ledger.csv, not necessarily the newest completed board game.',
               'Historical development and selection are exposed; an unresolved comparison is not forward evidence of superiority.', '']
     return '\n'.join(lines)

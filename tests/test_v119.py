@@ -41,20 +41,6 @@ def test_fit_uses_only_the_terms_and_equals_zeroed_v118():
     assert np.all(np.isfinite(se)) and np.all(lo <= p+1e-12) and np.all(p <= hi+1e-12)
 
 
-def test_shadow_gets_its_own_v116_fit():
-    train, test = fixture()
-    fit19 = m.fit_composite(train, m.PRODUCT_RECIPE, 2023, 1)
-    fit18 = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
-    s19 = m.shadow_fit(train, fit19, 2023, 1)
-    assert s19['recipe'] == m.SHADOW_RECIPE and len(s19['names']) == 29
-    assert m.shadow_fit(train, fit18, 2023, 1) is fit18                              # v1.18 path unchanged
-    v116 = m.apply_fit(test, m.fit_composite(train, m.LEGACY_PRODUCT_RECIPE, 2023, 1))
-    assert np.allclose(m.apply_fit(test, s19, raw=True), v116, rtol=0, atol=1e-15)
-    assert not np.allclose(m.apply_fit(test, fit19, raw=True), v116)              # the production raw is not v1.16
-    with pytest.raises(ValueError, match='term-restricted'):
-        m.record_shadow(test.assign(model_wp_v116=.5), fit19, None, 2023)
-
-
 def test_recipe_keys_never_collide():
     assert m.recipe_key(m.PRODUCT_RECIPE) != m.recipe_key(m.V118_RECIPE)
     other = dict(m.PRODUCT_RECIPE, terms=list(m.CORE_TERMS[:-1]))

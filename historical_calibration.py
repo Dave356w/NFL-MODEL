@@ -264,41 +264,6 @@ def american_odds(probability):
     return number(odds, digits=0, signed=True)
 
 
-def market_odds_band(index):
-    if index == 0:
-        return 'Longer than ' + american_odds(PROB_CUTS[0])
-    if index == len(PROB_LABELS)-1:
-        return american_odds(PROB_CUTS[-1]) + ' or shorter'
-    return '≈ ' + american_odds(PROB_CUTS[index-1]) + ' to ' + american_odds(PROB_CUTS[index])
-
-
-def wp_table(rows, view):
-    lookup = {(r['band'], r['side']): r for r in rows if r['view'] == view}
-    body = []
-    for index, band in enumerate(PROB_LABELS):
-        cells = []
-        for side in ['home', 'away', 'both']:
-            r = lookup[band, side]
-            gap = number(r['gap_pp'], signed=True)
-            se = number(r['se_pp'])
-            uncertainty = (f'({gap} ± {se} pp)' if r['se_pp'] is not None
-                           else f'({gap} pp · SE unavailable)' if r['decided'] else 'No decided games')
-            cells.append("<td><div class='cal-rate'>" + percentage(r['actual_wp'])
-                + "</div><div class='cal-detail'>vs " + percentage(r['implied_wp'])
-                + f" implied <span class='cal-gap'>{uncertainty}</span></div>"
-                + f"<div class='cal-meta'>n={r['decided']} · {r['ties']} ties</div>"
-                + "<div class='cal-mov'>Median MOV <b>" + number(r['median_mov'], signed=True)
-                + "</b></div></td>")
-        odds = ("<span class='cal-odds'>" + market_odds_band(index) + '</span>'
-                if view == 'market_wp' else '')
-        body.append('<tr><th scope="row">' + band + odds + '</th>' + ''.join(cells) + '</tr>')
-    odds_heading = "<span class='cal-odds'>Fair American odds</span>" if view == 'market_wp' else ''
-    return ("<div class='gr-tablewrap'><table class='gr cal-wp'><thead><tr>"
-            "<th scope='col'>Implied WP band" + odds_heading + "</th><th scope='col'>Home side</th>"
-            "<th scope='col'>Away side</th><th scope='col'>Both sides</th>"
-            "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
-
-
 def roi_table(rows, view):
     body = []
     for r in rows:

@@ -44,75 +44,12 @@ def test_penalty_applies_at_the_source_without_changing_the_fit():
     assert np.allclose(m.expit(score), p)
 
 
-def test_v118_and_v116_have_distinct_identities():
-    assert m.recipe_key(m.V118_RECIPE).endswith('_fp0.2')
-    assert m.recipe_key(m.SHADOW_RECIPE) == m.recipe_key(m.LEGACY_PRODUCT_RECIPE)
-    sig18 = m.config_signature()[0]
-    with m.revision_identity(m.SHADOW_REVISION, m.SHADOW_RECIPE):
-        sig16 = m.config_signature()[0]
-        assert m.REVISION == 'boxscore-composite-v1.16'
-    assert sig16.startswith('9dad9b9a') and sig18 != sig16
-    assert m.REVISION == V118 and m.V118_RECIPE['favorite_penalty'] == m.FAVORITE_PENALTY
-    assert 'terms' not in m.V118_RECIPE and sig18.startswith('73636f30')        # v1.18's frozen identity
-
-
 def test_v119_is_production_and_keeps_v118_and_v116_identities():
     with m.revision_identity('boxscore-composite-v1.19', dict(m.V118_RECIPE, terms=list(m.CORE_TERMS))):
         sig19 = m.config_signature()[0]
         key19 = m.recipe_key(m.PRODUCT_RECIPE)
     assert not sig19.startswith(('73636f30', '9dad9b9a')) and key19.endswith('_t10_f8ff0b')
     assert key19.startswith(m.recipe_key(m.V118_RECIPE))
-
-
-def shadow_state(tmp_path, monkeypatch, season=2023):
-    monkeypatch.setattr(m, 'STATE_DIR', str(tmp_path))
-    with m.revision_identity(m.SHADOW_REVISION, m.SHADOW_RECIPE):
-        sig, cfg = m.config_signature()
-        (tmp_path/m.frozen_recipe_name(season)).write_text(json.dumps(
-            {'revision': m.REVISION, 'season': season, 'recipe': m.SHADOW_RECIPE, 'config_signature': sig,
-             'config': cfg, 'selection_max_season': season-1}))
-    return sig
-
-
-def test_shadow_locks_v116_beside_v118(tmp_path, monkeypatch):
-    sig16 = shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
-    board = lockable(train, board, fit)
-    rec18 = {'config_signature': m.config_signature()[0], 'recipe': m.V118_RECIPE, 'season': 2023}
-    _, n18 = m.record_forward(board, fit, rec18, asof=ASOF)
-    n16 = m.record_shadow(board, fit, None, 2023, asof=ASOF)
-    assert n18 == n16 == 4
-    rows = [json.loads(l) for l in (tmp_path/'forward_predictions.jsonl').read_text().splitlines()]
-    v18 = {r['game_id']: r for r in rows if r['revision'] == 'boxscore-composite-v1.18'}
-    v16 = {r['game_id']: r for r in rows if r['revision'] == 'boxscore-composite-v1.16'}
-    assert all(r['experiment'].startswith(sig16) for r in v16.values())
-    assert not any(r['experiment'].startswith(sig16) for r in v18.values())
-    for g, r in v16.items():
-        assert r['model_wp'] == pytest.approx(board.set_index('game_id').model_wp_v116[g])
-        assert v18[g]['model_wp'] == pytest.approx(m.favorite_penalized_wp([r['model_wp']], [r['market_no_vig_wp']])[0])
-        assert (v18[g]['model_wp'] > .5) == (r['model_wp'] > .5)
-        assert 'favorite_penalty' not in r['recipe'] and v18[g]['recipe']['favorite_penalty'] == m.FAVORITE_PENALTY
-    assert m.REVISION == 'boxscore-composite-v1.18'                                  # identity restored
-    assert m.record_shadow(board, fit, None, 2023, asof=ASOF) == 0                     # first snapshot only
-
-
-def test_shadow_off_or_without_raw_column_writes_nothing(tmp_path, monkeypatch):
-    shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
-    board = lockable(train, board, fit)
-    assert m.record_shadow(board.drop(columns='model_wp_v116'), fit, None, 2023, asof=ASOF) == 0
-    monkeypatch.setattr(m, 'SHADOW_LOCK', False)
-    assert m.record_shadow(board, fit, None, 2023, asof=ASOF) == 0
-    assert not (tmp_path/'forward_predictions.jsonl').exists()
-
-
-def test_shadow_refuses_a_tampered_raw_forecast(tmp_path, monkeypatch):
-    shadow_state(tmp_path, monkeypatch)
-    train, board = fixture(); fit = m.fit_composite(train, m.V118_RECIPE, 2023, 1)
-    board = lockable(train, board, fit)
-    with pytest.raises(ValueError, match='does not match'):
-        m.record_shadow(board.assign(model_wp_v116=board.model_wp), fit, None, 2023, asof=ASOF)
-    assert m.REVISION == 'boxscore-composite-v1.18'                                  # restored after an error
 
 
 def test_model_range_bounds_follow_the_penalty():

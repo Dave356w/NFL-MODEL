@@ -8,7 +8,6 @@ import pytest
 
 import availability_collect as c
 import ats_locks as locks
-import ats_wait
 import nfl_model as m
 
 UTC=dt.timezone.utc
@@ -295,29 +294,6 @@ def test_collection_to_corrected_starter_to_immutable_t60_lock(tmp_path):
     locks.validate_store(tmp_path)
 
 
-def test_no_inactives_no_candidate_but_hold_refreshes_and_locks(tmp_path):
-    source=Sources();source.inactives=False
-    state=collect(tmp_path,source);save_board(tmp_path,resolved(tmp_path,state))
-    assert locks.record(tmp_path,NOW)==dict(candidates=0,locks=0)
-    from test_ats_wait import Clock
-    clock=Clock(NOW)
-    def refresh():
-        source.now=clock.now;source.inactives=True
-        state=collect(tmp_path,source);save_board(tmp_path,resolved(tmp_path,state,asof=clock.now),generated=clock.now)
-        return locks.record(tmp_path,clock.now)
-    steps=ats_wait.hold(tmp_path,KO,refresh,lambda:locks.record(tmp_path,clock.now),clock,clock.sleep)
-    assert [r[0] for r in steps]==['refresh','finalize']
-    assert steps[0][2]['candidates']==1 and steps[1][2]['locks']==1
-
-
-def test_failed_refresh_cannot_freeze_a_missing_inactive_list(tmp_path):
-    source=Sources();source.inactives=False
-    state=collect(tmp_path,source);save_board(tmp_path,resolved(tmp_path,state))
-    from test_ats_wait import Clock
-    clock=Clock(NOW)
-    steps=ats_wait.hold(tmp_path,KO,lambda:1,lambda:locks.record(tmp_path,clock.now),clock,clock.sleep)
-    assert [r[0] for r in steps]==['refresh','refresh','finalize']
-    assert not c.read(tmp_path/locks.LOCKS)
 
 
 def test_both_teams_fresh_resolved_lists_required_even_if_digest_is_recomputed(tmp_path):

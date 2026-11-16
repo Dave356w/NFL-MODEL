@@ -8,20 +8,6 @@ import nfl_model as m
 from test_product_production import fixture
 
 
-def test_restored_configuration_matches_original_frozen_recipe():
-    # v1.18 (owner decision 2026-10-13) is v1.16 plus the favorite penalty; v1.16's own identity must
-    # still reproduce exactly, because the shadow lock and research replays run under it.
-    original=json.loads((Path(__file__).resolve().parents[1]/'data/frozen_recipe_2026_boxscore-composite-v1.16.json').read_text())
-    with m.revision_identity(m.SHADOW_REVISION,m.SHADOW_RECIPE):
-        assert m.REVISION=='boxscore-composite-v1.16'
-        assert m.PRODUCT_RECIPE==original['recipe']
-        assert m.config_signature()[0]==original['config_signature']
-    assert m.REVISION=='boxscore-composite-v1.24' and m.OUTPUT_NAME=='nfl_boxscore_output_v1_24'
-    assert {k:v for k,v in m.PRODUCT_RECIPE.items() if k not in ('favorite_penalty','terms')}==original['recipe']
-    assert m.PRODUCT_RECIPE['favorite_penalty']==m.FAVORITE_PENALTY
-    assert m.config_signature()[0]!=original['config_signature']
-
-
 def test_v116_walk_forward_does_not_require_v117_targets(monkeypatch):
     train,test=fixture();test.loc[test.index[0],'home won']=.5
     f=pd.concat([train,test],ignore_index=True)

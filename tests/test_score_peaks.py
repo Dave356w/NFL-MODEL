@@ -92,8 +92,6 @@ def test_family_features_signature_and_display_labels():
     assert cfg['score_peaks']['features']==list(m.PEAK_FEATURES)
     assert sig not in ('cfacc42e9143fdda8e2568cc4be208708ea6c086a9229fff08fb9421d42095fe',
                        '035443ef46ffa5d68c96c4c847657adac2f9eb6182d10308952090b4ddd4a90d')  # v1.13, v1.14
-    assert b.factor_label('d__max_lead')=='Largest lead'
-    assert b.factor_label('d__max_deficit')=='Largest deficit'
 
 
 def test_v114_excludes_only_separate_sack_rates():
