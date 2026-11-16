@@ -201,3 +201,12 @@ def test_sf_dal_and_pit_cin_repairs_use_last_pre_cutoff_observation(tmp_path):
         assert row['retro_locked'] and row['finalized_utc'] == now.isoformat()
         r.validate(row)
     assert r.apply(tmp_path, requests, now) == 0   # idempotent
+
+
+def test_monitor_reports_evidence_blockers_even_when_collection_is_complete():
+    complete = dict(report=dict(complete=True), inactives=dict(complete=True))
+    board = dict(home='BAL', away='JAX', quote_ready=True,
+                 home_availability_evidence=json.dumps(dict(team='BAL', collection=complete,
+                                                            blockers=['starting quarterback unresolved'])),
+                 away_availability_evidence=json.dumps(dict(team='JAX', collection=complete, blockers=[])))
+    assert monitor.observation_blockers(board) == ['BAL: starting quarterback unresolved']

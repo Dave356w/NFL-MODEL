@@ -58,7 +58,9 @@ def observation_blockers(board):
             item=collection.get(kind) or {}
             if item.get('error'):out.append(f"{team} {kind}: {item['error']}")
             elif item and item.get('complete') is not True:out.append(f'{team} {kind}: incomplete')
-        out+=[f'{team}: {b}' for b in ev.get('blockers') or [] if not collection]
+        # Evidence blockers can exist with complete collection (e.g. an unresolved
+        # starting QB or conflicting observations); always report them.
+        out+=[f'{team}: {b}' for b in ev.get('blockers') or []]
     if str(board.get('quote_ready')) not in ('True','true','1'):out.append('no fresh paired quote')
     return sorted(set(out))
 
