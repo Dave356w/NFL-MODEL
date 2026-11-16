@@ -83,7 +83,7 @@ do not select a new deadline from retrospective profit alone.
 For one operational heartbeat use the watcher's `once` dispatch input.
 For a publication retry dispatch `publish.yml`. Dispatch `lock-watchdog.yml`
 to check or restart the continuous watcher. Do not run the old build-held
-`ats_wait.py` concurrently as an additional journal writer.
+`ats_wait.py` (removed 2026-11-16) concurrently as an additional journal writer.
 
 ## November 15 parser incident and recovery
 
@@ -149,4 +149,4 @@ display rule above. `ats_locks.public_records` shows only the current revision's
 locks (v1.24, at their lock line and price); every other graded game, including games locked by
 v1.18–v1.22, shows v1.24's walk-forward replay. Capture and the watchdog still use
 `current_records`, so a game saved by any revision is never relocked. The journals are unchanged,
-and the continuity record stays in backend research (`research/regrade_2026_results/REPORT.md`).
+and native-lock results against same-row baselines stay in `data/ledger_report.txt`.
