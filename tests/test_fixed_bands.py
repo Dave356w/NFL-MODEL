@@ -164,13 +164,15 @@ LIVE_MAPS['boxscore-composite-v1.22'] = LIVE_MAPS['boxscore-composite-v1.19']
 # The v1.24 replay retains these annual medians. Its replacement-QB adjustment
 # is a separate final-margin step, not a change to median-map fitting.
 LIVE_MAPS['boxscore-composite-v1.24'] = LIVE_MAPS['boxscore-composite-v1.19']
+# v1.25 only removes that final-margin step; its median maps are v1.24's.
+LIVE_MAPS['boxscore-composite-v1.25'] = LIVE_MAPS['boxscore-composite-v1.24']
 
 
 def test_live_median_maps_match_the_recorded_targets_for_their_revision():
     root = Path(__file__).resolve().parents[1]
     revision = json.loads((root / 'data/latest/manifest.json').read_text())['revision']
     import nfl_model as m
-    assert revision in ('boxscore-composite-v1.19', 'boxscore-composite-v1.20', 'boxscore-composite-v1.21', 'boxscore-composite-v1.22', m.REVISION)  # bot snapshot may precede code adoption
+    assert revision in ('boxscore-composite-v1.19', 'boxscore-composite-v1.20', 'boxscore-composite-v1.21', 'boxscore-composite-v1.22', 'boxscore-composite-v1.24', m.REVISION)  # bot snapshot may precede code adoption
     assert revision in LIVE_MAPS, f'record the median-map targets for {revision} in LIVE_MAPS'
     d = pd.read_csv(root / 'data/latest/retro_ledger.csv')
     d['model_spread'] = m.implied_spread(d.model_wp)

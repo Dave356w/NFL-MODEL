@@ -10,7 +10,21 @@ below are history. The production recipe, fit and config signature are unchanged
 version history (v1 to v1.24), newest first; this page describes what the code
 does **today** and how the repository runs it.
 
-## The current model: `boxscore-composite-v1.24`
+## The current model: `boxscore-composite-v1.25`
+
+**Owner decision 2026-11-16:** v1.25 is v1.24 without the replacement-QB margin
+adjustment described below. The ten-term fit, favorite penalty, QB starter repairs,
+availability gates and weekly median map are unchanged; the ATS margin is the median
+map itself. Replayed on 2023–2026 with the production weekly maps, the adjustment
+changed 93 picks, which went 35‑55‑3 with it and 55‑35‑3 without (−38.2u at flat −110;
+it lost units in 2023, 2024 and 2025). This is development-history evidence, not forward
+evidence. New T−60 candidates use lock policy v6 (`ats_locks.NO_REPLACEMENT_POLICY`): v4/v5
+durability and freshness, and a lock may carry no replacement adjustment. Public 2026
+results show the v1.25 regrade: its replay for every game whose T−60 deadline precedes
+2026-11-18 00:00 UTC (all of week 10) and its own locks after that. v1.24's locks and
+journals are unchanged. Output `nfl_boxscore_output_v1_25`, new configuration signature.
+
+### v1.24 (production 2026-11-13 to 2026-11-16)
 
 By owner decision on 2026-11-13, the broader replacement-starter rule applies
 an additional **−2 team-margin points after the ATS median mapping**. The

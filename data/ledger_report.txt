@@ -273,7 +273,7 @@ boxscore-composite-v1.16 2026_10_LAC_BAL           0.630053  0.621610           
 
 Appendix C: current production sanity checks
 
-Production sanity check: boxscore-composite-v1.24 and the median ATS map
+Production sanity check: boxscore-composite-v1.25 and the median ATS map
 Status: PASS
 Basis: historical replay and timed ATS locks remain separate.
 ATS map policy v2: weekly weighted medians of signed pick margins (one-season half-life), including losses and tied finals; games before the forecast week only.
@@ -320,7 +320,7 @@ Historical replay: median ATS on every game opportunity:
   2026: ATS 76-54-6, 0 skips, 136/136 selected, +15.09u, ROI +11.10% +/- 7.92pp (1 SE)
     Binary proper scores n=135: log loss 0.626206, market 0.622275; Brier 0.217001; tied finals excluded from binary scoring.
 
-Native boxscore-composite-v1.24 forward snapshots: {"graded": 11, "pending": 1, "snapshots": 12, "ties": 0}
+Native boxscore-composite-v1.25 forward snapshots: {"graded": 0, "pending": 0, "snapshots": 0, "ties": 0}
 Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 320, "original_selections": 57, "original_skips": 0, "policy": "median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3", "recovered_saved_forecasts": 2, "timed_locks": 55}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
