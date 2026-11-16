@@ -227,3 +227,9 @@ for every 2026 game whose deadline precedes 2026-11-18 00:00 UTC (through week 1
 after. v1.24 code paths, locks and journals are preserved for validation. Evidence: on the 2023–2026
 replay the adjustment changed 93 picks, 35‑55‑3 with it vs 55‑35‑3 without (−38.2u); development
 history, not forward evidence.
+
+**Final-report fallback (owner decision 2026-11-16; lock policy v7).** Under v1.25, when both teams'
+complete official inactive lists are not ready, a T−60 candidate may lock on complete, fresh final
+injury reports, labelled `final_report_fallback` with each team's reasons. Incomplete reports still
+block; a fallback never replaces a complete inactive-list candidate. See `LOCKING.md`. This changes
+only the lock gate: the model, its configuration signature and the public regrade rules are unchanged.

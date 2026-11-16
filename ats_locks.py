@@ -46,7 +46,19 @@ NO_REPLACEMENT_POLICY = 'median-mov-weekly-decay-ats-t60-durable-no-qb-adjustmen
 POLICIES[NO_REPLACEMENT_POLICY] = True
 POLICY_METHODS[NO_REPLACEMENT_POLICY] = 'weighted_median_signed_mov_weekly_decay'
 NO_REPLACEMENT_REVISION = 'boxscore-composite-v1.25'
-DURABLE_POLICIES = (WATCHER_POLICY, REPLACEMENT_POLICY, NO_REPLACEMENT_POLICY)
+# v7 (owner decision 2026-11-16, v1.25): v6 plus a final-injury-report fallback. When both
+# teams' complete official inactive lists are not ready, a candidate inside the final
+# freshness window may still save on complete, fresh final injury reports. It is labelled
+# `final_report_fallback` with each team's reasons, and is never saved after a candidate
+# that had complete inactive lists (`official_inactives`) for the same game.
+FALLBACK_POLICY = 'median-mov-weekly-decay-ats-t60-durable-report-fallback-2026-11-16-v7'
+POLICIES[FALLBACK_POLICY] = True
+POLICY_METHODS[FALLBACK_POLICY] = 'weighted_median_signed_mov_weekly_decay'
+FALLBACK_POLICIES = (FALLBACK_POLICY,)
+INACTIVES_GATE = 'official_inactives'
+FALLBACK_GATE = 'final_report_fallback'
+V125_POLICIES = (NO_REPLACEMENT_POLICY, FALLBACK_POLICY)
+DURABLE_POLICIES = (WATCHER_POLICY, REPLACEMENT_POLICY, NO_REPLACEMENT_POLICY, FALLBACK_POLICY)
 REPLACEMENT_FIELDS = ('home_qb_replacement','away_qb_replacement',
     'qb_replacement_base_margin','qb_replacement_margin_adjustment','qb_replacement_policy')
 REPLACEMENT_TEAM_FIELDS = ('qb_replacement','qb_replacement_status','qb_projected_id',
@@ -59,8 +71,20 @@ def policy_for_revision(revision):
     if revision=='boxscore-composite-v1.24':
         return REPLACEMENT_POLICY
     if revision==NO_REPLACEMENT_REVISION:
-        return NO_REPLACEMENT_POLICY
+        return FALLBACK_POLICY
     return WATCHER_POLICY
+
+
+def inactive_issues(availability, asof):
+    """Per side, why complete fresh official inactive lists are not ready at `asof`."""
+    import availability_collect as ac
+    out = {}
+    for side, evidence in availability.items():
+        collection = evidence.get('collection', {})
+        if not ac.collection_ready(collection, asof, require_inactives=True):
+            out[side] = sorted({i for i in ac.readiness_issues(collection, asof, True)
+                                if i.startswith('inactives')} or {'inactives: not ready'})
+    return out
 
 RECEIPTS = 'candidate_receipts.jsonl'
 MAX_FORECAST_AGE_MINUTES = 10
@@ -253,12 +277,12 @@ def validate_store(data='data'):
         elif row['policy_version']==REPLACEMENT_POLICY:
             raise ValueError('Replacement lock policy requires v1.24')
         if row['revision']==NO_REPLACEMENT_REVISION:
-            if row['policy_version']!=NO_REPLACEMENT_POLICY or row.get('availability_policy') is None:
-                raise ValueError('v1.25 requires lock policy v6 and availability evidence')
+            if row['policy_version'] not in V125_POLICIES or row.get('availability_policy') is None:
+                raise ValueError('v1.25 requires lock policy v6/v7 and availability evidence')
             if any(row.get(k) is not None for k in ('qb_replacement_base_margin','qb_replacement_margin_adjustment')):
                 raise ValueError('v1.25 locks carry no replacement-QB margin adjustment')
-        elif row['policy_version']==NO_REPLACEMENT_POLICY:
-            raise ValueError('Lock policy v6 requires v1.25')
+        elif row['policy_version'] in V125_POLICIES:
+            raise ValueError('Lock policy v6/v7 requires v1.25')
         side = select(mapped, line, POLICIES[row['policy_version']])
         if abs(mapped - row['fixed_band_spread']) > EPS or side != row['selected_side']:
             raise ValueError('ATS candidate does not match the saved map and line')
@@ -290,6 +314,11 @@ def validate_store(data='data'):
                 if abs(float(m.apply_fit(check, audit['fit'])[0])-wp) > 1e-10:
                     raise ValueError('Watcher probability differs from its prepared fit and quote')
         by_hash[h] = row
+    for row in candidates:
+        if row.get('availability_gate')==FALLBACK_GATE and any(
+                key(c)==key(row) and c.get('availability_gate')==INACTIVES_GATE
+                and utc(c['generated_utc'])<=utc(row['generated_utc']) for c in candidates):
+            raise ValueError('report-only fallback saved after a complete inactive-list candidate')
     locks = read(data / LOCKS)
     seen = set()
     for row in locks:
@@ -355,15 +384,29 @@ def validate_availability(row):
                 if row['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') and any(
                         f.get('source_kind')=='official_team_news' for f in evidence['observations']):
                     raise ValueError('RSS/news is retired for v1.22')
+                fallback=row.get('policy_version') in FALLBACK_POLICIES and row.get('availability_gate')==FALLBACK_GATE
+                if row.get('policy_version') in FALLBACK_POLICIES and row.get('availability_gate') not in (INACTIVES_GATE,FALLBACK_GATE):
+                    raise ValueError('lock policy v7 requires an availability gate label')
+                need_inactives=not fallback
                 if (collection.get('team')!=row[side] or collection.get('game_id')!=row['game_id']
-                        or not ac.collection_ready(collection,row['generated_utc'],require_inactives=True)
-                        or not ac.collection_ready(collection,row['lock_at_utc'],require_inactives=True)):
+                        or not ac.collection_ready(collection,row['generated_utc'],require_inactives=need_inactives)
+                        or not ac.collection_ready(collection,row['lock_at_utc'],require_inactives=need_inactives)):
                     raise ValueError('complete fresh official collection required through the cutoff')
-                for kind,field in (('report','report_complete'),('inactives','inactives_complete')):
+                for kind,field in (('report','report_complete'),)+((('inactives','inactives_complete'),) if need_inactives else ()):
                     if not any(f['field']==field and f['value'] is True
                                and f.get('source_capture_sha256')==collection[kind]['source_capture_sha256']
                                for f in evidence['observations']):
                         raise ValueError('collection completeness has no matching sourced observation')
+        if row.get('policy_version') in FALLBACK_POLICIES:
+            # The label must match the evidence: a fallback names exactly the sides whose
+            # inactive lists were not ready at the cutoff; a complete gate names none.
+            missing=inactive_issues(row['availability'],row['lock_at_utc'])
+            reasons=row.get('availability_fallback_reasons')
+            if row['availability_gate']==FALLBACK_GATE:
+                if not missing or not isinstance(reasons,dict) or set(reasons)!=set(missing) or not all(reasons.values()):
+                    raise ValueError('report-only fallback must record each team whose inactive lists were not ready')
+            elif missing or reasons:
+                raise ValueError('complete inactive-list gate carries fallback reasons')
     except (KeyError,TypeError,ValueError) as exc:
         raise ValueError(f'ATS availability evidence invalid: {exc}') from exc
 
@@ -396,7 +439,8 @@ def record(data='data', now=None, policy_version=None, finalize=True):
         manifest = json.loads((latest / 'manifest.json').read_text())
         current = manifest['revision'] in ('boxscore-composite-v1.24', NO_REPLACEMENT_REVISION)
         policy_version = requested_policy or (policy_for_revision(manifest['revision']) if current else POLICY_VERSION)
-        if current and policy_version!=policy_for_revision(manifest['revision']):
+        allowed = V125_POLICIES if manifest['revision']==NO_REPLACEMENT_REVISION else (policy_for_revision(manifest['revision']),)
+        if current and policy_version not in allowed:
             raise ValueError(f"{manifest['revision']} candidates must use lock policy {policy_for_revision(manifest['revision'])}")
         generated = utc(manifest['generated_utc'])
         rule_path = latest / 'fixed_band_rules.json'
@@ -425,13 +469,22 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 if (manifest.get('recipe') or {}).get('family') in m.AVAIL_FAMILIES and not m.injury_reports_ready(raw, ko, now):
                     continue
                 availability = None
+                missing = None
                 if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
                     availability=m.availability_snapshot(raw,ko,generated)
                     if availability is None: continue
                 if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
                     import availability_collect as ac
-                    if not availability or any(not ac.collection_ready(e.get('collection',{}),cutoff,require_inactives=True)
-                                               for e in availability.values()):continue
+                    if not availability:continue
+                    if policy_version in FALLBACK_POLICIES:
+                        if any(not ac.collection_ready(e.get('collection',{}),cutoff) for e in availability.values()):continue
+                        missing=inactive_issues(availability,cutoff)
+                        # Never replace evidence with less: no report-only fallback once a
+                        # complete inactive-list candidate exists for this game.
+                        if missing and any(key(c)==identity and c.get('availability_gate')==INACTIVES_GATE
+                                           for c in candidates+added):continue
+                    elif any(not ac.collection_ready(e.get('collection',{}),cutoff,require_inactives=True)
+                             for e in availability.values()):continue
                     expected=ac.REPORTS_POLICY if manifest['revision'] in ('boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25') else ac.POLICY
                     if any(e.get('collection',{}).get('policy')!=expected for e in availability.values()):continue
                 try:
@@ -477,6 +530,9 @@ def record(data='data', now=None, policy_version=None, finalize=True):
                 if raw.get('availability_policy')==m.AVAILABILITY_POLICY:
                     row['availability_policy']=m.AVAILABILITY_POLICY
                     row['availability']=availability
+                    if policy_version in FALLBACK_POLICIES:
+                        row['availability_gate']=FALLBACK_GATE if missing else INACTIVES_GATE
+                        if missing:row['availability_fallback_reasons']=missing
                     validate_availability(row)
                 row['espn_quote'] = espn_spreads.candidate_quote(row, data)
                 row['espn_quote_status'] = 'captured_prelock' if row['espn_quote'] else 'no_matching_prelock_price'
@@ -583,7 +639,10 @@ def write_capture_status(data='data', now=None):
                                 issues.extend(raw[side]+': '+str(b) for b in e.get('blockers',[]))
                                 if not e.get('report_complete'):issues.append(raw[side]+': final report incomplete')
                                 if manifest['revision'] in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24','boxscore-composite-v1.25'):
-                                    issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,True))
+                                    fallback=policy_for_revision(manifest['revision']) in FALLBACK_POLICIES
+                                    issues.extend(raw[side]+': '+b for b in ac.readiness_issues(e.get('collection',{}),cutoff,not fallback))
+                                    if fallback and not ac.collection_ready(e.get('collection',{}),cutoff,True):
+                                        issues.append(raw[side]+': inactive lists not ready (report-only fallback allowed at T-60)')
                             except (KeyError,ValueError,TypeError):
                                 issues.append(raw[side]+': forecast availability evidence invalid')
                         if m.availability_snapshot(raw,ko,utc(diagnostic['generated_utc']) if diagnostic else generated) is None:

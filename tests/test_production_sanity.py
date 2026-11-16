@@ -93,25 +93,31 @@ def test_replacement_audit_requires_metadata_even_when_both_replacements_cancel(
         s.replacement_predictions(history, [3.], saved.drop(columns=missing), s.REPLACEMENT_REVISION)
 
 
-@pytest.mark.parametrize('field', ['qb_replacement_margin_adjustment', 'fixed_band_spread', 'fixed_band_ats_result'])
-def test_standalone_audit_rejects_replacement_export_tampering(tmp_path, field):
+@pytest.mark.parametrize('field', ['injected_qb_adjustment', 'fixed_band_spread', 'fixed_band_ats_result'])
+def test_standalone_audit_rejects_current_export_tampering(tmp_path, field):
+    """Tamper the committed current-revision export; the independent audit must fail and leave it as is."""
     latest = tmp_path/'latest'; latest.mkdir()
     source = Path(__file__).resolve().parents[1]/'data/latest'
     for name in ['manifest.json', 'retro_ledger.csv', 'fixed_band_ledger.csv', 'fixed_band_rules.json']:
         shutil.copyfile(source/name, latest/name)
+    assert s.inspect(tmp_path)['status'] == 'PASS'
     path = latest/'fixed_band_ledger.csv'
     saved = pd.read_csv(path)
-    i = saved.index[saved.qb_replacement_margin_adjustment.abs().eq(2.)][0]
+    i = saved.index[saved.season.eq(2026) & saved.fixed_band_ats_result.isin(['W', 'L'])][0]
     if field == 'fixed_band_ats_result':
         saved.loc[i, field] = 'W' if saved.loc[i, field] != 'W' else 'L'
-    else:
+    elif field == 'fixed_band_spread':
         saved.loc[i, field] += 2.
+    else:  # a v1.24-style -2 overlay smuggled into a v1.25 export
+        saved['qb_replacement_margin_adjustment'] = np.nan
+        saved.loc[i, 'qb_replacement_margin_adjustment'] = -2.
+        saved.loc[i, 'fixed_band_spread'] -= 2.
     saved.to_csv(path, index=False)
     before = path.read_bytes()
     audit = s.inspect(tmp_path)
     assert audit['status'] == 'FAIL'
-    name = {'qb_replacement_margin_adjustment': 'exported_replacement_margin_evidence',
-            'fixed_band_spread': 'exported_median_predictions', 'fixed_band_ats_result': 'exported_ats_grades'}[field]
+    name = {'injected_qb_adjustment': 'exported_median_predictions', 'fixed_band_spread': 'exported_median_predictions',
+            'fixed_band_ats_result': 'exported_ats_grades'}[field]
     assert audit['checks'][name] is False
     assert path.read_bytes() == before
 

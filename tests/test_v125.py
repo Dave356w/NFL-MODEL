@@ -22,9 +22,9 @@ def test_identity_signature_and_lock_policy():
     with m.revision_identity(V124, m.PRODUCT_RECIPE):
         old_sig, old_cfg = m.config_signature()
     assert 'replacement_margin' in old_cfg and sig != old_sig
-    assert locks.policy_for_revision(m.REVISION) == locks.NO_REPLACEMENT_POLICY
+    assert locks.policy_for_revision(m.REVISION) == locks.FALLBACK_POLICY  # v7 since the report fallback
     assert locks.policy_for_revision(V124) == locks.REPLACEMENT_POLICY
-    assert locks.NO_REPLACEMENT_POLICY in locks.DURABLE_POLICIES
+    assert {locks.NO_REPLACEMENT_POLICY, locks.FALLBACK_POLICY} <= set(locks.DURABLE_POLICIES)
     assert m.REVISION in locks.REGRADE_REVISIONS
 
 
@@ -85,9 +85,11 @@ def crafted(revision, policy, **changes):
 
 @pytest.mark.parametrize('revision,policy,message', [
     (m.REVISION, locks.REPLACEMENT_POLICY, 'Replacement lock policy requires v1.24'),
-    (m.REVISION, locks.WATCHER_POLICY, 'v1.25 requires lock policy v6'),
-    (m.REVISION, locks.NO_REPLACEMENT_POLICY, 'v1.25 requires lock policy v6 and availability evidence'),
-    ('boxscore-composite-v1.22', locks.NO_REPLACEMENT_POLICY, 'Lock policy v6 requires v1.25'),
+    (m.REVISION, locks.WATCHER_POLICY, 'v1.25 requires lock policy v6/v7'),
+    (m.REVISION, locks.NO_REPLACEMENT_POLICY, 'v1.25 requires lock policy v6/v7 and availability evidence'),
+    (m.REVISION, locks.FALLBACK_POLICY, 'v1.25 requires lock policy v6/v7 and availability evidence'),
+    ('boxscore-composite-v1.22', locks.NO_REPLACEMENT_POLICY, 'Lock policy v6/v7 requires v1.25'),
+    ('boxscore-composite-v1.22', locks.FALLBACK_POLICY, 'Lock policy v6/v7 requires v1.25'),
 ])
 def test_store_rejects_v125_policy_mismatches(tmp_path, revision, policy, message):
     (tmp_path / locks.CANDIDATES).write_text(json.dumps(crafted(revision, policy)) + '\n')

@@ -215,3 +215,9 @@ data. The ladder workflow retains its pinned numerical-library versions, includi
 Before a PR, run `python sync_notebook.py`, `python validate_data_files.py`, and
 `python -m pytest tests/ -q`. The three previously failing snapshot assertions now distinguish
 annual targets from weekly map exports and settle historical ROI at actual spread prices.
+
+## Final-report fallback (2026-11-16)
+
+From lock policy v7 (v1.25), complete official inactive lists are preferred, not required, at T−60.
+If they are not ready, a lock may use complete, fresh final injury reports alone; the lock records
+the fallback and its reasons. See `LOCKING.md`.
