@@ -150,3 +150,23 @@ locks (v1.24, at their lock line and price); every other graded game, including 
 v1.18–v1.22, shows v1.24's walk-forward replay. Capture and the watchdog still use
 `current_records`, so a game saved by any revision is never relocked. The journals are unchanged,
 and native-lock results against same-row baselines stay in `data/ledger_report.txt`.
+
+## Final-report fallback (lock policy v7, 2026-11-16)
+
+Owner decision: a missed pick costs more than a late scratch the model does not see. Under
+v1.25, T−60 candidates use lock policy v7 (`ats_locks.FALLBACK_POLICY`). It keeps v6's
+freshness and durability rules (forecast within 10 minutes of T−60, paired quote within 5 minutes
+of the forecast, pre-cutoff persistence, scoring audit) and changes only the availability gate:
+
+- Both teams' complete, fresh official inactive lists: candidate gate `official_inactives`, as before.
+- Otherwise, if both teams' final injury reports are complete and fresh, the candidate saves with
+  gate `final_report_fallback` and `availability_fallback_reasons` naming each team whose inactive
+  lists were not ready and why. Players listed only on the inactive list are not priced.
+- An incomplete or stale final report still blocks the game.
+- No downgrade: a fallback is never saved after a complete inactive-list candidate for the same
+  game, and the store validator rejects one that is. The lock still takes the newest candidate, so a
+  complete candidate saved after a fallback replaces it.
+
+The store validator checks that each label matches its evidence. The watcher, capture status and
+watchdog show missing inactive lists as warnings ("report-only fallback allowed"), not blockers.
+Saved v4–v6 locks keep their own rules.

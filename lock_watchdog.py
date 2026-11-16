@@ -58,7 +58,9 @@ def observation_blockers(board):
         for kind in ('report','inactives'):
             item=collection.get(kind) or {}
             if item.get('error'):out.append(f"{team} {kind}: {item['error']}")
-            elif item and item.get('complete') is not True:out.append(f'{team} {kind}: incomplete')
+            elif item and item.get('complete') is not True:
+                # Lock policy v7 can lock on final reports alone; inactive gaps are warnings.
+                out.append(f'{team} {kind}: incomplete' + (' (report-only fallback allowed)' if kind=='inactives' else ''))
         # Evidence blockers can exist with complete collection (e.g. an unresolved
         # starting QB or conflicting observations); always report them.
         out+=[f'{team}: {b}' for b in ev.get('blockers') or []]

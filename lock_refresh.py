@@ -145,7 +145,10 @@ def score(data, now=None, clock=None):
     board['generated_utc'] = generated.isoformat()
     board['prepared_bundle_sha256'] = manifest['sha256']
     board['quote_ready'] = [game in offers for game in board.game_id]
+    # Lock policy v7 (v1.25) can lock on complete final reports when inactive lists are
+    # not ready; earlier policies still require both teams' complete inactive lists.
+    inactives = locks.policy_for_revision(manifest.get('revision')) not in locks.FALLBACK_POLICIES
     board['availability_ready'] = [bool(m.availability_snapshot(row, m.kickoff_utc(row), generated)) and all(
-        ac.collection_ready(ac.team_snapshot(collection, row[side], row['game_id']), generated, require_inactives=True)
+        ac.collection_ready(ac.team_snapshot(collection, row[side], row['game_id']), generated, require_inactives=inactives)
         for side in ('home', 'away')) for row in board.to_dict('records')]
     return manifest, board

@@ -234,8 +234,9 @@ def tick(data, now=None):
                     evidence = json.loads(evidence) if isinstance(evidence, str) else evidence or {}
                     reasons.extend(evidence.get('blockers', []))
                     import availability_collect as ac
+                    fallback = locks.policy_for_revision(manifest['revision']) in locks.FALLBACK_POLICIES
                     reasons.extend(row[side]+': '+issue for issue in ac.readiness_issues(
-                        evidence.get('collection',{}), generated, require_inactives=True))
+                        evidence.get('collection',{}), generated, require_inactives=not fallback))
                 if not row.get('ready'):
                     reasons.append('fresh paired quote or base features unavailable')
                 if not row.get('availability_ready'):
