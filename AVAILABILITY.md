@@ -36,10 +36,17 @@ The first four files are append-only; only operational health is replaced atomic
 unchanged evidence updates health without changing its first-capture time. A report that changes
 and later reverts receives a new capture. Full article prose is not republished.
 
-Injury tables must identify the scheduled week and both opponents. A final report also requires
-the final practice day to be populated and every player to resolve to an exact GSIS ID. Blank
-practice cells, missing tables and unknown players remain incomplete. The explicit `(-)` marker
-for a player removed from a practice report is distinct from an unpublished blank. Undated tables
+Injury tables must identify the scheduled week and contain this club's own table. Some club
+sites (dallascowboys.com, 2026 week 10) publish only their own table; the opponent's table is read
+from the opponent's site. A page listing any club other than the scheduled opponent is rejected
+as stale. A final report also requires the final practice day to be published (at least one real
+entry in that column) and every player to resolve to an exact GSIS ID. A blank final-day cell is
+an unpublished day unless the row carries an Out/Doubtful/Questionable designation: designations
+are issued only with the final report, so that blank is a player added after the final practice
+(2026 week 10: CIN's Hinton and Risner). Missing tables and unknown players remain incomplete. The
+explicit `(-)` marker for a player removed from a practice report is distinct from an unpublished
+blank. Raw pages behind parse failures or incomplete reports within four hours of kickoff are kept
+once per distinct error in `availability_failures/` for diagnosis; they are never a fact source. Undated tables
 use their first capture as the conservative effective/publication bound, explicitly labelled
 `first_capture`; they are never backdated.
 

@@ -74,6 +74,9 @@ def historical_before_adoption(row, cutoff=None):
 # The owner activated this final-margin policy for 2026 reporting, including
 # previously saved selections. The underlying append-only rows stay untouched.
 REPLACEMENT_REVISION='boxscore-composite-v1.24'
+# Owner decision 2026-11-15: every saved pregame lock stays the game's decision
+# across revisions (ats_locks.current_records); replay fills only unlocked games.
+LOCK_POLICY_VERSION='lock-continuity-2026-11-15-v1'
 REPLACEMENT_METADATA=('qb_replacement_base_margin','qb_replacement_margin_adjustment',
                       'qb_replacement_policy','qb_replacement_applied')
 
@@ -85,16 +88,20 @@ def replacement_enabled(latest):
 def replacement_overlay(frame,latest):
     """Apply the 2026 reporting view after original saved-decision priority.
 
-    A new-policy lock already contains its final margin and stays authoritative.
-    Old locks consume the model run's strictly pregame long-form classification
-    table. Missing classifications preserve their original margin.
+    Saved locks of every revision keep their saved margin (lock continuity,
+    owner decision 2026-11-15). Replayed rows consume the model run's strictly
+    pregame long-form classification table. Missing classifications preserve
+    their original margin.
     """
     out=frame.copy()
     if out.empty or not replacement_enabled(latest) or 'fixed_band_spread' not in out:
         return out
     years=pd.to_numeric(out.get('season',pd.Series(np.nan,index=out.index)),errors='coerce')
     existing=out.get('qb_replacement_policy',pd.Series('',index=out.index)).fillna('').eq(qb_replacement.POLICY)
-    pending=years.ge(2026)&~existing
+    # Lock continuity (owner decision 2026-11-15): a saved decision is the bet and
+    # keeps its saved margin, whichever revision saved it. Only replays are overlaid.
+    saved=out.get('saved_decision',pd.Series(False,index=out.index)).fillna(False).astype(bool)
+    pending=years.ge(2026)&~existing&~saved
     if not pending.any(): return out
     table=latest.get('replacement_adjustments',pd.DataFrame())
     if len(table):
@@ -148,6 +155,10 @@ def align_calibration_2026(latest,pool):
     history=latest.get('fixed_band_ledger',pd.DataFrame()).copy()
     if history.empty:return
     lookup=pool.set_index('game_id')
+    # Saved earlier-revision locks carry no overlay metadata (NaN); keep the column
+    # able to hold it instead of failing on a boolean dtype.
+    for name in REPLACEMENT_METADATA:
+        if name in history and history[name].dtype==bool:history[name]=history[name].astype(object)
     names=('fixed_band_spread','spread_line','result','home_score','away_score')
     for i,row in history.loc[history.season.eq(2026)].iterrows():
         if row.game_id not in lookup.index:continue
@@ -159,7 +170,7 @@ def align_calibration_2026(latest,pool):
             name=f'ats_{side}_odds'
             if name in current:history.loc[i,f'{side}_spread_odds']=current[name]
         for name in ('fixed_band_ats_result','fixed_band_ats_units','fixed_band_ats_side',
-                     'fixed_band_ats_team','fixed_band_ats_handicap',*REPLACEMENT_METADATA):
+                     'fixed_band_ats_team','fixed_band_ats_handicap','lock_policy_version',*REPLACEMENT_METADATA):
             if name in current:history.loc[i,name]=current[name]
     latest['fixed_band_ledger']=history
 
@@ -238,7 +249,8 @@ def build(latest, ledger):
             ats_basis='Backfilled recorded skip' if ats_locks.backfilled(saved)
             else 'Owner-requested retro lock' if saved.get('retro_locked')
             else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
-            else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock')
+            else 'Recorded pregame' if saved.get('legacy_lock') else '60-minute lock',
+            saved_decision=True)
         rows[game].update({k:v for k,v in saved.items() if k in REPLACEMENT_METADATA or k.startswith(('home_qb_','away_qb_'))})
     # ESPN supplies final scores only. It cannot create or change a decision.
     # Completed games without a model row remain visible as unavailable.
@@ -262,6 +274,7 @@ def build(latest, ledger):
             frame[name] = np.nan
         frame[name] = pd.to_numeric(frame[name], errors='coerce')
     frame = replacement_overlay(frame,latest)
+    frame['lock_policy_version'] = LOCK_POLICY_VERSION
     grades, units = fixed_bands.grade(frame, frame.fixed_band_spread)
     # A pending zero-edge selection is not a completed skip yet.
     complete = np.isfinite(frame.result)

@@ -28,6 +28,8 @@ SOURCES='availability_sources.jsonl'
 NEWS='team_news.jsonl'
 REVIEW='availability_review.jsonl'
 STATE='availability_collection_status.json'
+# Raw pages that failed to parse, kept once per (team, game, url, error) for diagnosis.
+FAILURES='availability_failures'
 MAX_AGE_MINUTES=35
 NEWS_POLL_MINUTES=15
 NFL='https://www.nfl.com'
@@ -225,7 +227,12 @@ def parse_injury_report(text,team,event,index):
     expected={TEAMS[event[s]][0] for s in ('home','away')}
     found={c.select_one('.nfl-o-injury-report__club-name').get_text(' ',strip=True)
            for c in containers if c.select_one('.nfl-o-injury-report__club-name')}
-    if not expected<=found:raise ValueError('injury report for both scheduled opponents not yet published')
+    # Some club sites (e.g. dallascowboys.com, 2026 week 10) publish only their own
+    # table. The opponent's table is read from the opponent's own site, so this
+    # page needs only this club's table for the selected week. Any other club on
+    # the page must be the scheduled opponent; a different one means a stale page.
+    if found-expected:raise ValueError('injury report lists a club other than the scheduled opponent')
+    if TEAMS[team][0] not in found:raise ValueError('injury report for this club not yet published')
     container=next((c for c in containers if c.select_one('.nfl-o-injury-report__club-name')
                     and c.select_one('.nfl-o-injury-report__club-name').get_text(' ',strip=True)==TEAMS[team][0]),None)
     table=container.find('table') if container else None
@@ -237,7 +244,7 @@ def parse_injury_report(text,team,event,index):
     final=day-dt.timedelta(days=1 if day.weekday()==3 else 2)
     final_column=final.strftime('%a')
     if final_column not in headers:raise ValueError('injury table has no final practice-day column')
-    final_index=headers.index(final_column);rows=[];issues=[];complete=True
+    final_index=headers.index(final_column);rows=[];issues=[];complete=True;final_published=False
     for tr in table.select('tbody tr'):
         cells=[x.get_text(' ',strip=True) for x in tr.find_all('td')]
         if not cells:continue
@@ -245,12 +252,20 @@ def parse_injury_report(text,team,event,index):
         status=cells[-1].upper();player=index.resolve(cells[0],team,allow_transfer=True)
         if status not in STATUSES:issues.append('unknown injury designation: '+status);continue
         # The CMS explicitly writes (-) when a previously listed player is no
-        # longer on that day's report. An empty cell is an unpublished day.
-        if not cells[final_index].strip() or cells[final_index].strip() in ('-','--'):complete=False
+        # longer on that day's report. An empty cell is an unpublished day,
+        # unless the row carries a game designation: designations are issued
+        # only with the final report, so a blank final-day cell next to one is
+        # a player added after the final practice (2026 week 10: CIN's
+        # Hinton/Risner, Questionable with no Friday entry).
+        practice=cells[final_index].strip()
+        if practice and practice not in ('-','--'):final_published=True
+        designated=STATUSES[status] in ('Out','Doubtful','Questionable')
+        if practice in ('-','--') or (not practice and not designated):complete=False
         if player is None:issues.append('unresolved injury player: '+cells[0]);continue
         rows.append(dict(gsis_id=player['gsis_id'],player=player['player'],position=player['position'],
                          status=STATUSES[status],practice=cells[final_index]))
-    if not rows:complete=False
+    # At least one real final-day entry proves that day's column was published.
+    if not rows or not final_published:complete=False
     return dict(rows=rows,complete=complete and not issues,issues=issues,final_date=final.isoformat())
 
 
@@ -558,6 +573,24 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False,legacy_news
     def success(health,response,**values):
         health.update(last_attempt_utc=response['captured_utc'],last_success_utc=response['captured_utc'],error=None,**values)
 
+    def keep_failure(team,event,response,exc):
+        """Persist the raw page behind a parser failure once per distinct error.
+
+        Diagnostic only: never read by the model and never a source of facts.
+        """
+        if not isinstance(response,dict) or not isinstance(response.get('text'),str):return None
+        # Only failures inside the pre-lock window matter; earlier in the week an
+        # unpublished or previous-week page is expected and would bloat the repo.
+        if utc(event['kickoff_utc'])-now>dt.timedelta(hours=4):return None
+        key=digest(dict(team=team,game_id=event['game_id'],url=response['url'],error=str(exc)[:250]))
+        path=data/FAILURES/f"{event['game_id']}_{team}_{key[:16]}.html"
+        if not path.exists():
+            path.parent.mkdir(parents=True,exist_ok=True)
+            header=json.dumps(dict(team=team,game_id=event['game_id'],url=response['url'],error=str(exc)[:250],
+                                   captured_utc=response['captured_utc'],body_sha256=response.get('body_sha256')),sort_keys=True)
+            path.write_text('<!-- '+header.replace('--','- -')+' -->\n'+response['text'])
+        return str(path.relative_to(data))
+
     def capture(kind,team,event,response,parsed,published=None):
         basis='source_publication' if published else 'first_capture'
         payload=dict(policy=policy,kind=kind,team=team,game_id=event['game_id'],url=response['url'],
@@ -648,8 +681,12 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False,legacy_news
                     for p in parsed['rows'] if parsed['complete'] or p['status'] in ('Out','Doubtful','Questionable')]
             facts(source,values+[dict(field='report_complete',value=parsed['complete'])])
             success(health,response,complete=parsed['complete'],source_capture_sha256=source['source_capture_sha256'],issues=parsed['issues'])
+            health.pop('failure_capture',None);health.pop('incomplete_capture',None)
             review(team,event,url,parsed['issues'])
-        except Exception as exc:failure(health,exc)
+            if not parsed['complete']:
+                health['incomplete_capture']=keep_failure(team,event,response,'report incomplete: '+'; '.join(parsed['issues']))
+        except Exception as exc:
+            failure(health,exc);health['failure_capture']=keep_failure(team,event,response,exc)
     hub=responses.get(NFL+'/inactives/')
     if isinstance(hub,dict):
         for link in soup(hub['text']).select('a[href]'):
@@ -695,6 +732,7 @@ def refresh(data,schedule,players,now=None,fetcher=fetch,force=False,legacy_news
                     except ValueError as exc:
                         # A bundle may contain other kickoffs; only this team's failed list is reviewed.
                         review(team,event,url,[str(exc)])
+                        keep_failure(team,event,response,exc)
                         # A failed revision of the page that supplied the accepted list never inherits
                         # it. Any other failure of an NFL.com list covering this game withdraws completeness
                         # too, and outranks another page's success in the same refresh. Club articles

@@ -604,22 +604,36 @@ RSS_RETIRED_UTC = utc('2026-11-09T19:30:00+00:00')
 QB_REPAIRS_UTC = utc('2026-11-14T00:00:00+00:00')
 
 
-def current_records(records, revision):
-    """Keep earlier saved decisions authoritative across production revisions.
+def lock_rank(row, revision):
+    """Order competing saved decisions for one game: native T-60 locks, then
+    recovered saved forecasts and owner retro locks; then earliest finalization;
+    the current revision breaks an exact tie."""
+    tier = 1 if (row.get('retro_locked') or row.get('recovered_after_kickoff')) else 0
+    try:
+        when = utc(row.get('finalized_utc') or row['lock_at_utc'])
+    except (KeyError, TypeError, ValueError):
+        when = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
+    return (tier, when, row.get('revision') != revision)
 
+
+def current_records(records, revision):
+    """One saved decision per game, whatever revision saved it.
+
+    Owner decision 2026-11-15 (lock continuity): a durable pregame lock is the
+    bet. A later production revision, its replay or its reporting overlays never
+    replace or alter a saved decision; a game keeps the best-ranked saved lock
+    from any revision (see lock_rank). Archived pre-adoption shadow rows
+    (legacy_lock) are development history and are never inherited.
     Reporting aliases only: original rows, revisions, timestamps and journals
-    are unchanged. No future v1.21 decision can substitute for a v1.22 lock.
+    are unchanged. Keys are aliased to the requested revision.
     """
-    out = {k: r for k, r in records.items() if k[0] == revision}
-    if revision == 'boxscore-composite-v1.23':
-        for (_, game), row in current_records(records, 'boxscore-composite-v1.22').items():
-            if utc(row['lock_at_utc']) < QB_REPAIRS_UTC:
-                out.setdefault((revision, game), row)
-    if revision in ('boxscore-composite-v1.22','boxscore-composite-v1.23'):
-        for (rev, game), row in records.items():
-            if rev == 'boxscore-composite-v1.21' and utc(row['lock_at_utc']) < RSS_RETIRED_UTC:
-                out.setdefault((revision, game), row)
-    return out
+    best = {}
+    for (rev, game), row in records.items():
+        if rev != revision and row.get('legacy_lock'):
+            continue
+        if game not in best or lock_rank(row, revision) < lock_rank(best[game], revision):
+            best[game] = row
+    return {(revision, game): row for game, row in best.items()}
 
 
 def report(data='data'):

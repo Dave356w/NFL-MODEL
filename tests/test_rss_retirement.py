@@ -87,9 +87,10 @@ def test_old_locks_stay_authoritative_without_rewriting_or_duplicating(tmp_path,
     replacement=dict(original,revision=m.REVISION)
     records[locks.key(replacement)]=replacement
     assert locks.current_records(records,m.REVISION)[locks.key(replacement)] is replacement
+    # Lock continuity (owner decision 2026-11-15): a saved lock of any revision is kept.
     later=dict(original,revision='boxscore-composite-v1.22',game_id='future',lock_at_utc=(locks.QB_REPAIRS_UTC+dt.timedelta(seconds=1)).isoformat())
     records[locks.key(later)]=later
-    assert (m.REVISION,'future') not in locks.current_records(records,m.REVISION)
+    assert locks.current_records(records,m.REVISION)[(m.REVISION,'future')] is later
 
 
 def test_rescue_uses_exact_last_committed_sunday_night_board():
