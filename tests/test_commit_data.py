@@ -10,6 +10,7 @@ the data rather than losing a forward snapshot.
 
 import base64
 import os
+import subprocess
 import sys
 
 import pytest
@@ -148,12 +149,12 @@ def test_api_failure_falls_back_to_the_push_that_cannot_lose_a_snapshot(
     pushed = []
     monkeypatch.setattr(
         commit_data, "git_commit_and_push",
-        lambda branch, message: pushed.append((branch, message)),
+        lambda branch, message, paths=None: pushed.append((branch, message, paths)),
     )
     monkeypatch.setenv("GITHUB_TOKEN", "tok")
     monkeypatch.setenv("GITHUB_REPOSITORY", "o/r")
     assert commit_data.main(["--branch", "main", "--message", "ledger"]) == 0
-    assert pushed == [("main", "ledger")]
+    assert pushed == [("main", "ledger", commit_data.DEFAULT_PATHS)]
     assert "::warning::" in capsys.readouterr().out
 
 
@@ -187,6 +188,66 @@ def test_failed_rebase_is_aborted_before_return(monkeypatch):
         commit_data.git_commit_and_push('main', 'm')
     assert calls[-1] == ('rebase', '--abort')
     assert not any(c[0] == 'push' for c in calls)
+
+
+@pytest.mark.parametrize('failure', ['fetch', 'diff'])
+def test_failed_history_comparison_refuses_overwrite(failure, monkeypatch):
+    def git(*args, **kwargs):
+        if args[0] == failure:
+            raise RuntimeError('history unavailable')
+        return ''
+    monkeypatch.setattr(commit_data, 'git', git)
+    with pytest.raises(commit_data.BranchCollision, match='Cannot verify'):
+        commit_data.touches_ours('old', 'new', ['data/ledger.csv'])
+
+
+def test_history_comparison_keeps_paths_with_spaces(monkeypatch):
+    monkeypatch.setattr(commit_data, 'git', lambda *args, **kwargs:
+                        '' if args[0] == 'fetch' else 'data/a file.csv\0data/other.csv\0')
+    assert commit_data.touches_ours('old', 'new', ['data/a file.csv']) == ['data/a file.csv']
+
+
+def test_default_save_cannot_erase_runtime_adopted_by_mixed_reset(tmp_path, monkeypatch):
+    """A builder can save twice while the independent watcher advances main."""
+    monkeypatch.chdir(tmp_path)
+    def git(*args):
+        return subprocess.check_output(['git', *args], text=True).strip()
+    git('init', '-q')
+    git('config', 'user.name', 'Fixture')
+    git('config', 'user.email', 'fixture@example.test')
+    runtime = tmp_path/'data'/'lock_runtime'
+    runtime.mkdir(parents=True)
+    (runtime/'locks.jsonl').write_text('first\n')
+    (tmp_path/'data'/'board.csv').write_text('old\n')
+    git('add', 'data')
+    git('commit', '-qm', 'builder checkout')
+    base = git('rev-parse', 'HEAD')
+    (runtime/'locks.jsonl').write_text('first\nsecond\n')
+    (runtime/'new-evidence.json').write_text('{}\n')
+    (tmp_path/'data'/'final_scores.json').write_text('{"new-final":true}\n')
+    git('add', 'data')
+    git('commit', '-qm', 'watcher saves while builder works')
+    server = git('rev-parse', 'HEAD')
+    git('reset', '--hard', base)
+    git('reset', '--mixed', server)
+    (tmp_path/'data'/'board.csv').write_text('new\n')
+    # Runtime bytes are stale/missing locally after the API reset. The broad
+    # save sends only builder outputs; explicit watcher ownership still works.
+    assert commit_data.changed_paths(commit_data.DEFAULT_PATHS) == (['data/board.csv'], [])
+    assert commit_data.changed_paths(['data/lock_runtime']) == (
+        ['data/lock_runtime/locks.jsonl'], ['data/lock_runtime/new-evidence.json'])
+    assert commit_data.changed_paths(['data/final_scores.json']) == (
+        [], ['data/final_scores.json'])
+
+
+def test_git_fallback_honors_explicit_path_scope(monkeypatch):
+    calls = []
+    monkeypatch.setattr(commit_data, 'git', lambda *args, **kwargs: calls.append(args) or '')
+    monkeypatch.setattr(commit_data.subprocess, 'run', lambda *args, **kwargs:
+                        type('R', (), {'returncode': 0})())
+    commit_data.git_commit_and_push('main', 'm', paths=['data/final_scores.json'])
+    assert ('add', '--', 'data/final_scores.json') in calls
+    assert not any(c[:2] == ('add', 'data/') for c in calls)
 
 
 def test_no_fallback_flag_lets_the_failure_surface(tmp_path, monkeypatch):

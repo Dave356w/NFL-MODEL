@@ -1,0 +1,65 @@
+name: Refresh final scores and results
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '2,17,32,47 * * * *'
+    # Reconcile delayed score corrections even after the 24-hour game window.
+    - cron: '13 6 * * *'
+      timezone: America/New_York
+
+# Score refreshes do not wait for the expensive model build or collector.
+# Publication itself shares publish.yml's queue with every other publisher.
+concurrency:
+  group: nfl-score-updates
+  cancel-in-progress: false
+  queue: max
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+      season: ${{ steps.gate.outputs.season }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Gate score refresh against recently started games
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
+        run: python schedule_gate.py --scores
+
+  refresh:
+    needs: plan
+    if: needs.plan.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install requests
+      - name: Fetch completed scores without rerunning the model
+        run: python score_updates.py --data-dir data --season ${{ needs.plan.outputs.season }}
+      - name: Save scores before publication
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python commit_data.py --branch main --no-fallback --path data/final_scores.json --message "Refresh completed NFL scores"
+
+  # Retry publication even when the saved scores have not changed: a prior
+  # deployment failure must not leave an already-committed result unpublished.
+  publish:
+    needs: refresh
+    uses: ./.github/workflows/publish.yml

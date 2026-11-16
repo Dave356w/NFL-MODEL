@@ -45,6 +45,10 @@ import time
 import requests
 
 API_URL = "https://api.github.com/graphql"
+# Independent controllers own their evidence and final-score overlay. A mixed
+# reset after an API commit can leave their newer remote bytes absent locally;
+# broad builder/collector saves must never send those as changes or deletions.
+DEFAULT_PATHS = ["data", ":(exclude)data/lock_runtime", ":(exclude)data/final_scores.json"]
 
 
 class BranchCollision(RuntimeError):
@@ -146,8 +150,11 @@ def remote_head(branch):
 
 def touches_ours(old_oid, new_oid, ours):
     """Did the commit(s) between two tips write any file we are sending?"""
-    git("fetch", "--quiet", "origin", new_oid, check=False)
-    names = git("diff", "--name-only", old_oid, new_oid, check=False).split()
+    try:
+        git("fetch", "--quiet", "origin", new_oid)
+        names = git("diff", "--name-only", "-z", old_oid, new_oid).split("\0")
+    except RuntimeError as exc:
+        raise BranchCollision("Cannot verify intervening changes; refusing to overwrite") from exc
     return sorted(set(names) & set(ours))
 
 
@@ -199,12 +206,12 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
     raise RuntimeError("unreachable")
 
 
-def git_commit_and_push(branch, message):
+def git_commit_and_push(branch, message, paths=None):
     """The pre-API sequence, kept verbatim as the fallback path."""
     git("config", "user.name", "github-actions[bot]")
     git("config", "user.email",
         "github-actions[bot]@users.noreply.github.com")
-    git("add", "data/")
+    git("add", "--", *(DEFAULT_PATHS if paths is None else paths))
     nothing_staged = subprocess.run(
         ["git", "diff", "--cached", "--quiet"], check=False
     ).returncode == 0
@@ -233,7 +240,7 @@ def main(argv=None):
     parser.add_argument("--no-fallback", action="store_true",
                         help="fail instead of falling back to git push")
     args = parser.parse_args(argv)
-    paths = args.path or ["data"]
+    paths = args.path or DEFAULT_PATHS
 
     adds, dels = changed_paths(paths)
     if not adds and not dels:
@@ -261,7 +268,7 @@ def main(argv=None):
         # Losing a pregame slate is irreversible; an unverified commit is not.
         log(f"::warning::signed commit failed ({exc}); "
             "falling back to an unverified git push")
-        git_commit_and_push(args.branch, args.message)
+        git_commit_and_push(args.branch, args.message, paths=paths)
         return 0
     log(f"commit: signed {commit['oid'][:7]} {commit['url']}")
     # API writes do not advance this checkout. Advance the index/base while

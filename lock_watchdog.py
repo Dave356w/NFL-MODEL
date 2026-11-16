@@ -9,7 +9,8 @@ import time
 from pathlib import Path
 
 CONTROLLER_FILES=('lock_watcher.py','lock_refresh.py','ats_locks.py','availability_collect.py',
-                  'espn_spreads.py','forecast_history.py','nfl_model.py','qb_replacement.py')
+                  'espn_spreads.py','forecast_history.py','nfl_model.py','qb_replacement.py',
+                  'fixed_bands.py','schedule_gate.py','lock_watchdog.py')
 
 
 def restart_outdated(runs, sleep=time.sleep):

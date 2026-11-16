@@ -135,7 +135,7 @@ def visible_text(html):
 
 def test_public_pages_with_nav_and_no_nan(tmp_path):
     out, files = render(tmp_path)
-    assert set(PUBLIC) | HISTORICAL_PUBLIC | SPREAD_EXPORTS | {"ats_2026_results.csv", ".nojekyll"} == set(files)
+    assert set(PUBLIC) | HISTORICAL_PUBLIC | SPREAD_EXPORTS | {"ats_2026_results.csv", ".nojekyll", "site-state.json"} == set(files)
     assert "model.html" not in files and "board.html" not in files
     for name in PUBLIC:
         html = (out / name).read_text()
@@ -143,6 +143,49 @@ def test_public_pages_with_nav_and_no_nan(tmp_path):
         assert all(f"href='{h}'" in html for h, _ in b.PAGES) and "model.html" not in html
         text = visible_text(html)
         assert not re.search(r"\bnan\b|\bNaN\b|\bNone\b", text), name
+
+
+def test_saved_final_updates_cards_csv_and_totals_without_model_run(tmp_path, monkeypatch):
+    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
+                        dict(season=year, week=week, training_max_season=year-1, training_max_week=18,
+                             cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
+    data = make_data(tmp_path / 'data')
+    board_path = data / 'latest' / 'board.csv'
+    original = board_path.read_bytes()
+    score = dict(game_id='2026_05_TB_DAL', season=2026, week=5, away='TB', home='DAL',
+                 away_score=24, home_score=20, completed=True, event_id='123456',
+                 kickoff_utc='2026-10-09T00:15:00+00:00', captured_utc='2026-10-09T04:00:00+00:00')
+    (data / 'final_scores.json').write_text(json.dumps([score]))
+    out = tmp_path / 'public'
+    b.render_all(out, data, now=NOW + dt.timedelta(days=2))
+    results = pd.read_csv(out / 'ats_2026_results.csv').set_index('game_id')
+    board = pd.read_csv(out / 'fixed_band_board.csv').set_index('game_id')
+    game = results.loc[score['game_id']]
+    card = board.loc[score['game_id']]
+    assert game.ats_status == 'graded'
+    assert game.result == card.result == -4
+    assert game.home_score == card.home_score == 20
+    assert game.away_score == card.away_score == 24
+    assert game.fixed_band_ats_result == card.ats_result
+    assert game.fixed_band_ats_units == pytest.approx(card.ats_units)
+    assert 'Final 24–20' in visible_text((out / 'index.html').read_text())
+    assert board_path.read_bytes() == original  # saved prediction inputs remain intact
+
+
+def test_publication_version_tracks_new_results_across_every_page(tmp_path):
+    data = make_data(tmp_path / 'data')
+    out = tmp_path / 'public'
+    b.render_all(out, data, now=NOW)
+    version = json.loads((out / 'site-state.json').read_text())['version']
+    assert re.fullmatch('[a-f0-9]{64}', version)
+    for name in (*PUBLIC, 'historical-calibration.html'):
+        assert f"name='site-version' content='{version}'" in (out / name).read_text()
+    board_path = data / 'latest' / 'board.csv'
+    board = pd.read_csv(board_path)
+    board.loc[board.game_id.eq('2026_05_KC_BUF'), ['home_score', 'result']] = [17, -3]
+    board.to_csv(board_path, index=False)
+    b.render_all(out, data, now=NOW)
+    assert json.loads((out / 'site-state.json').read_text())['version'] != version
 
 
 def test_retired_research_artifacts_are_removed_from_public_output(tmp_path):
@@ -584,7 +627,7 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     g.write_outputs(g.grade(recs, res), data)
     out = tmp_path / "public"
     files = b.render_all(out, data, now=NOW)
-    assert set(files) <= {*PUBLIC, *HISTORICAL_PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll"}
+    assert set(files) <= {*PUBLIC, *HISTORICAL_PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll", "site-state.json"}
     pages = "".join((out / p).read_text() for p in PUBLIC)
     for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
         assert marker not in pages

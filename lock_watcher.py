@@ -131,10 +131,24 @@ def publish(pending):
             '--json', 'status,conclusion']))
         if result['status'] != 'completed':
             return
-        if result['conclusion'] == 'success':
+        if result['conclusion'] == 'success' and not state.get('dirty'):
             pending.write_text(json.dumps(dict(pending=False))+'\n')
             return
     pending.write_text(json.dumps(dict(pending=True, run_id=dispatch('publish.yml')))+'\n')
+
+
+def request_publication(pending):
+    """Keep delivery tracking when newer saved decisions need publication.
+
+    The active publisher may already have checked out main. Retain its ID and
+    request one follow-up after it finishes instead of losing the ID and
+    repeatedly queuing deployments while the current one is still running.
+    """
+    state = json.loads(pending.read_text()) if pending.exists() else {}
+    state['pending'] = True
+    if state.get('run_id'):
+        state['dirty'] = True
+    pending.write_text(json.dumps(state)+'\n')
 
 
 def checkpoints(runtime, now):
@@ -184,11 +198,11 @@ def tick(data, now=None):
         changed |= len(locks.read(store/locks.LOCKS)) > before
         checkpoints(store, now)
     if changed:
-        (runtime/'publish_pending.json').write_text(json.dumps(dict(pending=True))+'\n')
+        request_publication(runtime/'publish_pending.json')
         persist(data, f'ATS durable finalization {now.isoformat()}')
     # A deployment retry is needed after every missed checkpoint too (no-pick state).
     if sum(len(locks.read(p/CHECKPOINTS)) for p in stores) > old_checkpoints:
-        (runtime/'publish_pending.json').write_text(json.dumps(dict(pending=True))+'\n')
+        request_publication(runtime/'publish_pending.json')
     health = dict(heartbeat_utc=now.isoformat(), run_id=os.environ.get('GITHUB_RUN_ID'), errors=[])
     try:
         refresh_prepared(data)
@@ -238,7 +252,7 @@ def tick(data, now=None):
     for store in stores:
         checkpoints(store, dt.datetime.now(UTC))
     if sum(len(locks.read(p/CHECKPOINTS)) for p in stores) > old_checkpoints:
-        (runtime/'publish_pending.json').write_text(json.dumps(dict(pending=True))+'\n')
+        request_publication(runtime/'publish_pending.json')
     health['updated_utc'] = dt.datetime.now(UTC).isoformat()
     import lock_watchdog
     health['coverage_alerts'] = lock_watchdog.coverage_issues(data, dt.datetime.now(UTC))
@@ -282,7 +296,9 @@ def main():
                 acknowledged_utc=dt.datetime.now(UTC).isoformat(), state='successor queued'))+'\n')
             persist('data', 'ATS watcher handoff acknowledged')
             return
-        time.sleep(60 if health and health.get('games') else 300)
+        # A provider/persistence error must not turn the one-minute lock loop
+        # into a five-minute pause during the ten-minute eligibility window.
+        time.sleep(60 if health is None or health.get('errors') or health.get('games') else 300)
 
 
 if __name__ == '__main__':

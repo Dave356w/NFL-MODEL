@@ -24,6 +24,7 @@ margin, so a dropped cron delivery delays a snapshot instead of losing it.
 """
 
 import csv
+import argparse
 import io
 import json
 import os
@@ -45,6 +46,7 @@ ATS_FINALIZE_MINUTES = 15
 LEDGER_WINDOW_HOURS = 30
 FINAL_REFRESH_MINUTES = 150
 MIN_MINUTES_BEFORE = 15
+SCORE_WINDOW_HOURS = 24
 LEDGER_PATH = Path("data/forward_predictions.jsonl")
 MODEL_PATH = Path("nfl_model.py")
 
@@ -147,6 +149,38 @@ def decision(event_name, event_schedule, now=None, games=None, recorded=None):
     return False, season, "no unrecorded game within 30h and none within 150 minutes"
 
 
+def score_due_games(games, now):
+    """A cheap reporting refresh while games finish and for a day of corrections.
+
+    The schedule's result may lag ESPN or already be final. Neither should
+    suppress a score update; no prediction build is needed for this path.
+    """
+    now = now.astimezone(timezone.utc)
+    due = []
+    for game in games:
+        if game.get('game_type') != 'REG':
+            continue
+        ko = kickoff(game)
+        if ko is not None and 0 <= (now - ko).total_seconds() <= SCORE_WINDOW_HOURS * 3600:
+            due.append((game['game_id'], 'postgame score refresh'))
+    return due
+
+
+def score_decision(event_name, event_schedule, now=None, games=None):
+    now = now or datetime.now(timezone.utc)
+    season = season_of(now)
+    if event_name != 'schedule':
+        return True, season, f"{event_name or 'manual'} score refresh"
+    if event_schedule == DAILY_CRON:
+        return True, season, 'daily final-score reconciliation'
+    try:
+        due = score_due_games(fetch_games() if games is None else games, now)
+    except Exception as exc:  # a stale/missing schedule must not block finals
+        return True, season, f'score schedule lookup failed; fail-open ({type(exc).__name__})'
+    return bool(due), season, ('; '.join(f'{gid}: {why}' for gid, why in due[:6])
+                               if due else 'outside the postgame score refresh window')
+
+
 def emit_output(name, value):
     value = str(value).replace("\n", " ")
     output_path = os.environ.get("GITHUB_OUTPUT")
@@ -156,8 +190,12 @@ def emit_output(name, value):
     print(f"{name}={value}")
 
 
-def main():
-    should_run, season, reason = decision(
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--scores', action='store_true', help='gate lightweight final-score refreshes')
+    args = parser.parse_args(argv)
+    decide = score_decision if args.scores else decision
+    should_run, season, reason = decide(
         os.environ.get("EVENT_NAME", "workflow_dispatch"),
         os.environ.get("EVENT_SCHEDULE", ""),
     )
