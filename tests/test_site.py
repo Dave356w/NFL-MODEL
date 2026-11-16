@@ -180,6 +180,8 @@ def test_publication_version_tracks_new_results_across_every_page(tmp_path):
     assert re.fullmatch('[a-f0-9]{64}', version)
     for name in (*PUBLIC, 'historical-calibration.html'):
         assert f"name='site-version' content='{version}'" in (out / name).read_text()
+    b.render_all(out, data, now=NOW + dt.timedelta(minutes=1))
+    assert json.loads((out / 'site-state.json').read_text())['version'] == version
     board_path = data / 'latest' / 'board.csv'
     board = pd.read_csv(board_path)
     board.loc[board.game_id.eq('2026_05_KC_BUF'), ['home_score', 'result']] = [17, -3]

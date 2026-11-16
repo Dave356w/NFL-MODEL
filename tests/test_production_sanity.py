@@ -170,6 +170,77 @@ def test_native_replacement_audit_rejects_altered_export(field, value):
         s.replacement_export_basis(history, [3.], saved, records)
 
 
+def _inherited_lock_export():
+    history, saved, records = _native_replacement_export()
+    current = next(iter(records.values()))
+    old = {name: current[name] for name in ('game_id', 'season', 'week', 'home', 'away',
+        'model_wp', 'market_spread', 'fixed_rule')}
+    old.update(revision='boxscore-composite-v1.22', fixed_band_spread=7.,
+        finalized_utc='2026-11-15T17:00:01Z')
+    # Both the current replay and the later v1.24 lock would adjust a different
+    # band. The first saved v1.22 decision must remain its unadjusted 7 points.
+    current['finalized_utc'] = '2026-11-15T17:00:02Z'
+    records[('boxscore-composite-v1.22', 'g')] = old
+    return history, saved.assign(fixed_band_spread=7.), records
+
+
+def test_inherited_lock_audit_uses_earliest_saved_revision_without_new_qb_overlay():
+    history, saved, records = _inherited_lock_export()
+    predicted, lines = s.replacement_export_basis(history, [3.], saved, records)
+    np.testing.assert_array_equal(predicted, [7.])
+    np.testing.assert_array_equal(lines, [4.5])
+
+
+@pytest.mark.parametrize('field,value', [('fixed_band_spread', 5.), ('spread_line', 2.5)])
+def test_inherited_lock_audit_rejects_export_changes(field, value):
+    history, saved, records = _inherited_lock_export()
+    saved.loc[0, field] = value
+    with pytest.raises(ValueError):
+        s.replacement_export_basis(history, [3.], saved, records)
+
+
+def test_inherited_lock_audit_recomputes_margin_instead_of_trusting_saved_number():
+    history, saved, records = _inherited_lock_export()
+    records[('boxscore-composite-v1.22', 'g')]['fixed_band_spread'] = 14.
+    saved.loc[0, 'fixed_band_spread'] = 14.
+    with pytest.raises(ValueError, match='inherited frozen lock'):
+        s.replacement_export_basis(history, [3.], saved, records)
+
+
+def test_corrected_scores_audit_preserves_fitted_maps_and_rejects_export_tampering(tmp_path):
+    import build_site
+    import score_updates
+    source = Path(__file__).resolve().parents[1]/'data'
+    data = tmp_path/'data'
+    shutil.copytree(source, data)
+    before = s.inspect(data)
+    game = '2026_09_BUF_MIN'
+    history = pd.read_csv(data/'latest'/'retro_ledger.csv').set_index('game_id')
+    original = history.loc[game]
+    home, away = (0, 50) if original.result > 0 else (50, 0)
+    final = dict(game_id=game, season=2026, week=9, home='MIN', away='BUF',
+        completed=True, home_score=home, away_score=away, event_id='123456',
+        kickoff_utc='2026-11-08T18:00:00Z', captured_utc='2026-11-16T07:00:00Z')
+    score_updates.validate(final)
+    (data/score_updates.STORE).write_text(json.dumps([final]))
+    original_bytes = (data/'latest'/'retro_ledger.csv').read_bytes()
+    build_site.render_all(tmp_path/'public', data=data)
+    audit = s.inspect(data)
+    assert audit['status'] == 'PASS'
+    assert audit['rules'] == before['rules']
+    assert (data/'latest'/'retro_ledger.csv').read_bytes() == original_bytes
+    exported = data/'latest'/'fixed_band_ledger.csv'
+    saved = pd.read_csv(exported)
+    index = saved.index[saved.game_id.eq(game)][0]
+    assert saved.loc[index, 'result'] == home-away
+    saved.loc[index, 'result'] += 1
+    saved.to_csv(exported, index=False)
+    tampered = exported.read_bytes()
+    failed = s.inspect(data)
+    assert failed['status'] == 'FAIL' and failed['checks']['exported_scores_match_sources'] is False
+    assert exported.read_bytes() == tampered
+
+
 @pytest.mark.parametrize('gameday,native', [('2026-11-15', False), ('2026-10-04', True)])
 def test_missing_native_lock_does_not_authorize_historical_fallback(gameday, native):
     history, saved = _replacement_export()

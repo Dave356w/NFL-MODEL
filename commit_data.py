@@ -158,6 +158,33 @@ def touches_ours(old_oid, new_oid, ours):
     return sorted(set(names) & set(ours))
 
 
+def without_saved_changes(commit, changes, touched):
+    """Confirm identical remote bytes after a lost reply; never merge differences."""
+    try:
+        remote = {}
+        for entry in filter(None, git('ls-tree', '-z', commit, '--', *touched).split('\0')):
+            metadata, path = entry.split('\t', 1)
+            _mode, kind, oid = metadata.split()
+            remote[path] = (kind, oid)
+        for addition in changes['additions']:
+            if addition['path'] not in touched:
+                continue
+            content = base64.b64decode(addition['contents'], validate=True)
+            hashed = subprocess.run(['git', 'hash-object', '--stdin'], input=content,
+                                    capture_output=True, check=True).stdout.decode().strip()
+            if remote.get(addition['path']) != ('blob', hashed):
+                raise BranchCollision(f"Remote bytes differ for {addition['path']}; refusing to overwrite")
+        for deletion in changes['deletions']:
+            if deletion['path'] in touched and deletion['path'] in remote:
+                raise BranchCollision(f"Remote path still exists: {deletion['path']}; refusing to overwrite")
+    except (RuntimeError, ValueError, subprocess.CalledProcessError) as exc:
+        if isinstance(exc, BranchCollision):
+            raise
+        raise BranchCollision('Cannot verify saved remote bytes; refusing to overwrite') from exc
+    return {name: [row for row in rows if row['path'] not in touched]
+            for name, rows in changes.items()}
+
+
 def local_head():
     """The commit this job's files were computed from, or None."""
     out = git("rev-parse", "HEAD", check=False).strip()
@@ -172,8 +199,8 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
     migration once undid a site build's ledger rows. If the tip moved, the
     retry below checks everything between `base` and the tip for our files.
     """
+    head = base or remote_head(branch)
     for attempt in range(1, attempts + 1):
-        head = base if (attempt == 1 and base) else remote_head(branch)
         variables = {"input": {
             "branch": {
                 "repositoryNameWithOwner": repo,
@@ -185,21 +212,24 @@ def api_commit(token, repo, branch, message, changes, attempts=3, base=None):
         }}
         try:
             data = graphql(token, MUTATION, variables)
-        except RuntimeError as exc:
+        except (RuntimeError, requests.RequestException) as exc:
             moved = remote_head(branch)
             if moved == head:
                 raise
-            if attempt == attempts:
-                raise BranchCollision(f"{branch} kept moving; refusing git fallback") from exc
             ours = [a["path"] for a in changes["additions"]]
             ours += [d["path"] for d in changes["deletions"]]
             clash = touches_ours(head, moved, ours)
             if clash:
-                raise BranchCollision(
-                    f"{branch} moved from {head[:7]} to {moved[:7]} and the new "
-                    f"commit wrote {', '.join(clash)} -- refusing to overwrite"
-                ) from exc
+                changes = without_saved_changes(moved, changes, clash)
+                if not changes['additions'] and not changes['deletions']:
+                    log(f'  confirmed requested bytes already saved at {moved[:7]}')
+                    return dict(oid=moved, url=f'https://github.com/{repo}/commit/{moved}')
+            if attempt == attempts:
+                raise BranchCollision(f"{branch} kept moving; refusing git fallback") from exc
             log(f"  {branch} moved to {moved[:7]} beneath us; retrying")
+            # Pin the next attempt to the head whose changes were just checked.
+            # A fresh unverified head could overwrite a write made during sleep.
+            head = moved
             time.sleep(2 ** attempt)
             continue
         return data["createCommitOnBranch"]["commit"]

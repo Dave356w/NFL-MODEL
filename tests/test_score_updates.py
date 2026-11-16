@@ -126,6 +126,14 @@ def test_overlay_only_changes_outcomes_and_rejects_identity_mismatch(tmp_path):
         scores.overlay(frame.assign(home='TEN', away='IND'), scores.read(tmp_path))
 
 
+def test_overlay_tie_keeps_existing_push_and_binary_exclusion_convention(tmp_path):
+    refresh(tmp_path, [event(17, 17)])
+    frame = pd.DataFrame([dict(game_id='2026_10_TEN_IND', home='IND', away='TEN',
+        result=np.nan, **{'home won': np.nan, 'status': 'pending'})])
+    final = scores.overlay(frame, scores.read(tmp_path)).iloc[0]
+    assert final['result'] == 0 and final['home won'] == .5 and final['status'] == 'tie'
+
+
 def test_independent_finals_grade_saved_decision_over_stale_espn_archive(tmp_path):
     refresh(tmp_path, [event()])
     row = scores.read(tmp_path)[0]

@@ -1584,7 +1584,10 @@ def render_all(out_dir, data=DATA, now=None):
              "grades.html": render_grades(ledger, latest, built),
              "market-calibration.html": render_calibration(latest, ledger, built),
              "historical-calibration.html": render_historical_calibration(latest, built, calibration_pack)}
-    version = hashlib.sha256(''.join(pages.values()).encode('utf-8')).hexdigest()
+    # Retrying an unchanged publication must not reload a reader's tab merely
+    # because its footer timestamp advanced.
+    content = ''.join(pages.values()).replace(f"<span class='stamp'>{esc(built)}</span>", '')
+    version = hashlib.sha256(content.encode('utf-8')).hexdigest()
     for name, html in pages.items():
         (out / name).write_text(html.replace('__NFL_SITE_VERSION__', version), encoding="utf-8")
     (out / 'site-state.json').write_text(json.dumps({'version': version}), encoding='utf-8')

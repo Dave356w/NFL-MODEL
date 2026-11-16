@@ -23,6 +23,7 @@ from scipy.special import ndtri
 import fixed_bands
 import nfl_model as m
 import ats_locks
+import score_updates
 from schedule_gate import kickoff as scheduled_kickoff
 
 CUTS = [3., 7., 10.]
@@ -182,7 +183,7 @@ def replacement_predictions(history, mapped, saved, revision):
 
 
 def replacement_export_basis(history, mapped, saved, records, native_games=()):
-    """Use immutable v1.24 decisions ahead of replay, with their own map/line.
+    """Use every revision's immutable decisions ahead of replay, with its own map/line.
 
     Calibration keeps replay WP and team annotations even when a saved lock
     supplies its ATS decision. Only the frozen lock's replacement evidence can
@@ -193,6 +194,8 @@ def replacement_export_basis(history, mapped, saved, records, native_games=()):
     lines = history.spread_line.to_numpy(float).copy()
     evidence = saved.astype(object).copy() if saved is not None else None
     unavailable = np.zeros(len(history), bool)
+    inherited = np.zeros(len(history), bool)
+    records = ats_locks.current_records(records, REPLACEMENT_REVISION)
     cutoff = pd.Timestamp('2026-11-14T00:00:00Z')
     for i, row in enumerate(history.to_dict('records')):
         if int(row['season']) != 2026:
@@ -208,6 +211,14 @@ def replacement_export_basis(history, mapped, saved, records, native_games=()):
             lines[i] = float(lock['market_spread'])
             if evidence is None:
                 raise ValueError('v1.24 native ATS export is missing')
+            if lock['revision'] != REPLACEMENT_REVISION:
+                # Lock continuity: a later revision's QB overlay cannot alter
+                # an earlier saved decision. Recompute its own frozen map.
+                if not (np.isclose(float(lock['fixed_band_spread']), base[i], atol=EPS, rtol=0)
+                        and np.isclose(float(saved.iloc[i].fixed_band_spread), base[i], atol=EPS, rtol=0)):
+                    raise ValueError('exported ATS margin differs from its inherited frozen lock')
+                inherited[i] = True
+                continue
             for name in ('qb_replacement_base_margin', 'qb_replacement_margin_adjustment'):
                 if not np.isclose(float(saved.iloc[i][name]), float(lock[name]), atol=EPS, rtol=0):
                     raise ValueError('exported replacement metadata differs from its frozen lock')
@@ -246,9 +257,45 @@ def replacement_export_basis(history, mapped, saved, records, native_games=()):
                 lines[i] = np.nan
     if saved is not None and not np.allclose(saved.spread_line, lines, atol=EPS, rtol=0, equal_nan=True):
         raise ValueError('exported ATS line differs from its replay or frozen lock')
-    predicted = replacement_predictions(history, base, evidence, REPLACEMENT_REVISION)
+    predicted = base.copy()
+    active = ~inherited
+    predicted[active] = replacement_predictions(history.iloc[active].reset_index(drop=True), base[active],
+        evidence.iloc[active].reset_index(drop=True) if evidence is not None else None, REPLACEMENT_REVISION)
     predicted[unavailable] = np.nan
     return predicted, lines
+
+
+def reporting_outcomes(data, history, final_scores):
+    """Read outcome evidence independently, after the historical maps are fitted.
+
+    New results grade the saved decisions, but cannot change the inputs used
+    to reproduce a frozen historical map. Exported scores are never a source
+    for their own audit.
+    """
+    data = Path(data)
+    out = history.copy()
+    outcomes = {}
+    for path in (data/'forward_ledger.csv', data/'latest'/'board.csv'):
+        if not path.exists():
+            continue
+        frame = pd.read_csv(path)
+        if 'game_id' not in frame or 'result' not in frame:
+            continue
+        for row in frame.to_dict('records'):
+            if pd.notna(row['result']):
+                outcomes[row['game_id']] = {k: row.get(k) for k in ('result', 'home_score', 'away_score')}
+    import espn_spreads
+    for row in espn_spreads.read(data):
+        home, away = espn_spreads.number(row.get('home_score')), espn_spreads.number(row.get('away_score'))
+        if row.get('completed') is True and home is not None and away is not None:
+            outcomes[row['game_id']] = dict(home_score=home, away_score=away, result=home-away)
+    for row in final_scores:
+        outcomes[row['game_id']] = dict(home_score=row['home_score'], away_score=row['away_score'],
+            result=row['home_score']-row['away_score'])
+    for i, row in out.iterrows():
+        for name, value in outcomes.get(row.game_id, {}).items():
+            out.loc[i, name] = value
+    return out
 
 
 def independent_moneyline(frame):
@@ -278,6 +325,14 @@ def record(grades):
 def inspect(data='data'):
     data = Path(data); latest = data/'latest'
     checks = {}
+    final_scores = []
+    score_error = None
+    try:
+        final_scores = score_updates.read(data)
+        checks['final_score_store_integrity'] = True
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        score_error = str(exc)
+        checks['final_score_store_integrity'] = False
     # Primary ATS capture is independent of historical exports. A standalone
     # sanity check must reject corrupt timed-lock evidence even on an otherwise
     # empty data directory; validation never rewrites either append-only store.
@@ -357,7 +412,9 @@ def inspect(data='data'):
     manifest_path = latest/'manifest.json'
     revision = json.loads(manifest_path.read_text()).get('revision') if manifest_path.exists() else None
     replacement_error = None
-    ats_history = d.copy()
+    # Fit/check the historical map above before applying newer reporting-only
+    # outcomes. A score refresh cannot silently refit earlier predictions.
+    ats_history = reporting_outcomes(data, d, final_scores)
     raw_path = data/'forward_predictions.jsonl'
     snapshots = [json.loads(line) for line in raw_path.read_text().splitlines() if line.strip()] if raw_path.exists() else []
     if revision == REPLACEMENT_REVISION:
@@ -369,7 +426,7 @@ def inspect(data='data'):
         except (ValueError, KeyError, TypeError, OverflowError) as exc:
             replacement_error = str(exc)
             checks['exported_replacement_margin_evidence'] = False
-    grades = independent_grades(predicted, ats_history.spread_line, d.result)
+    grades = independent_grades(predicted, ats_history.spread_line, ats_history.result)
     if saved is not None:
         checks['exported_median_predictions'] = bool(np.allclose(saved.fixed_band_spread, predicted, equal_nan=True))
         # Each export is checked against the selection rule it declares; an export
@@ -378,8 +435,12 @@ def inspect(data='data'):
         export_rule = declared[0] if declared else 'zero-edge skip (before 2026-10-19)'
         checks['exported_selection_rule_known'] = (len(declared) <= 1 and
             export_rule in (fixed_bands.SELECTION_VERSION, 'zero-edge skip (before 2026-10-19)'))
-        expected = grades if declared else independent_grades(predicted, ats_history.spread_line, d.result, False)
+        expected = grades if declared else independent_grades(predicted, ats_history.spread_line, ats_history.result, False)
         checks['exported_ats_grades'] = bool(np.array_equal(saved.fixed_band_ats_result.fillna('').to_numpy(), expected))
+        checks['exported_scores_match_sources'] = bool(np.allclose(saved.result, ats_history.result, equal_nan=True))
+        for name in ('home_score', 'away_score'):
+            if name in saved and name in ats_history:
+                checks['exported_scores_match_sources'] &= bool(np.allclose(saved[name], ats_history[name], equal_nan=True))
     production_grades, _ = fixed_bands.grade(ats_history, predicted)
     checks['production_grading_matches_independent'] = bool(np.array_equal(grades, production_grades))
     saved_rules=latest/'fixed_band_rules.json'
@@ -463,7 +524,7 @@ def inspect(data='data'):
         archive['original_skips'] = len(rows)-archive['original_selections']
         archive['backfilled_skips'] = sum(ats_locks.backfilled(r) for r in rows)
     return dict(checks=checks,rules=rules,weekly=weekly,historical=historical,native=native,ats_archive=archive,ats_capture=capture,
-                export_selection=export_rule if exported.exists() else None, replacement_error=replacement_error,
+                export_selection=export_rule if exported.exists() else None, replacement_error=replacement_error, score_error=score_error,
                 status='PASS' if all(checks.values()) else 'FAIL')
 
 
@@ -484,6 +545,8 @@ def report(data='data'):
                      '+ 2 × away replacement; either unresolved flag retains the original map.')
     if audit.get('replacement_error'):
         lines.append(f"  Replacement margin evidence: {audit['replacement_error']}")
+    if audit.get('score_error'):
+        lines.append(f"  Final-score evidence: {audit['score_error']}")
     if audit.get('export_selection'):
         lines.append(f"  Exported ATS selection rule: {audit['export_selection']}")
     if audit.get('weekly'):
