@@ -1,9 +1,9 @@
 {
-  "heartbeat_utc": "2026-11-16T18:18:03.185641+00:00",
+  "heartbeat_utc": "2026-11-16T18:19:08.870207+00:00",
   "run_id": "43926676764",
-  "errors": [
-    "Prepared scoring identity or training cutoff mismatch"
-  ],
-  "updated_utc": "2026-11-16T18:18:04.363347+00:00",
+  "errors": [],
+  "prepared_bundle_sha256": "42245cf26a5344e5c27c7099dc8d28ea954587209dfe51e12d3f8ba028f9ad33",
+  "games": [],
+  "updated_utc": "2026-11-16T18:19:12.324394+00:00",
   "coverage_alerts": []
 }
