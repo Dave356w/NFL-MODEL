@@ -130,4 +130,8 @@ the old both-opponents rule) and CIN's report had two Questionable late addition
 Friday cells (read as an unpublished day). Both rules are corrected in `availability_collect.py`;
 see `AVAILABILITY.md`. The watchdog now treats any revision's lock as coverage, raises AT RISK
 alerts from T-90 naming the latest saved blockers, and retains missed-cutoff alerts for 24 hours.
-These two games are not reconstructed; no retro lock is authorized by this change.
+Owner follow-up (2026-11-15, "Repair all lost picks"): SF-DAL and PIT-CIN are recovered as
+owner-requested retro locks in `ats_retro_requests.json`, each from the last watcher observation
+committed before its T-60 cutoff (SF-DAL `b1399660`, 20:23:47 UTC; PIT-CIN `f5d0539e`, 00:19:56 UTC),
+with its exact paired price, saved weekly map and v1.24 overlay. Original blockers are preserved. Every
+other 2026 game with a T-60 deadline after ATS adoption already has a saved lock.

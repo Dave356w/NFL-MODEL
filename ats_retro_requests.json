@@ -98,5 +98,17 @@
     "source_commit": "a2c043de09774a90c17bb82ad69541d307c37094",
     "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_MIN_GB/b274361dab1fc0a87927d90ff0c5c75128fe9d6ec0089e73246167529274a084.json",
     "reason": "Owner requested fixing all lock issues and recovering missed locks on 2026-11-15. Use only this last committed pre-T-60 watcher observation, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original inactive-parser/name-resolution blockers. This is an explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_SF_DAL",
+    "source_commit": "b1399660c80a99cc2d97324661f9c243bde3a522",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_SF_DAL/8f6ce889dfd40b5b9198e58a8d78b3ff6ac4572d936e1847cfca594dacedc105.json",
+    "reason": "Owner requested repairing all lost picks on 2026-11-15 (\"Repair all lost picks\"). DAL's club injury page lists only DAL's table and the collector required both clubs, so no candidate was eligible. Use only this last watcher observation committed before T-60, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original blockers. Explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
+  },
+  {
+    "game_id": "2026_10_PIT_CIN",
+    "source_commit": "f5d0539eaec705e338274a9f01c1bade4985274e",
+    "source_path": "data/lock_runtime/2026_week10/timing_forecasts/2026_10_PIT_CIN/031092df8ebebd84df86d4a848217db13419195fce1b5836b283a536b0c2d0ea.json",
+    "reason": "Owner requested repairing all lost picks on 2026-11-15 (\"Repair all lost picks\"). CIN's final report had two Questionable late additions with blank Friday cells, read as an unpublished day, so no candidate was eligible. Use only this last watcher observation committed before T-60, its exact paired price, saved weekly map and v1.24 replacement-QB overlay. Preserve original blockers. Explicitly authorized retro recovery with actual creation time, not an eligible native forward lock."
   }
 ]

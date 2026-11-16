@@ -197,4 +197,6 @@ Questionable designation is a post-practice addition, not an unpublished day, pr
 day's column has at least one real entry; raw pages behind parser failures inside four hours of
 kickoff are kept once per distinct error under `availability_failures/`; the watchdog counts any
 revision's saved lock as coverage, flags AT RISK from T-90 with the latest saved blockers, and
-keeps missed games visible for 24 hours after kickoff.
+keeps missed games visible for 24 hours after kickoff. Owner follow-up the same night ("Repair all lost picks")
+authorizes SF-DAL and PIT-CIN retro locks from their last pre-T-60 committed watcher observations
+(`ats_retro_requests.json`); this is not authorization to reconstruct other future misses.

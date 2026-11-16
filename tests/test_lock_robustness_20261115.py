@@ -180,3 +180,24 @@ def test_monitor_is_quiet_before_risk_window_without_observations(tmp_path):
     cutoff = monitored(tmp_path)
     assert not monitor.coverage_issues(tmp_path, cutoff - dt.timedelta(minutes=20))
     assert 'no saved forecast observation' in monitor.coverage_issues(tmp_path, cutoff - dt.timedelta(minutes=4))[0]
+
+
+# --- Owner-requested repair of the two remaining lost week-10 picks ---------------
+
+import retro_lock as r
+
+
+def test_sf_dal_and_pit_cin_repairs_use_last_pre_cutoff_observation(tmp_path):
+    requests = [q for q in json.loads(r.REQUESTS.read_text())
+                if q['game_id'] in ('2026_10_SF_DAL', '2026_10_PIT_CIN')]
+    assert len(requests) == 2
+    now = dt.datetime(2026, 11, 16, 6, tzinfo=dt.timezone.utc)
+    assert r.apply(tmp_path, requests, now) == 2
+    rows = {row['game_id']: row for row in a.read(tmp_path/a.LOCKS)}
+    expected = {'2026_10_SF_DAL': ('away', -5., -4.5), '2026_10_PIT_CIN': ('home', 5., 3.5)}
+    for game, row in rows.items():
+        assert (row['selected_side'], row['fixed_band_spread'], row['market_spread']) == expected[game]
+        assert a.utc(row['source_snapshot']['committed_utc']) + dt.timedelta(seconds=1) <= a.utc(row['lock_at_utc'])
+        assert row['retro_locked'] and row['finalized_utc'] == now.isoformat()
+        r.validate(row)
+    assert r.apply(tmp_path, requests, now) == 0   # idempotent
