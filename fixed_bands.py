@@ -33,57 +33,6 @@ HALF_LIFE_SEASONS = 1.
 WEEKS_PER_SEASON = 19.
 
 
-def fit_legacy(history, season):
-    """Frozen superseded ATS W-L optimizer; never used by production prepare."""
-    d = history[(history.season < season) & history['home won'].isin([0., 1.])]
-    d = d.dropna(subset=['model_spread', 'spread_line', 'result'])
-    if d.season.nunique() < 2:
-        return None
-    band = np.digitize(d.model_spread.abs(), CUTS)
-    counts = np.bincount(band, minlength=4)
-    if min(counts) < 30:
-        return None
-    grid = np.arange(22, dtype=float)
-    # Optimize reward AND >=90% selection coverage jointly. The previous
-    # procedure chose the unconstrained W-L maximum and rejected it if too
-    # many exact market equalities skipped; a feasible runner-up was missed.
-    scores, coverage = [], []
-    for k in range(4):
-        g = d.iloc[np.flatnonzero(band == k)]
-        pred = np.sign(g.model_spread.to_numpy())[:, None] * grid
-        edge = pred - g.spread_line.to_numpy()[:, None]
-        side = np.where(np.abs(edge) <= EPS, 0., np.sign(edge))
-        reward = np.sign(side * (g.result - g.spread_line).to_numpy()[:, None]).sum(0)
-        distance = ((pred - g.model_spread.to_numpy()[:, None]) ** 2).mean(0)
-        scores.append(reward - 1e-8 * distance)
-        coverage.append(np.count_nonzero(np.abs(edge) > EPS, axis=0))
-    minimum = int(np.ceil(.90 * len(d) - 1e-12))
-    # (selected_games, last_magnitude_index) -> (objective, 4-band path).
-    # The state includes coverage so dropping a skip-heavy partial solution
-    # cannot inadvertently discard the best feasible monotone map.
-    states = {(int(coverage[0][j]), j): (float(scores[0][j]), (j,))
-              for j in range(len(grid))}
-    for k in range(1, 4):
-        following = {}
-        for (selected, previous), (value, path) in states.items():
-            for j in range(previous, len(grid)):
-                key = (selected + int(coverage[k][j]), j)
-                candidate = (value + float(scores[k][j]), path + (j,))
-                incumbent = following.get(key)
-                if incumbent is None or (candidate[0], tuple(-m for m in candidate[1])) > (
-                        incumbent[0], tuple(-m for m in incumbent[1])):
-                    following[key] = candidate
-        states = following
-    feasible = [v for (selected, _), v in states.items() if selected >= minimum]
-    if not feasible:
-        return None
-    winner = max(feasible, key=lambda v: (v[0], tuple(-m for m in v[1])))
-    magnitudes = grid[list(winner[1])]
-    return dict(season=int(season), training_max_season=int(d.season.max()),
-                training_games=len(d), cuts=CUTS, magnitudes=magnitudes.tolist())
-
-
-
 def fit(history, season):
     """Prior-season signed MOV medians; ties count as zero, losses negative."""
     d = history.loc[history.season < season].copy()

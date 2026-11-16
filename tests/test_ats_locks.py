@@ -117,13 +117,6 @@ class TimedATS(unittest.TestCase):
                 expected = fixed_bands.apply(m.implied_spread([wp]), self.rule)[0]
                 self.assertEqual(self.locks()[0]['fixed_band_spread'], expected)
 
-    def test_legacy_early_capture_stops_at_timed_policy_adoption(self):
-        from research import ats_forward_shadow as old
-        row = dict(revision=m.REVISION, game_id=self.raw['game_id'], model_wp=.7,
-                   spread_line=7., generated_utc=CUTOFF.isoformat(), kickoff_utc=KO.isoformat())
-        (self.data/'forward_predictions.jsonl').write_text(json.dumps(row)+'\n')
-        self.assertEqual(old.possible_locks(self.data, CUTOFF), [])
-
     def test_delayed_run_cannot_use_post_cutoff_inputs(self):
         previous = CUTOFF - dt.timedelta(minutes=2)
         self.board(previous)
@@ -341,19 +334,6 @@ class TimedATS(unittest.TestCase):
         latest['board']['result'] = float('nan')
         html = b.render_index(latest, pd.DataFrame(), 'test', CUTOFF-dt.timedelta(minutes=5))
         self.assertIn('ATS provisional · locks Sun 9:00 AM PDT', html)
-
-    def test_legacy_archive_is_displayed_without_rewriting_or_reusing_it_for_future_locks(self):
-        legacy = dict(revision=m.REVISION, game_id='2026_06_TEN_IND', season=2026,
-                      kickoff_utc='2026-10-18T17:00:00+00:00', archived_utc='2026-10-17T12:00:00+00:00',
-                      generated_utc='2026-10-17T11:30:00+00:00', raw_spread=8.,
-                      fixed_band_spread=7., market_spread=7., selected_side='', skip_reason='zero_edge')
-        future = dict(legacy, game_id=self.raw['game_id'], kickoff_utc=KO.isoformat())
-        path = self.data / 'ats_forward_shadow.jsonl'
-        path.write_text(''.join(json.dumps(r)+'\n' for r in (legacy,future)))
-        before = path.read_bytes()
-        rows = a.display_records(self.data)
-        self.assertEqual(set(rows), {(m.REVISION,legacy['game_id'])})
-        self.assertEqual(path.read_bytes(), before)
 
     def test_fast_poll_is_limited_to_ats_window_even_without_moneyline_locks(self):
         game = dict(game_id='g', gameday='2026-10-25', gametime='13:00', game_type='REG', result='')

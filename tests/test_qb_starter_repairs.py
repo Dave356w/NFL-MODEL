@@ -74,19 +74,6 @@ def test_previous_revision_signatures_remain_frozen():
     assert m.config_signature()[1]['qb_starter_policy']['confirmed']=='no Questionable blend'
 
 
-def test_repaired_training_features_do_not_change_legacy_shadow():
-    from test_product_production import fixture
-    train,test=fixture()
-    old={8.:pd.concat([train,test],ignore_index=True)}
-    baseline_shadow={}; repaired_shadow={}
-    m.current_predictions(old,m.PRODUCT_RECIPE,2023,1,baseline_shadow)
-    new={8.:old[8.].copy()}
-    new[8.]['d__avail__qb_delta']+=np.linspace(-3,3,len(new[8.]))
-    m.current_predictions(new,m.PRODUCT_RECIPE,2023,1,repaired_shadow,shadow_features=old)
-    assert baseline_shadow['fit']==repaired_shadow['fit']
-    pd.testing.assert_frame_equal(baseline_shadow['board'],repaired_shadow['board'])
-
-
 def test_aggregate_keeps_legacy_gadget_label_separate():
     plays=pd.DataFrame([dict(game_id='g',season_type='REG',two_point_attempt=0,posteam='H',
         passer_player_id=p,passer_player_name=p,play_id=i,play_type='pass',yards_gained=5,pass_attempt=1,sack=0)
@@ -105,21 +92,3 @@ def test_aggregate_keeps_legacy_gadget_label_separate():
     assert old.loc[old.starter,'gsis_id'].tolist()==['rb']
 
 
-def test_full_shadow_preparation_builds_main_and_pass_profile_windows(monkeypatch):
-    base=pd.DataFrame(dict(game_id=['a','b','c','d'],season=[2020,2020,2021,2021],week=[1,2,1,2],home='H',away='A'))
-    cols=[f'{side}__{role}__rates_core__net_pass_yards_per_pass_play' for side,role in
-          [('home','for'),('away','allowed'),('away','for'),('home','allowed')]]
-    calls=[]
-    def lagged(box,schedule,half,availability,profile_families=None):
-        calls.append(half);f=base.copy()
-        for i,c in enumerate(cols):f[c]=np.array([5.,6.,7.,8.])+(i*half/16.)
-        return f
-    schedules=base.rename(columns={'home':'home_team','away':'away_team'}).assign(home_moneyline=-130.,away_moneyline=110.)
-    monkeypatch.setattr(m,'lagged_features',lagged)
-    with m.revision_identity(m.SHADOW_REVISION,m.SHADOW_RECIPE):
-        out=m.prepare_legacy_shadow_features(None,schedules,None)
-    assert calls==[8.,16.]
-    assert set(out)=={8.,16.}
-    expected,_=m.pass_contexts(out[16.])
-    np.testing.assert_allclose(out[8.].pass_product,expected.pass_product,equal_nan=True)
-    assert out[8.].q.notna().all()

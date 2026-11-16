@@ -51,9 +51,9 @@ labels its reconstructed, exposed development basis separately from live results
   describes current behavior. Verify disputed behavior in code and tests, not in prose.
 - `build_site.py` (pages, `data/latest` snapshot), `grade_ledger.py` (grading),
   `schedule_gate.py` (when builds run), `commit_data.py` (signed data commits),
-  `validate_data_files.py` (data invariants), `kalshi.py` (secondary Kalshi quotes at lock,
-  `data/kalshi_snapshots.jsonl`, append-only like the ledger), `matchup.py` (pre-registered
-  H4 term at lock, `data/h4_terms.jsonl`, append-only).
+  `validate_data_files.py` (data invariants), `season_ats.py` (2026 public ATS pool),
+  `ats_locks.py`/`lock_watcher.py` (T-60 locks), `espn_spreads.py` (spread prices),
+  `production_sanity.py` (independent audit).
 - `data/forward_predictions.jsonl` is the forward ledger, and it is **append-only
   evidence**. `data/forward_ledger.csv` and `data/ledger_report.txt` are
   regenerated views. Quote live numbers from the current report, not from old PRs.
@@ -207,5 +207,14 @@ Public Picks, Results, Performance, Calibration and CSVs show the current produc
 including games locked by earlier revisions, shows v1.24's walk-forward replay
 (`ats_locks.public_records`, `season_ats.LOCK_POLICY_VERSION = current-revision-regrade-2026-11-16-v1`).
 Capture and watchdog coverage still count any revision's saved lock, so nothing is relocked. Journals
-and earlier locks are unchanged and remain native forward evidence in backend reports
-(`research/regrade_2026_results/`). The independent audit checks each export under the policy it declares.
+and earlier locks are unchanged and remain native forward evidence in the backend report
+(`data/ledger_report.txt`). The independent audit checks each export under the policy it declares.
+
+**Lean repository (owner decision 2026-11-16).** Keep only what the production model,
+its locks, its pages and their audit require. `research/`, its workflows and tests, the
+v1.16 shadow lock, Kalshi capture, H4/H5 journals, H1–H13 hypothesis grading, moneyline
+ledger reporting, `ats_wait.py` and data nothing reads (Kalshi, v1.18 ATS shadow, team news,
+frozen recipes before v1.24) were deleted; they remain in git history. Earlier sections that
+mention them are history. The forward ledger keeps grading and proper scores. The production
+recipe, fit and `config_signature()` are unchanged. New research belongs outside this repository
+or in a separate branch unless the owner asks for it here.

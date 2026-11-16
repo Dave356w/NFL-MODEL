@@ -2169,12 +2169,6 @@ CORE_TERMS=('site','d__for__rates_core__first_down_rate','d__allowed__rates_core
             'd__allowed__rates_core__penalty_yards_per_game','d__avail__qb_delta',
             'pass_product','pass_1sd_pn','pass_1sd_np')
 PRODUCT_RECIPE=dict(V118_RECIPE,terms=list(CORE_TERMS))  # v1.19
-# v1.18 shadow lock: v1.16 (no penalty, all terms) keeps locking under its original identity for the
-# pre-registered H1/H2/H6 sample and the penalty's forward verdict; reported in ledger_report.txt only.
-# From v1.19 the shadow has its own v1.16 fit (shadow_fit), never the production fit.
-SHADOW_REVISION='boxscore-composite-v1.16'
-SHADOW_RECIPE=dict(LEGACY_PRODUCT_RECIPE)
-SHADOW_LOCK=True
 
 
 def pass_contexts(f):
@@ -2894,13 +2888,6 @@ def calibration_bands(df):
     return pd.DataFrame(rows)
 
 
-def calibration_wide(cal):
-    w=cal.pivot(index=['band_index','band'],columns='source',values=['games','mean forecast %','realized home win %'])
-    w.columns=[f'{src} {metric}' for metric,src in w.columns]
-    order=[f'{src} {m}' for src in ('model','market') for m in ('games','mean forecast %','realized home win %')]
-    return w[order].reset_index().drop(columns='band_index')
-
-
 def calibration_summary(cal):
     out=[]
     for src in ('model','market'):
@@ -3081,20 +3068,8 @@ def blend_verdict(blend):
     return out
 
 
-def term_restricted(fit):
-    """True for a fit whose recipe keeps only some terms (v1.19): its unpenalized forecast is not v1.16's."""
-    return fit.get('recipe',{}).get('terms') is not None
-
-
-def shadow_fit(train,fit,year,week):
-    """The v1.16 shadow's fit for a week: the production fit itself while production uses every term
-    (v1.18: the unpenalized forecast is v1.16's), otherwise a separate v1.16 fit on the same rows (v1.19)."""
-    return fit_composite(train,SHADOW_RECIPE,year,week) if term_restricted(fit) else fit
-
-
-def current_predictions(features,recipe,year,through_week,shadow_out=None,availability=None,shadow_features=None):
-    """Weekly walk-forward forecasts for this season. shadow_out (a dict) receives the v1.16 shadow
-    fit for through_week under 'fit'."""
+def current_predictions(features,recipe,year,through_week,availability=None):
+    """Weekly walk-forward forecasts for this season."""
     f=features[recipe['half_life']]; rows=[]; current_fit=None
     for week in range(1,through_week+1):
         te=f[(f.season==year)&(f.week==week)].copy()
@@ -3105,16 +3080,9 @@ def current_predictions(features,recipe,year,through_week,shadow_out=None,availa
             fit['market_target_fit']=features['market_target_fits'][f'{year}_{week}']
             fit['market_target_selection']=[r for r in features['market_target_selections'] if r['season']==year]
         baseline=fit_composite(tr,recipe,year,week,baseline=True)
-        sf=f if shadow_features is None else shadow_features[recipe['half_life']]
-        str_=sf[before(sf,year,week)]
-        sfit=shadow_fit(str_,fit,year,week)
-        shadow_board=sf[(sf.season==year)&(sf.week==week)].copy()
-        shadow_board['model_wp_v116']=apply_fit(shadow_board,sfit,raw=True)
-        shadow_board['homefield_wp']=apply_fit(shadow_board,baseline)
         te=apply_game_availability(te,availability)
         p,z,_=apply_fit(te,fit,True)
         te['model_wp'],te['composite_log_odds']=p,z
-        te['model_wp_v116']=shadow_board.model_wp_v116  # shadow retains the original availability inputs
         try: te['offset_se'],te['model_wp_lo'],te['model_wp_hi']=offset_band(tr,fit,te)
         except (ValueError,np.linalg.LinAlgError) as e:  # reporting only: never costs a forecast
             print(f'  Note: week {week} probability range unavailable ({e})')
@@ -3124,9 +3092,6 @@ def current_predictions(features,recipe,year,through_week,shadow_out=None,availa
         rows.append(te)
         if week==through_week:
             current_fit=fit
-            if shadow_out is not None:
-                shadow_out['fit']=sfit
-                shadow_out['board']=shadow_board
     return pd.concat(rows,ignore_index=True),current_fit
 
 
@@ -3291,29 +3256,6 @@ class revision_identity:
         g['REVISION'],g['PRODUCT_RECIPE']=self.new
     def __exit__(self,*exc):
         g=globals(); g['REVISION'],g['PRODUCT_RECIPE']=self.saved
-
-
-def prepare_legacy_shadow_features(box,schedules,availability,profile_mode='full'):
-    """The legacy product needs h8 main profiles and h16 pass contexts."""
-    features={half:lagged_features(box,schedules,half,availability,
-        profile_families=('rates_core',)) for half in (8.,16.)}
-    prepare_product_features(features,schedules)
-    return features
-
-
-def record_shadow(board,fit,oof,season,asof=None):
-    """v1.18 shadow lock: the unpenalized v1.16 forecast for the same games, under v1.16's own
-    frozen recipe and config signature, so the pre-registered v1.16 sample (H1/H2/H6) and the
-    penalty's forward verdict continue. Same gate and first-snapshot rule as production.
-    `fit` must be a v1.16 fit (from v1.19, the shadow fit from current_predictions), never a
-    term-restricted production fit."""
-    if not SHADOW_LOCK or PRODUCT_RECIPE.get('favorite_penalty') is None or 'model_wp_v116' not in board: return 0
-    if term_restricted(fit): raise ValueError('Shadow lock needs the v1.16 fit, not a term-restricted production fit')
-    with revision_identity(SHADOW_REVISION,SHADOW_RECIPE):
-        rec=frozen_recipe(oof,season)
-        if rec['recipe']!=SHADOW_RECIPE: raise ValueError('Shadow frozen recipe is not the v1.16 recipe')
-        _,n=record_forward(board.assign(model_wp=board.model_wp_v116),dict(fit,recipe=dict(SHADOW_RECIPE)),rec,asof)
-    return n
 
 
 def record_forward(board,fit,recipe_record,asof=None):
@@ -3685,13 +3627,10 @@ def walk_forward_product(features,last_historical_season):
     out=f.loc[valid,['game_id','season','week','home','away','home won','market_wp','result','spread_line','home_moneyline','away_moneyline']].copy()
     col='p__'+recipe_key(PRODUCT_RECIPE)
     out[col]=np.nan; out['homefield_wp']=np.nan
-    raw_col='p__'+recipe_key(SHADOW_RECIPE) if PRODUCT_RECIPE.get('favorite_penalty') is not None else None
-    if raw_col: out[raw_col]=np.nan  # unpenalized v1.16 forecasts (own fit from v1.19), for the shadow lock's frozen recipe
     for (year,week),test in f.loc[valid].groupby(['season','week'],sort=True):
         tr=f[before(f,year,week)]
         fit=fit_composite(tr,PRODUCT_RECIPE,year,week)
         out.loc[test.index,col]=apply_fit(test,fit)
-        if raw_col: out.loc[test.index,raw_col]=apply_fit(test,shadow_fit(tr,fit,year,week),raw=True)
         baseline=fit_composite(tr,PRODUCT_RECIPE,year,week,baseline=True)
         out.loc[test.index,'homefield_wp']=apply_fit(test,baseline)
     if not np.isfinite(out[col]).all(): raise ValueError('Incomplete production reconstruction')
@@ -4050,17 +3989,7 @@ def main():
     print('Best validation log loss by family (lower is better):'); print(fam_best.round(5).to_string())
     dump(outdir/'frozen_recipe.json',recipe_rec)
     print(f'[4/4] Current recipe: {recipe_key(recipe)}; coefficients refit before each week')
-    shadow_out={}; shadow_features=None
-    if REVISION in ('boxscore-composite-v1.23','boxscore-composite-v1.24') and qb is not None:
-        if 'starter_first_dropback' not in qb:
-            raise ValueError('v1.23 shadow requires original first-dropback labels')
-        with revision_identity(SHADOW_REVISION,SHADOW_RECIPE):
-            legacy_qb=qb.assign(starter=qb.starter_first_dropback)
-            legacy_avail=availability_table(targets,legacy_qb,a['snaps'],a['inj'],a['rost'],
-                depth=a.get('depth'),events=events,gameday=targets)
-            shadow_features=prepare_legacy_shadow_features(box,schedules,legacy_avail,profile_mode)
-    gw,fit=current_predictions(features,recipe,season,cur,shadow_out,availability=resolved_availability,
-                               shadow_features=shadow_features)
+    gw,fit=current_predictions(features,recipe,season,cur,availability=resolved_availability)
     if REVISION in ('boxscore-composite-v1.21','boxscore-composite-v1.22','boxscore-composite-v1.23','boxscore-composite-v1.24'):
         # Collection occurs during this run. The run-start time would predate
         # that evidence and make every otherwise valid automatic candidate fail.
@@ -4101,9 +4030,6 @@ def main():
     if HAS_IPY: display(HTML(html))
     if WRITE_FORWARD_LEDGER:
         records,new=record_forward(board,fit,recipe_rec)
-        shadow_board=attach_moneylines(shadow_out['board'],schedules)
-        shadow=record_shadow(shadow_board,shadow_out['fit'],oof,season)
-        if shadow: print(f'  v1.16 shadow snapshots added (ledger report only): {shadow}')
         graded,forward_card=grade_forward(records,schedules)
         save(graded,'forward_ledger_grades.csv'); save(forward_card,'forward_only_scorecard.csv')
         print(f'First pre-kickoff snapshots added: {new}. Historical reconstructions are excluded from this ledger.')

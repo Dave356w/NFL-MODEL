@@ -16,9 +16,6 @@ arm stay in the repository's data/ledger_report.txt and data/latest/)
 Data written (committed by build.yml through commit_data.py)
   data/forward_predictions.jsonl   append-only ledger (written by nfl_model.record_forward)
   data/frozen_recipe_<season>_<REVISION>.json frozen hyperparameters (nfl_model.frozen_recipe)
-  data/kalshi_snapshots.jsonl      append-only Kalshi quotes captured for newly locked games (kalshi.py)
-  data/h4_terms.jsonl              append-only pass-matchup terms for newly locked games (matchup.py, H4)
-  data/h5_totals.jsonl             append-only totals and moneylines for newly locked games (totals.py, H5)
   data/forward_ledger.csv, data/ledger_report.txt   graded view (grade_ledger.py)
   data/latest/                     the newest run's page inputs, so --pages-only needs no model run
   data/projections/<season>_week<NN>.csv   the latest board of each week, overwritten through the week
@@ -44,10 +41,7 @@ import numpy as np
 import pandas as pd
 
 import grade_ledger
-import kalshi
-import matchup
 import nfl_model as m
-import totals
 import fixed_bands
 import ats_locks
 import forecast_history
@@ -55,9 +49,7 @@ import season_ats
 import espn_spreads
 import historical_calibration
 import score_updates
-from research import version_report
-from research import ats_forward_shadow
-from research import production_sanity
+import production_sanity
 
 DATA = Path("data")
 LATEST = DATA / "latest"
@@ -90,9 +82,6 @@ SNAPSHOT = {
     "report_notes.csv": "report_notes.csv",
     "regraded_ledger.csv": "regraded_ledger.csv",
     "regraded_summary.csv": "regraded_summary.csv",
-    "version_historical.csv": "version_historical.csv",
-    "version_archived.csv": "version_archived.csv",
-    "version_native.csv": "version_native.csv",
     "market_target_fit_audit.csv": "market_target_fit_audit.csv",
     "replacement_adjustments.csv": "replacement_adjustments.csv",
 }
@@ -591,101 +580,8 @@ def model_spread(r):
     return x if math.isfinite(x) else float(m.implied_spread([r.get("model_wp")])[0])
 
 
-def wl_text(r):
-    return f"{int(r['wins'])}-{int(r['losses'])}" + (f"-{int(r['pushes'])}" if r.get("pushes") else "")
-
-
 def roi_short(roi):
     return "—" if not math.isfinite(num(roi)) else f"{100 * roi:+.1f}%".replace("-", "−")
-
-
-def control_records(df):
-    """Flat 1u records for the model, always-the-favorite and always-home on the same graded, priced rows."""
-    if df is None or df.empty or "home won" not in df:
-        return None
-    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., .5, 1.])].copy()
-    if d.empty:
-        return None
-    d["_fav"] = m.market_ml_wp(d)
-    d["_home"] = .99
-    bets = {k: m.flat_bets(d, c) for k, c in (("model", "model_wp"), ("favorite", "_fav"), ("home", "_home"))}
-    keep = np.logical_and.reduce([b.units.notna().to_numpy() for b in bets.values()])
-    if not keep.any():
-        return None
-    return {k: m.roi_summary(b[keep]) for k, b in bets.items()}
-
-
-def disagreement_note(df, where):
-    """The games that separate the model from always betting the favorite (v1.14.2):
-    on every other game the two make the same bet."""
-    if df is None or df.empty or "home won" not in df:
-        return ""
-    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., .5, 1.])]
-    t = m.disagreement_table(d, by="season") if len(d) else None
-    if t is None or t.empty:
-        return ""
-    t = t[t.group == "All games"].set_index("source")
-    r, f = t.loc["model"], t.loc["market favorite"]
-    if not r.bets:
-        return (f"<p class='mut small'>{where}: the model has not yet picked against the market favorite, "
-                "so its record equals always betting the favorite.</p>")
-    units = lambda u: f"{u:+.1f}u".replace("-", "−")
-    return (f"<p class='mut small'>{where}: the model picked against the market favorite in {int(r.bets)} game{'s' if r.bets != 1 else ''}, "
-            f"the only games where its bets differ from always betting the favorite. There it went "
-            f"{int(r.wins)}-{int(r.losses)}, {units(r.units)} (ROI {roi_short(r.roi)}), against "
-            f"{units(f.units)} for the favorite: a difference of {units(r.units - f.units)}.</p>")
-
-
-def control_tiles(ctrl, first_label, first_value, first_sub):
-    """Four same-shape tiles: a count, then the model and two do-nothing controls."""
-    tiles = [stat(first_label, first_value, first_sub)]
-    for key, label in (("model", "Model"), ("favorite", "Always favorite"), ("home", "Always home")):
-        r = (ctrl or {}).get(key)
-        if r and r["bets"]:
-            tiles.append(stat(label, wl_text(r), f"{100 * r['win_pct']:.1f}% · ROI {roi_short(r['roi'])}",
-                              "model" if key == "model" else ""))
-        else:
-            tiles.append(stat(label, "—", "no graded picks yet"))
-    return f"<div class='gr-summary'>{''.join(tiles)}</div>"
-
-
-def spread_record(latest, season=None):
-    d = (latest or {}).get('fixed_band_ledger', pd.DataFrame())
-    if d.empty:
-        return None
-    s = fixed_bands.summary(d)
-    r = s[(s.method == 'Fixed bands') & (s.season == ('All' if season is None else str(season)))]
-    return r.iloc[0] if len(r) and r.iloc[0].games else None
-
-
-def spread_record_text(r):
-    return (f"ATS {int(r.wins)}–{int(r.losses)}–{int(r.pushes)} · {int(r.skips)} skips · "
-            f"{r.units:+.2f}u · ROI {roi_short(r.roi)}")
-
-
-def spread_headline(latest, season=None):
-    pooled = (latest or {}).get('pooled_ats', pd.DataFrame())
-    if season == 2026 and len(pooled):
-        record = season_ats.summary(pooled)
-        if record['opportunities']:
-            r = pd.Series(record)
-            basis = pooled_basis_text(pooled)
-            return (f"<div class='record'><div class='l'>Spread results · 2026</div>"
-                    f"<div class='mono'>{spread_record_text(r)}<div class='mut small'>"
-                    f"Season total · {esc(basis)} · ESPN prices + labelled −110 assumptions · 1-unit stakes</div></div></div>")
-    r = spread_record(latest, season)
-    label = f'Spread results · {season}' if season is not None else 'Spread results · historical replay'
-    text = spread_record_text(r) if r is not None else 'No eligible graded spread results yet.'
-    basis = 'Historical replay'
-    data=(latest or {}).get('fixed_band_ledger',pd.DataFrame())
-    if len(data) and season is not None:
-        covered=data[(data.season==season)&data.fixed_band_spread.notna()&data.result.notna()&data.spread_line.notna()]
-        if len(covered):basis+=f' · through week {int(covered.week.max())}'
-    if r is not None:
-        basis += f' · {int(r.selected)} selections from {int(r.opportunities)} games'
-    return (f"<div class='record'><div class='l'>{esc(label)}</div><div class='mono'>{text}"
-            f"<div class='mut small'>{basis} · −110 pricing · 1-unit stakes</div>"
-            "</div></div>")
 
 
 UNIT_NAMES = {"OL": "Offensive line", "WRTE": "Receivers", "RB": "Running backs",
@@ -706,89 +602,10 @@ FACTOR_METRICS = {
 }
 
 
-def factor_label(name):
-    """Plain name for a model input on the public card."""
-    if name == "market_log_odds":
-        return "Market starting point"
-    if name == "pass_product":
-        return "Passing matchup balance"
-    if name.startswith("pass_1sd_"):
-        return PASS_CONTEXT_LABELS.get(name[-2:], "Passing matchup pattern")
-    if name == "site":
-        return "Home field"
-    if name == m.MARGIN_FEATURE:
-        return "Point margin"
-    if name in m.PEAK_FEATURES:
-        return "Largest lead" if name == "d__max_lead" else "Largest deficit"
-    if name.startswith("d__avail__"):
-        c = name[len("d__avail__"):]
-        return "Quarterback" if c == "qb_delta" else f"{UNIT_NAMES.get(c.split('_')[0], c)} availability"
-    pieces = name.split("__", 3)
-    if len(pieces) == 4 and pieces[-1] in FACTOR_METRICS:
-        offense, defense, _ = FACTOR_METRICS[pieces[-1]]
-        return offense if pieces[1] == "for" else defense
-    try:
-        return m.feature_label(name)
-    except (ValueError, KeyError):
-        return "Other team profile"
-
-
-def factor_description(name, raw_input, away, home):
-    """Short, game-specific labels; strength describes inputs, not guaranteed effects."""
-    label, note = factor_label(name), ""
-    if name.startswith("pass_1sd_"):
-        if math.isfinite(num(raw_input)) and abs(num(raw_input)) > 1e-12:
-            attack, defense = (home, away) if num(raw_input) > 0 else (away, home)
-            note = label
-            label = f"{attack} passing vs {defense} defense"
-        else:
-            note = "Historical passing matchup pattern"
-    elif name in m.PASS_TOTAL_NAMES:
-        note = {"margin_edge":"Expected margin relative to the spread", "total_homefield":"Home-field effect at the expected combined score", "pass_total_interaction":"Passing matchup effect at the expected combined score"}[name]
-    elif name == "pass_product":
-        note = "Each passing attack matched with the opposing pass defense"
-    elif name == "market_log_odds":
-        note = "Starting probability from the moneyline prices"
-    elif name == "site":
-        note = "Home-field term in the fitted model"
-    elif name == m.MARGIN_FEATURE:
-        note = "Recent scoring margins"
-    elif name in m.PEAK_FEATURES:
-        note = "How far teams led or trailed during recent games"
-    elif name.startswith("d__avail__"):
-        note = ("Expected starter compared with recent quarterback play" if name.endswith("qb_delta")
-                else "Expected absences among recent contributors")
-    else:
-        pieces = name.split("__", 3)
-        if len(pieces) == 4 and pieces[-1] in FACTOR_METRICS:
-            note = FACTOR_METRICS[pieces[-1]][2]
-            if pieces[1] == "allowed":
-                note = "Opponents’ " + note[0].lower() + note[1:]
-    return label, note
-
-
-def factor_cells(c, away, home, cmax):
-    v = num(c.get("log-odds contribution"))
-    if not math.isfinite(v):
-        return None
-    label, note = factor_description(c["feature"], c.get("home-minus-away input"), away, home)
-    tone = "pos" if v > 0 else "neg" if v < 0 else ""
-    toward = f"Toward {home if v > 0 else away}" if v else "Neutral"
-    w = min(50., 50 * abs(v) / max(cmax, 1e-9))
-    style = f"left:50%;width:{w:.1f}%" if v >= 0 else f"right:50%;width:{w:.1f}%"
-    return [f"<div class='factor-name'>{esc(label)}</div><div class='factor-note'>{esc(note)}</div>",
-            f"<div class='factor-impact'><div class='factor-toward {tone}'>{esc(toward)}</div>"
-            f"<div class='cbar' role='img' aria-label='{esc(toward)}'><i class='{tone}' style='{style}'></i></div></div>"]
-
-
 def result_badge(res):
     if res not in ("W", "L", "P"):
         return "—"
     return f"<span class='badge {'w' if res == 'W' else 'l' if res == 'L' else ''}'>{res}</span>"
-
-
-def pick_text(team, price):
-    return f"{esc(team)} {ml_text(price)}" if isinstance(team, str) and team else "—"
 
 
 def score_text(away, home):
@@ -800,92 +617,7 @@ def folded(summary, inner, open_=False):
     return (f"<details class='fold'{' open' if open_ else ''}><summary>{summary}</summary>{inner}</details>")
 
 
-def margin_text(margin, spread):
-    """Average realized margin of a pick, beside the average market spread for it."""
-    mg, sp = num(margin), num(spread)
-    if not math.isfinite(mg):
-        return "—"
-    tone = "up" if math.isfinite(sp) and mg > sp else "dn" if math.isfinite(sp) else ""
-    out = f"<span class='{tone}'>{mg:+.1f}</span>".replace("-", "−")
-    return out + (f" vs {sp:+.1f}".replace("-", "−") if math.isfinite(sp) else "")
-
-
-def records_table(recs):
-    """When the model said X%, how often its pick won, and by how much on average."""
-    rows = []
-    margins = "avg pick margin" in recs
-    for _, r in recs[recs.source == "model"].sort_values("band_index").iterrows():
-        if not r.games:
-            continue
-        cells = [esc(r.band), f"<b>{esc(r.record)}</b>", f"{r['realized pick win %']:.1f}%", f"{r['avg pick prob %']:.1f}%"]
-        if margins:
-            cells.append(margin_text(r["avg pick margin"], r.get("avg pick spread")))
-        rows.append({"cells": cells, "_class": "total" if r.band == "All picks" else ""})
-    heads = ["Model said", "Picks", "Won", "Average forecast"] + (["Avg margin"] if margins else [])
-    return table(heads, rows, num_cols=tuple(range(1, len(heads))))
-
-
-def market_band_stats(retro):
-    """Per moneyline band: sides, realized win rate and mean no-vig implied probability."""
-    s = market_sides(retro)
-    return {b: (len(g), float(g.won.mean()), float(g.q.mean())) for b, g in s.groupby("band")}
-
-
-def heldout_seasons(latest):
-    """Seasons scored out of sample (each season's recipe chosen on earlier seasons only)."""
-    t = latest.get("roi_by_season") if latest else None
-    if t is None or t.empty or "group" not in t:
-        return []
-    return sorted(int(float(g)) for g in t.group.unique() if str(g).replace(".", "").isdigit())
-
-
-def band_windows(latest, forward):
-    """Market and model records per moneyline band on the SAME games: the held-out seasons
-    plus graded forward picks of the current revision. Returns (market, model, seasons, n_forward)."""
-    years = heldout_seasons(latest)
-    retro = latest.get("retro_ledger") if latest else None
-    cols = ["season", "home won", "home_moneyline", "away_moneyline", "model_wp"]
-    base = retro[retro.season.isin(years)][cols] if retro is not None and len(retro) and years else pd.DataFrame(columns=cols)
-    fwd = forward[cols] if forward is not None and len(forward) else pd.DataFrame(columns=cols)
-    mkt = market_band_stats(pd.concat([base, fwd], ignore_index=True)) if len(base) + len(fwd) else {}
-    mdl = {}
-    t = latest.get("roi_bands") if latest else None
-    if t is not None and len(t) and "source" in t:
-        for r in t[(t.source == "model") & (t.group != "All games")].itertuples(index=False):
-            if r.bets:
-                mdl[str(r.group)] = {"wins": int(r.wins), "losses": int(r.losses), "bets": int(r.bets),
-                                     "qsum": float(r.mean_q) * int(r.bets)}
-    if len(fwd):
-        fb = m.flat_bets(fwd.assign(**{"home won": pd.to_numeric(fwd["home won"], errors="coerce")}), "model_wp")
-        for band, g in fb[fb.units.notna()].groupby("band"):
-            d = mdl.setdefault(band, {"wins": 0, "losses": 0, "bets": 0, "qsum": 0.})
-            d["wins"] += int((g.result == "W").sum()); d["losses"] += int((g.result == "L").sum())
-            d["bets"] += len(g); d["qsum"] += float(g.q.sum())
-    return mkt, mdl, years, len(fwd)
-
-
 SMALL_SAMPLE = 30  # fewer games than this at a price: flag the rate as a small sample
-
-
-def price_band_html(team, price, q_pick, mkt, mdl, years, n_forward):
-    """How sides at the pick's moneyline have done for the market and the model, on the same games."""
-    band = m.ml_band(price)
-    k, md = mkt.get(band), mdl.get(band)
-    dec = (md["wins"] + md["losses"]) if md else 0
-    small = lambda n: " · small sample" if n < SMALL_SAMPLE else ""
-    tiles = [stat("This game", pct(q_pick, 1), f"market's chance for {esc(team)} {ml_text(price)}"),
-             stat("All teams at this price", f"won {pct(k[1], 1)}" if k else "—",
-                  f"vs {pct(k[2], 1)} implied · {k[0]} teams{small(k[0])}" if k else "no games at this price yet"),
-             stat("Model picks at this price", f"won {pct(md['wins'] / dec, 1)}" if dec else "—",
-                  f"vs {pct(md['qsum'] / md['bets'], 1)} implied · {md['bets']} picks{small(md['bets'])}"
-                  if md else "no picks at this price yet"),
-             stat("Model record", f"{md['wins']}-{md['losses']}" if md else "—", "at this price")]
-    span = f"{years[0]}–{years[-1]}" if len(years) > 1 else f"{years[0]}" if years else "past seasons"
-    fwd = f" plus {n_forward} locked pick{'s' if n_forward != 1 else ''} this season" if n_forward else ""
-    return (f"<h3>At this price · {esc(team)} {ml_text(price)} is in the {esc(band)} range</h3>"
-            f"<div class='gr-summary band'>{''.join(tiles)}</div>"
-            f"<p class='mut small'>Implied is the market's chance with the bookmaker's margin removed. "
-            f"Same games for both: {span}, each game reconstructed using earlier weeks; the current formula was chosen after historical review{fwd}.</p>")
 
 
 # ---------------------------------------------------------------- pages
@@ -1130,74 +862,6 @@ def _qb(r, side):
     return esc(e) + (f" (usual {esc(u)})" if isinstance(u, str) and u != e else "")
 
 
-def pooled_2026_v118_rows(latest, ledger):
-    """One 2026 row per game: a native lock of the production revision wins over any historical replay
-    (legacy moneyline research; not published)."""
-    if latest is None:
-        return None
-    man = latest.get("manifest", {})
-    if man.get("revision") != m.REVISION or int(man.get("season", 0)) != 2026:
-        return None
-
-    replay = latest.get("retro_ledger", pd.DataFrame())
-    required = {"game_id", "season", "week", "basis", "bet_result", "units"}
-    if replay is None or not required.issubset(replay.columns):
-        replay = pd.DataFrame(columns=list(required))
-    replay = replay.loc[(pd.to_numeric(replay["season"], errors="coerce") == 2026)
-                        & replay["basis"].eq("current season walk-forward")].copy()
-    replay = replay.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="last")
-
-    native = ledger.loc[(ledger["revision"].eq(m.REVISION))
-                        & (pd.to_numeric(ledger["season"], errors="coerce") == 2026)].copy()
-    native = native.dropna(subset=["game_id"]).drop_duplicates("game_id", keep="first")
-    # Block every native game from replay, including games still pending.
-    replay = replay.loc[~replay["game_id"].isin(native["game_id"])]
-    pending = int(native["status"].eq("pending").sum())
-    native = native.loc[native["status"].isin(["graded", "tie"])]
-
-    def valid(df):
-        if df.empty:
-            return df
-        units = pd.to_numeric(df["units"], errors="coerce")
-        return df.loc[df["bet_result"].isin(["W", "L", "P"]) & np.isfinite(units)].copy()
-
-    replay, native = valid(replay), valid(native)
-    replay["_basis"] = "replayed"
-    native["_basis"] = "native"
-    rows = pd.concat([replay, native], ignore_index=True, sort=False)
-    return rows, len(replay), len(native), pending
-
-
-def pooled_2026_v118_header(latest, ledger):
-    """One pooled moneyline scorecard, with a transparent mixed-price basis."""
-    data = pooled_2026_v118_rows(latest, ledger)
-    if data is None:
-        return ""
-    rows, replay_count, native_count, pending = data
-    ctrl = control_records(rows)
-    model = (ctrl or {}).get("model")
-    eligible = int(model["bets"]) if model else 0
-    sub = f"{replay_count} historical replay · {native_count} recorded · {pending} pending"
-    parts = ["<h2 class='sec'>Moneyline · 2026 season overview</h2>",
-             control_tiles(ctrl, "Graded", str(eligible), sub)]
-    if model and eligible:
-        parts.append(f"<p class='mut small'>Season moneyline: {wl_text(model)} · "
-                     f"{model['units']:+.2f}u · ROI {roi_short(model['roi'])}. "
-                     "Includes historical replay and recorded forecasts, with one result per game. "
-                     "Recorded forecasts use their saved pregame prices and replace any replay of the same game.</p>")
-        weekly = []
-        for week, group in rows.groupby("week", sort=True):
-            summary = control_records(group)
-            r = (summary or {}).get("model")
-            if r and r["bets"]:
-                weekly.append(f"W{int(week)} {wl_text(r)}")
-        if weekly:
-            parts.append(f"<p class='mut small'>By week: {esc(' · '.join(weekly))}</p>")
-    else:
-        parts.append(f"<p class='mut small'>No graded 2026 {esc(m.REVISION.rsplit('-', 1)[-1])} picks yet.</p>")
-    return "".join(parts)
-
-
 # Every public season surface uses the same deduplicated pool. Provenance stays
 # in season_ats and the repository report rather than the customer interface.
 PUBLIC_BASES = {'Historical replay', 'Replayed pregame forecast', '60-minute lock',
@@ -1335,19 +999,6 @@ def render_grades(ledger, latest, built):
     return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
 
 
-def pooled_basis_text(frame):
-    graded = frame[frame.ats_status.eq('graded')]
-    replay = int(graded.ats_basis.isin(['Historical replay', 'Replayed pregame forecast']).sum())
-    backfill = int(graded.ats_basis.eq('Backfilled recorded skip').sum())
-    recorded = len(graded) - replay - backfill
-    r = season_ats.summary(frame)
-    text = f'{replay} replayed · ' + (f'{backfill} backfilled · ' if backfill else '')
-    text += f'{recorded} recorded · {r["pending"]} pending'
-    if r['unavailable']:
-        text += f' · {r["unavailable"]} unavailable'
-    return text
-
-
 def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple baselines'):
     """Compare ATS sides on identical selected, completed, non-pick'em games."""
     d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
@@ -1448,27 +1099,6 @@ HOW_IT_WORKS = (
     ("Grade at the matched price", "Each priced pick risks 1 unit. A win pays the selected side’s spread odds; a loss costs 1u, "
                       "a push returns the stake. Historical closes are labelled estimates; missing prices use a labelled −110 assumption in pooled returns."),
 )
-
-
-def market_sides(df):
-    """One row per side of every priced, decided game: its moneyline, no-vig implied probability and result,
-    plus that side's realized margin and the market spread for it (positive = the side favored/won by)."""
-    if df is None or df.empty:
-        return pd.DataFrame(columns=["side", "price", "q", "won", "band", "margin", "spread"])
-    d = df[pd.to_numeric(df["home won"], errors="coerce").isin([0., 1.])].copy()
-    q = m.market_ml_wp(d)
-    ok = np.isfinite(q)
-    d, q = d[ok], q[ok]
-    hw = d["home won"].to_numpy(float)
-    res = pd.to_numeric(d.get("result", pd.Series(np.nan, index=d.index)), errors="coerce").to_numpy(float)
-    spr = pd.to_numeric(d.get("spread_line", pd.Series(np.nan, index=d.index)), errors="coerce").to_numpy(float)
-    sides = pd.concat([pd.DataFrame({"side": "home", "price": d.home_moneyline.to_numpy(float), "q": q, "won": hw,
-                                     "margin": res, "spread": spr}),
-                       pd.DataFrame({"side": "away", "price": d.away_moneyline.to_numpy(float), "q": 1 - q, "won": 1 - hw,
-                                     "margin": -res, "spread": -spr})],
-                      ignore_index=True)
-    sides["band"] = [m.ml_band(p) for p in sides.price]
-    return sides
 
 
 def render_calibration(latest, ledger, built):
@@ -1607,8 +1237,7 @@ def render_all(out_dir, data=DATA, now=None):
     return sorted(p.name for p in out.iterdir())
 
 
-APPENDICES = (("version_report.md", "Appendix A: competing model versions and research arms"),
-              ("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"))
+APPENDICES = (("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"),)
 RESEARCH_MARKER = '\n\n' + '=' * 78 + '\nRepository analysis appendices\n' + '=' * 78 + '\n'
 
 
@@ -1629,9 +1258,6 @@ def published_report(data):
         pool = season_ats.build(latest, load_ledger(data))
         parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(pool))
         parts.append('\n\nATS same-row baselines\n\n' + season_ats.lock_baselines(latest, pool))
-    calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
-    if calibration.exists():
-        parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())
     return "".join(parts)
 
 
@@ -1671,15 +1297,9 @@ def main(argv=None):
                 ats_locks.write_capture_status(DATA)
             except Exception as exc:
                 print(f'::warning::ATS capture status not refreshed: {exc}')
-        kalshi.safe_record(DATA)  # secondary quotes for newly locked games; never fails the build
-        matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
-        totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
-        version_report.run(DATA,LATEST)
     files = render_all(args.out)
     if not args.pages_only:
-        count = ats_forward_shadow.record(DATA)
-        print(f"ATS research: {count} new immutable shadow locks")
         # Captures happen after rendering; include this build's new archive rows.
         (DATA / 'ledger_report.txt').write_text(published_report(DATA), encoding='utf-8')
     print(f"site: {len(files)} files -> {args.out}")

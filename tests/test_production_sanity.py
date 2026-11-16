@@ -4,7 +4,7 @@ import shutil
 import numpy as np
 import pandas as pd
 import pytest
-from research import production_sanity as s
+import production_sanity as s
 
 
 def test_independent_grading_skip_push_away_missing_and_pending():
@@ -17,14 +17,6 @@ def test_independent_grading_skip_push_away_missing_and_pending():
 def test_independent_zero_edge_favorite_away_and_pickem_skip():
     grades=s.independent_grades([-7.,-7.,0.,0.],[-7.,-7.,0.,0.],[-10.,-3.,5.,np.nan])
     assert grades.tolist()==['W','L','S','S']
-
-
-def test_independent_moneyline_payouts_loss_tie_neutral_and_missing():
-    d=pd.DataFrame({'model_wp':[.6,.4,.6,.5,.4,.6], 'home won':[1.,0.,.5,1.,1.,np.nan],
-                    'home_moneyline':[-150.]*6,'away_moneyline':[130.]*6})
-    grades,units=s.independent_moneyline(d)
-    assert grades.tolist()==['W','W','P','','L','']
-    np.testing.assert_allclose(units,[2/3,1.3,0.,np.nan,-1.,np.nan],equal_nan=True)
 
 
 def test_independent_median_uses_losses_ties_and_only_prior_seasons():
@@ -276,9 +268,6 @@ def test_current_production_snapshot_passes_independent_audit():
     audit=s.inspect(data)
     assert audit['status']=='PASS' and all(audit['checks'].values())
     assert audit['ats_capture']['candidates'] >= audit['ats_capture']['timed_locks']
-    archive=audit['ats_archive']
-    assert archive['original_selections']+archive['original_skips']==archive['snapshots']
-    assert archive['backfilled_skips']<=archive['original_skips']
     rule=next(x for x in audit['rules'] if x['season']==2026)
     if audit['weekly']:
         assert (rule['training_max_season'],rule['training_max_week']) < (rule['season'],rule['week'])
@@ -289,9 +278,6 @@ def test_current_production_snapshot_passes_independent_audit():
     assert total['selected']+total['skips']==total['opportunities']
     if total['opportunities']==895:
         assert (total['wins'],total['losses'],total['pushes'],total['skips'])==(473,397,25,0)
-    for r in audit['historical']:
-        if r['favorite']:
-            assert r['favorite']['bets']==r['common_moneyline']['bets']
 
 
 def test_missing_data_has_explicit_empty_state(tmp_path):

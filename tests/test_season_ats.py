@@ -273,12 +273,6 @@ class SeasonATS(unittest.TestCase):
         # Graded at the saved 7 with the newer final score: IND by 12 covers.
         self.assertEqual(pool.loc['overlap'].fixed_band_ats_result,'W')
 
-    def test_display_uses_pooled_count_and_labels_both_sources(self):
-        latest,native=self.fixture();latest['pooled_ats']=s.build(latest,native)
-        html=b.spread_headline(latest,2026)
-        self.assertIn('ATS 1–1–0 · 0 skips',html)
-        self.assertIn('1 replayed · 1 backfilled · 0 recorded',html)
-        self.assertIn('1 unavailable',html)
 
     def test_current_data_reconciles_and_backfills_recorded_skips(self):
         data=Path(__file__).resolve().parents[1]/'data'

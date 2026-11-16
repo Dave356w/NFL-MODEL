@@ -127,7 +127,6 @@ def test_all_published_timestamps_use_pacific_and_dst(tmp_path):
         assert not re.search(r"\b(?:EST|EDT|ET)\b", visible_text(html))
 
 
-
 def visible_text(html):
     html = re.sub(r"<style>.*?</style>|<script>.*?</script>", "", html, flags=re.S)
     return re.sub(r"<[^>]+>", " ", html)
@@ -218,24 +217,16 @@ def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_
     monkeypatch.setattr(b,'run_model',lambda:tmp_path/'run')
     monkeypatch.setattr(b.espn_spreads, 'safe_refresh', lambda *a, **k: None)
     monkeypatch.setattr(b,'snapshot',lambda _: (2026,6))
-    monkeypatch.setattr(b.kalshi,'safe_record',lambda *_:None)
-    monkeypatch.setattr(b.matchup,'safe_record',lambda *_:None)
-    monkeypatch.setattr(b.totals,'safe_record',lambda *_:None)
     monkeypatch.setattr(b.grade_ledger,'main',lambda *_:None)
-    monkeypatch.setattr(b.version_report,'run',lambda *_:None)
     def render(_):
         assert recovered == [data]  # pages-only held finalization also applies repairs
-        (data/'ledger_report.txt').write_text('before capture')
+        (data/'ledger_report.txt').write_text('before report')
         return []
-    def capture(_):
-        (data/'capture-marker').write_text('new archive')
-        return 1
     monkeypatch.setattr(b,'render_all',render)
-    monkeypatch.setattr(b.ats_forward_shadow,'record',capture)
-    monkeypatch.setattr(b,'published_report',lambda path:(path/'capture-marker').read_text())
+    monkeypatch.setattr(b,'published_report',lambda path:'after render')
     assert b.main(['--pages-only'] if pages_only else [])==0
-    assert (data/'ledger_report.txt').read_text()==('before capture' if pages_only else 'new archive')
-    assert (data/'capture-marker').exists()!=pages_only
+    # Full builds publish the consolidated report after rendering; pages-only builds do not.
+    assert (data/'ledger_report.txt').read_text()==('before report' if pages_only else 'after render')
 
 
 def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
@@ -259,58 +250,6 @@ def test_index_cards_flags_and_record(tmp_path):
     assert "View ATS results" in html and "model win probability" not in html
 
 
-def test_pooled_2026_v118_picks_no_double_count(tmp_path):
-    data = make_data(tmp_path / "data")
-    path = data / "latest" / "retro_ledger.csv"
-    retro = pd.read_csv(path)
-    prior = retro.iloc[:8].copy()
-    prior["season"] = 2026
-    prior["week"] = [1, 2, 3, 4, 5, 5, 3, 2]
-    prior["game_id"] = ["prior_1", "prior_2", "prior_3", "prior_4",
-                        "2026_05_KC_BUF", "2026_05_PENDING", "ignored_backtest", "unpriced"]
-    prior["basis"] = ["current season walk-forward"] * 6 + ["backtest", "current season walk-forward"]
-    prior["model_wp"] = .7
-    prior["home won"] = [1., 0., .5, 1., 0., 1., 1., 1.]
-    prior["home_moneyline"], prior["away_moneyline"] = -150., 130.
-    prior["bet_result"] = ["W", "L", "P", "W", "L", "W", "W", "W"]
-    prior["units"] = [2/3, -1., 0., 2/3, -1., 2/3, 2/3, float("nan")]
-    pd.concat([retro, prior], ignore_index=True).to_csv(path, index=False)
-
-    ledger_path = data / "forward_ledger.csv"
-    ledger = pd.read_csv(ledger_path)
-    pending = ledger.iloc[0].copy()
-    pending["game_id"] = "2026_05_PENDING"
-    pending["status"] = "pending"
-    pending["bet_result"], pending["units"], pending["home won"] = "", float("nan"), float("nan")
-    pd.concat([ledger, pending.to_frame().T], ignore_index=True).to_csv(ledger_path, index=False)
-
-    latest = b.load_latest(data / "latest")
-    saved = b.load_ledger(data)
-    rows, n_replay, n_native, n_pending = b.pooled_2026_v118_rows(latest, saved)
-    assert (n_replay, n_native, n_pending) == (4, 1, 1)
-    assert len(rows) == len(set(rows.game_id)) == 5
-    assert rows.loc[rows.game_id == "2026_05_KC_BUF", "_basis"].item() == "native"
-    assert "2026_05_PENDING" not in set(rows.game_id)
-
-    out = tmp_path / "public"
-    b.render_all(out, data, now=NOW)
-    page = (out / "grades.html").read_text()
-    # Legacy moneyline research helpers still work, but are not published.
-    research = b.pooled_2026_v118_header(latest, saved)
-    assert "Season moneyline: 3-1-1 · +1.07u · ROI +21.5%" in research
-    assert "4 historical replay · 1 recorded · 1 pending" in research
-    assert "Moneyline" not in page and "Season moneyline:" not in page
-    assert "ATS results" in page and "replay" not in page.lower()
-    if (out / 'ats_2026_results.csv').exists():
-        exported = pd.read_csv(out / 'ats_2026_results.csv')
-        assert not exported.game_id.duplicated().any()
-
-    # A different revision cannot silently inherit the production pooled headline.
-    latest["manifest"]["revision"] = "boxscore-composite-v1.18"
-    assert b.pooled_2026_v118_rows(latest, saved) is None
-    assert b.pooled_2026_v118_header(latest, saved) == ""
-
-
 def test_index_before_any_graded_pick(tmp_path):
     data = make_data(tmp_path / "data", with_ledger=False)
     b.render_all(tmp_path / "public", data, now=NOW)
@@ -327,30 +266,6 @@ def test_results_page_keeps_unavailable_games_without_research_details(tmp_path)
         assert research not in html
     assert not (out / "ledger_report.txt").exists()
     assert "native forward" in (tmp_path / "data/ledger_report.txt").read_text()
-
-
-def test_control_records_share_rows_and_push_ties():
-    df = pd.DataFrame({"home won": [1., 0., .5, 1.], "model_wp": [.6, .6, .4, .7],
-                       "home_moneyline": [-150, 120, -120, np.nan], "away_moneyline": [130, -140, 100, 100]})
-    c = b.control_records(df)
-    # last row has no home price: dropped for all three; the tie is a push everywhere
-    assert {k: (v["bets"], v["wins"], v["losses"], v["pushes"]) for k, v in c.items()} == {
-        "model": (3, 1, 1, 1), "favorite": (3, 2, 0, 1), "home": (3, 1, 1, 1)}
-    assert np.isclose(c["model"]["units"], 100 / 150 - 1) and np.isclose(c["home"]["units"], 100 / 150 - 1)
-    # a pick'em (no favorite) is dropped for every control, so all three stay on the same rows
-    even = df.assign(home_moneyline=[-150, 120, -110, -110], away_moneyline=[130, -140, -110, -110])
-    assert {v["bets"] for v in b.control_records(even).values()} == {2}
-    assert b.control_records(df.iloc[:0]) is None
-
-
-def test_market_sides_devig_and_bands():
-    df = pd.DataFrame({"home won": [1., 0., .5], "home_moneyline": [-150, -150, -110], "away_moneyline": [130, 130, -110]})
-    s = b.market_sides(df)
-    assert len(s) == 4  # the tie is excluded, two sides per decided game
-    home = s[s.side == "home"]
-    q = (150 / 250) / (150 / 250 + 100 / 230)
-    assert np.allclose(home.q, q) and list(home.won) == [1., 0.] and set(home.band) == {"−174 to −130"}
-    assert np.allclose(s[s.side == "home"].q.to_numpy() + s[s.side == "away"].q.to_numpy(), 1.)
 
 
 def test_calibration_page_grades_the_market_and_model_confidence(tmp_path):
@@ -410,39 +325,6 @@ def test_rebuilt_history_stays_off_public_pages(tmp_path):
         assert "Moneyline pick" not in html and "ML result" not in html
 
 
-def test_factor_labels_are_plain():
-    assert b.factor_label("site") == "Home field"
-    assert b.factor_label(m.MARGIN_FEATURE) == "Point margin"
-    assert b.factor_label("d__avail__qb_delta") == "Quarterback"
-    assert b.factor_label("d__avail__OL_out_cs") == "Offensive line availability"
-    assert b.factor_label("d__for__rates_core__first_down_rate") == "Sustaining drives"
-    assert b.factor_label("d__allowed__rates_core__interception_pct") == "Interceptions forced"
-    assert b.factor_label("pass_product") == "Passing matchup balance"
-
-
-def test_passing_context_names_and_direction_are_independent():
-    label, note = b.factor_description("pass_1sd_pn", -1.62, "SF", "SEA")
-    assert label == "SF passing vs SEA defense"
-    assert note == "Strong attack, strong defense"
-    cells = "".join(b.factor_cells({"feature": "pass_1sd_pn", "home-minus-away input": -1.62,
-                                  "log-odds contribution": 1.7}, "SF", "SEA", 1.7))
-    assert "Toward SEA" in cells and "aria-label='Toward SEA'" in cells
-    assert "SF passing vs SEA defense" in cells and "width:50.0%" in cells
-    for suffix, words in b.PASS_CONTEXT_LABELS.items():
-        label, note = b.factor_description("pass_1sd_"+suffix, .2, "SF", "SEA")
-        assert label == "SEA passing vs SF defense" and note == words
-
-
-def test_factor_cells_escape_names_and_handle_zero_or_missing_impact():
-    c = {"feature": "pass_1sd_pn", "home-minus-away input": -1., "log-odds contribution": -.2}
-    html = "".join(b.factor_cells(c, "SF<script>", "SEA", 1.))
-    assert "<script>" not in html and "SF&lt;script&gt;" in html
-    c["log-odds contribution"] = 0.
-    assert "Neutral" in "".join(b.factor_cells(c, "SF", "SEA", 1.))
-    c["log-odds contribution"] = np.nan
-    assert b.factor_cells(c, "SF", "SEA", 1.) is None
-
-
 def test_biggest_factors_use_readable_game_descriptions(tmp_path):
     data = tmp_path / "data"
     make_data(data)
@@ -482,35 +364,6 @@ def test_cards_keep_game_prices_without_price_cohort_research(tmp_path):
     assert 'Market DAL −9.5' in idx and 'ATS pick' in idx
     assert 'At this price' not in idx and 'Same games for both' not in idx
     assert 'Model documentation' not in idx
-
-
-def test_band_windows_use_the_same_games_and_add_forward_picks():
-    retro = pd.DataFrame({"season": [2022, 2024, 2024, 2024], "home won": [1., 1., 0., .5],
-                          "home_moneyline": [-150, -150, -150, -110], "away_moneyline": [130, 130, 130, -110],
-                          "model_wp": [.6, .6, .6, .5]})
-    held = retro[retro.season == 2024].assign(market_wp=.5)
-    latest = {"retro_ledger": retro, "roi_bands": m.roi_table(held),
-              "roi_by_season": m.roi_table(held, by="season")}
-    fwd = pd.DataFrame({"season": [2026], "home won": [1.], "home_moneyline": [-140.], "away_moneyline": [120.],
-                        "model_wp": [.62]})
-    mkt, mdl, years, n = b.band_windows(latest, fwd)
-    assert years == [2024] and n == 1
-    # 2022 is outside the held-out window; the tie is excluded; the forward game is added
-    assert mkt["−174 to −130"][0] == 3 and np.isclose(mkt["−174 to −130"][1], 2 / 3)
-    assert (mdl["−174 to −130"]["wins"], mdl["−174 to −130"]["losses"], mdl["−174 to −130"]["bets"]) == (2, 1, 3)
-    html = b.price_band_html("BUF", -135, .55, mkt, mdl, years, n)
-    assert "−174 to −130 range" in html and "3 teams · small sample" in html and "2-1" in html
-    assert "won 66.7%" in html and "55.0%" in html and "3 picks · small sample" in html
-    mkt0, mdl0, _, n0 = b.band_windows(latest, None)
-    assert n0 == 0 and mkt0["−174 to −130"][0] == 2 and mdl0["−174 to −130"]["bets"] == 2
-
-
-def test_price_band_flags_small_samples_only():
-    big = {"−174 to −130": (231, .628, .576)}
-    mdl = {"−174 to −130": {"wins": 103, "losses": 53, "bets": 156, "qsum": .579 * 156}}
-    html = b.price_band_html("CHI", -148, .572, big, mdl, [2023, 2024, 2025], 0)
-    assert "small sample" not in html and "won 62.8%" in html and "vs 57.6% implied · 231 teams" in html
-    assert "won 66.0%" in html and "This game" in html and "2023–2025" in html
 
 
 def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
@@ -569,35 +422,11 @@ def test_snapshot_keeps_model_spread():
     assert "model_spread" in b.BOARD_COLS
 
 
-def test_market_sides_margin_is_from_each_sides_view():
-    df = pd.DataFrame({"home won": [1., 0.], "home_moneyline": [-150, -150], "away_moneyline": [130, 130],
-                       "result": [7., -3.], "spread_line": [3., 3.]})
-    s = b.market_sides(df)
-    assert list(s[s.side == "home"].margin) == [7., -3.] and list(s[s.side == "away"].margin) == [-7., 3.]
-    assert list(s[s.side == "home"].spread) == [3., 3.] and list(s[s.side == "away"].spread) == [-3., -3.]
-    no_scores = b.market_sides(df.drop(columns=["result", "spread_line"]))
-    assert no_scores.margin.isna().all()  # older inputs without scores still render
-
-
 def test_calibration_page_shows_avg_margin(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "market-calibration.html").read_text()
     assert 'ATS performance' in html
     assert 'Avg margin' not in html and 'Model confidence' not in html
-
-
-def test_model_confidence_rows_carry_avg_margin():
-    hist = pd.DataFrame({"season": 2024, "week": 1, "home won": [1., 0., 1., 0.], "model_wp": [.7, .7, .3, .3],
-                         "market_wp": [.6, .6, .6, .6], "result": [10., -4., 3., -7.], "spread_line": [3., 3., -2., -2.]})
-    recs = m.band_records(hist)
-    tot = recs[(recs.source == "model") & (recs.band == "All picks")].iloc[0]
-    # picks: home (+10, -4), away (-3, +7); spreads from the pick's view: +3, +3, +2, +2
-    assert np.isclose(tot["avg pick margin"], (10 - 4 - 3 + 7) / 4) and np.isclose(tot["avg pick spread"], 2.5)
-    html = b.records_table(recs)
-    assert "<th class=n>Avg margin</th>" in html and "+2.5" in html
-    old = recs.drop(columns=["avg pick margin", "avg pick spread"])  # a band_records.csv written before v1.12.4
-    assert "Avg margin" not in b.records_table(old)
-    assert np.isnan(m.band_records(hist.drop(columns=["result", "spread_line"]))["avg pick margin"]).all()
 
 
 def test_partial_parameter_uncertainty_stays_off_customer_cards(tmp_path):
@@ -624,65 +453,24 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
              "kickoff_utc": "2026-10-04T20:25:00+00:00", "model_wp": wp, "market_wp": .58, "homefield_wp": .54,
              "spread_line": 2.5, "home_moneyline": -135, "away_moneyline": 115,
              "injury_report": {"home": "final", "away": "final"}}
-            for e, rev, wp in (("e", m.REVISION, .55), ("shadow", m.SHADOW_REVISION, .45))]
+            for e, rev, wp in (("e", m.REVISION, .55), ("shadow", 'boxscore-composite-v1.16', .45))]
     res = pd.DataFrame({"game_id": ["2026_05_KC_BUF"], "away_score": [20], "home_score": [27], "result": [7]})
     g.write_outputs(g.grade(recs, res), data)
     out = tmp_path / "public"
     files = b.render_all(out, data, now=NOW)
     assert set(files) <= {*PUBLIC, *HISTORICAL_PUBLIC, *SPREAD_EXPORTS, "ats_2026_results.csv", ".nojekyll", "site-state.json"}
     pages = "".join((out / p).read_text() for p in PUBLIC)
-    for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", m.SHADOW_REVISION):
+    for marker in ("secret_arm", "competing", "replayed with", "ARM-MARKER", "REPLAY-MARKER", 'boxscore-composite-v1.16'):
         assert marker not in pages
     grades = (out / "grades.html").read_text()
     assert grades.count("@ BUF</span>") <= 1          # at most one pick: production only
     assert not (out / "ledger_report.txt").exists()
     report = (data / "ledger_report.txt").read_text()
-    assert "Appendix A" in report and "ARM-MARKER" in report and "Appendix B" in report and "REPLAY-MARKER" in report
-    assert f"== {m.SHADOW_REVISION}" in report and f"== {m.REVISION}" in report
+    assert "Appendix B" in report and "REPLAY-MARKER" in report
+    assert f"== {'boxscore-composite-v1.16'}" in report and f"== {m.REVISION}" in report
     assert 'Appendix C: current production sanity checks' in report
-    assert 'Appendix D: win-probability calibration theory' in report
     b.render_all(out, data, now=NOW)
     assert (data / 'ledger_report.txt').read_text() == report
-
-
-def test_current_season_replay_is_pooled_and_prior_seasons_stay_internal(tmp_path, monkeypatch):
-    monkeypatch.setattr(b.fixed_bands, 'fit_weekly', lambda history, year, week:
-                        dict(season=year, week=week, training_max_season=year - 1, training_max_week=18,
-                             cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
-    data = make_data(tmp_path / 'data')
-    path = data / 'latest' / 'retro_ledger.csv'
-    retro = pd.read_csv(path)
-    retro.loc[retro.index[:3], 'season'] = 2026
-    retro.loc[retro.index[:3], 'gameday'] = '2026-09-10'
-    retro.loc[retro.index[:3], 'gametime'] = '13:00'
-    retro.to_csv(path, index=False)
-    out = tmp_path / 'public'
-    b.render_all(out, data, now=NOW)
-    latest = b.load_latest(data / 'latest')
-    assert b.spread_record(latest, 2026) is not None
-    public = pd.read_csv(out / 'ats_2026_results.csv')
-    assert set(public.season) == {2026}
-    assert 'ats_basis' not in public.columns
-    assert 'Historical replay:' in (data / 'ledger_report.txt').read_text()
-    assert not public.game_id.duplicated().any()
-    stats = b.season_ats.summary(public)
-    record = f"{stats['wins']}–{stats['losses']}–{stats['pushes']}"
-    for page in PUBLIC:
-        html = (out / page).read_text()
-        assert record in html
-        assert 'replayed' not in html and '<th>Source</th>' not in html
-        for research in ('Per-season results', '<td>2024</td>'):
-            assert research not in html, (page, research)
-    grades = (out / 'grades.html').read_text()
-    for game in public.game_id:
-        assert grades.count(f"data-game-id='{game}'") == 1
-    performance = (out / 'market-calibration.html').read_text()
-    # Three replayed history games plus the early native week-5 snapshot, replayed with its week's
-    # rule (the injected weekly rules carry a season, as production rules always do).
-    assert stats['priced_bets'] == stats['assumed_prices'] == 4
-    assert 'assumed −110 in pooled units and ROI' in performance
-    assert f"Pick {stats['bets']}" in performance
-    assert (data / 'latest' / 'fixed_band_summary.csv').exists()
 
 
 def test_previous_spread_removed_from_public_pages_and_downloads(tmp_path, monkeypatch):

@@ -1,12 +1,10 @@
-"""The adopted stack matches research and rejects missing/future target inputs."""
+"""The adopted stack rejects missing/future target inputs."""
 import sys
 from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
 import nfl_model as m
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'research'))
-import margin_total_models as research
 
 
 @pytest.fixture(autouse=True)
@@ -25,16 +23,6 @@ def fixture():
     test=train.iloc[:3].copy();test['season']=2023;test['week']=1
     test['game_id']=['a','b','c'];test['home']='H';test['away']='A'
     return train,test
-
-
-def test_exact_research_stack_and_contributions():
-    train,test=fixture();expected,_=research.stack_fit(train,test,'pass_total')
-    fit=m.fit_composite(train,m.PRODUCT_RECIPE,2023,1)
-    assert np.allclose(m.apply_fit(test,fit),expected,rtol=0,atol=1e-10)
-    _,score,_=m.apply_fit(test,fit,True)
-    parts=m.contribution_table(test,fit).groupby('game_id')['log-odds contribution'].sum()
-    assert np.allclose(parts.loc[test.game_id],score,rtol=0,atol=1e-12)
-    assert all(c in fit['names'] for c in m.PASS_TOTAL_NAMES)
 
 
 def test_missing_forecasts_do_not_silently_become_neutral():

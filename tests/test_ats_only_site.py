@@ -40,7 +40,7 @@ class ATSOnlySite(unittest.TestCase):
         (cls.data/'latest/manifest.json').write_text(json.dumps(manifest))
         cls.out = root/'public'
         cls.before = {name:hashlib.sha256((cls.data/name).read_bytes()).hexdigest()
-                      for name in ('forward_predictions.jsonl','ats_forward_shadow.jsonl','ats_lock_candidates.jsonl')}
+                      for name in ('forward_predictions.jsonl','ats_lock_candidates.jsonl')}
         b.render_all(cls.out, cls.data, now=dt.datetime(2026,10,19,5,40,tzinfo=dt.timezone.utc))
         cls.pool=pd.read_csv(cls.out/'ats_2026_results.csv',keep_default_na=False)
 
@@ -81,25 +81,6 @@ class ATSOnlySite(unittest.TestCase):
                     self.assertNotIn('model_wp',column)
                     self.assertFalse(column.startswith(('bet_','original_ats_')))
 
-    def test_board_download_matches_frozen_card(self):
-        frame=pd.read_csv(self.out/'fixed_band_board.csv',keep_default_na=False).set_index('game_id')
-        row=frame.loc['2026_06_TEN_IND']
-        self.assertEqual(row.ats_status,'locked')
-        self.assertEqual(row.model_spread,7.)
-        self.assertEqual(row.spread_line,7.)
-        self.assertEqual(row.selected_team,'IND')
-        self.assertEqual(row.ats_result,'L')
-        expected=self.pool.set_index('game_id').loc['2026_06_TEN_IND']
-        self.assertEqual(str(row.ats_units),str(expected.fixed_band_ats_units))
-        saved=pd.read_csv(self.out/'ats_locked_picks.csv',keep_default_na=False).set_index('game_id')
-        # Public downloads use the effective displayed favorite; originals and
-        # source/backfill flags remain in the unchanged backend archive.
-        self.assertEqual(saved.loc['2026_06_TEN_IND'].selected_side,'home')
-        self.assertEqual(saved.loc['2026_06_TEN_IND'].selected_team,'IND')
-        self.assertEqual(float(saved.loc['2026_06_TEN_IND'].handicap),-7.)
-        for field in ('timing_policy','skip_reason','backfilled_favorite','legacy_lock','ats_basis'):
-            self.assertNotIn(field,saved.columns)
-
     def test_completed_card_and_board_download_use_the_season_selection(self):
         expected=self.pool.set_index('game_id').loc['2026_06_SEA_DEN']
         board=pd.read_csv(self.out/'fixed_band_board.csv',keep_default_na=False).set_index('game_id')
@@ -137,7 +118,6 @@ class ATSOnlySite(unittest.TestCase):
                 self.assertNotIn(source,text)
         report=(self.data/'ledger_report.txt').read_text()
         self.assertIn('Historical replay:',report)
-        self.assertIn('Recorded pregame:',report)
         for game in self.pool.game_id:
             self.assertEqual(html.count(f"data-game-id='{game}'"),1)
         self.assertEqual(html.count("data-game-id='2026_06_TEN_IND'"),1)
@@ -151,7 +131,7 @@ class ATSOnlySite(unittest.TestCase):
         expected=b.season_ats.build(latest,b.load_ledger(self.data))
         self.assertEqual(set(self.pool.game_id),set(expected.game_id))
         self.assertNotIn('ats_basis',self.pool.columns)
-        self.assertTrue({'Historical replay','Replayed pregame forecast','Recorded pregame'} <= set(expected.ats_basis))
+        self.assertTrue({'Historical replay','Replayed pregame forecast'} <= set(expected.ats_basis))
         pd.testing.assert_series_equal(self.pool.set_index('game_id').fixed_band_ats_result,
             expected.set_index('game_id').fixed_band_ats_result,check_names=False)
         grades=self.pool.fixed_band_ats_result

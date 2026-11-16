@@ -233,22 +233,20 @@ def test_v120_identity_keeps_old_frozen_signatures_and_ten_terms():
     assert sig20!=sig19
 
 
-def test_production_overlay_keeps_coefficients_historical_rows_and_shadow_inputs():
+def test_production_overlay_keeps_coefficients_and_historical_rows():
     from test_product_production import fixture
     train,test=fixture()
     for c in m.ALL_AVAIL_COLS:
         for side in ('home','away'): test[f'{side}__avail__{c}']=0.
     source={8.:pd.concat([train,test],ignore_index=True)}
     original=source[8.].copy(deep=True)
-    before_shadow={}; after_shadow={}
-    before,fit=m.current_predictions(source,m.PRODUCT_RECIPE,2023,1,before_shadow)
+    before,fit=m.current_predictions(source,m.PRODUCT_RECIPE,2023,1)
     correction=dict(game_id='a',team='H',qb_expected='Announced QB',qb_usual='Starter',injury_report='final',
                     availability_evidence='{}',availability_evidence_sha256='fixture',**{c:2. if c=='qb_delta' else 0. for c in m.ALL_AVAIL_COLS})
-    after,refit=m.current_predictions(source,m.PRODUCT_RECIPE,2023,1,after_shadow,availability=pd.DataFrame([correction]))
+    after,refit=m.current_predictions(source,m.PRODUCT_RECIPE,2023,1,availability=pd.DataFrame([correction]))
     assert fit==refit
     assert after.loc[after.game_id.eq('a'),'model_wp'].iloc[0]!=before.loc[before.game_id.eq('a'),'model_wp'].iloc[0]
     np.testing.assert_array_equal(after.loc[~after.game_id.eq('a'),'model_wp'],before.loc[~before.game_id.eq('a'),'model_wp'])
-    pd.testing.assert_frame_equal(before_shadow['board'],after_shadow['board'])
     pd.testing.assert_frame_equal(source[8.],original)
 
 

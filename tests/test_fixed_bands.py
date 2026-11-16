@@ -12,17 +12,6 @@ def history():
                          'spread_line': spread + .5, 'result': spread + 2})
 
 
-def test_legacy_training_excludes_target_and_future_seasons_and_ties():
-    d = history()
-    rule = f.fit_legacy(d, 2023)
-    assert rule and rule['training_max_season'] == 2022
-    poison = d.assign(season=2023, result=-100., **{'home won': 0.})
-    tied = d.assign(result=0., **{'home won': .5})
-    assert f.fit_legacy(pd.concat([d, poison, poison.assign(season=2024), tied]), 2023) == rule
-    assert f.fit_legacy(d, 2022) is None
-    assert f.fit_legacy(d.iloc[:20], 2023) is None
-
-
 def test_signed_boundaries_missing_and_pickem():
     rule = dict(cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13])
     x = f.apply([0., 2.99, 3., -7., 10., np.nan], rule)
@@ -66,33 +55,6 @@ def test_summary_excludes_unavailable_and_skipped_stakes():
     assert np.isclose(r.roi, (1/1.1)/2)
 
 
-def test_coverage_is_enforced_inside_monotone_optimization():
-    # Within each of four bands, half the outcomes favor either ATS side.
-    # An unconstrained W-L maximizer chooses an exact-line skip in every
-    # band (its squared-distance tie-break prefers the original points).
-    # Coverage-first fitting must find a feasible monotone runner-up.
-    d = history()
-    d['spread_line'] = d.model_spread
-    sign = np.where((np.arange(len(d)) // 4) % 2 == 0, 1., -1.)
-    d['result'] = d.spread_line + 2 * sign
-    d['home won'] = (d.result > 0).astype(float)
-    rule = f.fit_legacy(d, 2023)
-    assert rule is not None
-    mapped = f.apply(d.model_spread, rule)
-    assert (np.abs(mapped - d.spread_line) > f.EPS).mean() >= .90
-    assert rule['magnitudes'] == sorted(rule['magnitudes'])
-    assert rule['cuts'] == [3., 7., 10.]
-
-
-def test_no_feasible_coverage_returns_no_map():
-    d = history()
-    # A signed zero can never move away from a pick'em market.
-    d.loc[d.model_spread == 1, 'model_spread'] = 0.
-    d['spread_line'] = 0.
-    d['result'] = 3.
-    assert f.fit_legacy(d, 2023) is None
-
-
 def test_strict_zero_edge_and_explicit_selection_denominator():
     d = pd.DataFrame({'spread_line': [3., 3., 3.],
                       'result': [4., 4., 4.]})
@@ -118,21 +80,6 @@ V118_LEDGER = 'tests/fixtures/v118_fixed_band_ledger.csv'  # frozen copy from 98
 def frozen_v118():
     root = Path(__file__).resolve().parents[1]
     return pd.read_csv(root / V118_LEDGER)
-
-
-def test_committed_annual_maps_are_frozen_regression_targets():
-    # Source is a frozen copy of the v1.18 exposed-history ledger (bot builds cannot change it),
-    # not newly selected outcomes. A change to any saved band would invalidate ATS comparisons.
-    root = Path(__file__).resolve().parents[1]
-    d = frozen_v118()
-    archived = json.loads((root / 'tests/fixtures/legacy_fixed_band_rules.json').read_text())
-    assert [int(r['season']) for r in archived] == [2023, 2024, 2025, 2026]
-    for stored in archived:
-        current = f.fit_legacy(d, int(stored['season']))
-        assert current is not None
-        assert current['magnitudes'] == stored['magnitudes']
-        assert current['cuts'] == stored['cuts']
-        assert current['training_games'] == stored['training_games']
 
 
 def test_production_median_includes_ties_and_ignores_target_future_and_prices():
