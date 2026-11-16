@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-16T00:57:04.334927+00:00",
+  "heartbeat_utc": "2026-11-16T00:58:42.950660+00:00",
   "run_id": "43780865708",
   "errors": [],
   "prepared_bundle_sha256": "2af87eda52ec36e547e2387d0f2dba784f17de3fcab230f4dde75bd5cf6c74dd",
@@ -15,7 +15,7 @@
       ]
     }
   ],
-  "updated_utc": "2026-11-16T00:57:38.679442+00:00",
+  "updated_utc": "2026-11-16T00:59:17.312998+00:00",
   "coverage_alerts": [
     "2026_10_PIT_CIN: MISSED CUTOFF; no eligible durable candidate"
   ]
