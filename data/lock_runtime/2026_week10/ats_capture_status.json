@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-16T00:03:02.556082+00:00",
+  "forecast_utc": "2026-11-16T00:04:25.872187+00:00",
   "games": [
     {
       "game_id": "2026_10_PIT_CIN",
@@ -7,12 +7,6 @@
         "CIN: automatic source checks incomplete or stale",
         "CIN: final report incomplete",
         "CIN: report: complete official list/report missing",
-        "CIN: inactives: official inactive list not found",
-        "CIN: inactives: no successful source check",
-        "CIN: inactives: complete official list/report missing",
-        "PIT: inactives: official inactive list not found",
-        "PIT: inactives: no successful source check",
-        "PIT: inactives: complete official list/report missing",
         "forecast availability validation failed"
       ],
       "lock_at_utc": "2026-11-16T00:20:00+00:00",
@@ -20,5 +14,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.24",
-  "updated_utc": "2026-11-16T00:03:13.391209+00:00"
+  "updated_utc": "2026-11-16T00:04:36.804357+00:00"
 }
