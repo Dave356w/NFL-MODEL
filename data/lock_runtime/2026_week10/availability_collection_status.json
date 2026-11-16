@@ -2,13 +2,13 @@
   "articles": {
     "https://www.nfl.com/news/nfl-week-10-inactives-players-ruled-out-sunday-2026-season": {
       "error": null,
-      "last_attempt_utc": "2026-11-16T23:51:50.617669+00:00",
-      "last_success_utc": "2026-11-16T23:51:50.617669+00:00"
+      "last_attempt_utc": "2026-11-16T23:53:19.045724+00:00",
+      "last_success_utc": "2026-11-16T23:53:19.045724+00:00"
     },
     "https://www.nfl.com/news/week-10-thursday-night-inactives-washington-commanders-at-new-york-giants": {
       "error": null,
-      "last_attempt_utc": "2026-11-16T23:51:50.614083+00:00",
-      "last_success_utc": "2026-11-16T23:51:50.614083+00:00"
+      "last_attempt_utc": "2026-11-16T23:53:19.113181+00:00",
+      "last_success_utc": "2026-11-16T23:53:19.113181+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -47,8 +47,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T23:51:50.157776+00:00",
-        "last_success_utc": "2026-11-16T23:51:50.157776+00:00",
+        "last_attempt_utc": "2026-11-16T23:53:18.822498+00:00",
+        "last_success_utc": "2026-11-16T23:53:18.822498+00:00",
         "source_capture_sha256": "8cdc9fb321fd04c15b21985a01067be25c9540d2a7e8508452dbba54e327de25"
       }
     },
@@ -186,8 +186,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-16T23:51:50.362510+00:00",
-        "last_success_utc": "2026-11-16T23:51:50.362510+00:00",
+        "last_attempt_utc": "2026-11-16T23:53:18.883497+00:00",
+        "last_success_utc": "2026-11-16T23:53:18.883497+00:00",
         "source_capture_sha256": "8233af3994de10c137281796765f4ce7e62c35b899849645370221e0e335dd80"
       }
     },
@@ -312,5 +312,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-16T23:51:50.617669+00:00"
+  "updated_utc": "2026-11-16T23:53:19.113181+00:00"
 }
