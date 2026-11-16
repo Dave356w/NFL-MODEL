@@ -4,7 +4,7 @@ import shutil
 import numpy as np
 import pandas as pd
 import pytest
-from research import production_sanity as s
+import production_sanity as s
 
 
 def test_independent_grading_skip_push_away_missing_and_pending():

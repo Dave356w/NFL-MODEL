@@ -582,7 +582,7 @@ def write_capture_status(data='data', now=None):
 
 
 def display_records(data='data'):
-    """New timed locks plus legacy archive decisions for pre-adoption deadlines."""
+    """Saved timed and retro locks from the root journal and runtime stores."""
     data = Path(data)
     validate_store(data)
     out = {key(r): r for r in read(data / LOCKS)}
@@ -592,11 +592,6 @@ def display_records(data='data'):
             if key(row) in out and out[key(row)] != row:
                 raise ValueError('Conflicting immutable ATS selections')
             out[key(row)] = row
-    for row in read(data / 'ats_forward_shadow.jsonl'):
-        if key(row) in out or deadline(row['kickoff_utc']) >= ADOPTED_UTC:
-            continue
-        out[key(row)] = dict(row, model_wp=NormalDist().cdf(row['raw_spread'] / 12.37),
-                             lock_at_utc=row['archived_utc'], legacy_lock=True)
     return out
 
 

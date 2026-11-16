@@ -222,20 +222,15 @@ def test_full_build_report_includes_its_new_archives(tmp_path,monkeypatch,pages_
     monkeypatch.setattr(b.matchup,'safe_record',lambda *_:None)
     monkeypatch.setattr(b.totals,'safe_record',lambda *_:None)
     monkeypatch.setattr(b.grade_ledger,'main',lambda *_:None)
-    monkeypatch.setattr(b.version_report,'run',lambda *_:None)
     def render(_):
         assert recovered == [data]  # pages-only held finalization also applies repairs
-        (data/'ledger_report.txt').write_text('before capture')
+        (data/'ledger_report.txt').write_text('before report')
         return []
-    def capture(_):
-        (data/'capture-marker').write_text('new archive')
-        return 1
     monkeypatch.setattr(b,'render_all',render)
-    monkeypatch.setattr(b.ats_forward_shadow,'record',capture)
-    monkeypatch.setattr(b,'published_report',lambda path:(path/'capture-marker').read_text())
+    monkeypatch.setattr(b,'published_report',lambda path:'after render')
     assert b.main(['--pages-only'] if pages_only else [])==0
-    assert (data/'ledger_report.txt').read_text()==('before capture' if pages_only else 'new archive')
-    assert (data/'capture-marker').exists()!=pages_only
+    # Full builds publish the consolidated report after rendering; pages-only builds do not.
+    assert (data/'ledger_report.txt').read_text()==('before report' if pages_only else 'after render')
 
 
 def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
@@ -637,10 +632,9 @@ def test_research_arms_stay_off_the_site_and_in_the_ledger_report(tmp_path):
     assert grades.count("@ BUF</span>") <= 1          # at most one pick: production only
     assert not (out / "ledger_report.txt").exists()
     report = (data / "ledger_report.txt").read_text()
-    assert "Appendix A" in report and "ARM-MARKER" in report and "Appendix B" in report and "REPLAY-MARKER" in report
+    assert "Appendix B" in report and "REPLAY-MARKER" in report
     assert f"== {m.SHADOW_REVISION}" in report and f"== {m.REVISION}" in report
     assert 'Appendix C: current production sanity checks' in report
-    assert 'Appendix D: win-probability calibration theory' in report
     b.render_all(out, data, now=NOW)
     assert (data / 'ledger_report.txt').read_text() == report
 

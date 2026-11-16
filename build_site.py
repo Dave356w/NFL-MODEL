@@ -55,9 +55,7 @@ import season_ats
 import espn_spreads
 import historical_calibration
 import score_updates
-from research import version_report
-from research import ats_forward_shadow
-from research import production_sanity
+import production_sanity
 
 DATA = Path("data")
 LATEST = DATA / "latest"
@@ -1607,8 +1605,7 @@ def render_all(out_dir, data=DATA, now=None):
     return sorted(p.name for p in out.iterdir())
 
 
-APPENDICES = (("version_report.md", "Appendix A: competing model versions and research arms"),
-              ("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"))
+APPENDICES = (("regraded_ledger_report.md", "Appendix B: original snapshots replayed with the current model"),)
 RESEARCH_MARKER = '\n\n' + '=' * 78 + '\nRepository analysis appendices\n' + '=' * 78 + '\n'
 
 
@@ -1629,9 +1626,6 @@ def published_report(data):
         pool = season_ats.build(latest, load_ledger(data))
         parts.append('\n\n2026 pooled ATS results\n\n' + season_ats.report(pool))
         parts.append('\n\nATS same-row baselines\n\n' + season_ats.lock_baselines(latest, pool))
-    calibration = Path(__file__).parent / 'research/wp_probability_calibration_results/REPORT.md'
-    if calibration.exists():
-        parts.append('\n\nAppendix D: win-probability calibration theory (frozen research)\n\n' + calibration.read_text())
     return "".join(parts)
 
 
@@ -1675,11 +1669,8 @@ def main(argv=None):
         matchup.safe_record(outdir, DATA)  # pre-registered H4 term for newly locked games; never fails the build
         totals.safe_record(DATA)  # pre-registered H5 total and moneylines for newly locked games; never fails the build
         grade_ledger.main([])
-        version_report.run(DATA,LATEST)
     files = render_all(args.out)
     if not args.pages_only:
-        count = ats_forward_shadow.record(DATA)
-        print(f"ATS research: {count} new immutable shadow locks")
         # Captures happen after rendering; include this build's new archive rows.
         (DATA / 'ledger_report.txt').write_text(published_report(DATA), encoding='utf-8')
     print(f"site: {len(files)} files -> {args.out}")

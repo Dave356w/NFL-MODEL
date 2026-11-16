@@ -33,13 +33,3 @@ def test_band_refuses_rows_the_fit_did_not_use_and_non_offset_fits():
     assert np.isnan(m.offset_band(f, fit, missing)[1]).all()
 
 
-def test_real_week_matches_an_independent_calculation():
-    root = Path(__file__).resolve().parents[1]
-    f = pd.read_csv(root/'research/shrinkage_results/frozen_training_features.csv.gz')
-    train = f[m.before(f, 2026, 5)]
-    fit = m.fit_composite(train, m.LEGACY_PRODUCT_RECIPE, 2026, 5)
-    rows = f[f.game_id.isin(['2026_05_SF_SEA', '2026_05_BAL_ATL'])].sort_values('game_id')
-    se, lo, hi = m.offset_band(train, fit, rows)
-    # Values from a separate scratch implementation of the same penalized-Hessian formula.
-    assert se == pytest.approx([.295, .918], abs=1e-3)
-    assert lo[1] == pytest.approx(.773, abs=1e-3) and hi[1] == pytest.approx(.986, abs=1e-3)

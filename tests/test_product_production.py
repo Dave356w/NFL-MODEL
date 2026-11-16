@@ -1,4 +1,4 @@
-"""Adopted recipe reproduces independent research math and preserves evidence."""
+"""Adopted recipe: fit, required inputs, chronology and evidence preservation."""
 import json
 import sys
 from pathlib import Path
@@ -6,9 +6,6 @@ import numpy as np
 import pandas as pd
 import pytest
 import nfl_model as m
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'research'))
-import production_qualification as research
-import qualified_interactions as contexts
 
 
 def fixture():
@@ -22,20 +19,6 @@ def fixture():
     test=train.iloc[:4].copy();test['season']=2023;test['week']=1
     test['game_id']=['a','b','c','d'];test['home']='H';test['away']='A'
     return train,test
-
-
-def test_production_matches_independent_market_offset_research_fit():
-    train,test=fixture()
-    mapping=dict(zip(m.PRODUCT_CONTEXT_NAMES,['product','e_pp','e_pn','e_np','e_nn']))
-    expected,_=research.fit_predict(train.rename(columns=mapping),test.rename(columns=mapping),
-        m.feature_names(m.LEGACY_PRODUCT_RECIPE['family']),list(mapping.values()),.1,.1,True)
-    fit=m.fit_composite(train,m.LEGACY_PRODUCT_RECIPE,2023,1)
-    actual=m.apply_fit(test,fit)
-    assert np.allclose(actual,expected,rtol=0,atol=1e-10)
-    parts=m.contribution_table(test,fit).groupby('game_id')['log-odds contribution'].sum()
-    _,scores,_=m.apply_fit(test,fit,True)
-    assert np.allclose(parts.loc[test.game_id],scores,atol=1e-12)
-    assert fit['training_max_season']==2022 and fit['market_offset']
 
 
 def test_quotes_and_contexts_are_required_without_fallback():
@@ -53,21 +36,6 @@ def test_training_rejects_current_week():
     train,test=fixture();train.loc[train.index[0],['season','week']]=[2023,1]
     with pytest.raises(ValueError,match='current/future'):
         m.fit_composite(train,m.LEGACY_PRODUCT_RECIPE,2023,1)
-
-
-def test_normalization_exactly_matches_research_and_ignores_future(tmp_path):
-    f=pd.DataFrame({'season':[2020,2020,2021,2021,2021],'week':[1,2,1,2,3]})
-    for n,(side,role) in enumerate([('home','for'),('away','allowed'),('away','for'),('home','allowed')]):
-        f[f'{side}__{role}__rates_core__{contexts.STAT}']=[5+n*.2,6+n*.3,5.5+n*.4,7-n*.1,6.5+n*.1]
-    old=contexts.OUT;contexts.OUT=tmp_path
-    try: expected=contexts.descriptors(f)
-    finally: contexts.OUT=old
-    actual,audit=m.pass_contexts(f)
-    assert np.allclose(actual[list(m.PRODUCT_CONTEXT_NAMES)],expected[['product','e_pp','e_pn','e_np','e_nn']],equal_nan=True)
-    f.loc[4,f.columns[2:]]=10000
-    altered,_=m.pass_contexts(f)
-    assert np.allclose(actual.iloc[:4],altered.iloc[:4],equal_nan=True)
-    assert ((audit.max_reference_season<audit.season)|((audit.max_reference_season==audit.season)&(audit.max_reference_week<audit.week))).all()
 
 
 def test_owner_recipe_does_not_reselect_from_historical_outcomes():
