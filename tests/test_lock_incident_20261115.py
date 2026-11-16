@@ -41,7 +41,9 @@ def test_name_aliases_are_bound_to_exact_roster_identity(pid,canonical,alias):
 
 @pytest.fixture
 def recoveries():
-    return [q for q in json.loads(r.REQUESTS.read_text()) if q['game_id'].startswith('2026_10_')]
+    # The five 13:00 ET parser-incident recoveries (the later SF-DAL/PIT-CIN repairs have their own test).
+    five={'2026_10_BUF_NYJ','2026_10_HOU_CLE','2026_10_JAX_TEN','2026_10_MIA_IND','2026_10_MIN_GB'}
+    return [q for q in json.loads(r.REQUESTS.read_text()) if q['game_id'] in five]
 
 
 def test_five_recoveries_preserve_exact_predeadline_snapshot_and_qb_overlay(tmp_path,recoveries):

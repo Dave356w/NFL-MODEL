@@ -116,3 +116,22 @@ from the same fetched main commit. This makes concurrent recoveries visible to
 coverage monitoring without waiting for the next process restart. The lock
 journal must extend its local prefix; a rewrite fails closed. Watcher-owned
 runtime candidates, receipts and pending evidence are never replaced.
+
+## Lock continuity and week-10 coverage fixes (2026-11-15)
+
+Owner request: maintain picks robustly. A saved lock from any revision remains the game's
+decision in every public view, CSV and calibration export (`ats_locks.current_records`;
+`season_ats.LOCK_POLICY_VERSION`). A revision change can no longer swap a real pick for a
+replay: e.g. the Thursday WAS-NYG lock saved under v1.22 now stays authoritative under v1.24.
+Replay only fills games without a saved lock, and the QB overlay never alters a saved lock.
+
+Week 10 also missed SF-DAL and PIT-CIN. DAL's club page lists only DAL's table (rejected by
+the old both-opponents rule) and CIN's report had two Questionable late additions with blank
+Friday cells (read as an unpublished day). Both rules are corrected in `availability_collect.py`;
+see `AVAILABILITY.md`. The watchdog now treats any revision's lock as coverage, raises AT RISK
+alerts from T-90 naming the latest saved blockers, and retains missed-cutoff alerts for 24 hours.
+Owner follow-up (2026-11-15, "Repair all lost picks"): SF-DAL and PIT-CIN are recovered as
+owner-requested retro locks in `ats_retro_requests.json`, each from the last watcher observation
+committed before its T-60 cutoff (SF-DAL `b1399660`, 20:23:47 UTC; PIT-CIN `f5d0539e`, 00:19:56 UTC),
+with its exact paired price, saved weekly map and v1.24 overlay. Original blockers are preserved. Every
+other 2026 game with a T-60 deadline after ATS adoption already has a saved lock.

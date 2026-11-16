@@ -41,12 +41,48 @@ def restart_outdated(runs, sleep=time.sleep):
     return restarted
 
 
+AT_RISK_MINUTES=30        # from T-90, warn when the latest saved observation is blocked
+MISSED_RETENTION_HOURS=24  # keep a missed game visible for a full day, not just through the game
+
+
+def observation_blockers(board):
+    """Short source/parser reasons from a saved timing observation's evidence."""
+    out=[]
+    for side in ('home','away'):
+        raw=board.get(side+'_availability_evidence')
+        try:ev=json.loads(raw) if isinstance(raw,str) else (raw or {})
+        except ValueError:continue
+        team=ev.get('team') or board.get(side,'')
+        collection=ev.get('collection') or {}
+        for kind in ('report','inactives'):
+            item=collection.get(kind) or {}
+            if item.get('error'):out.append(f"{team} {kind}: {item['error']}")
+            elif item and item.get('complete') is not True:out.append(f'{team} {kind}: incomplete')
+        # Evidence blockers can exist with complete collection (e.g. an unresolved
+        # starting QB or conflicting observations); always report them.
+        out+=[f'{team}: {b}' for b in ev.get('blockers') or []]
+    if str(board.get('quote_ready')) not in ('True','true','1'):out.append('no fresh paired quote')
+    return sorted(set(out))
+
+
+def latest_blockers(stores, identity, now):
+    import ats_locks as a
+    import forecast_history
+    rows=[r for store in stores for r in forecast_history.timing_rows(store)
+          if (r.get('revision'),r.get('game_id'))==identity and a.utc(r['observed_utc'])<=now]
+    if not rows:return ['no saved forecast observation']
+    return observation_blockers(max(rows,key=lambda r:a.utc(r['observed_utc']))['board'])
+
+
 def coverage_issues(data='data', now=None):
     """A live process is insufficient: check saved decisions for each deadline.
 
     Stdlib only, usable in the cheap monitor without installing the model.
-    Candidates become eligible at T-70; by T-65 absence is actionable. Retain
-    missed-deadline alerts through kickoff+3h, even when the rolling board has scores.
+    Candidates become eligible at T-70; by T-65 absence is actionable. From T-90
+    a game whose latest saved observation is blocked is flagged AT RISK. Alerts
+    name the latest saved source/parser blockers. A game counts as covered by a saved
+    lock from any revision (lock continuity, owner decision 2026-11-15). Missed
+    deadlines stay visible for MISSED_RETENTION_HOURS after kickoff.
     """
     import ats_locks as a
     from schedule_gate import kickoff
@@ -55,20 +91,28 @@ def coverage_issues(data='data', now=None):
     if not manifest.exists() or not board.exists():return ['ATS schedule/manifest missing; lock coverage cannot be checked']
     revision=json.loads(manifest.read_text())['revision']
     stores=[data]+a.runtime_stores(data)
-    locked={a.key(r) for store in stores for r in a.read(store/a.LOCKS)}
+    records={a.key(r):r for store in stores for r in a.read(store/a.LOCKS)}
+    locked=set(a.current_records(records,revision))
     candidates={a.key(r) for store in stores for r in a.durable_candidates(store,a.read(store/a.CANDIDATES))}
     out=[]
     for row in csv.DictReader(board.open()):
         ko=kickoff(row)
-        if ko is None or now>ko+dt.timedelta(hours=3):continue
+        if ko is None or now>ko+dt.timedelta(hours=MISSED_RETENTION_HOURS):continue
         cutoff=a.deadline(ko);key=(revision,row['game_id'])
         if key in locked:continue
         if now>=cutoff and key in candidates:
             if now>=cutoff+dt.timedelta(minutes=3):out.append(row['game_id']+': durable candidate not finalized after cutoff')
         elif now>=cutoff:
-            out.append(row['game_id']+': MISSED CUTOFF; no eligible durable candidate')
+            out.append(row['game_id']+': MISSED CUTOFF; no eligible durable candidate; '
+                       +'; '.join(latest_blockers(stores,key,cutoff)))
         elif now>=cutoff-dt.timedelta(minutes=5) and key not in candidates:
-            out.append(row['game_id']+': cutoff within five minutes; no eligible durable candidate')
+            out.append(row['game_id']+': cutoff within five minutes; no eligible durable candidate; '
+                       +'; '.join(latest_blockers(stores,key,now)))
+        elif now>=cutoff-dt.timedelta(minutes=AT_RISK_MINUTES) and key not in candidates:
+            blockers=[b for b in latest_blockers(stores,key,now) if b!='no saved forecast observation']
+            if blockers:
+                out.append(row['game_id']+f': AT RISK {int((cutoff-now).total_seconds()//60)} min before cutoff; '
+                           +'; '.join(blockers))
     return out
 
 

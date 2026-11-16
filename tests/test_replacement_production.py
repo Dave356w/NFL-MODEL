@@ -50,22 +50,34 @@ def latest():
                 replacement_adjustments=table,board=pd.DataFrame(),ats_locks={})
 
 
-def test_public_current_model_replay_replaces_old_version_and_regrades_once():
+def test_old_version_saved_lock_survives_current_model_replay_and_overlay():
+    # Lock continuity (owner decision 2026-11-15): the v1.22 lock stays the bet;
+    # v1.24's replay (A, adjusted margin 1.0) never replaces it and the QB overlay never alters it.
     x=latest();old=dict(revision='boxscore-composite-v1.22',game_id='g',season=2026,week=4,home='H',away='A',
-        market_spread=2.5,fixed_band_spread=13.,selected_side='home',lock_at_utc='2026-10-04T16:00:00Z')
+        market_spread=2.5,fixed_band_spread=13.,selected_side='home',lock_at_utc='2026-10-04T16:00:00Z',
+        kickoff_utc='2026-10-04T17:00:00Z',generated_utc='2026-10-04T15:55:00Z',model_wp=.7)
     x['ats_locks']={locks.key(old):old};before=copy.deepcopy(x['ats_locks'])
     ats.prepare_replacement_views(x,remapped=True)
     pool=ats.build(x,pd.DataFrame())
     assert len(pool)==1
-    assert pool.iloc[0].fixed_band_spread==1.
-    assert pool.iloc[0].fixed_band_ats_team=='A'
-    assert pool.iloc[0].fixed_band_ats_result=='W'
-    assert pool.iloc[0].ats_basis=='Historical replay'
+    assert pool.iloc[0].fixed_band_spread==13.
+    assert pool.iloc[0].fixed_band_ats_team=='H'
+    assert pool.iloc[0].fixed_band_ats_result=='L'
+    assert pool.iloc[0].ats_basis=='60-minute lock'
     pd.testing.assert_frame_equal(ats.replacement_overlay(pool,x),pool)
     assert x['ats_locks']==before
-    assert not locks.current_records(x['ats_locks'],m.REVISION)
+    assert locks.current_records(x['ats_locks'],m.REVISION)[(m.REVISION,'g')] is old
     ats.align_calibration_2026(x,pool)
-    assert x['fixed_band_ledger'].iloc[0].fixed_band_spread==pool.iloc[0].fixed_band_spread
+    assert x['fixed_band_ledger'].iloc[0].fixed_band_spread==13.
+    assert x['fixed_band_ledger'].iloc[0].lock_policy_version==ats.LOCK_POLICY_VERSION
+
+
+def test_replay_without_any_saved_lock_still_uses_current_model():
+    x=latest()
+    ats.prepare_replacement_views(x,remapped=True)
+    pool=ats.build(x,pd.DataFrame())
+    assert (pool.iloc[0].fixed_band_spread,pool.iloc[0].fixed_band_ats_team)==(1.,'A')
+    assert pool.iloc[0].ats_basis=='Historical replay'
 
 
 def test_current_week_completed_replay_is_included_before_adoption():
@@ -103,12 +115,11 @@ def test_pages_only_rejects_old_snapshot_under_new_code(tmp_path,monkeypatch):
     with pytest.raises(ValueError,match='fresh v1.24'):build_site.main(['--pages-only'])
 
 
-def test_public_downloads_exclude_archived_versions():
+def test_public_downloads_include_earlier_version_saved_locks():
     x=latest();old=dict(revision='boxscore-composite-v1.22',game_id='old')
     x['ats_locks']={locks.key(old):old}
-    assert not build_site.has_public_saved_picks(x)
-    assert 'ats_locked_picks.csv' not in build_site.downloads(x)
-    own=dict(revision=m.REVISION,game_id='own')
-    x['ats_locks'][locks.key(own)]=own
     assert build_site.has_public_saved_picks(x)
     assert 'ats_locked_picks.csv' in build_site.downloads(x)
+    legacy=dict(revision='boxscore-composite-v1.16',game_id='legacy',legacy_lock=True)
+    x['ats_locks']={locks.key(legacy):legacy}
+    assert not build_site.has_public_saved_picks(x)   # archived shadow rows are never inherited

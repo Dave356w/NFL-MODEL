@@ -1504,9 +1504,11 @@ def render_all(out_dir, data=DATA, now=None):
         (out / 'ats_2026_results.csv').unlink(missing_ok=True)
     if latest is not None and latest['ats_locks']:
         locked_rows = []
-        for row in latest['ats_locks'].values():
-            if season_ats.replacement_enabled(latest) and row.get('revision')!=latest['manifest']['revision']:
-                continue
+        # Lock continuity (owner decision 2026-11-15): one saved decision per game
+        # from any revision; a revision change never drops an earlier saved pick.
+        saved_rows = (ats_locks.current_records(latest['ats_locks'], latest['manifest']['revision']).values()
+                      if season_ats.replacement_enabled(latest) else latest['ats_locks'].values())
+        for row in saved_rows:
             margin,market=row['fixed_band_spread'],row['market_spread']
             pricing = season_results.loc[season_results.game_id.eq(row['game_id'])]
             pricing = pricing.iloc[0] if len(pricing) else {}

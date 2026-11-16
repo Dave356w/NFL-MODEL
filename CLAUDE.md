@@ -181,3 +181,22 @@ journals and source/version distinctions in backend reports only. Update all
 consistently and reprice flipped picks on their new side. The owner explicitly
 authorized merging all changes and publishing when ready. Existing earlier
 model picks remain archive evidence, not public v1.24 selections.
+
+**Lock continuity (owner request 2026-11-15, supersedes the v1.19/v1.24 "replay replaces
+earlier locks" display rules above).** A durable pregame lock is the bet. Every saved lock in
+`ats_locks.jsonl` and the runtime stores stays the game's public decision, whichever revision
+saved it; a later revision, its replay and its post-map overlays (e.g. the v1.24 QB adjustment)
+never replace or alter it. One decision per game (`ats_locks.current_records`): native T-60 locks
+before recovered/retro locks, then earliest finalization, then the current revision on an exact
+tie. Archived pre-adoption shadow rows (`legacy_lock`) are not inherited. Replay still fills only
+games with no saved lock. Exports declare `season_ats.LOCK_POLICY_VERSION`. Journals are unchanged.
+The same request fixed collection gaps that blocked week-10 locks: a club injury page that shows
+only its own table is accepted (the opponent's table comes from the opponent's site; a foreign
+club on the page is still rejected); a blank final-day practice cell beside an Out/Doubtful/
+Questionable designation is a post-practice addition, not an unpublished day, provided the final
+day's column has at least one real entry; raw pages behind parser failures inside four hours of
+kickoff are kept once per distinct error under `availability_failures/`; the watchdog counts any
+revision's saved lock as coverage, flags AT RISK from T-90 with the latest saved blockers, and
+keeps missed games visible for 24 hours after kickoff. Owner follow-up the same night ("Repair all lost picks")
+authorizes SF-DAL and PIT-CIN retro locks from their last pre-T-60 committed watcher observations
+(`ats_retro_requests.json`); this is not authorization to reconstruct other future misses.

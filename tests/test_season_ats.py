@@ -98,16 +98,19 @@ class SeasonATS(unittest.TestCase):
         self.assertEqual((row.ats_basis, row.ats_status), ('Awaiting ATS lock', 'unavailable'))
         self.assertTrue(np.isnan(row.fixed_band_spread))
 
-    def test_v119_ignores_v118_locks_and_keeps_its_own_lock_priority(self):
+    def test_v119_keeps_v118_saved_lock_over_its_replay(self):
+        # Lock continuity (owner decision 2026-11-15): an earlier revision's saved lock is the bet.
         latest = self.v119('2026-10-25T17:00:00Z')
         lock = dict(game_id='pending', season=2026, week=7, home='IND', away='TEN', model_wp=.8,
                     market_spread=7., fixed_band_spread=14., selected_side='home',
                     generated_utc='2026-10-25T15:00:00Z', kickoff_utc='2026-10-25T17:00:00Z',
-                    lock_at_utc='2026-10-25T16:00:00Z', policy_version='v2')
+                    lock_at_utc='2026-10-25T16:00:00Z', policy_version='v2',
+                    revision='boxscore-composite-v1.18')
         latest['ats_locks'] = {('boxscore-composite-v1.18', 'pending'): lock}
         row = s.build(latest, pd.DataFrame()).iloc[0]
-        self.assertEqual((row.ats_basis, row.fixed_band_spread), ('Historical replay', 4.))   # v1.18 lock not shown
-        latest['ats_locks'] = {('boxscore-composite-v1.19', 'pending'): lock}
+        self.assertEqual((row.ats_basis, row.fixed_band_spread), ('60-minute lock', 14.))     # v1.18 lock kept
+        self.assertEqual(row.forecast_revision, 'boxscore-composite-v1.18')
+        latest['ats_locks'] = {('boxscore-composite-v1.19', 'pending'): dict(lock, revision='boxscore-composite-v1.19')}
         row = s.build(latest, pd.DataFrame()).iloc[0]
         self.assertEqual((row.ats_basis, row.fixed_band_spread), ('60-minute lock', 14.))     # own lock wins
 
