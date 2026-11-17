@@ -1974,6 +1974,20 @@
     "away_score": 35
   },
   {
+    "game_id": "2026_10_LAC_BAL",
+    "season": 2026,
+    "week": 10,
+    "home": "BAL",
+    "away": "LAC",
+    "event_id": "401873065",
+    "completed": true,
+    "kickoff_utc": "2026-11-17T01:15:00+00:00",
+    "captured_utc": "2026-11-17T07:59:52.143856+00:00",
+    "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873065",
+    "home_score": 20,
+    "away_score": 23
+  },
+  {
     "game_id": "2026_10_LA_ARI",
     "season": 2026,
     "week": 10,
