@@ -7,8 +7,144 @@ moneyline ledger reporting, the build-held `ats_wait.py`); descriptions of them
 below are history. The production recipe, fit and config signature are unchanged.
 
 `nfl_model.py` is the single source of truth. Its module docstring is the
-version history (v1 to v1.24), newest first; this page describes what the code
-does **today** and how the repository runs it.
+version history (v1 to v1.25), newest first. The next section describes what the
+code does **today**, end to end; the sections after it record each version and
+owner decision and are history unless the current section points to them.
+
+## Current model, end to end
+
+Production is `boxscore-composite-v1.25` (`nfl_model.REVISION`, output
+`nfl_boxscore_output_v1_25`). Each step names the code that implements it.
+
+### 1. Team profiles (`lagged_features`, `metric_profile`)
+
+For every game, each team gets box-score rate profiles built only from its
+earlier games: up to `MAX_HISTORY_SEASONS` (3) seasons back, weighted
+2^(−age / half-life) with age counted in the team's own games, multiplied by
+`OFFSEASON_RETENTION` (0.5) per season boundary. Rates are ratios of weighted
+sums (for example first downs ÷ plays), not averages of per-game rates, and
+each is shrunk toward the league with `PRIOR_EQUIVALENT_GAMES` (4) pseudo-games.
+"For" profiles describe the team's offense; "allowed" profiles describe what its
+opponents did against it. The main profiles use an 8-game half-life (h8) and the
+pass profiles a 16-game half-life (h16). A feature named `d__…` is home minus away.
+
+### 2. The ten fitted terms (`CORE_TERMS`, `model_terms`, `pass_contexts`)
+
+| Term | Definition |
+|---|---|
+| `site` | 1 for a home game, 0 at a neutral site |
+| `d__for__rates_core__first_down_rate` | offense first downs per 100 plays, home − away |
+| `d__allowed__rates_core__first_down_rate` | first downs per 100 plays allowed, home − away |
+| `d__for__rates_core__interception_pct` | interceptions thrown per 100 pass attempts, home − away |
+| `d__allowed__rates_core__interception_pct` | interceptions forced per 100 opponent attempts, home − away |
+| `d__allowed__rates_core__penalty_yards_per_game` | opponents' penalty yards per game, home − away |
+| `d__avail__qb_delta` | projected QB's net yards per dropback minus the team's recent dropback-weighted QB mix, home − away |
+| `pass_product` | z(home pass offense)·z(away pass defense) − z(away pass offense)·z(home pass defense) |
+| `pass_1sd_pn` | the same product built from the parts beyond 1 SD: max(z_off − 1, 0)·max(−z_def − 1, 0), home side minus away side |
+| `pass_1sd_np` | likewise with max(−z_off − 1, 0)·max(z_def − 1, 0) |
+
+The pass z-scores standardize h16 net yards per dropback (offense, and allowed by
+the defense) with the mean of the current season's earlier weeks (the previous
+season's at week 1) and the SD of all earlier weeks in the current and previous
+four seasons (`pass_contexts`). Other inputs (plays, rushing and
+dropback yards, fumbles, own penalty yards, unit absences, largest lead and
+deficit, the PP and NN hinges) are still built and audited but get no coefficient.
+
+**QB projection.** The projected starter comes from a fresh depth chart (at least
+24 hours before kickoff, at most 7 days old) among available QBs, else start
+history. Historical starters are the earliest actual QB-position dropbacks
+(v1.23). A projected starter listed Questionable who is not confirmed is an even
+blend (`QB_QUESTIONABLE_START` = 0.5) with the next candidate; a confirmed starter
+keeps his full estimate. Unit absences (Out/Doubtful at 100%, Questionable at 25%
+of the player's unit snap share) are still computed for the board and audit, but
+only `qb_delta` enters the fit.
+
+### 3. The fit (`fit_composite`, refit before every week)
+
+A logistic regression of "home won" with the no-vig moneyline log-odds as a fixed
+offset (coefficient 1): logit(p) = logit(q) + Σ βᵢ·xᵢ/sᵢ. The ten terms are
+scaled by their weighted SD (not centered, so a missing or neutral input
+contributes zero). Training uses only labeled games from earlier weeks, weighted
+2^(−age) with age in seasons over a two-season half-life (`FIT_HALF_LIFE_SEASONS`).
+Ridge is 0.1 on the profile terms, 0.01 on `site` and 0.1 on the pass contexts.
+Because the market price already carries home field and team strength, every
+coefficient is an adjustment to the market, not a stand-alone rating. The latest
+coefficients are in `data/latest/weights.csv`. The recipe is owner-fixed
+(`PRODUCT_RECIPE`, `select_recipe`); it was chosen after exposed development, so
+the held-out seasons are walk-forward for coefficients and medians, not for the
+design.
+
+### 4. Favorite-confidence penalty (`favorite_penalized_wp`)
+
+Where the fitted probability backs the market favorite more strongly than q, the
+forecast keeps 0.2 of its log-odds departure from q; elsewhere it is unchanged.
+This never changes which team the model favors.
+
+### 5. Raw spread (`implied_spread`)
+
+raw = 12.37 × Φ⁻¹(p), with p clipped to 0.5–99.5% (about ±31.9 points). Positive
+means home favored, the same sign as the market `spread_line`. 12.37
+(`MARKET_SIGMA`) is a fixed conversion constant, not fitted.
+
+### 6. Weekly median map (`fixed_bands.fit_weekly`, `apply`)
+
+Before every week, each band of |raw| (<3, 3–7, 7–10, 10+) gets one number: the
+weighted median of earlier games' margins signed toward the model's favorite
+(losses negative, ties zero), weight 2^(−age) with a one-season half-life
+(19 week slots per season). A rule needs two complete earlier seasons, 300 games
+and 30 per band; otherwise there is no rule and no lock. The mapped spread is
+sign(raw) × that band's number, so size within a band is discarded. For example,
+the 2026 week-10 rule is 3/5/7/13 (`data/latest/fixed_band_rules.json`). Details
+and evidence are under "Weekly decayed median map" below.
+
+### 7. The pick (`fixed_bands.pick`)
+
+Edge = mapped spread − market line. A positive edge takes home, a negative edge
+takes away, and a zero edge takes the market favorite. Only a pick'em line with a
+zero mapped spread skips. v1.25 applies no adjustment after the map (v1.24's −2
+replacement-QB adjustment was removed).
+
+### 8. Forecasts, snapshots and locks
+
+* **Builds** (`build_site.py`, gated by `schedule_gate.py`) refit and refresh the
+  board. The forward ledger (`data/forward_predictions.jsonl`) keeps each game's
+  first pregame snapshot once both teams' injury reports carry game statuses
+  (`record_forward`, `injury_reports_ready`).
+* **T−60 locks** (`lock_watcher.py`, `ats_locks.py`, [LOCKING.md](LOCKING.md)) take
+  the newest forecast generated within 10 minutes of the cutoff, with an ESPN quote
+  within 5 minutes of that forecast, persisted before the cutoff. Lock policy v7
+  (`ats_locks.FALLBACK_POLICY`) requires both teams' complete official inactive
+  lists, or else complete and fresh final injury reports (`final_report_fallback`);
+  see [AVAILABILITY.md](AVAILABILITY.md). Each lock saves `model_wp`, `raw_spread`,
+  `market_spread`, `fixed_band_spread`, the full rule, the side and the evidence,
+  and the store validator recomputes every step. Locks are append-only.
+
+### 9. Grading and public results
+
+`fixed_bands.grade` scores W/L/P against the line. Public Picks, Results,
+Performance, Calibration and CSVs show the v1.25 regrade (`season_ats.py`):
+v1.25's walk-forward replay for 2026 games whose deadline precedes 2026-11-18
+00:00 UTC, and v1.25's own locks after. Returns use each game's ESPN spread price
+at the exact handicap, else −110 (counted; [ESPN_SPREAD_PRICING.md](ESPN_SPREAD_PRICING.md)).
+Earlier revisions' locks remain native forward evidence in `data/ledger_report.txt`.
+`production_sanity.py` independently re-derives the weekly rules, grades and exports.
+
+### What the map does in practice (development history, not forward evidence)
+
+Diagnostics on the 2023–26 replay (952 games, −110 unless noted):
+
+* When raw and the line fall in the same band (about 77% of games), the pick is
+  identical to the line-only map (the market line passed through the same rule).
+* Raw is a calibrated mean margin (slope about 1.04 on 2021–26), but between 4 and
+  10 points the median margin sits 0.5–2.5 points below raw, plateauing at 7. ATS
+  outcomes turn on the median, which is why the medians beat raw picks.
+* The map's gain over line-only (+0.056 ± 0.023 u/game) comes almost entirely from
+  games where raw is under 3 against a line of 3 or more, or where raw picks the
+  other winner; elsewhere it is +0.009 ± 0.018 (at closing prices). These cells were identified after
+  the fact; the map design was chosen on overlapping seasons.
+* Resolving map minus line-only on forward locks at 2 SE needs about 650 locks.
+
+## Version history and decisions (newest first)
 
 ## The current model: `boxscore-composite-v1.25`
 
@@ -87,7 +223,7 @@ unit absences, largest lead and deficit, the PP and NN hinges) are still built a
 not fitted. `model_terms()` applies the restriction to the fit, the probability range and every
 replay. Fitting without a term is identical to v1.18 with that column at zero (checked to 1e-17).
 
-Evidence (research Test 50, `research/SLIM_MODEL.md`, arm S3; log loss vs v1.18 per 1000 games):
+Evidence (research Test 50, arm S3, report in git history under `research/`; log loss vs v1.18 per 1000 games):
 +1.22 ± 3.39 on 2015–16, the only basis not used to choose the terms; −2.68 ± 1.15 on 2017–22 and
 −1.40 ± 1.38 on 2023–25, where the terms were chosen on overlapping 2019–25 bootstrap support. A 2026
 weeks 1–8 replay, seen before adoption, gave −15.2 ± 4.6 (every model trailed the market there).
@@ -172,8 +308,8 @@ scores. Native reports continue to grade each original version unchanged.
 **Owner decision 2026-10-19.** The model is judged by ATS results. After the
 hold, break-even prices and variance, moneyline betting does not look
 profitable, so moneyline betting is not reported. The
-v1.18 probability engine, its log-loss fitting and the median map are
-unchanged.
+production probability engine (now v1.25), its log-loss fitting and the median
+map are unchanged by this goal.
 
 Every locked game gets 1u at an assumed −110 on the side its mapped spread
 takes against the market line. When the mapped spread equals the line, the bet
@@ -196,10 +332,12 @@ Spread point error (MAE) is a secondary diagnostic. On 2023–26 walk-forward
 games the mapped spread, the raw spread and the market line have the same
 error (9.74–9.76 points).
 
-**Open question: median map vs raw spread.** On 2023–26 walk-forward games,
-picks from the median map covered 54.1% (n=761) and picks from the raw spread
-covered 51.1% (n=870). The difference is about 3 points ± 2.5. It is
-unresolved, and the map was adopted with this history in view. Every
+**Open question: median map vs raw spread.** On the 2023–26 replay under the
+production weekly map (`data/ledger_report.txt`, "ATS same-row baselines"; 952
+games, −110), the median map went 532‑395‑25 (57.4% cover, ROI +9.3% ± 3.0) and the
+raw spread 465‑462‑25 (50.2%, −4.1% ± 3.1). This is exposed development history:
+the map was adopted with it in view. On the saved locks the comparison is
+unresolved. Every
 60-minute lock saves `raw_spread` and `market_spread` with the mapped spread,
 so the raw-spread pick can be graded on the same locked games without new
 capture or backfill. The owner reviews the comparison at 100 decided locks.
@@ -210,8 +348,8 @@ and always-home, all at assumed −110 on the same rows. The line-only map passe
 the market line through the same frozen median map with no model input. The
 map's paired difference from it is what the model adds beyond the line's own
 band. In the development replay most map picks equal line-only picks, and the
-line-only map alone breaks even. This is backend reporting only; picks, the
-map and lock timing are unchanged.
+line-only map alone returned +3.5% ± 3.0 on 2023–26. This is backend reporting
+only; picks, the map and lock timing are unchanged.
 
 ## Bases of evidence: never pooled
 
@@ -220,18 +358,17 @@ map and lock timing are unchanged.
    carry game statuses (or practice-only teams within 6h). These are native
    forward observations. Snapshots are append-only; the experiment identity is
    `config signature : recipe : season`.
-2. **Held-out seasons** (Model and Calibration pages): walk-forward predictions
+2. **Held-out seasons** (Calibration page): walk-forward predictions
    for seasons whose recipe came only from earlier seasons. They are
    reconstructions, and the design was revised after seeing them, so they are
    development evidence, not forward confirmation.
 3. **This season so far**: weekly walk-forward reconstructions of games already
    played. They use current upstream data, not the data available at the time.
-4. **Rebuilt history of the chosen recipe** (Ledger page, below the forward
-   record): the frozen recipe's weekly walk-forward predictions for every game
-   since 2021 plus this season's earlier weeks, graded as flat 1u moneyline
-   bets game by game (`data/latest/retro_ledger.csv`). This is the MLB site's
-   "rebuilt" history. The recipe was chosen on those seasons, so it is
-   hindsight, not a track record.
+4. **Rebuilt history of the chosen recipe** (`data/latest/retro_ledger.csv`,
+   backend only): the frozen recipe's weekly walk-forward predictions for every
+   game since 2021 plus this season's earlier weeks. It trains the median map
+   and feeds the ATS replay (`fixed_band_ledger.csv`). The recipe was chosen on
+   those seasons, so it is hindsight, not a track record.
 
 From v1.16 the market comparator is the model's own market input: the no-vig
 probability q from the snapshot's moneylines (`market_wp` equals `market_no_vig_wp`).
@@ -241,6 +378,11 @@ line instead. Neither nflverse quote has an independent timestamp.
 Earlier out-of-sample and selection-adjusted research checks were removed on 2026-11-16 and remain in git history.
 
 ## How a week's forecast updates as injury reports arrive
+
+This table describes the build and the forward-ledger snapshot gate
+(nflverse injury statuses). T−60 ATS locks use a separate, stricter gate:
+official inactive lists or the final-report fallback ([LOCKING.md](LOCKING.md),
+[AVAILABILITY.md](AVAILABILITY.md)).
 
 | When (Sunday game) | Injury data for the week | Model counts | Card shows | Ledger |
 |---|---|---|---|---|
@@ -259,7 +401,7 @@ play; research Test 28). Other same-week roster changes (activations, signings, 
 inactives) are still not used.
 
 Two changes to these weights were replayed against v1.16 on 2017–20 and 2023–25 with a
-protocol committed first (`research/availability_weights_results/REPORT.md`). Weighting a
+protocol committed first (the report was under `research/`, now only in git history). Weighting a
 Questionable player by his final practice (Test 28's 0.06 full, 0.26 limited, 0.55 none) is
 unresolved: log loss improved slightly on both bases (pooled +0.0003, 97.5% interval −0.0003
 to +0.0009), and its 12 changed picks lost 11.4u. Separate WR/TE and CB/S units are falsified
@@ -273,9 +415,16 @@ schedule_gate.py ──► build_site.py
                        │                          writes data/frozen_recipe_<season>_<REVISION>.json, caches in .nfl_cache/
                        ├─ snapshot()            → data/latest/ (page inputs), data/projections/<season>_weekNN.csv
                        ├─ grade_ledger.main()   → data/forward_ledger.csv, data/ledger_report.txt
-                       └─ render_all()          → public/ (index, grades, market-calibration), repo report appendices
+                       └─ render_all()          → public/ (index, grades, market-calibration,
+                                                  historical-calibration), repo report appendices
 validate_data_files.py ─► commit_data.py (signed commit of data/) ─► Pages deploy
+
+lock_watcher.py / lock_watchdog.py   T−60 lock capture and coverage alerts (data/ats_locks.jsonl)
+availability_collect.py              official injury reports and inactive lists
+score_updates.py                     final scores (data/final_scores.json)
 ```
+
+Workflows are listed in README.md.
 
 Cold run (no caches): about 8 minutes. Warm runs reuse completed seasons'
 play-by-play (weekly refresh), availability features and the historical
@@ -388,7 +537,7 @@ and publishes downloadable copies. The deployment workflow commits these derived
 data files; original snapshots are never rewritten.
 
 
-Game cards distinguish the v1.18 moneyline pick from the fixed-band ATS pick.
+Game cards show the ATS pick only; live moneyline picks are not published.
 ATS edge is the absolute fixed-band minus market spread; zero edge takes the
 market favorite, and an earlier saved zero-edge skip is shown as a backfilled
 favorite bet.
@@ -404,7 +553,7 @@ longer included on customer game cards. Partial coefficient-only probability
 ranges, fitting details and confidence-to-margin diagnostics also stay off the
 public pages; their source inputs and definitions remain in repository reports.
 
-`python -m research.production_sanity` independently recomputes annual signed
+`python production_sanity.py` independently recomputes annual and weekly signed
 medians, grading and denominators, checks source snapshot hashes and pregame
 timestamps, and separates historical returns from native median ATS archives.
 Native median-policy results come only from saved locks, never retroactive backfills.
