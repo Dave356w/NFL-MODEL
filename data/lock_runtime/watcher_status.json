@@ -1,16 +1,9 @@
 {
-  "heartbeat_utc": "2026-11-17T01:13:57.703474+00:00",
+  "heartbeat_utc": "2026-11-17T01:15:27.114716+00:00",
   "run_id": "43977439336",
   "errors": [],
   "prepared_bundle_sha256": "f1a549734491ab421f88512c678359da7bccc67b7167dbac94f257a48e0bd2dc",
-  "games": [
-    {
-      "game_id": "2026_10_LAC_BAL",
-      "revision": "boxscore-composite-v1.25",
-      "cutoff_utc": "2026-11-17T00:15:00+00:00",
-      "blockers": []
-    }
-  ],
-  "updated_utc": "2026-11-17T01:14:22.118282+00:00",
+  "games": [],
+  "updated_utc": "2026-11-17T01:15:28.146365+00:00",
   "coverage_alerts": []
 }
