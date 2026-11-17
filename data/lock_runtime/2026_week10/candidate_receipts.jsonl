@@ -30,3 +30,4 @@
 {"candidate_sha256": "838d8a0a7e3edd0576713b3f14b7d9baa1f2237ade980e5f503ff4085e73d366", "commit": "275bd6300e115e23c7e4f284e78c3ebc315093a1", "committed_utc": "2026-11-15T20:04:19+00:00", "timestamp_basis": "server commit upper-second bound"}
 {"candidate_sha256": "780c3043be4f74398bf17ce5d3a2192a361f42356a4682d25dfae1e63188fa8c", "commit": "39e03b32402dd81984b481e1b80b7830b82c9cd2", "committed_utc": "2026-11-17T00:05:28+00:00", "timestamp_basis": "server commit upper-second bound"}
 {"candidate_sha256": "4fa69ba4889bea0111e3769143fa04ca03d45bb6af6f3498a5b07772cb0dbca1", "commit": "50459e3bdf886dee883ec8ade60af5810d3dac37", "committed_utc": "2026-11-17T00:06:57+00:00", "timestamp_basis": "server commit upper-second bound"}
+{"candidate_sha256": "0e0ad2c925781b6e035d7b04620e81863a350574b408b31e14ec0e3e2f8b8304", "commit": "2264d7d493887eb05feb6797176cecddd0b89830", "committed_utc": "2026-11-17T00:08:27+00:00", "timestamp_basis": "server commit upper-second bound"}
