@@ -25,7 +25,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "ATL": {
@@ -47,7 +47,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "BUF": {
@@ -58,9 +58,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.267213+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.267213+00:00",
+        "source_capture_sha256": "ed1d3b66689d4a3fe7375369055db8383bc150abc2d063c96999237e53b41376"
       }
     },
     "CAR": {
@@ -71,9 +75,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.269995+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.269995+00:00",
+        "source_capture_sha256": "6fc041e708e083547cb8bcda37f819d6794b768a1eaa0728a26295fa7cb48a60"
       }
     },
     "CHI": {
@@ -84,9 +92,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.241785+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.241785+00:00",
+        "source_capture_sha256": "5f07ac47ffb14e485a06dd9a58cdfe8339e57e6160cde89a7c3f3c3c00e61405"
       }
     },
     "CIN": {
@@ -99,7 +111,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "CLE": {
@@ -119,9 +131,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.265960+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.265960+00:00",
+        "source_capture_sha256": "dd6b2a4432847d3ee87494231b0521c6cdfebf44103bcbf58b9b3cd500040c23"
       }
     },
     "DEN": {
@@ -134,7 +150,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "DET": {
@@ -145,9 +161,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.400084+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.400084+00:00",
+        "source_capture_sha256": "3e858db476a4c86daa54754974cd7221592d0396f606353a6feea96bed759eca"
       }
     },
     "GB": {
@@ -168,10 +188,11 @@
       },
       "report": {
         "complete": false,
-        "error": null,
+        "error": "injury report for this club not yet published",
+        "failure_capture": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-18T19:25:36.701830+00:00",
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00",
         "last_success_utc": "2026-11-18T19:25:36.701830+00:00",
         "source_capture_sha256": "56cd4d7cdbf6781aca4a507ef50542389d2e33c419114b3ce8e6d696439ff372"
       }
@@ -187,8 +208,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-18T19:25:36.144067+00:00",
-        "last_success_utc": "2026-11-18T19:25:36.144067+00:00",
+        "last_attempt_utc": "2026-11-18T22:19:40.418404+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.418404+00:00",
         "source_capture_sha256": "d31ea13bb8aa4d3fa3832ce0f172d8b0759433688c7ae8a0eb0331a0e8a4c255"
       }
     },
@@ -200,9 +221,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.448105+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.448105+00:00",
+        "source_capture_sha256": "91b2985a6dfc58ca422df6e9b4c553f1d9adddfeea56487f2ebccf537524c480"
       }
     },
     "KC": {
@@ -213,9 +238,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.523230+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.523230+00:00",
+        "source_capture_sha256": "a228bf6c58ce59969354970c92b7c50fb8589930ed923439e811e8e8cb429a3b"
       }
     },
     "LA": {
@@ -237,7 +266,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "LV": {
@@ -250,7 +279,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "MIA": {
@@ -263,7 +292,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "MIN": {
@@ -274,9 +303,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.540484+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.540484+00:00",
+        "source_capture_sha256": "cf15a750fa0a3fe0b0adf6b514d299c5119c01ba9bff2d8f89e95e6d8394ad2d"
       }
     },
     "NE": {
@@ -298,7 +331,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "NYG": {
@@ -309,9 +342,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.553673+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.553673+00:00",
+        "source_capture_sha256": "42eb7884d3e74e67f1d795a57a929ace11853fd53409bc42b39938bf4264b8fa"
       }
     },
     "NYJ": {
@@ -322,9 +359,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.619074+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.619074+00:00",
+        "source_capture_sha256": "1c4ac7eab2bb004bac59709066814aae074eab502bcfdee846b8974f87dc8b68"
       }
     },
     "PHI": {
@@ -337,7 +378,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "PIT": {
@@ -350,7 +391,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "SEA": {
@@ -372,7 +413,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     },
     "TB": {
@@ -383,9 +424,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.677240+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.677240+00:00",
+        "source_capture_sha256": "8f250335cf1b1b9e073d62298f95fcd90559697a4be7f539f74d8c9bdf924cab"
       }
     },
     "TEN": {
@@ -396,9 +441,13 @@
         "article_errors": []
       },
       "report": {
-        "error": "injury report for this club not yet published",
-        "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "complete": false,
+        "error": null,
+        "incomplete_capture": null,
+        "issues": [],
+        "last_attempt_utc": "2026-11-18T22:19:40.685421+00:00",
+        "last_success_utc": "2026-11-18T22:19:40.685421+00:00",
+        "source_capture_sha256": "7f6908cf9842d25c49f8f5fd37bd4b226113dc2038b8706a6cc3ac9a9dfe9069"
       }
     },
     "WAS": {
@@ -411,9 +460,9 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-18T19:25:32.173887+00:00"
+        "last_attempt_utc": "2026-11-18T22:19:37.354981+00:00"
       }
     }
   },
-  "updated_utc": "2026-11-18T19:25:36.701830+00:00"
+  "updated_utc": "2026-11-18T22:19:40.685421+00:00"
 }
