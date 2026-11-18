@@ -2,12 +2,13 @@ team,gsis_id,player,position,unit,snap_share,prev_week,prev_status,prev_injury,t
 ARI,00-0033119,Jacoby Brissett,QB,QB,0.512,,,,not on wk 10 roster (left team),1.0,none
 ARI,00-0035289,Gardner Minshew,QB,QB,0.348,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 ARI,00-0038559,Michael Wilson,WR,WRTE,0.18118118118118118,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
-ARI,00-0035378,Andrew Wingard,S,DB,0.1757085020242915,10.0,Questionable,Groin,not on a week-11 report yet,0.0,none
+ARI,00-0035378,Andrew Wingard,S,DB,0.1757085020242915,10.0,Questionable,Groin,Reserve/Injured (IR) on wk 11 roster,1.0,none
 ARI,00-0035258,Hjalte Froholdt,C,OL,0.1718625099920064,10.0,Out,Concussion,not on a week-11 report yet,0.0,none
 ARI,00-0039854,Darius Robinson,DT,DL,0.15870786516853932,10.0,Questionable,Wrist,not on a week-11 report yet,0.0,none
 ARI,00-0036568,Roy Lopez,DT,DL,0.13623595505617977,10.0,Questionable,Toe,not on a week-11 report yet,0.0,none
 ARI,00-0041113,Jayden Williams,T,OL,0.10391686650679456,10.0,Questionable,Knee,not on a week-11 report yet,0.0,none
 ARI,00-0039807,Max Melton,CB,DB,0.08825910931174089,10.0,Questionable,Knee,not on a week-11 report yet,0.0,none
+ARI,00-0040137,Jordan Burch,LB,LB,0.0747074707470747,,,,Reserve/Injured (IR) on wk 11 roster,1.0,none
 ARI,00-0033307,Kendrick Bourne,WR,WRTE,0.07007007007007007,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 ARI,00-0041027,Jeremiyah Love,RB,RB,0.06,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 ARI,00-0038640,Jalen Brooks,WR,WRTE,0.05205205205205205,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
@@ -41,20 +42,25 @@ DET,00-0039018,Jack Campbell,LB,LB,0.19081272084805653,,,,Reserve/Injured (IR) o
 DET,00-0036963,Amon-Ra St. Brown,WR,WRTE,0.1859582542694497,10.0,Questionable,Rib,not on a week-11 report yet,0.0,none
 DET,00-0034384,D.J. Reed,CB,DB,0.09554730983302412,10.0,Out,Hip,not on a week-11 report yet,0.0,none
 DET,00-0037297,Cade Mays,C,OL,0.06598240469208211,10.0,Out,Ankle,not on a week-11 report yet,0.0,none
-HOU,00-0035166,Azeez Al-Shaair,LB,LB,0.32066115702479336,10.0,Out,Groin,not on a week-11 report yet,0.0,none
-HOU,00-0032071,Trent Brown,T,OL,0.19134897360703812,10.0,Questionable,Wrist,not on a week-11 report yet,0.0,none
-HOU,00-0039108,Will Anderson Jr.,DE,DL,0.179553264604811,10.0,Questionable,Ankle,not on a week-11 report yet,0.0,none
-HOU,00-0041532,Keylan Rutledge,G,OL,0.14222873900293256,10.0,Out,Neck,not on a week-11 report yet,0.0,none
-HOU,00-0031565,Danielle Hunter,DE,DL,0.12972508591065293,10.0,Out,Hamstring,not on a week-11 report yet,0.0,none
-HOU,00-0039849,Marvin Harrison Jr.,WR,WRTE,0.05786802030456853,10.0,Out,Hamstring,not on a week-11 report yet,0.0,none
-HOU,00-0040138,Jaylin Noel,WR,WRTE,0.050761421319796954,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
-IND,00-0036298,Akeem Davis-Gaither,LB,LB,0.17318435754189945,10.0,Out,Knee,Reserve/Injured (IR) on wk 10 roster,1.0,none
-IND,00-0038997,Josh Downs,WR,WRTE,0.15030674846625766,,,,not on wk 10 roster (left team),1.0,none
-IND,00-0040163,Jalen Travis,T,OL,0.12061939690301549,10.0,Out,Knee,not on a week-11 report yet,0.0,none
-IND,00-0039377,Jaylon Carlies,LB,LB,0.11173184357541899,10.0,Out,Neck,not on a week-11 report yet,0.0,none
-IND,00-0030279,Keenan Allen,WR,WRTE,0.10020449897750511,,,,not on wk 10 roster (left team),1.0,none
-IND,00-0033217,Mo Alie-Cox,TE,WRTE,0.0705521472392638,10.0,Out,Groin,Reserve/Injured (IR) on wk 10 roster,1.0,none
-IND,00-0035674,Jerry Tillery,DT,DL,0.05604982206405694,10.0,Out,Calf,not on a week-11 report yet,0.0,none
+HOU,00-0040583,Woody Marks,RB,RB,0.685823754789272,,,,practice: Did Not Participate In Practice,0.0,practice
+HOU,00-0035166,Azeez Al-Shaair,LB,LB,0.32066115702479336,10.0,Out,Groin,Reserve/Injured (IR) on wk 11 roster,1.0,practice
+HOU,00-0039343,Kamari Lassiter,CB,DB,0.2142298670836591,,,,practice: Did Not Participate In Practice,0.0,practice
+HOU,00-0032071,Trent Brown,T,OL,0.19134897360703812,10.0,Questionable,Wrist,not on the week-11 practice report,0.0,practice
+HOU,00-0039108,Will Anderson Jr.,DE,DL,0.179553264604811,10.0,Questionable,Ankle,not on the week-11 practice report,0.0,practice
+HOU,00-0041532,Keylan Rutledge,G,OL,0.14222873900293256,10.0,Out,Neck,practice: Full Participation in Practice,0.0,practice
+HOU,00-0031565,Danielle Hunter,DE,DL,0.12972508591065293,10.0,Out,Hamstring,practice: Did Not Participate In Practice,0.0,practice
+HOU,00-0039849,Marvin Harrison Jr.,WR,WRTE,0.05786802030456853,10.0,Out,Hamstring,practice: Did Not Participate In Practice,0.0,practice
+HOU,00-0040138,Jaylin Noel,WR,WRTE,0.050761421319796954,,,,Reserve/Injured (IR) on wk 10 roster,1.0,practice
+IND,00-0034573,Charvarius Ward,DB,DB,0.17851239669421487,,,,Out,1.0,final
+IND,00-0036298,Akeem Davis-Gaither,LB,LB,0.17318435754189945,10.0,Out,Knee,Reserve/Injured (IR) on wk 10 roster,1.0,final
+IND,00-0038997,Josh Downs,WR,WRTE,0.15030674846625766,,,,not on wk 10 roster (left team),1.0,final
+IND,00-0037757,Bernhard Raimann,OL,OL,0.14995925020374898,,,,Out,1.0,final
+IND,00-0037190,Sauce Gardner,DB,DB,0.14132231404958678,,,,Questionable,0.25,final
+IND,00-0040163,Jalen Travis,OL,OL,0.12061939690301549,10.0,Out,Knee,Out,1.0,final
+IND,00-0039377,Jaylon Carlies,LB,LB,0.11173184357541899,10.0,Out,Neck,Reserve/Injured (IR) on wk 11 roster,1.0,final
+IND,00-0030279,Keenan Allen,WR,WRTE,0.10020449897750511,,,,not on wk 10 roster (left team),1.0,final
+IND,00-0033217,Mo Alie-Cox,TE,WRTE,0.0705521472392638,10.0,Out,Groin,Reserve/Injured (IR) on wk 10 roster,1.0,final
+IND,00-0035674,Jerry Tillery,DL,DL,0.05604982206405694,10.0,Out,Calf,Out,1.0,final
 JAX,00-0036985,Robert Hainsey,C,OL,0.16318638824439288,10.0,Questionable,Concussion,not on a week-11 report yet,0.0,none
 JAX,00-0033038,Eric Murray,DB,DB,0.06813186813186813,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 JAX,00-0036262,DaVon Hamilton,DL,DL,0.05142231947483589,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
@@ -67,7 +73,9 @@ LV,00-0029604,Kirk Cousins,QB,QB,0.7541666666666667,,,,not on wk 10 roster (left
 MIA,00-0038128,Malik Willis,QB,QB,0.73046875,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 MIA,00-0034285,Zach Sieler,DL,DL,0.14482029598308668,,,,Reserve/Injured (IR) on wk 10 roster,1.0,none
 MIA,00-0036171,Aaron Brewer,C,OL,0.14462490332559938,10.0,Out,Concussion,not on a week-11 report yet,0.0,none
+MIA,00-0040175,Jordan Phillips,DL,DL,0.14376321353065538,,,,Reserve/Injured (IR) on wk 11 roster,1.0,none
 MIA,00-0041525,Chris Bell,WR,WRTE,0.12173913043478261,10.0,Doubtful,Knee,not on a week-11 report yet,0.0,none
+MIA,00-0040248,Zeek Biggers,DL,DL,0.11733615221987315,,,,Reserve/Injured (IR) on wk 11 roster,1.0,none
 MIN,00-0035228,Kyler Murray,QB,QB,0.4890829694323144,10.0,Out,Hamstring,not on a week-11 report yet,0.0,none
 MIN,00-0036348,Josh Metellus,S,DB,0.22849695916594265,10.0,Questionable,Shoulder,not on a week-11 report yet,0.0,none
 MIN,00-0040173,Tyrion Ingram-Dawkins,DT,DL,0.1985611510791367,10.0,Out,Ankle,not on a week-11 report yet,0.0,none
@@ -101,6 +109,7 @@ TB,00-0040129,Emeka Egbuka,WR,WRTE,0.11058150619637751,9.0,Questionable,Foot,not
 TB,00-0039068,Yaya Diaby,LB,LB,0.07661290322580645,9.0,Out,Knee,not on a week-11 report yet,0.0,none
 TEN,00-0041479,Anthony Hill Jr.,LB,LB,0.37583892617449666,10.0,Out,Neck,not on a week-11 report yet,0.0,none
 TEN,00-0035672,Cody Barton,LB,LB,0.20469798657718122,10.0,Out,Concussion,not on a week-11 report yet,0.0,none
+TEN,00-0038117,Wan'Dale Robinson,WR,WRTE,0.16252587991718426,,,,Reserve/Injured (IR) on wk 11 roster,1.0,none
 TEN,00-0035632,Amani Hooker,DB,DB,0.15093085106382978,,,,not on wk 10 roster (left team),1.0,none
 TEN,00-0039034,Peter Skoronski,G,OL,0.13852459016393442,10.0,Out,Hamstring,Reserve/Injured (IR) on wk 10 roster,1.0,none
 TEN,00-0036924,Michael Carter,RB,RB,0.11885245901639344,,,,Waived on wk 10 roster,1.0,none
