@@ -90,8 +90,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:15:14.555479+00:00",
-        "last_success_utc": "2026-11-19T23:15:14.555479+00:00",
+        "last_attempt_utc": "2026-11-19T23:16:55.861211+00:00",
+        "last_success_utc": "2026-11-19T23:16:55.861211+00:00",
         "source_capture_sha256": "6e274213164d5ddec4b04a458eab081bdedfb36a57d21f3fb408ec83d090904c"
       }
     },
@@ -109,8 +109,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:15:14.692103+00:00",
-        "last_success_utc": "2026-11-19T23:15:14.692103+00:00",
+        "last_attempt_utc": "2026-11-19T23:16:55.818353+00:00",
+        "last_success_utc": "2026-11-19T23:16:55.818353+00:00",
         "source_capture_sha256": "1c2b224f9e7f33acc4751b06933840a2b79b1701df722019b6d468046b6d0731"
       }
     },
@@ -223,5 +223,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-19T23:15:14.692103+00:00"
+  "updated_utc": "2026-11-19T23:16:55.861211+00:00"
 }
