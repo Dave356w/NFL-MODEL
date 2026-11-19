@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-19T19:31:44.797865+00:00",
+  "forecast_utc": "2026-11-19T22:29:35.138607+00:00",
   "games": [
     {
       "game_id": "2026_11_ARI_KC",
@@ -48,8 +48,7 @@
         "WAS: inactive lists not ready (report-only fallback allowed at T-60)",
         "CIN: automatic source checks incomplete or stale",
         "CIN: final report incomplete",
-        "CIN: report: injury report for this club not yet published",
-        "CIN: report: no successful source check",
+        "CIN: report: source check stale or after forecast",
         "CIN: report: complete official list/report missing",
         "CIN: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -60,15 +59,10 @@
     {
       "game_id": "2026_11_IND_HOU",
       "issues": [
-        "HOU: automatic source checks incomplete or stale",
-        "HOU: final report incomplete",
-        "HOU: report: injury report for this club not yet published",
         "HOU: report: source check stale or after forecast",
-        "HOU: report: complete official list/report missing",
         "HOU: inactive lists not ready (report-only fallback allowed at T-60)",
         "IND: report: source check stale or after forecast",
-        "IND: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "IND: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-20T00:15:00+00:00",
       "state": "awaiting candidate"
@@ -155,8 +149,7 @@
         "CHI: inactive lists not ready (report-only fallback allowed at T-60)",
         "NO: automatic source checks incomplete or stale",
         "NO: final report incomplete",
-        "NO: report: injury report for this club not yet published",
-        "NO: report: no successful source check",
+        "NO: report: source check stale or after forecast",
         "NO: report: complete official list/report missing",
         "NO: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -238,5 +231,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.25",
-  "updated_utc": "2026-11-19T19:31:47.918026+00:00"
+  "updated_utc": "2026-11-19T22:29:37.781905+00:00"
 }
