@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-18T22:21:08.395924+00:00",
+  "forecast_utc": "2026-11-19T03:54:12.866402+00:00",
   "games": [
     {
       "game_id": "2026_11_ARI_KC",
@@ -11,8 +11,7 @@
         "KC: inactive lists not ready (report-only fallback allowed at T-60)",
         "ARI: automatic source checks incomplete or stale",
         "ARI: final report incomplete",
-        "ARI: report: injury report for this club not yet published",
-        "ARI: report: no successful source check",
+        "ARI: report: source check stale or after forecast",
         "ARI: report: complete official list/report missing",
         "ARI: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -30,8 +29,7 @@
         "CAR: inactive lists not ready (report-only fallback allowed at T-60)",
         "BAL: automatic source checks incomplete or stale",
         "BAL: final report incomplete",
-        "BAL: report: injury report for this club not yet published",
-        "BAL: report: no successful source check",
+        "BAL: report: source check stale or after forecast",
         "BAL: report: complete official list/report missing",
         "BAL: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -98,14 +96,12 @@
       "issues": [
         "DEN: automatic source checks incomplete or stale",
         "DEN: final report incomplete",
-        "DEN: report: injury report for this club not yet published",
-        "DEN: report: no successful source check",
+        "DEN: report: source check stale or after forecast",
         "DEN: report: complete official list/report missing",
         "DEN: inactive lists not ready (report-only fallback allowed at T-60)",
         "LV: automatic source checks incomplete or stale",
         "LV: final report incomplete",
-        "LV: report: injury report for this club not yet published",
-        "LV: report: no successful source check",
+        "LV: report: source check stale or after forecast",
         "LV: report: complete official list/report missing",
         "LV: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -123,8 +119,7 @@
         "BUF: inactive lists not ready (report-only fallback allowed at T-60)",
         "MIA: automatic source checks incomplete or stale",
         "MIA: final report incomplete",
-        "MIA: report: injury report for this club not yet published",
-        "MIA: report: no successful source check",
+        "MIA: report: source check stale or after forecast",
         "MIA: report: complete official list/report missing",
         "MIA: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -137,8 +132,7 @@
       "issues": [
         "SF: automatic source checks incomplete or stale",
         "SF: final report incomplete",
-        "SF: report: injury report for this club not yet published",
-        "SF: report: no successful source check",
+        "SF: report: source check stale or after forecast",
         "SF: report: complete official list/report missing",
         "SF: inactive lists not ready (report-only fallback allowed at T-60)",
         "MIN: automatic source checks incomplete or stale",
@@ -175,8 +169,7 @@
       "issues": [
         "LAC: automatic source checks incomplete or stale",
         "LAC: final report incomplete",
-        "LAC: report: injury report for this club not yet published",
-        "LAC: report: no successful source check",
+        "LAC: report: source check stale or after forecast",
         "LAC: report: complete official list/report missing",
         "LAC: inactive lists not ready (report-only fallback allowed at T-60)",
         "NYJ: automatic source checks incomplete or stale",
@@ -194,14 +187,12 @@
       "issues": [
         "PHI: automatic source checks incomplete or stale",
         "PHI: final report incomplete",
-        "PHI: report: injury report for this club not yet published",
-        "PHI: report: no successful source check",
+        "PHI: report: source check stale or after forecast",
         "PHI: report: complete official list/report missing",
         "PHI: inactive lists not ready (report-only fallback allowed at T-60)",
         "PIT: automatic source checks incomplete or stale",
         "PIT: final report incomplete",
-        "PIT: report: injury report for this club not yet published",
-        "PIT: report: no successful source check",
+        "PIT: report: source check stale or after forecast",
         "PIT: report: complete official list/report missing",
         "PIT: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
@@ -247,5 +238,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.25",
-  "updated_utc": "2026-11-18T22:21:11.248459+00:00"
+  "updated_utc": "2026-11-19T03:54:16.036241+00:00"
 }
