@@ -1,5 +1,5 @@
 {
-  "heartbeat_utc": "2026-11-19T23:47:58.865448+00:00",
+  "heartbeat_utc": "2026-11-19T23:49:31.583826+00:00",
   "run_id": "44602363999",
   "errors": [],
   "prepared_bundle_sha256": "ffb6e667bc9a0fb2d3eb3c84fa3a2164783aa01f86c606d13d5718096f58443f",
@@ -11,8 +11,8 @@
       "blockers": []
     }
   ],
-  "updated_utc": "2026-11-19T23:48:26.738510+00:00",
+  "updated_utc": "2026-11-19T23:49:59.361257+00:00",
   "coverage_alerts": [
-    "2026_11_IND_HOU: AT RISK 26 min before cutoff; HOU inactives: official inactive list not found; IND inactives: official inactive list not found"
+    "2026_11_IND_HOU: AT RISK 25 min before cutoff; HOU inactives: official inactive list not found; IND inactives: official inactive list not found"
   ]
 }
