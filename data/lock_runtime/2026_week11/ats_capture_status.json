@@ -1,12 +1,10 @@
 {
-  "forecast_utc": "2026-11-19T23:38:34.750618+00:00",
+  "forecast_utc": "2026-11-19T23:40:07.120985+00:00",
   "games": [
     {
       "game_id": "2026_11_IND_HOU",
       "issues": [
-        "HOU: report: source check stale or after forecast",
         "HOU: inactive lists not ready (report-only fallback allowed at T-60)",
-        "IND: report: source check stale or after forecast",
         "IND: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-20T00:15:00+00:00",
@@ -14,5 +12,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.25",
-  "updated_utc": "2026-11-19T23:38:51.460402+00:00"
+  "updated_utc": "2026-11-19T23:40:23.930851+00:00"
 }
