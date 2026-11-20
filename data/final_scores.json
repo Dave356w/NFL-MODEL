@@ -2098,5 +2098,19 @@
     "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873052",
     "home_score": 21,
     "away_score": 24
+  },
+  {
+    "game_id": "2026_11_IND_HOU",
+    "season": 2026,
+    "week": 11,
+    "home": "HOU",
+    "away": "IND",
+    "event_id": "401873066",
+    "completed": true,
+    "kickoff_utc": "2026-11-20T01:15:00+00:00",
+    "captured_utc": "2026-11-20T10:01:42.489584+00:00",
+    "source_url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401873066",
+    "home_score": 26,
+    "away_score": 3
   }
 ]
