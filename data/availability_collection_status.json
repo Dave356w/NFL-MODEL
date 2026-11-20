@@ -27,8 +27,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.472883+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.472883+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.594790+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.594790+00:00",
         "source_capture_sha256": "b8fec279c7d410c093b43a9ec90640f43c97f4d268cfd080ebb1a4f8d406e22c"
       }
     },
@@ -53,8 +53,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.492891+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.492891+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.528480+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.528480+00:00",
         "source_capture_sha256": "4fc204a53703609d5c6640820c5841d68118ca0634f97f434205d7300b13beca"
       }
     },
@@ -70,8 +70,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.541681+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.541681+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.578452+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.578452+00:00",
         "source_capture_sha256": "c3e8fbd630a8925fc2f83227bfe6320729f8258f6dff923bd2cbaa40fdf53b4f"
       }
     },
@@ -87,8 +87,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.482525+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.482525+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.585441+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.585441+00:00",
         "source_capture_sha256": "6fc041e708e083547cb8bcda37f819d6794b768a1eaa0728a26295fa7cb48a60"
       }
     },
@@ -104,8 +104,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.468863+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.468863+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.607806+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.607806+00:00",
         "source_capture_sha256": "5f07ac47ffb14e485a06dd9a58cdfe8339e57e6160cde89a7c3f3c3c00e61405"
       }
     },
@@ -121,8 +121,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.457462+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.457462+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.582629+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.582629+00:00",
         "source_capture_sha256": "81c2ffda54c05119f95c1df9f729a4b6a3bf65c674df2af8e828ab70b06bfec2"
       }
     },
@@ -147,8 +147,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.484757+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.484757+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.559130+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.559130+00:00",
         "source_capture_sha256": "d8bb836df2c3c0b7f58272594bbde43069e1e86c176d206a8733c00ed75bdc65"
       }
     },
@@ -164,8 +164,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.469483+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.469483+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.567114+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.567114+00:00",
         "source_capture_sha256": "dd0b9533959fa9215711096cafbb91336ec66ca50c51f341d3dd5f4d0fe63429"
       }
     },
@@ -181,8 +181,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.619464+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.619464+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.723846+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.723846+00:00",
         "source_capture_sha256": "3e858db476a4c86daa54754974cd7221592d0396f606353a6feea96bed759eca"
       }
     },
@@ -196,46 +196,26 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-19T23:34:26.821752+00:00"
+        "last_attempt_utc": "2026-11-20T04:18:43.628833+00:00"
       }
     },
     "HOU": {
-      "game_id": "2026_11_IND_HOU",
-      "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-19T22:26:46.215491+00:00"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-20T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.668462+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.668462+00:00",
-        "source_capture_sha256": "fe4e9514e1449bb0853fefcfc072ba634a0d302ef44273024d2b9a88ea3760cf"
-      }
+      "report": {}
     },
     "IND": {
-      "game_id": "2026_11_IND_HOU",
-      "inactives": {
-        "error": "official inactive list not found",
-        "last_attempt_utc": "2026-11-19T22:26:46.215491+00:00"
-      },
+      "game_id": null,
+      "inactives": {},
       "kickoff_utc": "2026-11-20T01:15:00+00:00",
       "news": {
         "article_errors": []
       },
-      "report": {
-        "complete": true,
-        "error": null,
-        "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.664975+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.664975+00:00",
-        "source_capture_sha256": "09fcb868631e61d289080f7cb89b6ee003723920661dbfcb3d33c64e57028177"
-      }
+      "report": {}
     },
     "JAX": {
       "game_id": "2026_11_JAX_NYG",
@@ -249,8 +229,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.784054+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.784054+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.761203+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.761203+00:00",
         "source_capture_sha256": "91b2985a6dfc58ca422df6e9b4c553f1d9adddfeea56487f2ebccf537524c480"
       }
     },
@@ -266,8 +246,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.638323+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.638323+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.748128+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.748128+00:00",
         "source_capture_sha256": "a228bf6c58ce59969354970c92b7c50fb8589930ed923439e811e8e8cb429a3b"
       }
     },
@@ -281,7 +261,7 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-19T23:34:26.821752+00:00"
+        "last_attempt_utc": "2026-11-20T04:18:43.628833+00:00"
       }
     },
     "LAC": {
@@ -296,8 +276,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.785729+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.785729+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.778622+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.778622+00:00",
         "source_capture_sha256": "37ebd68664735aa373254b3d9a610ff6ae570d975471dd1db7f656efdce1ca79"
       }
     },
@@ -313,8 +293,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.834127+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.834127+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.775282+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.775282+00:00",
         "source_capture_sha256": "0b5ea6d262f8fda288bd11d8dfecb6b05e2d9a27a8982dd55a86a9f941c27543"
       }
     },
@@ -330,8 +310,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.826966+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.826966+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.772259+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.772259+00:00",
         "source_capture_sha256": "0dcdda72dba8c03ecccf5c6e8d4464af10b5f4b8bbf26bf726917bd8a0274ff3"
       }
     },
@@ -347,8 +327,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.773520+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.773520+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.915455+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.915455+00:00",
         "source_capture_sha256": "c08adc96b7831458e093ce8b8aafc239445608147f6e2ca32775a757b9a26312"
       }
     },
@@ -373,8 +353,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.890624+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.890624+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.959535+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.959535+00:00",
         "source_capture_sha256": "f8452e3f9a1ecb3e869adc81e520a8e0060c97db71257b566085eca97cd5317d"
       }
     },
@@ -390,8 +370,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.882687+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.882687+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.990195+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.990195+00:00",
         "source_capture_sha256": "9490ce7ca2bd934ad353bc19d26f30e4613416910c72a52e9ff69a48f91d31bb"
       }
     },
@@ -407,8 +387,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.904099+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.904099+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.900868+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.900868+00:00",
         "source_capture_sha256": "11b7403e064173830205d1bf7e62b756660e31d0a1774c18c6fa14f87d6dbf72"
       }
     },
@@ -424,8 +404,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.967343+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.967343+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.944353+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.944353+00:00",
         "source_capture_sha256": "2d6e8d1ec4787d2ac20c09004fbea797e1174e085a5a6c05cdad497737c82109"
       }
     },
@@ -441,8 +421,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.967706+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.967706+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:45.965045+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.965045+00:00",
         "source_capture_sha256": "8b3ab91471dfa414e509ed1037a9252fb6acdd37c2cfdc96a27f0812891fa51e"
       }
     },
@@ -467,9 +447,9 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.964826+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.964826+00:00",
-        "source_capture_sha256": "b80366fa11976ccdca7dd6bfb64e3ff209388916eb92c5b19f9d5c8904ec1172"
+        "last_attempt_utc": "2026-11-20T04:18:45.985990+00:00",
+        "last_success_utc": "2026-11-20T04:18:45.985990+00:00",
+        "source_capture_sha256": "f4271845ed2b99140941e1f80e4de0ee49de4baa039b4967283125a5852fdeb9"
       }
     },
     "TB": {
@@ -484,8 +464,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:29.140530+00:00",
-        "last_success_utc": "2026-11-19T23:34:29.140530+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:46.017822+00:00",
+        "last_success_utc": "2026-11-20T04:18:46.017822+00:00",
         "source_capture_sha256": "1ce68a38a2406c50c3f1f0618d41fd959e11165c3f973bc43d19962ff9043188"
       }
     },
@@ -501,8 +481,8 @@
         "error": null,
         "incomplete_capture": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-19T23:34:28.976754+00:00",
-        "last_success_utc": "2026-11-19T23:34:28.976754+00:00",
+        "last_attempt_utc": "2026-11-20T04:18:46.077298+00:00",
+        "last_success_utc": "2026-11-20T04:18:46.077298+00:00",
         "source_capture_sha256": "96f3bb7170ab3fd9ef8c7abdbf5ba2b14838ef58568348fbf7c07da072013bf6"
       }
     },
@@ -516,9 +496,9 @@
       "report": {
         "error": "injury report for this club not yet published",
         "failure_capture": null,
-        "last_attempt_utc": "2026-11-19T23:34:26.821752+00:00"
+        "last_attempt_utc": "2026-11-20T04:18:43.628833+00:00"
       }
     }
   },
-  "updated_utc": "2026-11-19T23:34:29.140530+00:00"
+  "updated_utc": "2026-11-20T04:18:46.077298+00:00"
 }
