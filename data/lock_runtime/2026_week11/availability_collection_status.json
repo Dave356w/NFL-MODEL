@@ -2,8 +2,8 @@
   "articles": {
     "https://www.nfl.com/news/week-11-thursday-night-inactives-indianapolis-colts-at-houston-texans": {
       "error": null,
-      "last_attempt_utc": "2026-11-20T00:58:31.843441+00:00",
-      "last_success_utc": "2026-11-20T00:58:31.843441+00:00"
+      "last_attempt_utc": "2026-11-20T00:59:55.092166+00:00",
+      "last_success_utc": "2026-11-20T00:59:55.092166+00:00"
     }
   },
   "max_age_minutes": 35,
@@ -87,8 +87,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-20T00:58:31.843441+00:00",
-        "last_success_utc": "2026-11-20T00:58:31.843441+00:00",
+        "last_attempt_utc": "2026-11-20T00:59:55.092166+00:00",
+        "last_success_utc": "2026-11-20T00:59:55.092166+00:00",
         "source_capture_sha256": "60317e2963ac9de8b94d3c9717571558a7285a9024a8409a74ca3c8ab8b48b1a",
         "url": "https://www.nfl.com/news/week-11-thursday-night-inactives-indianapolis-colts-at-houston-texans"
       },
@@ -100,8 +100,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-20T00:58:31.621674+00:00",
-        "last_success_utc": "2026-11-20T00:58:31.621674+00:00",
+        "last_attempt_utc": "2026-11-20T00:59:54.859765+00:00",
+        "last_success_utc": "2026-11-20T00:59:54.859765+00:00",
         "source_capture_sha256": "6e274213164d5ddec4b04a458eab081bdedfb36a57d21f3fb408ec83d090904c"
       }
     },
@@ -110,8 +110,8 @@
       "inactives": {
         "complete": true,
         "error": null,
-        "last_attempt_utc": "2026-11-20T00:58:31.843441+00:00",
-        "last_success_utc": "2026-11-20T00:58:31.843441+00:00",
+        "last_attempt_utc": "2026-11-20T00:59:55.092166+00:00",
+        "last_success_utc": "2026-11-20T00:59:55.092166+00:00",
         "source_capture_sha256": "a4648dd9a87b1af73eeeee5ee2a005e483ca22254b78845cb06d740bad4ad0b8",
         "url": "https://www.nfl.com/news/week-11-thursday-night-inactives-indianapolis-colts-at-houston-texans"
       },
@@ -123,8 +123,8 @@
         "complete": true,
         "error": null,
         "issues": [],
-        "last_attempt_utc": "2026-11-20T00:58:31.638073+00:00",
-        "last_success_utc": "2026-11-20T00:58:31.638073+00:00",
+        "last_attempt_utc": "2026-11-20T00:59:54.876569+00:00",
+        "last_success_utc": "2026-11-20T00:59:54.876569+00:00",
         "source_capture_sha256": "1c2b224f9e7f33acc4751b06933840a2b79b1701df722019b6d468046b6d0731"
       }
     },
@@ -237,5 +237,5 @@
       "report": {}
     }
   },
-  "updated_utc": "2026-11-20T00:58:31.843441+00:00"
+  "updated_utc": "2026-11-20T00:59:55.092166+00:00"
 }
