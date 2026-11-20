@@ -1,5 +1,5 @@
 {
-  "forecast_utc": "2026-11-19T22:29:35.138607+00:00",
+  "forecast_utc": "2026-11-20T19:07:53.339509+00:00",
   "games": [
     {
       "game_id": "2026_11_ARI_KC",
@@ -22,10 +22,7 @@
     {
       "game_id": "2026_11_BAL_CAR",
       "issues": [
-        "CAR: automatic source checks incomplete or stale",
-        "CAR: final report incomplete",
         "CAR: report: source check stale or after forecast",
-        "CAR: report: complete official list/report missing",
         "CAR: inactive lists not ready (report-only fallback allowed at T-60)",
         "BAL: automatic source checks incomplete or stale",
         "BAL: final report incomplete",
@@ -42,8 +39,7 @@
       "issues": [
         "WAS: automatic source checks incomplete or stale",
         "WAS: final report incomplete",
-        "WAS: report: injury report for this club not yet published",
-        "WAS: report: no successful source check",
+        "WAS: report: source check stale or after forecast",
         "WAS: report: complete official list/report missing",
         "WAS: inactive lists not ready (report-only fallback allowed at T-60)",
         "CIN: automatic source checks incomplete or stale",
@@ -58,14 +54,9 @@
     },
     {
       "game_id": "2026_11_IND_HOU",
-      "issues": [
-        "HOU: report: source check stale or after forecast",
-        "HOU: inactive lists not ready (report-only fallback allowed at T-60)",
-        "IND: report: source check stale or after forecast",
-        "IND: inactive lists not ready (report-only fallback allowed at T-60)"
-      ],
+      "issues": [],
       "lock_at_utc": "2026-11-20T00:15:00+00:00",
-      "state": "awaiting candidate"
+      "state": "locked"
     },
     {
       "game_id": "2026_11_JAX_NYG",
@@ -231,5 +222,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.25",
-  "updated_utc": "2026-11-19T22:29:37.781905+00:00"
+  "updated_utc": "2026-11-20T19:07:56.500511+00:00"
 }
