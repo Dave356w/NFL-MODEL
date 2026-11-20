@@ -270,7 +270,6 @@ a{color:rgb(var(--accent-tx))}
   color:var(--ink);text-decoration:none;white-space:nowrap}
 .brand-mark{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;
   background:rgb(var(--accent));color:#fff;font:800 12px/1 var(--sans);letter-spacing:.03em}
-.brand-version{font:600 11px/1 var(--mono);color:var(--muted);border:1px solid var(--line);padding:4px 6px;border-radius:6px}
 .nav{display:flex;gap:4px;margin-left:auto;padding:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px}
 .nav a{padding:8px 16px;border-radius:8px;color:var(--muted);text-decoration:none;font:650 14px/1.2 var(--sans);white-space:nowrap}
 .nav a:hover{color:var(--ink);background:var(--surface-2)}
@@ -368,7 +367,7 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .pick-lines .kind{font:700 11px/1 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);width:100%}
 .pick-lines .pk{font:800 20px/1.2 var(--mono);letter-spacing:-.01em}
 .pick-lines .pk.na{font:600 14px/1.4 var(--sans);color:var(--muted)}
-.pick-lines .edge{font:600 12.5px/1.3 var(--sans);color:var(--muted)}
+.pick-lines .edge{font:600 12.5px/1.3 var(--sans)}
 .mk{font:500 12.5px/1.5 var(--mono);color:var(--muted);margin-top:6px}
 .mk span{white-space:nowrap}
 .flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
@@ -388,6 +387,16 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 .fold .rt{margin-left:auto;font:600 13px/1 var(--mono);color:var(--muted)}
 .fold .gr-tablewrap{box-shadow:none;border-width:1px 0 0;border-radius:0;margin:0}
 .record{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 18px;margin:0 0 16px;font-size:14px}
+.rec-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:11px 16px;margin:0 0 8px;font-size:14px;box-shadow:var(--shadow)}
+.rec-line .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+.rec-line b{font-size:16px}.rec-line a{margin-left:auto;font-weight:650;text-decoration:none}
+details.how>summary{cursor:pointer;font-weight:650;color:var(--ink)}details.how p{margin:8px 0 0}
+abbr[title]{text-decoration:underline dotted;cursor:help}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.pick-lines .edge{border:1px solid rgba(var(--accent),.4);background:rgba(var(--accent),.09);color:rgb(var(--accent-tx));
+  border-radius:var(--r-pill);padding:3px 8px;font-weight:700}
+.pick-lines .edge.tie{border-color:var(--line);background:var(--surface-2);color:var(--muted)}
 .record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
 /* chart */
 .chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px 10px;margin:0 0 12px}
@@ -421,7 +430,8 @@ table.gr tr.total td{font-weight:700;border-top:2px solid var(--line)}
 @media (max-width:720px){
   .topbar{flex-wrap:wrap;gap:12px;padding:14px 0;margin-bottom:16px}
   .nav{order:3;width:100%;margin-left:0}.nav a{flex:1;text-align:center;padding:9px 6px}
-  .theme{margin-left:auto}.brand-version{display:none}
+  .theme{margin-left:auto}
+  .rec-line a{margin-left:0;width:100%}
   .gr-h1{font-size:28px}
   .gr-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
   .gr-stat{padding:13px 13px}.gr-stat .v{font-size:22px}
@@ -443,6 +453,11 @@ FILTER_JS = """<script>(function(){var bar=document.querySelector('.seg[data-fil
 bar.hidden=false;bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
 var f=b.getAttribute('data-show');bar.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
 document.querySelectorAll('.card[data-state]').forEach(function(c){c.hidden=f!=='all'&&c.getAttribute('data-state')!==f;});});})();
+(function(){var bar=document.querySelector('.seg[data-sort-bar]'),grid=document.querySelector('.grid');if(!bar||!grid)return;
+var order=Array.from(grid.children);bar.hidden=false;bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+var by=b.getAttribute('data-sort');bar.querySelectorAll('button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+var cards=order.slice();if(by==='gap')cards.sort(function(a,c){var f=(a.dataset.state==='final')-(c.dataset.state==='final');
+return f||parseFloat(c.dataset.gap)-parseFloat(a.dataset.gap);});cards.forEach(function(c){grid.appendChild(c);});});})();
 (function(){function expire(){document.querySelectorAll('[data-provisional-cutoff]').forEach(function(c){
 if(Date.now()<Date.parse(c.dataset.provisionalCutoff))return;
 c.removeAttribute('data-provisional-cutoff');
@@ -467,7 +482,7 @@ var controller=new AbortController(),timeout=setTimeout(function(){controller.ab
 try{var response=await fetch('site-state.json',{cache:'no-store',signal:controller.signal});
 if(!response.ok)return;var state=await response.json();
 if(!state||! /^[a-f0-9]{64}$/.test(state.version)||state.version===meta.content)return;
-var selected=document.querySelector('.seg button[aria-pressed="true"]');
+var selected=document.querySelector('.seg[data-filter] button[aria-pressed="true"]');
 try{sessionStorage.setItem(key,JSON.stringify({open:Array.from(document.querySelectorAll('details[data-game-id][open]')).map(function(c){return c.dataset.gameId;}),
 filter:selected?selected.dataset.show:'all',scroll:window.scrollY}));}catch(e){}
 var url=new URL(location.href);url.searchParams.set('_v',state.version);location.replace(url.href);
@@ -483,6 +498,9 @@ THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentC
 PAGES = (("index.html", "Picks"), ("grades.html", "Results"),
          ("market-calibration.html", "Performance"),
          ("historical-calibration.html", "Calibration"))
+PAGE_HELP = {"index.html": "This week's picks", "grades.html": "Every 2026 pick and how it graded",
+             "market-calibration.html": "Running units, simple baselines and how picks work",
+             "historical-calibration.html": "Advanced: 2023–2026 results by line size and win-probability band"}
 
 
 def font_face_css(assets=ASSETS):
@@ -498,7 +516,7 @@ def font_face_css(assets=ASSETS):
 
 
 def html_document(body, title, current, built, scripts="", extra_css=""):
-    nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''}>{label}</a>"
+    nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''} title='{esc(PAGE_HELP.get(href, ''))}'>{label}</a>"
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
@@ -506,12 +524,11 @@ def html_document(body, title, current, built, scripts="", extra_css=""):
             f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, locked handicaps and season results'>"
             "<meta name='color-scheme' content='light dark'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}{extra_css}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
-            f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}"
-            f"<span class='brand-version'>{esc(m.REVISION.rsplit('-', 1)[-1])}</span></a>"
+            f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}</a>"
             f"<nav class='nav' aria-label='Main navigation'>{nav}</nav>"
             f"<button class='theme' type='button' onclick='toggleTheme()' aria-label='Toggle colour theme' title='Toggle theme'>{THEME_ICON}</button></header>"
             f"<main id='main-content'>{body}</main>"
-            f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span></span>"
+            f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span> · model {esc(m.REVISION.rsplit('-', 1)[-1])}</span>"
             "<span>Flat 1-unit stakes. ESPN prices and assumed −110 prices are labelled; returns are estimates.</span>"
             f"</footer></div>{scripts}{REFRESH_JS}</body></html>")
 
@@ -676,9 +693,9 @@ def ats_card_state(latest, row, now):
         status, source, note = 'unavailable', 'No saved ATS selection', 'ATS lock unavailable'
     elif cutoff is not None:
         when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
-        note = f'ATS provisional · locks {when}'
+        note = f'Locks {when}'
     else:
-        note = 'ATS provisional · kickoff unconfirmed'
+        note = 'Lock time pending · kickoff unconfirmed'
     if saved is not None and ats_locks.backfilled(saved):
         # Owner decision 2026-10-19: a saved skip is graded as a favorite bet.
         source = 'Backfilled recorded skip'
@@ -724,10 +741,11 @@ def render_index(latest, ledger, built, now=None):
     updated = (f"<div class='record'><div class='l'>Forecast updated</div><div class='mono'>"
                f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</div></div>" if local is not None else '')
     parts = [head(f'Week {week} picks',
-                  'Against-the-spread picks from the model’s projected spread. Each pick locks 60 minutes '
-                  'before kickoff. Open a game for spreads, quarterbacks and injury reports.',
+                  'Against-the-spread picks from the model’s projected spread. Picks can change until they lock '
+                  '60 minutes before kickoff. Tap a game for spreads, quarterbacks and injury reports. '
+                  "<a href='market-calibration.html#how'>How picks work</a>",
                   f'{season} regular season', updated)]
-    parts.append(record_tiles(public_ats(latest), f'{season} record'))
+    parts.append(record_line(public_ats(latest), f'{season} record'))
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -748,8 +766,11 @@ def render_index(latest, ledger, built, now=None):
                   f"{label}<span class='ct'>{n}</span></button>"
                   for k, label, n in (('all', 'All', len(rows)), ('upcoming', 'Upcoming', len(rows) - finals),
                                       ('final', 'Final', finals)))
-    parts.append(f"<div class='toolbar'><h2 class='sec'>This week’s games</h2>"
-                 f"<div class='seg' data-filter role='group' aria-label='Filter games' hidden>{seg}</div></div>")
+    sort = ("<button type='button' data-sort='time' aria-pressed='true'>Kickoff</button>"
+            "<button type='button' data-sort='gap' aria-pressed='false'>Biggest gap</button>")
+    parts.append(f"<div class='toolbar'><h2 class='sec'>This week’s games</h2><div class='tools'>"
+                 f"<div class='seg' data-sort-bar role='group' aria-label='Sort games' hidden>{sort}</div>"
+                 f"<div class='seg' data-filter role='group' aria-label='Filter games' hidden>{seg}</div></div></div>")
     cards = []
     for row in rows:
         home, away = row['home'], row['away']
@@ -759,27 +780,32 @@ def render_index(latest, ledger, built, now=None):
         if final:
             status = f"<span class='badge'>Final {score_text(row.get('away_score'), row.get('home_score'))}</span>"
         elif state['status'] == 'locked':
-            status = "<span class='badge lock'>Locked</span>"
+            status = "<span class='badge lock'>Locked ✓</span>"
         elif state['status'] == 'unavailable':
             status = "<span class='badge'>No pick</span>"
         else:
-            status = "<span class='badge live'>Provisional</span>"
+            status = "<span class='badge live'>Can still change</span>"
         flags = []
         if state['result']:
             result = 'Skip' if state['result'] == 'S' else state['result']
             tone = 'w' if state['result'] == 'W' else 'l' if state['result'] == 'L' else ''
             units = f" · <span class='u'>{units_text(state['units'])}</span>" if math.isfinite(state['units']) else ''
             flags.append(f"<span class='badge {tone}'>ATS result · {esc(result)}{units}</span>")
-        if pending(row):
-            flags.append("<span class='badge warn'>Report pending</span>")
         if not bool(row.get('ready', True)):
             flags.append("<span class='badge'>Limited history</span>")
         for side in ('away', 'home'):
             expected, usual = row.get(f'{side}_qb_expected'), row.get(f'{side}_qb_usual')
             if isinstance(expected, str) and isinstance(usual, str) and expected != usual:
                 flags.append(f"<span class='badge warn'>{esc(row[side])} QB: {esc(expected)}</span>")
-        edge = (f"<span class='edge'>{state['gap']:g}-point difference from market</span>"
-                if math.isfinite(state['gap']) and state['gap'] > fixed_bands.EPS else '')
+        gap = state['gap']
+        if not state['selected_side'] or not math.isfinite(gap):
+            edge = ''
+        elif gap > fixed_bands.EPS:
+            edge = (f"<span class='edge' title='Gap between the model spread and the market line. "
+                    f"It describes the disagreement; it is not a win probability.'>Model differs by {gap:g} pt{'s' if gap != 1 else ''}</span>")
+        else:
+            edge = ("<span class='edge tie' title='The model matches the line exactly; ties take the market favorite.'>"
+                    "Matches line · favorite</span>")
         pick = (f"<div class='pick-lines'><span class='kind'>ATS pick</span>"
                 f"<span class='pk{'' if state['selected_side'] else ' na'}'>{state['pick']}</span>{edge}</div>")
         spreads = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
@@ -798,7 +824,7 @@ def render_index(latest, ledger, built, now=None):
                    f"<div class='g-teams'>{team(away, 'away')}{team(home, 'home')}</div>{pick}"
                    f"<div class='mk sp'>{spreads}</div>"
                    f"{f'<div class=flags>{chr(32).join(flags)}</div>' if flags else ''}"
-                   f"<div class='g-note'>{esc(state['note'])}</div></summary>")
+                   f"<div class='g-note'>{esc(state['note'])}{' · injury reports pending' if pending(row) else ''}</div></summary>")
         detail = ["<div class='detail'><h3>Spreads</h3>", table(['', esc(away), esc(home)], [
             ['Model spread', spread_text(ms, False), spread_text(ms, True)],
             ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]
@@ -822,12 +848,14 @@ def render_index(latest, ledger, built, now=None):
         tone = ' picked-card' if state['selected_side'] else ''
         cutoff_attr = (f" data-provisional-cutoff='{ats_locks.deadline(m.kickoff_utc(row)).isoformat()}'"
                        if state['status'] == 'provisional' and m.kickoff_utc(row) is not None else '')
-        cards.append(f"<details class='card{tone}' data-game-id='{esc(row['game_id'])}' data-state='{'final' if final else 'upcoming'}'{cutoff_attr}>"
+        gap_attr = f" data-gap='{state['gap']:g}'" if state['selected_side'] and math.isfinite(state['gap']) else " data-gap='-1'"
+        cards.append(f"<details class='card{tone}' data-game-id='{esc(row['game_id'])}' data-state='{'final' if final else 'upcoming'}'{gap_attr}{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
     links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if has_public_saved_picks(latest) else ''
     parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
                  f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
+                 + pricing_note(public_ats(latest)) +
                  "<p><a href='grades.html'>View ATS results →</a></p>")
     return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS)
 
@@ -847,9 +875,16 @@ def report_notes_html(notes, teams, week):
         n = notes[notes.team == t]
         if n.empty:
             continue
-        rows = []
+        rows, reserve = [], []
         for x in n.itertuples(index=False):
-            rows.append([f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>", esc(x.this_week)])
+            status = str(x.this_week)
+            if '(left team)' in status:
+                continue  # no longer on the roster; still counted by the model, but not news
+            row = [f"{esc(x.player)} <span class='mut'>{esc(x.position)}</span>", esc(status)]
+            (reserve if status.startswith('Reserve/') else rows).append(row)
+        rows += reserve
+        if not rows:
+            continue
         out.append(f"<p class='mut'><b>{esc(t)}</b> · {esc(STATE_TEXT.get(n.report_state.iloc[0], '').format(w=week))}</p>"
                    + table(["Player", f"Week {week} status"], rows))
     return "".join(out) if len(out) > 1 else ""
@@ -883,9 +918,14 @@ def units_text(u):
     return "—" if not math.isfinite(u) else f"{u:+.2f}u".replace("-", "−")
 
 
+SE_HELP = ('Standard error: how far ROI could swing from luck alone. '
+           'A range of about two standard errors that crosses 0 means the edge is not yet established.')
+
+
 def roi_uncertainty(se):
     se = num(se)
-    return f'± {100 * se:.1f} pp SE' if math.isfinite(se) else 'SE unavailable'
+    return (f"<abbr title='{SE_HELP}'>± {100 * se:.1f} pp SE</abbr>" if math.isfinite(se)
+            else 'SE unavailable')
 
 
 def record_tiles(frame, label):
@@ -901,12 +941,12 @@ def record_tiles(frame, label):
                  f"<i style='width:{100 * rate:.1f}%'></i><b style='left:{100 * BREAK_EVEN:.1f}%'></b></div>")
     pending = f" · {r['pending']} pending" if r['pending'] else ''
     tiles = [stat(label, f"{r['wins']}–{r['losses']}–{r['pushes']}", f"W–L–P · {r['bets']} bets{pending}"),
-             stat('Cover rate', pct(rate, 1), f"{meter}−110 reference {pct(BREAK_EVEN, 1)} · pushes excluded",
+             stat('Cover rate', pct(rate, 1), f"{meter}Break-even {pct(BREAK_EVEN, 1)} at −110 · pushes excluded",
                   '' if not math.isfinite(rate) else 'good' if rate > BREAK_EVEN else 'bad'),
              stat('Estimated units' if r['closing_estimates']+r['assumed_prices'] else 'Units', units_text(r['units']),
                   f"{r['priced_bets']} 1-unit stakes", tone(r['units'])),
              stat('Estimated ROI' if r['closing_estimates']+r['assumed_prices'] else 'ROI', roi_short(r['roi']),
-                  f"{roi_uncertainty(r['roi_se'])} · pooled stakes · pushes included", tone(r['roi']))]
+                  f"Profit per unit staked · {roi_uncertainty(r['roi_se'])}", tone(r['roi']))]
     return f"<div class='gr-summary'>{''.join(tiles)}</div>" + pricing_note(frame)
 
 
@@ -914,11 +954,30 @@ def pricing_note(frame):
     if 'ats_price_basis' not in frame:
         return "<p class='mut small'>−110 reference pricing.</p>"
     r = season_ats.summary(frame)
-    return (f"<p class='gr-note'>ESPN pricing: <b>{r['prelock_prices']} pre-lock</b> · "
+    return (f"<details class='gr-note how'><summary>How returns are priced</summary>"
+            f"<p>ESPN pricing: <b>{r['prelock_prices']} pre-lock</b> · "
             f"<b>{r['closing_estimates']} closing estimates</b> · <b>{r['assumed_prices']} assumed −110</b>. "
             "Prices must match the saved side and handicap. Closing estimates could differ from lock-time prices. "
             "Picks without a matching ESPN price are included at an assumed −110 in pooled units and ROI. "
-            "The 52.4% break-even marker is a −110 reference; actual thresholds vary with price.</p>")
+            "Pushes count as stakes in ROI. The 52.4% break-even marker is a −110 reference; actual thresholds vary with price.</p></details>")
+
+
+def record_line(frame, label, link=True):
+    """One-line season summary for pages whose main content is not the record."""
+    if frame is None or frame.empty:
+        return ''
+    r = season_ats.summary(frame)
+    if not r['bets']:
+        return (f"<p class='rec-line'><span class='l'>{esc(label)}</span>"
+                f"<span class='mut'>No graded picks yet · break-even {pct(BREAK_EVEN, 1)} at −110</span></p>")
+    rate = num(r['cover_rate'])
+    tone = lambda x: '' if not math.isfinite(num(x)) or num(x) == 0 else 'pos-tx' if num(x) > 0 else 'neg-tx'
+    more = " <a href='grades.html'>All results →</a>" if link else ''
+    return (f"<p class='rec-line'><span class='l'>{esc(label)}</span>"
+            f"<b class='mono'>{r['wins']}–{r['losses']}–{r['pushes']}</b>"
+            f"<span>{pct(rate, 1)} covered <span class='mut'>(break-even {pct(BREAK_EVEN, 1)} at −110)</span></span>"
+            f"<b class='mono {tone(r['units'])}'>{units_text(r['units'])}</b>"
+            f"<span class='mut'>ROI {roi_short(r['roi'])}</span>{more}</p>")
 
 
 def game_rows(group):
@@ -960,7 +1019,8 @@ def render_ats_games(latest):
     groups = list(games.groupby(['season', 'week'], sort=True))
     for i, ((season, week), group) in enumerate(reversed(groups)):
         stats = season_ats.summary(group)
-        label = (f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]} · {stats["skips"]} skips'
+        skips = f' · {stats["skips"]} skip{"s" if stats["skips"] != 1 else ""}' if stats['skips'] else ''
+        label = (f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]}{skips}'
                  f"<span class='rt'>{units_text(stats['units']) if stats['bets'] else '—'}</span>")
         parts.append(folded(label, table(['Game', 'ATS pick', 'Odds', 'Model', 'Final', 'Result', 'Units'],
                                          game_rows(group), num_cols=(4, 6)), i == 0))
@@ -1080,13 +1140,17 @@ def units_chart(frame):
             f"<span class='v {tone}'>{units_text(run[-1])}</span></div>{''.join(out)}</div>")
 
 
+MIN_ROI_BETS = 5  # a week's ROI from fewer bets is noise, not a rate
+
+
 def weekly_table(frame):
     rows = []
     for week, group in frame.groupby('week', sort=True):
         v = season_ats.summary(group)
         rows.append([f'Week {int(week)}', f'{v["wins"]}–{v["losses"]}–{v["pushes"]}', pct(v['cover_rate'], 1),
                      f"{v['quoted_bets']} / {v['assumed_prices']}", str(v['pending']), units_text(v['units']) if v['bets'] else '—',
-                     f"{roi_short(v['roi'])}<div class='mut small'>{roi_uncertainty(v['roi_se'])}</div>"])
+                     (f"{roi_short(v['roi'])}<div class='mut small'>{roi_uncertainty(v['roi_se'])}</div>"
+                      if v['bets'] >= MIN_ROI_BETS else f"—<div class='mut small'>{v['bets']} bet{'s' if v['bets'] != 1 else ''} so far</div>")])
     return ("<h2 class='sec'>By week</h2>" +
             table(['Week', 'ATS W–L–P', 'Cover rate', 'ESPN / assumed', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
 
@@ -1111,12 +1175,12 @@ def render_calibration(latest, ledger, built):
     if latest is None or frame.empty:
         parts.append("<p class='mut'>No ATS results yet.</p>")
     else:
-        parts.append(record_tiles(frame, f'{season} record'))
+        parts.append(record_line(frame, f'{season} record'))
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
         parts.append(downloads(latest))
-    parts.append("<h2 class='sec'>How picks work</h2><ol class='steps'>" +
+    parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>" +
                  ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 

@@ -242,7 +242,9 @@ def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
 def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
-    assert "Injury reports aren't final for 1 game yet" in html and "Report pending" in html
+    assert "Injury reports aren't final for 1 game yet" in html and "injury reports pending" in html
+    assert "Report pending" not in html and "Can still change" in html  # one status per card
+    assert html.index("This week’s games") < html.index("How returns are priced")  # board before the fine print
     assert "TB QB: J.Daniels" in html and "Market DAL −9.5" in html
     assert "Final 20–27" in html and "Moneyline result" not in html
     assert "pts off market" not in html and "Largest drivers" not in html
@@ -512,7 +514,7 @@ def test_cards_show_separate_picks_without_research_cohorts(tmp_path,monkeypatch
     text=(out/'index.html').read_text()
     assert "<span class='kind'>ATS pick</span>" in text
     assert "<span class='kind'>Moneyline</span>" not in text
-    assert 'point difference' in text
+    assert 'Model differs by' in text
     assert 'Historical reference' not in text and 'At this price' not in text
     assert 'model win probability' not in text and 'Recorded moneyline results' not in text
 
@@ -579,7 +581,10 @@ def test_public_ats_roi_uncertainty_includes_pushes_and_is_unavailable_for_one_b
     # Returns 10/11, -1, 0 have sample-mean SE sqrt(331)/33.
     expected = f'± {100*math.sqrt(331)/33:.1f} pp SE'
     assert expected in b.record_tiles(frame,'Season')
-    assert expected in b.weekly_table(frame)
+    # A week with fewer than MIN_ROI_BETS bets shows no ROI rate at all.
+    assert expected not in b.weekly_table(frame) and '3 bets so far' in b.weekly_table(frame)
+    five = pd.concat([frame.iloc[:2]] * 3, ignore_index=True).iloc[:5]
+    assert 'pp SE' in b.weekly_table(five) and 'so far' not in b.weekly_table(five)
     assert b.ats_comparison_tiles(frame).count(expected) == 3
     assert 'SE unavailable' in b.record_tiles(frame.iloc[:1],'One pick')
     assert 'nan' not in b.weekly_table(frame.iloc[:1]).lower()
