@@ -2,3 +2,4 @@
 {"candidate_sha256": "c2f7a94d9773ab997ebbd4e87ebc4954305194f396c58fccd20f5307630fbc4d", "commit": "e20b3f3cd0f63a51f315e8e39190151d4c79bcb8", "committed_utc": "2026-11-20T00:06:58+00:00", "timestamp_basis": "server commit upper-second bound"}
 {"candidate_sha256": "24bceceecf480f989fdfd48fc827a1e6e9c061675f5b24fa6ffe5be9e41d2624", "commit": "e681fb7acbef97c3d6ca0c67e5d9fe84d4df8f04", "committed_utc": "2026-11-20T00:08:31+00:00", "timestamp_basis": "server commit upper-second bound"}
 {"candidate_sha256": "c8c164728b9fa2e6cbcc2983b801e4518f0d4b90d46f690bd64e89bd03f1830c", "commit": "edae1391627cab2f302d4547264c43cb7564a904", "committed_utc": "2026-11-20T00:10:04+00:00", "timestamp_basis": "server commit upper-second bound"}
+{"candidate_sha256": "663a4c5aa280ff94807d6bef5f468a8b0c76ed8b3fe55d23d03f29a19c41ae67", "commit": "52f3eb274714d4dff8791190bc8509711a05ecb8", "committed_utc": "2026-11-20T00:11:37+00:00", "timestamp_basis": "server commit upper-second bound"}
