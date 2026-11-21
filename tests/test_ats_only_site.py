@@ -57,7 +57,8 @@ class ATSOnlySite(unittest.TestCase):
                 self.assertIn('Picks',text)
                 grades=self.pool.fixed_band_ats_result
                 record='–'.join(str(int(grades.eq(k).sum())) for k in 'WLP')
-                self.assertIn(record,text)
+                if page!='index.html':  # Picks keeps a compact header; the record is on Results (2026-11-21)
+                    self.assertIn(record,text)
                 for banned in ('moneyline','win probability','win probabilities','model confidence','no-vig'):
                     self.assertNotIn(banned,text.lower())
                 self.assertNotRegex(text,r'\bnan\b|\bNaN\b|\bNone\b')

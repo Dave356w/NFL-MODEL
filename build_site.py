@@ -400,6 +400,7 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .pick-lines .edge.tie{border-color:var(--line);background:var(--surface-2);color:var(--muted)}
 .pick-lines .px{font:600 13px/1 var(--mono);color:var(--muted);margin-left:8px;letter-spacing:0}
 .moved{font:600 12px/1.4 var(--sans);color:rgb(var(--lean-tx));margin-top:4px}
+.gr-head+.primer{margin-top:-8px}
 .primer ul{margin:8px 0 0;padding-left:18px}.primer li{margin:4px 0}
 .foot .disclaimer{flex-basis:100%}
 .record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
@@ -806,16 +807,11 @@ def render_index(latest, ledger, built, now=None):
     has_avail = (man.get('recipe') or {}).get('family', '') in m.AVAIL_FAMILIES
     stamp = pd.to_datetime(man.get('generated_utc'), utc=True, errors='coerce')
     local = stamp.tz_convert(PT) if pd.notna(stamp) else None
-    updated = (f"<div class='record'><div class='l'>Forecast updated</div><div class='mono'>"
-               f"<time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
-               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time></div></div>" if local is not None else '')
-    parts = [head(f'Week {week} picks',
-                  'Against-the-spread picks from the model’s projected spread. Picks can change until they lock '
-                  '60 minutes before kickoff. Tap a game for spreads, quarterbacks and injury reports. '
-                  "<a href='market-calibration.html#how'>How picks work</a>",
-                  f'{season} regular season', updated)]
-    parts.append(record_line(public_ats(latest), f'{season} record'))
-    parts.append(SPREAD_PRIMER)
+    # A compact header: the season record lives on Results and the explanation in "How picks work".
+    updated = (f"Updated <time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
+               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time> · " if local is not None else '')
+    parts = [head(f'Week {week} picks', f"{updated}<a href='market-calibration.html#how'>How picks work</a>",
+                  f'{season} regular season'), SPREAD_PRIMER]
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -1274,7 +1270,9 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
-    parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>" +
+    parts.append("<h2 class='sec' id='how'>How picks work</h2><p class='sec-lead'>Against-the-spread picks from the "
+                 "model’s projected spread. Picks can change until they lock 60 minutes before kickoff. On Picks, tap a "
+                 "game for spreads, quarterbacks and injury reports.</p><ol class='steps'>" +
                  ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 

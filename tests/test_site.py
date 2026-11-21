@@ -700,3 +700,16 @@ def test_locked_card_shows_price_and_flags_a_moved_line():
     assert b.locked_line_html(dict(row, spread_line=16.5), state, final=False) == ''   # unchanged line
     assert b.locked_line_html(row, dict(state, status='provisional'), final=False) == ''  # not locked yet
     assert b.locked_line_html(row, state, final=True) == ''                              # game over
+
+
+def test_picks_header_is_compact(tmp_path):
+    """Owner request 2026-11-21: no season record or intro paragraph above the board."""
+    out, _ = render(tmp_path)
+    index = (out / "index.html").read_text()
+    body = index[index.index("<main"):]
+    top = body[:body.index("This week’s games")]
+    assert "rec-line" not in top and "Forecast updated" not in top and "Tap a game" not in top
+    assert "Updated <time" in top and "href='market-calibration.html#how'" in top
+    perf = (out / "market-calibration.html").read_text()
+    how = perf[perf.index("id='how'"):]
+    assert "Picks can change until they lock 60 minutes before kickoff" in how and "tap a game" in how
