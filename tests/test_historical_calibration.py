@@ -129,7 +129,7 @@ def test_render_has_four_views_season_filter_and_aggregate_only_download():
     source = latest([game('a', 2023), game('b', 2024), game('c', 2025), game('d')])
     pack = c.build(source)
     html = b.render_historical_calibration(source, 'test', pack)
-    assert "href='historical-calibration.html' aria-current=\"page\"" in html
+    assert "href='market-calibration.html'>← Performance" in html
     assert 'Win probability vs actual win rate' in html and 'Market favorite' in html and 'Model favorite' in html
     assert 'Split by favorite at home or away' in html and 'ATS ROI by spread band' in html
     # The page shows only the four favorite bands; the CSV keeps all eight two-sided bands.
