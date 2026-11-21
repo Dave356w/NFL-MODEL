@@ -1,9 +1,9 @@
-NFL forward ledger report -- 2026-11-21 00:08 UTC
+NFL forward ledger report -- 2026-11-21 00:56 UTC
 Source: data/forward_predictions.jsonl (first pregame snapshot per game and experiment).
 Basis: native forward observations only; no reconstructed or backfilled rows.
 Proper scores against the market probability saved in each snapshot. ATS results follow below.
 
-== boxscore-composite-v1.25: 11 snapshots, 2 graded, 9 pending, 0 ties
+== boxscore-composite-v1.25: 12 snapshots, 2 graded, 10 pending, 0 ties
   Scored rows (graded, market present): 2
   Model picks  1-1 (.500)
   Market picks 1-1 (.500)
@@ -88,12 +88,12 @@ Appendix B: original snapshots replayed with the current model (from data/latest
 
 Reconstructed predictions at each original snapshot moneyline. Original snapshots are unchanged. This is hindsight, not native forward evidence.
 
-Snapshots: 182; unique games: 96. Repeated snapshots are not independent games.
+Snapshots: 183; unique games: 97. Repeated snapshots are not independent games.
 Summary uses the earliest original snapshot per game, globally and within each original revision. Revision groups overlap and must not be pooled.
 Ties push in returns and are excluded from binary scores. Pending games remain ungraded. Market baseline uses each snapshot moneyline.
 
                    group  games  pending  wins  losses  pushes     units       roi   roi_se  market_null_roi  favorite_units  favorite_roi  binary_games  log_loss  market_log_loss    brier  market_brier
-        All unique games     96        9    60      26       1  1.719522  0.019765 0.074053        -0.040925        4.268232      0.049631            86  0.592697         0.588982 0.201954      0.199869
+        All unique games     97       10    60      26       1  1.719522  0.019765 0.074053        -0.040925        4.268232      0.049631            86  0.592697         0.588982 0.201954      0.199869
 boxscore-composite-v1.12      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040264       -1.000000     -1.000000             1  1.573241         1.567153 0.628259      0.626253
 boxscore-composite-v1.13      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040000       -1.000000     -1.000000             1  1.615592         1.609438 0.641965      0.640000
 boxscore-composite-v1.14      1        0     0       1       0 -1.000000 -1.000000      NaN        -0.040785       -1.000000     -1.000000             1  1.657296         1.651078 0.655041      0.653118
@@ -103,7 +103,7 @@ boxscore-composite-v1.18     42        0    27      15       0 -1.269387 -0.0302
 boxscore-composite-v1.21     12        0    11       1       0  3.401299  0.283442 0.127535        -0.040811        3.401299      0.283442            12  0.432219         0.416427 0.129110      0.121994
 boxscore-composite-v1.22      3        0     2       1       0  0.150212  0.050071 0.526591        -0.040664        0.150212      0.050071             3  0.644147         0.606555 0.225693      0.207752
 boxscore-composite-v1.24     12        0     8       4       0 -0.847620 -0.070635 0.203177        -0.040942       -0.847620     -0.070635            12  0.538290         0.567759 0.180500      0.194033
-boxscore-composite-v1.25     11        9     1       1       0 -0.857143 -0.428571 0.571429        -0.039805       -0.857143     -0.428571             2  0.593872         0.639740 0.213287      0.236514
+boxscore-composite-v1.25     12       10     1       1       0 -0.857143 -0.428571 0.571429        -0.039805       -0.857143     -0.428571             2  0.593872         0.639740 0.213287      0.236514
 
        original_revision         game_id  original_model_wp  model_wp bet_result  bet_units
 boxscore-composite-v1.12  2026_05_TB_DAL           0.644547  0.792628          L  -1.000000
@@ -288,6 +288,7 @@ boxscore-composite-v1.25  2026_11_NO_CHI           0.834330  0.834330           
 boxscore-composite-v1.25 2026_11_NYJ_LAC           0.594282  0.594282                   NaN
 boxscore-composite-v1.25 2026_11_PIT_PHI           0.341970  0.341970                   NaN
 boxscore-composite-v1.25  2026_11_TB_DET           0.622166  0.622166                   NaN
+boxscore-composite-v1.25  2026_11_MIN_SF           0.413489  0.413489                   NaN
 
 
 Appendix C: current production sanity checks
@@ -339,7 +340,7 @@ Historical replay: median ATS on every game opportunity:
   2026: ATS 84-60-6, 0 skips, 150/150 selected, +16.36u, ROI +10.91% +/- 7.56pp (1 SE)
     Binary proper scores n=149: log loss 0.616110, market 0.615257; Brier 0.212649; tied finals excluded from binary scoring.
 
-Native boxscore-composite-v1.25 forward snapshots: {"graded": 2, "pending": 9, "snapshots": 11, "ties": 0}
+Native boxscore-composite-v1.25 forward snapshots: {"graded": 2, "pending": 10, "snapshots": 12, "ties": 0}
 Primary 60-minute ATS capture: {"backfilled_skips": 0, "candidates": 334, "original_selections": 59, "original_skips": 0, "policy": "median-mov-weekly-decay-ats-t60-favtie-2026-11-04-v3", "recovered_saved_forecasts": 2, "timed_locks": 57}
 Only timed ATS locks provide native forward ATS evidence. Original skips are decisions, not recorded bets; retrospectively backfilled favorite bets are excluded from forward evidence.
 Recovered saved forecasts retain pre-cutoff inputs but were finalized after kickoff; they are reported separately from pregame-finalized forward locks.
@@ -424,10 +425,10 @@ Store validation: PASS; 334 saved candidates, 59 finalized saved decisions.
 2026 pooled ATS overview: one row per game; saved ATS decisions override replay.
 Priority: timed/earlier ATS archive, pre-adoption pregame snapshot replay, historical replay.
 Snapshot replay is not a registered ATS forecast; post-adoption missing locks are not reconstructed.
-Record 85-60-6, 0 skips, 9 pending, 0 unavailable; +17.33u, ROI +11.48%.
+Record 85-60-6, 0 skips, 10 pending, 0 unavailable; +17.33u, ROI +11.48%.
 ESPN exact-handicap pricing: 2 pre-lock, 121 closing estimates, 28 assumed -110, 0 unpriced; ROI denominator 151 1u stakes (pushes included). Missing or mismatched ESPN prices use labelled -110 assumptions in the pooled estimate. Closing estimates and assumed prices are not verified lock-time returns.
   60-minute lock: 1-1-0, 0 skips, 0 pending, 0 unavailable; -0.06u
-  Awaiting ATS lock: 0-0-0, 0 skips, 9 pending, 0 unavailable; +0.00u
+  Awaiting ATS lock: 0-0-0, 0 skips, 10 pending, 0 unavailable; +0.00u
   Historical replay: 84-59-6, 0 skips, 0 pending, 0 unavailable; +17.39u
 This mixed-basis season total is descriptive, not a pooled native-forward claim.
 
