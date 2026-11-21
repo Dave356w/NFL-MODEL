@@ -673,3 +673,30 @@ def test_units_chart_has_a_phone_sized_drawing():
     assert "<svg class='wide'" in html and "<svg class='narrow'" in html
     narrow = html.split("<svg class='narrow'")[1]
     assert "viewBox='0 0 340 190'" in narrow and '<title>' not in narrow and 'Pick 3' in narrow
+
+
+def test_pages_have_previews_icon_disclaimer_and_local_times(tmp_path):
+    """Owner request 2026-11-21: link previews, a tab icon, a disclaimer and viewer-local times."""
+    out, _ = render(tmp_path)
+    for name in ("index.html", "grades.html", "market-calibration.html", "historical-calibration.html"):
+        html = (out / name).read_text()
+        assert "<meta property='og:title'" in html and "<meta property='og:description'" in html, name
+        icon = re.search(r'rel=\'icon\' type=\'image/svg\+xml\' href="(data:image/svg\+xml,[^"]+)"', html)
+        assert icon and "#" not in icon.group(1), name  # an unencoded '#' truncates the icon
+        assert "1-800-GAMBLER" in html and "not betting advice" in html, name
+        assert "time[data-local]" in html, name
+    index = (out / "index.html").read_text()
+    assert re.search(r"<time datetime='\d{4}-\d\d-\d\dT\d\d:\d\d:00Z' data-local>\w{3} \d{1,2}:\d\d [AP]M P[DS]T</time>", index)
+    assert "New to spread betting?" in index and "52.4% of decided bets" in index
+    assert re.search(r"<meta name='description' content='Week \d+ against-the-spread picks", index)
+
+
+def test_locked_card_shows_price_and_flags_a_moved_line():
+    row = dict(game_id='g', season=2026, week=7, away='ARI', home='KC', gameday='2026-10-25', gametime='13:00',
+               spread_line=15.5, result=float('nan'))
+    state = dict(status='locked', selected_side='away', selected_team='ARI', ats_price=-108., spread_line=16.5)
+    html = b.locked_line_html(row, state, final=False)
+    assert 'Line now ARI +15.5 · graded at the locked line' in html
+    assert b.locked_line_html(dict(row, spread_line=16.5), state, final=False) == ''   # unchanged line
+    assert b.locked_line_html(row, dict(state, status='provisional'), final=False) == ''  # not locked yet
+    assert b.locked_line_html(row, state, final=True) == ''                              # game over

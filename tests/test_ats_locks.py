@@ -333,7 +333,8 @@ class TimedATS(unittest.TestCase):
         latest = self.latest()
         latest['board']['result'] = float('nan')
         html = b.render_index(latest, pd.DataFrame(), 'test', CUTOFF-dt.timedelta(minutes=5))
-        self.assertIn('Locks Sun 9:00 AM PDT', html)
+        # Pacific text inside a <time> the page script localizes for each viewer.
+        self.assertIn(f"Locks <time datetime='{CUTOFF.astimezone(dt.timezone.utc):%Y-%m-%dT%H:%M:%SZ}' data-local>Sun 9:00 AM PDT</time>", html)
 
     def test_fast_poll_is_limited_to_ats_window_even_without_moneyline_locks(self):
         game = dict(game_id='g', gameday='2026-10-25', gametime='13:00', game_type='REG', result='')

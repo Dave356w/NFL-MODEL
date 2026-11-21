@@ -34,6 +34,7 @@ import os
 import shutil
 import sys
 from html import escape
+from urllib.parse import quote
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -397,6 +398,10 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .pick-lines .edge{border:1px solid rgba(var(--accent),.4);background:rgba(var(--accent),.09);color:rgb(var(--accent-tx));
   border-radius:var(--r-pill);padding:3px 8px;font-weight:700}
 .pick-lines .edge.tie{border-color:var(--line);background:var(--surface-2);color:var(--muted)}
+.pick-lines .px{font:600 13px/1 var(--mono);color:var(--muted);margin-left:8px;letter-spacing:0}
+.moved{font:600 12px/1.4 var(--sans);color:rgb(var(--lean-tx));margin-top:4px}
+.primer ul{margin:8px 0 0;padding-left:18px}.primer li{margin:4px 0}
+.foot .disclaimer{flex-basis:100%}
 .record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
 /* chart */
 .chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px 18px 10px;margin:0 0 12px}
@@ -505,6 +510,12 @@ var url=new URL(location.href);url.searchParams.set('_v',state.version);location
 setInterval(check,60000);document.addEventListener('visibilitychange',check);
 })();</script>"""
 
+# Viewer-local times; the formatted Pacific text stays if Intl is unavailable.
+LOCAL_TIME_JS = """<script>(function(){try{var o={weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'},
+f=new Intl.DateTimeFormat([],o),g=new Intl.DateTimeFormat([],Object.assign({month:'short',day:'numeric'},o));
+document.querySelectorAll('time[data-local]').forEach(function(t){var d=new Date(t.getAttribute('datetime'));
+if(!isNaN(d))t.textContent=(t.getAttribute('data-local')==='date'?g:f).format(d).replace(/,/g,'');});}catch(e){}})();</script>"""
+
 THEME_ICON = ("<svg class='sun' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
               "<circle cx='12' cy='12' r='4'/><path d='M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4'/></svg>"
               "<svg class='moon' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' aria-hidden='true'>"
@@ -530,13 +541,27 @@ def font_face_css(assets=ASSETS):
     return "".join(out)
 
 
-def html_document(body, title, current, built, scripts="", extra_css=""):
+DEFAULT_DESCRIPTION = 'NFL against-the-spread picks, locked 60 minutes before kickoff, with season results.'
+DISCLAIMER = ('For information only; not betting advice. Must be 21+ and in a legal jurisdiction to bet. '
+              'Gambling problem? Call 1-800-GAMBLER.')
+# The brand mark as the browser-tab icon, embedded so it needs no extra file.
+ICON = "data:image/svg+xml," + quote(
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='16' fill='#09785e'/>"
+    "<text x='32' y='42' font-family='Arial,sans-serif' font-size='26' font-weight='800' fill='#fff' "
+    "text-anchor='middle'>NF</text></svg>", safe="/:=,'() ")  # '#' must be encoded in a data URI
+
+
+def html_document(body, title, current, built, scripts="", extra_css="", description=DEFAULT_DESCRIPTION):
     nav = "".join(f"<a href='{href}'{' aria-current=\"page\"' if href == current else ''} title='{esc(PAGE_HELP.get(href, ''))}'>{label}</a>"
                   for href, label in PAGES)
     return ("<!doctype html><html lang='en'><head><meta charset='utf-8'>"
             "<meta name='viewport' content='width=device-width,initial-scale=1'>"
             "<meta name='site-version' content='__NFL_SITE_VERSION__'>"
-            f"<title>{esc(title)}</title><meta name='description' content='NFL ATS picks, locked handicaps and season results'>"
+            f"<title>{esc(title)}</title><meta name='description' content='{esc(description)}'>"
+            f"<link rel='icon' type='image/svg+xml' href=\"{ICON}\">"
+            f"<meta property='og:type' content='website'><meta property='og:site_name' content='{SITE_NAME}'>"
+            f"<meta property='og:title' content='{esc(title)}'><meta property='og:description' content='{esc(description)}'>"
+            "<meta name='twitter:card' content='summary'>"
             "<meta name='color-scheme' content='light dark'>"
             f"{THEME_JS}<style>{font_face_css()}{CSS}{extra_css}</style></head><body><a class='skip-link' href='#main-content'>Skip to content</a><div class='mx-wrap'>"
             f"<header class='topbar'><a class='brand' href='index.html'><span class='brand-mark' aria-hidden='true'>NF</span>{SITE_NAME}</a>"
@@ -545,7 +570,8 @@ def html_document(body, title, current, built, scripts="", extra_css=""):
             f"<main id='main-content'>{body}</main>"
             f"<footer class='foot'><span>Updated <span class='stamp'>{esc(built)}</span> · model {esc(m.REVISION.rsplit('-', 1)[-1])}</span>"
             "<span>Flat 1-unit stakes. ESPN prices and assumed −110 prices are labelled; returns are estimates.</span>"
-            f"</footer></div>{scripts}{REFRESH_JS}</body></html>")
+            f"<span class='disclaimer'>{DISCLAIMER}</span>"
+            f"</footer></div>{scripts}{LOCAL_TIME_JS}{REFRESH_JS}</body></html>")
 
 
 def head(title, lead, eyebrow="", aside=""):
@@ -575,9 +601,25 @@ def table(heads, rows, num_cols=(), table_class=''):
 # Public pages carry W-L, win % and ROI only. Standard errors, no-vig q, excess,
 # log loss and recipe details stay in data/ledger_report.txt and data/latest/.
 
+def pt_text(when):
+    return when.astimezone(PT).strftime("%a %-I:%M %p %Z")
+
+
+def local_time(when):
+    """A Pacific time that the page script rewrites into the viewer's own zone.
+    Without script (and for crawlers) the Pacific text stands."""
+    utc = pd.Timestamp(when).tz_convert('UTC')
+    return f"<time datetime='{utc.strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local>{esc(pt_text(utc))}</time>"
+
+
 def kickoff_text(r):
     ko = m.kickoff_utc(r)
-    return ko.astimezone(PT).strftime("%a %-I:%M %p %Z") if ko else "TBD"
+    return pt_text(ko) if ko else "TBD"
+
+
+def kickoff_html(r):
+    ko = m.kickoff_utc(r)
+    return local_time(ko) if ko else "TBD"
 
 
 def ml_text(ml):
@@ -690,15 +732,15 @@ def ats_card_state(latest, row, now):
                     completed = candidate
     ko = m.kickoff_utc(row)
     cutoff = ats_locks.deadline(ko) if ko is not None else None
-    source, status, note = 'Provisional', 'provisional', ''
+    source, status, note, note_at = 'Provisional', 'provisional', '', None
     if saved is not None:
         ms, line = num(saved['fixed_band_spread']), num(saved['market_spread'])
         status = 'locked'
         source = ('Owner-requested retro lock' if saved.get('retro_locked')
                   else 'Recovered saved forecast' if saved.get('recovered_after_kickoff')
                   else 'Earlier recorded pick' if saved.get('legacy_lock') else '60-minute lock')
-        when = ats_locks.utc(saved['lock_at_utc']).astimezone(PT).strftime('%a %-I:%M %p %Z')
-        note = f'ATS locked {when}'
+        note_at = ats_locks.utc(saved['lock_at_utc'])
+        note = f'ATS locked {pt_text(note_at)}'
     elif completed is not None:
         # The season pool already owns this completed selection. Never use a
         # refreshed postgame line/probability to recreate the public result.
@@ -707,8 +749,8 @@ def ats_card_state(latest, row, now):
     elif cutoff is not None and now >= cutoff:
         status, source, note = 'unavailable', 'No saved ATS selection', 'ATS lock unavailable'
     elif cutoff is not None:
-        when = cutoff.astimezone(PT).strftime('%a %-I:%M %p %Z')
-        note = f'Locks {when}'
+        note_at = cutoff
+        note = f'Locks {pt_text(note_at)}'
     else:
         note = 'Lock time pending · kickoff unconfirmed'
     if saved is not None and ats_locks.backfilled(saved):
@@ -737,10 +779,21 @@ def ats_card_state(latest, row, now):
             price_info = {name: matches.iloc[0].get(name) for name in
                           ('ats_price', 'ats_price_basis', 'ats_book', 'ats_quote_utc')}
     return dict(model_spread=ms, spread_line=line, pick=pick, gap=gap, status=status,
-                source=source, note=note, saved=saved, result=grade, units=units,
+                source=source, note=note, note_at=note_at, saved=saved, result=grade, units=units,
                 display_row=display_row, **price_info,
                 selected_side=side, selected_team=row[side] if side else '',
                 handicap=(-line if side == 'home' else line) if side else math.nan)
+
+
+def locked_line_html(row, state, final):
+    """After lock, note when the market has moved off the saved handicap. Display only:
+    the saved line and price stay the bet."""
+    current, line = num(row.get('spread_line')), num(state.get('spread_line'))
+    if (state.get('status') != 'locked' or final or not state.get('selected_side')
+            or not math.isfinite(current) or not math.isfinite(line) or abs(current - line) <= fixed_bands.EPS):
+        return ''
+    return (f"<div class='moved'>Line now {esc(state['selected_team'])} "
+            f"{spread_text(current, state['selected_side'] == 'home')} · graded at the locked line</div>")
 
 
 def render_index(latest, ledger, built, now=None):
@@ -754,13 +807,15 @@ def render_index(latest, ledger, built, now=None):
     stamp = pd.to_datetime(man.get('generated_utc'), utc=True, errors='coerce')
     local = stamp.tz_convert(PT) if pd.notna(stamp) else None
     updated = (f"<div class='record'><div class='l'>Forecast updated</div><div class='mono'>"
-               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</div></div>" if local is not None else '')
+               f"<time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
+               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time></div></div>" if local is not None else '')
     parts = [head(f'Week {week} picks',
                   'Against-the-spread picks from the model’s projected spread. Picks can change until they lock '
                   '60 minutes before kickoff. Tap a game for spreads, quarterbacks and injury reports. '
                   "<a href='market-calibration.html#how'>How picks work</a>",
                   f'{season} regular season', updated)]
     parts.append(record_line(public_ats(latest), f'{season} record'))
+    parts.append(SPREAD_PRIMER)
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -821,8 +876,12 @@ def render_index(latest, ledger, built, now=None):
         else:
             edge = ("<span class='edge tie' title='The model matches the line exactly; ties take the market favorite.'>"
                     "Matches line · favorite</span>")
+        price = num(state.get('ats_price'))
+        price_html = (f"<span class='px' title='Spread price used for grading'>{ml_text(price)}</span>"
+                      if state['status'] in ('locked', 'graded') and state['selected_side'] and math.isfinite(price) else '')
+        moved = locked_line_html(row, state, final)
         pick = (f"<div class='pick-lines'><span class='kind'>ATS pick</span>"
-                f"<span class='pk{'' if state['selected_side'] else ' na'}'>{state['pick']}</span>{edge}</div>")
+                f"<span class='pk{'' if state['selected_side'] else ' na'}'>{state['pick']}{price_html}</span>{edge}</div>{moved}")
         spreads = (f"<span>Model {favorite_spread_text(ms, home, away)}</span>"
                    + (f" · <span>Market {favorite_spread_text(line, home, away)}</span>" if math.isfinite(line) else ''))
 
@@ -835,11 +894,14 @@ def render_index(latest, ledger, built, now=None):
                     f"<small>{'@ ' if side == 'home' else ''}{esc(code)}</small></span>"
                     f"<span class='ln'>{spread_text(line, side == 'home')}</span>{sc}</div>")
 
-        summary = (f"<summary class='game-summary'><div class='g-meta'><span class='when'>{esc(kickoff_text(row))}</span>{status}</div>"
+        note_html = esc(state['note'])
+        if state.get('note_at') is not None:
+            note_html = note_html.replace(esc(pt_text(state['note_at'])), local_time(state['note_at']))
+        summary = (f"<summary class='game-summary'><div class='g-meta'><span class='when'>{kickoff_html(row)}</span>{status}</div>"
                    f"<div class='g-teams'>{team(away, 'away')}{team(home, 'home')}</div>{pick}"
                    f"<div class='mk sp'>{spreads}</div>"
                    f"{f'<div class=flags>{chr(32).join(flags)}</div>' if flags else ''}"
-                   f"<div class='g-note'>{esc(state['note'])}{' · injury reports pending' if pending(row) else ''}</div></summary>")
+                   f"<div class='g-note'>{note_html}{' · injury reports pending' if pending(row) else ''}</div></summary>")
         detail = ["<div class='detail'><h3>Spreads</h3>", table(['', esc(away), esc(home)], [
             ['Model spread', spread_text(ms, False), spread_text(ms, True)],
             ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]
@@ -871,7 +933,23 @@ def render_index(latest, ledger, built, now=None):
                  f"is the pick. Saved handicaps and selections stay fixed after lock.</p>"
                  + pricing_note(public_ats(latest)) +
                  "<p><a href='grades.html'>View ATS results →</a></p>")
-    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS)
+    share = f'Week {week} against-the-spread picks, locked 60 minutes before kickoff.'
+    pool = public_ats(latest)
+    if len(pool):
+        r = season_ats.summary(pool)
+        if r['bets']:
+            share += f" {season}: {r['wins']}–{r['losses']}–{r['pushes']}, {units_text(r['units'])}."
+    return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS,
+                         description=share)
+
+SPREAD_PRIMER = (
+    "<details class='gr-note how primer'><summary>New to spread betting?</summary><ul>"
+    "<li><b>The spread</b> evens out a game. ARI +16.5 wins if Arizona wins or loses by 16 or fewer; "
+    "KC −16.5 wins only if Kansas City wins by 17 or more. A margin landing exactly on a whole-number line is a push and the stake is returned.</li>"
+    "<li><b>Covered</b> means the pick won against the spread, whatever the final winner.</li>"
+    "<li><b>−110</b> means risking 1.10 to win 1.00. At that price a pick needs to win about 52.4% of decided bets to break even.</li>"
+    "<li><b>Units</b> are the profit or loss from staking 1 unit on every pick. ROI is that profit divided by the total staked.</li>"
+    "</ul></details>")
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1015,7 +1093,7 @@ def game_rows(group):
                        'closing_estimate': '', 'assumed_minus110': 'assumed'}.get(r.get('ats_price_basis'), 'unpriced')
         tone = 'pos-tx' if units > 0 else 'neg-tx' if units < 0 else ''
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
-        when = f"<div class='mut small'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</div>" if pd.notna(ko) else ''
+        when = f"<div class='mut small'>{local_time(ko)}</div>" if pd.notna(ko) else ''
         day = pd.to_datetime(r.get('gameday'), errors='coerce')
         if not when and pd.notna(day):
             when = f"<div class='mut small'>{esc(day.strftime('%a %b %-d'))}</div>"
