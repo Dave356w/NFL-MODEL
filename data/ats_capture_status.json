@@ -1,20 +1,13 @@
 {
-  "forecast_utc": "2026-11-20T19:07:53.339509+00:00",
+  "forecast_utc": "2026-11-21T00:08:25.596537+00:00",
   "games": [
     {
       "game_id": "2026_11_ARI_KC",
       "issues": [
-        "KC: automatic source checks incomplete or stale",
-        "KC: final report incomplete",
         "KC: report: source check stale or after forecast",
-        "KC: report: complete official list/report missing",
         "KC: inactive lists not ready (report-only fallback allowed at T-60)",
-        "ARI: automatic source checks incomplete or stale",
-        "ARI: final report incomplete",
         "ARI: report: source check stale or after forecast",
-        "ARI: report: complete official list/report missing",
-        "ARI: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "ARI: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -24,12 +17,8 @@
       "issues": [
         "CAR: report: source check stale or after forecast",
         "CAR: inactive lists not ready (report-only fallback allowed at T-60)",
-        "BAL: automatic source checks incomplete or stale",
-        "BAL: final report incomplete",
         "BAL: report: source check stale or after forecast",
-        "BAL: report: complete official list/report missing",
-        "BAL: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "BAL: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -61,17 +50,10 @@
     {
       "game_id": "2026_11_JAX_NYG",
       "issues": [
-        "NYG: automatic source checks incomplete or stale",
-        "NYG: final report incomplete",
         "NYG: report: source check stale or after forecast",
-        "NYG: report: complete official list/report missing",
         "NYG: inactive lists not ready (report-only fallback allowed at T-60)",
-        "JAX: automatic source checks incomplete or stale",
-        "JAX: final report incomplete",
         "JAX: report: source check stale or after forecast",
-        "JAX: report: complete official list/report missing",
-        "JAX: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "JAX: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -79,17 +61,10 @@
     {
       "game_id": "2026_11_LV_DEN",
       "issues": [
-        "DEN: automatic source checks incomplete or stale",
-        "DEN: final report incomplete",
         "DEN: report: source check stale or after forecast",
-        "DEN: report: complete official list/report missing",
         "DEN: inactive lists not ready (report-only fallback allowed at T-60)",
-        "LV: automatic source checks incomplete or stale",
-        "LV: final report incomplete",
         "LV: report: source check stale or after forecast",
-        "LV: report: complete official list/report missing",
-        "LV: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "LV: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T20:25:00+00:00",
       "state": "awaiting candidate"
@@ -97,17 +72,10 @@
     {
       "game_id": "2026_11_MIA_BUF",
       "issues": [
-        "BUF: automatic source checks incomplete or stale",
-        "BUF: final report incomplete",
         "BUF: report: source check stale or after forecast",
-        "BUF: report: complete official list/report missing",
         "BUF: inactive lists not ready (report-only fallback allowed at T-60)",
-        "MIA: automatic source checks incomplete or stale",
-        "MIA: final report incomplete",
         "MIA: report: source check stale or after forecast",
-        "MIA: report: complete official list/report missing",
-        "MIA: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "MIA: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -120,10 +88,7 @@
         "SF: report: source check stale or after forecast",
         "SF: report: complete official list/report missing",
         "SF: inactive lists not ready (report-only fallback allowed at T-60)",
-        "MIN: automatic source checks incomplete or stale",
-        "MIN: final report incomplete",
         "MIN: report: source check stale or after forecast",
-        "MIN: report: complete official list/report missing",
         "MIN: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
       ],
@@ -133,17 +98,10 @@
     {
       "game_id": "2026_11_NO_CHI",
       "issues": [
-        "CHI: automatic source checks incomplete or stale",
-        "CHI: final report incomplete",
         "CHI: report: source check stale or after forecast",
-        "CHI: report: complete official list/report missing",
         "CHI: inactive lists not ready (report-only fallback allowed at T-60)",
-        "NO: automatic source checks incomplete or stale",
-        "NO: final report incomplete",
         "NO: report: source check stale or after forecast",
-        "NO: report: complete official list/report missing",
-        "NO: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "NO: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -151,17 +109,10 @@
     {
       "game_id": "2026_11_NYJ_LAC",
       "issues": [
-        "LAC: automatic source checks incomplete or stale",
-        "LAC: final report incomplete",
         "LAC: report: source check stale or after forecast",
-        "LAC: report: complete official list/report missing",
         "LAC: inactive lists not ready (report-only fallback allowed at T-60)",
-        "NYJ: automatic source checks incomplete or stale",
-        "NYJ: final report incomplete",
         "NYJ: report: source check stale or after forecast",
-        "NYJ: report: complete official list/report missing",
-        "NYJ: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "NYJ: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T20:05:00+00:00",
       "state": "awaiting candidate"
@@ -169,17 +120,10 @@
     {
       "game_id": "2026_11_PIT_PHI",
       "issues": [
-        "PHI: automatic source checks incomplete or stale",
-        "PHI: final report incomplete",
         "PHI: report: source check stale or after forecast",
-        "PHI: report: complete official list/report missing",
         "PHI: inactive lists not ready (report-only fallback allowed at T-60)",
-        "PIT: automatic source checks incomplete or stale",
-        "PIT: final report incomplete",
         "PIT: report: source check stale or after forecast",
-        "PIT: report: complete official list/report missing",
-        "PIT: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "PIT: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T20:25:00+00:00",
       "state": "awaiting candidate"
@@ -187,17 +131,10 @@
     {
       "game_id": "2026_11_TB_DET",
       "issues": [
-        "DET: automatic source checks incomplete or stale",
-        "DET: final report incomplete",
         "DET: report: source check stale or after forecast",
-        "DET: report: complete official list/report missing",
         "DET: inactive lists not ready (report-only fallback allowed at T-60)",
-        "TB: automatic source checks incomplete or stale",
-        "TB: final report incomplete",
         "TB: report: source check stale or after forecast",
-        "TB: report: complete official list/report missing",
-        "TB: inactive lists not ready (report-only fallback allowed at T-60)",
-        "forecast availability validation failed"
+        "TB: inactive lists not ready (report-only fallback allowed at T-60)"
       ],
       "lock_at_utc": "2026-11-22T17:00:00+00:00",
       "state": "awaiting candidate"
@@ -210,10 +147,7 @@
         "DAL: report: source check stale or after forecast",
         "DAL: report: complete official list/report missing",
         "DAL: inactive lists not ready (report-only fallback allowed at T-60)",
-        "TEN: automatic source checks incomplete or stale",
-        "TEN: final report incomplete",
         "TEN: report: source check stale or after forecast",
-        "TEN: report: complete official list/report missing",
         "TEN: inactive lists not ready (report-only fallback allowed at T-60)",
         "forecast availability validation failed"
       ],
@@ -222,5 +156,5 @@
     }
   ],
   "revision": "boxscore-composite-v1.25",
-  "updated_utc": "2026-11-20T19:07:56.500511+00:00"
+  "updated_utc": "2026-11-21T00:08:28.693498+00:00"
 }
