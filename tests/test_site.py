@@ -246,7 +246,7 @@ def test_index_cards_flags_and_record(tmp_path):
     assert html.count("<span class='pending'") == 1 and "injury reports pending</span>" in html  # the one pending game
     assert "Report pending" not in html and "Can still change" in html  # one status per card
     assert html.index("This week’s games") < html.index("How returns are priced")  # board before the fine print
-    assert "TB QB: J.Daniels" in html and "Market DAL −9.5" in html
+    assert "TB QB: J.Daniels" in html and "Market has Dallas by 9.5." in html
     assert "Final 20–27" in html and "Moneyline result" not in html
     assert "pts off market" not in html and "Largest drivers" not in html
     assert html.index("Buccaneers") < html.index("Chiefs")  # upcoming game first
@@ -364,7 +364,7 @@ def test_cards_keep_game_prices_without_price_cohort_research(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
     assert 'DAL −485' not in idx and 'BUF −135' not in idx
-    assert 'Market DAL −9.5' in idx and 'ATS pick' in idx
+    assert 'Market has Dallas by 9.5.' in idx and 'ATS pick' in idx
     assert 'At this price' not in idx and 'Same games for both' not in idx
     assert 'Model documentation' not in idx
 
@@ -375,9 +375,9 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
                              cuts=[3, 7, 10], magnitudes=[4, 5, 7, 13]))
     out, _ = render(tmp_path)
     idx = (out / "index.html").read_text()
-    assert "<span>Model DAL −5.0</span> · <span>Market DAL −9.5</span>" in idx
+    assert "Model has Dallas by 5. Market has Dallas by 9.5." in idx
     assert "<td>Model spread</td><td class=n>+5.0</td><td class=n>−5.0</td>" in idx
-    assert "Model DAL −3.1" not in idx
+    assert "Model has Dallas by 3.1." not in idx
     assert "<td>Market spread</td><td class=n>+9.5</td><td class=n>−9.5</td>" in idx
     for page in ['grades.html', 'market-calibration.html']:
         text = (out / page).read_text()
@@ -388,8 +388,8 @@ def test_card_shows_fixed_band_as_model_spread(tmp_path, monkeypatch):
 def test_missing_training_never_falls_back_to_old_spread(tmp_path):
     out, _ = render(tmp_path)
     idx = (out / 'index.html').read_text()
-    assert '<span>Model —</span>' in idx
-    assert 'Model DAL −3.1' not in idx
+    assert 'Model spread unavailable.' in idx
+    assert 'Model has Dallas by 3.1.' not in idx
 
 
 def test_ats_comparison_uses_common_selected_games():
@@ -399,7 +399,7 @@ def test_ats_comparison_uses_common_selected_games():
                       'result': [7., -7., 3., 10., 7., np.nan],
                       'fixed_band_ats_result': ['W', 'W', 'P', 'S', 'W', '']})
     html = b.ats_comparison_tiles(d)
-    assert 'On the same <b>3</b>' in html  # the shared-game count leads the section
+    assert 'Model vs simple baselines · 3 games' in html  # the shared-game count leads the section
     assert html.count('2–0–1') == 2  # model and market favorite
     assert '1–1–1' in html  # home side
     assert '100.0% covered · +1.82u · ROI +60.6%' in html
@@ -591,7 +591,7 @@ def test_public_ats_roi_uncertainty_includes_pushes_and_is_unavailable_for_one_b
     assert 'nan' not in b.weekly_table(frame.iloc[:1]).lower()
 
 
-def test_pick_badge_text_contrast_in_light_and_dark_themes():
+def test_accent_palette_contrast_in_light_and_dark_themes():
     def luminance(rgb):
         linear = [v/12.92 if v <= .04045 else ((v+.055)/1.055)**2.4 for v in np.array(rgb)/255]
         return sum(a*v for a,v in zip((.2126,.7152,.0722),linear))
@@ -601,7 +601,6 @@ def test_pick_badge_text_contrast_in_light_and_dark_themes():
         foreground = tuple(int(foreground[i:i+2],16) for i in (0,2,4))
         light,dark = sorted([luminance(background),luminance(foreground)],reverse=True)
         assert (light+.05)/(dark+.05) >= 4.5
-    assert 'color:var(--accent-on)' in b.CSS.split('.g-team.picked .nm::after{',1)[1].split('}',1)[0]
 
 
 def test_public_ats_keeps_all_season_sources_and_missing_locks():
