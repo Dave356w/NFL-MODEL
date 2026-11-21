@@ -301,7 +301,7 @@ html[data-theme="dark"] .theme .sun{display:none}html[data-theme="dark"] .theme 
 .gr-note{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;
   padding:12px 15px;margin:0 0 16px;font-size:14px;line-height:1.6;color:var(--muted)}
 .gr-note b{color:var(--ink)}
-.flag-note{border-left:3px solid rgb(var(--lean));background:rgba(var(--lean),.09)}
+.g-note .pending{color:rgb(var(--lean-tx));font-weight:650}
 h2.sec{font:800 19px/1.25 var(--sans);letter-spacing:-.02em;margin:36px 0 12px}
 h3{font:750 15px/1.3 var(--sans);margin:22px 0 10px}
 .sec-lead{color:var(--muted);font-size:14px;margin:-4px 0 14px;max-width:72ch}
@@ -400,7 +400,8 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .pick-lines .edge.tie{border-color:var(--line);background:var(--surface-2);color:var(--muted)}
 .pick-lines .px{font:600 13px/1 var(--mono);color:var(--muted);margin-left:8px;letter-spacing:0}
 .moved{font:600 12px/1.4 var(--sans);color:rgb(var(--lean-tx));margin-top:4px}
-.primer ul{margin:8px 0 0;padding-left:18px}.primer li{margin:4px 0}
+.basics{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0 0 12px;font-size:14px;color:var(--muted)}
+.basics dt{font:700 13px/1.5 var(--mono);color:var(--ink)}.basics dd{margin:0}
 .foot .disclaimer{flex-basis:100%}
 .record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
 /* chart */
@@ -442,6 +443,9 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
   .detail table.gr td{white-space:normal}
   .fold .rt{margin-left:0;width:100%}
   .chart svg.wide{display:none}.chart svg.narrow{display:block}
+  .steps{gap:8px}.steps li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:0 12px;padding:12px 14px}
+  .steps li::before{grid-row:span 2;margin:0}.steps li b{margin-bottom:0}
+  .basics{grid-template-columns:minmax(0,1fr);gap:2px}.basics dd{margin-bottom:8px}
   /* Results: each game becomes a two-line row so the result and units stay on screen. */
   table.games thead{display:none}
   table.games tr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"game result units" "pick odds final";
@@ -785,6 +789,11 @@ def ats_card_state(latest, row, now):
                 handicap=(-line if side == 'home' else line) if side else math.nan)
 
 
+# Per-game flag; there is no page-wide banner (owner request 2026-11-21).
+PENDING_NOTE = (" · <span class='pending' title='Final injury reports are not out yet, so this pick can still move.'>"
+                "injury reports pending</span>")
+
+
 def locked_line_html(row, state, final):
     """After lock, note when the market has moved off the saved handicap. Display only:
     the saved line and price stay the bet."""
@@ -806,16 +815,11 @@ def render_index(latest, ledger, built, now=None):
     has_avail = (man.get('recipe') or {}).get('family', '') in m.AVAIL_FAMILIES
     stamp = pd.to_datetime(man.get('generated_utc'), utc=True, errors='coerce')
     local = stamp.tz_convert(PT) if pd.notna(stamp) else None
-    updated = (f"<div class='record'><div class='l'>Forecast updated</div><div class='mono'>"
-               f"<time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
-               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time></div></div>" if local is not None else '')
-    parts = [head(f'Week {week} picks',
-                  'Against-the-spread picks from the model’s projected spread. Picks can change until they lock '
-                  '60 minutes before kickoff. Tap a game for spreads, quarterbacks and injury reports. '
-                  "<a href='market-calibration.html#how'>How picks work</a>",
-                  f'{season} regular season', updated)]
-    parts.append(record_line(public_ats(latest), f'{season} record'))
-    parts.append(SPREAD_PRIMER)
+    # A compact header: the season record lives on Results and the explanation in "How picks work".
+    updated = (f"Updated <time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
+               f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time> · " if local is not None else '')
+    parts = [head(f'Week {week} picks', f"{updated}<a href='market-calibration.html#how'>How picks work</a>",
+                  f'{season} regular season')]
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -825,10 +829,6 @@ def render_index(latest, ledger, built, now=None):
     raw_rows = board.to_dict('records')
     states = {r['game_id']: ats_card_state(latest, r, now) for r in raw_rows}
     rows = [states[r['game_id']]['display_row'] for r in raw_rows]
-    count = sum(pending(r) for r in rows)
-    if count:
-        parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {count} "
-                     f"game{'s' if count != 1 else ''} yet, so {'those numbers' if count != 1 else 'that number'} can still move.</div>")
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
     rows.sort(key=lambda r: (pd.notna(r.get('result')), m.kickoff_utc(r) or far, str(r['game_id'])))
     finals = sum(pd.notna(r.get('result')) for r in rows)
@@ -901,7 +901,7 @@ def render_index(latest, ledger, built, now=None):
                    f"<div class='g-teams'>{team(away, 'away')}{team(home, 'home')}</div>{pick}"
                    f"<div class='mk sp'>{spreads}</div>"
                    f"{f'<div class=flags>{chr(32).join(flags)}</div>' if flags else ''}"
-                   f"<div class='g-note'>{note_html}{' · injury reports pending' if pending(row) else ''}</div></summary>")
+                   f"<div class='g-note'>{note_html}{PENDING_NOTE if pending(row) else ''}</div></summary>")
         detail = ["<div class='detail'><h3>Spreads</h3>", table(['', esc(away), esc(home)], [
             ['Model spread', spread_text(ms, False), spread_text(ms, True)],
             ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]
@@ -942,14 +942,14 @@ def render_index(latest, ledger, built, now=None):
     return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS,
                          description=share)
 
-SPREAD_PRIMER = (
-    "<details class='gr-note how primer'><summary>New to spread betting?</summary><ul>"
-    "<li><b>The spread</b> evens out a game. ARI +16.5 wins if Arizona wins or loses by 16 or fewer; "
-    "KC −16.5 wins only if Kansas City wins by 17 or more. A margin landing exactly on a whole-number line is a push and the stake is returned.</li>"
-    "<li><b>Covered</b> means the pick won against the spread, whatever the final winner.</li>"
-    "<li><b>−110</b> means risking 1.10 to win 1.00. At that price a pick needs to win about 52.4% of decided bets to break even.</li>"
-    "<li><b>Units</b> are the profit or loss from staking 1 unit on every pick. ROI is that profit divided by the total staked.</li>"
-    "</ul></details>")
+SPREAD_BASICS = (
+    ("+16.5 / −16.5", "The underdog at +16.5 wins the bet if it loses by 16 or fewer; the favorite at −16.5 must win by 17+. "
+                      "Landing exactly on a whole-number line is a push."),
+    ("Covered", "The pick won against the spread."),
+    ("−110", "Risk 1.10 to win 1.00, so about 52.4% wins break even."),
+    ("Units · ROI", "Profit from 1 unit on every pick, and that profit divided by the amount staked."),
+)
+
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1251,12 +1251,10 @@ def weekly_table(frame):
 
 
 HOW_IT_WORKS = (
-    ("Project the spread", "The model turns each team’s recent box-score profile into a projected point spread."),
-    ("Compare with the market", "The pick is the side the projection favors against the market handicap. "
-                                "A projection equal to the line takes the market favorite."),
-    ("Lock before kickoff", "The latest forecast 60 minutes before kickoff is saved. The handicap and pick never change after that."),
-    ("Grade at the matched price", "Each priced pick risks 1 unit. A win pays the selected side’s spread odds; a loss costs 1u, "
-                      "a push returns the stake. Historical closes are labelled estimates; missing prices use a labelled −110 assumption in pooled returns."),
+    ("Project", "The model projects each game’s point spread from team box-score stats."),
+    ("Pick", "It takes the side its spread favors against the market line; an exact match takes the favorite."),
+    ("Lock", "Picks can change until 60 minutes before kickoff, then never change."),
+    ("Grade", "Each pick risks 1 unit at its spread price; a push returns the stake."),
 )
 
 
@@ -1274,8 +1272,10 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
-    parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>" +
-                 ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
+    parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>"
+                 + ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>"
+                 "<h3>Spread basics</h3><dl class='basics'>"
+                 + ''.join(f"<dt>{esc(t)}</dt><dd>{esc(d)}</dd>" for t, d in SPREAD_BASICS) + "</dl>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 
 def render_historical_calibration(latest, built, pack=None):

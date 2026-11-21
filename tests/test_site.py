@@ -242,7 +242,8 @@ def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
 def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
-    assert "Injury reports aren't final for 1 game yet" in html and "injury reports pending" in html
+    assert "Injury reports aren't final" not in html and "flag-note'>" not in html  # no page-wide banner
+    assert html.count("<span class='pending'") == 1 and "injury reports pending</span>" in html  # the one pending game
     assert "Report pending" not in html and "Can still change" in html  # one status per card
     assert html.index("This week’s games") < html.index("How returns are priced")  # board before the fine print
     assert "TB QB: J.Daniels" in html and "Market DAL −9.5" in html
@@ -687,7 +688,7 @@ def test_pages_have_previews_icon_disclaimer_and_local_times(tmp_path):
         assert "time[data-local]" in html, name
     index = (out / "index.html").read_text()
     assert re.search(r"<time datetime='\d{4}-\d\d-\d\dT\d\d:\d\d:00Z' data-local>\w{3} \d{1,2}:\d\d [AP]M P[DS]T</time>", index)
-    assert "New to spread betting?" in index and "52.4% of decided bets" in index
+    assert "New to spread betting?" not in index  # basics live in How picks work
     assert re.search(r"<meta name='description' content='Week \d+ against-the-spread picks", index)
 
 
@@ -700,3 +701,17 @@ def test_locked_card_shows_price_and_flags_a_moved_line():
     assert b.locked_line_html(dict(row, spread_line=16.5), state, final=False) == ''   # unchanged line
     assert b.locked_line_html(row, dict(state, status='provisional'), final=False) == ''  # not locked yet
     assert b.locked_line_html(row, state, final=True) == ''                              # game over
+
+
+def test_picks_header_is_compact(tmp_path):
+    """Owner request 2026-11-21: no season record or intro paragraph above the board."""
+    out, _ = render(tmp_path)
+    index = (out / "index.html").read_text()
+    body = index[index.index("<main"):]
+    top = body[:body.index("This week’s games")]
+    assert "rec-line" not in top and "Forecast updated" not in top and "Tap a game" not in top
+    assert "Updated <time" in top and "href='market-calibration.html#how'" in top
+    perf = (out / "market-calibration.html").read_text()
+    how = perf[perf.index("id='how'"):]
+    assert "Picks can change until 60 minutes before kickoff" in how
+    assert "Spread basics" in how and "52.4% wins break even" in how
