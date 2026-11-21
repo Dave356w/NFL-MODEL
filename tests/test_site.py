@@ -687,7 +687,7 @@ def test_pages_have_previews_icon_disclaimer_and_local_times(tmp_path):
         assert "time[data-local]" in html, name
     index = (out / "index.html").read_text()
     assert re.search(r"<time datetime='\d{4}-\d\d-\d\dT\d\d:\d\d:00Z' data-local>\w{3} \d{1,2}:\d\d [AP]M P[DS]T</time>", index)
-    assert "New to spread betting?" in index and "52.4% of decided bets" in index
+    assert "New to spread betting?" not in index  # basics live in How picks work
     assert re.search(r"<meta name='description' content='Week \d+ against-the-spread picks", index)
 
 
@@ -712,4 +712,5 @@ def test_picks_header_is_compact(tmp_path):
     assert "Updated <time" in top and "href='market-calibration.html#how'" in top
     perf = (out / "market-calibration.html").read_text()
     how = perf[perf.index("id='how'"):]
-    assert "Picks can change until they lock 60 minutes before kickoff" in how and "tap a game" in how
+    assert "Picks can change until 60 minutes before kickoff" in how
+    assert "Spread basics" in how and "52.4% wins break even" in how

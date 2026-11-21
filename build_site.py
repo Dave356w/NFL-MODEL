@@ -400,8 +400,8 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .pick-lines .edge.tie{border-color:var(--line);background:var(--surface-2);color:var(--muted)}
 .pick-lines .px{font:600 13px/1 var(--mono);color:var(--muted);margin-left:8px;letter-spacing:0}
 .moved{font:600 12px/1.4 var(--sans);color:rgb(var(--lean-tx));margin-top:4px}
-.gr-head+.primer{margin-top:-8px}
-.primer ul{margin:8px 0 0;padding-left:18px}.primer li{margin:4px 0}
+.basics{display:grid;grid-template-columns:max-content 1fr;gap:6px 16px;margin:0 0 12px;font-size:14px;color:var(--muted)}
+.basics dt{font:700 13px/1.5 var(--mono);color:var(--ink)}.basics dd{margin:0}
 .foot .disclaimer{flex-basis:100%}
 .record .l{font:700 11.5px/1.2 var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
 /* chart */
@@ -443,6 +443,9 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
   .detail table.gr td{white-space:normal}
   .fold .rt{margin-left:0;width:100%}
   .chart svg.wide{display:none}.chart svg.narrow{display:block}
+  .steps{gap:8px}.steps li{display:grid;grid-template-columns:26px minmax(0,1fr);gap:0 12px;padding:12px 14px}
+  .steps li::before{grid-row:span 2;margin:0}.steps li b{margin-bottom:0}
+  .basics{grid-template-columns:minmax(0,1fr);gap:2px}.basics dd{margin-bottom:8px}
   /* Results: each game becomes a two-line row so the result and units stay on screen. */
   table.games thead{display:none}
   table.games tr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"game result units" "pick odds final";
@@ -811,7 +814,7 @@ def render_index(latest, ledger, built, now=None):
     updated = (f"Updated <time datetime='{stamp.tz_convert('UTC').strftime('%Y-%m-%dT%H:%M:%SZ')}' data-local='date'>"
                f"{esc(local.strftime('%a %b %-d · %-I:%M %p %Z'))}</time> · " if local is not None else '')
     parts = [head(f'Week {week} picks', f"{updated}<a href='market-calibration.html#how'>How picks work</a>",
-                  f'{season} regular season'), SPREAD_PRIMER]
+                  f'{season} regular season')]
 
     def pending(row):
         ko = m.kickoff_utc(row)
@@ -938,14 +941,14 @@ def render_index(latest, ledger, built, now=None):
     return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS,
                          description=share)
 
-SPREAD_PRIMER = (
-    "<details class='gr-note how primer'><summary>New to spread betting?</summary><ul>"
-    "<li><b>The spread</b> evens out a game. ARI +16.5 wins if Arizona wins or loses by 16 or fewer; "
-    "KC −16.5 wins only if Kansas City wins by 17 or more. A margin landing exactly on a whole-number line is a push and the stake is returned.</li>"
-    "<li><b>Covered</b> means the pick won against the spread, whatever the final winner.</li>"
-    "<li><b>−110</b> means risking 1.10 to win 1.00. At that price a pick needs to win about 52.4% of decided bets to break even.</li>"
-    "<li><b>Units</b> are the profit or loss from staking 1 unit on every pick. ROI is that profit divided by the total staked.</li>"
-    "</ul></details>")
+SPREAD_BASICS = (
+    ("+16.5 / −16.5", "The underdog at +16.5 wins the bet if it loses by 16 or fewer; the favorite at −16.5 must win by 17+. "
+                      "Landing exactly on a whole-number line is a push."),
+    ("Covered", "The pick won against the spread."),
+    ("−110", "Risk 1.10 to win 1.00, so about 52.4% wins break even."),
+    ("Units · ROI", "Profit from 1 unit on every pick, and that profit divided by the amount staked."),
+)
+
 
 STATE_TEXT = {
     "none": "Week {w} injury report is pending.",
@@ -1247,12 +1250,10 @@ def weekly_table(frame):
 
 
 HOW_IT_WORKS = (
-    ("Project the spread", "The model turns each team’s recent box-score profile into a projected point spread."),
-    ("Compare with the market", "The pick is the side the projection favors against the market handicap. "
-                                "A projection equal to the line takes the market favorite."),
-    ("Lock before kickoff", "The latest forecast 60 minutes before kickoff is saved. The handicap and pick never change after that."),
-    ("Grade at the matched price", "Each priced pick risks 1 unit. A win pays the selected side’s spread odds; a loss costs 1u, "
-                      "a push returns the stake. Historical closes are labelled estimates; missing prices use a labelled −110 assumption in pooled returns."),
+    ("Project", "The model projects each game’s point spread from team box-score stats."),
+    ("Pick", "It takes the side its spread favors against the market line; an exact match takes the favorite."),
+    ("Lock", "Picks can change until 60 minutes before kickoff, then never change."),
+    ("Grade", "Each pick risks 1 unit at its spread price; a push returns the stake."),
 )
 
 
@@ -1270,10 +1271,10 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
-    parts.append("<h2 class='sec' id='how'>How picks work</h2><p class='sec-lead'>Against-the-spread picks from the "
-                 "model’s projected spread. Picks can change until they lock 60 minutes before kickoff. On Picks, tap a "
-                 "game for spreads, quarterbacks and injury reports.</p><ol class='steps'>" +
-                 ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
+    parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>"
+                 + ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>"
+                 "<h3>Spread basics</h3><dl class='basics'>"
+                 + ''.join(f"<dt>{esc(t)}</dt><dd>{esc(d)}</dd>" for t, d in SPREAD_BASICS) + "</dl>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)
 
 def render_historical_calibration(latest, built, pack=None):
