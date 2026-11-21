@@ -1159,13 +1159,11 @@ def render_grades(ledger, latest, built):
 
 
 def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple baselines'):
-    """Compare ATS sides on identical selected, completed, non-pick'em games."""
+    """Compare ATS sides on the full season of graded model picks."""
     d = frame.loc[frame.fixed_band_ats_result.isin(['W', 'L', 'P'])
-                  & np.isfinite(frame.spread_line) & frame.spread_line.ne(0)
+                  & np.isfinite(frame.spread_line)
                   & np.isfinite(frame.result) & np.isfinite(frame.fixed_band_spread)]
     priced = 'ats_price_basis' in d
-    if priced:
-        d = d.loc[d.ats_home_odds.notna() & d.ats_away_odds.notna()]
     tiles = []
     for label, prediction in [('Model ATS', d.fixed_band_spread),
                               ('Market favorite ATS', d.spread_line + np.sign(d.spread_line)),
@@ -1173,11 +1171,15 @@ def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple base
         results, returns = fixed_bands.grade(d, prediction)
         if priced:
             side = fixed_bands.pick(prediction, d.spread_line)
-            odds = np.where(side > 0, d.ats_home_odds, d.ats_away_odds)
+            odds = np.where(side > 0, d.ats_home_odds.fillna(-110), d.ats_away_odds.fillna(-110))
             returns = np.where(results == 'W', [espn_spreads.profit(p) for p in odds],
                                np.where(results == 'L', -1., 0.))
+        if label == 'Model ATS' and 'fixed_band_ats_units' in d:
+            results = d.fixed_band_ats_result.to_numpy()
+            returns = d.fixed_band_ats_units.to_numpy(float)
+        returns = returns[np.isin(results, ['W', 'L', 'P'])]
         wins, losses, pushes = [int((results == x).sum()) for x in ['W', 'L', 'P']]
-        if len(d):
+        if len(returns):
             rate = f'{100 * wins / (wins + losses):.1f}%' if wins + losses else '—'
             se = float(returns.std(ddof=1) / math.sqrt(len(returns))) if len(returns) > 1 else math.nan
             tiles.append(stat(label, f'{wins}–{losses}–{pushes}',
@@ -1185,10 +1187,9 @@ def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple base
                               'model' if label == 'Model ATS' else ''))
         else:
             tiles.append(stat(label, '—', 'No compared games yet'))
-    eligibility = ' where both sides had ESPN prices' if priced else ''
-    lead = f"<p class='sec-lead'>Completed {esc(basis)} games{eligibility}.</p>"
+    lead = f"<p class='sec-lead'>Full {esc(basis)}. One unit per pick. Matched odds when available, otherwise −110.</p>"
     return (f"<h2 class='sec'>{esc(title)} · {len(d)} games</h2>{lead}<div class='gr-summary'>" + ''.join(tiles) + "</div>"
-            "<p class='mut small'>Model skips and pick’em games excluded. Cover rate excludes pushes. ROI includes them.</p>")
+            "<p class='mut small'>The favorite strategy skips pick’em games. Cover rate excludes pushes. ROI includes them.</p>")
 
 
 def nice_step(span, ticks=4):

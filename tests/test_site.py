@@ -393,18 +393,25 @@ def test_missing_training_never_falls_back_to_old_spread(tmp_path):
 
 
 def test_ats_comparison_uses_common_selected_games():
-    # Home win, away win, push; omit a model skip, market pick'em and pending game.
+    # Home win, away win, push; only the favorite strategy skips a graded pick'em.
     d = pd.DataFrame({'fixed_band_spread': [7., -7., 7., 3., 3., 7.],
                       'spread_line': [3., -3., 3., 3., 0., 3.],
                       'result': [7., -7., 3., 10., 7., np.nan],
                       'fixed_band_ats_result': ['W', 'W', 'P', 'S', 'W', '']})
     html = b.ats_comparison_tiles(d)
-    assert 'Model vs simple baselines · 3 games' in html  # the shared-game count leads the section
-    assert html.count('2–0–1') == 2  # model and market favorite
-    assert '1–1–1' in html  # home side
+    assert 'Model vs simple baselines · 4 games' in html  # the shared-game count leads the section
+    assert '3–0–1' in html and '2–0–1' in html  # model and market favorite
+    assert '2–1–1' in html  # home side
     assert '100.0% covered · +1.82u · ROI +60.6%' in html
-    assert '50.0% covered · −0.09u · ROI −3.0%' in html  # true minus sign, like every other unit figure
-    assert 'pick’em' in html and 'Model skips' in html
+    assert '66.7% covered · +0.82u · ROI +20.5%' in html  # true minus sign, like every other unit figure
+    assert 'favorite strategy skips pick’em' in html
+    priced = d.assign(ats_price_basis='assumed_minus110', ats_home_odds=np.nan, ats_away_odds=np.nan)
+    priced.loc[0, 'ats_home_odds'] = 120
+    priced.loc[1, 'ats_away_odds'] = -125
+    priced_html = b.ats_comparison_tiles(priced)
+    assert 'Model vs simple baselines · 4 games' in priced_html
+    assert '100.0% covered · +2.00u · ROI +66.7%' in priced_html  # favorite
+    assert '100.0% covered · +2.91u · ROI +72.7%' in priced_html  # model
     empty = b.ats_comparison_tiles(d.iloc[3:4])
     assert empty.count('No compared games yet') == 3
     assert 'nan' not in empty
@@ -662,7 +669,7 @@ def test_results_and_performance_read_on_phones(tmp_path):
     perf = (out / "market-calibration.html").read_text()
     assert "class='gr weekly'" in perf
     assert not re.search(r"(?<![\w−])-\d+\.\d\du", visible_text(perf))  # hyphen-minus units
-    assert "where both sides had ESPN prices" in perf
+    assert "Matched odds when available, otherwise −110" in perf
 
 
 def test_units_chart_has_a_phone_sized_drawing():
