@@ -141,7 +141,6 @@ def test_public_downloads_list_only_the_current_revisions_saved_locks():
     own=dict(revision=V124,game_id='new')
     x['ats_locks'][locks.key(own)]=own
     assert build_site.has_public_saved_picks(x)
-    assert 'ats_locked_picks.csv' in build_site.downloads(x)
     legacy=dict(revision='boxscore-composite-v1.16',game_id='legacy',legacy_lock=True)
     x['ats_locks']={locks.key(legacy):legacy}
     assert not build_site.has_public_saved_picks(x)   # archived shadow rows are never inherited

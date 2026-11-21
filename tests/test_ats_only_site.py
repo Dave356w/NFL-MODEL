@@ -109,7 +109,7 @@ class ATSOnlySite(unittest.TestCase):
     def test_results_pool_each_game_once_and_keep_sources_internal(self):
         html=(self.out/'grades.html').read_text()
         self.assertIn('Game-by-game ATS results',html)
-        self.assertIn('−110 reference 52.4%',html)
+        self.assertIn('Break-even 52.4% at −110',html)
         self.assertRegex(self.visible(html),r'(Sun|Sat|Thu|Mon) \d{1,2}:\d{2} [AP]M PDT')  # Pacific kickoffs
         for page in ('index.html','grades.html','market-calibration.html'):
             text=self.visible((self.out/page).read_text())
@@ -123,7 +123,8 @@ class ATSOnlySite(unittest.TestCase):
         self.assertEqual(html.count("data-game-id='2026_06_TEN_IND'"),1)
         week=self.pool[self.pool.week.eq(6)].fixed_band_ats_result
         record='–'.join(str(int(week.eq(k).sum())) for k in 'WLP')
-        self.assertIn(f'2026 week 6 · {record} · {int(week.eq("S").sum())} skips',html)
+        skips=int(week.eq("S").sum())
+        self.assertIn(f'2026 week 6 · {record}'+(f' · {skips} skip' if skips else '<'),html)
 
     def test_public_results_export_matches_the_full_season_pool(self):
         latest=b.load_latest(self.data/'latest')
