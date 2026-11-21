@@ -301,7 +301,7 @@ html[data-theme="dark"] .theme .sun{display:none}html[data-theme="dark"] .theme 
 .gr-note{background:var(--surface-2);border:1px solid var(--line-2);border-radius:10px;
   padding:12px 15px;margin:0 0 16px;font-size:14px;line-height:1.6;color:var(--muted)}
 .gr-note b{color:var(--ink)}
-.flag-note{border-left:3px solid rgb(var(--lean));background:rgba(var(--lean),.09)}
+.g-note .pending{color:rgb(var(--lean-tx));font-weight:650}
 h2.sec{font:800 19px/1.25 var(--sans);letter-spacing:-.02em;margin:36px 0 12px}
 h3{font:750 15px/1.3 var(--sans);margin:22px 0 10px}
 .sec-lead{color:var(--muted);font-size:14px;margin:-4px 0 14px;max-width:72ch}
@@ -789,6 +789,11 @@ def ats_card_state(latest, row, now):
                 handicap=(-line if side == 'home' else line) if side else math.nan)
 
 
+# Per-game flag; there is no page-wide banner (owner request 2026-11-21).
+PENDING_NOTE = (" · <span class='pending' title='Final injury reports are not out yet, so this pick can still move.'>"
+                "injury reports pending</span>")
+
+
 def locked_line_html(row, state, final):
     """After lock, note when the market has moved off the saved handicap. Display only:
     the saved line and price stay the bet."""
@@ -824,10 +829,6 @@ def render_index(latest, ledger, built, now=None):
     raw_rows = board.to_dict('records')
     states = {r['game_id']: ats_card_state(latest, r, now) for r in raw_rows}
     rows = [states[r['game_id']]['display_row'] for r in raw_rows]
-    count = sum(pending(r) for r in rows)
-    if count:
-        parts.append(f"<div class='gr-note flag-note'>Injury reports aren't final for {count} "
-                     f"game{'s' if count != 1 else ''} yet, so {'those numbers' if count != 1 else 'that number'} can still move.</div>")
     far = dt.datetime.max.replace(tzinfo=dt.timezone.utc)
     rows.sort(key=lambda r: (pd.notna(r.get('result')), m.kickoff_utc(r) or far, str(r['game_id'])))
     finals = sum(pd.notna(r.get('result')) for r in rows)
@@ -900,7 +901,7 @@ def render_index(latest, ledger, built, now=None):
                    f"<div class='g-teams'>{team(away, 'away')}{team(home, 'home')}</div>{pick}"
                    f"<div class='mk sp'>{spreads}</div>"
                    f"{f'<div class=flags>{chr(32).join(flags)}</div>' if flags else ''}"
-                   f"<div class='g-note'>{note_html}{' · injury reports pending' if pending(row) else ''}</div></summary>")
+                   f"<div class='g-note'>{note_html}{PENDING_NOTE if pending(row) else ''}</div></summary>")
         detail = ["<div class='detail'><h3>Spreads</h3>", table(['', esc(away), esc(home)], [
             ['Model spread', spread_text(ms, False), spread_text(ms, True)],
             ['Market spread', spread_text(line, False), spread_text(line, True)]], num_cols=(1, 2))]

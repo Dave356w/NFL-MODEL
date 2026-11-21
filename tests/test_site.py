@@ -242,7 +242,8 @@ def test_public_pages_carry_no_analyst_units_or_model_internals(tmp_path):
 def test_index_cards_flags_and_record(tmp_path):
     out, _ = render(tmp_path)
     html = (out / "index.html").read_text()
-    assert "Injury reports aren't final for 1 game yet" in html and "injury reports pending" in html
+    assert "Injury reports aren't final" not in html and "flag-note'>" not in html  # no page-wide banner
+    assert html.count("<span class='pending'") == 1 and "injury reports pending</span>" in html  # the one pending game
     assert "Report pending" not in html and "Can still change" in html  # one status per card
     assert html.index("This week’s games") < html.index("How returns are priced")  # board before the fine print
     assert "TB QB: J.Daniels" in html and "Market DAL −9.5" in html
