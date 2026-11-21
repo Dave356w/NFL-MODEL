@@ -640,3 +640,13 @@ def test_units_chart_orders_early_replay_before_later_recorded_games():
     html=b.units_chart(frame)
     assert html.index('ARI @ LAC') < html.index('NYJ @ NE') < html.index('TEN @ IND')
     assert 'running −1.09u' in html and 'Pick 3' in html
+
+
+def test_public_pages_do_not_link_to_data_files(tmp_path):
+    """Owner request 2026-11-20: pages carry no links to CSV/JSON data; the exports are still written."""
+    out, _ = render(tmp_path)
+    for page in out.glob("*.html"):
+        html = page.read_text()
+        assert not re.search(r"href=['\"][^'\"]*\.(csv|json|txt|jsonl)['\"]", html), page.name
+        assert "github.com" not in html and "Downloads" not in html, page.name
+    assert (out / "ats_2026_results.csv").exists()

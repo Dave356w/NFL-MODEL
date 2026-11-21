@@ -10,7 +10,7 @@ same-game baselines. Earlier seasons, median-map rules,
 standard errors, log loss, model internals, earlier revisions and every research
 arm stay in the repository's data/ledger_report.txt and data/latest/)
   index.html               this week's games: model vs market spread, pick, lock status, injury reports
-  grades.html              pooled season results game by game, with downloads
+  grades.html              pooled season results game by game
   market-calibration.html  ATS performance: running units, same-game baselines, by week (legacy URL)
 
 Data written (committed by build.yml through commit_data.py)
@@ -418,11 +418,6 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .steps li b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
 .steps li::before{content:counter(s);display:grid;place-items:center;width:26px;height:26px;border-radius:50%;
   background:rgba(var(--accent),.12);color:rgb(var(--accent-tx));font:800 13px/1 var(--mono);margin-bottom:10px}
-.downloads{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
-.downloads a{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;
-  background:var(--surface);color:var(--ink);text-decoration:none;font:600 13px/1 var(--sans)}
-.downloads a:hover{border-color:rgb(var(--accent))}
-.downloads a::before{content:"↓";color:rgb(var(--accent-tx));font-weight:800}
 .empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:22px;color:var(--muted);text-align:center}
 .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 18px;margin-top:44px;padding-top:16px;
   border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;line-height:1.6}
@@ -852,9 +847,8 @@ def render_index(latest, ledger, built, now=None):
         cards.append(f"<details class='card{tone}' data-game-id='{esc(row['game_id'])}' data-state='{'final' if final else 'upcoming'}'{gap_attr}{cutoff_attr}>"
                      f"{summary}{''.join(detail)}</details>")
     parts.append(f"<div class='grid'>{''.join(cards)}</div>")
-    links = "<a href='ats_locked_picks.csv'>Saved spread picks</a>" if has_public_saved_picks(latest) else ''
     parts.append(f"<p class='mut small'>Model and market spreads are shown from the favorite’s side; the highlighted team "
-                 f"is the pick. Saved handicaps and selections stay fixed after lock. {links}</p>"
+                 f"is the pick. Saved handicaps and selections stay fixed after lock.</p>"
                  + pricing_note(public_ats(latest)) +
                  "<p><a href='grades.html'>View ATS results →</a></p>")
     return html_document(''.join(parts), f'{SITE_NAME} — week {week}', 'index.html', built, FILTER_JS)
@@ -1035,17 +1029,6 @@ def has_public_saved_picks(latest):
     return bool(records)
 
 
-def downloads(latest):
-    links = []
-    if len(public_ats(latest)):
-        links.append("<a href='ats_2026_results.csv'>2026 per-game results (CSV)</a>")
-    if has_public_saved_picks(latest):
-        links.append("<a href='ats_locked_picks.csv'>Saved spread picks (CSV)</a>")
-    if (latest or {}).get('board') is not None and len(latest['board']):
-        links.append("<a href='fixed_band_board.csv'>This week’s board (CSV)</a>")
-    return f"<h2 class='sec'>Downloads</h2><div class='downloads'>{''.join(links)}</div>" if links else ''
-
-
 def render_grades(ledger, latest, built):
     season = int(latest['manifest']['season']) if latest is not None else None
     parts = [head('ATS results', 'All 2026 season results. Estimated returns use ESPN spread prices '
@@ -1055,7 +1038,6 @@ def render_grades(ledger, latest, built):
     else:
         parts.append(record_tiles(public_ats(latest), f'{season} record'))
         parts.append(render_ats_games(latest))
-        parts.append(downloads(latest))
     return html_document(''.join(parts), f'{SITE_NAME} results', 'grades.html', built)
 
 
@@ -1179,7 +1161,6 @@ def render_calibration(latest, ledger, built):
         parts.append(units_chart(frame))
         parts.append(ats_comparison_tiles(frame))
         parts.append(weekly_table(frame))
-        parts.append(downloads(latest))
     parts.append("<h2 class='sec' id='how'>How picks work</h2><ol class='steps'>" +
                  ''.join(f"<li><b>{esc(t)}</b>{esc(d)}</li>" for t, d in HOW_IT_WORKS) + "</ol>")
     return html_document(''.join(parts), f'{SITE_NAME} performance', 'market-calibration.html', built)

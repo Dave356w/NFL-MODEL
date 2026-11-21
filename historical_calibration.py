@@ -422,8 +422,7 @@ def render_body(pack):
                        "sides. ± is one standard error; an interval that crosses the null is unresolved. Historical "
                        "aggregate only: the live product is ATS, and no moneyline picks are published.</p>")
         out.append('</section>')
-    out.append("<div class='downloads'><a href='historical_calibration.csv'>Download all calibration bands</a></div>"
-               "<noscript><style>[data-cal-season][hidden]{display:block!important} .cal-season-control{display:none}</style>"
+    out.append("<noscript><style>[data-cal-season][hidden]{display:block!important} .cal-season-control{display:none}</style>"
                "<p class='mut small'>All season tables are shown below when JavaScript is disabled.</p></noscript>")
     return ''.join(out)
 
