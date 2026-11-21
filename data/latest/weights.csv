@@ -1,11 +1,11 @@
 feature,label,coefficient per scaled unit,training scale,training missing fraction
-site,Home field,-0.07490308985583106,1.0,0.0
-d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.06491355505893873,2.377946945705783,0.0
+site,Home field,-0.07490308985583104,1.0,0.0
+d__for__rates_core__first_down_rate,Offense: first downs per 100 plays,0.06491355505893867,2.377946945705783,0.0
 d__for__rates_core__interception_pct,Offense: interception %,0.09836462654114135,0.7034595471644879,0.0
-d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.054208293537860934,1.882906228992982,0.0
-d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.08077508351872029,0.7289289287908505,0.0
-d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.08543810819568037,6.478043955522073,0.0
-d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.0580726171789759,0.38134130219117185,0.0
-pass_product,Pass matchup product,0.08035892890911195,1.2699117593113523,0.0
-pass_1sd_pn,Pass matchup 1 SD context PN,-0.034811868376886795,0.1166413649505646,0.0
-pass_1sd_np,Pass matchup 1 SD context NP,0.07870368443703679,0.05493081632159548,0.0
+d__allowed__rates_core__first_down_rate,Defense: opponents’ first downs per 100 plays,0.054208293537861184,1.882906228992982,0.0
+d__allowed__rates_core__interception_pct,Defense: opponents’ interception %,0.08077508351872031,0.7289289287908505,0.0
+d__allowed__rates_core__penalty_yards_per_game,Defense: opponents’ penalty yards per game,-0.08543810819568043,6.478043955522073,0.0
+d__avail__qb_delta,Availability: QB: projected starter vs recent QB mix (net yards per dropback),0.05807261717897592,0.38134130219117185,0.0
+pass_product,Pass matchup product,0.08035892890911198,1.269911759311352,0.0
+pass_1sd_pn,Pass matchup 1 SD context PN,-0.034811868376886976,0.11664136495056449,0.0
+pass_1sd_np,Pass matchup 1 SD context NP,0.07870368443703676,0.05493081632159556,0.0
