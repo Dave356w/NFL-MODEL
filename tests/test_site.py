@@ -398,11 +398,11 @@ def test_ats_comparison_uses_common_selected_games():
                       'result': [7., -7., 3., 10., 7., np.nan],
                       'fixed_band_ats_result': ['W', 'W', 'P', 'S', 'W', '']})
     html = b.ats_comparison_tiles(d)
-    assert 'Compared games' in html and '>3<' in html
+    assert 'On the same <b>3</b>' in html  # the shared-game count leads the section
     assert html.count('2–0–1') == 2  # model and market favorite
     assert '1–1–1' in html  # home side
     assert '100.0% covered · +1.82u · ROI +60.6%' in html
-    assert '50.0% covered · -0.09u · ROI −3.0%' in html
+    assert '50.0% covered · −0.09u · ROI −3.0%' in html  # true minus sign, like every other unit figure
     assert 'pick’em' in html and 'Model skips' in html
     empty = b.ats_comparison_tiles(d.iloc[3:4])
     assert empty.count('No compared games yet') == 3
@@ -650,3 +650,26 @@ def test_public_pages_do_not_link_to_data_files(tmp_path):
         assert not re.search(r"href=['\"][^'\"]*\.(csv|json|txt|jsonl)['\"]", html), page.name
         assert "github.com" not in html and "Downloads" not in html, page.name
     assert (out / "ats_2026_results.csv").exists()
+
+
+def test_results_and_performance_read_on_phones(tmp_path):
+    """Owner request 2026-11-21: results stay on screen on phones; consistent minus signs."""
+    out, _ = render(tmp_path)
+    grades = (out / "grades.html").read_text()
+    assert "class='gr games'" in grades and "Odds are ESPN closing prices unless marked" in grades
+    tables = "".join(re.findall(r"<table class='gr games'>.*?</table>", grades, flags=re.S))
+    assert tables and "Closing estimate" not in tables  # only exceptions are labelled
+    perf = (out / "market-calibration.html").read_text()
+    assert "class='gr weekly'" in perf
+    assert not re.search(r"(?<![\w−])-\d+\.\d\du", visible_text(perf))  # hyphen-minus units
+    assert "where both sides had ESPN prices" in perf
+
+
+def test_units_chart_has_a_phone_sized_drawing():
+    frame = pd.DataFrame(dict(week=[1, 1, 2], game_id=['a', 'b', 'c'], away=['X'] * 3, home=['Y'] * 3,
+                              fixed_band_ats_result=['W', 'L', 'W'], fixed_band_ats_units=[.91, -1., .91],
+                              fixed_band_ats_team=['Y'] * 3, fixed_band_ats_side=['home'] * 3, spread_line=[3.] * 3))
+    html = b.units_chart(frame)
+    assert "<svg class='wide'" in html and "<svg class='narrow'" in html
+    narrow = html.split("<svg class='narrow'")[1]
+    assert "viewBox='0 0 340 190'" in narrow and '<title>' not in narrow and 'Pick 3' in narrow

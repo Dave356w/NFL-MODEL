@@ -359,6 +359,34 @@ def moneyline_table(rows):
             "</tr></thead><tbody>" + ''.join(body) + '</tbody></table></div>')
 
 
+def ats_total(rows, view):
+    """Pooled ATS ROI across a view's spread bands. Bands hold disjoint games, so
+    their game-clustered unit-sum variances add."""
+    rows = [r for r in rows if r['view'] == view and r['observations']]
+    n = sum(r['observations'] for r in rows)
+    if not n:
+        return None
+    units = sum(r['units'] for r in rows)
+    var = [(r['roi_se_pp'] / 100 * r['observations']) ** 2 for r in rows if r['roi_se_pp'] is not None]
+    se = float(np.sqrt(sum(var))) / n if len(var) == len(rows) else None
+    return dict(bets=n, roi=units / n, roi_se=se)
+
+
+def plain_summary(p):
+    """Two sentences a casual reader can take away before the tables."""
+    model, market = ats_total(p['rows'], 'model_spread'), ats_total(p['rows'], 'market_spread')
+    if model is None or market is None:
+        return ''
+    def roi(t):
+        se = f" (± {number(100 * t['roi_se'])} pp)" if t['roi_se'] is not None else ''
+        return f"<b>{number(100 * t['roi'], signed=True, suffix='%')}</b>{se}"
+    return ("<p class='cal-plain'>In short: betting the model’s ATS pick in every game returned " + roi(model)
+            + f" per unit staked over {model['bets']:,} bets; always backing the market favorite returned "
+            + roi(market) + ". These are replayed forecasts, not live bets, and a range of about two standard "
+            "errors that includes 0 means an edge is not established. Results by line size come first, then "
+            "win-probability calibration.</p>")
+
+
 def render_body(pack):
     if not pack['panels']:
         return "<p class='empty'>No completed weeks are available for historical calibration yet.</p>"
@@ -380,24 +408,7 @@ def render_body(pack):
         label = 'All seasons' if p['season'] == 'all' else p['season']
         out.append(f"<section data-cal-season='{p['season']}' aria-label='{escape(label)}'"
                    + ('' if p['season'] == 'all' else ' hidden') + '>')
-        out.append("<div class='gr-summary cal-summary'>"
-            + f"<div class='gr-stat'><div class='l'>{label} · games</div><div class='v'>{p['games']:,}</div>"
-            + f"<div class='s'>{p['binary_games']:,} decided · {p['ties']} tied final{'s' if p['ties'] != 1 else ''}</div></div>"
-            + "<div class='gr-stat'><div class='l'>Market log loss</div><div class='v'>"
-            + number(p['market_log_loss'], 4) + "</div><div class='s'>Lower is better</div></div>"
-            + "<div class='gr-stat'><div class='l'>Model log loss</div><div class='v'>"
-            + number(p['model_log_loss'], 4) + "</div><div class='s'>Same decided games</div></div></div>")
-        out.append("<h2 class='sec'>Win probability vs actual win rate</h2><p class='sec-lead'>Each game counted "
-                   "once, at its favorite’s probability. The market uses paired moneylines with the book’s margin "
-                   "removed; the model uses its production win probabilities.</p>")
-        out.append(favorite_table(p))
-        out.append("<details class='cal-more'><summary>Split by favorite at home or away</summary>"
-                   + favorite_split_table(p, 'market_wp') + favorite_split_table(p, 'model_wp') + '</details>')
-        out.append("<p class='mut small'>WP = win probability. Bands below 50% are the underdog side of these same "
-                   "games, so they are omitted here; the CSV keeps both sides. Actual and implied WP use decided games; "
-                   "n excludes tied finals. ± is one standard error; the gap is colored only when it exceeds it. "
-                   "Median MOV includes losses and ties, signed toward the favorite. Fair odds are approximate, "
-                   "after removing the bookmaker’s margin.</p>")
+        out.append(plain_summary(p))
         out.append("<h2 class='sec'>ATS ROI by spread band</h2><p class='sec-lead'>Left: back the market favorite, "
                    "grouped by market spread. Right: back the model’s ATS pick, grouped by its mapped spread. Both are "
                    "graded against the market handicap.</p><div class='cal-pair'>"
@@ -412,6 +423,24 @@ def render_body(pack):
             "by total stakes, including pushes. ± is one standard error. Both tables use the same eligible games, "
             "each counted once; their band counts can differ because each uses its own spread. Market pick’em "
             "lines and unavailable model spreads are excluded.</p>")
+        out.append("<div class='gr-summary cal-summary'>"
+            + f"<div class='gr-stat'><div class='l'>{label} · games</div><div class='v'>{p['games']:,}</div>"
+            + f"<div class='s'>{p['binary_games']:,} decided · {p['ties']} tied final{'s' if p['ties'] != 1 else ''}</div></div>"
+            + "<div class='gr-stat'><div class='l'>Market log loss</div><div class='v'>"
+            + number(p['market_log_loss'], 4) + "</div><div class='s'>Lower is better</div></div>"
+            + "<div class='gr-stat'><div class='l'>Model log loss</div><div class='v'>"
+            + number(p['model_log_loss'], 4) + "</div><div class='s'>Same decided games</div></div></div>")
+        out.append("<h2 class='sec'>Win probability vs actual win rate</h2><p class='sec-lead'>Each game counted "
+                   "once, at its favorite’s probability. The market uses paired moneylines with the book’s margin "
+                   "removed; the model uses its production win probabilities.</p>")
+        out.append(favorite_table(p))
+        out.append("<details class='cal-more'><summary>Split by favorite at home or away</summary>"
+                   + favorite_split_table(p, 'market_wp') + favorite_split_table(p, 'model_wp') + '</details>')
+        out.append("<p class='mut small'>WP = win probability. Bands below 50% are the underdog side of these same "
+                   "games, so they are omitted here. Actual and implied WP use decided games; "
+                   "n excludes tied finals. ± is one standard error; the gap is colored only when it exceeds it. "
+                   "Median MOV includes losses and ties, signed toward the favorite. Fair odds are approximate, "
+                   "after removing the bookmaker’s margin.</p>")
         if p.get('moneyline'):
             out.append("<h2 class='sec'>Moneyline ROI: model vs market favorite</h2><p class='sec-lead'>Flat 1u on "
                        "the side each source makes the favorite, at that side’s posted closing moneyline, on the same "
@@ -447,6 +476,8 @@ CSS = """
 .cal-roi-rate{font:800 22px/1.3 var(--mono);letter-spacing:-.04em}
 .cal-roi-meta{font:500 11px/1.6 var(--mono);color:var(--faint);margin-top:5px}
 .cal-roi-note{max-width:100ch;line-height:1.7}
+.cal-plain{background:var(--surface);border:1px solid var(--line);border-left:3px solid rgb(var(--accent));border-radius:10px;
+ padding:13px 16px;margin:18px 0 4px;font-size:15px;line-height:1.6;max-width:90ch}
 .cal-fav{min-width:520px}.cal-fav th:first-child{width:30%}
 .cal-gap.pos-tx,.cal-gap.neg-tx{font-weight:700}
 .cal-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.cal-pair .cal-roi-wrap{max-width:none}
@@ -460,6 +491,7 @@ CSS = """
  .cal-fav th:first-child{width:27%}.cal-ml th:first-child{width:25%}.cal-ml .cal-roi-rate{font-size:16px}
  .cal-ml .cal-roi-meta,.cal-fav .cal-meta{white-space:normal;overflow-wrap:anywhere}.cal-fav .cal-rate{font-size:18px}.cal-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.cal-summary .v{font-size:20px}
  .cal-summary .gr-stat{padding:12px 9px}.cal-summary .l{font-size:10px}.cal-summary .s{font-size:11px}
+ .cal-roi td,.cal-roi th{white-space:normal!important}.cal-roi-meta{overflow-wrap:anywhere}
  .cal-toolbar{align-items:flex-start}.cal-wp td{white-space:normal!important}.cal-rate{font-size:21px}}
 """
 

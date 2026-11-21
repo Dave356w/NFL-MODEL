@@ -1,3 +1,4 @@
+import math
 import datetime as dt
 import hashlib
 import re
@@ -284,3 +285,29 @@ def test_moneyline_roi_is_on_the_page_but_never_in_the_csv():
     assert not {'home_moneyline', 'away_moneyline', 'null_roi', 'model_wp'} & set(table.columns)
     # Without moneylines the section is omitted rather than rendered empty.
     assert 'Moneyline ROI' not in b.render_historical_calibration(latest([game('x')]), 'test')
+
+
+def test_page_leads_with_plain_summary_then_ats_and_has_no_csv_reference():
+    """Owner request 2026-11-21: casual readers get a plain summary and ATS results first."""
+    source = latest([game('a', 2023), game('b', 2024), game('c', 2025), game('d')])
+    pack = c.build(source)
+    html = b.render_historical_calibration(source, 'test', pack)
+    visible = re.sub(r'<style>.*?</style>|<script>.*?</script>|<[^>]+>', '', html, flags=re.S)
+    assert 'CSV' not in visible
+    panel = html.split("data-cal-season='all'")[1]
+    assert panel.index('In short:') < panel.index('ATS ROI by spread band') < panel.index('Win probability vs actual win rate')
+    rows = pack['panels'][0]['rows']
+    total = c.ats_total(rows, 'model_spread')
+    model = [r for r in rows if r['view'] == 'model_spread' and r['observations']]
+    assert total['bets'] == sum(r['observations'] for r in model)
+    assert total['roi'] == pytest.approx(sum(r['units'] for r in model) / total['bets'])
+    assert c.ats_total([], 'model_spread') is None and c.plain_summary(dict(rows=[])) == ''
+
+
+def test_pooled_ats_se_matches_one_band_and_adds_disjoint_bands():
+    one = [dict(view='v', observations=4, units=2., roi_se_pp=10.)]
+    assert c.ats_total(one, 'v')['roi_se'] == pytest.approx(.10)
+    two = one + [dict(view='v', observations=4, units=-1., roi_se_pp=20.)]
+    # Disjoint games: band-sum variances add; (0.4^2 + 0.8^2)^0.5 / 8.
+    assert c.ats_total(two, 'v')['roi_se'] == pytest.approx(math.sqrt(.4**2 + .8**2) / 8)
+    assert c.ats_total(two + [dict(view='v', observations=1, units=1., roi_se_pp=None)], 'v')['roi_se'] is None

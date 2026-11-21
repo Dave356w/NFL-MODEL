@@ -411,6 +411,8 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
 .chart .pt{fill:rgb(var(--accent));stroke:var(--surface);stroke-width:2}
 .chart .hit{fill:transparent;cursor:default}
 .chart .hit:hover+.pt{r:6}
+.chart svg.narrow{display:none}
+.chart svg.narrow .ax{font-size:11px}
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0 0 12px;padding:0;list-style:none;counter-reset:s}
 .steps li{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);
@@ -434,6 +436,24 @@ abbr[title]{text-decoration:underline dotted;cursor:help}
   table.gr{font-size:13px}table.gr th,table.gr td{padding:9px 10px;white-space:nowrap}
   .detail table.gr td{white-space:normal}
   .fold .rt{margin-left:0;width:100%}
+  .chart svg.wide{display:none}.chart svg.narrow{display:block}
+  /* Results: each game becomes a two-line row so the result and units stay on screen. */
+  table.games thead{display:none}
+  table.games tr{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"game result units" "pick odds final";
+    gap:4px 12px;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line-2)}
+  table.games tr:last-child{border-bottom:0}
+  table.games td{display:block;padding:0;border:0;white-space:normal}
+  table.games td:nth-child(1){grid-area:game}table.games td:nth-child(2){grid-area:pick}
+  table.games td:nth-child(3){grid-area:odds;text-align:right;font-family:var(--mono);font-size:12.5px}
+  table.games td:nth-child(3) .small{display:inline;margin-left:4px;font-family:var(--sans)}
+  table.games td:nth-child(4){display:none}
+  table.games td:nth-child(5){grid-area:final;text-align:right}
+  table.games td:nth-child(6){grid-area:result;text-align:right}table.games td:nth-child(7){grid-area:units;text-align:right}
+  /* By week: the price-source and pending counts are secondary on a phone. */
+  table.weekly th:nth-child(4),table.weekly td:nth-child(4),table.weekly th:nth-child(5),table.weekly td:nth-child(5){display:none}
+  table.weekly th,table.weekly td{padding:9px 6px;font-size:12px}
+  table.gr.weekly th,table.gr.weekly td{white-space:normal}table.gr.weekly td:first-child{white-space:nowrap}
+  table.weekly td .small{font-size:11px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 """
@@ -540,7 +560,7 @@ def stat(label, value, sub="", tone=""):
             f"{f'<div class=s>{sub}</div>' if sub else ''}</div>")
 
 
-def table(heads, rows, num_cols=()):
+def table(heads, rows, num_cols=(), table_class=''):
     th = "".join(f"<th{' class=n' if i in num_cols else ''}>{h}</th>" for i, h in enumerate(heads))
     body = []
     for r in rows:
@@ -548,7 +568,7 @@ def table(heads, rows, num_cols=()):
         cells = r["cells"] if isinstance(r, dict) else r
         tds = "".join(f"<td{' class=n' if i in num_cols else ''}>{c}</td>" for i, c in enumerate(cells))
         body.append(f"<tr{f' class={cls}' if cls else ''}>{tds}</tr>")
-    return f"<div class='gr-tablewrap'><table class='gr'><thead><tr>{th}</tr></thead><tbody>{''.join(body)}</tbody></table></div>"
+    return f"<div class='gr-tablewrap'><table class='gr{(' ' + table_class) if table_class else ''}'><thead><tr>{th}</tr></thead><tbody>{''.join(body)}</tbody></table></div>"
 
 
 # ---------------------------------------------------------------- shared pieces
@@ -990,8 +1010,9 @@ def game_rows(group):
         final = score_text(r.get('away_score'), r.get('home_score')) if math.isfinite(num(r.get('result'))) else 'Pending'
         units = num(r.get('fixed_band_ats_units'))
         price = ml_text(r.get('ats_price'))
-        price_label = {'captured_prelock': 'Pre-lock', 'historical_prelock': 'Historical pre-lock',
-                       'closing_estimate': 'Closing estimate', 'assumed_minus110': 'Assumed −110'}.get(r.get('ats_price_basis'), 'Unpriced')
+        # Closing estimates are the norm; label only the exceptions (explained under the tables).
+        price_label = {'captured_prelock': 'pre-lock', 'historical_prelock': 'pre-lock',
+                       'closing_estimate': '', 'assumed_minus110': 'assumed'}.get(r.get('ats_price_basis'), 'unpriced')
         tone = 'pos-tx' if units > 0 else 'neg-tx' if units < 0 else ''
         ko = pd.to_datetime(r.get('kickoff_utc'), utc=True, errors='coerce')
         when = f"<div class='mut small'>{esc(ko.tz_convert(PT).strftime('%a %-I:%M %p %Z'))}</div>" if pd.notna(ko) else ''
@@ -999,7 +1020,7 @@ def game_rows(group):
         if not when and pd.notna(day):
             when = f"<div class='mut small'>{esc(day.strftime('%a %b %-d'))}</div>"
         rows.append([f"<span class='team-code' data-game-id='{esc(r['game_id'])}'>{esc(r['away'])} @ {esc(r['home'])}</span>{when}",
-                     pick, f"{price}<div class='mut small'>{price_label}</div>",
+                     pick, price + (f"<div class='mut small'>{price_label}</div>" if price_label else ''),
                      favorite_spread_text(r.get('fixed_band_spread'), r['home'], r['away']), final, badge,
                      f"<span class='{tone}'>{units_text(units)}</span>" if math.isfinite(units) else '—'])
     return rows
@@ -1017,7 +1038,9 @@ def render_ats_games(latest):
         label = (f'{int(season)} week {int(week)} · {stats["wins"]}–{stats["losses"]}–{stats["pushes"]}{skips}'
                  f"<span class='rt'>{units_text(stats['units']) if stats['bets'] else '—'}</span>")
         parts.append(folded(label, table(['Game', 'ATS pick', 'Odds', 'Model', 'Final', 'Result', 'Units'],
-                                         game_rows(group), num_cols=(4, 6)), i == 0))
+                                         game_rows(group), num_cols=(4, 6), table_class='games'), i == 0))
+    parts.append("<p class='mut small'>Odds are ESPN closing prices unless marked: <b>pre-lock</b> means the price "
+                 "was captured before the pick locked; <b>assumed</b> means no matching price was found, so −110 is used.</p>")
     return ''.join(parts)
 
 
@@ -1049,7 +1072,7 @@ def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple base
     priced = 'ats_price_basis' in d
     if priced:
         d = d.loc[d.ats_home_odds.notna() & d.ats_away_odds.notna()]
-    tiles = [stat('Compared games', str(len(d)), f'{basis} · same games')]
+    tiles = []
     for label, prediction in [('Model ATS', d.fixed_band_spread),
                               ('Market favorite ATS', d.spread_line + np.sign(d.spread_line)),
                               ('Home side ATS', d.spread_line + 1)]:
@@ -1064,11 +1087,14 @@ def ats_comparison_tiles(frame, basis='2026 season', title='Model vs simple base
             rate = f'{100 * wins / (wins + losses):.1f}%' if wins + losses else '—'
             se = float(returns.std(ddof=1) / math.sqrt(len(returns))) if len(returns) > 1 else math.nan
             tiles.append(stat(label, f'{wins}–{losses}–{pushes}',
-                              f'{rate} covered · {returns.sum():+.2f}u · ROI {roi_short(returns.mean())} · {roi_uncertainty(se)}',
+                              f'{rate} covered · {units_text(returns.sum())} · ROI {roi_short(returns.mean())} · {roi_uncertainty(se)}',
                               'model' if label == 'Model ATS' else ''))
         else:
             tiles.append(stat(label, '—', 'No compared games yet'))
-    return (f"<h2 class='sec'>{esc(title)}</h2><div class='gr-summary'>" + ''.join(tiles) + "</div>"
+    lead = (f"<p class='sec-lead'>On the <b>{len(d)}</b> {esc(basis)} games where both sides had ESPN prices, so all three "
+            "records cover exactly the same games. That is why the model’s record here differs from the season record above.</p>"
+            if priced else f"<p class='sec-lead'>On the same <b>{len(d)}</b> {esc(basis)} games.</p>")
+    return (f"<h2 class='sec'>{esc(title)}</h2>{lead}<div class='gr-summary'>" + ''.join(tiles) + "</div>"
             "<p class='mut small'>Same completed games with a model ATS selection and a market favorite: the model’s pick, "
             "always taking the market favorite, and always taking the home side. "
             "Model skips and market pick’em games are excluded from all three records. "
@@ -1094,13 +1120,23 @@ def units_chart(frame):
     g['_ko'] = g['_ko'].fillna(day)
     g = g.sort_values(['week', '_ko', 'game_id'], na_position='last')
     run = np.concatenate([[0.], np.cumsum(g.fixed_band_ats_units.astype(float).to_numpy())])
-    W, H, L, R, T, B = 1000, 240, 40, 12, 12, 26
+    tone = 'pos-tx' if run[-1] > 0 else 'neg-tx' if run[-1] < 0 else ''
+    # The wide drawing scales down on phones until its labels are unreadable, so
+    # phones get their own drawing at roughly 1:1 scale (CSS picks one).
+    wide = _units_svg(g, run, 1000, 240, 40, 'wide', tips=True)
+    narrow = _units_svg(g, run, 340, 190, 34, 'narrow', tips=False)
+    return (f"<div class='chart'><div class='chart-head'><span class='t'>Running units · 2026 season</span>"
+            f"<span class='v {tone}'>{units_text(run[-1])}</span></div>{wide}{narrow}</div>")
+
+
+def _units_svg(g, run, W, H, L, cls, tips):
+    R, T, B = 12, 12, 26
     step = nice_step(max(run.max(), 0) - min(run.min(), 0))
     lo, hi = math.floor(min(run.min(), 0) / step) * step, math.ceil(max(run.max(), 0) / step) * step
     hi = hi if hi > lo else lo + step
     x = lambda i: L + (W - L - R) * i / (len(run) - 1)
     y = lambda v: T + (H - T - B) * (hi - v) / (hi - lo)
-    out = [f"<svg viewBox='0 0 {W} {H}' role='img' aria-label='Running units after each graded pick, ending at {units_text(run[-1])}'>"]
+    out = [f"<svg class='{cls}' viewBox='0 0 {W} {H}' role='img' aria-label='Running units after each graded pick, ending at {units_text(run[-1])}'>"]
     v = lo
     while v <= hi + 1e-9:
         out.append(f"<line class='{'zero' if abs(v) < 1e-9 else 'grid-ln'}' x1='{L}' x2='{W - R}' y1='{y(v):.1f}' y2='{y(v):.1f}'/>"
@@ -1109,7 +1145,7 @@ def units_chart(frame):
     pts = ' '.join(f'{x(i):.1f},{y(u):.1f}' for i, u in enumerate(run))
     out.append(f"<polygon class='area' points='{x(0):.1f},{y(0):.1f} {pts} {x(len(run) - 1):.1f},{y(0):.1f}'/>")
     out.append(f"<polyline class='ln' points='{pts}'/>")
-    for i, r in enumerate(g.to_dict('records'), start=1):
+    for i, r in enumerate(g.to_dict('records') if tips else [], start=1):
         pick = f"{r.get('fixed_band_ats_team', '')} {spread_text(num(r.get('spread_line')), r.get('fixed_band_ats_side') == 'home')}"
         tip = (f"Week {int(r['week'])} · {r['away']} @ {r['home']} · {pick} · {r['fixed_band_ats_result']} "
                f"{units_text(r['fixed_band_ats_units'])} · running {units_text(run[i])}")
@@ -1117,9 +1153,7 @@ def units_chart(frame):
                    f"<circle class='pt' cx='{x(i):.1f}' cy='{y(run[i]):.1f}' r='4'/></g>")
     out.append(f"<text class='ax' x='{L}' y='{H - 6}'>Start</text>"
                f"<text class='ax' x='{W - R}' y='{H - 6}' text-anchor='end'>Pick {len(run) - 1}</text></svg>")
-    tone = 'pos-tx' if run[-1] > 0 else 'neg-tx' if run[-1] < 0 else ''
-    return (f"<div class='chart'><div class='chart-head'><span class='t'>Running units · 2026 season</span>"
-            f"<span class='v {tone}'>{units_text(run[-1])}</span></div>{''.join(out)}</div>")
+    return ''.join(out)
 
 
 MIN_ROI_BETS = 5  # a week's ROI from fewer bets is noise, not a rate
@@ -1134,7 +1168,8 @@ def weekly_table(frame):
                      (f"{roi_short(v['roi'])}<div class='mut small'>{roi_uncertainty(v['roi_se'])}</div>"
                       if v['bets'] >= MIN_ROI_BETS else f"—<div class='mut small'>{v['bets']} bet{'s' if v['bets'] != 1 else ''} so far</div>")])
     return ("<h2 class='sec'>By week</h2>" +
-            table(['Week', 'ATS W–L–P', 'Cover rate', 'ESPN / assumed', 'Pending', 'Units', 'ROI'], rows, num_cols=(1, 2, 3, 4, 5, 6)))
+            table(['Week', 'ATS W–L–P', 'Cover rate', 'ESPN / assumed', 'Pending', 'Units', 'ROI'], rows,
+                  num_cols=(1, 2, 3, 4, 5, 6), table_class='weekly'))
 
 
 HOW_IT_WORKS = (
@@ -1169,7 +1204,8 @@ def render_historical_calibration(latest, built, pack=None):
     pack = historical_calibration.build(latest) if pack is None else pack
     current = pack['current_season']
     body = head('Market & model calibration',
-        'Favorite win probabilities against actual win rates, ATS ROI by spread band and moneyline ROI against the market favorite.',
+        'How the model’s spread picks did by line size, how well favorite win probabilities matched actual win rates, '
+        'and moneyline ROI against the market favorite.',
         f'2023–{current} · completed weeks')
     body += historical_calibration.render_body(pack)
     return html_document(body, f'{SITE_NAME} historical calibration',
